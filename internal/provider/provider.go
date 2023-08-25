@@ -118,12 +118,6 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 	resp.ResourceData = client
 }
 
-type roundTripperFunc func(*http.Request) (*http.Response, error)
-
-func (fn roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
-	return fn(req)
-}
-
 func (p *PlanetScaleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewExampleResource,
@@ -142,4 +136,10 @@ func New(version string) func() provider.Provider {
 			version: version,
 		}
 	}
+}
+
+type roundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (fn roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return fn(req)
 }
