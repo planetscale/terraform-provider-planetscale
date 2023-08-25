@@ -28,6 +28,8 @@ func NewClient(httpCl *http.Client, baseURL *url.URL) *Client {
 	return &Client{httpCl: httpCl, baseURL: baseURL}
 }
 
+type ListOrganizationsRes404 struct{}
+type ListOrganizationsRes403 struct{}
 type ListOrganizationsRes500 struct{}
 type ListOrganizationsRes200_DataItem_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
@@ -61,8 +63,6 @@ type ListOrganizationsRes200_DataItem struct {
 type ListOrganizationsRes200 struct {
 	Data []ListOrganizationsRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListOrganizationsRes404 struct{}
-type ListOrganizationsRes403 struct{}
 
 func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int) (res200 *ListOrganizationsRes200, res403 *ListOrganizationsRes403, res404 *ListOrganizationsRes404, res500 *ListOrganizationsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations"})
@@ -106,7 +106,6 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	return res200, res403, res404, res500, err
 }
 
-type GetOrganizationRes403 struct{}
 type GetOrganizationRes500 struct{}
 type GetOrganizationRes200_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
@@ -138,6 +137,7 @@ type GetOrganizationRes200 struct {
 	ValidBillingInfo          bool                            `json:"valid_billing_info" tfsdk:"valid_billing_info"`
 }
 type GetOrganizationRes404 struct{}
+type GetOrganizationRes403 struct{}
 
 func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *GetOrganizationRes200, res403 *GetOrganizationRes403, res404 *GetOrganizationRes404, res500 *GetOrganizationRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name})
@@ -178,8 +178,6 @@ type UpdateOrganizationReq struct {
 	IdpManagedRoles                 *bool   `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
 	RequireAdminForProductionAccess *bool   `json:"require_admin_for_production_access,omitempty" tfsdk:"require_admin_for_production_access"`
 }
-type UpdateOrganizationRes404 struct{}
-type UpdateOrganizationRes403 struct{}
 type UpdateOrganizationRes500 struct{}
 type UpdateOrganizationRes200_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
@@ -210,6 +208,8 @@ type UpdateOrganizationRes200 struct {
 	UpdatedAt                 string                             `json:"updated_at" tfsdk:"updated_at"`
 	ValidBillingInfo          bool                               `json:"valid_billing_info" tfsdk:"valid_billing_info"`
 }
+type UpdateOrganizationRes404 struct{}
+type UpdateOrganizationRes403 struct{}
 
 func (cl *Client) UpdateOrganization(ctx context.Context, name string, req UpdateOrganizationReq) (res200 *UpdateOrganizationRes200, res403 *UpdateOrganizationRes403, res404 *UpdateOrganizationRes404, res500 *UpdateOrganizationRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name})
@@ -249,7 +249,6 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	return res200, res403, res404, res500, err
 }
 
-type ListRegionsForOrganizationRes404 struct{}
 type ListRegionsForOrganizationRes403 struct{}
 type ListRegionsForOrganizationRes500 struct{}
 type ListRegionsForOrganizationRes200_DataItem struct {
@@ -264,6 +263,7 @@ type ListRegionsForOrganizationRes200_DataItem struct {
 type ListRegionsForOrganizationRes200 struct {
 	Data []ListRegionsForOrganizationRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListRegionsForOrganizationRes404 struct{}
 
 func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, page *int, perPage *int) (res200 *ListRegionsForOrganizationRes200, res403 *ListRegionsForOrganizationRes403, res404 *ListRegionsForOrganizationRes404, res500 *ListRegionsForOrganizationRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name + "/region"})
@@ -307,8 +307,6 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	return res200, res403, res404, res500, err
 }
 
-type ListDatabasesRes404 struct{}
-type ListDatabasesRes403 struct{}
 type ListDatabasesRes500 struct{}
 type ListDatabasesRes200_DataItem_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
@@ -371,6 +369,8 @@ type ListDatabasesRes200_DataItem struct {
 type ListDatabasesRes200 struct {
 	Data []ListDatabasesRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListDatabasesRes404 struct{}
+type ListDatabasesRes403 struct{}
 
 func (cl *Client) ListDatabases(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListDatabasesRes200, res403 *ListDatabasesRes403, res404 *ListDatabasesRes404, res500 *ListDatabasesRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases"})
@@ -421,6 +421,7 @@ type CreateDatabaseReq struct {
 	Plan        *string `json:"plan,omitempty" tfsdk:"plan"`
 	Region      *string `json:"region,omitempty" tfsdk:"region"`
 }
+type CreateDatabaseRes404 struct{}
 type CreateDatabaseRes403 struct{}
 type CreateDatabaseRes500 struct{}
 type CreateDatabaseRes201_DataImport_DataSource struct {
@@ -481,7 +482,6 @@ type CreateDatabaseRes201 struct {
 	UpdatedAt                         string                           `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                           `json:"url" tfsdk:"url"`
 }
-type CreateDatabaseRes404 struct{}
 
 func (cl *Client) CreateDatabase(ctx context.Context, organization string, req CreateDatabaseReq) (res201 *CreateDatabaseRes201, res403 *CreateDatabaseRes403, res404 *CreateDatabaseRes404, res500 *CreateDatabaseRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases"})
@@ -521,6 +521,8 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	return res201, res403, res404, res500, err
 }
 
+type ListBranchesRes404 struct{}
+type ListBranchesRes403 struct{}
 type ListBranchesRes500 struct{}
 type ListBranchesRes200_DataItem_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -567,8 +569,6 @@ type ListBranchesRes200_DataItem struct {
 type ListBranchesRes200 struct {
 	Data []ListBranchesRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListBranchesRes404 struct{}
-type ListBranchesRes403 struct{}
 
 func (cl *Client) ListBranches(ctx context.Context, organization string, database string, page *int, perPage *int) (res200 *ListBranchesRes200, res403 *ListBranchesRes403, res404 *ListBranchesRes404, res500 *ListBranchesRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches"})
@@ -701,6 +701,7 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 	return res201, res403, res404, res500, err
 }
 
+type ListBackupsRes403 struct{}
 type ListBackupsRes500 struct{}
 type ListBackupsRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -747,7 +748,6 @@ type ListBackupsRes200 struct {
 	Data []ListBackupsRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListBackupsRes404 struct{}
-type ListBackupsRes403 struct{}
 
 func (cl *Client) ListBackups(ctx context.Context, organization string, database string, branch string, page *int, perPage *int) (res200 *ListBackupsRes200, res403 *ListBackupsRes403, res404 *ListBackupsRes404, res500 *ListBackupsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups"})
@@ -796,9 +796,6 @@ type CreateBackupReq struct {
 	RetentionUnit  *string  `json:"retention_unit,omitempty" tfsdk:"retention_unit"`
 	RetentionValue *float64 `json:"retention_value,omitempty" tfsdk:"retention_value"`
 }
-type CreateBackupRes404 struct{}
-type CreateBackupRes403 struct{}
-type CreateBackupRes500 struct{}
 type CreateBackupRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -843,6 +840,9 @@ type CreateBackupRes200_DataItem struct {
 type CreateBackupRes200 struct {
 	Data []CreateBackupRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type CreateBackupRes404 struct{}
+type CreateBackupRes403 struct{}
+type CreateBackupRes500 struct{}
 
 func (cl *Client) CreateBackup(ctx context.Context, organization string, database string, branch string, req CreateBackupReq) (res200 *CreateBackupRes200, res403 *CreateBackupRes403, res404 *CreateBackupRes404, res500 *CreateBackupRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups"})
@@ -882,6 +882,7 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 	return res200, res403, res404, res500, err
 }
 
+type GetBackupRes500 struct{}
 type GetBackupRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -925,7 +926,6 @@ type GetBackupRes200 struct {
 }
 type GetBackupRes404 struct{}
 type GetBackupRes403 struct{}
-type GetBackupRes500 struct{}
 
 func (cl *Client) GetBackup(ctx context.Context, organization string, database string, branch string, id string) (res200 *GetBackupRes200, res403 *GetBackupRes403, res404 *GetBackupRes404, res500 *GetBackupRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups/" + id})
@@ -961,10 +961,10 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	return res200, res403, res404, res500, err
 }
 
-type DeleteBackupRes204 struct{}
 type DeleteBackupRes404 struct{}
 type DeleteBackupRes403 struct{}
 type DeleteBackupRes500 struct{}
+type DeleteBackupRes204 struct{}
 
 func (cl *Client) DeleteBackup(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeleteBackupRes204, res403 *DeleteBackupRes403, res404 *DeleteBackupRes404, res500 *DeleteBackupRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups/" + id})
@@ -1000,6 +1000,8 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	return res204, res403, res404, res500, err
 }
 
+type ListPasswordsRes404 struct{}
+type ListPasswordsRes403 struct{}
 type ListPasswordsRes500 struct{}
 type ListPasswordsRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1041,8 +1043,6 @@ type ListPasswordsRes200_DataItem struct {
 type ListPasswordsRes200 struct {
 	Data []ListPasswordsRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListPasswordsRes404 struct{}
-type ListPasswordsRes403 struct{}
 
 func (cl *Client) ListPasswords(ctx context.Context, organization string, database string, branch string, readOnlyRegionId *string, page *int, perPage *int) (res200 *ListPasswordsRes200, res403 *ListPasswordsRes403, res404 *ListPasswordsRes404, res500 *ListPasswordsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords"})
@@ -1174,9 +1174,6 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	return res201, res403, res404, res500, err
 }
 
-type GetPasswordRes404 struct{}
-type GetPasswordRes403 struct{}
-type GetPasswordRes500 struct{}
 type GetPasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1214,6 +1211,9 @@ type GetPasswordRes200 struct {
 	TtlSeconds     float64                          `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                          `json:"username,omitempty" tfsdk:"username"`
 }
+type GetPasswordRes404 struct{}
+type GetPasswordRes403 struct{}
+type GetPasswordRes500 struct{}
 
 func (cl *Client) GetPassword(ctx context.Context, organization string, database string, branch string, id string, readOnlyRegionId *string) (res200 *GetPasswordRes200, res403 *GetPasswordRes403, res404 *GetPasswordRes404, res500 *GetPasswordRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id})
@@ -1538,10 +1538,10 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 	return res200, res403, res404, res500, err
 }
 
-type DeleteBranchRes500 struct{}
-type DeleteBranchRes204 struct{}
 type DeleteBranchRes404 struct{}
 type DeleteBranchRes403 struct{}
+type DeleteBranchRes500 struct{}
+type DeleteBranchRes204 struct{}
 
 func (cl *Client) DeleteBranch(ctx context.Context, organization string, database string, name string) (res204 *DeleteBranchRes204, res403 *DeleteBranchRes403, res404 *DeleteBranchRes404, res500 *DeleteBranchRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name})
@@ -1577,8 +1577,6 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	return res204, res403, res404, res500, err
 }
 
-type DemoteBranchRes404 struct{}
-type DemoteBranchRes403 struct{}
 type DemoteBranchRes500 struct{}
 type DemoteBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1622,6 +1620,8 @@ type DemoteBranchRes200 struct {
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
 }
+type DemoteBranchRes404 struct{}
+type DemoteBranchRes403 struct{}
 
 func (cl *Client) DemoteBranch(ctx context.Context, organization string, database string, name string) (res200 *DemoteBranchRes200, res403 *DemoteBranchRes403, res404 *DemoteBranchRes404, res500 *DemoteBranchRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/demote"})
@@ -1737,6 +1737,8 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	return res200, res403, res404, res500, err
 }
 
+type EnableSafeMigrationsForBranchRes404 struct{}
+type EnableSafeMigrationsForBranchRes403 struct{}
 type EnableSafeMigrationsForBranchRes500 struct{}
 type EnableSafeMigrationsForBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1780,8 +1782,6 @@ type EnableSafeMigrationsForBranchRes200 struct {
 	Sharded                     bool                                                    `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                                  `json:"updated_at" tfsdk:"updated_at"`
 }
-type EnableSafeMigrationsForBranchRes404 struct{}
-type EnableSafeMigrationsForBranchRes403 struct{}
 
 func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *EnableSafeMigrationsForBranchRes200, res403 *EnableSafeMigrationsForBranchRes403, res404 *EnableSafeMigrationsForBranchRes404, res500 *EnableSafeMigrationsForBranchRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/safe-migrations"})
@@ -1897,8 +1897,6 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	return res200, res403, res404, res500, err
 }
 
-type GetBranchSchemaRes403 struct{}
-type GetBranchSchemaRes500 struct{}
 type GetBranchSchemaRes200_DataItem struct {
 	Html string `json:"html" tfsdk:"html"`
 	Name string `json:"name" tfsdk:"name"`
@@ -1908,6 +1906,8 @@ type GetBranchSchemaRes200 struct {
 	Data []GetBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type GetBranchSchemaRes404 struct{}
+type GetBranchSchemaRes403 struct{}
+type GetBranchSchemaRes500 struct{}
 
 func (cl *Client) GetBranchSchema(ctx context.Context, organization string, database string, name string, keyspace *string) (res200 *GetBranchSchemaRes200, res403 *GetBranchSchemaRes403, res404 *GetBranchSchemaRes404, res500 *GetBranchSchemaRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/schema"})
@@ -1948,6 +1948,8 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	return res200, res403, res404, res500, err
 }
 
+type LintBranchSchemaRes403 struct{}
+type LintBranchSchemaRes500 struct{}
 type LintBranchSchemaRes200_DataItem struct {
 	AutoIncrementColumnNames []string `json:"auto_increment_column_names" tfsdk:"auto_increment_column_names"`
 	CharsetName              string   `json:"charset_name" tfsdk:"charset_name"`
@@ -1971,8 +1973,6 @@ type LintBranchSchemaRes200 struct {
 	Data []LintBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type LintBranchSchemaRes404 struct{}
-type LintBranchSchemaRes403 struct{}
-type LintBranchSchemaRes500 struct{}
 
 func (cl *Client) LintBranchSchema(ctx context.Context, organization string, database string, name string, page *int, perPage *int) (res200 *LintBranchSchemaRes200, res403 *LintBranchSchemaRes403, res404 *LintBranchSchemaRes404, res500 *LintBranchSchemaRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/schema/lint"})
@@ -3042,7 +3042,6 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 	return res200, err
 }
 
-type GetDatabaseRes500 struct{}
 type GetDatabaseRes200_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
 	Hostname string `json:"hostname" tfsdk:"hostname"`
@@ -3103,6 +3102,7 @@ type GetDatabaseRes200 struct {
 }
 type GetDatabaseRes404 struct{}
 type GetDatabaseRes403 struct{}
+type GetDatabaseRes500 struct{}
 
 func (cl *Client) GetDatabase(ctx context.Context, organization string, name string) (res200 *GetDatabaseRes200, res403 *GetDatabaseRes403, res404 *GetDatabaseRes404, res500 *GetDatabaseRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -3138,10 +3138,10 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	return res200, res403, res404, res500, err
 }
 
+type DeleteDatabaseRes204 struct{}
 type DeleteDatabaseRes404 struct{}
 type DeleteDatabaseRes403 struct{}
 type DeleteDatabaseRes500 struct{}
-type DeleteDatabaseRes204 struct{}
 
 func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name string) (res204 *DeleteDatabaseRes204, res403 *DeleteDatabaseRes403, res404 *DeleteDatabaseRes404, res500 *DeleteDatabaseRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -3189,7 +3189,6 @@ type UpdateDatabaseSettingsReq struct {
 	RequireApprovalForDeploy   *bool   `json:"require_approval_for_deploy,omitempty" tfsdk:"require_approval_for_deploy"`
 	RestrictBranchRegion       *bool   `json:"restrict_branch_region,omitempty" tfsdk:"restrict_branch_region"`
 }
-type UpdateDatabaseSettingsRes403 struct{}
 type UpdateDatabaseSettingsRes500 struct{}
 type UpdateDatabaseSettingsRes200_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
@@ -3250,6 +3249,7 @@ type UpdateDatabaseSettingsRes200 struct {
 	Url                               string                                   `json:"url" tfsdk:"url"`
 }
 type UpdateDatabaseSettingsRes404 struct{}
+type UpdateDatabaseSettingsRes403 struct{}
 
 func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization string, name string, req UpdateDatabaseSettingsReq) (res200 *UpdateDatabaseSettingsRes200, res403 *UpdateDatabaseSettingsRes403, res404 *UpdateDatabaseSettingsRes404, res500 *UpdateDatabaseSettingsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -3417,7 +3417,6 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	return res200, res403, res404, res500, err
 }
 
-type ListOauthApplicationsRes404 struct{}
 type ListOauthApplicationsRes403 struct{}
 type ListOauthApplicationsRes500 struct{}
 type ListOauthApplicationsRes200_DataItem struct {
@@ -3435,6 +3434,7 @@ type ListOauthApplicationsRes200_DataItem struct {
 type ListOauthApplicationsRes200 struct {
 	Data []ListOauthApplicationsRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListOauthApplicationsRes404 struct{}
 
 func (cl *Client) ListOauthApplications(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListOauthApplicationsRes200, res403 *ListOauthApplicationsRes403, res404 *ListOauthApplicationsRes404, res500 *ListOauthApplicationsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications"})
@@ -3478,7 +3478,6 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	return res200, res403, res404, res500, err
 }
 
-type GetOauthApplicationRes500 struct{}
 type GetOauthApplicationRes200 struct {
 	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
 	ClientId    string   `json:"client_id" tfsdk:"client_id"`
@@ -3493,6 +3492,7 @@ type GetOauthApplicationRes200 struct {
 }
 type GetOauthApplicationRes404 struct{}
 type GetOauthApplicationRes403 struct{}
+type GetOauthApplicationRes500 struct{}
 
 func (cl *Client) GetOauthApplication(ctx context.Context, organization string, applicationId string) (res200 *GetOauthApplicationRes200, res403 *GetOauthApplicationRes403, res404 *GetOauthApplicationRes404, res500 *GetOauthApplicationRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId})
@@ -3590,6 +3590,8 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	return res200, res403, res404, res500, err
 }
 
+type GetOauthTokenRes404 struct{}
+type GetOauthTokenRes403 struct{}
 type GetOauthTokenRes500 struct{}
 type GetOauthTokenRes200_OauthAccessesByResource_Branch struct {
 	Accesses []string `json:"accesses" tfsdk:"accesses"`
@@ -3627,8 +3629,6 @@ type GetOauthTokenRes200 struct {
 	OauthAccessesByResource GetOauthTokenRes200_OauthAccessesByResource `json:"oauth_accesses_by_resource" tfsdk:"oauth_accesses_by_resource"`
 	UpdatedAt               string                                      `json:"updated_at" tfsdk:"updated_at"`
 }
-type GetOauthTokenRes404 struct{}
-type GetOauthTokenRes403 struct{}
 
 func (cl *Client) GetOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res200 *GetOauthTokenRes200, res403 *GetOauthTokenRes403, res404 *GetOauthTokenRes404, res500 *GetOauthTokenRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -3664,10 +3664,10 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	return res200, res403, res404, res500, err
 }
 
-type DeleteOauthTokenRes500 struct{}
 type DeleteOauthTokenRes204 struct{}
 type DeleteOauthTokenRes404 struct{}
 type DeleteOauthTokenRes403 struct{}
+type DeleteOauthTokenRes500 struct{}
 
 func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, res403 *DeleteOauthTokenRes403, res404 *DeleteOauthTokenRes404, res500 *DeleteOauthTokenRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})

@@ -5,14 +5,18 @@ package provider
 
 import (
 	"context"
+	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/planetscale/planetscale-go/planetscale"
+	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
+	"golang.org/x/oauth2"
 )
 
 // Ensure PlanetScaleProvider satisfies various provider interfaces.
@@ -60,9 +64,17 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
-	var clientOpts []planetscale.ClientOption
+	var (
+		rt      http.RoundTripper
+		baseURL *url.URL
+	)
 	if !data.Endpoint.IsNull() {
-		clientOpts = append(clientOpts, planetscale.WithBaseURL(data.Endpoint.ValueString()))
+		u, err := url.Parse(data.Endpoint.ValueString())
+		if err != nil {
+			resp.Diagnostics.AddAttributeError(path.Root("endpoint"), "invalid URL", err.Error())
+			return
+		}
+		baseURL = u
 	}
 	var (
 		accessToken       = os.Getenv("PLANETSCALE_ACCESS_TOKEN")
@@ -74,9 +86,14 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 	}
 	switch {
 	case accessToken != "" && serviceTokenName == "" && serviceTokenValue == "":
-		clientOpts = append(clientOpts, planetscale.WithAccessToken(accessToken))
+		tok := &oauth2.Token{AccessToken: accessToken}
+		rt = &oauth2.Transport{Base: &http.Transport{}, Source: oauth2.StaticTokenSource(tok)}
 	case accessToken == "" && serviceTokenName != "" && serviceTokenValue != "":
-		clientOpts = append(clientOpts, planetscale.WithServiceToken(serviceTokenName, serviceTokenValue))
+		tpt := &http.Transport{}
+		rt = roundTripperFunc(func(r *http.Request) (*http.Response, error) {
+			r.Header.Set("Authorization", serviceTokenName+":"+serviceTokenValue)
+			return tpt.RoundTrip(r)
+		})
 	case accessToken == "" && serviceTokenName == "" && serviceTokenValue == "":
 		resp.Diagnostics.AddError("Missing PlanetScale credentials.",
 			"You must set either of:\n"+
@@ -95,17 +112,16 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 		return
 	}
 
-	client, err := planetscale.NewClient(clientOpts...)
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to create PlanetScale client",
-			"An unexpected error occurred when creating the PlanetScale API client. "+
-				"If the error is not clear, please contact the provider developers.\n\n"+
-				"PlanetScale Client Error: "+err.Error())
-		return
-	}
+	client := planetscale.NewClient(&http.Client{Transport: rt}, baseURL)
 
 	resp.DataSourceData = client
 	resp.ResourceData = client
+}
+
+type roundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (fn roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return fn(req)
 }
 
 func (p *PlanetScaleProvider) Resources(ctx context.Context) []func() resource.Resource {
