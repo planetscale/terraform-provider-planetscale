@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -120,13 +121,14 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 
 func (p *PlanetScaleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewExampleResource,
+		newDatabaseResource,
 	}
 }
 
 func (p *PlanetScaleProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		newOrganizationsDataSource,
+		newOrganizationDataSource,
 	}
 }
 
@@ -142,4 +144,28 @@ type roundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (fn roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return fn(req)
+}
+
+func stringListAttr(els []string) []attr.Value {
+	out := make([]attr.Value, 0, len(els))
+	for _, el := range els {
+		out = append(out, types.StringValue(el))
+	}
+	return out
+}
+
+func boolIfDifferent(oldBool, newBool types.Bool, wasChanged *bool) *bool {
+	if oldBool.Equal(newBool) {
+		return nil
+	}
+	*wasChanged = true
+	return newBool.ValueBoolPointer()
+}
+
+func stringIfDifferent(oldString, newString types.String, wasChanged *bool) *string {
+	if oldString == newString {
+		return nil
+	}
+	*wasChanged = true
+	return newString.ValueStringPointer()
 }
