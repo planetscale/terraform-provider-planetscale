@@ -12,6 +12,32 @@ provider "planetscale" {
 
 data "planetscale_organizations" "test" {}
 
-output "my_orgs" {
-  value = data.planetscale_organizations.test
+data "planetscale_organization_regions" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+}
+
+output "my_regions" {
+  value = data.planetscale_organization_regions.test
+}
+
+data "planetscale_databases" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+}
+
+output "my_dbs" {
+  value = data.planetscale_databases.test
+}
+
+data "planetscale_oauth_applications" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+}
+
+output "my_oauth_apps" {
+  value = data.planetscale_oauth_applications.test
+}
+
+data "planetscale_user" "test" {}
+
+output "current_user" {
+  value = data.planetscale_user.test
 }

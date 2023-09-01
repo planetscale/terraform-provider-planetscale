@@ -129,6 +129,11 @@ func (p *PlanetScaleProvider) DataSources(ctx context.Context) []func() datasour
 	return []func() datasource.DataSource{
 		newOrganizationsDataSource,
 		newOrganizationDataSource,
+		newOrganizationRegionsDataSource,
+		newDatabasesDataSource,
+		newDatabaseDataSource,
+		newOAuthApplicationsDataSource,
+		newUserDataSource,
 	}
 }
 

@@ -104,7 +104,6 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Example resource",
-
 		Attributes: map[string]schema.Attribute{
 			"organization": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
 				stringplanmodifier.RequiresReplace(),
@@ -133,6 +132,7 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 				Attributes: map[string]schema.Attribute{
 					"data_source": schema.SingleNestedAttribute{
+						Required: true,
 						Attributes: map[string]schema.Attribute{
 							"database": schema.StringAttribute{Required: true},
 							"hostname": schema.StringAttribute{Required: true},
