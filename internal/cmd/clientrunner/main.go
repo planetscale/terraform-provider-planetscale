@@ -35,13 +35,13 @@ func main() {
 
 	ctx := context.Background()
 
-	res200, res403, res404, res500, err := cl.ListOrganizations(ctx, nil, nil)
+	res200, res403, res404, res500, err := cl.GetCurrentUser(ctx)
 	if err != nil {
 		slog.Error("failed to get current user", "err", err)
 	} else {
 		switch {
 		case res200 != nil:
-			slog.Info("current orgs", "orgs", res200.Data[0])
+			slog.Info("current orgs", "orgs", res200)
 		case res403 != nil:
 			slog.Error("403 error")
 		case res404 != nil:

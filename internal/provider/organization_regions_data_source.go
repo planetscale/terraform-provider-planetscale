@@ -25,7 +25,7 @@ type organizationRegionsDataSource struct {
 
 type organizationRegionDataSourceModel struct {
 	DisplayName       string   `tfsdk:"display_name"`
-	Enabled           string   `tfsdk:"enabled"`
+	Enabled           bool     `tfsdk:"enabled"`
 	Id                string   `tfsdk:"id"`
 	Location          string   `tfsdk:"location"`
 	Provider          string   `tfsdk:"provider"`
@@ -51,7 +51,7 @@ func (d *organizationRegionsDataSource) Schema(ctx context.Context, req datasour
 				Attributes: map[string]schema.Attribute{
 					"slug":                schema.StringAttribute{Computed: true},
 					"display_name":        schema.StringAttribute{Computed: true},
-					"enabled":             schema.StringAttribute{Computed: true},
+					"enabled":             schema.BoolAttribute{Computed: true},
 					"id":                  schema.StringAttribute{Computed: true},
 					"location":            schema.StringAttribute{Computed: true},
 					"provider":            schema.StringAttribute{Computed: true},

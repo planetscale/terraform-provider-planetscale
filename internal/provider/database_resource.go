@@ -48,7 +48,7 @@ type importResourceModel struct {
 
 type regionResourceModel struct {
 	DisplayName       types.String `tfsdk:"display_name"`
-	Enabled           types.String `tfsdk:"enabled"`
+	Enabled           types.Bool   `tfsdk:"enabled"`
 	Id                types.String `tfsdk:"id"`
 	Location          types.String `tfsdk:"location"`
 	Provider          types.String `tfsdk:"provider"`
@@ -172,7 +172,7 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 						Computed: true, Optional: true,
 					},
 					"display_name":        schema.StringAttribute{Computed: true},
-					"enabled":             schema.StringAttribute{Computed: true},
+					"enabled":             schema.BoolAttribute{Computed: true},
 					"id":                  schema.StringAttribute{Computed: true},
 					"location":            schema.StringAttribute{Computed: true},
 					"provider":            schema.StringAttribute{Computed: true},
@@ -279,7 +279,7 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	data.Region = regionResourceModel{
 		DisplayName:       types.StringValue(res201.Region.DisplayName),
-		Enabled:           types.StringValue(res201.Region.Enabled),
+		Enabled:           types.BoolValue(res201.Region.Enabled),
 		Id:                types.StringValue(res201.Region.Id),
 		Location:          types.StringValue(res201.Region.Location),
 		Provider:          types.StringValue(res201.Region.Provider),
@@ -374,7 +374,7 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 	data.Region = regionResourceModel{
 		DisplayName:       types.StringValue(res200.Region.DisplayName),
-		Enabled:           types.StringValue(res200.Region.Enabled),
+		Enabled:           types.BoolValue(res200.Region.Enabled),
 		Id:                types.StringValue(res200.Region.Id),
 		Location:          types.StringValue(res200.Region.Location),
 		Provider:          types.StringValue(res200.Region.Provider),
@@ -480,7 +480,7 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		}
 		data.Region = regionResourceModel{
 			DisplayName:       types.StringValue(res200.Region.DisplayName),
-			Enabled:           types.StringValue(res200.Region.Enabled),
+			Enabled:           types.BoolValue(res200.Region.Enabled),
 			Id:                types.StringValue(res200.Region.Id),
 			Location:          types.StringValue(res200.Region.Location),
 			Provider:          types.StringValue(res200.Region.Provider),

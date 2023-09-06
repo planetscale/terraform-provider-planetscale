@@ -90,7 +90,7 @@ func (d *databasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 								Computed: true, Optional: true,
 							},
 							"display_name":        schema.StringAttribute{Computed: true},
-							"enabled":             schema.StringAttribute{Computed: true},
+							"enabled":             schema.BoolAttribute{Computed: true},
 							"id":                  schema.StringAttribute{Computed: true},
 							"location":            schema.StringAttribute{Computed: true},
 							"provider":            schema.StringAttribute{Computed: true},
