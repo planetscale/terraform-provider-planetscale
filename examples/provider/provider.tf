@@ -16,28 +16,33 @@ data "planetscale_organization_regions" "test" {
   organization = data.planetscale_organizations.test.organizations.0.name
 }
 
-output "my_regions" {
-  value = data.planetscale_organization_regions.test
-}
+# output "my_regions" {
+#   value = data.planetscale_organization_regions.test
+# }
 
 data "planetscale_databases" "test" {
   organization = data.planetscale_organizations.test.organizations.0.name
 }
 
-output "my_dbs" {
-  value = data.planetscale_databases.test
-}
+# output "my_dbs" {
+#   value = data.planetscale_databases.test
+# }
 
-data "planetscale_oauth_applications" "test" {
+resource "planetscale_database" "my_db" {
   organization = data.planetscale_organizations.test.organizations.0.name
+  name = "antoine_terraform_testing"
 }
 
-output "my_oauth_apps" {
-  value = data.planetscale_oauth_applications.test
-}
+# data "planetscale_oauth_applications" "test" {
+#   organization = data.planetscale_organizations.test.organizations.0.name
+# }
 
-data "planetscale_user" "test" {}
+# output "my_oauth_apps" {
+#   value = data.planetscale_oauth_applications.test
+# }
 
-output "current_user" {
-  value = data.planetscale_user.test
-}
+# data "planetscale_user" "test" {}
+
+# output "current_user" {
+#   value = data.planetscale_user.test
+# }

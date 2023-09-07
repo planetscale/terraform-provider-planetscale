@@ -113,6 +113,30 @@ func genClientStruct(
 	return nil
 }
 
+func genErrorStruct(
+	file *jen.File,
+	spec *spec.Swagger,
+) error {
+	file.Type().Id("Error").Struct(
+		jen.Id("Code").Id("string").Tag(map[string]string{"json": "code"}),
+		jen.Id("Message").Id("string").Tag(map[string]string{"json": "message"}),
+	)
+
+	file.Func().Params(
+		jen.Id("err").Op("*").Id("Error"),
+	).Id("Error").Params().Parens(jen.String()).BlockFunc(func(g *jen.Group) {
+		g.Return(
+			jen.Qual("fmt", "Sprintf").Call(
+				jen.Lit("error %s: %s"),
+				jen.Id("err").Dot("Code"),
+				jen.Id("err").Dot("Message"),
+			),
+		)
+	})
+
+	return nil
+}
+
 func genClientCall(
 	file *jen.File,
 	path, verb string,
@@ -242,6 +266,7 @@ func genClientCall(
 		g.If(jen.Id("err").Op("!=").Nil()).Block(
 			jen.Return(returnNames...),
 		)
+		g.Id("r").Dot("Header").Dot("Set").Call(jen.Lit("Content-Type"), jen.Lit("application/json"))
 		g.Id("r").Dot("Header").Dot("Set").Call(jen.Lit("Accept"), jen.Lit("application/json"))
 
 		g.List(jen.Id("res"), jen.Id("err")).Op(":=").Id("cl").Dot("httpCl").Dot("Do").Call(jen.Id("r"))
@@ -262,7 +287,13 @@ func genClientCall(
 				)
 			}
 			g.Default().Block(
-				jen.Id("err").Op("=").Qual("fmt", "Errorf").Call(jen.Lit("unexpected status code %d"), jen.Id("res").Dot("StatusCode")),
+				jen.Var().Id("errBody").Op("*").Id("Error"),
+				jen.Id("_").Op("=").Qual("encoding/json", "NewDecoder").Call(jen.Id("res").Dot("Body")).Dot("Decode").Call(jen.Op("&").Id("errBody")),
+				jen.If(jen.Id("errBody").Op("!=").Nil()).Block(
+					jen.Id("err").Op("=").Id("errBody"),
+				).Else().Block(
+					jen.Id("err").Op("=").Qual("fmt", "Errorf").Call(jen.Lit("unexpected status code %d"), jen.Id("res").Dot("StatusCode")),
+				),
 			)
 		})
 		g.If(jen.Qual("errors", "Is").Call(jen.Id("err"), jen.Qual("io", "EOF"))).Block(jen.Id("err").Op("=").Nil())

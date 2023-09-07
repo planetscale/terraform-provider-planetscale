@@ -38,6 +38,10 @@ func realMain() error {
 		return fmt.Errorf("generating client struct: %w", err)
 	}
 
+	if err := genErrorStruct(f, spec); err != nil {
+		return fmt.Errorf("generating error struct: %w", err)
+	}
+
 	paths := maps.Keys(spec.Paths.Paths)
 	sort.Strings(paths)
 	for _, path := range paths {

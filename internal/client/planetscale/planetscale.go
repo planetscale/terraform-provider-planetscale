@@ -28,7 +28,15 @@ func NewClient(httpCl *http.Client, baseURL *url.URL) *Client {
 	return &Client{httpCl: httpCl, baseURL: baseURL}
 }
 
-type ListOrganizationsRes500 struct{}
+type Error struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+func (err *Error) Error() string {
+	return fmt.Sprintf("error %s: %s", err.Code, err.Message)
+}
+
 type ListOrganizationsRes200_DataItem_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
 	SingleTenancy *bool `json:"single_tenancy,omitempty" tfsdk:"single_tenancy"`
@@ -63,6 +71,7 @@ type ListOrganizationsRes200 struct {
 }
 type ListOrganizationsRes404 struct{}
 type ListOrganizationsRes403 struct{}
+type ListOrganizationsRes500 struct{}
 
 func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int) (res200 *ListOrganizationsRes200, res403 *ListOrganizationsRes403, res404 *ListOrganizationsRes404, res500 *ListOrganizationsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations"})
@@ -78,6 +87,7 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -98,7 +108,13 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 		res500 = new(ListOrganizationsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -145,6 +161,7 @@ func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *Get
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -165,7 +182,13 @@ func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *Get
 		res500 = new(GetOrganizationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -221,6 +244,7 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -241,7 +265,13 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 		res500 = new(UpdateOrganizationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -249,7 +279,6 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	return res200, res403, res404, res500, err
 }
 
-type ListRegionsForOrganizationRes404 struct{}
 type ListRegionsForOrganizationRes403 struct{}
 type ListRegionsForOrganizationRes500 struct{}
 type ListRegionsForOrganizationRes200_DataItem struct {
@@ -264,9 +293,10 @@ type ListRegionsForOrganizationRes200_DataItem struct {
 type ListRegionsForOrganizationRes200 struct {
 	Data []ListRegionsForOrganizationRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListRegionsForOrganizationRes404 struct{}
 
 func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, page *int, perPage *int) (res200 *ListRegionsForOrganizationRes200, res403 *ListRegionsForOrganizationRes403, res404 *ListRegionsForOrganizationRes404, res500 *ListRegionsForOrganizationRes500, err error) {
-	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name + "/region"})
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name + "/regions"})
 	q := u.Query()
 	if page != nil {
 		q.Set("page", strconv.Itoa(*page))
@@ -279,6 +309,7 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -299,7 +330,13 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 		res500 = new(ListRegionsForOrganizationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -386,6 +423,7 @@ func (cl *Client) ListDatabases(ctx context.Context, organization string, page *
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -406,7 +444,13 @@ func (cl *Client) ListDatabases(ctx context.Context, organization string, page *
 		res500 = new(ListDatabasesRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -421,8 +465,6 @@ type CreateDatabaseReq struct {
 	Plan        *string `json:"plan,omitempty" tfsdk:"plan"`
 	Region      *string `json:"region,omitempty" tfsdk:"region"`
 }
-type CreateDatabaseRes404 struct{}
-type CreateDatabaseRes403 struct{}
 type CreateDatabaseRes500 struct{}
 type CreateDatabaseRes201_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
@@ -482,6 +524,8 @@ type CreateDatabaseRes201 struct {
 	UpdatedAt                         string                           `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                           `json:"url" tfsdk:"url"`
 }
+type CreateDatabaseRes404 struct{}
+type CreateDatabaseRes403 struct{}
 
 func (cl *Client) CreateDatabase(ctx context.Context, organization string, req CreateDatabaseReq) (res201 *CreateDatabaseRes201, res403 *CreateDatabaseRes403, res404 *CreateDatabaseRes404, res500 *CreateDatabaseRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases"})
@@ -493,6 +537,7 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	if err != nil {
 		return res201, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -513,7 +558,13 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 		res500 = new(CreateDatabaseRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -521,6 +572,7 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	return res201, res403, res404, res500, err
 }
 
+type ListBranchesRes403 struct{}
 type ListBranchesRes500 struct{}
 type ListBranchesRes200_DataItem_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -568,7 +620,6 @@ type ListBranchesRes200 struct {
 	Data []ListBranchesRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListBranchesRes404 struct{}
-type ListBranchesRes403 struct{}
 
 func (cl *Client) ListBranches(ctx context.Context, organization string, database string, page *int, perPage *int) (res200 *ListBranchesRes200, res403 *ListBranchesRes403, res404 *ListBranchesRes404, res500 *ListBranchesRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches"})
@@ -584,6 +635,7 @@ func (cl *Client) ListBranches(ctx context.Context, organization string, databas
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -604,7 +656,13 @@ func (cl *Client) ListBranches(ctx context.Context, organization string, databas
 		res500 = new(ListBranchesRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -673,6 +731,7 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 	if err != nil {
 		return res201, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -693,7 +752,13 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 		res500 = new(CreateBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -701,6 +766,7 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 	return res201, res403, res404, res500, err
 }
 
+type ListBackupsRes404 struct{}
 type ListBackupsRes403 struct{}
 type ListBackupsRes500 struct{}
 type ListBackupsRes200_DataItem_Actor struct {
@@ -747,7 +813,6 @@ type ListBackupsRes200_DataItem struct {
 type ListBackupsRes200 struct {
 	Data []ListBackupsRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListBackupsRes404 struct{}
 
 func (cl *Client) ListBackups(ctx context.Context, organization string, database string, branch string, page *int, perPage *int) (res200 *ListBackupsRes200, res403 *ListBackupsRes403, res404 *ListBackupsRes404, res500 *ListBackupsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups"})
@@ -763,6 +828,7 @@ func (cl *Client) ListBackups(ctx context.Context, organization string, database
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -783,7 +849,13 @@ func (cl *Client) ListBackups(ctx context.Context, organization string, database
 		res500 = new(ListBackupsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -854,6 +926,7 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -874,7 +947,13 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 		res500 = new(CreateBackupRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -882,7 +961,6 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 	return res200, res403, res404, res500, err
 }
 
-type GetBackupRes500 struct{}
 type GetBackupRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -926,6 +1004,7 @@ type GetBackupRes200 struct {
 }
 type GetBackupRes404 struct{}
 type GetBackupRes403 struct{}
+type GetBackupRes500 struct{}
 
 func (cl *Client) GetBackup(ctx context.Context, organization string, database string, branch string, id string) (res200 *GetBackupRes200, res403 *GetBackupRes403, res404 *GetBackupRes404, res500 *GetBackupRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups/" + id})
@@ -933,6 +1012,7 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -953,7 +1033,13 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 		res500 = new(GetBackupRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -961,10 +1047,10 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	return res200, res403, res404, res500, err
 }
 
-type DeleteBackupRes204 struct{}
 type DeleteBackupRes404 struct{}
 type DeleteBackupRes403 struct{}
 type DeleteBackupRes500 struct{}
+type DeleteBackupRes204 struct{}
 
 func (cl *Client) DeleteBackup(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeleteBackupRes204, res403 *DeleteBackupRes403, res404 *DeleteBackupRes404, res500 *DeleteBackupRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups/" + id})
@@ -972,6 +1058,7 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	if err != nil {
 		return res204, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -992,7 +1079,13 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 		res500 = new(DeleteBackupRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1000,6 +1093,7 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	return res204, res403, res404, res500, err
 }
 
+type ListPasswordsRes500 struct{}
 type ListPasswordsRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1042,7 +1136,6 @@ type ListPasswordsRes200 struct {
 }
 type ListPasswordsRes404 struct{}
 type ListPasswordsRes403 struct{}
-type ListPasswordsRes500 struct{}
 
 func (cl *Client) ListPasswords(ctx context.Context, organization string, database string, branch string, readOnlyRegionId *string, page *int, perPage *int) (res200 *ListPasswordsRes200, res403 *ListPasswordsRes403, res404 *ListPasswordsRes404, res500 *ListPasswordsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords"})
@@ -1061,6 +1154,7 @@ func (cl *Client) ListPasswords(ctx context.Context, organization string, databa
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1081,7 +1175,13 @@ func (cl *Client) ListPasswords(ctx context.Context, organization string, databa
 		res500 = new(ListPasswordsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1094,9 +1194,6 @@ type CreatePasswordReq struct {
 	Role *string  `json:"role,omitempty" tfsdk:"role"`
 	Ttl  *float64 `json:"ttl,omitempty" tfsdk:"ttl"`
 }
-type CreatePasswordRes404 struct{}
-type CreatePasswordRes403 struct{}
-type CreatePasswordRes500 struct{}
 type CreatePasswordRes201_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1135,6 +1232,9 @@ type CreatePasswordRes201 struct {
 	TtlSeconds     float64                             `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
+type CreatePasswordRes404 struct{}
+type CreatePasswordRes403 struct{}
+type CreatePasswordRes500 struct{}
 
 func (cl *Client) CreatePassword(ctx context.Context, organization string, database string, branch string, req CreatePasswordReq) (res201 *CreatePasswordRes201, res403 *CreatePasswordRes403, res404 *CreatePasswordRes404, res500 *CreatePasswordRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords"})
@@ -1146,6 +1246,7 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	if err != nil {
 		return res201, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1166,7 +1267,13 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 		res500 = new(CreatePasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1174,6 +1281,7 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	return res201, res403, res404, res500, err
 }
 
+type GetPasswordRes403 struct{}
 type GetPasswordRes500 struct{}
 type GetPasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1213,7 +1321,6 @@ type GetPasswordRes200 struct {
 	Username       *string                          `json:"username,omitempty" tfsdk:"username"`
 }
 type GetPasswordRes404 struct{}
-type GetPasswordRes403 struct{}
 
 func (cl *Client) GetPassword(ctx context.Context, organization string, database string, branch string, id string, readOnlyRegionId *string) (res200 *GetPasswordRes200, res403 *GetPasswordRes403, res404 *GetPasswordRes404, res500 *GetPasswordRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id})
@@ -1226,6 +1333,7 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1246,7 +1354,13 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 		res500 = new(GetPasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1265,6 +1379,7 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 	if err != nil {
 		return res204, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1285,7 +1400,13 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 		res500 = new(DeletePasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1296,9 +1417,6 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 type UpdatePasswordReq struct {
 	Name string `json:"name" tfsdk:"name"`
 }
-type UpdatePasswordRes404 struct{}
-type UpdatePasswordRes403 struct{}
-type UpdatePasswordRes500 struct{}
 type UpdatePasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1336,6 +1454,9 @@ type UpdatePasswordRes200 struct {
 	TtlSeconds     float64                             `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
+type UpdatePasswordRes404 struct{}
+type UpdatePasswordRes403 struct{}
+type UpdatePasswordRes500 struct{}
 
 func (cl *Client) UpdatePassword(ctx context.Context, organization string, database string, branch string, id string, req UpdatePasswordReq) (res200 *UpdatePasswordRes200, res403 *UpdatePasswordRes403, res404 *UpdatePasswordRes404, res500 *UpdatePasswordRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id})
@@ -1347,6 +1468,7 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1367,7 +1489,13 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 		res500 = new(UpdatePasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1430,6 +1558,7 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1450,7 +1579,13 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 		res500 = new(RenewPasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1510,6 +1645,7 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1530,7 +1666,13 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 		res500 = new(GetBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1538,10 +1680,10 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 	return res200, res403, res404, res500, err
 }
 
-type DeleteBranchRes500 struct{}
-type DeleteBranchRes204 struct{}
 type DeleteBranchRes404 struct{}
 type DeleteBranchRes403 struct{}
+type DeleteBranchRes500 struct{}
+type DeleteBranchRes204 struct{}
 
 func (cl *Client) DeleteBranch(ctx context.Context, organization string, database string, name string) (res204 *DeleteBranchRes204, res403 *DeleteBranchRes403, res404 *DeleteBranchRes404, res500 *DeleteBranchRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name})
@@ -1549,6 +1691,7 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	if err != nil {
 		return res204, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1569,7 +1712,13 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 		res500 = new(DeleteBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1577,6 +1726,7 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	return res204, res403, res404, res500, err
 }
 
+type DemoteBranchRes404 struct{}
 type DemoteBranchRes403 struct{}
 type DemoteBranchRes500 struct{}
 type DemoteBranchRes200_ApiActor struct {
@@ -1621,7 +1771,6 @@ type DemoteBranchRes200 struct {
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
 }
-type DemoteBranchRes404 struct{}
 
 func (cl *Client) DemoteBranch(ctx context.Context, organization string, database string, name string) (res200 *DemoteBranchRes200, res403 *DemoteBranchRes403, res404 *DemoteBranchRes404, res500 *DemoteBranchRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/demote"})
@@ -1629,6 +1778,7 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1649,7 +1799,13 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 		res500 = new(DemoteBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1657,7 +1813,6 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 	return res200, res403, res404, res500, err
 }
 
-type PromoteBranchRes500 struct{}
 type PromoteBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1702,6 +1857,7 @@ type PromoteBranchRes200 struct {
 }
 type PromoteBranchRes404 struct{}
 type PromoteBranchRes403 struct{}
+type PromoteBranchRes500 struct{}
 
 func (cl *Client) PromoteBranch(ctx context.Context, organization string, database string, name string) (res200 *PromoteBranchRes200, res403 *PromoteBranchRes403, res404 *PromoteBranchRes404, res500 *PromoteBranchRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/promote"})
@@ -1709,6 +1865,7 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1729,7 +1886,13 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 		res500 = new(PromoteBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1737,8 +1900,6 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	return res200, res403, res404, res500, err
 }
 
-type EnableSafeMigrationsForBranchRes404 struct{}
-type EnableSafeMigrationsForBranchRes403 struct{}
 type EnableSafeMigrationsForBranchRes500 struct{}
 type EnableSafeMigrationsForBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1782,6 +1943,8 @@ type EnableSafeMigrationsForBranchRes200 struct {
 	Sharded                     bool                                                    `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                                  `json:"updated_at" tfsdk:"updated_at"`
 }
+type EnableSafeMigrationsForBranchRes404 struct{}
+type EnableSafeMigrationsForBranchRes403 struct{}
 
 func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *EnableSafeMigrationsForBranchRes200, res403 *EnableSafeMigrationsForBranchRes403, res404 *EnableSafeMigrationsForBranchRes404, res500 *EnableSafeMigrationsForBranchRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/safe-migrations"})
@@ -1789,6 +1952,7 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1809,7 +1973,13 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 		res500 = new(EnableSafeMigrationsForBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1869,6 +2039,7 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1889,7 +2060,13 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 		res500 = new(DisableSafeMigrationsForBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1897,8 +2074,6 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	return res200, res403, res404, res500, err
 }
 
-type GetBranchSchemaRes403 struct{}
-type GetBranchSchemaRes500 struct{}
 type GetBranchSchemaRes200_DataItem struct {
 	Html string `json:"html" tfsdk:"html"`
 	Name string `json:"name" tfsdk:"name"`
@@ -1908,6 +2083,8 @@ type GetBranchSchemaRes200 struct {
 	Data []GetBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type GetBranchSchemaRes404 struct{}
+type GetBranchSchemaRes403 struct{}
+type GetBranchSchemaRes500 struct{}
 
 func (cl *Client) GetBranchSchema(ctx context.Context, organization string, database string, name string, keyspace *string) (res200 *GetBranchSchemaRes200, res403 *GetBranchSchemaRes403, res404 *GetBranchSchemaRes404, res500 *GetBranchSchemaRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/schema"})
@@ -1920,6 +2097,7 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -1940,7 +2118,13 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 		res500 = new(GetBranchSchemaRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -1948,7 +2132,6 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	return res200, res403, res404, res500, err
 }
 
-type LintBranchSchemaRes500 struct{}
 type LintBranchSchemaRes200_DataItem struct {
 	AutoIncrementColumnNames []string `json:"auto_increment_column_names" tfsdk:"auto_increment_column_names"`
 	CharsetName              string   `json:"charset_name" tfsdk:"charset_name"`
@@ -1973,6 +2156,7 @@ type LintBranchSchemaRes200 struct {
 }
 type LintBranchSchemaRes404 struct{}
 type LintBranchSchemaRes403 struct{}
+type LintBranchSchemaRes500 struct{}
 
 func (cl *Client) LintBranchSchema(ctx context.Context, organization string, database string, name string, page *int, perPage *int) (res200 *LintBranchSchemaRes200, res403 *LintBranchSchemaRes403, res404 *LintBranchSchemaRes404, res500 *LintBranchSchemaRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/schema/lint"})
@@ -1988,6 +2172,7 @@ func (cl *Client) LintBranchSchema(ctx context.Context, organization string, dat
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2008,7 +2193,13 @@ func (cl *Client) LintBranchSchema(ctx context.Context, organization string, dat
 		res500 = new(LintBranchSchemaRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2041,6 +2232,7 @@ func (cl *Client) GetTheDeployQueue(ctx context.Context, organization string, da
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2052,7 +2244,13 @@ func (cl *Client) GetTheDeployQueue(ctx context.Context, organization string, da
 		res200 = new(GetTheDeployQueueRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2125,6 +2323,7 @@ func (cl *Client) ListDeployRequests(ctx context.Context, organization string, d
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2136,7 +2335,13 @@ func (cl *Client) ListDeployRequests(ctx context.Context, organization string, d
 		res200 = new(ListDeployRequestsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2214,6 +2419,7 @@ func (cl *Client) CreateDeployRequest(ctx context.Context, organization string, 
 	if err != nil {
 		return res201, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2225,7 +2431,13 @@ func (cl *Client) CreateDeployRequest(ctx context.Context, organization string, 
 		res201 = new(CreateDeployRequestRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2294,6 +2506,7 @@ func (cl *Client) GetDeployRequest(ctx context.Context, organization string, dat
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2305,7 +2518,13 @@ func (cl *Client) GetDeployRequest(ctx context.Context, organization string, dat
 		res200 = new(GetDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2381,6 +2600,7 @@ func (cl *Client) CloseDeployRequest(ctx context.Context, organization string, d
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2392,7 +2612,13 @@ func (cl *Client) CloseDeployRequest(ctx context.Context, organization string, d
 		res200 = new(CloseDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2445,6 +2671,7 @@ func (cl *Client) CompleteGatedDeployRequest(ctx context.Context, organization s
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2456,7 +2683,13 @@ func (cl *Client) CompleteGatedDeployRequest(ctx context.Context, organization s
 		res200 = new(CompleteGatedDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2516,6 +2749,7 @@ func (cl *Client) UpdateAutoApplyForDeployRequest(ctx context.Context, organizat
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2527,7 +2761,13 @@ func (cl *Client) UpdateAutoApplyForDeployRequest(ctx context.Context, organizat
 		res200 = new(UpdateAutoApplyForDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2580,6 +2820,7 @@ func (cl *Client) CancelQueuedDeployRequest(ctx context.Context, organization st
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2591,7 +2832,13 @@ func (cl *Client) CancelQueuedDeployRequest(ctx context.Context, organization st
 		res200 = new(CancelQueuedDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2644,6 +2891,7 @@ func (cl *Client) CompleteErroredDeploy(ctx context.Context, organization string
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2655,7 +2903,13 @@ func (cl *Client) CompleteErroredDeploy(ctx context.Context, organization string
 		res200 = new(CompleteErroredDeployRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2708,6 +2962,7 @@ func (cl *Client) QueueDeployRequest(ctx context.Context, organization string, d
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2719,7 +2974,13 @@ func (cl *Client) QueueDeployRequest(ctx context.Context, organization string, d
 		res200 = new(QueueDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2749,6 +3010,7 @@ func (cl *Client) GetDeployment(ctx context.Context, organization string, databa
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2760,7 +3022,13 @@ func (cl *Client) GetDeployment(ctx context.Context, organization string, databa
 		res200 = new(GetDeploymentRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2804,6 +3072,7 @@ func (cl *Client) ListDeployOperations(ctx context.Context, organization string,
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2815,7 +3084,13 @@ func (cl *Client) ListDeployOperations(ctx context.Context, organization string,
 		res200 = new(ListDeployOperationsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2868,6 +3143,7 @@ func (cl *Client) CompleteRevert(ctx context.Context, organization string, datab
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2879,7 +3155,13 @@ func (cl *Client) CompleteRevert(ctx context.Context, organization string, datab
 		res200 = new(CompleteRevertRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2911,6 +3193,7 @@ func (cl *Client) ListDeployRequestReviews(ctx context.Context, organization str
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2922,7 +3205,13 @@ func (cl *Client) ListDeployRequestReviews(ctx context.Context, organization str
 		res200 = new(ListDeployRequestReviewsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -2959,6 +3248,7 @@ func (cl *Client) ReviewDeployRequest(ctx context.Context, organization string, 
 	if err != nil {
 		return res201, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -2970,7 +3260,13 @@ func (cl *Client) ReviewDeployRequest(ctx context.Context, organization string, 
 		res201 = new(ReviewDeployRequestRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3023,6 +3319,7 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 	if err != nil {
 		return res200, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3034,7 +3331,13 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 		res200 = new(SkipRevertPeriodRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3042,8 +3345,6 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 	return res200, err
 }
 
-type GetDatabaseRes404 struct{}
-type GetDatabaseRes403 struct{}
 type GetDatabaseRes500 struct{}
 type GetDatabaseRes200_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
@@ -3103,6 +3404,8 @@ type GetDatabaseRes200 struct {
 	UpdatedAt                         string                        `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                        `json:"url" tfsdk:"url"`
 }
+type GetDatabaseRes404 struct{}
+type GetDatabaseRes403 struct{}
 
 func (cl *Client) GetDatabase(ctx context.Context, organization string, name string) (res200 *GetDatabaseRes200, res403 *GetDatabaseRes403, res404 *GetDatabaseRes404, res500 *GetDatabaseRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -3110,6 +3413,7 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3130,7 +3434,13 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 		res500 = new(GetDatabaseRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3149,6 +3459,7 @@ func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name 
 	if err != nil {
 		return res204, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3169,7 +3480,13 @@ func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name 
 		res500 = new(DeleteDatabaseRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3261,6 +3578,7 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3281,7 +3599,13 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 		res500 = new(UpdateDatabaseSettingsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3289,6 +3613,8 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	return res200, res403, res404, res500, err
 }
 
+type ListReadOnlyRegionsRes404 struct{}
+type ListReadOnlyRegionsRes403 struct{}
 type ListReadOnlyRegionsRes500 struct{}
 type ListReadOnlyRegionsRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -3314,8 +3640,6 @@ type ListReadOnlyRegionsRes200 struct {
 	Region      ListReadOnlyRegionsRes200_Region `json:"region" tfsdk:"region"`
 	UpdatedAt   string                           `json:"updated_at" tfsdk:"updated_at"`
 }
-type ListReadOnlyRegionsRes404 struct{}
-type ListReadOnlyRegionsRes403 struct{}
 
 func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListReadOnlyRegionsRes200, res403 *ListReadOnlyRegionsRes403, res404 *ListReadOnlyRegionsRes404, res500 *ListReadOnlyRegionsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name + "/read-only-regions"})
@@ -3331,6 +3655,7 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3351,7 +3676,13 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 		res500 = new(ListReadOnlyRegionsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3389,6 +3720,7 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3409,7 +3741,13 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 		res500 = new(ListDatabaseRegionsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3417,8 +3755,6 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	return res200, res403, res404, res500, err
 }
 
-type ListOauthApplicationsRes404 struct{}
-type ListOauthApplicationsRes403 struct{}
 type ListOauthApplicationsRes500 struct{}
 type ListOauthApplicationsRes200_DataItem struct {
 	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
@@ -3435,6 +3771,8 @@ type ListOauthApplicationsRes200_DataItem struct {
 type ListOauthApplicationsRes200 struct {
 	Data []ListOauthApplicationsRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListOauthApplicationsRes404 struct{}
+type ListOauthApplicationsRes403 struct{}
 
 func (cl *Client) ListOauthApplications(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListOauthApplicationsRes200, res403 *ListOauthApplicationsRes403, res404 *ListOauthApplicationsRes404, res500 *ListOauthApplicationsRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications"})
@@ -3450,6 +3788,7 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3470,7 +3809,13 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 		res500 = new(ListOauthApplicationsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3500,6 +3845,7 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3520,7 +3866,13 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 		res500 = new(GetOauthApplicationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3528,6 +3880,7 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	return res200, res403, res404, res500, err
 }
 
+type ListOauthTokensRes500 struct{}
 type ListOauthTokensRes200_DataItem struct {
 	ActorDisplayName string `json:"actor_display_name" tfsdk:"actor_display_name"`
 	ActorId          string `json:"actor_id" tfsdk:"actor_id"`
@@ -3546,7 +3899,6 @@ type ListOauthTokensRes200 struct {
 }
 type ListOauthTokensRes404 struct{}
 type ListOauthTokensRes403 struct{}
-type ListOauthTokensRes500 struct{}
 
 func (cl *Client) ListOauthTokens(ctx context.Context, organization string, applicationId string, page *int, perPage *int) (res200 *ListOauthTokensRes200, res403 *ListOauthTokensRes403, res404 *ListOauthTokensRes404, res500 *ListOauthTokensRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens"})
@@ -3562,6 +3914,7 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3582,7 +3935,13 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 		res500 = new(ListOauthTokensRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3636,6 +3995,7 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3656,7 +4016,13 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 		res500 = new(GetOauthTokenRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3664,10 +4030,10 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	return res200, res403, res404, res500, err
 }
 
-type DeleteOauthTokenRes500 struct{}
-type DeleteOauthTokenRes204 struct{}
 type DeleteOauthTokenRes404 struct{}
 type DeleteOauthTokenRes403 struct{}
+type DeleteOauthTokenRes500 struct{}
+type DeleteOauthTokenRes204 struct{}
 
 func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, res403 *DeleteOauthTokenRes403, res404 *DeleteOauthTokenRes404, res500 *DeleteOauthTokenRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -3675,6 +4041,7 @@ func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, app
 	if err != nil {
 		return res204, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3695,7 +4062,13 @@ func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, app
 		res500 = new(DeleteOauthTokenRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3711,6 +4084,7 @@ type CreateOrRenewOauthTokenReq struct {
 	RedirectUri  *string `json:"redirect_uri,omitempty" tfsdk:"redirect_uri"`
 	RefreshToken *string `json:"refresh_token,omitempty" tfsdk:"refresh_token"`
 }
+type CreateOrRenewOauthTokenRes403 struct{}
 type CreateOrRenewOauthTokenRes422 struct{}
 type CreateOrRenewOauthTokenRes500 struct{}
 type CreateOrRenewOauthTokenRes200 struct {
@@ -3723,7 +4097,6 @@ type CreateOrRenewOauthTokenRes200 struct {
 	Token                 *string   `json:"token,omitempty" tfsdk:"token"`
 }
 type CreateOrRenewOauthTokenRes404 struct{}
-type CreateOrRenewOauthTokenRes403 struct{}
 
 func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization string, id string, req CreateOrRenewOauthTokenReq) (res200 *CreateOrRenewOauthTokenRes200, res403 *CreateOrRenewOauthTokenRes403, res404 *CreateOrRenewOauthTokenRes404, res422 *CreateOrRenewOauthTokenRes422, res500 *CreateOrRenewOauthTokenRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + id + "/token"})
@@ -3735,6 +4108,7 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 	if err != nil {
 		return res200, res403, res404, res422, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3758,7 +4132,13 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 		res500 = new(CreateOrRenewOauthTokenRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil
@@ -3766,7 +4146,6 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 	return res200, res403, res404, res422, res500, err
 }
 
-type GetCurrentUserRes500 struct{}
 type GetCurrentUserRes200 struct {
 	AvatarUrl               *string `json:"avatar_url,omitempty" tfsdk:"avatar_url"`
 	CreatedAt               *string `json:"created_at,omitempty" tfsdk:"created_at"`
@@ -3784,6 +4163,7 @@ type GetCurrentUserRes200 struct {
 }
 type GetCurrentUserRes404 struct{}
 type GetCurrentUserRes403 struct{}
+type GetCurrentUserRes500 struct{}
 
 func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes200, res403 *GetCurrentUserRes403, res404 *GetCurrentUserRes404, res500 *GetCurrentUserRes500, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "user"})
@@ -3791,6 +4171,7 @@ func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes
 	if err != nil {
 		return res200, res403, res404, res500, err
 	}
+	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
@@ -3811,7 +4192,13 @@ func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes
 		res500 = new(GetCurrentUserRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 	default:
-		err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		var errBody *Error
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
 	}
 	if errors.Is(err, io.EOF) {
 		err = nil

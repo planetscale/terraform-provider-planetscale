@@ -82,10 +82,11 @@ type databaseResourceModel struct {
 	Name                              types.String         `tfsdk:"name"`
 	Notes                             types.String         `tfsdk:"notes"`
 	Plan                              types.String         `tfsdk:"plan"`
+	ClusterSize                       types.String         `tfsdk:"cluster_size"`
 	ProductionBranchWebConsole        types.Bool           `tfsdk:"production_branch_web_console"`
 	ProductionBranchesCount           types.Float64        `tfsdk:"production_branches_count"`
 	Ready                             types.Bool           `tfsdk:"ready"`
-	Region                            regionResourceModel  `tfsdk:"region"`
+	Region                            types.String         `tfsdk:"region"`
 	RequireApprovalForDeploy          types.Bool           `tfsdk:"require_approval_for_deploy"`
 	RestrictBranchRegion              types.Bool           `tfsdk:"restrict_branch_region"`
 	SchemaLastUpdatedAt               types.String         `tfsdk:"schema_last_updated_at"`
@@ -158,25 +159,14 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"multiple_admins_required_for_deletion":  schema.BoolAttribute{Computed: true, Optional: true},
 			"notes":                                  schema.StringAttribute{Computed: true, Optional: true},
 			"plan":                                   schema.StringAttribute{Computed: true, Optional: true},
+			"cluster_size":                           schema.StringAttribute{Computed: true, Optional: true},
 			"production_branch_web_console":          schema.BoolAttribute{Computed: true, Optional: true},
 			"production_branches_count":              schema.Float64Attribute{Computed: true},
 			"ready":                                  schema.BoolAttribute{Computed: true},
-			"region": schema.SingleNestedAttribute{
+			"region": schema.StringAttribute{
 				Computed: true, Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplace(),
-				},
-				Attributes: map[string]schema.Attribute{
-					"slug": schema.StringAttribute{
-						// the actual argument to set the region to use
-						Computed: true, Optional: true,
-					},
-					"display_name":        schema.StringAttribute{Computed: true},
-					"enabled":             schema.BoolAttribute{Computed: true},
-					"id":                  schema.StringAttribute{Computed: true},
-					"location":            schema.StringAttribute{Computed: true},
-					"provider":            schema.StringAttribute{Computed: true},
-					"public_ip_addresses": schema.ListAttribute{Computed: true, ElementType: types.StringType},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"require_approval_for_deploy": schema.BoolAttribute{Computed: true, Optional: true},
@@ -221,14 +211,35 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	res201, _, _, _, err := r.client.CreateDatabase(ctx, data.Organization.String(), planetscale.CreateDatabaseReq{})
+	orgName := data.Organization.ValueString()
+	name := data.Name.ValueString()
+	resp.Diagnostics.AddWarning("name is weird?", fmt.Sprintf("name is %q", name))
+
+	res201, res403, res404, res500, err := r.client.CreateDatabase(ctx, orgName, planetscale.CreateDatabaseReq{
+		Name:        name,
+		Plan:        data.Plan.ValueStringPointer(),
+		ClusterSize: data.ClusterSize.ValueStringPointer(),
+		Notes:       data.Notes.ValueStringPointer(),
+		Region:      data.Region.ValueStringPointer(),
+	})
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database, got error: %s", err))
 		return
 	}
-
-	ipAddrValue, diags := types.ListValue(types.StringType, stringListAttr(res201.Region.PublicIpAddresses))
-	resp.Diagnostics.Append(diags...)
+	switch {
+	case res403 != nil:
+		resp.Diagnostics.AddError("Unable to create databases", fmt.Sprintf("403 error, forbidden from creating database in organization %q", orgName))
+		return
+	case res404 != nil:
+		resp.Diagnostics.AddError("Unable to create databases", fmt.Sprintf("organization %q not found", orgName))
+		return
+	case res500 != nil:
+		resp.Diagnostics.AddError("Unable to create databases", "500 error, try again later")
+		return
+	case res201 == nil:
+		resp.Diagnostics.AddError("Unable to create databases", "no data")
+		return
+	}
 
 	data.Id = types.StringValue(res201.Id)
 
@@ -264,6 +275,7 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 	data.Type = types.StringValue(res201.Type)
 	data.UpdatedAt = types.StringValue(res201.UpdatedAt)
 	data.Url = types.StringValue(res201.Url)
+	data.Region = types.StringValue(res201.Region.Slug)
 	if res201.DataImport != nil {
 		data.DataImport = &importResourceModel{
 			DataSource: importDataSourceResourceModel{
@@ -276,15 +288,6 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 			StartedAt:         types.StringValue(res201.DataImport.StartedAt),
 			State:             types.StringValue(res201.DataImport.State),
 		}
-	}
-	data.Region = regionResourceModel{
-		DisplayName:       types.StringValue(res201.Region.DisplayName),
-		Enabled:           types.BoolValue(res201.Region.Enabled),
-		Id:                types.StringValue(res201.Region.Id),
-		Location:          types.StringValue(res201.Region.Location),
-		Provider:          types.StringValue(res201.Region.Provider),
-		PublicIpAddresses: ipAddrValue,
-		Slug:              types.StringValue(res201.Region.Slug),
 	}
 
 	// Write logs using the tflog package
@@ -322,9 +325,6 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read database, got error: %s", err))
 		return
 	}
-
-	ipAddrValue, diags := types.ListValue(types.StringType, stringListAttr(res200.Region.PublicIpAddresses))
-	resp.Diagnostics.Append(diags...)
 
 	data.Id = types.StringValue(res200.Id)
 	data.AllowDataBranching = types.BoolValue(res200.AllowDataBranching)
@@ -372,15 +372,7 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 			State:             types.StringValue(res200.DataImport.State),
 		}
 	}
-	data.Region = regionResourceModel{
-		DisplayName:       types.StringValue(res200.Region.DisplayName),
-		Enabled:           types.BoolValue(res200.Region.Enabled),
-		Id:                types.StringValue(res200.Region.Id),
-		Location:          types.StringValue(res200.Region.Location),
-		Provider:          types.StringValue(res200.Region.Provider),
-		PublicIpAddresses: ipAddrValue,
-		Slug:              types.StringValue(res200.Region.Slug),
-	}
+	data.Region = types.StringValue(res200.Region.Slug)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -430,8 +422,6 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update database settings, got error: %s", err))
 			return
 		}
-		ipAddrValue, diags := types.ListValue(types.StringType, stringListAttr(res200.Region.PublicIpAddresses))
-		resp.Diagnostics.Append(diags...)
 		data.Id = types.StringValue(res200.Id)
 		data.AllowDataBranching = types.BoolValue(res200.AllowDataBranching)
 		data.AtBackupRestoreBranchesLimit = types.BoolValue(res200.AtBackupRestoreBranchesLimit)
@@ -478,15 +468,7 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 				State:             types.StringValue(res200.DataImport.State),
 			}
 		}
-		data.Region = regionResourceModel{
-			DisplayName:       types.StringValue(res200.Region.DisplayName),
-			Enabled:           types.BoolValue(res200.Region.Enabled),
-			Id:                types.StringValue(res200.Region.Id),
-			Location:          types.StringValue(res200.Region.Location),
-			Provider:          types.StringValue(res200.Region.Provider),
-			PublicIpAddresses: ipAddrValue,
-			Slug:              types.StringValue(res200.Region.Slug),
-		}
+		data.Region = types.StringValue(res200.Region.Slug)
 	}
 
 	// Save updated data into Terraform state
