@@ -89,22 +89,12 @@ func (d *oauthApplicationsDataSource) Read(ctx context.Context, req datasource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res200, res403, res404, res500, err := d.client.ListOauthApplications(ctx, data.Organization, nil, nil)
+	res200, err := d.client.ListOauthApplications(ctx, data.Organization, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to list oauth applications", err.Error())
 		return
 	}
-	switch {
-	case res403 != nil:
-		resp.Diagnostics.AddError("Unable to list oauth applications", fmt.Sprintf("403 error, forbidden from listing oauth applications for organization %q", data.Organization))
-		return
-	case res404 != nil:
-		resp.Diagnostics.AddError("Unable to list oauth applications", fmt.Sprintf("organization %q not found", data.Organization))
-		return
-	case res500 != nil:
-		resp.Diagnostics.AddError("Unable to list oauth applications", "500 error, try again later")
-		return
-	case res200 == nil:
+	if res200 == nil {
 		resp.Diagnostics.AddError("Unable to list oauth applications", "no data")
 		return
 	}

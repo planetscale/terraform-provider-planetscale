@@ -81,6 +81,78 @@ func genParamStruct(file *jen.File, typename string, body *spec.Schema) error {
 	return nil
 }
 
+func genErrRespParamStruct(file *jen.File, typename string, body *spec.Schema) error {
+	toField := func(item spec.OrderSchemaItem) (jen.Code, error) {
+		fieldName := snakeToCamel(item.Name)
+		f := jen.Id(fieldName)
+		isOptional := !slices.Contains(body.Required, item.Name)
+		if isOptional {
+			f = f.Op("*")
+		}
+		switch {
+		case item.Type.Contains("string"):
+			f = f.String()
+		case item.Type.Contains("number"):
+			f = f.Float64()
+		case item.Type.Contains("boolean"):
+			f = f.Bool()
+		case item.Type.Contains("array"):
+			itemTypename := ""
+			switch {
+			case item.Items.Schema.Type.Contains("string"):
+				itemTypename += "string"
+			case item.Items.Schema.Type.Contains("number"):
+				itemTypename += "float64"
+			case item.Items.Schema.Type.Contains("boolean"):
+				itemTypename += "bool"
+			case item.Items.Schema.Type.Contains("object"):
+				itemTypename = typename + "_" + fieldName + "Item"
+
+				if err := genParamStruct(file, itemTypename, item.Items.Schema); err != nil {
+					return nil, fmt.Errorf("generating child item type: %w", err)
+				}
+			case item.Items.Schema.Type.Contains("array"):
+				return nil, fmt.Errorf("arrays of array aren't supported")
+			}
+			f = f.Id("[]" + itemTypename)
+
+		case item.Type.Contains("object"):
+			itemTypename := typename + "_" + fieldName
+			if err := genParamStruct(file, itemTypename, &item.Schema); err != nil {
+				return nil, fmt.Errorf("generating child item type: %w", err)
+			}
+			f = f.Id(itemTypename)
+		default:
+			return nil, fmt.Errorf("unhandled item type %v", item.Type)
+		}
+		jsonTag := item.Name
+		if isOptional {
+			jsonTag += ",omitempty"
+		}
+		f = f.Tag(map[string]string{
+			"json":  jsonTag,
+			"tfsdk": item.Name,
+		})
+		return f, nil
+	}
+
+	fields := []jen.Code{
+		jen.Op("*").Id("ErrorResponse"),
+	}
+
+	if body != nil {
+		for _, item := range body.Properties.ToOrderedSchemaItems() {
+			f, err := toField(item)
+			if err != nil {
+				return fmt.Errorf("looking at item %q: %w", item.Name, err)
+			}
+			fields = append(fields, f)
+		}
+	}
+	file.Type().Id(typename).Struct(fields...)
+	return nil
+}
+
 func genClientStruct(
 	file *jen.File,
 	spec *spec.Swagger,
@@ -117,13 +189,13 @@ func genErrorStruct(
 	file *jen.File,
 	spec *spec.Swagger,
 ) error {
-	file.Type().Id("Error").Struct(
+	file.Type().Id("ErrorResponse").Struct(
 		jen.Id("Code").Id("string").Tag(map[string]string{"json": "code"}),
 		jen.Id("Message").Id("string").Tag(map[string]string{"json": "message"}),
 	)
 
 	file.Func().Params(
-		jen.Id("err").Op("*").Id("Error"),
+		jen.Id("err").Op("*").Id("ErrorResponse"),
 	).Id("Error").Params().Parens(jen.String()).BlockFunc(func(g *jen.Group) {
 		g.Return(
 			jen.Qual("fmt", "Sprintf").Call(
@@ -191,6 +263,9 @@ func genClientCall(
 	codes := maps.Keys(responseTypeNames)
 	sort.Ints(codes)
 	for _, code := range codes {
+		if code >= 400 {
+			continue
+		}
 		returnValName := "res" + strconv.Itoa(code)
 		returnValTypeName := responseTypeNames[code]
 		returnF := jen.Id(returnValName).Op("*").Id(returnValTypeName)
@@ -280,14 +355,24 @@ func genClientCall(
 			for _, code := range codes {
 				returnValName := "res" + strconv.Itoa(code)
 				returnValTypeName := responseTypeNames[code]
+				if code < 400 {
 
-				g.Case(jen.Lit(code)).Block(
-					jen.Id(returnValName).Op("=").New(jen.Id(returnValTypeName)),
-					jen.Id("err").Op("=").Qual("encoding/json", "NewDecoder").Call(jen.Id("res").Dot("Body")).Dot("Decode").Call(jen.Op("&").Id(returnValName)),
-				)
+					g.Case(jen.Lit(code)).Block(
+						jen.Id(returnValName).Op("=").New(jen.Id(returnValTypeName)),
+						jen.Id("err").Op("=").Qual("encoding/json", "NewDecoder").Call(jen.Id("res").Dot("Body")).Dot("Decode").Call(jen.Op("&").Id(returnValName)),
+					)
+				} else {
+					g.Case(jen.Lit(code)).Block(
+						jen.Id(returnValName).Op(":=").New(jen.Id(returnValTypeName)),
+						jen.Id("err").Op("=").Qual("encoding/json", "NewDecoder").Call(jen.Id("res").Dot("Body")).Dot("Decode").Call(jen.Op("&").Id(returnValName)),
+						jen.If(jen.Id("err").Op("==").Nil()).Block(
+							jen.Id("err").Op("=").Id(returnValName),
+						),
+					)
+				}
 			}
 			g.Default().Block(
-				jen.Var().Id("errBody").Op("*").Id("Error"),
+				jen.Var().Id("errBody").Op("*").Id("ErrorResponse"),
 				jen.Id("_").Op("=").Qual("encoding/json", "NewDecoder").Call(jen.Id("res").Dot("Body")).Dot("Decode").Call(jen.Op("&").Id("errBody")),
 				jen.If(jen.Id("errBody").Op("!=").Nil()).Block(
 					jen.Id("err").Op("=").Id("errBody"),

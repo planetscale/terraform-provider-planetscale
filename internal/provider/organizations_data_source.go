@@ -89,7 +89,7 @@ func (d *organizationsDataSource) Configure(ctx context.Context, req datasource.
 }
 
 func (d *organizationsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	res200, _, _, _, err := d.client.ListOrganizations(ctx, nil, nil)
+	res200, err := d.client.ListOrganizations(ctx, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read organizations", err.Error())
 		return

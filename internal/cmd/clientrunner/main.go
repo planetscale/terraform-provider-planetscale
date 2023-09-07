@@ -35,23 +35,15 @@ func main() {
 
 	ctx := context.Background()
 
-	res200, res403, res404, res500, err := cl.CreateDatabase(ctx, "ps-e2e-prod", planetscale.CreateDatabaseReq{
+	res200, err := cl.CreateDatabase(ctx, "ps-e2e-prod", planetscale.CreateDatabaseReq{
 		Name: "hello_antoine",
 	})
 	if err != nil {
 		slog.Error("failed to get current user", "err", err)
-	} else {
-		switch {
-		case res200 != nil:
-			slog.Info("response", "resp", res200)
-		case res403 != nil:
-			slog.Error("403 error")
-		case res404 != nil:
-			slog.Error("404 error")
-		case res500 != nil:
-			slog.Error("500 error")
-		}
+		return
 	}
+	slog.Info("response", "resp", res200)
+
 }
 
 func DebugRoundTripper(out io.Writer, tpt http.RoundTripper) http.RoundTripper {

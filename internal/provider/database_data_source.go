@@ -182,7 +182,7 @@ func (d *databaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res200, _, _, _, err := d.client.GetDatabase(ctx, data.Organization, data.Name)
+	res200, err := d.client.GetDatabase(ctx, data.Organization, data.Name)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read database", err.Error())
 		return

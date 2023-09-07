@@ -88,22 +88,12 @@ func (d *organizationRegionsDataSource) Read(ctx context.Context, req datasource
 
 	orgName := data.Organization
 
-	res200, res403, res404, res500, err := d.client.ListRegionsForOrganization(ctx, orgName, nil, nil)
+	res200, err := d.client.ListRegionsForOrganization(ctx, orgName, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read organization regions", err.Error())
 		return
 	}
-	switch {
-	case res403 != nil:
-		resp.Diagnostics.AddError("Unable to read organization regions", fmt.Sprintf("403 error, forbidden from listing regions in organization %q", orgName))
-		return
-	case res404 != nil:
-		resp.Diagnostics.AddError("Unable to read organization regions", fmt.Sprintf("organization %q not found", orgName))
-		return
-	case res500 != nil:
-		resp.Diagnostics.AddError("Unable to read organization regions", "500 error, try again later")
-		return
-	case res200 == nil:
+	if res200 == nil {
 		resp.Diagnostics.AddError("Unable to read organization regions", "no data")
 		return
 	}

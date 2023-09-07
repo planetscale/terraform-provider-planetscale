@@ -116,8 +116,14 @@ func handleVerbPath(ll *slog.Logger, f *jen.File, path, verb string, operation *
 	for _, code := range resCodes {
 		resBodyStructName := kebabToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
 		res := operation.Responses.StatusCodeResponses[code]
-		if err := genParamStruct(f, resBodyStructName, res.Schema); err != nil {
-			return fmt.Errorf("generating call response struct: %w", err)
+		if code < 400 {
+			if err := genParamStruct(f, resBodyStructName, res.Schema); err != nil {
+				return fmt.Errorf("generating call response struct: %w", err)
+			}
+		} else {
+			if err := genErrRespParamStruct(f, resBodyStructName, res.Schema); err != nil {
+				return fmt.Errorf("generating call response struct: %w", err)
+			}
 		}
 		responses[code] = resBodyStructName
 	}

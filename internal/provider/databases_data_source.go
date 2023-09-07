@@ -138,22 +138,12 @@ func (d *databasesDataSource) Read(ctx context.Context, req datasource.ReadReque
 
 	orgName := data.Organization
 
-	res200, res403, res404, res500, err := d.client.ListDatabases(ctx, orgName, nil, nil)
+	res200, err := d.client.ListDatabases(ctx, orgName, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read databases", err.Error())
 		return
 	}
-	switch {
-	case res403 != nil:
-		resp.Diagnostics.AddError("Unable to read databases", fmt.Sprintf("403 error, forbidden from listing database in organization %q", orgName))
-		return
-	case res404 != nil:
-		resp.Diagnostics.AddError("Unable to read databases", "organization not found")
-		return
-	case res500 != nil:
-		resp.Diagnostics.AddError("Unable to read databases", "500 error, try again later")
-		return
-	case res200 == nil:
+	if res200 == nil {
 		resp.Diagnostics.AddError("Unable to read databases", "no data")
 		return
 	}

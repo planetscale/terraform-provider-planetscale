@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 	"golang.org/x/oauth2"
 )
@@ -173,4 +174,11 @@ func stringIfDifferent(oldString, newString types.String, wasChanged *bool) *str
 	}
 	*wasChanged = true
 	return newString.ValueStringPointer()
+}
+
+func stringValueIfKnown(v basetypes.StringValue) *string {
+	if v.IsUnknown() || v.IsNull() {
+		return nil
+	}
+	return v.ValueStringPointer()
 }

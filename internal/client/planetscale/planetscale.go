@@ -28,12 +28,12 @@ func NewClient(httpCl *http.Client, baseURL *url.URL) *Client {
 	return &Client{httpCl: httpCl, baseURL: baseURL}
 }
 
-type Error struct {
+type ErrorResponse struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`
 }
 
-func (err *Error) Error() string {
+func (err *ErrorResponse) Error() string {
 	return fmt.Sprintf("error %s: %s", err.Code, err.Message)
 }
 
@@ -69,11 +69,17 @@ type ListOrganizationsRes200_DataItem struct {
 type ListOrganizationsRes200 struct {
 	Data []ListOrganizationsRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListOrganizationsRes404 struct{}
-type ListOrganizationsRes403 struct{}
-type ListOrganizationsRes500 struct{}
+type ListOrganizationsRes404 struct {
+	*ErrorResponse
+}
+type ListOrganizationsRes403 struct {
+	*ErrorResponse
+}
+type ListOrganizationsRes500 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int) (res200 *ListOrganizationsRes200, res403 *ListOrganizationsRes403, res404 *ListOrganizationsRes404, res500 *ListOrganizationsRes500, err error) {
+func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int) (res200 *ListOrganizationsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations"})
 	q := u.Query()
 	if page != nil {
@@ -85,13 +91,13 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -99,16 +105,25 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 		res200 = new(ListOrganizationsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListOrganizationsRes403)
+		res403 := new(ListOrganizationsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListOrganizationsRes404)
+		res404 := new(ListOrganizationsRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListOrganizationsRes500)
+		res500 := new(ListOrganizationsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -119,12 +134,18 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type GetOrganizationRes404 struct{}
-type GetOrganizationRes403 struct{}
-type GetOrganizationRes500 struct{}
+type GetOrganizationRes404 struct {
+	*ErrorResponse
+}
+type GetOrganizationRes403 struct {
+	*ErrorResponse
+}
+type GetOrganizationRes500 struct {
+	*ErrorResponse
+}
 type GetOrganizationRes200_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
 	SingleTenancy *bool `json:"single_tenancy,omitempty" tfsdk:"single_tenancy"`
@@ -155,17 +176,17 @@ type GetOrganizationRes200 struct {
 	ValidBillingInfo          bool                            `json:"valid_billing_info" tfsdk:"valid_billing_info"`
 }
 
-func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *GetOrganizationRes200, res403 *GetOrganizationRes403, res404 *GetOrganizationRes404, res500 *GetOrganizationRes500, err error) {
+func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *GetOrganizationRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name})
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -173,16 +194,25 @@ func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *Get
 		res200 = new(GetOrganizationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetOrganizationRes403)
+		res403 := new(GetOrganizationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetOrganizationRes404)
+		res404 := new(GetOrganizationRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetOrganizationRes500)
+		res500 := new(GetOrganizationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -193,13 +223,19 @@ func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *Get
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type UpdateOrganizationReq struct {
 	BillingEmail                    *string `json:"billing_email,omitempty" tfsdk:"billing_email"`
 	IdpManagedRoles                 *bool   `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
 	RequireAdminForProductionAccess *bool   `json:"require_admin_for_production_access,omitempty" tfsdk:"require_admin_for_production_access"`
+}
+type UpdateOrganizationRes403 struct {
+	*ErrorResponse
+}
+type UpdateOrganizationRes500 struct {
+	*ErrorResponse
 }
 type UpdateOrganizationRes200_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
@@ -230,25 +266,25 @@ type UpdateOrganizationRes200 struct {
 	UpdatedAt                 string                             `json:"updated_at" tfsdk:"updated_at"`
 	ValidBillingInfo          bool                               `json:"valid_billing_info" tfsdk:"valid_billing_info"`
 }
-type UpdateOrganizationRes404 struct{}
-type UpdateOrganizationRes403 struct{}
-type UpdateOrganizationRes500 struct{}
+type UpdateOrganizationRes404 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) UpdateOrganization(ctx context.Context, name string, req UpdateOrganizationReq) (res200 *UpdateOrganizationRes200, res403 *UpdateOrganizationRes403, res404 *UpdateOrganizationRes404, res500 *UpdateOrganizationRes500, err error) {
+func (cl *Client) UpdateOrganization(ctx context.Context, name string, req UpdateOrganizationReq) (res200 *UpdateOrganizationRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), body)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -256,16 +292,25 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 		res200 = new(UpdateOrganizationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(UpdateOrganizationRes403)
+		res403 := new(UpdateOrganizationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(UpdateOrganizationRes404)
+		res404 := new(UpdateOrganizationRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(UpdateOrganizationRes500)
+		res500 := new(UpdateOrganizationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -276,11 +321,12 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type ListRegionsForOrganizationRes403 struct{}
-type ListRegionsForOrganizationRes500 struct{}
+type ListRegionsForOrganizationRes500 struct {
+	*ErrorResponse
+}
 type ListRegionsForOrganizationRes200_DataItem struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
@@ -293,9 +339,14 @@ type ListRegionsForOrganizationRes200_DataItem struct {
 type ListRegionsForOrganizationRes200 struct {
 	Data []ListRegionsForOrganizationRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListRegionsForOrganizationRes404 struct{}
+type ListRegionsForOrganizationRes404 struct {
+	*ErrorResponse
+}
+type ListRegionsForOrganizationRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, page *int, perPage *int) (res200 *ListRegionsForOrganizationRes200, res403 *ListRegionsForOrganizationRes403, res404 *ListRegionsForOrganizationRes404, res500 *ListRegionsForOrganizationRes500, err error) {
+func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, page *int, perPage *int) (res200 *ListRegionsForOrganizationRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + name + "/regions"})
 	q := u.Query()
 	if page != nil {
@@ -307,13 +358,13 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -321,16 +372,25 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 		res200 = new(ListRegionsForOrganizationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListRegionsForOrganizationRes403)
+		res403 := new(ListRegionsForOrganizationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListRegionsForOrganizationRes404)
+		res404 := new(ListRegionsForOrganizationRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListRegionsForOrganizationRes500)
+		res500 := new(ListRegionsForOrganizationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -341,12 +401,18 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type ListDatabasesRes404 struct{}
-type ListDatabasesRes403 struct{}
-type ListDatabasesRes500 struct{}
+type ListDatabasesRes404 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes403 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes500 struct {
+	*ErrorResponse
+}
 type ListDatabasesRes200_DataItem_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
 	Hostname string `json:"hostname" tfsdk:"hostname"`
@@ -409,7 +475,7 @@ type ListDatabasesRes200 struct {
 	Data []ListDatabasesRes200_DataItem `json:"data" tfsdk:"data"`
 }
 
-func (cl *Client) ListDatabases(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListDatabasesRes200, res403 *ListDatabasesRes403, res404 *ListDatabasesRes404, res500 *ListDatabasesRes500, err error) {
+func (cl *Client) ListDatabases(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListDatabasesRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases"})
 	q := u.Query()
 	if page != nil {
@@ -421,13 +487,13 @@ func (cl *Client) ListDatabases(ctx context.Context, organization string, page *
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -435,16 +501,25 @@ func (cl *Client) ListDatabases(ctx context.Context, organization string, page *
 		res200 = new(ListDatabasesRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListDatabasesRes403)
+		res403 := new(ListDatabasesRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListDatabasesRes404)
+		res404 := new(ListDatabasesRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListDatabasesRes500)
+		res500 := new(ListDatabasesRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -455,7 +530,7 @@ func (cl *Client) ListDatabases(ctx context.Context, organization string, page *
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type CreateDatabaseReq struct {
@@ -465,7 +540,12 @@ type CreateDatabaseReq struct {
 	Plan        *string `json:"plan,omitempty" tfsdk:"plan"`
 	Region      *string `json:"region,omitempty" tfsdk:"region"`
 }
-type CreateDatabaseRes500 struct{}
+type CreateDatabaseRes403 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes500 struct {
+	*ErrorResponse
+}
 type CreateDatabaseRes201_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
 	Hostname string `json:"hostname" tfsdk:"hostname"`
@@ -524,24 +604,25 @@ type CreateDatabaseRes201 struct {
 	UpdatedAt                         string                           `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                           `json:"url" tfsdk:"url"`
 }
-type CreateDatabaseRes404 struct{}
-type CreateDatabaseRes403 struct{}
+type CreateDatabaseRes404 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) CreateDatabase(ctx context.Context, organization string, req CreateDatabaseReq) (res201 *CreateDatabaseRes201, res403 *CreateDatabaseRes403, res404 *CreateDatabaseRes404, res500 *CreateDatabaseRes500, err error) {
+func (cl *Client) CreateDatabase(ctx context.Context, organization string, req CreateDatabaseReq) (res201 *CreateDatabaseRes201, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases"})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
 	if err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -549,16 +630,25 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 		res201 = new(CreateDatabaseRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
 	case 403:
-		res403 = new(CreateDatabaseRes403)
+		res403 := new(CreateDatabaseRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(CreateDatabaseRes404)
+		res404 := new(CreateDatabaseRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(CreateDatabaseRes500)
+		res500 := new(CreateDatabaseRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -569,11 +659,12 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res201, res403, res404, res500, err
+	return res201, err
 }
 
-type ListBranchesRes403 struct{}
-type ListBranchesRes500 struct{}
+type ListBranchesRes500 struct {
+	*ErrorResponse
+}
 type ListBranchesRes200_DataItem_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -619,9 +710,14 @@ type ListBranchesRes200_DataItem struct {
 type ListBranchesRes200 struct {
 	Data []ListBranchesRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListBranchesRes404 struct{}
+type ListBranchesRes404 struct {
+	*ErrorResponse
+}
+type ListBranchesRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) ListBranches(ctx context.Context, organization string, database string, page *int, perPage *int) (res200 *ListBranchesRes200, res403 *ListBranchesRes403, res404 *ListBranchesRes404, res500 *ListBranchesRes500, err error) {
+func (cl *Client) ListBranches(ctx context.Context, organization string, database string, page *int, perPage *int) (res200 *ListBranchesRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches"})
 	q := u.Query()
 	if page != nil {
@@ -633,13 +729,13 @@ func (cl *Client) ListBranches(ctx context.Context, organization string, databas
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -647,16 +743,25 @@ func (cl *Client) ListBranches(ctx context.Context, organization string, databas
 		res200 = new(ListBranchesRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListBranchesRes403)
+		res403 := new(ListBranchesRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListBranchesRes404)
+		res404 := new(ListBranchesRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListBranchesRes500)
+		res500 := new(ListBranchesRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -667,7 +772,7 @@ func (cl *Client) ListBranches(ctx context.Context, organization string, databas
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type CreateBranchReq struct {
@@ -675,7 +780,15 @@ type CreateBranchReq struct {
 	Name         string  `json:"name" tfsdk:"name"`
 	ParentBranch string  `json:"parent_branch" tfsdk:"parent_branch"`
 }
-type CreateBranchRes500 struct{}
+type CreateBranchRes404 struct {
+	*ErrorResponse
+}
+type CreateBranchRes403 struct {
+	*ErrorResponse
+}
+type CreateBranchRes500 struct {
+	*ErrorResponse
+}
 type CreateBranchRes201_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -718,24 +831,22 @@ type CreateBranchRes201 struct {
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
 }
-type CreateBranchRes404 struct{}
-type CreateBranchRes403 struct{}
 
-func (cl *Client) CreateBranch(ctx context.Context, organization string, database string, req CreateBranchReq) (res201 *CreateBranchRes201, res403 *CreateBranchRes403, res404 *CreateBranchRes404, res500 *CreateBranchRes500, err error) {
+func (cl *Client) CreateBranch(ctx context.Context, organization string, database string, req CreateBranchReq) (res201 *CreateBranchRes201, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches"})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
 	if err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -743,16 +854,25 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 		res201 = new(CreateBranchRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
 	case 403:
-		res403 = new(CreateBranchRes403)
+		res403 := new(CreateBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(CreateBranchRes404)
+		res404 := new(CreateBranchRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(CreateBranchRes500)
+		res500 := new(CreateBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -763,12 +883,18 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res201, res403, res404, res500, err
+	return res201, err
 }
 
-type ListBackupsRes404 struct{}
-type ListBackupsRes403 struct{}
-type ListBackupsRes500 struct{}
+type ListBackupsRes404 struct {
+	*ErrorResponse
+}
+type ListBackupsRes403 struct {
+	*ErrorResponse
+}
+type ListBackupsRes500 struct {
+	*ErrorResponse
+}
 type ListBackupsRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -814,7 +940,7 @@ type ListBackupsRes200 struct {
 	Data []ListBackupsRes200_DataItem `json:"data" tfsdk:"data"`
 }
 
-func (cl *Client) ListBackups(ctx context.Context, organization string, database string, branch string, page *int, perPage *int) (res200 *ListBackupsRes200, res403 *ListBackupsRes403, res404 *ListBackupsRes404, res500 *ListBackupsRes500, err error) {
+func (cl *Client) ListBackups(ctx context.Context, organization string, database string, branch string, page *int, perPage *int) (res200 *ListBackupsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups"})
 	q := u.Query()
 	if page != nil {
@@ -826,13 +952,13 @@ func (cl *Client) ListBackups(ctx context.Context, organization string, database
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -840,16 +966,25 @@ func (cl *Client) ListBackups(ctx context.Context, organization string, database
 		res200 = new(ListBackupsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListBackupsRes403)
+		res403 := new(ListBackupsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListBackupsRes404)
+		res404 := new(ListBackupsRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListBackupsRes500)
+		res500 := new(ListBackupsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -860,7 +995,7 @@ func (cl *Client) ListBackups(ctx context.Context, organization string, database
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type CreateBackupReq struct {
@@ -868,9 +1003,15 @@ type CreateBackupReq struct {
 	RetentionUnit  *string  `json:"retention_unit,omitempty" tfsdk:"retention_unit"`
 	RetentionValue *float64 `json:"retention_value,omitempty" tfsdk:"retention_value"`
 }
-type CreateBackupRes404 struct{}
-type CreateBackupRes403 struct{}
-type CreateBackupRes500 struct{}
+type CreateBackupRes404 struct {
+	*ErrorResponse
+}
+type CreateBackupRes403 struct {
+	*ErrorResponse
+}
+type CreateBackupRes500 struct {
+	*ErrorResponse
+}
 type CreateBackupRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -916,21 +1057,21 @@ type CreateBackupRes200 struct {
 	Data []CreateBackupRes200_DataItem `json:"data" tfsdk:"data"`
 }
 
-func (cl *Client) CreateBackup(ctx context.Context, organization string, database string, branch string, req CreateBackupReq) (res200 *CreateBackupRes200, res403 *CreateBackupRes403, res404 *CreateBackupRes404, res500 *CreateBackupRes500, err error) {
+func (cl *Client) CreateBackup(ctx context.Context, organization string, database string, branch string, req CreateBackupReq) (res200 *CreateBackupRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups"})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -938,16 +1079,25 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 		res200 = new(CreateBackupRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(CreateBackupRes403)
+		res403 := new(CreateBackupRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(CreateBackupRes404)
+		res404 := new(CreateBackupRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(CreateBackupRes500)
+		res500 := new(CreateBackupRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -958,7 +1108,7 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type GetBackupRes200_Actor struct {
@@ -1002,21 +1152,27 @@ type GetBackupRes200 struct {
 	State                string                         `json:"state" tfsdk:"state"`
 	UpdatedAt            string                         `json:"updated_at" tfsdk:"updated_at"`
 }
-type GetBackupRes404 struct{}
-type GetBackupRes403 struct{}
-type GetBackupRes500 struct{}
+type GetBackupRes404 struct {
+	*ErrorResponse
+}
+type GetBackupRes403 struct {
+	*ErrorResponse
+}
+type GetBackupRes500 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) GetBackup(ctx context.Context, organization string, database string, branch string, id string) (res200 *GetBackupRes200, res403 *GetBackupRes403, res404 *GetBackupRes404, res500 *GetBackupRes500, err error) {
+func (cl *Client) GetBackup(ctx context.Context, organization string, database string, branch string, id string) (res200 *GetBackupRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups/" + id})
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1024,16 +1180,25 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 		res200 = new(GetBackupRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetBackupRes403)
+		res403 := new(GetBackupRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetBackupRes404)
+		res404 := new(GetBackupRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetBackupRes500)
+		res500 := new(GetBackupRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1044,25 +1209,31 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type DeleteBackupRes404 struct{}
-type DeleteBackupRes403 struct{}
-type DeleteBackupRes500 struct{}
+type DeleteBackupRes404 struct {
+	*ErrorResponse
+}
+type DeleteBackupRes403 struct {
+	*ErrorResponse
+}
+type DeleteBackupRes500 struct {
+	*ErrorResponse
+}
 type DeleteBackupRes204 struct{}
 
-func (cl *Client) DeleteBackup(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeleteBackupRes204, res403 *DeleteBackupRes403, res404 *DeleteBackupRes404, res500 *DeleteBackupRes500, err error) {
+func (cl *Client) DeleteBackup(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeleteBackupRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups/" + id})
 	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1070,16 +1241,25 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 		res204 = new(DeleteBackupRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
 	case 403:
-		res403 = new(DeleteBackupRes403)
+		res403 := new(DeleteBackupRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(DeleteBackupRes404)
+		res404 := new(DeleteBackupRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(DeleteBackupRes500)
+		res500 := new(DeleteBackupRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1090,10 +1270,18 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res204, res403, res404, res500, err
+	return res204, err
 }
 
-type ListPasswordsRes500 struct{}
+type ListPasswordsRes404 struct {
+	*ErrorResponse
+}
+type ListPasswordsRes403 struct {
+	*ErrorResponse
+}
+type ListPasswordsRes500 struct {
+	*ErrorResponse
+}
 type ListPasswordsRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1134,10 +1322,8 @@ type ListPasswordsRes200_DataItem struct {
 type ListPasswordsRes200 struct {
 	Data []ListPasswordsRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListPasswordsRes404 struct{}
-type ListPasswordsRes403 struct{}
 
-func (cl *Client) ListPasswords(ctx context.Context, organization string, database string, branch string, readOnlyRegionId *string, page *int, perPage *int) (res200 *ListPasswordsRes200, res403 *ListPasswordsRes403, res404 *ListPasswordsRes404, res500 *ListPasswordsRes500, err error) {
+func (cl *Client) ListPasswords(ctx context.Context, organization string, database string, branch string, readOnlyRegionId *string, page *int, perPage *int) (res200 *ListPasswordsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords"})
 	q := u.Query()
 	if readOnlyRegionId != nil {
@@ -1152,13 +1338,13 @@ func (cl *Client) ListPasswords(ctx context.Context, organization string, databa
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1166,16 +1352,25 @@ func (cl *Client) ListPasswords(ctx context.Context, organization string, databa
 		res200 = new(ListPasswordsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListPasswordsRes403)
+		res403 := new(ListPasswordsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListPasswordsRes404)
+		res404 := new(ListPasswordsRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListPasswordsRes500)
+		res500 := new(ListPasswordsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1186,13 +1381,22 @@ func (cl *Client) ListPasswords(ctx context.Context, organization string, databa
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type CreatePasswordReq struct {
 	Name *string  `json:"name,omitempty" tfsdk:"name"`
 	Role *string  `json:"role,omitempty" tfsdk:"role"`
 	Ttl  *float64 `json:"ttl,omitempty" tfsdk:"ttl"`
+}
+type CreatePasswordRes404 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes403 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes500 struct {
+	*ErrorResponse
 }
 type CreatePasswordRes201_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1232,25 +1436,22 @@ type CreatePasswordRes201 struct {
 	TtlSeconds     float64                             `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
-type CreatePasswordRes404 struct{}
-type CreatePasswordRes403 struct{}
-type CreatePasswordRes500 struct{}
 
-func (cl *Client) CreatePassword(ctx context.Context, organization string, database string, branch string, req CreatePasswordReq) (res201 *CreatePasswordRes201, res403 *CreatePasswordRes403, res404 *CreatePasswordRes404, res500 *CreatePasswordRes500, err error) {
+func (cl *Client) CreatePassword(ctx context.Context, organization string, database string, branch string, req CreatePasswordReq) (res201 *CreatePasswordRes201, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords"})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
 	if err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res201, res403, res404, res500, err
+		return res201, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1258,16 +1459,25 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 		res201 = new(CreatePasswordRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
 	case 403:
-		res403 = new(CreatePasswordRes403)
+		res403 := new(CreatePasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(CreatePasswordRes404)
+		res404 := new(CreatePasswordRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(CreatePasswordRes500)
+		res500 := new(CreatePasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1278,11 +1488,12 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res201, res403, res404, res500, err
+	return res201, err
 }
 
-type GetPasswordRes403 struct{}
-type GetPasswordRes500 struct{}
+type GetPasswordRes500 struct {
+	*ErrorResponse
+}
 type GetPasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1320,9 +1531,14 @@ type GetPasswordRes200 struct {
 	TtlSeconds     float64                          `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                          `json:"username,omitempty" tfsdk:"username"`
 }
-type GetPasswordRes404 struct{}
+type GetPasswordRes404 struct {
+	*ErrorResponse
+}
+type GetPasswordRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) GetPassword(ctx context.Context, organization string, database string, branch string, id string, readOnlyRegionId *string) (res200 *GetPasswordRes200, res403 *GetPasswordRes403, res404 *GetPasswordRes404, res500 *GetPasswordRes500, err error) {
+func (cl *Client) GetPassword(ctx context.Context, organization string, database string, branch string, id string, readOnlyRegionId *string) (res200 *GetPasswordRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id})
 	q := u.Query()
 	if readOnlyRegionId != nil {
@@ -1331,13 +1547,13 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1345,16 +1561,25 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 		res200 = new(GetPasswordRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetPasswordRes403)
+		res403 := new(GetPasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetPasswordRes404)
+		res404 := new(GetPasswordRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetPasswordRes500)
+		res500 := new(GetPasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1365,25 +1590,31 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type DeletePasswordRes404 struct{}
-type DeletePasswordRes403 struct{}
-type DeletePasswordRes500 struct{}
+type DeletePasswordRes500 struct {
+	*ErrorResponse
+}
 type DeletePasswordRes204 struct{}
+type DeletePasswordRes404 struct {
+	*ErrorResponse
+}
+type DeletePasswordRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) DeletePassword(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeletePasswordRes204, res403 *DeletePasswordRes403, res404 *DeletePasswordRes404, res500 *DeletePasswordRes500, err error) {
+func (cl *Client) DeletePassword(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeletePasswordRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id})
 	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1391,16 +1622,25 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 		res204 = new(DeletePasswordRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
 	case 403:
-		res403 = new(DeletePasswordRes403)
+		res403 := new(DeletePasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(DeletePasswordRes404)
+		res404 := new(DeletePasswordRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(DeletePasswordRes500)
+		res500 := new(DeletePasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1411,7 +1651,7 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res204, res403, res404, res500, err
+	return res204, err
 }
 
 type UpdatePasswordReq struct {
@@ -1454,25 +1694,31 @@ type UpdatePasswordRes200 struct {
 	TtlSeconds     float64                             `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
-type UpdatePasswordRes404 struct{}
-type UpdatePasswordRes403 struct{}
-type UpdatePasswordRes500 struct{}
+type UpdatePasswordRes404 struct {
+	*ErrorResponse
+}
+type UpdatePasswordRes403 struct {
+	*ErrorResponse
+}
+type UpdatePasswordRes500 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) UpdatePassword(ctx context.Context, organization string, database string, branch string, id string, req UpdatePasswordReq) (res200 *UpdatePasswordRes200, res403 *UpdatePasswordRes403, res404 *UpdatePasswordRes404, res500 *UpdatePasswordRes500, err error) {
+func (cl *Client) UpdatePassword(ctx context.Context, organization string, database string, branch string, id string, req UpdatePasswordReq) (res200 *UpdatePasswordRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), body)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1480,16 +1726,25 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 		res200 = new(UpdatePasswordRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(UpdatePasswordRes403)
+		res403 := new(UpdatePasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(UpdatePasswordRes404)
+		res404 := new(UpdatePasswordRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(UpdatePasswordRes500)
+		res500 := new(UpdatePasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1500,15 +1755,12 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type RenewPasswordReq struct {
 	ReadOnlyRegionId *string `json:"read_only_region_id,omitempty" tfsdk:"read_only_region_id"`
 }
-type RenewPasswordRes404 struct{}
-type RenewPasswordRes403 struct{}
-type RenewPasswordRes500 struct{}
 type RenewPasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1547,22 +1799,31 @@ type RenewPasswordRes200 struct {
 	TtlSeconds     float64                            `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                            `json:"username,omitempty" tfsdk:"username"`
 }
+type RenewPasswordRes404 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes403 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes500 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) RenewPassword(ctx context.Context, organization string, database string, branch string, id string, req RenewPasswordReq) (res200 *RenewPasswordRes200, res403 *RenewPasswordRes403, res404 *RenewPasswordRes404, res500 *RenewPasswordRes500, err error) {
+func (cl *Client) RenewPassword(ctx context.Context, organization string, database string, branch string, id string, req RenewPasswordReq) (res200 *RenewPasswordRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id + "/renew"})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1570,16 +1831,25 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 		res200 = new(RenewPasswordRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(RenewPasswordRes403)
+		res403 := new(RenewPasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(RenewPasswordRes404)
+		res404 := new(RenewPasswordRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(RenewPasswordRes500)
+		res500 := new(RenewPasswordRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1590,12 +1860,12 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type GetBranchRes404 struct{}
-type GetBranchRes403 struct{}
-type GetBranchRes500 struct{}
+type GetBranchRes500 struct {
+	*ErrorResponse
+}
 type GetBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1638,18 +1908,24 @@ type GetBranchRes200 struct {
 	Sharded                     bool                                `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                              `json:"updated_at" tfsdk:"updated_at"`
 }
+type GetBranchRes404 struct {
+	*ErrorResponse
+}
+type GetBranchRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) GetBranch(ctx context.Context, organization string, database string, name string) (res200 *GetBranchRes200, res403 *GetBranchRes403, res404 *GetBranchRes404, res500 *GetBranchRes500, err error) {
+func (cl *Client) GetBranch(ctx context.Context, organization string, database string, name string) (res200 *GetBranchRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name})
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1657,16 +1933,25 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 		res200 = new(GetBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetBranchRes403)
+		res403 := new(GetBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetBranchRes404)
+		res404 := new(GetBranchRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetBranchRes500)
+		res500 := new(GetBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1677,25 +1962,31 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type DeleteBranchRes404 struct{}
-type DeleteBranchRes403 struct{}
-type DeleteBranchRes500 struct{}
+type DeleteBranchRes403 struct {
+	*ErrorResponse
+}
+type DeleteBranchRes500 struct {
+	*ErrorResponse
+}
 type DeleteBranchRes204 struct{}
+type DeleteBranchRes404 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) DeleteBranch(ctx context.Context, organization string, database string, name string) (res204 *DeleteBranchRes204, res403 *DeleteBranchRes403, res404 *DeleteBranchRes404, res500 *DeleteBranchRes500, err error) {
+func (cl *Client) DeleteBranch(ctx context.Context, organization string, database string, name string) (res204 *DeleteBranchRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name})
 	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1703,16 +1994,25 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 		res204 = new(DeleteBranchRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
 	case 403:
-		res403 = new(DeleteBranchRes403)
+		res403 := new(DeleteBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(DeleteBranchRes404)
+		res404 := new(DeleteBranchRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(DeleteBranchRes500)
+		res500 := new(DeleteBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1723,12 +2023,15 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res204, res403, res404, res500, err
+	return res204, err
 }
 
-type DemoteBranchRes404 struct{}
-type DemoteBranchRes403 struct{}
-type DemoteBranchRes500 struct{}
+type DemoteBranchRes403 struct {
+	*ErrorResponse
+}
+type DemoteBranchRes500 struct {
+	*ErrorResponse
+}
 type DemoteBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1771,18 +2074,21 @@ type DemoteBranchRes200 struct {
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
 }
+type DemoteBranchRes404 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) DemoteBranch(ctx context.Context, organization string, database string, name string) (res200 *DemoteBranchRes200, res403 *DemoteBranchRes403, res404 *DemoteBranchRes404, res500 *DemoteBranchRes500, err error) {
+func (cl *Client) DemoteBranch(ctx context.Context, organization string, database string, name string) (res200 *DemoteBranchRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/demote"})
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1790,16 +2096,25 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 		res200 = new(DemoteBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(DemoteBranchRes403)
+		res403 := new(DemoteBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(DemoteBranchRes404)
+		res404 := new(DemoteBranchRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(DemoteBranchRes500)
+		res500 := new(DemoteBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1810,9 +2125,18 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
+type PromoteBranchRes404 struct {
+	*ErrorResponse
+}
+type PromoteBranchRes403 struct {
+	*ErrorResponse
+}
+type PromoteBranchRes500 struct {
+	*ErrorResponse
+}
 type PromoteBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1855,21 +2179,18 @@ type PromoteBranchRes200 struct {
 	Sharded                     bool                                    `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                  `json:"updated_at" tfsdk:"updated_at"`
 }
-type PromoteBranchRes404 struct{}
-type PromoteBranchRes403 struct{}
-type PromoteBranchRes500 struct{}
 
-func (cl *Client) PromoteBranch(ctx context.Context, organization string, database string, name string) (res200 *PromoteBranchRes200, res403 *PromoteBranchRes403, res404 *PromoteBranchRes404, res500 *PromoteBranchRes500, err error) {
+func (cl *Client) PromoteBranch(ctx context.Context, organization string, database string, name string) (res200 *PromoteBranchRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/promote"})
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1877,16 +2198,25 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 		res200 = new(PromoteBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(PromoteBranchRes403)
+		res403 := new(PromoteBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(PromoteBranchRes404)
+		res404 := new(PromoteBranchRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(PromoteBranchRes500)
+		res500 := new(PromoteBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1897,10 +2227,9 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type EnableSafeMigrationsForBranchRes500 struct{}
 type EnableSafeMigrationsForBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1943,20 +2272,27 @@ type EnableSafeMigrationsForBranchRes200 struct {
 	Sharded                     bool                                                    `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                                  `json:"updated_at" tfsdk:"updated_at"`
 }
-type EnableSafeMigrationsForBranchRes404 struct{}
-type EnableSafeMigrationsForBranchRes403 struct{}
+type EnableSafeMigrationsForBranchRes404 struct {
+	*ErrorResponse
+}
+type EnableSafeMigrationsForBranchRes403 struct {
+	*ErrorResponse
+}
+type EnableSafeMigrationsForBranchRes500 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *EnableSafeMigrationsForBranchRes200, res403 *EnableSafeMigrationsForBranchRes403, res404 *EnableSafeMigrationsForBranchRes404, res500 *EnableSafeMigrationsForBranchRes500, err error) {
+func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *EnableSafeMigrationsForBranchRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/safe-migrations"})
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -1964,16 +2300,25 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 		res200 = new(EnableSafeMigrationsForBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(EnableSafeMigrationsForBranchRes403)
+		res403 := new(EnableSafeMigrationsForBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(EnableSafeMigrationsForBranchRes404)
+		res404 := new(EnableSafeMigrationsForBranchRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(EnableSafeMigrationsForBranchRes500)
+		res500 := new(EnableSafeMigrationsForBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -1984,11 +2329,9 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type DisableSafeMigrationsForBranchRes403 struct{}
-type DisableSafeMigrationsForBranchRes500 struct{}
 type DisableSafeMigrationsForBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -2031,19 +2374,27 @@ type DisableSafeMigrationsForBranchRes200 struct {
 	Sharded                     bool                                                     `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                                   `json:"updated_at" tfsdk:"updated_at"`
 }
-type DisableSafeMigrationsForBranchRes404 struct{}
+type DisableSafeMigrationsForBranchRes404 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes403 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes500 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *DisableSafeMigrationsForBranchRes200, res403 *DisableSafeMigrationsForBranchRes403, res404 *DisableSafeMigrationsForBranchRes404, res500 *DisableSafeMigrationsForBranchRes500, err error) {
+func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *DisableSafeMigrationsForBranchRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/safe-migrations"})
 	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -2051,16 +2402,25 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 		res200 = new(DisableSafeMigrationsForBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(DisableSafeMigrationsForBranchRes403)
+		res403 := new(DisableSafeMigrationsForBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(DisableSafeMigrationsForBranchRes404)
+		res404 := new(DisableSafeMigrationsForBranchRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(DisableSafeMigrationsForBranchRes500)
+		res500 := new(DisableSafeMigrationsForBranchRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2071,9 +2431,18 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
+type GetBranchSchemaRes404 struct {
+	*ErrorResponse
+}
+type GetBranchSchemaRes403 struct {
+	*ErrorResponse
+}
+type GetBranchSchemaRes500 struct {
+	*ErrorResponse
+}
 type GetBranchSchemaRes200_DataItem struct {
 	Html string `json:"html" tfsdk:"html"`
 	Name string `json:"name" tfsdk:"name"`
@@ -2082,11 +2451,8 @@ type GetBranchSchemaRes200_DataItem struct {
 type GetBranchSchemaRes200 struct {
 	Data []GetBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type GetBranchSchemaRes404 struct{}
-type GetBranchSchemaRes403 struct{}
-type GetBranchSchemaRes500 struct{}
 
-func (cl *Client) GetBranchSchema(ctx context.Context, organization string, database string, name string, keyspace *string) (res200 *GetBranchSchemaRes200, res403 *GetBranchSchemaRes403, res404 *GetBranchSchemaRes404, res500 *GetBranchSchemaRes500, err error) {
+func (cl *Client) GetBranchSchema(ctx context.Context, organization string, database string, name string, keyspace *string) (res200 *GetBranchSchemaRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/schema"})
 	q := u.Query()
 	if keyspace != nil {
@@ -2095,13 +2461,13 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -2109,16 +2475,25 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 		res200 = new(GetBranchSchemaRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetBranchSchemaRes403)
+		res403 := new(GetBranchSchemaRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetBranchSchemaRes404)
+		res404 := new(GetBranchSchemaRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetBranchSchemaRes500)
+		res500 := new(GetBranchSchemaRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2129,9 +2504,18 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
+type LintBranchSchemaRes404 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes403 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes500 struct {
+	*ErrorResponse
+}
 type LintBranchSchemaRes200_DataItem struct {
 	AutoIncrementColumnNames []string `json:"auto_increment_column_names" tfsdk:"auto_increment_column_names"`
 	CharsetName              string   `json:"charset_name" tfsdk:"charset_name"`
@@ -2154,11 +2538,8 @@ type LintBranchSchemaRes200_DataItem struct {
 type LintBranchSchemaRes200 struct {
 	Data []LintBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type LintBranchSchemaRes404 struct{}
-type LintBranchSchemaRes403 struct{}
-type LintBranchSchemaRes500 struct{}
 
-func (cl *Client) LintBranchSchema(ctx context.Context, organization string, database string, name string, page *int, perPage *int) (res200 *LintBranchSchemaRes200, res403 *LintBranchSchemaRes403, res404 *LintBranchSchemaRes404, res500 *LintBranchSchemaRes500, err error) {
+func (cl *Client) LintBranchSchema(ctx context.Context, organization string, database string, name string, page *int, perPage *int) (res200 *LintBranchSchemaRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name + "/schema/lint"})
 	q := u.Query()
 	if page != nil {
@@ -2170,13 +2551,13 @@ func (cl *Client) LintBranchSchema(ctx context.Context, organization string, dat
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -2184,16 +2565,25 @@ func (cl *Client) LintBranchSchema(ctx context.Context, organization string, dat
 		res200 = new(LintBranchSchemaRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(LintBranchSchemaRes403)
+		res403 := new(LintBranchSchemaRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(LintBranchSchemaRes404)
+		res404 := new(LintBranchSchemaRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(LintBranchSchemaRes500)
+		res500 := new(LintBranchSchemaRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2204,7 +2594,7 @@ func (cl *Client) LintBranchSchema(ctx context.Context, organization string, dat
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
 type GetTheDeployQueueRes200_DataItem struct {
@@ -2244,7 +2634,7 @@ func (cl *Client) GetTheDeployQueue(ctx context.Context, organization string, da
 		res200 = new(GetTheDeployQueueRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2335,7 +2725,7 @@ func (cl *Client) ListDeployRequests(ctx context.Context, organization string, d
 		res200 = new(ListDeployRequestsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2431,7 +2821,7 @@ func (cl *Client) CreateDeployRequest(ctx context.Context, organization string, 
 		res201 = new(CreateDeployRequestRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2518,7 +2908,7 @@ func (cl *Client) GetDeployRequest(ctx context.Context, organization string, dat
 		res200 = new(GetDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2612,7 +3002,7 @@ func (cl *Client) CloseDeployRequest(ctx context.Context, organization string, d
 		res200 = new(CloseDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2683,7 +3073,7 @@ func (cl *Client) CompleteGatedDeployRequest(ctx context.Context, organization s
 		res200 = new(CompleteGatedDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2761,7 +3151,7 @@ func (cl *Client) UpdateAutoApplyForDeployRequest(ctx context.Context, organizat
 		res200 = new(UpdateAutoApplyForDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2832,7 +3222,7 @@ func (cl *Client) CancelQueuedDeployRequest(ctx context.Context, organization st
 		res200 = new(CancelQueuedDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2903,7 +3293,7 @@ func (cl *Client) CompleteErroredDeploy(ctx context.Context, organization string
 		res200 = new(CompleteErroredDeployRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -2974,7 +3364,7 @@ func (cl *Client) QueueDeployRequest(ctx context.Context, organization string, d
 		res200 = new(QueueDeployRequestRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3022,7 +3412,7 @@ func (cl *Client) GetDeployment(ctx context.Context, organization string, databa
 		res200 = new(GetDeploymentRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3084,7 +3474,7 @@ func (cl *Client) ListDeployOperations(ctx context.Context, organization string,
 		res200 = new(ListDeployOperationsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3155,7 +3545,7 @@ func (cl *Client) CompleteRevert(ctx context.Context, organization string, datab
 		res200 = new(CompleteRevertRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3205,7 +3595,7 @@ func (cl *Client) ListDeployRequestReviews(ctx context.Context, organization str
 		res200 = new(ListDeployRequestReviewsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3260,7 +3650,7 @@ func (cl *Client) ReviewDeployRequest(ctx context.Context, organization string, 
 		res201 = new(ReviewDeployRequestRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3331,7 +3721,7 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 		res200 = new(SkipRevertPeriodRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3345,7 +3735,12 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 	return res200, err
 }
 
-type GetDatabaseRes500 struct{}
+type GetDatabaseRes403 struct {
+	*ErrorResponse
+}
+type GetDatabaseRes500 struct {
+	*ErrorResponse
+}
 type GetDatabaseRes200_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
 	Hostname string `json:"hostname" tfsdk:"hostname"`
@@ -3404,20 +3799,21 @@ type GetDatabaseRes200 struct {
 	UpdatedAt                         string                        `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                        `json:"url" tfsdk:"url"`
 }
-type GetDatabaseRes404 struct{}
-type GetDatabaseRes403 struct{}
+type GetDatabaseRes404 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) GetDatabase(ctx context.Context, organization string, name string) (res200 *GetDatabaseRes200, res403 *GetDatabaseRes403, res404 *GetDatabaseRes404, res500 *GetDatabaseRes500, err error) {
+func (cl *Client) GetDatabase(ctx context.Context, organization string, name string) (res200 *GetDatabaseRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3425,16 +3821,25 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 		res200 = new(GetDatabaseRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetDatabaseRes403)
+		res403 := new(GetDatabaseRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetDatabaseRes404)
+		res404 := new(GetDatabaseRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetDatabaseRes500)
+		res500 := new(GetDatabaseRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3445,25 +3850,31 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type DeleteDatabaseRes404 struct{}
-type DeleteDatabaseRes403 struct{}
-type DeleteDatabaseRes500 struct{}
+type DeleteDatabaseRes404 struct {
+	*ErrorResponse
+}
+type DeleteDatabaseRes403 struct {
+	*ErrorResponse
+}
+type DeleteDatabaseRes500 struct {
+	*ErrorResponse
+}
 type DeleteDatabaseRes204 struct{}
 
-func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name string) (res204 *DeleteDatabaseRes204, res403 *DeleteDatabaseRes403, res404 *DeleteDatabaseRes404, res500 *DeleteDatabaseRes500, err error) {
+func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name string) (res204 *DeleteDatabaseRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
 	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3471,16 +3882,25 @@ func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name 
 		res204 = new(DeleteDatabaseRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
 	case 403:
-		res403 = new(DeleteDatabaseRes403)
+		res403 := new(DeleteDatabaseRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(DeleteDatabaseRes404)
+		res404 := new(DeleteDatabaseRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(DeleteDatabaseRes500)
+		res500 := new(DeleteDatabaseRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3491,7 +3911,7 @@ func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name 
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res204, res403, res404, res500, err
+	return res204, err
 }
 
 type UpdateDatabaseSettingsReq struct {
@@ -3506,7 +3926,15 @@ type UpdateDatabaseSettingsReq struct {
 	RequireApprovalForDeploy   *bool   `json:"require_approval_for_deploy,omitempty" tfsdk:"require_approval_for_deploy"`
 	RestrictBranchRegion       *bool   `json:"restrict_branch_region,omitempty" tfsdk:"restrict_branch_region"`
 }
-type UpdateDatabaseSettingsRes500 struct{}
+type UpdateDatabaseSettingsRes404 struct {
+	*ErrorResponse
+}
+type UpdateDatabaseSettingsRes403 struct {
+	*ErrorResponse
+}
+type UpdateDatabaseSettingsRes500 struct {
+	*ErrorResponse
+}
 type UpdateDatabaseSettingsRes200_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
 	Hostname string `json:"hostname" tfsdk:"hostname"`
@@ -3565,24 +3993,22 @@ type UpdateDatabaseSettingsRes200 struct {
 	UpdatedAt                         string                                   `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                                   `json:"url" tfsdk:"url"`
 }
-type UpdateDatabaseSettingsRes404 struct{}
-type UpdateDatabaseSettingsRes403 struct{}
 
-func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization string, name string, req UpdateDatabaseSettingsReq) (res200 *UpdateDatabaseSettingsRes200, res403 *UpdateDatabaseSettingsRes403, res404 *UpdateDatabaseSettingsRes404, res500 *UpdateDatabaseSettingsRes500, err error) {
+func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization string, name string, req UpdateDatabaseSettingsReq) (res200 *UpdateDatabaseSettingsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), body)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3590,16 +4016,25 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 		res200 = new(UpdateDatabaseSettingsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(UpdateDatabaseSettingsRes403)
+		res403 := new(UpdateDatabaseSettingsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(UpdateDatabaseSettingsRes404)
+		res404 := new(UpdateDatabaseSettingsRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(UpdateDatabaseSettingsRes500)
+		res500 := new(UpdateDatabaseSettingsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3610,12 +4045,12 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type ListReadOnlyRegionsRes404 struct{}
-type ListReadOnlyRegionsRes403 struct{}
-type ListReadOnlyRegionsRes500 struct{}
+type ListReadOnlyRegionsRes500 struct {
+	*ErrorResponse
+}
 type ListReadOnlyRegionsRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -3640,8 +4075,14 @@ type ListReadOnlyRegionsRes200 struct {
 	Region      ListReadOnlyRegionsRes200_Region `json:"region" tfsdk:"region"`
 	UpdatedAt   string                           `json:"updated_at" tfsdk:"updated_at"`
 }
+type ListReadOnlyRegionsRes404 struct {
+	*ErrorResponse
+}
+type ListReadOnlyRegionsRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListReadOnlyRegionsRes200, res403 *ListReadOnlyRegionsRes403, res404 *ListReadOnlyRegionsRes404, res500 *ListReadOnlyRegionsRes500, err error) {
+func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListReadOnlyRegionsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name + "/read-only-regions"})
 	q := u.Query()
 	if page != nil {
@@ -3653,13 +4094,13 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3667,16 +4108,25 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 		res200 = new(ListReadOnlyRegionsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListReadOnlyRegionsRes403)
+		res403 := new(ListReadOnlyRegionsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListReadOnlyRegionsRes404)
+		res404 := new(ListReadOnlyRegionsRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListReadOnlyRegionsRes500)
+		res500 := new(ListReadOnlyRegionsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3687,12 +4137,12 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type ListDatabaseRegionsRes404 struct{}
-type ListDatabaseRegionsRes403 struct{}
-type ListDatabaseRegionsRes500 struct{}
+type ListDatabaseRegionsRes500 struct {
+	*ErrorResponse
+}
 type ListDatabaseRegionsRes200_DataItem struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
@@ -3705,8 +4155,14 @@ type ListDatabaseRegionsRes200_DataItem struct {
 type ListDatabaseRegionsRes200 struct {
 	Data []ListDatabaseRegionsRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListDatabaseRegionsRes404 struct {
+	*ErrorResponse
+}
+type ListDatabaseRegionsRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListDatabaseRegionsRes200, res403 *ListDatabaseRegionsRes403, res404 *ListDatabaseRegionsRes404, res500 *ListDatabaseRegionsRes500, err error) {
+func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListDatabaseRegionsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name + "/regions"})
 	q := u.Query()
 	if page != nil {
@@ -3718,13 +4174,13 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3732,16 +4188,25 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 		res200 = new(ListDatabaseRegionsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListDatabaseRegionsRes403)
+		res403 := new(ListDatabaseRegionsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListDatabaseRegionsRes404)
+		res404 := new(ListDatabaseRegionsRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListDatabaseRegionsRes500)
+		res500 := new(ListDatabaseRegionsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3752,10 +4217,18 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type ListOauthApplicationsRes500 struct{}
+type ListOauthApplicationsRes404 struct {
+	*ErrorResponse
+}
+type ListOauthApplicationsRes403 struct {
+	*ErrorResponse
+}
+type ListOauthApplicationsRes500 struct {
+	*ErrorResponse
+}
 type ListOauthApplicationsRes200_DataItem struct {
 	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
 	ClientId    string   `json:"client_id" tfsdk:"client_id"`
@@ -3771,10 +4244,8 @@ type ListOauthApplicationsRes200_DataItem struct {
 type ListOauthApplicationsRes200 struct {
 	Data []ListOauthApplicationsRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListOauthApplicationsRes404 struct{}
-type ListOauthApplicationsRes403 struct{}
 
-func (cl *Client) ListOauthApplications(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListOauthApplicationsRes200, res403 *ListOauthApplicationsRes403, res404 *ListOauthApplicationsRes404, res500 *ListOauthApplicationsRes500, err error) {
+func (cl *Client) ListOauthApplications(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListOauthApplicationsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications"})
 	q := u.Query()
 	if page != nil {
@@ -3786,13 +4257,13 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3800,16 +4271,25 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 		res200 = new(ListOauthApplicationsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListOauthApplicationsRes403)
+		res403 := new(ListOauthApplicationsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListOauthApplicationsRes404)
+		res404 := new(ListOauthApplicationsRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListOauthApplicationsRes500)
+		res500 := new(ListOauthApplicationsRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3820,12 +4300,12 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type GetOauthApplicationRes404 struct{}
-type GetOauthApplicationRes403 struct{}
-type GetOauthApplicationRes500 struct{}
+type GetOauthApplicationRes500 struct {
+	*ErrorResponse
+}
 type GetOauthApplicationRes200 struct {
 	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
 	ClientId    string   `json:"client_id" tfsdk:"client_id"`
@@ -3838,18 +4318,24 @@ type GetOauthApplicationRes200 struct {
 	Tokens      float64  `json:"tokens" tfsdk:"tokens"`
 	UpdatedAt   string   `json:"updated_at" tfsdk:"updated_at"`
 }
+type GetOauthApplicationRes404 struct {
+	*ErrorResponse
+}
+type GetOauthApplicationRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) GetOauthApplication(ctx context.Context, organization string, applicationId string) (res200 *GetOauthApplicationRes200, res403 *GetOauthApplicationRes403, res404 *GetOauthApplicationRes404, res500 *GetOauthApplicationRes500, err error) {
+func (cl *Client) GetOauthApplication(ctx context.Context, organization string, applicationId string) (res200 *GetOauthApplicationRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId})
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3857,16 +4343,25 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 		res200 = new(GetOauthApplicationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetOauthApplicationRes403)
+		res403 := new(GetOauthApplicationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetOauthApplicationRes404)
+		res404 := new(GetOauthApplicationRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetOauthApplicationRes500)
+		res500 := new(GetOauthApplicationRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3877,10 +4372,18 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type ListOauthTokensRes500 struct{}
+type ListOauthTokensRes404 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes403 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes500 struct {
+	*ErrorResponse
+}
 type ListOauthTokensRes200_DataItem struct {
 	ActorDisplayName string `json:"actor_display_name" tfsdk:"actor_display_name"`
 	ActorId          string `json:"actor_id" tfsdk:"actor_id"`
@@ -3897,10 +4400,8 @@ type ListOauthTokensRes200_DataItem struct {
 type ListOauthTokensRes200 struct {
 	Data []ListOauthTokensRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListOauthTokensRes404 struct{}
-type ListOauthTokensRes403 struct{}
 
-func (cl *Client) ListOauthTokens(ctx context.Context, organization string, applicationId string, page *int, perPage *int) (res200 *ListOauthTokensRes200, res403 *ListOauthTokensRes403, res404 *ListOauthTokensRes404, res500 *ListOauthTokensRes500, err error) {
+func (cl *Client) ListOauthTokens(ctx context.Context, organization string, applicationId string, page *int, perPage *int) (res200 *ListOauthTokensRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens"})
 	q := u.Query()
 	if page != nil {
@@ -3912,13 +4413,13 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	u.RawQuery = q.Encode()
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -3926,16 +4427,25 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 		res200 = new(ListOauthTokensRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(ListOauthTokensRes403)
+		res403 := new(ListOauthTokensRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(ListOauthTokensRes404)
+		res404 := new(ListOauthTokensRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(ListOauthTokensRes500)
+		res500 := new(ListOauthTokensRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -3946,12 +4456,15 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type GetOauthTokenRes404 struct{}
-type GetOauthTokenRes403 struct{}
-type GetOauthTokenRes500 struct{}
+type GetOauthTokenRes403 struct {
+	*ErrorResponse
+}
+type GetOauthTokenRes500 struct {
+	*ErrorResponse
+}
 type GetOauthTokenRes200_OauthAccessesByResource_Branch struct {
 	Accesses []string `json:"accesses" tfsdk:"accesses"`
 	Branches []string `json:"branches" tfsdk:"branches"`
@@ -3988,18 +4501,21 @@ type GetOauthTokenRes200 struct {
 	OauthAccessesByResource GetOauthTokenRes200_OauthAccessesByResource `json:"oauth_accesses_by_resource" tfsdk:"oauth_accesses_by_resource"`
 	UpdatedAt               string                                      `json:"updated_at" tfsdk:"updated_at"`
 }
+type GetOauthTokenRes404 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) GetOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res200 *GetOauthTokenRes200, res403 *GetOauthTokenRes403, res404 *GetOauthTokenRes404, res500 *GetOauthTokenRes500, err error) {
+func (cl *Client) GetOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res200 *GetOauthTokenRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -4007,16 +4523,25 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 		res200 = new(GetOauthTokenRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetOauthTokenRes403)
+		res403 := new(GetOauthTokenRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetOauthTokenRes404)
+		res404 := new(GetOauthTokenRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetOauthTokenRes500)
+		res500 := new(GetOauthTokenRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -4027,25 +4552,31 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }
 
-type DeleteOauthTokenRes404 struct{}
-type DeleteOauthTokenRes403 struct{}
-type DeleteOauthTokenRes500 struct{}
+type DeleteOauthTokenRes404 struct {
+	*ErrorResponse
+}
+type DeleteOauthTokenRes403 struct {
+	*ErrorResponse
+}
+type DeleteOauthTokenRes500 struct {
+	*ErrorResponse
+}
 type DeleteOauthTokenRes204 struct{}
 
-func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, res403 *DeleteOauthTokenRes403, res404 *DeleteOauthTokenRes404, res500 *DeleteOauthTokenRes500, err error) {
+func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
 	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res204, res403, res404, res500, err
+		return res204, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -4053,16 +4584,25 @@ func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, app
 		res204 = new(DeleteOauthTokenRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
 	case 403:
-		res403 = new(DeleteOauthTokenRes403)
+		res403 := new(DeleteOauthTokenRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(DeleteOauthTokenRes404)
+		res404 := new(DeleteOauthTokenRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(DeleteOauthTokenRes500)
+		res500 := new(DeleteOauthTokenRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -4073,7 +4613,7 @@ func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, app
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res204, res403, res404, res500, err
+	return res204, err
 }
 
 type CreateOrRenewOauthTokenReq struct {
@@ -4084,9 +4624,12 @@ type CreateOrRenewOauthTokenReq struct {
 	RedirectUri  *string `json:"redirect_uri,omitempty" tfsdk:"redirect_uri"`
 	RefreshToken *string `json:"refresh_token,omitempty" tfsdk:"refresh_token"`
 }
-type CreateOrRenewOauthTokenRes403 struct{}
-type CreateOrRenewOauthTokenRes422 struct{}
-type CreateOrRenewOauthTokenRes500 struct{}
+type CreateOrRenewOauthTokenRes422 struct {
+	*ErrorResponse
+}
+type CreateOrRenewOauthTokenRes500 struct {
+	*ErrorResponse
+}
 type CreateOrRenewOauthTokenRes200 struct {
 	ActorDisplayName      *string   `json:"actor_display_name,omitempty" tfsdk:"actor_display_name"`
 	ActorId               *string   `json:"actor_id,omitempty" tfsdk:"actor_id"`
@@ -4096,23 +4639,28 @@ type CreateOrRenewOauthTokenRes200 struct {
 	ServiceTokenAccesses  *[]string `json:"service_token_accesses,omitempty" tfsdk:"service_token_accesses"`
 	Token                 *string   `json:"token,omitempty" tfsdk:"token"`
 }
-type CreateOrRenewOauthTokenRes404 struct{}
+type CreateOrRenewOauthTokenRes404 struct {
+	*ErrorResponse
+}
+type CreateOrRenewOauthTokenRes403 struct {
+	*ErrorResponse
+}
 
-func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization string, id string, req CreateOrRenewOauthTokenReq) (res200 *CreateOrRenewOauthTokenRes200, res403 *CreateOrRenewOauthTokenRes403, res404 *CreateOrRenewOauthTokenRes404, res422 *CreateOrRenewOauthTokenRes422, res500 *CreateOrRenewOauthTokenRes500, err error) {
+func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization string, id string, req CreateOrRenewOauthTokenReq) (res200 *CreateOrRenewOauthTokenRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + id + "/token"})
 	body := bytes.NewBuffer(nil)
 	if err = json.NewEncoder(body).Encode(req); err != nil {
-		return res200, res403, res404, res422, res500, err
+		return res200, err
 	}
 	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
 	if err != nil {
-		return res200, res403, res404, res422, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res422, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -4120,19 +4668,31 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 		res200 = new(CreateOrRenewOauthTokenRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(CreateOrRenewOauthTokenRes403)
+		res403 := new(CreateOrRenewOauthTokenRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(CreateOrRenewOauthTokenRes404)
+		res404 := new(CreateOrRenewOauthTokenRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 422:
-		res422 = new(CreateOrRenewOauthTokenRes422)
+		res422 := new(CreateOrRenewOauthTokenRes422)
 		err = json.NewDecoder(res.Body).Decode(&res422)
+		if err == nil {
+			err = res422
+		}
 	case 500:
-		res500 = new(CreateOrRenewOauthTokenRes500)
+		res500 := new(CreateOrRenewOauthTokenRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -4143,9 +4703,18 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res422, res500, err
+	return res200, err
 }
 
+type GetCurrentUserRes404 struct {
+	*ErrorResponse
+}
+type GetCurrentUserRes403 struct {
+	*ErrorResponse
+}
+type GetCurrentUserRes500 struct {
+	*ErrorResponse
+}
 type GetCurrentUserRes200 struct {
 	AvatarUrl               *string `json:"avatar_url,omitempty" tfsdk:"avatar_url"`
 	CreatedAt               *string `json:"created_at,omitempty" tfsdk:"created_at"`
@@ -4161,21 +4730,18 @@ type GetCurrentUserRes200 struct {
 	TwoFactorAuthConfigured *bool   `json:"two_factor_auth_configured,omitempty" tfsdk:"two_factor_auth_configured"`
 	UpdatedAt               *string `json:"updated_at,omitempty" tfsdk:"updated_at"`
 }
-type GetCurrentUserRes404 struct{}
-type GetCurrentUserRes403 struct{}
-type GetCurrentUserRes500 struct{}
 
-func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes200, res403 *GetCurrentUserRes403, res404 *GetCurrentUserRes404, res500 *GetCurrentUserRes500, err error) {
+func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "user"})
 	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("Accept", "application/json")
 	res, err := cl.httpCl.Do(r)
 	if err != nil {
-		return res200, res403, res404, res500, err
+		return res200, err
 	}
 	defer res.Body.Close()
 	switch res.StatusCode {
@@ -4183,16 +4749,25 @@ func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes
 		res200 = new(GetCurrentUserRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
 	case 403:
-		res403 = new(GetCurrentUserRes403)
+		res403 := new(GetCurrentUserRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
 	case 404:
-		res404 = new(GetCurrentUserRes404)
+		res404 := new(GetCurrentUserRes404)
 		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
 	case 500:
-		res500 = new(GetCurrentUserRes500)
+		res500 := new(GetCurrentUserRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
 	default:
-		var errBody *Error
+		var errBody *ErrorResponse
 		_ = json.NewDecoder(res.Body).Decode(&errBody)
 		if errBody != nil {
 			err = errBody
@@ -4203,5 +4778,5 @@ func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes
 	if errors.Is(err, io.EOF) {
 		err = nil
 	}
-	return res200, res403, res404, res500, err
+	return res200, err
 }

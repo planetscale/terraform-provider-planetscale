@@ -81,22 +81,12 @@ func (d *userDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res200, res403, res404, res500, err := d.client.GetCurrentUser(ctx)
+	res200, err := d.client.GetCurrentUser(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read user", err.Error())
 		return
 	}
-	switch {
-	case res403 != nil:
-		resp.Diagnostics.AddError("Unable to read user", "403 error, forbidden from getting current user")
-		return
-	case res404 != nil:
-		resp.Diagnostics.AddError("Unable to read user", "current user not found")
-		return
-	case res500 != nil:
-		resp.Diagnostics.AddError("Unable to read user", "500 error, try again later")
-		return
-	case res200 == nil:
+	if res200 == nil {
 		resp.Diagnostics.AddError("Unable to read user", "no data")
 		return
 	}

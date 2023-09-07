@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/kr/pretty"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -104,7 +105,7 @@ func (r *databaseResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "Example resource",
+		MarkdownDescription: "A PlanetScale database",
 		Attributes: map[string]schema.Attribute{
 			"organization": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
 				stringplanmodifier.RequiresReplace(),
@@ -203,40 +204,28 @@ func (r *databaseResource) Configure(ctx context.Context, req resource.Configure
 
 func (r *databaseResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *databaseResourceModel
-
-	// Read Terraform plan data into the model
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	orgName := data.Organization.ValueString()
 	name := data.Name.ValueString()
-	resp.Diagnostics.AddWarning("name is weird?", fmt.Sprintf("name is %q", name))
 
-	res201, res403, res404, res500, err := r.client.CreateDatabase(ctx, orgName, planetscale.CreateDatabaseReq{
+	createDbReq := planetscale.CreateDatabaseReq{
 		Name:        name,
-		Plan:        data.Plan.ValueStringPointer(),
-		ClusterSize: data.ClusterSize.ValueStringPointer(),
-		Notes:       data.Notes.ValueStringPointer(),
-		Region:      data.Region.ValueStringPointer(),
-	})
+		Plan:        stringValueIfKnown(data.Plan),
+		ClusterSize: stringValueIfKnown(data.ClusterSize),
+		Notes:       stringValueIfKnown(data.Notes),
+		Region:      stringValueIfKnown(data.Region),
+	}
+	resp.Diagnostics.AddWarning("create db req", fmt.Sprintf("%# v", pretty.Formatter(createDbReq)))
+	res201, err := r.client.CreateDatabase(ctx, orgName, createDbReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database, got error: %s", err))
 		return
 	}
-	switch {
-	case res403 != nil:
-		resp.Diagnostics.AddError("Unable to create databases", fmt.Sprintf("403 error, forbidden from creating database in organization %q", orgName))
-		return
-	case res404 != nil:
-		resp.Diagnostics.AddError("Unable to create databases", fmt.Sprintf("organization %q not found", orgName))
-		return
-	case res500 != nil:
-		resp.Diagnostics.AddError("Unable to create databases", "500 error, try again later")
-		return
-	case res201 == nil:
+	if res201 == nil {
 		resp.Diagnostics.AddError("Unable to create databases", "no data")
 		return
 	}
@@ -276,6 +265,9 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 	data.UpdatedAt = types.StringValue(res201.UpdatedAt)
 	data.Url = types.StringValue(res201.Url)
 	data.Region = types.StringValue(res201.Region.Slug)
+	if data.ClusterSize.IsUnknown() {
+		data.ClusterSize = types.StringNull()
+	}
 	if res201.DataImport != nil {
 		data.DataImport = &importResourceModel{
 			DataSource: importDataSourceResourceModel{
@@ -320,7 +312,7 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	res200, _, _, _, err := r.client.GetDatabase(ctx, org.ValueString(), name.ValueString())
+	res200, err := r.client.GetDatabase(ctx, org.ValueString(), name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read database, got error: %s", err))
 		return
@@ -417,7 +409,7 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	if changedUpdatableSettings {
-		res200, _, _, _, err := r.client.UpdateDatabaseSettings(ctx, org.ValueString(), name.ValueString(), updateReq)
+		res200, err := r.client.UpdateDatabaseSettings(ctx, org.ValueString(), name.ValueString(), updateReq)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update database settings, got error: %s", err))
 			return
@@ -496,7 +488,7 @@ func (r *databaseResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
-	res204, _, _, _, err := r.client.DeleteDatabase(ctx, org.ValueString(), name.ValueString())
+	res204, err := r.client.DeleteDatabase(ctx, org.ValueString(), name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete database, got error: %s", err))
 		return
