@@ -35,9 +35,7 @@ func main() {
 
 	ctx := context.Background()
 
-	res200, err := cl.CreateDatabase(ctx, "ps-e2e-prod", planetscale.CreateDatabaseReq{
-		Name: "hello_antoine",
-	})
+	res200, err := cl.ListOauthApplications(ctx, "ps-e2e-prod", nil, nil)
 	if err != nil {
 		slog.Error("failed to get current user", "err", err)
 		return

@@ -8,15 +8,16 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/kr/pretty"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -39,6 +40,12 @@ type importDataSourceResourceModel struct {
 	Port     types.String `tfsdk:"port"`
 }
 
+var importDataSourceResourceAttrTypes = map[string]attr.Type{
+	"database": basetypes.StringType{},
+	"hostname": basetypes.StringType{},
+	"port":     basetypes.StringType{},
+}
+
 type importResourceModel struct {
 	DataSource        importDataSourceResourceModel `tfsdk:"data_source"`
 	FinishedAt        types.String                  `tfsdk:"finished_at"`
@@ -47,55 +54,53 @@ type importResourceModel struct {
 	State             types.String                  `tfsdk:"state"`
 }
 
-type regionResourceModel struct {
-	DisplayName       types.String `tfsdk:"display_name"`
-	Enabled           types.Bool   `tfsdk:"enabled"`
-	Id                types.String `tfsdk:"id"`
-	Location          types.String `tfsdk:"location"`
-	Provider          types.String `tfsdk:"provider"`
-	PublicIpAddresses types.List   `tfsdk:"public_ip_addresses"`
-	Slug              types.String `tfsdk:"slug"`
+var importResourceAttrTypes = map[string]attr.Type{
+	"data_source":         basetypes.ObjectType{AttrTypes: importDataSourceResourceAttrTypes},
+	"finished_at":         basetypes.StringType{},
+	"import_check_errors": basetypes.StringType{},
+	"started_at":          basetypes.StringType{},
+	"state":               basetypes.StringType{},
 }
 
 type databaseResourceModel struct {
 	Organization types.String `tfsdk:"organization"`
 	Id           types.String `tfsdk:"id"`
 
-	AllowDataBranching                types.Bool           `tfsdk:"allow_data_branching"`
-	AtBackupRestoreBranchesLimit      types.Bool           `tfsdk:"at_backup_restore_branches_limit"`
-	AtDevelopmentBranchLimit          types.Bool           `tfsdk:"at_development_branch_limit"`
-	AutomaticMigrations               types.Bool           `tfsdk:"automatic_migrations"`
-	BranchesCount                     types.Float64        `tfsdk:"branches_count"`
-	BranchesUrl                       types.String         `tfsdk:"branches_url"`
-	CreatedAt                         types.String         `tfsdk:"created_at"`
-	DataImport                        *importResourceModel `tfsdk:"data_import"`
-	DefaultBranch                     types.String         `tfsdk:"default_branch"`
-	DefaultBranchReadOnlyRegionsCount types.Float64        `tfsdk:"default_branch_read_only_regions_count"`
-	DefaultBranchShardCount           types.Float64        `tfsdk:"default_branch_shard_count"`
-	DefaultBranchTableCount           types.Float64        `tfsdk:"default_branch_table_count"`
-	DevelopmentBranchesCount          types.Float64        `tfsdk:"development_branches_count"`
-	HtmlUrl                           types.String         `tfsdk:"html_url"`
-	InsightsRawQueries                types.Bool           `tfsdk:"insights_raw_queries"`
-	IssuesCount                       types.Float64        `tfsdk:"issues_count"`
-	MigrationFramework                types.String         `tfsdk:"migration_framework"`
-	MigrationTableName                types.String         `tfsdk:"migration_table_name"`
-	MultipleAdminsRequiredForDeletion types.Bool           `tfsdk:"multiple_admins_required_for_deletion"`
-	Name                              types.String         `tfsdk:"name"`
-	Notes                             types.String         `tfsdk:"notes"`
-	Plan                              types.String         `tfsdk:"plan"`
-	ClusterSize                       types.String         `tfsdk:"cluster_size"`
-	ProductionBranchWebConsole        types.Bool           `tfsdk:"production_branch_web_console"`
-	ProductionBranchesCount           types.Float64        `tfsdk:"production_branches_count"`
-	Ready                             types.Bool           `tfsdk:"ready"`
-	Region                            types.String         `tfsdk:"region"`
-	RequireApprovalForDeploy          types.Bool           `tfsdk:"require_approval_for_deploy"`
-	RestrictBranchRegion              types.Bool           `tfsdk:"restrict_branch_region"`
-	SchemaLastUpdatedAt               types.String         `tfsdk:"schema_last_updated_at"`
-	Sharded                           types.Bool           `tfsdk:"sharded"`
-	State                             types.String         `tfsdk:"state"`
-	Type                              types.String         `tfsdk:"type"`
-	UpdatedAt                         types.String         `tfsdk:"updated_at"`
-	Url                               types.String         `tfsdk:"url"`
+	AllowDataBranching                types.Bool    `tfsdk:"allow_data_branching"`
+	AtBackupRestoreBranchesLimit      types.Bool    `tfsdk:"at_backup_restore_branches_limit"`
+	AtDevelopmentBranchLimit          types.Bool    `tfsdk:"at_development_branch_limit"`
+	AutomaticMigrations               types.Bool    `tfsdk:"automatic_migrations"`
+	BranchesCount                     types.Float64 `tfsdk:"branches_count"`
+	BranchesUrl                       types.String  `tfsdk:"branches_url"`
+	CreatedAt                         types.String  `tfsdk:"created_at"`
+	DataImport                        types.Object  `tfsdk:"data_import"`
+	DefaultBranch                     types.String  `tfsdk:"default_branch"`
+	DefaultBranchReadOnlyRegionsCount types.Float64 `tfsdk:"default_branch_read_only_regions_count"`
+	DefaultBranchShardCount           types.Float64 `tfsdk:"default_branch_shard_count"`
+	DefaultBranchTableCount           types.Float64 `tfsdk:"default_branch_table_count"`
+	DevelopmentBranchesCount          types.Float64 `tfsdk:"development_branches_count"`
+	HtmlUrl                           types.String  `tfsdk:"html_url"`
+	InsightsRawQueries                types.Bool    `tfsdk:"insights_raw_queries"`
+	IssuesCount                       types.Float64 `tfsdk:"issues_count"`
+	MigrationFramework                types.String  `tfsdk:"migration_framework"`
+	MigrationTableName                types.String  `tfsdk:"migration_table_name"`
+	MultipleAdminsRequiredForDeletion types.Bool    `tfsdk:"multiple_admins_required_for_deletion"`
+	Name                              types.String  `tfsdk:"name"`
+	Notes                             types.String  `tfsdk:"notes"`
+	Plan                              types.String  `tfsdk:"plan"`
+	ClusterSize                       types.String  `tfsdk:"cluster_size"`
+	ProductionBranchWebConsole        types.Bool    `tfsdk:"production_branch_web_console"`
+	ProductionBranchesCount           types.Float64 `tfsdk:"production_branches_count"`
+	Ready                             types.Bool    `tfsdk:"ready"`
+	Region                            types.String  `tfsdk:"region"`
+	RequireApprovalForDeploy          types.Bool    `tfsdk:"require_approval_for_deploy"`
+	RestrictBranchRegion              types.Bool    `tfsdk:"restrict_branch_region"`
+	SchemaLastUpdatedAt               types.String  `tfsdk:"schema_last_updated_at"`
+	Sharded                           types.Bool    `tfsdk:"sharded"`
+	State                             types.String  `tfsdk:"state"`
+	Type                              types.String  `tfsdk:"type"`
+	UpdatedAt                         types.String  `tfsdk:"updated_at"`
+	Url                               types.String  `tfsdk:"url"`
 }
 
 func (r *databaseResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -128,13 +133,10 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"branches_url":                     schema.StringAttribute{Computed: true},
 			"created_at":                       schema.StringAttribute{Computed: true},
 			"data_import": schema.SingleNestedAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplace(),
-				},
+				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"data_source": schema.SingleNestedAttribute{
-						Required: true,
+						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"database": schema.StringAttribute{Required: true},
 							"hostname": schema.StringAttribute{Required: true},
@@ -167,7 +169,7 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"region": schema.StringAttribute{
 				Computed: true, Optional: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
 			"require_approval_for_deploy": schema.BoolAttribute{Computed: true, Optional: true},
@@ -204,6 +206,7 @@ func (r *databaseResource) Configure(ctx context.Context, req resource.Configure
 
 func (r *databaseResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var data *databaseResourceModel
+	tflog.Info(ctx, "getting current database resource from plan")
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -219,7 +222,6 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		Notes:       stringValueIfKnown(data.Notes),
 		Region:      stringValueIfKnown(data.Region),
 	}
-	resp.Diagnostics.AddWarning("create db req", fmt.Sprintf("%# v", pretty.Formatter(createDbReq)))
 	res201, err := r.client.CreateDatabase(ctx, orgName, createDbReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database, got error: %s", err))
@@ -268,8 +270,12 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 	if data.ClusterSize.IsUnknown() {
 		data.ClusterSize = types.StringNull()
 	}
-	if res201.DataImport != nil {
-		data.DataImport = &importResourceModel{
+	if res201.DataImport == nil {
+		tflog.Info(ctx, "no dataimport in read database")
+		// do nothing
+	} else {
+		var diErr diag.Diagnostics
+		data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, &importResourceModel{
 			DataSource: importDataSourceResourceModel{
 				Database: types.StringValue(res201.DataImport.DataSource.Database),
 				Hostname: types.StringValue(res201.DataImport.DataSource.Hostname),
@@ -279,6 +285,10 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 			ImportCheckErrors: types.StringValue(res201.DataImport.ImportCheckErrors),
 			StartedAt:         types.StringValue(res201.DataImport.StartedAt),
 			State:             types.StringValue(res201.DataImport.State),
+		})
+		if diErr.HasError() {
+			resp.Diagnostics.Append(diErr.Errors()...)
+			return
 		}
 	}
 
@@ -293,9 +303,9 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var data *databaseResourceModel
 
+	tflog.Info(ctx, "getting current database resource from state")
 	// Read Terraform prior state data into the model
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
-
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -351,8 +361,13 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	data.Type = types.StringValue(res200.Type)
 	data.UpdatedAt = types.StringValue(res200.UpdatedAt)
 	data.Url = types.StringValue(res200.Url)
-	if res200.DataImport != nil {
-		data.DataImport = &importResourceModel{
+	if res200.DataImport == nil {
+		tflog.Info(ctx, "no dataimport in read database")
+		// do nothing
+	} else {
+		tflog.Info(ctx, "found dataimport in read database")
+		var diErr diag.Diagnostics
+		data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, &importResourceModel{
 			DataSource: importDataSourceResourceModel{
 				Database: types.StringValue(res200.DataImport.DataSource.Database),
 				Hostname: types.StringValue(res200.DataImport.DataSource.Hostname),
@@ -362,6 +377,10 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 			ImportCheckErrors: types.StringValue(res200.DataImport.ImportCheckErrors),
 			StartedAt:         types.StringValue(res200.DataImport.StartedAt),
 			State:             types.StringValue(res200.DataImport.State),
+		})
+		if diErr.HasError() {
+			resp.Diagnostics.Append(diErr.Errors()...)
+			return
 		}
 	}
 	data.Region = types.StringValue(res200.Region.Slug)
@@ -393,6 +412,11 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		resp.Diagnostics.AddAttributeError(path.Root("name"), "name is required", "a name must be provided and cannot be empty")
 		return
 	}
+
+	tflog.Trace(ctx, "updating db settings", map[string]interface{}{
+		"old_notes": old.Notes.ValueString(),
+		"new_notes": data.Notes.ValueString(),
+	})
 
 	changedUpdatableSettings := false
 	updateReq := planetscale.UpdateDatabaseSettingsReq{
@@ -436,6 +460,7 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		data.Name = types.StringValue(res200.Name)
 		data.Notes = types.StringPointerValue(res200.Notes)
 		data.Plan = types.StringValue(res200.Plan)
+		data.ClusterSize = old.ClusterSize
 		data.ProductionBranchWebConsole = types.BoolValue(res200.ProductionBranchWebConsole)
 		data.ProductionBranchesCount = types.Float64Value(res200.ProductionBranchesCount)
 		data.Ready = types.BoolValue(res200.Ready)
@@ -447,8 +472,12 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		data.Type = types.StringValue(res200.Type)
 		data.UpdatedAt = types.StringValue(res200.UpdatedAt)
 		data.Url = types.StringValue(res200.Url)
-		if res200.DataImport != nil {
-			data.DataImport = &importResourceModel{
+		if res200.DataImport == nil {
+			tflog.Info(ctx, "no dataimport in read database")
+			// do nothing
+		} else {
+			var diErr diag.Diagnostics
+			data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, &importResourceModel{
 				DataSource: importDataSourceResourceModel{
 					Database: types.StringValue(res200.DataImport.DataSource.Database),
 					Hostname: types.StringValue(res200.DataImport.DataSource.Hostname),
@@ -458,6 +487,10 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 				ImportCheckErrors: types.StringValue(res200.DataImport.ImportCheckErrors),
 				StartedAt:         types.StringValue(res200.DataImport.StartedAt),
 				State:             types.StringValue(res200.DataImport.State),
+			})
+			if diErr.HasError() {
+				resp.Diagnostics.Append(diErr.Errors()...)
+				return
 			}
 		}
 		data.Region = types.StringValue(res200.Region.Slug)

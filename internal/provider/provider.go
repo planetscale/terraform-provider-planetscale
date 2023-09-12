@@ -6,6 +6,7 @@ package provider
 import (
 	"context"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"os"
 
@@ -17,6 +18,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/pkg/errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 	"golang.org/x/oauth2"
 )
@@ -30,8 +33,6 @@ type PlanetScaleProvider struct {
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
-
-	client *planetscale.Client
 }
 
 // PlanetScaleProviderModel describes the provider data model.
@@ -67,6 +68,12 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
 	var (
+		initrt = debugRoundTripper(func(req, res []byte) {
+			tflog.Debug(ctx, "roundtripper", map[string]interface{}{
+				"req": string(req),
+				"res": string(res),
+			})
+		}, http.DefaultTransport)
 		rt      http.RoundTripper
 		baseURL *url.URL
 	)
@@ -89,12 +96,11 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 	switch {
 	case accessToken != "" && serviceTokenName == "" && serviceTokenValue == "":
 		tok := &oauth2.Token{AccessToken: accessToken}
-		rt = &oauth2.Transport{Base: &http.Transport{}, Source: oauth2.StaticTokenSource(tok)}
+		rt = &oauth2.Transport{Base: initrt, Source: oauth2.StaticTokenSource(tok)}
 	case accessToken == "" && serviceTokenName != "" && serviceTokenValue != "":
-		tpt := &http.Transport{}
 		rt = roundTripperFunc(func(r *http.Request) (*http.Response, error) {
 			r.Header.Set("Authorization", serviceTokenName+":"+serviceTokenValue)
-			return tpt.RoundTrip(r)
+			return initrt.RoundTrip(r)
 		})
 	case accessToken == "" && serviceTokenName == "" && serviceTokenValue == "":
 		resp.Diagnostics.AddError("Missing PlanetScale credentials.",
@@ -146,6 +152,25 @@ func New(version string) func() provider.Provider {
 	}
 }
 
+func debugRoundTripper(log func(req, res []byte), tpt http.RoundTripper) http.RoundTripper {
+	return roundTripperFunc(func(r *http.Request) (*http.Response, error) {
+		debugReq, err := httputil.DumpRequestOut(r, true)
+		if err != nil {
+			return nil, errors.Wrap(err, "dumping request output")
+		}
+		res, err := tpt.RoundTrip(r)
+		if res == nil {
+			return res, err
+		}
+		debugRes, err := httputil.DumpResponse(res, true)
+		if err != nil {
+			return nil, errors.Wrap(err, "dumping response output")
+		}
+		log(debugReq, debugRes)
+		return res, err
+	})
+}
+
 type roundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (fn roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -165,7 +190,7 @@ func boolIfDifferent(oldBool, newBool types.Bool, wasChanged *bool) *bool {
 		return nil
 	}
 	*wasChanged = true
-	return newBool.ValueBoolPointer()
+	return boolValueIfKnown(newBool)
 }
 
 func stringIfDifferent(oldString, newString types.String, wasChanged *bool) *string {
@@ -173,7 +198,14 @@ func stringIfDifferent(oldString, newString types.String, wasChanged *bool) *str
 		return nil
 	}
 	*wasChanged = true
-	return newString.ValueStringPointer()
+	return stringValueIfKnown(newString)
+}
+
+func boolValueIfKnown(v basetypes.BoolValue) *bool {
+	if v.IsUnknown() || v.IsNull() {
+		return nil
+	}
+	return v.ValueBoolPointer()
 }
 
 func stringValueIfKnown(v basetypes.StringValue) *string {

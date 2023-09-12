@@ -30,7 +30,12 @@ data "planetscale_databases" "test" {
 
 resource "planetscale_database" "my_db" {
   organization = data.planetscale_organizations.test.organizations.0.name
-  name = "antoine_terraform_testing_derp"
+  name = "again"
+}
+
+
+output "my_dbs_res" {
+  value = resource.planetscale_database.my_db
 }
 
 # data "planetscale_oauth_applications" "test" {
