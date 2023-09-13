@@ -38,13 +38,18 @@ resource "planetscale_database" "my_db" {
 #   name = resource.planetscale_database.my_db.name
 # }
 
-data "planetscale_database_read_only_regions" "my_ro_regions" {
+# data "planetscale_database_read_only_regions" "my_ro_regions" {
+#   organization = resource.planetscale_database.my_db.organization
+#   name = resource.planetscale_database.my_db.name
+# }
+
+data "planetscale_branches" "my_branches" {
   organization = resource.planetscale_database.my_db.organization
-  name = resource.planetscale_database.my_db.name
+  database = resource.planetscale_database.my_db.name
 }
 
-output "my_dbs_ro_regions" {
-  value = data.planetscale_database_read_only_regions.my_ro_regions
+output "my_branches" {
+  value = data.planetscale_branches.my_branches
 }
 
 # data "planetscale_oauth_applications" "test" {
