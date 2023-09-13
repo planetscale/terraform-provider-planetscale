@@ -37,6 +37,15 @@ func (err *ErrorResponse) Error() string {
 	return fmt.Sprintf("error %s: %s", err.Code, err.Message)
 }
 
+type ListOrganizationsRes404 struct {
+	*ErrorResponse
+}
+type ListOrganizationsRes403 struct {
+	*ErrorResponse
+}
+type ListOrganizationsRes500 struct {
+	*ErrorResponse
+}
 type ListOrganizationsRes200_DataItem_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
 	SingleTenancy *bool `json:"single_tenancy,omitempty" tfsdk:"single_tenancy"`
@@ -56,6 +65,7 @@ type ListOrganizationsRes200_DataItem struct {
 	FreeDatabasesRemaining    float64                                    `json:"free_databases_remaining" tfsdk:"free_databases_remaining"`
 	HasPastDueInvoices        bool                                       `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
 	Id                        string                                     `json:"id" tfsdk:"id"`
+	IdpManagedRoles           bool                                       `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
 	Name                      string                                     `json:"name" tfsdk:"name"`
 	Plan                      string                                     `json:"plan" tfsdk:"plan"`
 	SingleTenancy             bool                                       `json:"single_tenancy" tfsdk:"single_tenancy"`
@@ -69,13 +79,7 @@ type ListOrganizationsRes200_DataItem struct {
 type ListOrganizationsRes200 struct {
 	Data []ListOrganizationsRes200_DataItem `json:"data" tfsdk:"data"`
 }
-type ListOrganizationsRes404 struct {
-	*ErrorResponse
-}
-type ListOrganizationsRes403 struct {
-	*ErrorResponse
-}
-type ListOrganizationsRes500 struct {
+type ListOrganizationsRes401 struct {
 	*ErrorResponse
 }
 
@@ -104,6 +108,12 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	case 200:
 		res200 = new(ListOrganizationsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListOrganizationsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListOrganizationsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -137,6 +147,9 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	return res200, err
 }
 
+type GetOrganizationRes401 struct {
+	*ErrorResponse
+}
 type GetOrganizationRes404 struct {
 	*ErrorResponse
 }
@@ -165,6 +178,7 @@ type GetOrganizationRes200 struct {
 	FreeDatabasesRemaining    float64                         `json:"free_databases_remaining" tfsdk:"free_databases_remaining"`
 	HasPastDueInvoices        bool                            `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
 	Id                        string                          `json:"id" tfsdk:"id"`
+	IdpManagedRoles           bool                            `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
 	Name                      string                          `json:"name" tfsdk:"name"`
 	Plan                      string                          `json:"plan" tfsdk:"plan"`
 	SingleTenancy             bool                            `json:"single_tenancy" tfsdk:"single_tenancy"`
@@ -193,6 +207,12 @@ func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *Get
 	case 200:
 		res200 = new(GetOrganizationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetOrganizationRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetOrganizationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -231,12 +251,6 @@ type UpdateOrganizationReq struct {
 	IdpManagedRoles                 *bool   `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
 	RequireAdminForProductionAccess *bool   `json:"require_admin_for_production_access,omitempty" tfsdk:"require_admin_for_production_access"`
 }
-type UpdateOrganizationRes403 struct {
-	*ErrorResponse
-}
-type UpdateOrganizationRes500 struct {
-	*ErrorResponse
-}
 type UpdateOrganizationRes200_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
 	SingleTenancy *bool `json:"single_tenancy,omitempty" tfsdk:"single_tenancy"`
@@ -256,6 +270,7 @@ type UpdateOrganizationRes200 struct {
 	FreeDatabasesRemaining    float64                            `json:"free_databases_remaining" tfsdk:"free_databases_remaining"`
 	HasPastDueInvoices        bool                               `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
 	Id                        string                             `json:"id" tfsdk:"id"`
+	IdpManagedRoles           bool                               `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
 	Name                      string                             `json:"name" tfsdk:"name"`
 	Plan                      string                             `json:"plan" tfsdk:"plan"`
 	SingleTenancy             bool                               `json:"single_tenancy" tfsdk:"single_tenancy"`
@@ -266,7 +281,16 @@ type UpdateOrganizationRes200 struct {
 	UpdatedAt                 string                             `json:"updated_at" tfsdk:"updated_at"`
 	ValidBillingInfo          bool                               `json:"valid_billing_info" tfsdk:"valid_billing_info"`
 }
+type UpdateOrganizationRes401 struct {
+	*ErrorResponse
+}
 type UpdateOrganizationRes404 struct {
+	*ErrorResponse
+}
+type UpdateOrganizationRes403 struct {
+	*ErrorResponse
+}
+type UpdateOrganizationRes500 struct {
 	*ErrorResponse
 }
 
@@ -291,6 +315,12 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	case 200:
 		res200 = new(UpdateOrganizationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(UpdateOrganizationRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(UpdateOrganizationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -324,9 +354,6 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	return res200, err
 }
 
-type ListRegionsForOrganizationRes500 struct {
-	*ErrorResponse
-}
 type ListRegionsForOrganizationRes200_DataItem struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
@@ -339,10 +366,16 @@ type ListRegionsForOrganizationRes200_DataItem struct {
 type ListRegionsForOrganizationRes200 struct {
 	Data []ListRegionsForOrganizationRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListRegionsForOrganizationRes401 struct {
+	*ErrorResponse
+}
 type ListRegionsForOrganizationRes404 struct {
 	*ErrorResponse
 }
 type ListRegionsForOrganizationRes403 struct {
+	*ErrorResponse
+}
+type ListRegionsForOrganizationRes500 struct {
 	*ErrorResponse
 }
 
@@ -371,6 +404,12 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	case 200:
 		res200 = new(ListRegionsForOrganizationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListRegionsForOrganizationRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListRegionsForOrganizationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -404,12 +443,6 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	return res200, err
 }
 
-type ListDatabasesRes404 struct {
-	*ErrorResponse
-}
-type ListDatabasesRes403 struct {
-	*ErrorResponse
-}
 type ListDatabasesRes500 struct {
 	*ErrorResponse
 }
@@ -474,6 +507,15 @@ type ListDatabasesRes200_DataItem struct {
 type ListDatabasesRes200 struct {
 	Data []ListDatabasesRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListDatabasesRes401 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes404 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes403 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) ListDatabases(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListDatabasesRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases"})
@@ -500,6 +542,12 @@ func (cl *Client) ListDatabases(ctx context.Context, organization string, page *
 	case 200:
 		res200 = new(ListDatabasesRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListDatabasesRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListDatabasesRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -539,6 +587,9 @@ type CreateDatabaseReq struct {
 	Notes       *string `json:"notes,omitempty" tfsdk:"notes"`
 	Plan        *string `json:"plan,omitempty" tfsdk:"plan"`
 	Region      *string `json:"region,omitempty" tfsdk:"region"`
+}
+type CreateDatabaseRes404 struct {
+	*ErrorResponse
 }
 type CreateDatabaseRes403 struct {
 	*ErrorResponse
@@ -604,7 +655,7 @@ type CreateDatabaseRes201 struct {
 	UpdatedAt                         string                           `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                           `json:"url" tfsdk:"url"`
 }
-type CreateDatabaseRes404 struct {
+type CreateDatabaseRes401 struct {
 	*ErrorResponse
 }
 
@@ -629,6 +680,12 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	case 201:
 		res201 = new(CreateDatabaseRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
+	case 401:
+		res401 := new(CreateDatabaseRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(CreateDatabaseRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -662,9 +719,6 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	return res201, err
 }
 
-type ListBranchesRes500 struct {
-	*ErrorResponse
-}
 type ListBranchesRes200_DataItem_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -689,6 +743,7 @@ type ListBranchesRes200_DataItem_RestoredFromBranch struct {
 type ListBranchesRes200_DataItem struct {
 	AccessHostUrl               *string                                         `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
 	ApiActor                    *ListBranchesRes200_DataItem_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	ClusterRateName             string                                          `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                          `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                          `json:"html_url" tfsdk:"html_url"`
 	Id                          string                                          `json:"id" tfsdk:"id"`
@@ -710,10 +765,16 @@ type ListBranchesRes200_DataItem struct {
 type ListBranchesRes200 struct {
 	Data []ListBranchesRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListBranchesRes401 struct {
+	*ErrorResponse
+}
 type ListBranchesRes404 struct {
 	*ErrorResponse
 }
 type ListBranchesRes403 struct {
+	*ErrorResponse
+}
+type ListBranchesRes500 struct {
 	*ErrorResponse
 }
 
@@ -742,6 +803,12 @@ func (cl *Client) ListBranches(ctx context.Context, organization string, databas
 	case 200:
 		res200 = new(ListBranchesRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListBranchesRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListBranchesRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -813,6 +880,7 @@ type CreateBranchRes201_RestoredFromBranch struct {
 type CreateBranchRes201 struct {
 	AccessHostUrl               *string                                `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
 	ApiActor                    *CreateBranchRes201_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	ClusterRateName             string                                 `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                 `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                 `json:"html_url" tfsdk:"html_url"`
 	Id                          string                                 `json:"id" tfsdk:"id"`
@@ -830,6 +898,9 @@ type CreateBranchRes201 struct {
 	ShardCount                  *float64                               `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
+}
+type CreateBranchRes401 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) CreateBranch(ctx context.Context, organization string, database string, req CreateBranchReq) (res201 *CreateBranchRes201, err error) {
@@ -853,6 +924,12 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 	case 201:
 		res201 = new(CreateBranchRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
+	case 401:
+		res401 := new(CreateBranchRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(CreateBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -939,6 +1016,9 @@ type ListBackupsRes200_DataItem struct {
 type ListBackupsRes200 struct {
 	Data []ListBackupsRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListBackupsRes401 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) ListBackups(ctx context.Context, organization string, database string, branch string, page *int, perPage *int) (res200 *ListBackupsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups"})
@@ -965,6 +1045,12 @@ func (cl *Client) ListBackups(ctx context.Context, organization string, database
 	case 200:
 		res200 = new(ListBackupsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListBackupsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListBackupsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1056,6 +1142,9 @@ type CreateBackupRes200_DataItem struct {
 type CreateBackupRes200 struct {
 	Data []CreateBackupRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type CreateBackupRes401 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) CreateBackup(ctx context.Context, organization string, database string, branch string, req CreateBackupReq) (res200 *CreateBackupRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups"})
@@ -1078,6 +1167,12 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 	case 200:
 		res200 = new(CreateBackupRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(CreateBackupRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(CreateBackupRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1152,6 +1247,9 @@ type GetBackupRes200 struct {
 	State                string                         `json:"state" tfsdk:"state"`
 	UpdatedAt            string                         `json:"updated_at" tfsdk:"updated_at"`
 }
+type GetBackupRes401 struct {
+	*ErrorResponse
+}
 type GetBackupRes404 struct {
 	*ErrorResponse
 }
@@ -1179,6 +1277,12 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	case 200:
 		res200 = new(GetBackupRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetBackupRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetBackupRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1212,6 +1316,9 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	return res200, err
 }
 
+type DeleteBackupRes401 struct {
+	*ErrorResponse
+}
 type DeleteBackupRes404 struct {
 	*ErrorResponse
 }
@@ -1240,6 +1347,12 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	case 204:
 		res204 = new(DeleteBackupRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
+	case 401:
+		res401 := new(DeleteBackupRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(DeleteBackupRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1322,6 +1435,9 @@ type ListPasswordsRes200_DataItem struct {
 type ListPasswordsRes200 struct {
 	Data []ListPasswordsRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListPasswordsRes401 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) ListPasswords(ctx context.Context, organization string, database string, branch string, readOnlyRegionId *string, page *int, perPage *int) (res200 *ListPasswordsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords"})
@@ -1351,6 +1467,12 @@ func (cl *Client) ListPasswords(ctx context.Context, organization string, databa
 	case 200:
 		res200 = new(ListPasswordsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListPasswordsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListPasswordsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1389,13 +1511,7 @@ type CreatePasswordReq struct {
 	Role *string  `json:"role,omitempty" tfsdk:"role"`
 	Ttl  *float64 `json:"ttl,omitempty" tfsdk:"ttl"`
 }
-type CreatePasswordRes404 struct {
-	*ErrorResponse
-}
-type CreatePasswordRes403 struct {
-	*ErrorResponse
-}
-type CreatePasswordRes500 struct {
+type CreatePasswordRes422 struct {
 	*ErrorResponse
 }
 type CreatePasswordRes201_Actor struct {
@@ -1436,6 +1552,18 @@ type CreatePasswordRes201 struct {
 	TtlSeconds     float64                             `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
+type CreatePasswordRes401 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes404 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes403 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes500 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) CreatePassword(ctx context.Context, organization string, database string, branch string, req CreatePasswordReq) (res201 *CreatePasswordRes201, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords"})
@@ -1458,6 +1586,12 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	case 201:
 		res201 = new(CreatePasswordRes201)
 		err = json.NewDecoder(res.Body).Decode(&res201)
+	case 401:
+		res401 := new(CreatePasswordRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(CreatePasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1469,6 +1603,12 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 		err = json.NewDecoder(res.Body).Decode(&res404)
 		if err == nil {
 			err = res404
+		}
+	case 422:
+		res422 := new(CreatePasswordRes422)
+		err = json.NewDecoder(res.Body).Decode(&res422)
+		if err == nil {
+			err = res422
 		}
 	case 500:
 		res500 := new(CreatePasswordRes500)
@@ -1491,6 +1631,9 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	return res201, err
 }
 
+type GetPasswordRes403 struct {
+	*ErrorResponse
+}
 type GetPasswordRes500 struct {
 	*ErrorResponse
 }
@@ -1531,10 +1674,10 @@ type GetPasswordRes200 struct {
 	TtlSeconds     float64                          `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                          `json:"username,omitempty" tfsdk:"username"`
 }
-type GetPasswordRes404 struct {
+type GetPasswordRes401 struct {
 	*ErrorResponse
 }
-type GetPasswordRes403 struct {
+type GetPasswordRes404 struct {
 	*ErrorResponse
 }
 
@@ -1560,6 +1703,12 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	case 200:
 		res200 = new(GetPasswordRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetPasswordRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetPasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1593,14 +1742,17 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	return res200, err
 }
 
+type DeletePasswordRes403 struct {
+	*ErrorResponse
+}
 type DeletePasswordRes500 struct {
 	*ErrorResponse
 }
 type DeletePasswordRes204 struct{}
-type DeletePasswordRes404 struct {
+type DeletePasswordRes401 struct {
 	*ErrorResponse
 }
-type DeletePasswordRes403 struct {
+type DeletePasswordRes404 struct {
 	*ErrorResponse
 }
 
@@ -1621,6 +1773,12 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 	case 204:
 		res204 = new(DeletePasswordRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
+	case 401:
+		res401 := new(DeletePasswordRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(DeletePasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1656,6 +1814,15 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 
 type UpdatePasswordReq struct {
 	Name string `json:"name" tfsdk:"name"`
+}
+type UpdatePasswordRes404 struct {
+	*ErrorResponse
+}
+type UpdatePasswordRes403 struct {
+	*ErrorResponse
+}
+type UpdatePasswordRes500 struct {
+	*ErrorResponse
 }
 type UpdatePasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1694,13 +1861,7 @@ type UpdatePasswordRes200 struct {
 	TtlSeconds     float64                             `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
-type UpdatePasswordRes404 struct {
-	*ErrorResponse
-}
-type UpdatePasswordRes403 struct {
-	*ErrorResponse
-}
-type UpdatePasswordRes500 struct {
+type UpdatePasswordRes401 struct {
 	*ErrorResponse
 }
 
@@ -1725,6 +1886,12 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 	case 200:
 		res200 = new(UpdatePasswordRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(UpdatePasswordRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(UpdatePasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1760,6 +1927,18 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 
 type RenewPasswordReq struct {
 	ReadOnlyRegionId *string `json:"read_only_region_id,omitempty" tfsdk:"read_only_region_id"`
+}
+type RenewPasswordRes401 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes404 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes403 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes500 struct {
+	*ErrorResponse
 }
 type RenewPasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
@@ -1799,15 +1978,6 @@ type RenewPasswordRes200 struct {
 	TtlSeconds     float64                            `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                            `json:"username,omitempty" tfsdk:"username"`
 }
-type RenewPasswordRes404 struct {
-	*ErrorResponse
-}
-type RenewPasswordRes403 struct {
-	*ErrorResponse
-}
-type RenewPasswordRes500 struct {
-	*ErrorResponse
-}
 
 func (cl *Client) RenewPassword(ctx context.Context, organization string, database string, branch string, id string, req RenewPasswordReq) (res200 *RenewPasswordRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id + "/renew"})
@@ -1830,6 +2000,12 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 	case 200:
 		res200 = new(RenewPasswordRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(RenewPasswordRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(RenewPasswordRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1863,6 +2039,9 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 	return res200, err
 }
 
+type GetBranchRes403 struct {
+	*ErrorResponse
+}
 type GetBranchRes500 struct {
 	*ErrorResponse
 }
@@ -1890,6 +2069,7 @@ type GetBranchRes200_RestoredFromBranch struct {
 type GetBranchRes200 struct {
 	AccessHostUrl               *string                             `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
 	ApiActor                    *GetBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	ClusterRateName             string                              `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                              `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                              `json:"html_url" tfsdk:"html_url"`
 	Id                          string                              `json:"id" tfsdk:"id"`
@@ -1908,10 +2088,10 @@ type GetBranchRes200 struct {
 	Sharded                     bool                                `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                              `json:"updated_at" tfsdk:"updated_at"`
 }
-type GetBranchRes404 struct {
+type GetBranchRes401 struct {
 	*ErrorResponse
 }
-type GetBranchRes403 struct {
+type GetBranchRes404 struct {
 	*ErrorResponse
 }
 
@@ -1932,6 +2112,12 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 	case 200:
 		res200 = new(GetBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetBranchRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -1965,6 +2151,12 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 	return res200, err
 }
 
+type DeleteBranchRes401 struct {
+	*ErrorResponse
+}
+type DeleteBranchRes404 struct {
+	*ErrorResponse
+}
 type DeleteBranchRes403 struct {
 	*ErrorResponse
 }
@@ -1972,9 +2164,6 @@ type DeleteBranchRes500 struct {
 	*ErrorResponse
 }
 type DeleteBranchRes204 struct{}
-type DeleteBranchRes404 struct {
-	*ErrorResponse
-}
 
 func (cl *Client) DeleteBranch(ctx context.Context, organization string, database string, name string) (res204 *DeleteBranchRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + name})
@@ -1993,6 +2182,12 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	case 204:
 		res204 = new(DeleteBranchRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
+	case 401:
+		res401 := new(DeleteBranchRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(DeleteBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -2026,6 +2221,12 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	return res204, err
 }
 
+type DemoteBranchRes401 struct {
+	*ErrorResponse
+}
+type DemoteBranchRes404 struct {
+	*ErrorResponse
+}
 type DemoteBranchRes403 struct {
 	*ErrorResponse
 }
@@ -2056,6 +2257,7 @@ type DemoteBranchRes200_RestoredFromBranch struct {
 type DemoteBranchRes200 struct {
 	AccessHostUrl               *string                                `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
 	ApiActor                    *DemoteBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	ClusterRateName             string                                 `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                 `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                 `json:"html_url" tfsdk:"html_url"`
 	Id                          string                                 `json:"id" tfsdk:"id"`
@@ -2073,9 +2275,6 @@ type DemoteBranchRes200 struct {
 	ShardCount                  *float64                               `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
-}
-type DemoteBranchRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) DemoteBranch(ctx context.Context, organization string, database string, name string) (res200 *DemoteBranchRes200, err error) {
@@ -2095,6 +2294,12 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 	case 200:
 		res200 = new(DemoteBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(DemoteBranchRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(DemoteBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -2128,9 +2333,6 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 	return res200, err
 }
 
-type PromoteBranchRes404 struct {
-	*ErrorResponse
-}
 type PromoteBranchRes403 struct {
 	*ErrorResponse
 }
@@ -2161,6 +2363,7 @@ type PromoteBranchRes200_RestoredFromBranch struct {
 type PromoteBranchRes200 struct {
 	AccessHostUrl               *string                                 `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
 	ApiActor                    *PromoteBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	ClusterRateName             string                                  `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                  `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                  `json:"html_url" tfsdk:"html_url"`
 	Id                          string                                  `json:"id" tfsdk:"id"`
@@ -2178,6 +2381,12 @@ type PromoteBranchRes200 struct {
 	ShardCount                  *float64                                `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                    `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                  `json:"updated_at" tfsdk:"updated_at"`
+}
+type PromoteBranchRes401 struct {
+	*ErrorResponse
+}
+type PromoteBranchRes404 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) PromoteBranch(ctx context.Context, organization string, database string, name string) (res200 *PromoteBranchRes200, err error) {
@@ -2197,6 +2406,12 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	case 200:
 		res200 = new(PromoteBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(PromoteBranchRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(PromoteBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -2230,6 +2445,12 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	return res200, err
 }
 
+type EnableSafeMigrationsForBranchRes403 struct {
+	*ErrorResponse
+}
+type EnableSafeMigrationsForBranchRes500 struct {
+	*ErrorResponse
+}
 type EnableSafeMigrationsForBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -2254,6 +2475,7 @@ type EnableSafeMigrationsForBranchRes200_RestoredFromBranch struct {
 type EnableSafeMigrationsForBranchRes200 struct {
 	AccessHostUrl               *string                                                 `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
 	ApiActor                    *EnableSafeMigrationsForBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	ClusterRateName             string                                                  `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                                  `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                                  `json:"html_url" tfsdk:"html_url"`
 	Id                          string                                                  `json:"id" tfsdk:"id"`
@@ -2272,13 +2494,10 @@ type EnableSafeMigrationsForBranchRes200 struct {
 	Sharded                     bool                                                    `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                                  `json:"updated_at" tfsdk:"updated_at"`
 }
+type EnableSafeMigrationsForBranchRes401 struct {
+	*ErrorResponse
+}
 type EnableSafeMigrationsForBranchRes404 struct {
-	*ErrorResponse
-}
-type EnableSafeMigrationsForBranchRes403 struct {
-	*ErrorResponse
-}
-type EnableSafeMigrationsForBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -2299,6 +2518,12 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 	case 200:
 		res200 = new(EnableSafeMigrationsForBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(EnableSafeMigrationsForBranchRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(EnableSafeMigrationsForBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -2332,6 +2557,12 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 	return res200, err
 }
 
+type DisableSafeMigrationsForBranchRes403 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes500 struct {
+	*ErrorResponse
+}
 type DisableSafeMigrationsForBranchRes200_ApiActor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -2356,6 +2587,7 @@ type DisableSafeMigrationsForBranchRes200_RestoredFromBranch struct {
 type DisableSafeMigrationsForBranchRes200 struct {
 	AccessHostUrl               *string                                                  `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
 	ApiActor                    *DisableSafeMigrationsForBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	ClusterRateName             string                                                   `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                                   `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                                   `json:"html_url" tfsdk:"html_url"`
 	Id                          string                                                   `json:"id" tfsdk:"id"`
@@ -2374,13 +2606,10 @@ type DisableSafeMigrationsForBranchRes200 struct {
 	Sharded                     bool                                                     `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                                   `json:"updated_at" tfsdk:"updated_at"`
 }
+type DisableSafeMigrationsForBranchRes401 struct {
+	*ErrorResponse
+}
 type DisableSafeMigrationsForBranchRes404 struct {
-	*ErrorResponse
-}
-type DisableSafeMigrationsForBranchRes403 struct {
-	*ErrorResponse
-}
-type DisableSafeMigrationsForBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -2401,6 +2630,12 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	case 200:
 		res200 = new(DisableSafeMigrationsForBranchRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(DisableSafeMigrationsForBranchRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(DisableSafeMigrationsForBranchRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -2434,6 +2669,9 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	return res200, err
 }
 
+type GetBranchSchemaRes401 struct {
+	*ErrorResponse
+}
 type GetBranchSchemaRes404 struct {
 	*ErrorResponse
 }
@@ -2474,6 +2712,12 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	case 200:
 		res200 = new(GetBranchSchemaRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetBranchSchemaRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetBranchSchemaRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -2507,15 +2751,6 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	return res200, err
 }
 
-type LintBranchSchemaRes404 struct {
-	*ErrorResponse
-}
-type LintBranchSchemaRes403 struct {
-	*ErrorResponse
-}
-type LintBranchSchemaRes500 struct {
-	*ErrorResponse
-}
 type LintBranchSchemaRes200_DataItem struct {
 	AutoIncrementColumnNames []string `json:"auto_increment_column_names" tfsdk:"auto_increment_column_names"`
 	CharsetName              string   `json:"charset_name" tfsdk:"charset_name"`
@@ -2537,6 +2772,18 @@ type LintBranchSchemaRes200_DataItem struct {
 }
 type LintBranchSchemaRes200 struct {
 	Data []LintBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
+}
+type LintBranchSchemaRes401 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes404 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes403 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes500 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) LintBranchSchema(ctx context.Context, organization string, database string, name string, page *int, perPage *int) (res200 *LintBranchSchemaRes200, err error) {
@@ -2564,6 +2811,12 @@ func (cl *Client) LintBranchSchema(ctx context.Context, organization string, dat
 	case 200:
 		res200 = new(LintBranchSchemaRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(LintBranchSchemaRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(LintBranchSchemaRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -3735,6 +3988,9 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 	return res200, err
 }
 
+type GetDatabaseRes404 struct {
+	*ErrorResponse
+}
 type GetDatabaseRes403 struct {
 	*ErrorResponse
 }
@@ -3799,7 +4055,7 @@ type GetDatabaseRes200 struct {
 	UpdatedAt                         string                        `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                        `json:"url" tfsdk:"url"`
 }
-type GetDatabaseRes404 struct {
+type GetDatabaseRes401 struct {
 	*ErrorResponse
 }
 
@@ -3820,6 +4076,12 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	case 200:
 		res200 = new(GetDatabaseRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetDatabaseRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetDatabaseRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -3853,9 +4115,6 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	return res200, err
 }
 
-type DeleteDatabaseRes404 struct {
-	*ErrorResponse
-}
 type DeleteDatabaseRes403 struct {
 	*ErrorResponse
 }
@@ -3863,6 +4122,12 @@ type DeleteDatabaseRes500 struct {
 	*ErrorResponse
 }
 type DeleteDatabaseRes204 struct{}
+type DeleteDatabaseRes401 struct {
+	*ErrorResponse
+}
+type DeleteDatabaseRes404 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name string) (res204 *DeleteDatabaseRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -3881,6 +4146,12 @@ func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name 
 	case 204:
 		res204 = new(DeleteDatabaseRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
+	case 401:
+		res401 := new(DeleteDatabaseRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(DeleteDatabaseRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -3925,6 +4196,9 @@ type UpdateDatabaseSettingsReq struct {
 	ProductionBranchWebConsole *bool   `json:"production_branch_web_console,omitempty" tfsdk:"production_branch_web_console"`
 	RequireApprovalForDeploy   *bool   `json:"require_approval_for_deploy,omitempty" tfsdk:"require_approval_for_deploy"`
 	RestrictBranchRegion       *bool   `json:"restrict_branch_region,omitempty" tfsdk:"restrict_branch_region"`
+}
+type UpdateDatabaseSettingsRes401 struct {
+	*ErrorResponse
 }
 type UpdateDatabaseSettingsRes404 struct {
 	*ErrorResponse
@@ -4015,6 +4289,12 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	case 200:
 		res200 = new(UpdateDatabaseSettingsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(UpdateDatabaseSettingsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(UpdateDatabaseSettingsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4048,15 +4328,18 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	return res200, err
 }
 
+type ListReadOnlyRegionsRes403 struct {
+	*ErrorResponse
+}
 type ListReadOnlyRegionsRes500 struct {
 	*ErrorResponse
 }
-type ListReadOnlyRegionsRes200_Actor struct {
+type ListReadOnlyRegionsRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type ListReadOnlyRegionsRes200_Region struct {
+type ListReadOnlyRegionsRes200_DataItem_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -4065,20 +4348,23 @@ type ListReadOnlyRegionsRes200_Region struct {
 	PublicIpAddresses []string `json:"public_ip_addresses" tfsdk:"public_ip_addresses"`
 	Slug              string   `json:"slug" tfsdk:"slug"`
 }
-type ListReadOnlyRegionsRes200 struct {
-	Actor       ListReadOnlyRegionsRes200_Actor  `json:"actor" tfsdk:"actor"`
-	CreatedAt   string                           `json:"created_at" tfsdk:"created_at"`
-	DisplayName string                           `json:"display_name" tfsdk:"display_name"`
-	Id          string                           `json:"id" tfsdk:"id"`
-	Ready       bool                             `json:"ready" tfsdk:"ready"`
-	ReadyAt     string                           `json:"ready_at" tfsdk:"ready_at"`
-	Region      ListReadOnlyRegionsRes200_Region `json:"region" tfsdk:"region"`
-	UpdatedAt   string                           `json:"updated_at" tfsdk:"updated_at"`
+type ListReadOnlyRegionsRes200_DataItem struct {
+	Actor       ListReadOnlyRegionsRes200_DataItem_Actor  `json:"actor" tfsdk:"actor"`
+	CreatedAt   string                                    `json:"created_at" tfsdk:"created_at"`
+	DisplayName string                                    `json:"display_name" tfsdk:"display_name"`
+	Id          string                                    `json:"id" tfsdk:"id"`
+	Ready       bool                                      `json:"ready" tfsdk:"ready"`
+	ReadyAt     string                                    `json:"ready_at" tfsdk:"ready_at"`
+	Region      ListReadOnlyRegionsRes200_DataItem_Region `json:"region" tfsdk:"region"`
+	UpdatedAt   string                                    `json:"updated_at" tfsdk:"updated_at"`
 }
-type ListReadOnlyRegionsRes404 struct {
+type ListReadOnlyRegionsRes200 struct {
+	Data []ListReadOnlyRegionsRes200_DataItem `json:"data" tfsdk:"data"`
+}
+type ListReadOnlyRegionsRes401 struct {
 	*ErrorResponse
 }
-type ListReadOnlyRegionsRes403 struct {
+type ListReadOnlyRegionsRes404 struct {
 	*ErrorResponse
 }
 
@@ -4107,6 +4393,12 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 	case 200:
 		res200 = new(ListReadOnlyRegionsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListReadOnlyRegionsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListReadOnlyRegionsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4155,6 +4447,9 @@ type ListDatabaseRegionsRes200_DataItem struct {
 type ListDatabaseRegionsRes200 struct {
 	Data []ListDatabaseRegionsRes200_DataItem `json:"data" tfsdk:"data"`
 }
+type ListDatabaseRegionsRes401 struct {
+	*ErrorResponse
+}
 type ListDatabaseRegionsRes404 struct {
 	*ErrorResponse
 }
@@ -4187,6 +4482,12 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	case 200:
 		res200 = new(ListDatabaseRegionsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListDatabaseRegionsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListDatabaseRegionsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4220,6 +4521,9 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	return res200, err
 }
 
+type ListOauthApplicationsRes401 struct {
+	*ErrorResponse
+}
 type ListOauthApplicationsRes404 struct {
 	*ErrorResponse
 }
@@ -4270,6 +4574,12 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	case 200:
 		res200 = new(ListOauthApplicationsRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListOauthApplicationsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListOauthApplicationsRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4303,6 +4613,9 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	return res200, err
 }
 
+type GetOauthApplicationRes403 struct {
+	*ErrorResponse
+}
 type GetOauthApplicationRes500 struct {
 	*ErrorResponse
 }
@@ -4318,10 +4631,10 @@ type GetOauthApplicationRes200 struct {
 	Tokens      float64  `json:"tokens" tfsdk:"tokens"`
 	UpdatedAt   string   `json:"updated_at" tfsdk:"updated_at"`
 }
-type GetOauthApplicationRes404 struct {
+type GetOauthApplicationRes401 struct {
 	*ErrorResponse
 }
-type GetOauthApplicationRes403 struct {
+type GetOauthApplicationRes404 struct {
 	*ErrorResponse
 }
 
@@ -4342,6 +4655,12 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	case 200:
 		res200 = new(GetOauthApplicationRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetOauthApplicationRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetOauthApplicationRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4375,9 +4694,6 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	return res200, err
 }
 
-type ListOauthTokensRes404 struct {
-	*ErrorResponse
-}
 type ListOauthTokensRes403 struct {
 	*ErrorResponse
 }
@@ -4399,6 +4715,12 @@ type ListOauthTokensRes200_DataItem struct {
 }
 type ListOauthTokensRes200 struct {
 	Data []ListOauthTokensRes200_DataItem `json:"data" tfsdk:"data"`
+}
+type ListOauthTokensRes401 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes404 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) ListOauthTokens(ctx context.Context, organization string, applicationId string, page *int, perPage *int) (res200 *ListOauthTokensRes200, err error) {
@@ -4426,6 +4748,12 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	case 200:
 		res200 = new(ListOauthTokensRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListOauthTokensRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(ListOauthTokensRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4459,6 +4787,12 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	return res200, err
 }
 
+type GetOauthTokenRes401 struct {
+	*ErrorResponse
+}
+type GetOauthTokenRes404 struct {
+	*ErrorResponse
+}
 type GetOauthTokenRes403 struct {
 	*ErrorResponse
 }
@@ -4501,9 +4835,6 @@ type GetOauthTokenRes200 struct {
 	OauthAccessesByResource GetOauthTokenRes200_OauthAccessesByResource `json:"oauth_accesses_by_resource" tfsdk:"oauth_accesses_by_resource"`
 	UpdatedAt               string                                      `json:"updated_at" tfsdk:"updated_at"`
 }
-type GetOauthTokenRes404 struct {
-	*ErrorResponse
-}
 
 func (cl *Client) GetOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res200 *GetOauthTokenRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -4522,6 +4853,12 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	case 200:
 		res200 = new(GetOauthTokenRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetOauthTokenRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetOauthTokenRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4555,6 +4892,10 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	return res200, err
 }
 
+type DeleteOauthTokenRes204 struct{}
+type DeleteOauthTokenRes401 struct {
+	*ErrorResponse
+}
 type DeleteOauthTokenRes404 struct {
 	*ErrorResponse
 }
@@ -4564,7 +4905,6 @@ type DeleteOauthTokenRes403 struct {
 type DeleteOauthTokenRes500 struct {
 	*ErrorResponse
 }
-type DeleteOauthTokenRes204 struct{}
 
 func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -4583,6 +4923,12 @@ func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, app
 	case 204:
 		res204 = new(DeleteOauthTokenRes204)
 		err = json.NewDecoder(res.Body).Decode(&res204)
+	case 401:
+		res401 := new(DeleteOauthTokenRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(DeleteOauthTokenRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
@@ -4624,9 +4970,6 @@ type CreateOrRenewOauthTokenReq struct {
 	RedirectUri  *string `json:"redirect_uri,omitempty" tfsdk:"redirect_uri"`
 	RefreshToken *string `json:"refresh_token,omitempty" tfsdk:"refresh_token"`
 }
-type CreateOrRenewOauthTokenRes422 struct {
-	*ErrorResponse
-}
 type CreateOrRenewOauthTokenRes500 struct {
 	*ErrorResponse
 }
@@ -4643,6 +4986,9 @@ type CreateOrRenewOauthTokenRes404 struct {
 	*ErrorResponse
 }
 type CreateOrRenewOauthTokenRes403 struct {
+	*ErrorResponse
+}
+type CreateOrRenewOauthTokenRes422 struct {
 	*ErrorResponse
 }
 
@@ -4706,6 +5052,9 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 	return res200, err
 }
 
+type GetCurrentUserRes401 struct {
+	*ErrorResponse
+}
 type GetCurrentUserRes404 struct {
 	*ErrorResponse
 }
@@ -4748,6 +5097,12 @@ func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes
 	case 200:
 		res200 = new(GetCurrentUserRes200)
 		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetCurrentUserRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
 	case 403:
 		res403 := new(GetCurrentUserRes403)
 		err = json.NewDecoder(res.Body).Decode(&res403)
