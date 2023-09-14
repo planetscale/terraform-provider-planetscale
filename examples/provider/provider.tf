@@ -56,11 +56,31 @@ output "my_branches" {
 data "planetscale_branch" "my_branch" {
   organization = resource.planetscale_database.my_db.organization
   database = resource.planetscale_database.my_db.name
-  name = "main"
+  name = "hello"
 }
 
-output "my_branch" {
-  value = data.planetscale_branch.my_branch
+# output "my_branch" {
+#   value = data.planetscale_branch.my_branch
+# }
+
+data "planetscale_branch_schema" "my_schema" {
+  organization = resource.planetscale_database.my_db.organization
+  database = resource.planetscale_database.my_db.name
+  branch = data.planetscale_branch.my_branch.name
+}
+
+# output "my_schema" {
+#   value = data.planetscale_branch_schema.my_schema
+# }
+
+data "planetscale_branch_schema_lint" "my_schema_lint" {
+  organization = resource.planetscale_database.my_db.organization
+  database = resource.planetscale_database.my_db.name
+  branch = data.planetscale_branch.my_branch.name
+}
+
+output "my_schema_lint" {
+  value = data.planetscale_branch_schema_lint.my_schema_lint
 }
 
 # data "planetscale_oauth_applications" "test" {

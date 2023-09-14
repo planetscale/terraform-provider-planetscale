@@ -15,7 +15,7 @@ var (
 	_ datasource.DataSourceWithConfigure = &branchDataSource{}
 )
 
-func newDatabaseBranchDataSource() datasource.DataSource {
+func newBranchDataSource() datasource.DataSource {
 	return &branchDataSource{}
 }
 
@@ -69,7 +69,7 @@ type branchDataSourceModel struct {
 	Sharded                     types.Bool                               `tfsdk:"sharded"`
 	UpdatedAt                   types.String                             `tfsdk:"updated_at"`
 	ApiActor                    *branchApiActorDataSourceModel           `tfsdk:"api_actor"`
-	PlanetscaleRegion           *branchRegionDataSourceModel             `tfsdk:"planetscale_region"`
+	PlanetscaleRegion           *branchRegionDataSourceModel             `tfsdk:"region"`
 	RestoredFromBranch          *branchRestoredFromBranchDataSourceModel `tfsdk:"restored_from_branch"`
 }
 

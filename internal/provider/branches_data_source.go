@@ -15,7 +15,7 @@ var (
 	_ datasource.DataSourceWithConfigure = &branchesDataSource{}
 )
 
-func newDatabaseBranchesDataSource() datasource.DataSource {
+func newBranchesDataSource() datasource.DataSource {
 	return &branchesDataSource{}
 }
 
