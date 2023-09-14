@@ -52,6 +52,17 @@ output "my_branches" {
   value = data.planetscale_branches.my_branches
 }
 
+
+data "planetscale_branch" "my_branch" {
+  organization = resource.planetscale_database.my_db.organization
+  database = resource.planetscale_database.my_db.name
+  name = "main"
+}
+
+output "my_branch" {
+  value = data.planetscale_branch.my_branch
+}
+
 # data "planetscale_oauth_applications" "test" {
 #   organization = data.planetscale_organizations.test.organizations.0.name
 # }

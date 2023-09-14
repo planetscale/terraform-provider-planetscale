@@ -11,31 +11,31 @@ import (
 )
 
 var (
-	_ datasource.DataSource              = &databaseBranchesDataSource{}
-	_ datasource.DataSourceWithConfigure = &databaseBranchesDataSource{}
+	_ datasource.DataSource              = &branchesDataSource{}
+	_ datasource.DataSourceWithConfigure = &branchesDataSource{}
 )
 
 func newDatabaseBranchesDataSource() datasource.DataSource {
-	return &databaseBranchesDataSource{}
+	return &branchesDataSource{}
 }
 
-type databaseBranchesDataSource struct {
+type branchesDataSource struct {
 	client *planetscale.Client
 }
 
-type databaseBranchesDataSourceModel struct {
+type branchesDataSourceModel struct {
 	Organization string                          `tfsdk:"organization"`
 	Database     string                          `tfsdk:"database"`
-	Branches     []databaseBranchDataSourceModel `tfsdk:"branches"`
+	Branches     []branchesBranchDataSourceModel `tfsdk:"branches"`
 }
 
-type databaseBranchApiActorDataSourceModel struct {
+type branchesApiActorDataSourceModel struct {
 	AvatarUrl   string `tfsdk:"avatar_url"`
 	DisplayName string `tfsdk:"display_name"`
 	Id          string `tfsdk:"id"`
 }
 
-type databaseBranchRegionDataSourceModel struct {
+type branchesRegionDataSourceModel struct {
 	DisplayName       string   `tfsdk:"display_name"`
 	Enabled           bool     `tfsdk:"enabled"`
 	Id                string   `tfsdk:"id"`
@@ -45,7 +45,7 @@ type databaseBranchRegionDataSourceModel struct {
 	Slug              string   `tfsdk:"slug"`
 }
 
-type databaseBranchRestoredFromBranchDataSourceModel struct {
+type branchesRestoredFromBranchDataSourceModel struct {
 	CreatedAt string `tfsdk:"created_at"`
 	DeletedAt string `tfsdk:"deleted_at"`
 	Id        string `tfsdk:"id"`
@@ -53,34 +53,34 @@ type databaseBranchRestoredFromBranchDataSourceModel struct {
 	UpdatedAt string `tfsdk:"updated_at"`
 }
 
-type databaseBranchDataSourceModel struct {
-	Id                          string                                           `tfsdk:"id"`
-	Name                        string                                           `tfsdk:"name"`
-	AccessHostUrl               *string                                          `tfsdk:"access_host_url"`
-	ApiActor                    *databaseBranchApiActorDataSourceModel           `tfsdk:"api_actor"`
-	ClusterRateName             string                                           `tfsdk:"cluster_rate_name"`
-	CreatedAt                   string                                           `tfsdk:"created_at"`
-	HtmlUrl                     string                                           `tfsdk:"html_url"`
-	InitialRestoreId            *string                                          `tfsdk:"initial_restore_id"`
-	MysqlAddress                string                                           `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            string                                           `tfsdk:"mysql_edge_address"`
-	ParentBranch                string                                           `tfsdk:"parent_branch"`
-	PlanetscaleRegion           *databaseBranchRegionDataSourceModel             `tfsdk:"region"`
-	Production                  bool                                             `tfsdk:"production"`
-	Ready                       bool                                             `tfsdk:"ready"`
-	RestoreChecklistCompletedAt *string                                          `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          *databaseBranchRestoredFromBranchDataSourceModel `tfsdk:"restored_from_branch"`
-	SchemaLastUpdatedAt         string                                           `tfsdk:"schema_last_updated_at"`
-	ShardCount                  *float64                                         `tfsdk:"shard_count"`
-	Sharded                     bool                                             `tfsdk:"sharded"`
-	UpdatedAt                   string                                           `tfsdk:"updated_at"`
+type branchesBranchDataSourceModel struct {
+	Id                          string                                     `tfsdk:"id"`
+	Name                        string                                     `tfsdk:"name"`
+	AccessHostUrl               *string                                    `tfsdk:"access_host_url"`
+	ApiActor                    *branchesApiActorDataSourceModel           `tfsdk:"api_actor"`
+	ClusterRateName             string                                     `tfsdk:"cluster_rate_name"`
+	CreatedAt                   string                                     `tfsdk:"created_at"`
+	HtmlUrl                     string                                     `tfsdk:"html_url"`
+	InitialRestoreId            *string                                    `tfsdk:"initial_restore_id"`
+	MysqlAddress                string                                     `tfsdk:"mysql_address"`
+	MysqlEdgeAddress            string                                     `tfsdk:"mysql_edge_address"`
+	ParentBranch                string                                     `tfsdk:"parent_branch"`
+	PlanetscaleRegion           *branchesRegionDataSourceModel             `tfsdk:"region"`
+	Production                  bool                                       `tfsdk:"production"`
+	Ready                       bool                                       `tfsdk:"ready"`
+	RestoreChecklistCompletedAt *string                                    `tfsdk:"restore_checklist_completed_at"`
+	RestoredFromBranch          *branchesRestoredFromBranchDataSourceModel `tfsdk:"restored_from_branch"`
+	SchemaLastUpdatedAt         string                                     `tfsdk:"schema_last_updated_at"`
+	ShardCount                  *float64                                   `tfsdk:"shard_count"`
+	Sharded                     bool                                       `tfsdk:"sharded"`
+	UpdatedAt                   string                                     `tfsdk:"updated_at"`
 }
 
-func (d *databaseBranchesDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *branchesDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_branches"
 }
 
-func (d *databaseBranchesDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *branchesDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
 		"organization": schema.StringAttribute{Required: true},
 		"database":     schema.StringAttribute{Required: true},
@@ -141,7 +141,7 @@ func (d *databaseBranchesDataSource) Schema(ctx context.Context, req datasource.
 	}}
 }
 
-func (d *databaseBranchesDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *branchesDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -156,9 +156,9 @@ func (d *databaseBranchesDataSource) Configure(ctx context.Context, req datasour
 	d.client = client
 }
 
-func (d *databaseBranchesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+func (d *branchesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 
-	var data *databaseBranchesDataSourceModel
+	var data *branchesDataSourceModel
 
 	// Read Terraform prior state data into the model
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
@@ -175,15 +175,15 @@ func (d *databaseBranchesDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError("Unable to read database branches", "no data")
 		return
 	}
-	state := databaseBranchesDataSourceModel{
+	state := branchesDataSourceModel{
 		Organization: data.Organization,
 		Database:     data.Database,
-		Branches:     make([]databaseBranchDataSourceModel, 0, len(res200.Data)),
+		Branches:     make([]branchesBranchDataSourceModel, 0, len(res200.Data)),
 	}
 
 	for _, item := range res200.Data {
 
-		out := databaseBranchDataSourceModel{
+		out := branchesBranchDataSourceModel{
 			AccessHostUrl:               item.AccessHostUrl,
 			ClusterRateName:             item.ClusterRateName,
 			CreatedAt:                   item.CreatedAt,
@@ -203,14 +203,14 @@ func (d *databaseBranchesDataSource) Read(ctx context.Context, req datasource.Re
 			UpdatedAt:                   item.UpdatedAt,
 		}
 		if item.ApiActor != nil {
-			out.ApiActor = &databaseBranchApiActorDataSourceModel{
+			out.ApiActor = &branchesApiActorDataSourceModel{
 				AvatarUrl:   item.ApiActor.AvatarUrl,
 				DisplayName: item.ApiActor.DisplayName,
 				Id:          item.ApiActor.Id,
 			}
 		}
 		if item.PlanetscaleRegion != nil {
-			out.PlanetscaleRegion = &databaseBranchRegionDataSourceModel{
+			out.PlanetscaleRegion = &branchesRegionDataSourceModel{
 				DisplayName:       item.PlanetscaleRegion.DisplayName,
 				Enabled:           item.PlanetscaleRegion.Enabled,
 				Id:                item.PlanetscaleRegion.Id,
@@ -221,7 +221,7 @@ func (d *databaseBranchesDataSource) Read(ctx context.Context, req datasource.Re
 			}
 		}
 		if item.RestoredFromBranch != nil {
-			out.RestoredFromBranch = &databaseBranchRestoredFromBranchDataSourceModel{
+			out.RestoredFromBranch = &branchesRestoredFromBranchDataSourceModel{
 				CreatedAt: item.RestoredFromBranch.CreatedAt,
 				DeletedAt: item.RestoredFromBranch.DeletedAt,
 				Id:        item.RestoredFromBranch.Id,
