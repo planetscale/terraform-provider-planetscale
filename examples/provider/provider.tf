@@ -28,10 +28,15 @@ data "planetscale_organizations" "test" {}
 #   value = data.planetscale_databases.test
 # }
 
-resource "planetscale_database" "my_db" {
+data "planetscale_database" "my_db" {
   organization = data.planetscale_organizations.test.organizations.0.name
   name = "again"
 }
+
+# resource "planetscale_database" "my_db" {
+#   organization = data.planetscale_organizations.test.organizations.0.name
+#   name = "again"
+# }
 
 # data "planetscale_database_regions" "my_regions" {
 #   organization = resource.planetscale_database.my_db.organization
@@ -43,44 +48,50 @@ resource "planetscale_database" "my_db" {
 #   name = resource.planetscale_database.my_db.name
 # }
 
-data "planetscale_branches" "my_branches" {
-  organization = resource.planetscale_database.my_db.organization
-  database = resource.planetscale_database.my_db.name
-}
+# data "planetscale_branches" "my_branches" {
+#   organization = data.planetscale_database.my_db.organization
+#   database = data.planetscale_database.my_db.name
+# }
 
-output "my_branches" {
-  value = data.planetscale_branches.my_branches
-}
+# output "my_branches" {
+#   value = data.planetscale_branches.my_branches
+# }
 
-
-data "planetscale_branch" "my_branch" {
-  organization = resource.planetscale_database.my_db.organization
-  database = resource.planetscale_database.my_db.name
-  name = "hello"
-}
+# data "planetscale_branch" "my_branch" {
+#   organization = data.planetscale_database.my_db.organization
+#   database = data.planetscale_database.my_db.name
+#   name = "world"
+# }
 
 # output "my_branch" {
 #   value = data.planetscale_branch.my_branch
 # }
 
-data "planetscale_branch_schema" "my_schema" {
-  organization = resource.planetscale_database.my_db.organization
-  database = resource.planetscale_database.my_db.name
-  branch = data.planetscale_branch.my_branch.name
-}
+# data "planetscale_branch_schema" "my_schema" {
+#   organization = resource.planetscale_database.my_db.organization
+#   database = resource.planetscale_database.my_db.name
+#   branch = data.planetscale_branch.my_branch.name
+# }
 
 # output "my_schema" {
 #   value = data.planetscale_branch_schema.my_schema
 # }
 
-data "planetscale_branch_schema_lint" "my_schema_lint" {
-  organization = resource.planetscale_database.my_db.organization
-  database = resource.planetscale_database.my_db.name
-  branch = data.planetscale_branch.my_branch.name
-}
+# data "planetscale_branch_schema_lint" "my_schema_lint" {
+#   organization = resource.planetscale_database.my_db.organization
+#   database = resource.planetscale_database.my_db.name
+#   branch = data.planetscale_branch.my_branch.name
+# }
 
-output "my_schema_lint" {
-  value = data.planetscale_branch_schema_lint.my_schema_lint
+# output "my_schema_lint" {
+#   value = data.planetscale_branch_schema_lint.my_schema_lint
+# }
+
+resource "planetscale_branch" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+  database = data.planetscale_database.my_db.name
+  name = "hello"
+  parent_branch = "main"
 }
 
 # data "planetscale_oauth_applications" "test" {

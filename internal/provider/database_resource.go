@@ -413,11 +413,6 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	tflog.Trace(ctx, "updating db settings", map[string]interface{}{
-		"old_notes": old.Notes.ValueString(),
-		"new_notes": data.Notes.ValueString(),
-	})
-
 	changedUpdatableSettings := false
 	updateReq := planetscale.UpdateDatabaseSettingsReq{
 		AllowDataBranching:         boolIfDifferent(old.AllowDataBranching, data.AllowDataBranching, &changedUpdatableSettings),

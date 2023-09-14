@@ -50,40 +50,40 @@ type regionDataSourceModel struct {
 type databaseDataSourceModel struct {
 	Organization                      string                 `tfsdk:"organization"`
 	Name                              string                 `tfsdk:"name"`
-	Id                                string                 `tfsdk:"id"`
-	AllowDataBranching                bool                   `tfsdk:"allow_data_branching"`
-	AtBackupRestoreBranchesLimit      bool                   `tfsdk:"at_backup_restore_branches_limit"`
-	AtDevelopmentBranchLimit          bool                   `tfsdk:"at_development_branch_limit"`
-	AutomaticMigrations               bool                   `tfsdk:"automatic_migrations"`
-	BranchesCount                     float64                `tfsdk:"branches_count"`
-	BranchesUrl                       string                 `tfsdk:"branches_url"`
-	CreatedAt                         string                 `tfsdk:"created_at"`
+	Id                                types.String           `tfsdk:"id"`
+	AllowDataBranching                types.Bool             `tfsdk:"allow_data_branching"`
+	AtBackupRestoreBranchesLimit      types.Bool             `tfsdk:"at_backup_restore_branches_limit"`
+	AtDevelopmentBranchLimit          types.Bool             `tfsdk:"at_development_branch_limit"`
+	AutomaticMigrations               types.Bool             `tfsdk:"automatic_migrations"`
+	BranchesCount                     types.Float64          `tfsdk:"branches_count"`
+	BranchesUrl                       types.String           `tfsdk:"branches_url"`
+	CreatedAt                         types.String           `tfsdk:"created_at"`
 	DataImport                        *importDataSourceModel `tfsdk:"data_import"`
-	DefaultBranch                     string                 `tfsdk:"default_branch"`
-	DefaultBranchReadOnlyRegionsCount float64                `tfsdk:"default_branch_read_only_regions_count"`
-	DefaultBranchShardCount           float64                `tfsdk:"default_branch_shard_count"`
-	DefaultBranchTableCount           float64                `tfsdk:"default_branch_table_count"`
-	DevelopmentBranchesCount          float64                `tfsdk:"development_branches_count"`
-	HtmlUrl                           string                 `tfsdk:"html_url"`
-	InsightsRawQueries                bool                   `tfsdk:"insights_raw_queries"`
-	IssuesCount                       float64                `tfsdk:"issues_count"`
-	MigrationFramework                *string                `tfsdk:"migration_framework"`
-	MigrationTableName                *string                `tfsdk:"migration_table_name"`
-	MultipleAdminsRequiredForDeletion bool                   `tfsdk:"multiple_admins_required_for_deletion"`
-	Notes                             *string                `tfsdk:"notes"`
-	Plan                              string                 `tfsdk:"plan"`
-	ProductionBranchWebConsole        bool                   `tfsdk:"production_branch_web_console"`
-	ProductionBranchesCount           float64                `tfsdk:"production_branches_count"`
-	Ready                             bool                   `tfsdk:"ready"`
-	Region                            regionDataSourceModel  `tfsdk:"region"`
-	RequireApprovalForDeploy          bool                   `tfsdk:"require_approval_for_deploy"`
-	RestrictBranchRegion              bool                   `tfsdk:"restrict_branch_region"`
-	SchemaLastUpdatedAt               *string                `tfsdk:"schema_last_updated_at"`
-	Sharded                           bool                   `tfsdk:"sharded"`
-	State                             string                 `tfsdk:"state"`
-	Type                              string                 `tfsdk:"type"`
-	UpdatedAt                         string                 `tfsdk:"updated_at"`
-	Url                               string                 `tfsdk:"url"`
+	DefaultBranch                     types.String           `tfsdk:"default_branch"`
+	DefaultBranchReadOnlyRegionsCount types.Float64          `tfsdk:"default_branch_read_only_regions_count"`
+	DefaultBranchShardCount           types.Float64          `tfsdk:"default_branch_shard_count"`
+	DefaultBranchTableCount           types.Float64          `tfsdk:"default_branch_table_count"`
+	DevelopmentBranchesCount          types.Float64          `tfsdk:"development_branches_count"`
+	HtmlUrl                           types.String           `tfsdk:"html_url"`
+	InsightsRawQueries                types.Bool             `tfsdk:"insights_raw_queries"`
+	IssuesCount                       types.Float64          `tfsdk:"issues_count"`
+	MigrationFramework                types.String           `tfsdk:"migration_framework"`
+	MigrationTableName                types.String           `tfsdk:"migration_table_name"`
+	MultipleAdminsRequiredForDeletion types.Bool             `tfsdk:"multiple_admins_required_for_deletion"`
+	Notes                             types.String           `tfsdk:"notes"`
+	Plan                              types.String           `tfsdk:"plan"`
+	ProductionBranchWebConsole        types.Bool             `tfsdk:"production_branch_web_console"`
+	ProductionBranchesCount           types.Float64          `tfsdk:"production_branches_count"`
+	Ready                             types.Bool             `tfsdk:"ready"`
+	Region                            *regionDataSourceModel `tfsdk:"region"`
+	RequireApprovalForDeploy          types.Bool             `tfsdk:"require_approval_for_deploy"`
+	RestrictBranchRegion              types.Bool             `tfsdk:"restrict_branch_region"`
+	SchemaLastUpdatedAt               types.String           `tfsdk:"schema_last_updated_at"`
+	Sharded                           types.Bool             `tfsdk:"sharded"`
+	State                             types.String           `tfsdk:"state"`
+	Type                              types.String           `tfsdk:"type"`
+	UpdatedAt                         types.String           `tfsdk:"updated_at"`
+	Url                               types.String           `tfsdk:"url"`
 }
 
 func (d *databaseDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -193,39 +193,39 @@ func (d *databaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 	}
 	state := databaseDataSourceModel{
 		Organization:                      data.Organization,
-		Id:                                res200.Id,
-		AllowDataBranching:                res200.AllowDataBranching,
-		AtBackupRestoreBranchesLimit:      res200.AtBackupRestoreBranchesLimit,
-		AtDevelopmentBranchLimit:          res200.AtDevelopmentBranchLimit,
-		AutomaticMigrations:               res200.AutomaticMigrations,
-		BranchesCount:                     res200.BranchesCount,
-		BranchesUrl:                       res200.BranchesUrl,
-		CreatedAt:                         res200.CreatedAt,
-		DefaultBranch:                     res200.DefaultBranch,
-		DefaultBranchReadOnlyRegionsCount: res200.DefaultBranchReadOnlyRegionsCount,
-		DefaultBranchShardCount:           res200.DefaultBranchShardCount,
-		DefaultBranchTableCount:           res200.DefaultBranchTableCount,
-		DevelopmentBranchesCount:          res200.DevelopmentBranchesCount,
-		HtmlUrl:                           res200.HtmlUrl,
-		InsightsRawQueries:                res200.InsightsRawQueries,
-		IssuesCount:                       res200.IssuesCount,
-		MigrationFramework:                res200.MigrationFramework,
-		MigrationTableName:                res200.MigrationTableName,
-		MultipleAdminsRequiredForDeletion: res200.MultipleAdminsRequiredForDeletion,
 		Name:                              res200.Name,
-		Notes:                             res200.Notes,
-		Plan:                              res200.Plan,
-		ProductionBranchWebConsole:        res200.ProductionBranchWebConsole,
-		ProductionBranchesCount:           res200.ProductionBranchesCount,
-		Ready:                             res200.Ready,
-		RequireApprovalForDeploy:          res200.RequireApprovalForDeploy,
-		RestrictBranchRegion:              res200.RestrictBranchRegion,
-		SchemaLastUpdatedAt:               res200.SchemaLastUpdatedAt,
-		Sharded:                           res200.Sharded,
-		State:                             res200.State,
-		Type:                              res200.Type,
-		UpdatedAt:                         res200.UpdatedAt,
-		Url:                               res200.Url,
+		Id:                                types.StringValue(res200.Id),
+		AllowDataBranching:                types.BoolValue(res200.AllowDataBranching),
+		AtBackupRestoreBranchesLimit:      types.BoolValue(res200.AtBackupRestoreBranchesLimit),
+		AtDevelopmentBranchLimit:          types.BoolValue(res200.AtDevelopmentBranchLimit),
+		AutomaticMigrations:               types.BoolValue(res200.AutomaticMigrations),
+		BranchesCount:                     types.Float64Value(res200.BranchesCount),
+		BranchesUrl:                       types.StringValue(res200.BranchesUrl),
+		CreatedAt:                         types.StringValue(res200.CreatedAt),
+		DefaultBranch:                     types.StringValue(res200.DefaultBranch),
+		DefaultBranchReadOnlyRegionsCount: types.Float64Value(res200.DefaultBranchReadOnlyRegionsCount),
+		DefaultBranchShardCount:           types.Float64Value(res200.DefaultBranchShardCount),
+		DefaultBranchTableCount:           types.Float64Value(res200.DefaultBranchTableCount),
+		DevelopmentBranchesCount:          types.Float64Value(res200.DevelopmentBranchesCount),
+		HtmlUrl:                           types.StringValue(res200.HtmlUrl),
+		InsightsRawQueries:                types.BoolValue(res200.InsightsRawQueries),
+		IssuesCount:                       types.Float64Value(res200.IssuesCount),
+		MigrationFramework:                types.StringPointerValue(res200.MigrationFramework),
+		MigrationTableName:                types.StringPointerValue(res200.MigrationTableName),
+		MultipleAdminsRequiredForDeletion: types.BoolValue(res200.MultipleAdminsRequiredForDeletion),
+		Notes:                             types.StringPointerValue(res200.Notes),
+		Plan:                              types.StringValue(res200.Plan),
+		ProductionBranchWebConsole:        types.BoolValue(res200.ProductionBranchWebConsole),
+		ProductionBranchesCount:           types.Float64Value(res200.ProductionBranchesCount),
+		Ready:                             types.BoolValue(res200.Ready),
+		RequireApprovalForDeploy:          types.BoolValue(res200.RequireApprovalForDeploy),
+		RestrictBranchRegion:              types.BoolValue(res200.RestrictBranchRegion),
+		SchemaLastUpdatedAt:               types.StringPointerValue(res200.SchemaLastUpdatedAt),
+		Sharded:                           types.BoolValue(res200.Sharded),
+		State:                             types.StringValue(res200.State),
+		Type:                              types.StringValue(res200.Type),
+		UpdatedAt:                         types.StringValue(res200.UpdatedAt),
+		Url:                               types.StringValue(res200.Url),
 	}
 
 	if res200.DataImport != nil {
@@ -241,7 +241,7 @@ func (d *databaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 			State:             res200.DataImport.State,
 		}
 	}
-	data.Region = regionDataSourceModel{
+	data.Region = &regionDataSourceModel{
 		DisplayName:       res200.Region.DisplayName,
 		Enabled:           res200.Region.Enabled,
 		Id:                res200.Region.Id,
