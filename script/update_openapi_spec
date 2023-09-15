@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+
+function main() {
+    curl -q https://api.planetscale.com/v1/openapi-spec | jq . > ${root}/openapi-spec.json
+}
+
+main

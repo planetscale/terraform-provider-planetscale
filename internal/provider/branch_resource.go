@@ -34,13 +34,13 @@ type branchResource struct {
 	client *planetscale.Client
 }
 
-type branchApiActorResource struct {
+type branchActorResource struct {
 	AvatarUrl   string `tfsdk:"avatar_url"`
 	DisplayName string `tfsdk:"display_name"`
 	Id          string `tfsdk:"id"`
 }
 
-var apiActorResourceAttrTypes = map[string]attr.Type{
+var branchApiActorResourceAttrTypes = map[string]attr.Type{
 	"avatar_url":   types.StringType,
 	"display_name": types.StringType,
 	"id":           types.StringType,
@@ -56,7 +56,7 @@ type branchRegionResource struct {
 	Slug              string   `tfsdk:"slug"`
 }
 
-var planetscaleRegionResourceAttrTypes = map[string]attr.Type{
+var branchRegionResourceAttrTypes = map[string]attr.Type{
 	"display_name":        types.StringType,
 	"enabled":             types.BoolType,
 	"id":                  types.StringType,
@@ -74,7 +74,7 @@ type branchRestoredFromBranchResource struct {
 	UpdatedAt string `tfsdk:"updated_at"`
 }
 
-var restoredFromBranchResourceAttrTypes = map[string]attr.Type{
+var branchRestoredFromBranchResourceAttrTypes = map[string]attr.Type{
 	"created_at": types.StringType,
 	"deleted_at": types.StringType,
 	"id":         types.StringType,
@@ -89,7 +89,7 @@ type branchResourceModel struct {
 	ParentBranch types.String `tfsdk:"parent_branch"`
 
 	AccessHostUrl               types.String  `tfsdk:"access_host_url"`
-	ApiActor                    types.Object  `tfsdk:"api_actor"`
+	Actor                       types.Object  `tfsdk:"api_actor"`
 	ClusterRateName             types.String  `tfsdk:"cluster_rate_name"`
 	CreatedAt                   types.String  `tfsdk:"created_at"`
 	HtmlUrl                     types.String  `tfsdk:"html_url"`
@@ -97,7 +97,7 @@ type branchResourceModel struct {
 	InitialRestoreId            types.String  `tfsdk:"initial_restore_id"`
 	MysqlAddress                types.String  `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String  `tfsdk:"mysql_edge_address"`
-	PlanetscaleRegion           types.Object  `tfsdk:"region"`
+	Region                      types.Object  `tfsdk:"region"`
 	Production                  types.Bool    `tfsdk:"production"`
 	Ready                       types.Bool    `tfsdk:"ready"`
 	RestoreChecklistCompletedAt types.String  `tfsdk:"restore_checklist_completed_at"`
@@ -260,26 +260,20 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 	data.UpdatedAt = types.StringValue(res201.UpdatedAt)
 
 	var diErr diag.Diagnostics
-	if res201.ApiActor != nil {
-		data.ApiActor, diErr = types.ObjectValueFrom(ctx, apiActorResourceAttrTypes, res201.ApiActor)
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
+	data.Actor, diErr = types.ObjectValueFrom(ctx, branchApiActorResourceAttrTypes, res201.Actor)
+	if diErr.HasError() {
+		resp.Diagnostics.Append(diErr.Errors()...)
+		return
 	}
-	if res201.PlanetscaleRegion != nil {
-		data.PlanetscaleRegion, diErr = types.ObjectValueFrom(ctx, planetscaleRegionResourceAttrTypes, res201.PlanetscaleRegion)
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
+	data.Region, diErr = types.ObjectValueFrom(ctx, branchRegionResourceAttrTypes, res201.Region)
+	if diErr.HasError() {
+		resp.Diagnostics.Append(diErr.Errors()...)
+		return
 	}
-	if res201.RestoredFromBranch != nil {
-		data.RestoredFromBranch, diErr = types.ObjectValueFrom(ctx, restoredFromBranchResourceAttrTypes, res201.RestoredFromBranch)
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
+	data.RestoredFromBranch, diErr = types.ObjectValueFrom(ctx, branchRestoredFromBranchResourceAttrTypes, res201.RestoredFromBranch)
+	if diErr.HasError() {
+		resp.Diagnostics.Append(diErr.Errors()...)
+		return
 	}
 
 	// Write logs using the tflog package
@@ -334,26 +328,20 @@ func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, res
 	data.UpdatedAt = types.StringValue(res200.UpdatedAt)
 
 	var diErr diag.Diagnostics
-	if res200.ApiActor != nil {
-		data.ApiActor, diErr = types.ObjectValueFrom(ctx, apiActorResourceAttrTypes, res200.ApiActor)
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
+	data.Actor, diErr = types.ObjectValueFrom(ctx, branchApiActorResourceAttrTypes, res200.Actor)
+	if diErr.HasError() {
+		resp.Diagnostics.Append(diErr.Errors()...)
+		return
 	}
-	if res200.PlanetscaleRegion != nil {
-		data.PlanetscaleRegion, diErr = types.ObjectValueFrom(ctx, planetscaleRegionResourceAttrTypes, res200.PlanetscaleRegion)
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
+	data.Region, diErr = types.ObjectValueFrom(ctx, branchRegionResourceAttrTypes, res200.Region)
+	if diErr.HasError() {
+		resp.Diagnostics.Append(diErr.Errors()...)
+		return
 	}
-	if res200.RestoredFromBranch != nil {
-		data.RestoredFromBranch, diErr = types.ObjectValueFrom(ctx, restoredFromBranchResourceAttrTypes, res200.RestoredFromBranch)
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
+	data.RestoredFromBranch, diErr = types.ObjectValueFrom(ctx, branchRestoredFromBranchResourceAttrTypes, res200.RestoredFromBranch)
+	if diErr.HasError() {
+		resp.Diagnostics.Append(diErr.Errors()...)
+		return
 	}
 
 	// Save updated data into Terraform state

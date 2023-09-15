@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"sort"
@@ -17,14 +18,17 @@ import (
 )
 
 func main() {
-	if err := realMain(); err != nil {
+	specFilepath := flag.String("spec", "", "")
+	flag.Parse()
+
+	if err := realMain(*specFilepath); err != nil {
 		slog.Error("failed", "err", err)
 	}
 }
 
-func realMain() error {
+func realMain(specFilepath string) error {
 	slog.Info("loading spec")
-	doc, err := loads.Spec("https://api.planetscale.com/v1/openapi-spec")
+	doc, err := loads.Spec(specFilepath)
 	if err != nil {
 		return fmt.Errorf("loading spec: %w", err)
 	}

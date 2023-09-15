@@ -147,15 +147,6 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	return res200, err
 }
 
-type GetOrganizationRes401 struct {
-	*ErrorResponse
-}
-type GetOrganizationRes404 struct {
-	*ErrorResponse
-}
-type GetOrganizationRes403 struct {
-	*ErrorResponse
-}
 type GetOrganizationRes500 struct {
 	*ErrorResponse
 }
@@ -188,6 +179,15 @@ type GetOrganizationRes200 struct {
 	SsoPortalUrl              *string                         `json:"sso_portal_url,omitempty" tfsdk:"sso_portal_url"`
 	UpdatedAt                 string                          `json:"updated_at" tfsdk:"updated_at"`
 	ValidBillingInfo          bool                            `json:"valid_billing_info" tfsdk:"valid_billing_info"`
+}
+type GetOrganizationRes401 struct {
+	*ErrorResponse
+}
+type GetOrganizationRes404 struct {
+	*ErrorResponse
+}
+type GetOrganizationRes403 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *GetOrganizationRes200, err error) {
@@ -251,6 +251,15 @@ type UpdateOrganizationReq struct {
 	IdpManagedRoles                 *bool   `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
 	RequireAdminForProductionAccess *bool   `json:"require_admin_for_production_access,omitempty" tfsdk:"require_admin_for_production_access"`
 }
+type UpdateOrganizationRes404 struct {
+	*ErrorResponse
+}
+type UpdateOrganizationRes403 struct {
+	*ErrorResponse
+}
+type UpdateOrganizationRes500 struct {
+	*ErrorResponse
+}
 type UpdateOrganizationRes200_Features struct {
 	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
 	SingleTenancy *bool `json:"single_tenancy,omitempty" tfsdk:"single_tenancy"`
@@ -282,15 +291,6 @@ type UpdateOrganizationRes200 struct {
 	ValidBillingInfo          bool                               `json:"valid_billing_info" tfsdk:"valid_billing_info"`
 }
 type UpdateOrganizationRes401 struct {
-	*ErrorResponse
-}
-type UpdateOrganizationRes404 struct {
-	*ErrorResponse
-}
-type UpdateOrganizationRes403 struct {
-	*ErrorResponse
-}
-type UpdateOrganizationRes500 struct {
 	*ErrorResponse
 }
 
@@ -443,6 +443,12 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	return res200, err
 }
 
+type ListDatabasesRes404 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes403 struct {
+	*ErrorResponse
+}
 type ListDatabasesRes500 struct {
 	*ErrorResponse
 }
@@ -508,12 +514,6 @@ type ListDatabasesRes200 struct {
 	Data []ListDatabasesRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListDatabasesRes401 struct {
-	*ErrorResponse
-}
-type ListDatabasesRes404 struct {
-	*ErrorResponse
-}
-type ListDatabasesRes403 struct {
 	*ErrorResponse
 }
 
@@ -588,15 +588,6 @@ type CreateDatabaseReq struct {
 	Plan        *string `json:"plan,omitempty" tfsdk:"plan"`
 	Region      *string `json:"region,omitempty" tfsdk:"region"`
 }
-type CreateDatabaseRes404 struct {
-	*ErrorResponse
-}
-type CreateDatabaseRes403 struct {
-	*ErrorResponse
-}
-type CreateDatabaseRes500 struct {
-	*ErrorResponse
-}
 type CreateDatabaseRes201_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
 	Hostname string `json:"hostname" tfsdk:"hostname"`
@@ -656,6 +647,15 @@ type CreateDatabaseRes201 struct {
 	Url                               string                           `json:"url" tfsdk:"url"`
 }
 type CreateDatabaseRes401 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes404 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes403 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes500 struct {
 	*ErrorResponse
 }
 
@@ -719,12 +719,18 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	return res201, err
 }
 
-type ListBranchesRes200_DataItem_ApiActor struct {
+type ListBranchesRes403 struct {
+	*ErrorResponse
+}
+type ListBranchesRes500 struct {
+	*ErrorResponse
+}
+type ListBranchesRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type ListBranchesRes200_DataItem_PlanetscaleRegion struct {
+type ListBranchesRes200_DataItem_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -742,7 +748,7 @@ type ListBranchesRes200_DataItem_RestoredFromBranch struct {
 }
 type ListBranchesRes200_DataItem struct {
 	AccessHostUrl               *string                                         `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	ApiActor                    *ListBranchesRes200_DataItem_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	Actor                       *ListBranchesRes200_DataItem_Actor              `json:"actor,omitempty" tfsdk:"actor"`
 	ClusterRateName             string                                          `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                          `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                          `json:"html_url" tfsdk:"html_url"`
@@ -752,9 +758,9 @@ type ListBranchesRes200_DataItem struct {
 	MysqlEdgeAddress            string                                          `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
 	Name                        string                                          `json:"name" tfsdk:"name"`
 	ParentBranch                string                                          `json:"parent_branch" tfsdk:"parent_branch"`
-	PlanetscaleRegion           *ListBranchesRes200_DataItem_PlanetscaleRegion  `json:"planetscale_region,omitempty" tfsdk:"planetscale_region"`
 	Production                  bool                                            `json:"production" tfsdk:"production"`
 	Ready                       bool                                            `json:"ready" tfsdk:"ready"`
+	Region                      *ListBranchesRes200_DataItem_Region             `json:"region,omitempty" tfsdk:"region"`
 	RestoreChecklistCompletedAt *string                                         `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *ListBranchesRes200_DataItem_RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
 	SchemaLastUpdatedAt         string                                          `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
@@ -769,12 +775,6 @@ type ListBranchesRes401 struct {
 	*ErrorResponse
 }
 type ListBranchesRes404 struct {
-	*ErrorResponse
-}
-type ListBranchesRes403 struct {
-	*ErrorResponse
-}
-type ListBranchesRes500 struct {
 	*ErrorResponse
 }
 
@@ -847,21 +847,18 @@ type CreateBranchReq struct {
 	Name         string  `json:"name" tfsdk:"name"`
 	ParentBranch string  `json:"parent_branch" tfsdk:"parent_branch"`
 }
-type CreateBranchRes404 struct {
-	*ErrorResponse
-}
 type CreateBranchRes403 struct {
 	*ErrorResponse
 }
 type CreateBranchRes500 struct {
 	*ErrorResponse
 }
-type CreateBranchRes201_ApiActor struct {
+type CreateBranchRes201_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type CreateBranchRes201_PlanetscaleRegion struct {
+type CreateBranchRes201_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -879,7 +876,7 @@ type CreateBranchRes201_RestoredFromBranch struct {
 }
 type CreateBranchRes201 struct {
 	AccessHostUrl               *string                                `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	ApiActor                    *CreateBranchRes201_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	Actor                       *CreateBranchRes201_Actor              `json:"actor,omitempty" tfsdk:"actor"`
 	ClusterRateName             string                                 `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                 `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                 `json:"html_url" tfsdk:"html_url"`
@@ -889,9 +886,9 @@ type CreateBranchRes201 struct {
 	MysqlEdgeAddress            string                                 `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
 	Name                        string                                 `json:"name" tfsdk:"name"`
 	ParentBranch                string                                 `json:"parent_branch" tfsdk:"parent_branch"`
-	PlanetscaleRegion           *CreateBranchRes201_PlanetscaleRegion  `json:"planetscale_region,omitempty" tfsdk:"planetscale_region"`
 	Production                  bool                                   `json:"production" tfsdk:"production"`
 	Ready                       bool                                   `json:"ready" tfsdk:"ready"`
+	Region                      *CreateBranchRes201_Region             `json:"region,omitempty" tfsdk:"region"`
 	RestoreChecklistCompletedAt *string                                `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *CreateBranchRes201_RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
 	SchemaLastUpdatedAt         string                                 `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
@@ -900,6 +897,9 @@ type CreateBranchRes201 struct {
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
 }
 type CreateBranchRes401 struct {
+	*ErrorResponse
+}
+type CreateBranchRes404 struct {
 	*ErrorResponse
 }
 
@@ -963,9 +963,6 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 	return res201, err
 }
 
-type ListBackupsRes404 struct {
-	*ErrorResponse
-}
 type ListBackupsRes403 struct {
 	*ErrorResponse
 }
@@ -1017,6 +1014,9 @@ type ListBackupsRes200 struct {
 	Data []ListBackupsRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListBackupsRes401 struct {
+	*ErrorResponse
+}
+type ListBackupsRes404 struct {
 	*ErrorResponse
 }
 
@@ -1089,15 +1089,6 @@ type CreateBackupReq struct {
 	RetentionUnit  *string  `json:"retention_unit,omitempty" tfsdk:"retention_unit"`
 	RetentionValue *float64 `json:"retention_value,omitempty" tfsdk:"retention_value"`
 }
-type CreateBackupRes404 struct {
-	*ErrorResponse
-}
-type CreateBackupRes403 struct {
-	*ErrorResponse
-}
-type CreateBackupRes500 struct {
-	*ErrorResponse
-}
 type CreateBackupRes200_DataItem_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1143,6 +1134,15 @@ type CreateBackupRes200 struct {
 	Data []CreateBackupRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type CreateBackupRes401 struct {
+	*ErrorResponse
+}
+type CreateBackupRes404 struct {
+	*ErrorResponse
+}
+type CreateBackupRes403 struct {
+	*ErrorResponse
+}
+type CreateBackupRes500 struct {
 	*ErrorResponse
 }
 
@@ -1206,6 +1206,18 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 	return res200, err
 }
 
+type GetBackupRes401 struct {
+	*ErrorResponse
+}
+type GetBackupRes404 struct {
+	*ErrorResponse
+}
+type GetBackupRes403 struct {
+	*ErrorResponse
+}
+type GetBackupRes500 struct {
+	*ErrorResponse
+}
 type GetBackupRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1246,18 +1258,6 @@ type GetBackupRes200 struct {
 	Size                 float64                        `json:"size" tfsdk:"size"`
 	State                string                         `json:"state" tfsdk:"state"`
 	UpdatedAt            string                         `json:"updated_at" tfsdk:"updated_at"`
-}
-type GetBackupRes401 struct {
-	*ErrorResponse
-}
-type GetBackupRes404 struct {
-	*ErrorResponse
-}
-type GetBackupRes403 struct {
-	*ErrorResponse
-}
-type GetBackupRes500 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) GetBackup(ctx context.Context, organization string, database string, branch string, id string) (res200 *GetBackupRes200, err error) {
@@ -1316,9 +1316,6 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	return res200, err
 }
 
-type DeleteBackupRes401 struct {
-	*ErrorResponse
-}
 type DeleteBackupRes404 struct {
 	*ErrorResponse
 }
@@ -1329,6 +1326,9 @@ type DeleteBackupRes500 struct {
 	*ErrorResponse
 }
 type DeleteBackupRes204 struct{}
+type DeleteBackupRes401 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) DeleteBackup(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeleteBackupRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/backups/" + id})
@@ -1386,9 +1386,6 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	return res204, err
 }
 
-type ListPasswordsRes404 struct {
-	*ErrorResponse
-}
 type ListPasswordsRes403 struct {
 	*ErrorResponse
 }
@@ -1436,6 +1433,9 @@ type ListPasswordsRes200 struct {
 	Data []ListPasswordsRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListPasswordsRes401 struct {
+	*ErrorResponse
+}
+type ListPasswordsRes404 struct {
 	*ErrorResponse
 }
 
@@ -1631,6 +1631,12 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	return res201, err
 }
 
+type GetPasswordRes401 struct {
+	*ErrorResponse
+}
+type GetPasswordRes404 struct {
+	*ErrorResponse
+}
 type GetPasswordRes403 struct {
 	*ErrorResponse
 }
@@ -1673,12 +1679,6 @@ type GetPasswordRes200 struct {
 	Role           string                           `json:"role" tfsdk:"role"`
 	TtlSeconds     float64                          `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                          `json:"username,omitempty" tfsdk:"username"`
-}
-type GetPasswordRes401 struct {
-	*ErrorResponse
-}
-type GetPasswordRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) GetPassword(ctx context.Context, organization string, database string, branch string, id string, readOnlyRegionId *string) (res200 *GetPasswordRes200, err error) {
@@ -1742,6 +1742,9 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	return res200, err
 }
 
+type DeletePasswordRes404 struct {
+	*ErrorResponse
+}
 type DeletePasswordRes403 struct {
 	*ErrorResponse
 }
@@ -1750,9 +1753,6 @@ type DeletePasswordRes500 struct {
 }
 type DeletePasswordRes204 struct{}
 type DeletePasswordRes401 struct {
-	*ErrorResponse
-}
-type DeletePasswordRes404 struct {
 	*ErrorResponse
 }
 
@@ -1815,9 +1815,6 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 type UpdatePasswordReq struct {
 	Name string `json:"name" tfsdk:"name"`
 }
-type UpdatePasswordRes404 struct {
-	*ErrorResponse
-}
 type UpdatePasswordRes403 struct {
 	*ErrorResponse
 }
@@ -1862,6 +1859,9 @@ type UpdatePasswordRes200 struct {
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
 type UpdatePasswordRes401 struct {
+	*ErrorResponse
+}
+type UpdatePasswordRes404 struct {
 	*ErrorResponse
 }
 
@@ -1928,15 +1928,6 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 type RenewPasswordReq struct {
 	ReadOnlyRegionId *string `json:"read_only_region_id,omitempty" tfsdk:"read_only_region_id"`
 }
-type RenewPasswordRes401 struct {
-	*ErrorResponse
-}
-type RenewPasswordRes404 struct {
-	*ErrorResponse
-}
-type RenewPasswordRes403 struct {
-	*ErrorResponse
-}
 type RenewPasswordRes500 struct {
 	*ErrorResponse
 }
@@ -1977,6 +1968,15 @@ type RenewPasswordRes200 struct {
 	Role           string                             `json:"role" tfsdk:"role"`
 	TtlSeconds     float64                            `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                            `json:"username,omitempty" tfsdk:"username"`
+}
+type RenewPasswordRes401 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes404 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes403 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) RenewPassword(ctx context.Context, organization string, database string, branch string, id string, req RenewPasswordReq) (res200 *RenewPasswordRes200, err error) {
@@ -2039,18 +2039,24 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 	return res200, err
 }
 
+type GetBranchRes401 struct {
+	*ErrorResponse
+}
+type GetBranchRes404 struct {
+	*ErrorResponse
+}
 type GetBranchRes403 struct {
 	*ErrorResponse
 }
 type GetBranchRes500 struct {
 	*ErrorResponse
 }
-type GetBranchRes200_ApiActor struct {
+type GetBranchRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type GetBranchRes200_PlanetscaleRegion struct {
+type GetBranchRes200_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -2068,7 +2074,7 @@ type GetBranchRes200_RestoredFromBranch struct {
 }
 type GetBranchRes200 struct {
 	AccessHostUrl               *string                             `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	ApiActor                    *GetBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	Actor                       *GetBranchRes200_Actor              `json:"actor,omitempty" tfsdk:"actor"`
 	ClusterRateName             string                              `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                              `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                              `json:"html_url" tfsdk:"html_url"`
@@ -2078,21 +2084,15 @@ type GetBranchRes200 struct {
 	MysqlEdgeAddress            string                              `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
 	Name                        string                              `json:"name" tfsdk:"name"`
 	ParentBranch                string                              `json:"parent_branch" tfsdk:"parent_branch"`
-	PlanetscaleRegion           *GetBranchRes200_PlanetscaleRegion  `json:"planetscale_region,omitempty" tfsdk:"planetscale_region"`
 	Production                  bool                                `json:"production" tfsdk:"production"`
 	Ready                       bool                                `json:"ready" tfsdk:"ready"`
+	Region                      *GetBranchRes200_Region             `json:"region,omitempty" tfsdk:"region"`
 	RestoreChecklistCompletedAt *string                             `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *GetBranchRes200_RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
 	SchemaLastUpdatedAt         string                              `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
 	ShardCount                  *float64                            `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                              `json:"updated_at" tfsdk:"updated_at"`
-}
-type GetBranchRes401 struct {
-	*ErrorResponse
-}
-type GetBranchRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) GetBranch(ctx context.Context, organization string, database string, name string) (res200 *GetBranchRes200, err error) {
@@ -2221,9 +2221,6 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	return res204, err
 }
 
-type DemoteBranchRes401 struct {
-	*ErrorResponse
-}
 type DemoteBranchRes404 struct {
 	*ErrorResponse
 }
@@ -2233,12 +2230,12 @@ type DemoteBranchRes403 struct {
 type DemoteBranchRes500 struct {
 	*ErrorResponse
 }
-type DemoteBranchRes200_ApiActor struct {
+type DemoteBranchRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type DemoteBranchRes200_PlanetscaleRegion struct {
+type DemoteBranchRes200_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -2256,7 +2253,7 @@ type DemoteBranchRes200_RestoredFromBranch struct {
 }
 type DemoteBranchRes200 struct {
 	AccessHostUrl               *string                                `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	ApiActor                    *DemoteBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	Actor                       *DemoteBranchRes200_Actor              `json:"actor,omitempty" tfsdk:"actor"`
 	ClusterRateName             string                                 `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                 `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                 `json:"html_url" tfsdk:"html_url"`
@@ -2266,15 +2263,18 @@ type DemoteBranchRes200 struct {
 	MysqlEdgeAddress            string                                 `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
 	Name                        string                                 `json:"name" tfsdk:"name"`
 	ParentBranch                string                                 `json:"parent_branch" tfsdk:"parent_branch"`
-	PlanetscaleRegion           *DemoteBranchRes200_PlanetscaleRegion  `json:"planetscale_region,omitempty" tfsdk:"planetscale_region"`
 	Production                  bool                                   `json:"production" tfsdk:"production"`
 	Ready                       bool                                   `json:"ready" tfsdk:"ready"`
+	Region                      *DemoteBranchRes200_Region             `json:"region,omitempty" tfsdk:"region"`
 	RestoreChecklistCompletedAt *string                                `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *DemoteBranchRes200_RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
 	SchemaLastUpdatedAt         string                                 `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
 	ShardCount                  *float64                               `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
+}
+type DemoteBranchRes401 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) DemoteBranch(ctx context.Context, organization string, database string, name string) (res200 *DemoteBranchRes200, err error) {
@@ -2339,12 +2339,12 @@ type PromoteBranchRes403 struct {
 type PromoteBranchRes500 struct {
 	*ErrorResponse
 }
-type PromoteBranchRes200_ApiActor struct {
+type PromoteBranchRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type PromoteBranchRes200_PlanetscaleRegion struct {
+type PromoteBranchRes200_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -2362,7 +2362,7 @@ type PromoteBranchRes200_RestoredFromBranch struct {
 }
 type PromoteBranchRes200 struct {
 	AccessHostUrl               *string                                 `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	ApiActor                    *PromoteBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	Actor                       *PromoteBranchRes200_Actor              `json:"actor,omitempty" tfsdk:"actor"`
 	ClusterRateName             string                                  `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                  `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                  `json:"html_url" tfsdk:"html_url"`
@@ -2372,9 +2372,9 @@ type PromoteBranchRes200 struct {
 	MysqlEdgeAddress            string                                  `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
 	Name                        string                                  `json:"name" tfsdk:"name"`
 	ParentBranch                string                                  `json:"parent_branch" tfsdk:"parent_branch"`
-	PlanetscaleRegion           *PromoteBranchRes200_PlanetscaleRegion  `json:"planetscale_region,omitempty" tfsdk:"planetscale_region"`
 	Production                  bool                                    `json:"production" tfsdk:"production"`
 	Ready                       bool                                    `json:"ready" tfsdk:"ready"`
+	Region                      *PromoteBranchRes200_Region             `json:"region,omitempty" tfsdk:"region"`
 	RestoreChecklistCompletedAt *string                                 `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *PromoteBranchRes200_RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
 	SchemaLastUpdatedAt         string                                  `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
@@ -2445,18 +2445,24 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	return res200, err
 }
 
+type EnableSafeMigrationsForBranchRes401 struct {
+	*ErrorResponse
+}
+type EnableSafeMigrationsForBranchRes404 struct {
+	*ErrorResponse
+}
 type EnableSafeMigrationsForBranchRes403 struct {
 	*ErrorResponse
 }
 type EnableSafeMigrationsForBranchRes500 struct {
 	*ErrorResponse
 }
-type EnableSafeMigrationsForBranchRes200_ApiActor struct {
+type EnableSafeMigrationsForBranchRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type EnableSafeMigrationsForBranchRes200_PlanetscaleRegion struct {
+type EnableSafeMigrationsForBranchRes200_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -2474,7 +2480,7 @@ type EnableSafeMigrationsForBranchRes200_RestoredFromBranch struct {
 }
 type EnableSafeMigrationsForBranchRes200 struct {
 	AccessHostUrl               *string                                                 `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	ApiActor                    *EnableSafeMigrationsForBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	Actor                       *EnableSafeMigrationsForBranchRes200_Actor              `json:"actor,omitempty" tfsdk:"actor"`
 	ClusterRateName             string                                                  `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                                  `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                                  `json:"html_url" tfsdk:"html_url"`
@@ -2484,21 +2490,15 @@ type EnableSafeMigrationsForBranchRes200 struct {
 	MysqlEdgeAddress            string                                                  `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
 	Name                        string                                                  `json:"name" tfsdk:"name"`
 	ParentBranch                string                                                  `json:"parent_branch" tfsdk:"parent_branch"`
-	PlanetscaleRegion           *EnableSafeMigrationsForBranchRes200_PlanetscaleRegion  `json:"planetscale_region,omitempty" tfsdk:"planetscale_region"`
 	Production                  bool                                                    `json:"production" tfsdk:"production"`
 	Ready                       bool                                                    `json:"ready" tfsdk:"ready"`
+	Region                      *EnableSafeMigrationsForBranchRes200_Region             `json:"region,omitempty" tfsdk:"region"`
 	RestoreChecklistCompletedAt *string                                                 `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *EnableSafeMigrationsForBranchRes200_RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
 	SchemaLastUpdatedAt         string                                                  `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
 	ShardCount                  *float64                                                `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                                    `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                                  `json:"updated_at" tfsdk:"updated_at"`
-}
-type EnableSafeMigrationsForBranchRes401 struct {
-	*ErrorResponse
-}
-type EnableSafeMigrationsForBranchRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *EnableSafeMigrationsForBranchRes200, err error) {
@@ -2557,18 +2557,12 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 	return res200, err
 }
 
-type DisableSafeMigrationsForBranchRes403 struct {
-	*ErrorResponse
-}
-type DisableSafeMigrationsForBranchRes500 struct {
-	*ErrorResponse
-}
-type DisableSafeMigrationsForBranchRes200_ApiActor struct {
+type DisableSafeMigrationsForBranchRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
 	Id          string `json:"id" tfsdk:"id"`
 }
-type DisableSafeMigrationsForBranchRes200_PlanetscaleRegion struct {
+type DisableSafeMigrationsForBranchRes200_Region struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
 	Id                string   `json:"id" tfsdk:"id"`
@@ -2586,7 +2580,7 @@ type DisableSafeMigrationsForBranchRes200_RestoredFromBranch struct {
 }
 type DisableSafeMigrationsForBranchRes200 struct {
 	AccessHostUrl               *string                                                  `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	ApiActor                    *DisableSafeMigrationsForBranchRes200_ApiActor           `json:"api_actor,omitempty" tfsdk:"api_actor"`
+	Actor                       *DisableSafeMigrationsForBranchRes200_Actor              `json:"actor,omitempty" tfsdk:"actor"`
 	ClusterRateName             string                                                   `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                                   `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string                                                   `json:"html_url" tfsdk:"html_url"`
@@ -2596,9 +2590,9 @@ type DisableSafeMigrationsForBranchRes200 struct {
 	MysqlEdgeAddress            string                                                   `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
 	Name                        string                                                   `json:"name" tfsdk:"name"`
 	ParentBranch                string                                                   `json:"parent_branch" tfsdk:"parent_branch"`
-	PlanetscaleRegion           *DisableSafeMigrationsForBranchRes200_PlanetscaleRegion  `json:"planetscale_region,omitempty" tfsdk:"planetscale_region"`
 	Production                  bool                                                     `json:"production" tfsdk:"production"`
 	Ready                       bool                                                     `json:"ready" tfsdk:"ready"`
+	Region                      *DisableSafeMigrationsForBranchRes200_Region             `json:"region,omitempty" tfsdk:"region"`
 	RestoreChecklistCompletedAt *string                                                  `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *DisableSafeMigrationsForBranchRes200_RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
 	SchemaLastUpdatedAt         string                                                   `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
@@ -2610,6 +2604,12 @@ type DisableSafeMigrationsForBranchRes401 struct {
 	*ErrorResponse
 }
 type DisableSafeMigrationsForBranchRes404 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes403 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -2669,12 +2669,6 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	return res200, err
 }
 
-type GetBranchSchemaRes401 struct {
-	*ErrorResponse
-}
-type GetBranchSchemaRes404 struct {
-	*ErrorResponse
-}
 type GetBranchSchemaRes403 struct {
 	*ErrorResponse
 }
@@ -2688,6 +2682,12 @@ type GetBranchSchemaRes200_DataItem struct {
 }
 type GetBranchSchemaRes200 struct {
 	Data []GetBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
+}
+type GetBranchSchemaRes401 struct {
+	*ErrorResponse
+}
+type GetBranchSchemaRes404 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) GetBranchSchema(ctx context.Context, organization string, database string, name string, keyspace *string) (res200 *GetBranchSchemaRes200, err error) {
@@ -2751,6 +2751,18 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	return res200, err
 }
 
+type LintBranchSchemaRes401 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes404 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes403 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes500 struct {
+	*ErrorResponse
+}
 type LintBranchSchemaRes200_DataItem struct {
 	AutoIncrementColumnNames []string `json:"auto_increment_column_names" tfsdk:"auto_increment_column_names"`
 	CharsetName              string   `json:"charset_name" tfsdk:"charset_name"`
@@ -2772,18 +2784,6 @@ type LintBranchSchemaRes200_DataItem struct {
 }
 type LintBranchSchemaRes200 struct {
 	Data []LintBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
-}
-type LintBranchSchemaRes401 struct {
-	*ErrorResponse
-}
-type LintBranchSchemaRes404 struct {
-	*ErrorResponse
-}
-type LintBranchSchemaRes403 struct {
-	*ErrorResponse
-}
-type LintBranchSchemaRes500 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) LintBranchSchema(ctx context.Context, organization string, database string, name string, page *int, perPage *int) (res200 *LintBranchSchemaRes200, err error) {
@@ -3988,12 +3988,6 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 	return res200, err
 }
 
-type GetDatabaseRes404 struct {
-	*ErrorResponse
-}
-type GetDatabaseRes403 struct {
-	*ErrorResponse
-}
 type GetDatabaseRes500 struct {
 	*ErrorResponse
 }
@@ -4058,6 +4052,12 @@ type GetDatabaseRes200 struct {
 type GetDatabaseRes401 struct {
 	*ErrorResponse
 }
+type GetDatabaseRes404 struct {
+	*ErrorResponse
+}
+type GetDatabaseRes403 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) GetDatabase(ctx context.Context, organization string, name string) (res200 *GetDatabaseRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -4115,17 +4115,17 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	return res200, err
 }
 
-type DeleteDatabaseRes403 struct {
-	*ErrorResponse
-}
-type DeleteDatabaseRes500 struct {
-	*ErrorResponse
-}
 type DeleteDatabaseRes204 struct{}
 type DeleteDatabaseRes401 struct {
 	*ErrorResponse
 }
 type DeleteDatabaseRes404 struct {
+	*ErrorResponse
+}
+type DeleteDatabaseRes403 struct {
+	*ErrorResponse
+}
+type DeleteDatabaseRes500 struct {
 	*ErrorResponse
 }
 
@@ -4328,6 +4328,9 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	return res200, err
 }
 
+type ListReadOnlyRegionsRes404 struct {
+	*ErrorResponse
+}
 type ListReadOnlyRegionsRes403 struct {
 	*ErrorResponse
 }
@@ -4362,9 +4365,6 @@ type ListReadOnlyRegionsRes200 struct {
 	Data []ListReadOnlyRegionsRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListReadOnlyRegionsRes401 struct {
-	*ErrorResponse
-}
-type ListReadOnlyRegionsRes404 struct {
 	*ErrorResponse
 }
 
@@ -4432,6 +4432,15 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 	return res200, err
 }
 
+type ListDatabaseRegionsRes401 struct {
+	*ErrorResponse
+}
+type ListDatabaseRegionsRes404 struct {
+	*ErrorResponse
+}
+type ListDatabaseRegionsRes403 struct {
+	*ErrorResponse
+}
 type ListDatabaseRegionsRes500 struct {
 	*ErrorResponse
 }
@@ -4446,15 +4455,6 @@ type ListDatabaseRegionsRes200_DataItem struct {
 }
 type ListDatabaseRegionsRes200 struct {
 	Data []ListDatabaseRegionsRes200_DataItem `json:"data" tfsdk:"data"`
-}
-type ListDatabaseRegionsRes401 struct {
-	*ErrorResponse
-}
-type ListDatabaseRegionsRes404 struct {
-	*ErrorResponse
-}
-type ListDatabaseRegionsRes403 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListDatabaseRegionsRes200, err error) {
@@ -4613,12 +4613,6 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	return res200, err
 }
 
-type GetOauthApplicationRes403 struct {
-	*ErrorResponse
-}
-type GetOauthApplicationRes500 struct {
-	*ErrorResponse
-}
 type GetOauthApplicationRes200 struct {
 	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
 	ClientId    string   `json:"client_id" tfsdk:"client_id"`
@@ -4635,6 +4629,12 @@ type GetOauthApplicationRes401 struct {
 	*ErrorResponse
 }
 type GetOauthApplicationRes404 struct {
+	*ErrorResponse
+}
+type GetOauthApplicationRes403 struct {
+	*ErrorResponse
+}
+type GetOauthApplicationRes500 struct {
 	*ErrorResponse
 }
 
@@ -4694,9 +4694,6 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	return res200, err
 }
 
-type ListOauthTokensRes403 struct {
-	*ErrorResponse
-}
 type ListOauthTokensRes500 struct {
 	*ErrorResponse
 }
@@ -4720,6 +4717,9 @@ type ListOauthTokensRes401 struct {
 	*ErrorResponse
 }
 type ListOauthTokensRes404 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes403 struct {
 	*ErrorResponse
 }
 
@@ -4892,7 +4892,6 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	return res200, err
 }
 
-type DeleteOauthTokenRes204 struct{}
 type DeleteOauthTokenRes401 struct {
 	*ErrorResponse
 }
@@ -4905,6 +4904,7 @@ type DeleteOauthTokenRes403 struct {
 type DeleteOauthTokenRes500 struct {
 	*ErrorResponse
 }
+type DeleteOauthTokenRes204 struct{}
 
 func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -5052,9 +5052,6 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 	return res200, err
 }
 
-type GetCurrentUserRes401 struct {
-	*ErrorResponse
-}
 type GetCurrentUserRes404 struct {
 	*ErrorResponse
 }
@@ -5078,6 +5075,9 @@ type GetCurrentUserRes200 struct {
 	Sso                     *bool   `json:"sso,omitempty" tfsdk:"sso"`
 	TwoFactorAuthConfigured *bool   `json:"two_factor_auth_configured,omitempty" tfsdk:"two_factor_auth_configured"`
 	UpdatedAt               *string `json:"updated_at,omitempty" tfsdk:"updated_at"`
+}
+type GetCurrentUserRes401 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) GetCurrentUser(ctx context.Context) (res200 *GetCurrentUserRes200, err error) {

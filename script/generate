@@ -5,7 +5,7 @@ set -euo pipefail
 root=$(git rev-parse --show-toplevel)
 
 function main() {
-    go run ${root}/internal/cmd/codegen/*.go > ${root}/internal/client/planetscale/planetscale.go
+    go run ${root}/internal/cmd/codegen/*.go --spec ${root}/openapi-spec.json > ${root}/internal/client/planetscale/planetscale.go
 }
 
 main

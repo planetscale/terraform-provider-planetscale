@@ -29,7 +29,7 @@ type branchesDataSourceModel struct {
 	Branches     []branchesBranchDataSourceModel `tfsdk:"branches"`
 }
 
-type branchesApiActorDataSourceModel struct {
+type branchesActorDataSourceModel struct {
 	AvatarUrl   string `tfsdk:"avatar_url"`
 	DisplayName string `tfsdk:"display_name"`
 	Id          string `tfsdk:"id"`
@@ -57,7 +57,7 @@ type branchesBranchDataSourceModel struct {
 	Id                          string                                     `tfsdk:"id"`
 	Name                        string                                     `tfsdk:"name"`
 	AccessHostUrl               *string                                    `tfsdk:"access_host_url"`
-	ApiActor                    *branchesApiActorDataSourceModel           `tfsdk:"api_actor"`
+	Actor                       *branchesActorDataSourceModel              `tfsdk:"api_actor"`
 	ClusterRateName             string                                     `tfsdk:"cluster_rate_name"`
 	CreatedAt                   string                                     `tfsdk:"created_at"`
 	HtmlUrl                     string                                     `tfsdk:"html_url"`
@@ -65,7 +65,7 @@ type branchesBranchDataSourceModel struct {
 	MysqlAddress                string                                     `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            string                                     `tfsdk:"mysql_edge_address"`
 	ParentBranch                string                                     `tfsdk:"parent_branch"`
-	PlanetscaleRegion           *branchesRegionDataSourceModel             `tfsdk:"region"`
+	Region                      *branchesRegionDataSourceModel             `tfsdk:"region"`
 	Production                  bool                                       `tfsdk:"production"`
 	Ready                       bool                                       `tfsdk:"ready"`
 	RestoreChecklistCompletedAt *string                                    `tfsdk:"restore_checklist_completed_at"`
@@ -202,22 +202,22 @@ func (d *branchesDataSource) Read(ctx context.Context, req datasource.ReadReques
 			Sharded:                     item.Sharded,
 			UpdatedAt:                   item.UpdatedAt,
 		}
-		if item.ApiActor != nil {
-			out.ApiActor = &branchesApiActorDataSourceModel{
-				AvatarUrl:   item.ApiActor.AvatarUrl,
-				DisplayName: item.ApiActor.DisplayName,
-				Id:          item.ApiActor.Id,
+		if item.Actor != nil {
+			out.Actor = &branchesActorDataSourceModel{
+				AvatarUrl:   item.Actor.AvatarUrl,
+				DisplayName: item.Actor.DisplayName,
+				Id:          item.Actor.Id,
 			}
 		}
-		if item.PlanetscaleRegion != nil {
-			out.PlanetscaleRegion = &branchesRegionDataSourceModel{
-				DisplayName:       item.PlanetscaleRegion.DisplayName,
-				Enabled:           item.PlanetscaleRegion.Enabled,
-				Id:                item.PlanetscaleRegion.Id,
-				Location:          item.PlanetscaleRegion.Location,
-				Provider:          item.PlanetscaleRegion.Provider,
-				PublicIpAddresses: item.PlanetscaleRegion.PublicIpAddresses,
-				Slug:              item.PlanetscaleRegion.Slug,
+		if item.Region != nil {
+			out.Region = &branchesRegionDataSourceModel{
+				DisplayName:       item.Region.DisplayName,
+				Enabled:           item.Region.Enabled,
+				Id:                item.Region.Id,
+				Location:          item.Region.Location,
+				Provider:          item.Region.Provider,
+				PublicIpAddresses: item.Region.PublicIpAddresses,
+				Slug:              item.Region.Slug,
 			}
 		}
 		if item.RestoredFromBranch != nil {

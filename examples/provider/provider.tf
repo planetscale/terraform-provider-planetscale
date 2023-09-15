@@ -30,7 +30,7 @@ data "planetscale_organizations" "test" {}
 
 data "planetscale_database" "my_db" {
   organization = data.planetscale_organizations.test.organizations.0.name
-  name = "again"
+  name         = "again"
 }
 
 # resource "planetscale_database" "my_db" {
@@ -48,14 +48,14 @@ data "planetscale_database" "my_db" {
 #   name = resource.planetscale_database.my_db.name
 # }
 
-# data "planetscale_branches" "my_branches" {
-#   organization = data.planetscale_database.my_db.organization
-#   database = data.planetscale_database.my_db.name
-# }
+data "planetscale_branches" "my_branches" {
+  organization = data.planetscale_database.my_db.organization
+  database = data.planetscale_database.my_db.name
+}
 
-# output "my_branches" {
-#   value = data.planetscale_branches.my_branches
-# }
+output "my_branches" {
+  value = data.planetscale_branches.my_branches
+}
 
 # data "planetscale_branch" "my_branch" {
 #   organization = data.planetscale_database.my_db.organization
@@ -88,9 +88,9 @@ data "planetscale_database" "my_db" {
 # }
 
 resource "planetscale_branch" "test" {
-  organization = data.planetscale_organizations.test.organizations.0.name
-  database = data.planetscale_database.my_db.name
-  name = "hello"
+  organization  = data.planetscale_organizations.test.organizations.0.name
+  database      = data.planetscale_database.my_db.name
+  name          = "world"
   parent_branch = "main"
 }
 

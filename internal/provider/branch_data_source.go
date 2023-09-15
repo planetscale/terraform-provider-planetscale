@@ -23,7 +23,7 @@ type branchDataSource struct {
 	client *planetscale.Client
 }
 
-type branchApiActorDataSourceModel struct {
+type branchActorDataSourceModel struct {
 	AvatarUrl   string `tfsdk:"avatar_url"`
 	DisplayName string `tfsdk:"display_name"`
 	Id          string `tfsdk:"id"`
@@ -68,8 +68,8 @@ type branchDataSourceModel struct {
 	ShardCount                  types.Float64                            `tfsdk:"shard_count"`
 	Sharded                     types.Bool                               `tfsdk:"sharded"`
 	UpdatedAt                   types.String                             `tfsdk:"updated_at"`
-	ApiActor                    *branchApiActorDataSourceModel           `tfsdk:"api_actor"`
-	PlanetscaleRegion           *branchRegionDataSourceModel             `tfsdk:"region"`
+	Actor                       *branchActorDataSourceModel              `tfsdk:"api_actor"`
+	Region                      *branchRegionDataSourceModel             `tfsdk:"region"`
 	RestoredFromBranch          *branchRestoredFromBranchDataSourceModel `tfsdk:"restored_from_branch"`
 }
 
@@ -189,22 +189,22 @@ func (d *branchDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		Sharded:                     types.BoolValue(res200.Sharded),
 		UpdatedAt:                   types.StringValue(res200.UpdatedAt),
 	}
-	if res200.ApiActor != nil {
-		state.ApiActor = &branchApiActorDataSourceModel{
-			AvatarUrl:   res200.ApiActor.AvatarUrl,
-			DisplayName: res200.ApiActor.DisplayName,
-			Id:          res200.ApiActor.Id,
+	if res200.Actor != nil {
+		state.Actor = &branchActorDataSourceModel{
+			AvatarUrl:   res200.Actor.AvatarUrl,
+			DisplayName: res200.Actor.DisplayName,
+			Id:          res200.Actor.Id,
 		}
 	}
-	if res200.PlanetscaleRegion != nil {
-		state.PlanetscaleRegion = &branchRegionDataSourceModel{
-			DisplayName:       res200.PlanetscaleRegion.DisplayName,
-			Enabled:           res200.PlanetscaleRegion.Enabled,
-			Id:                res200.PlanetscaleRegion.Id,
-			Location:          res200.PlanetscaleRegion.Location,
-			Provider:          res200.PlanetscaleRegion.Provider,
-			PublicIpAddresses: res200.PlanetscaleRegion.PublicIpAddresses,
-			Slug:              res200.PlanetscaleRegion.Slug,
+	if res200.Region != nil {
+		state.Region = &branchRegionDataSourceModel{
+			DisplayName:       res200.Region.DisplayName,
+			Enabled:           res200.Region.Enabled,
+			Id:                res200.Region.Id,
+			Location:          res200.Region.Location,
+			Provider:          res200.Region.Provider,
+			PublicIpAddresses: res200.Region.PublicIpAddresses,
+			Slug:              res200.Region.Slug,
 		}
 	}
 	if res200.RestoredFromBranch != nil {
