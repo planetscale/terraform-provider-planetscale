@@ -1,0 +1,48 @@
+{
+    "extractions": [
+        {"path": "/organizations", "method": "get", "responses": 200, "prop": "data.features","become_ref": "features"},
+        {"path": "/organizations", "method": "get", "responses": 200, "prop": "data.flags", "become_ref": "flags"},
+        {"path": "/organizations", "method": "get", "responses": 200, "prop": "data", "become_ref": "organization"},
+
+        {"path": "/organizations/{name}", "method": "get", "responses": 200, "prop": "features", "become_ref": "features"},
+        {"path": "/organizations/{name}", "method": "get", "responses": 200, "prop": "flags", "become_ref": "flags"},
+        {"path": "/organizations/{name}", "method": "get", "responses": 200, "prop": "", "become_ref": "organization"},
+
+        {"path": "/organizations/{name}", "method": "patch", "responses": 200, "prop": "features", "become_ref": "features"},
+        {"path": "/organizations/{name}", "method": "patch", "responses": 200, "prop": "flags", "become_ref": "flags"},
+        {"path": "/organizations/{name}", "method": "patch", "responses": 200, "prop": "", "become_ref": "organization"},
+
+        {"path": "/organizations/{name}/regions", "method": "get", "responses": 200, "prop": "data", "become_ref": "region"},
+
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data.region", "become_ref": "region"},
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data.data_import.data_source", "become_ref": "data_source"},
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data.data_import", "become_ref": "data_import"},
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data", "become_ref": "database"},
+
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "region", "become_ref": "region"},
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "data_import.data_source", "become_ref": "data_source"},
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "data_import", "become_ref": "data_import"},
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "", "become_ref": "database"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data.region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data.restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.backup_policy","become_ref": "backup_policy"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.schema_snapshot","become_ref": "schema_snapshot"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data","become_ref": "backup"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 200,"prop": "data.backup_policy","become_ref": "backup_policy"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 200,"prop": "data.schema_snapshot","become_ref": "schema_snapshot"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 200,"prop": "data","become_ref": "backup"}
+
+    ]
+}

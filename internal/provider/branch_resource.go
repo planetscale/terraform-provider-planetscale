@@ -355,9 +355,25 @@ func (r *branchResource) Update(ctx context.Context, req resource.UpdateRequest,
 	)
 	resp.Diagnostics.Append(req.State.Get(ctx, &old)...)
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
-
 	if resp.Diagnostics.HasError() {
 		return
+	}
+
+	productionWasChanged := false
+	isProduction := boolIfDifferent(old.Production, data.Production, &productionWasChanged)
+	if productionWasChanged {
+		if *isProduction {
+			res200, err := r.client.PromoteBranch(ctx, data.Organization, data.Database, data.Name)
+			if err != nil {
+				resp.Diagnostics.AddAttributeError(path.Root("production"), "Failed to promote branch", "Unable to promote branch to production: "+err.Error())
+			}
+		} else {
+			res200, err := r.client.DemoteBranch(ctx, data.Organization, data.Database, data.Name)
+			if err != nil {
+				resp.Diagnostics.AddAttributeError(path.Root("production"), "Failed to demote branch", "Unable to demote branch from production: "+err.Error())
+			}
+
+		}
 	}
 
 	// todo

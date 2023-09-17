@@ -37,12 +37,6 @@ func (err *ErrorResponse) Error() string {
 	return fmt.Sprintf("error %s: %s", err.Code, err.Message)
 }
 
-type ListOrganizationsRes404 struct {
-	*ErrorResponse
-}
-type ListOrganizationsRes403 struct {
-	*ErrorResponse
-}
 type ListOrganizationsRes500 struct {
 	*ErrorResponse
 }
@@ -80,6 +74,12 @@ type ListOrganizationsRes200 struct {
 	Data []ListOrganizationsRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListOrganizationsRes401 struct {
+	*ErrorResponse
+}
+type ListOrganizationsRes404 struct {
+	*ErrorResponse
+}
+type ListOrganizationsRes403 struct {
 	*ErrorResponse
 }
 
@@ -251,6 +251,9 @@ type UpdateOrganizationReq struct {
 	IdpManagedRoles                 *bool   `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
 	RequireAdminForProductionAccess *bool   `json:"require_admin_for_production_access,omitempty" tfsdk:"require_admin_for_production_access"`
 }
+type UpdateOrganizationRes401 struct {
+	*ErrorResponse
+}
 type UpdateOrganizationRes404 struct {
 	*ErrorResponse
 }
@@ -289,9 +292,6 @@ type UpdateOrganizationRes200 struct {
 	SsoPortalUrl              *string                            `json:"sso_portal_url,omitempty" tfsdk:"sso_portal_url"`
 	UpdatedAt                 string                             `json:"updated_at" tfsdk:"updated_at"`
 	ValidBillingInfo          bool                               `json:"valid_billing_info" tfsdk:"valid_billing_info"`
-}
-type UpdateOrganizationRes401 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) UpdateOrganization(ctx context.Context, name string, req UpdateOrganizationReq) (res200 *UpdateOrganizationRes200, err error) {
@@ -354,6 +354,15 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	return res200, err
 }
 
+type ListRegionsForOrganizationRes404 struct {
+	*ErrorResponse
+}
+type ListRegionsForOrganizationRes403 struct {
+	*ErrorResponse
+}
+type ListRegionsForOrganizationRes500 struct {
+	*ErrorResponse
+}
 type ListRegionsForOrganizationRes200_DataItem struct {
 	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
 	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
@@ -367,15 +376,6 @@ type ListRegionsForOrganizationRes200 struct {
 	Data []ListRegionsForOrganizationRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListRegionsForOrganizationRes401 struct {
-	*ErrorResponse
-}
-type ListRegionsForOrganizationRes404 struct {
-	*ErrorResponse
-}
-type ListRegionsForOrganizationRes403 struct {
-	*ErrorResponse
-}
-type ListRegionsForOrganizationRes500 struct {
 	*ErrorResponse
 }
 
@@ -443,12 +443,6 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	return res200, err
 }
 
-type ListDatabasesRes404 struct {
-	*ErrorResponse
-}
-type ListDatabasesRes403 struct {
-	*ErrorResponse
-}
 type ListDatabasesRes500 struct {
 	*ErrorResponse
 }
@@ -514,6 +508,12 @@ type ListDatabasesRes200 struct {
 	Data []ListDatabasesRes200_DataItem `json:"data" tfsdk:"data"`
 }
 type ListDatabasesRes401 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes404 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes403 struct {
 	*ErrorResponse
 }
 
@@ -588,6 +588,18 @@ type CreateDatabaseReq struct {
 	Plan        *string `json:"plan,omitempty" tfsdk:"plan"`
 	Region      *string `json:"region,omitempty" tfsdk:"region"`
 }
+type CreateDatabaseRes401 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes404 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes403 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes500 struct {
+	*ErrorResponse
+}
 type CreateDatabaseRes201_DataImport_DataSource struct {
 	Database string `json:"database" tfsdk:"database"`
 	Hostname string `json:"hostname" tfsdk:"hostname"`
@@ -645,18 +657,6 @@ type CreateDatabaseRes201 struct {
 	Type                              string                           `json:"type" tfsdk:"type"`
 	UpdatedAt                         string                           `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                           `json:"url" tfsdk:"url"`
-}
-type CreateDatabaseRes401 struct {
-	*ErrorResponse
-}
-type CreateDatabaseRes404 struct {
-	*ErrorResponse
-}
-type CreateDatabaseRes403 struct {
-	*ErrorResponse
-}
-type CreateDatabaseRes500 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) CreateDatabase(ctx context.Context, organization string, req CreateDatabaseReq) (res201 *CreateDatabaseRes201, err error) {
@@ -719,6 +719,12 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	return res201, err
 }
 
+type ListBranchesRes401 struct {
+	*ErrorResponse
+}
+type ListBranchesRes404 struct {
+	*ErrorResponse
+}
 type ListBranchesRes403 struct {
 	*ErrorResponse
 }
@@ -770,12 +776,6 @@ type ListBranchesRes200_DataItem struct {
 }
 type ListBranchesRes200 struct {
 	Data []ListBranchesRes200_DataItem `json:"data" tfsdk:"data"`
-}
-type ListBranchesRes401 struct {
-	*ErrorResponse
-}
-type ListBranchesRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) ListBranches(ctx context.Context, organization string, database string, page *int, perPage *int) (res200 *ListBranchesRes200, err error) {
@@ -847,6 +847,12 @@ type CreateBranchReq struct {
 	Name         string  `json:"name" tfsdk:"name"`
 	ParentBranch string  `json:"parent_branch" tfsdk:"parent_branch"`
 }
+type CreateBranchRes401 struct {
+	*ErrorResponse
+}
+type CreateBranchRes404 struct {
+	*ErrorResponse
+}
 type CreateBranchRes403 struct {
 	*ErrorResponse
 }
@@ -895,12 +901,6 @@ type CreateBranchRes201 struct {
 	ShardCount                  *float64                               `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                   `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                                 `json:"updated_at" tfsdk:"updated_at"`
-}
-type CreateBranchRes401 struct {
-	*ErrorResponse
-}
-type CreateBranchRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) CreateBranch(ctx context.Context, organization string, database string, req CreateBranchReq) (res201 *CreateBranchRes201, err error) {
@@ -1386,6 +1386,12 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	return res204, err
 }
 
+type ListPasswordsRes401 struct {
+	*ErrorResponse
+}
+type ListPasswordsRes404 struct {
+	*ErrorResponse
+}
 type ListPasswordsRes403 struct {
 	*ErrorResponse
 }
@@ -1431,12 +1437,6 @@ type ListPasswordsRes200_DataItem struct {
 }
 type ListPasswordsRes200 struct {
 	Data []ListPasswordsRes200_DataItem `json:"data" tfsdk:"data"`
-}
-type ListPasswordsRes401 struct {
-	*ErrorResponse
-}
-type ListPasswordsRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) ListPasswords(ctx context.Context, organization string, database string, branch string, readOnlyRegionId *string, page *int, perPage *int) (res200 *ListPasswordsRes200, err error) {
@@ -1511,6 +1511,12 @@ type CreatePasswordReq struct {
 	Role *string  `json:"role,omitempty" tfsdk:"role"`
 	Ttl  *float64 `json:"ttl,omitempty" tfsdk:"ttl"`
 }
+type CreatePasswordRes403 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes500 struct {
+	*ErrorResponse
+}
 type CreatePasswordRes422 struct {
 	*ErrorResponse
 }
@@ -1556,12 +1562,6 @@ type CreatePasswordRes401 struct {
 	*ErrorResponse
 }
 type CreatePasswordRes404 struct {
-	*ErrorResponse
-}
-type CreatePasswordRes403 struct {
-	*ErrorResponse
-}
-type CreatePasswordRes500 struct {
 	*ErrorResponse
 }
 
@@ -1631,9 +1631,6 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	return res201, err
 }
 
-type GetPasswordRes401 struct {
-	*ErrorResponse
-}
 type GetPasswordRes404 struct {
 	*ErrorResponse
 }
@@ -1679,6 +1676,9 @@ type GetPasswordRes200 struct {
 	Role           string                           `json:"role" tfsdk:"role"`
 	TtlSeconds     float64                          `json:"ttl_seconds" tfsdk:"ttl_seconds"`
 	Username       *string                          `json:"username,omitempty" tfsdk:"username"`
+}
+type GetPasswordRes401 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) GetPassword(ctx context.Context, organization string, database string, branch string, id string, readOnlyRegionId *string) (res200 *GetPasswordRes200, err error) {
@@ -1742,6 +1742,9 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	return res200, err
 }
 
+type DeletePasswordRes401 struct {
+	*ErrorResponse
+}
 type DeletePasswordRes404 struct {
 	*ErrorResponse
 }
@@ -1752,9 +1755,6 @@ type DeletePasswordRes500 struct {
 	*ErrorResponse
 }
 type DeletePasswordRes204 struct{}
-type DeletePasswordRes401 struct {
-	*ErrorResponse
-}
 
 func (cl *Client) DeletePassword(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeletePasswordRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/passwords/" + id})
@@ -1815,6 +1815,9 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 type UpdatePasswordReq struct {
 	Name string `json:"name" tfsdk:"name"`
 }
+type UpdatePasswordRes404 struct {
+	*ErrorResponse
+}
 type UpdatePasswordRes403 struct {
 	*ErrorResponse
 }
@@ -1859,9 +1862,6 @@ type UpdatePasswordRes200 struct {
 	Username       *string                             `json:"username,omitempty" tfsdk:"username"`
 }
 type UpdatePasswordRes401 struct {
-	*ErrorResponse
-}
-type UpdatePasswordRes404 struct {
 	*ErrorResponse
 }
 
@@ -1928,9 +1928,6 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 type RenewPasswordReq struct {
 	ReadOnlyRegionId *string `json:"read_only_region_id,omitempty" tfsdk:"read_only_region_id"`
 }
-type RenewPasswordRes500 struct {
-	*ErrorResponse
-}
 type RenewPasswordRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -1976,6 +1973,9 @@ type RenewPasswordRes404 struct {
 	*ErrorResponse
 }
 type RenewPasswordRes403 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes500 struct {
 	*ErrorResponse
 }
 
@@ -2039,15 +2039,6 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 	return res200, err
 }
 
-type GetBranchRes401 struct {
-	*ErrorResponse
-}
-type GetBranchRes404 struct {
-	*ErrorResponse
-}
-type GetBranchRes403 struct {
-	*ErrorResponse
-}
 type GetBranchRes500 struct {
 	*ErrorResponse
 }
@@ -2093,6 +2084,15 @@ type GetBranchRes200 struct {
 	ShardCount                  *float64                            `json:"shard_count,omitempty" tfsdk:"shard_count"`
 	Sharded                     bool                                `json:"sharded" tfsdk:"sharded"`
 	UpdatedAt                   string                              `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetBranchRes401 struct {
+	*ErrorResponse
+}
+type GetBranchRes404 struct {
+	*ErrorResponse
+}
+type GetBranchRes403 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) GetBranch(ctx context.Context, organization string, database string, name string) (res200 *GetBranchRes200, err error) {
@@ -2333,12 +2333,6 @@ func (cl *Client) DemoteBranch(ctx context.Context, organization string, databas
 	return res200, err
 }
 
-type PromoteBranchRes403 struct {
-	*ErrorResponse
-}
-type PromoteBranchRes500 struct {
-	*ErrorResponse
-}
 type PromoteBranchRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -2386,6 +2380,12 @@ type PromoteBranchRes401 struct {
 	*ErrorResponse
 }
 type PromoteBranchRes404 struct {
+	*ErrorResponse
+}
+type PromoteBranchRes403 struct {
+	*ErrorResponse
+}
+type PromoteBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -2557,6 +2557,12 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 	return res200, err
 }
 
+type DisableSafeMigrationsForBranchRes403 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes500 struct {
+	*ErrorResponse
+}
 type DisableSafeMigrationsForBranchRes200_Actor struct {
 	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
 	DisplayName string `json:"display_name" tfsdk:"display_name"`
@@ -2604,12 +2610,6 @@ type DisableSafeMigrationsForBranchRes401 struct {
 	*ErrorResponse
 }
 type DisableSafeMigrationsForBranchRes404 struct {
-	*ErrorResponse
-}
-type DisableSafeMigrationsForBranchRes403 struct {
-	*ErrorResponse
-}
-type DisableSafeMigrationsForBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -2669,6 +2669,12 @@ func (cl *Client) DisableSafeMigrationsForBranch(ctx context.Context, organizati
 	return res200, err
 }
 
+type GetBranchSchemaRes401 struct {
+	*ErrorResponse
+}
+type GetBranchSchemaRes404 struct {
+	*ErrorResponse
+}
 type GetBranchSchemaRes403 struct {
 	*ErrorResponse
 }
@@ -2682,12 +2688,6 @@ type GetBranchSchemaRes200_DataItem struct {
 }
 type GetBranchSchemaRes200 struct {
 	Data []GetBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
-}
-type GetBranchSchemaRes401 struct {
-	*ErrorResponse
-}
-type GetBranchSchemaRes404 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) GetBranchSchema(ctx context.Context, organization string, database string, name string, keyspace *string) (res200 *GetBranchSchemaRes200, err error) {
@@ -2751,12 +2751,6 @@ func (cl *Client) GetBranchSchema(ctx context.Context, organization string, data
 	return res200, err
 }
 
-type LintBranchSchemaRes401 struct {
-	*ErrorResponse
-}
-type LintBranchSchemaRes404 struct {
-	*ErrorResponse
-}
 type LintBranchSchemaRes403 struct {
 	*ErrorResponse
 }
@@ -2784,6 +2778,12 @@ type LintBranchSchemaRes200_DataItem struct {
 }
 type LintBranchSchemaRes200 struct {
 	Data []LintBranchSchemaRes200_DataItem `json:"data" tfsdk:"data"`
+}
+type LintBranchSchemaRes401 struct {
+	*ErrorResponse
+}
+type LintBranchSchemaRes404 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) LintBranchSchema(ctx context.Context, organization string, database string, name string, page *int, perPage *int) (res200 *LintBranchSchemaRes200, err error) {
@@ -3988,6 +3988,15 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 	return res200, err
 }
 
+type GetDatabaseRes401 struct {
+	*ErrorResponse
+}
+type GetDatabaseRes404 struct {
+	*ErrorResponse
+}
+type GetDatabaseRes403 struct {
+	*ErrorResponse
+}
 type GetDatabaseRes500 struct {
 	*ErrorResponse
 }
@@ -4049,15 +4058,6 @@ type GetDatabaseRes200 struct {
 	UpdatedAt                         string                        `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                        `json:"url" tfsdk:"url"`
 }
-type GetDatabaseRes401 struct {
-	*ErrorResponse
-}
-type GetDatabaseRes404 struct {
-	*ErrorResponse
-}
-type GetDatabaseRes403 struct {
-	*ErrorResponse
-}
 
 func (cl *Client) GetDatabase(ctx context.Context, organization string, name string) (res200 *GetDatabaseRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -4115,7 +4115,6 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	return res200, err
 }
 
-type DeleteDatabaseRes204 struct{}
 type DeleteDatabaseRes401 struct {
 	*ErrorResponse
 }
@@ -4128,6 +4127,7 @@ type DeleteDatabaseRes403 struct {
 type DeleteDatabaseRes500 struct {
 	*ErrorResponse
 }
+type DeleteDatabaseRes204 struct{}
 
 func (cl *Client) DeleteDatabase(ctx context.Context, organization string, name string) (res204 *DeleteDatabaseRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -4197,9 +4197,6 @@ type UpdateDatabaseSettingsReq struct {
 	RequireApprovalForDeploy   *bool   `json:"require_approval_for_deploy,omitempty" tfsdk:"require_approval_for_deploy"`
 	RestrictBranchRegion       *bool   `json:"restrict_branch_region,omitempty" tfsdk:"restrict_branch_region"`
 }
-type UpdateDatabaseSettingsRes401 struct {
-	*ErrorResponse
-}
 type UpdateDatabaseSettingsRes404 struct {
 	*ErrorResponse
 }
@@ -4267,6 +4264,9 @@ type UpdateDatabaseSettingsRes200 struct {
 	UpdatedAt                         string                                   `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string                                   `json:"url" tfsdk:"url"`
 }
+type UpdateDatabaseSettingsRes401 struct {
+	*ErrorResponse
+}
 
 func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization string, name string, req UpdateDatabaseSettingsReq) (res200 *UpdateDatabaseSettingsRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -4328,6 +4328,9 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	return res200, err
 }
 
+type ListReadOnlyRegionsRes401 struct {
+	*ErrorResponse
+}
 type ListReadOnlyRegionsRes404 struct {
 	*ErrorResponse
 }
@@ -4363,9 +4366,6 @@ type ListReadOnlyRegionsRes200_DataItem struct {
 }
 type ListReadOnlyRegionsRes200 struct {
 	Data []ListReadOnlyRegionsRes200_DataItem `json:"data" tfsdk:"data"`
-}
-type ListReadOnlyRegionsRes401 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListReadOnlyRegionsRes200, err error) {
@@ -4613,6 +4613,12 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	return res200, err
 }
 
+type GetOauthApplicationRes403 struct {
+	*ErrorResponse
+}
+type GetOauthApplicationRes500 struct {
+	*ErrorResponse
+}
 type GetOauthApplicationRes200 struct {
 	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
 	ClientId    string   `json:"client_id" tfsdk:"client_id"`
@@ -4629,12 +4635,6 @@ type GetOauthApplicationRes401 struct {
 	*ErrorResponse
 }
 type GetOauthApplicationRes404 struct {
-	*ErrorResponse
-}
-type GetOauthApplicationRes403 struct {
-	*ErrorResponse
-}
-type GetOauthApplicationRes500 struct {
 	*ErrorResponse
 }
 
@@ -4694,6 +4694,15 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	return res200, err
 }
 
+type ListOauthTokensRes401 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes404 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes403 struct {
+	*ErrorResponse
+}
 type ListOauthTokensRes500 struct {
 	*ErrorResponse
 }
@@ -4712,15 +4721,6 @@ type ListOauthTokensRes200_DataItem struct {
 }
 type ListOauthTokensRes200 struct {
 	Data []ListOauthTokensRes200_DataItem `json:"data" tfsdk:"data"`
-}
-type ListOauthTokensRes401 struct {
-	*ErrorResponse
-}
-type ListOauthTokensRes404 struct {
-	*ErrorResponse
-}
-type ListOauthTokensRes403 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) ListOauthTokens(ctx context.Context, organization string, applicationId string, page *int, perPage *int) (res200 *ListOauthTokensRes200, err error) {
@@ -4787,15 +4787,6 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	return res200, err
 }
 
-type GetOauthTokenRes401 struct {
-	*ErrorResponse
-}
-type GetOauthTokenRes404 struct {
-	*ErrorResponse
-}
-type GetOauthTokenRes403 struct {
-	*ErrorResponse
-}
 type GetOauthTokenRes500 struct {
 	*ErrorResponse
 }
@@ -4834,6 +4825,15 @@ type GetOauthTokenRes200 struct {
 	Name                    string                                      `json:"name" tfsdk:"name"`
 	OauthAccessesByResource GetOauthTokenRes200_OauthAccessesByResource `json:"oauth_accesses_by_resource" tfsdk:"oauth_accesses_by_resource"`
 	UpdatedAt               string                                      `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetOauthTokenRes401 struct {
+	*ErrorResponse
+}
+type GetOauthTokenRes404 struct {
+	*ErrorResponse
+}
+type GetOauthTokenRes403 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) GetOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res200 *GetOauthTokenRes200, err error) {
@@ -4892,6 +4892,7 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	return res200, err
 }
 
+type DeleteOauthTokenRes204 struct{}
 type DeleteOauthTokenRes401 struct {
 	*ErrorResponse
 }
@@ -4904,7 +4905,6 @@ type DeleteOauthTokenRes403 struct {
 type DeleteOauthTokenRes500 struct {
 	*ErrorResponse
 }
-type DeleteOauthTokenRes204 struct{}
 
 func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -4970,6 +4970,15 @@ type CreateOrRenewOauthTokenReq struct {
 	RedirectUri  *string `json:"redirect_uri,omitempty" tfsdk:"redirect_uri"`
 	RefreshToken *string `json:"refresh_token,omitempty" tfsdk:"refresh_token"`
 }
+type CreateOrRenewOauthTokenRes404 struct {
+	*ErrorResponse
+}
+type CreateOrRenewOauthTokenRes403 struct {
+	*ErrorResponse
+}
+type CreateOrRenewOauthTokenRes422 struct {
+	*ErrorResponse
+}
 type CreateOrRenewOauthTokenRes500 struct {
 	*ErrorResponse
 }
@@ -4981,15 +4990,6 @@ type CreateOrRenewOauthTokenRes200 struct {
 	PlainTextRefreshToken *string   `json:"plain_text_refresh_token,omitempty" tfsdk:"plain_text_refresh_token"`
 	ServiceTokenAccesses  *[]string `json:"service_token_accesses,omitempty" tfsdk:"service_token_accesses"`
 	Token                 *string   `json:"token,omitempty" tfsdk:"token"`
-}
-type CreateOrRenewOauthTokenRes404 struct {
-	*ErrorResponse
-}
-type CreateOrRenewOauthTokenRes403 struct {
-	*ErrorResponse
-}
-type CreateOrRenewOauthTokenRes422 struct {
-	*ErrorResponse
 }
 
 func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization string, id string, req CreateOrRenewOauthTokenReq) (res200 *CreateOrRenewOauthTokenRes200, err error) {
@@ -5052,15 +5052,6 @@ func (cl *Client) CreateOrRenewOauthToken(ctx context.Context, organization stri
 	return res200, err
 }
 
-type GetCurrentUserRes404 struct {
-	*ErrorResponse
-}
-type GetCurrentUserRes403 struct {
-	*ErrorResponse
-}
-type GetCurrentUserRes500 struct {
-	*ErrorResponse
-}
 type GetCurrentUserRes200 struct {
 	AvatarUrl               *string `json:"avatar_url,omitempty" tfsdk:"avatar_url"`
 	CreatedAt               *string `json:"created_at,omitempty" tfsdk:"created_at"`
@@ -5077,6 +5068,15 @@ type GetCurrentUserRes200 struct {
 	UpdatedAt               *string `json:"updated_at,omitempty" tfsdk:"updated_at"`
 }
 type GetCurrentUserRes401 struct {
+	*ErrorResponse
+}
+type GetCurrentUserRes404 struct {
+	*ErrorResponse
+}
+type GetCurrentUserRes403 struct {
+	*ErrorResponse
+}
+type GetCurrentUserRes500 struct {
 	*ErrorResponse
 }
 

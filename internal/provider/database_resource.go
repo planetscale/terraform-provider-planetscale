@@ -361,27 +361,12 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	data.Type = types.StringValue(res200.Type)
 	data.UpdatedAt = types.StringValue(res200.UpdatedAt)
 	data.Url = types.StringValue(res200.Url)
-	if res200.DataImport == nil {
-		tflog.Info(ctx, "no dataimport in read database")
-		// do nothing
-	} else {
-		tflog.Info(ctx, "found dataimport in read database")
-		var diErr diag.Diagnostics
-		data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, &importResourceModel{
-			DataSource: importDataSourceResourceModel{
-				Database: types.StringValue(res200.DataImport.DataSource.Database),
-				Hostname: types.StringValue(res200.DataImport.DataSource.Hostname),
-				Port:     types.StringValue(res200.DataImport.DataSource.Port),
-			},
-			FinishedAt:        types.StringValue(res200.DataImport.FinishedAt),
-			ImportCheckErrors: types.StringValue(res200.DataImport.ImportCheckErrors),
-			StartedAt:         types.StringValue(res200.DataImport.StartedAt),
-			State:             types.StringValue(res200.DataImport.State),
-		})
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
+
+	var diErr diag.Diagnostics
+	data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, res200.DataImport)
+	if diErr.HasError() {
+		resp.Diagnostics.Append(diErr.Errors()...)
+		return
 	}
 	data.Region = types.StringValue(res200.Region.Slug)
 
@@ -467,26 +452,12 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		data.Type = types.StringValue(res200.Type)
 		data.UpdatedAt = types.StringValue(res200.UpdatedAt)
 		data.Url = types.StringValue(res200.Url)
-		if res200.DataImport == nil {
-			tflog.Info(ctx, "no dataimport in read database")
-			// do nothing
-		} else {
-			var diErr diag.Diagnostics
-			data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, &importResourceModel{
-				DataSource: importDataSourceResourceModel{
-					Database: types.StringValue(res200.DataImport.DataSource.Database),
-					Hostname: types.StringValue(res200.DataImport.DataSource.Hostname),
-					Port:     types.StringValue(res200.DataImport.DataSource.Port),
-				},
-				FinishedAt:        types.StringValue(res200.DataImport.FinishedAt),
-				ImportCheckErrors: types.StringValue(res200.DataImport.ImportCheckErrors),
-				StartedAt:         types.StringValue(res200.DataImport.StartedAt),
-				State:             types.StringValue(res200.DataImport.State),
-			})
-			if diErr.HasError() {
-				resp.Diagnostics.Append(diErr.Errors()...)
-				return
-			}
+
+		var diErr diag.Diagnostics
+		data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, res200.DataImport)
+		if diErr.HasError() {
+			resp.Diagnostics.Append(diErr.Errors()...)
+			return
 		}
 		data.Region = types.StringValue(res200.Region.Slug)
 	}

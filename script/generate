@@ -5,6 +5,15 @@ set -euo pipefail
 root=$(git rev-parse --show-toplevel)
 
 function main() {
+    generate_original
+}
+
+function generate_original() {
+    go run ${root}/internal/cmd/codegen/*.go --spec ${root}/openapi/openapi-spec.json > ${root}/internal/client/planetscale/planetscale.go
+}
+
+function generate_with_ref() {
+    go run ${root}/internal/cmd/extractref/main.go --cfg openapi/extract-ref-cfg.json --spec openapi/openapi-spec.json > ${root}/openapi-spec.json
     go run ${root}/internal/cmd/codegen/*.go --spec ${root}/openapi-spec.json > ${root}/internal/client/planetscale/planetscale.go
 }
 
