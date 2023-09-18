@@ -853,10 +853,6 @@
                         "type": "string",
                         "description": "Name of the database"
                       },
-                      "notes": {
-                        "type": "string",
-                        "description": "Notes about the database"
-                      },
                       "state": {
                         "type": "string",
                         "description": "State of the database"
@@ -953,7 +949,6 @@
                       "default_branch",
                       "require_approval_for_deploy",
                       "allow_data_branching",
-                      "automatic_migrations",
                       "restrict_branch_region",
                       "insights_raw_queries",
                       "plan",
@@ -1189,10 +1184,6 @@
                   "type": "string",
                   "description": "Name of the database"
                 },
-                "notes": {
-                  "type": "string",
-                  "description": "Notes about the database"
-                },
                 "state": {
                   "type": "string",
                   "description": "State of the database"
@@ -1289,7 +1280,6 @@
                 "default_branch",
                 "require_approval_for_deploy",
                 "allow_data_branching",
-                "automatic_migrations",
                 "restrict_branch_region",
                 "insights_raw_queries",
                 "plan",
@@ -1550,7 +1540,6 @@
                       "production",
                       "sharded",
                       "html_url",
-                      "parent_branch",
                       "cluster_rate_name"
                     ]
                   }
@@ -1818,7 +1807,6 @@
                 "production",
                 "sharded",
                 "html_url",
-                "parent_branch",
                 "cluster_rate_name"
               ]
             }
@@ -2185,224 +2173,212 @@
           "500": {
             "description": "Internal Server Error"
           },
-          "200": {
-            "description": "Returns database branch backups",
+          "201": {
+            "description": "Returns the created database branch backup",
             "schema": {
               "type": "object",
               "properties": {
-                "data": {
+                "id": {
+                  "type": "string",
+                  "description": "The ID of the backup"
+                },
+                "actor": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The ID of the actor"
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "description": "The name of the actor"
+                    },
+                    "avatar_url": {
+                      "type": "string",
+                      "description": "The URL of the actor's avatar"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "display_name",
+                    "avatar_url"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of the backup"
+                },
+                "state": {
+                  "type": "string",
+                  "enum": [
+                    "pending",
+                    "running",
+                    "success",
+                    "failed",
+                    "canceled",
+                    "ignored"
+                  ],
+                  "description": "The current state of the backup"
+                },
+                "size": {
+                  "type": "number",
+                  "description": "The size of the backup"
+                },
+                "estimated_storage_cost": {
+                  "type": "number",
+                  "description": "The estimated storage cost of the backup"
+                },
+                "created_at": {
+                  "type": "string",
+                  "description": "When the backup was created"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "description": "When the backup was last updated"
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Whether or not the backup policy is required"
+                },
+                "restored_branches": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "The ID of the backup"
-                      },
-                      "actor": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "The ID of the actor"
-                          },
-                          "display_name": {
-                            "type": "string",
-                            "description": "The name of the actor"
-                          },
-                          "avatar_url": {
-                            "type": "string",
-                            "description": "The URL of the actor's avatar"
-                          }
-                        },
-                        "additionalProperties": false,
-                        "required": [
-                          "id",
-                          "display_name",
-                          "avatar_url"
-                        ]
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "The name of the backup"
-                      },
-                      "state": {
-                        "type": "string",
-                        "enum": [
-                          "pending",
-                          "running",
-                          "success",
-                          "failed",
-                          "canceled",
-                          "ignored"
-                        ],
-                        "description": "The current state of the backup"
-                      },
-                      "size": {
-                        "type": "number",
-                        "description": "The size of the backup"
-                      },
-                      "estimated_storage_cost": {
-                        "type": "number",
-                        "description": "The estimated storage cost of the backup"
-                      },
-                      "created_at": {
-                        "type": "string",
-                        "description": "When the backup was created"
-                      },
-                      "updated_at": {
-                        "type": "string",
-                        "description": "When the backup was last updated"
-                      },
-                      "required": {
-                        "type": "boolean",
-                        "description": "Whether or not the backup policy is required"
-                      },
-                      "restored_branches": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "Branches that have been restored with this backup"
-                      },
-                      "backup_policy": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "The ID of the backup policy"
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "The name of the backup policy"
-                          },
-                          "target": {
-                            "type": "string",
-                            "enum": [
-                              "production",
-                              "development",
-                              "branch"
-                            ],
-                            "description": "Whether the backup policy is for a production or development database, or for a database branch"
-                          },
-                          "retention_value": {
-                            "type": "number",
-                            "description": "A number value for the retention period of the backup policy"
-                          },
-                          "retention_unit": {
-                            "type": "string",
-                            "description": "The unit for the retention period of the backup policy"
-                          },
-                          "frequency_value": {
-                            "type": "number",
-                            "description": "A number value for the frequency of the backup policy"
-                          },
-                          "frequency_unit": {
-                            "type": "string",
-                            "description": "The unit for the frequency of the backup policy"
-                          },
-                          "schedule_day": {
-                            "type": "string",
-                            "enum": [
-                              "0..6"
-                            ],
-                            "description": "Day of the week that the backup is scheduled"
-                          },
-                          "schedule_week": {
-                            "type": "string",
-                            "enum": [
-                              "0..3"
-                            ],
-                            "description": "Week of the month that the backup is scheduled"
-                          },
-                          "created_at": {
-                            "type": "string",
-                            "description": "When the backup policy was created"
-                          },
-                          "updated_at": {
-                            "type": "string",
-                            "description": "When the backup policy was last updated"
-                          },
-                          "last_ran_at": {
-                            "type": "string",
-                            "description": "When the backup was last run"
-                          },
-                          "next_run_at": {
-                            "type": "string",
-                            "description": "When the backup will next run"
-                          }
-                        },
-                        "additionalProperties": false,
-                        "required": [
-                          "id",
-                          "name",
-                          "target",
-                          "retention_value",
-                          "retention_unit",
-                          "frequency_value",
-                          "frequency_unit",
-                          "schedule_day",
-                          "schedule_week",
-                          "created_at",
-                          "updated_at",
-                          "last_ran_at",
-                          "next_run_at"
-                        ]
-                      },
-                      "schema_snapshot": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "The ID of the schema snapshot"
-                          },
-                          "url": {
-                            "type": "string",
-                            "description": "The URL to the schema snapshot in the PlanetScale app"
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "The name of the schema snapshot"
-                          },
-                          "created_at": {
-                            "type": "string",
-                            "description": "When the schema snapshot was created"
-                          },
-                          "updated_at": {
-                            "type": "string",
-                            "description": "When the schema snapshot was last updated"
-                          }
-                        },
-                        "additionalProperties": false,
-                        "required": [
-                          "id",
-                          "url",
-                          "name",
-                          "created_at",
-                          "updated_at"
-                        ]
-                      }
+                    "type": "string"
+                  },
+                  "description": "Branches that have been restored with this backup"
+                },
+                "backup_policy": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The ID of the backup policy"
                     },
-                    "additionalProperties": false,
-                    "required": [
-                      "id",
-                      "actor",
-                      "name",
-                      "state",
-                      "size",
-                      "estimated_storage_cost",
-                      "created_at",
-                      "updated_at",
-                      "required",
-                      "backup_policy",
-                      "schema_snapshot"
-                    ]
-                  }
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the backup policy"
+                    },
+                    "target": {
+                      "type": "string",
+                      "enum": [
+                        "production",
+                        "development",
+                        "branch"
+                      ],
+                      "description": "Whether the backup policy is for a production or development database, or for a database branch"
+                    },
+                    "retention_value": {
+                      "type": "number",
+                      "description": "A number value for the retention period of the backup policy"
+                    },
+                    "retention_unit": {
+                      "type": "string",
+                      "description": "The unit for the retention period of the backup policy"
+                    },
+                    "frequency_value": {
+                      "type": "number",
+                      "description": "A number value for the frequency of the backup policy"
+                    },
+                    "frequency_unit": {
+                      "type": "string",
+                      "description": "The unit for the frequency of the backup policy"
+                    },
+                    "schedule_day": {
+                      "type": "string",
+                      "enum": [
+                        "0..6"
+                      ],
+                      "description": "Day of the week that the backup is scheduled"
+                    },
+                    "schedule_week": {
+                      "type": "string",
+                      "enum": [
+                        "0..3"
+                      ],
+                      "description": "Week of the month that the backup is scheduled"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "When the backup policy was created"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "When the backup policy was last updated"
+                    },
+                    "last_ran_at": {
+                      "type": "string",
+                      "description": "When the backup was last run"
+                    },
+                    "next_run_at": {
+                      "type": "string",
+                      "description": "When the backup will next run"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "name",
+                    "target",
+                    "retention_value",
+                    "retention_unit",
+                    "frequency_value",
+                    "frequency_unit",
+                    "schedule_day",
+                    "schedule_week",
+                    "created_at",
+                    "updated_at",
+                    "last_ran_at",
+                    "next_run_at"
+                  ]
+                },
+                "schema_snapshot": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The ID of the schema snapshot"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "The URL to the schema snapshot in the PlanetScale app"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the schema snapshot"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "When the schema snapshot was created"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "When the schema snapshot was last updated"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "url",
+                    "name",
+                    "created_at",
+                    "updated_at"
+                  ]
                 }
               },
               "additionalProperties": false,
               "required": [
-                "data"
+                "id",
+                "actor",
+                "name",
+                "state",
+                "size",
+                "estimated_storage_cost",
+                "created_at",
+                "updated_at",
+                "required",
+                "backup_policy",
+                "schema_snapshot"
               ]
             }
           }
@@ -4249,7 +4225,6 @@
                 "production",
                 "sharded",
                 "html_url",
-                "parent_branch",
                 "cluster_rate_name"
               ]
             }
@@ -4544,7 +4519,6 @@
                 "production",
                 "sharded",
                 "html_url",
-                "parent_branch",
                 "cluster_rate_name"
               ]
             }
@@ -4788,7 +4762,6 @@
                 "production",
                 "sharded",
                 "html_url",
-                "parent_branch",
                 "cluster_rate_name"
               ]
             }
@@ -5032,7 +5005,6 @@
                 "production",
                 "sharded",
                 "html_url",
-                "parent_branch",
                 "cluster_rate_name"
               ]
             }
@@ -5274,7 +5246,6 @@
                 "production",
                 "sharded",
                 "html_url",
-                "parent_branch",
                 "cluster_rate_name"
               ]
             }
@@ -9368,10 +9339,6 @@
                   "type": "string",
                   "description": "Name of the database"
                 },
-                "notes": {
-                  "type": "string",
-                  "description": "Notes about the database"
-                },
                 "state": {
                   "type": "string",
                   "description": "State of the database"
@@ -9468,7 +9435,6 @@
                 "default_branch",
                 "require_approval_for_deploy",
                 "allow_data_branching",
-                "automatic_migrations",
                 "restrict_branch_region",
                 "insights_raw_queries",
                 "plan",
@@ -9721,10 +9687,6 @@
                   "type": "string",
                   "description": "Name of the database"
                 },
-                "notes": {
-                  "type": "string",
-                  "description": "Notes about the database"
-                },
                 "state": {
                   "type": "string",
                   "description": "State of the database"
@@ -9821,7 +9783,6 @@
                 "default_branch",
                 "require_approval_for_deploy",
                 "allow_data_branching",
-                "automatic_migrations",
                 "restrict_branch_region",
                 "insights_raw_queries",
                 "plan",
@@ -11046,10 +11007,6 @@
       "description": "          API endpoints for managing database branch backups.\n"
     },
     {
-      "name": "Deploy requests",
-      "description": "            API endpoints for managing database deploy requests.\n"
-    },
-    {
       "name": "Databases",
       "description": "          API endpoints for managing databases within an organization.\n"
     },
@@ -11072,6 +11029,10 @@
     {
       "name": "Users",
       "description": "          API endpoints for fetching user information.\n"
+    },
+    {
+      "name": "Deploy requests",
+      "description": "            API endpoints for managing database deploy requests.\n"
     }
   ],
   "securityDefinitions": {

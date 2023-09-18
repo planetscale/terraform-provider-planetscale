@@ -122,8 +122,14 @@ func handlePath(doc *spec.Swagger, rule ExtractRule, path spec.PathItem) error {
 	default:
 		return fmt.Errorf("unsupported method %q", rule.Method)
 	}
+	if op == nil {
+		return fmt.Errorf("no definition for method %q", rule.Method)
+	}
 
-	resp := op.Responses.StatusCodeResponses[rule.Response]
+	resp, ok := op.Responses.StatusCodeResponses[rule.Response]
+	if !ok {
+		return fmt.Errorf("response doesn't support code %d", rule.Response)
+	}
 	if resp.Schema == nil {
 		return fmt.Errorf("response at this path has no schema")
 	}
