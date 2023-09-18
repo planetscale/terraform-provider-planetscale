@@ -34,6 +34,10 @@
         {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
         {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "","become_ref": "branch"},
 
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}", "method": "get", "responses": 200, "prop": "actor", "become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}", "method": "get", "responses": 200, "prop": "backup_policy", "become_ref": "backup_policy"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}", "method": "get", "responses": 200, "prop": "schema_snapshot", "become_ref": "schema_snapshot"},
+
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.backup_policy","become_ref": "backup_policy"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.schema_snapshot","become_ref": "schema_snapshot"},
@@ -43,6 +47,5 @@
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 200,"prop": "data.backup_policy","become_ref": "backup_policy"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 200,"prop": "data.schema_snapshot","become_ref": "schema_snapshot"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 200,"prop": "data","become_ref": "backup"}
-
     ]
 }
