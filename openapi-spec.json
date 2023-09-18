@@ -3657,6 +3657,39 @@
       },
       "additionalProperties": false
     },
+    "branch_for_password": {
+      "type": "object",
+      "required": [
+        "name",
+        "id",
+        "production",
+        "access_host_url",
+        "mysql_edge_address"
+      ],
+      "properties": {
+        "access_host_url": {
+          "description": "The host URL for the password",
+          "type": "string"
+        },
+        "id": {
+          "description": "The ID for the database branch",
+          "type": "string"
+        },
+        "mysql_edge_address": {
+          "description": "The address of the MySQL provider for the branch",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name for the database branch",
+          "type": "string"
+        },
+        "production": {
+          "description": "Whether or not the database branch is a production database branch",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "created_oauth_token": {
       "type": "object",
       "properties": {
@@ -4988,7 +5021,7 @@
           "type": "string"
         },
         "database_branch": {
-          "$ref": "#/definitions/password_branch"
+          "$ref": "#/definitions/branch_for_password"
         },
         "deleted_at": {
           "description": "When the password was deleted",
@@ -5035,39 +5068,6 @@
       },
       "additionalProperties": false
     },
-    "password_branch": {
-      "type": "object",
-      "required": [
-        "name",
-        "id",
-        "production",
-        "access_host_url",
-        "mysql_edge_address"
-      ],
-      "properties": {
-        "access_host_url": {
-          "description": "The host URL for the password",
-          "type": "string"
-        },
-        "id": {
-          "description": "The ID for the database branch",
-          "type": "string"
-        },
-        "mysql_edge_address": {
-          "description": "The address of the MySQL provider for the branch",
-          "type": "string"
-        },
-        "name": {
-          "description": "The name for the database branch",
-          "type": "string"
-        },
-        "production": {
-          "description": "Whether or not the database branch is a production database branch",
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false
-    },
     "password_with_plaintext": {
       "type": "object",
       "required": [
@@ -5095,7 +5095,7 @@
           "type": "string"
         },
         "database_branch": {
-          "$ref": "#/definitions/password_branch"
+          "$ref": "#/definitions/branch_for_password"
         },
         "deleted_at": {
           "description": "When the password was deleted",

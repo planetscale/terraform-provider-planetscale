@@ -165,27 +165,27 @@
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 201,"prop": "","become_ref": "backup"},
 
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
-        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data.database_branch","become_ref": "password_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data.database_branch","become_ref": "branch_for_password"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data.region","become_ref": "region"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data","become_ref": "password"},
 
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
-        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "database_branch","become_ref": "password_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "database_branch","become_ref": "branch_for_password"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "region","become_ref": "region"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "","become_ref": "password_with_plaintext"},
 
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "actor","become_ref": "actor"},
-        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "database_branch","become_ref": "password_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "database_branch","become_ref": "branch_for_password"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "region","become_ref": "region"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "","become_ref": "password"},
 
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "actor","become_ref": "actor"},
-        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "database_branch","become_ref": "password_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "database_branch","become_ref": "branch_for_password"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "region","become_ref": "region"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "","become_ref": "password"},
 
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
-        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "database_branch","become_ref": "password_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "database_branch","become_ref": "branch_for_password"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "region","become_ref": "region"},
         {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "","become_ref": "password_with_plaintext"},
 
