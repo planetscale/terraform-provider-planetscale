@@ -131,9 +131,24 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 		resBodyStructName := kebabToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
 		res := operation.Responses.StatusCodeResponses[code]
 		if code < 400 {
-			if err := genParamStruct(defns, f, resBodyStructName, res.Schema); err != nil {
-				return fmt.Errorf("generating call response struct: %w", err)
+			respSchema := res.ResponseProps.Schema
+
+			if respSchema != nil && respSchema.Ref.GetURL() != nil && respSchema.Ref.GetURL().Fragment != "" {
+				defnName := strings.TrimPrefix(respSchema.Ref.GetURL().Fragment, "/definitions/")
+				_, ok := defns[defnName]
+				if !ok {
+					return fmt.Errorf("no definition with name %q exists in the openapi spec", defnName)
+				}
+				if err := genEmbedStruct(f, resBodyStructName, snakeToCamel(defnName)); err != nil {
+					return fmt.Errorf("generating call response struct: %w", err)
+				}
+
+			} else {
+				if err := genParamStruct(defns, f, resBodyStructName, res.Schema); err != nil {
+					return fmt.Errorf("generating call response struct: %w", err)
+				}
 			}
+
 		} else {
 			if err := genErrRespParamStruct(defns, f, resBodyStructName, res.Schema); err != nil {
 				return fmt.Errorf("generating call response struct: %w", err)

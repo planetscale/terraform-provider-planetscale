@@ -12,6 +12,11 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+func genEmbedStruct(file *jen.File, typename, embedname string) error {
+	file.Type().Id(typename).Struct(jen.Id(embedname))
+	return nil
+}
+
 func genParamStruct(defns spec.Definitions, file *jen.File, typename string, body *spec.Schema) error {
 	toField := func(item spec.OrderSchemaItem) (jen.Code, error) {
 		fieldName := snakeToCamel(item.Name)

@@ -37,218 +37,6 @@ func (err *ErrorResponse) Error() string {
 	return fmt.Sprintf("error %s: %s", err.Code, err.Message)
 }
 
-type Branch struct {
-	AccessHostUrl               *string             `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
-	Actor                       *Actor              `json:"actor,omitempty" tfsdk:"actor"`
-	ClusterRateName             string              `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
-	CreatedAt                   string              `json:"created_at" tfsdk:"created_at"`
-	HtmlUrl                     string              `json:"html_url" tfsdk:"html_url"`
-	Id                          string              `json:"id" tfsdk:"id"`
-	InitialRestoreId            *string             `json:"initial_restore_id,omitempty" tfsdk:"initial_restore_id"`
-	MysqlAddress                string              `json:"mysql_address" tfsdk:"mysql_address"`
-	MysqlEdgeAddress            string              `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
-	Name                        string              `json:"name" tfsdk:"name"`
-	ParentBranch                *string             `json:"parent_branch,omitempty" tfsdk:"parent_branch"`
-	Production                  bool                `json:"production" tfsdk:"production"`
-	Ready                       bool                `json:"ready" tfsdk:"ready"`
-	Region                      *Region             `json:"region,omitempty" tfsdk:"region"`
-	RestoreChecklistCompletedAt *string             `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          *RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
-	SchemaLastUpdatedAt         string              `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
-	ShardCount                  *float64            `json:"shard_count,omitempty" tfsdk:"shard_count"`
-	Sharded                     bool                `json:"sharded" tfsdk:"sharded"`
-	UpdatedAt                   string              `json:"updated_at" tfsdk:"updated_at"`
-}
-type QueuedDeployRequest struct {
-	AutoCutover       bool    `json:"auto_cutover" tfsdk:"auto_cutover"`
-	CreatedAt         string  `json:"created_at" tfsdk:"created_at"`
-	CutoverAt         *string `json:"cutover_at,omitempty" tfsdk:"cutover_at"`
-	CutoverExpiring   bool    `json:"cutover_expiring" tfsdk:"cutover_expiring"`
-	DeployCheckErrors *string `json:"deploy_check_errors,omitempty" tfsdk:"deploy_check_errors"`
-	FinishedAt        *string `json:"finished_at,omitempty" tfsdk:"finished_at"`
-	Id                string  `json:"id" tfsdk:"id"`
-	QueuedAt          *string `json:"queued_at,omitempty" tfsdk:"queued_at"`
-	ReadyToCutoverAt  *string `json:"ready_to_cutover_at,omitempty" tfsdk:"ready_to_cutover_at"`
-	StartedAt         *string `json:"started_at,omitempty" tfsdk:"started_at"`
-	State             string  `json:"state" tfsdk:"state"`
-	SubmittedAt       string  `json:"submitted_at" tfsdk:"submitted_at"`
-	UpdatedAt         string  `json:"updated_at" tfsdk:"updated_at"`
-}
-type RestoredFromBranch struct {
-	CreatedAt string `json:"created_at" tfsdk:"created_at"`
-	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
-	Id        string `json:"id" tfsdk:"id"`
-	Name      string `json:"name" tfsdk:"name"`
-	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
-}
-type DataSource struct {
-	Database string `json:"database" tfsdk:"database"`
-	Hostname string `json:"hostname" tfsdk:"hostname"`
-	Port     string `json:"port" tfsdk:"port"`
-}
-type DeployRequestWithDeployment struct {
-	Actor                Actor      `json:"actor" tfsdk:"actor"`
-	Approved             bool       `json:"approved" tfsdk:"approved"`
-	Branch               string     `json:"branch" tfsdk:"branch"`
-	BranchDeleted        bool       `json:"branch_deleted" tfsdk:"branch_deleted"`
-	BranchDeletedAt      string     `json:"branch_deleted_at" tfsdk:"branch_deleted_at"`
-	BranchDeletedBy      Actor      `json:"branch_deleted_by" tfsdk:"branch_deleted_by"`
-	ClosedAt             string     `json:"closed_at" tfsdk:"closed_at"`
-	ClosedBy             Actor      `json:"closed_by" tfsdk:"closed_by"`
-	CreatedAt            string     `json:"created_at" tfsdk:"created_at"`
-	DeployedAt           string     `json:"deployed_at" tfsdk:"deployed_at"`
-	Deployment           Deployment `json:"deployment" tfsdk:"deployment"`
-	DeploymentState      string     `json:"deployment_state" tfsdk:"deployment_state"`
-	HtmlBody             string     `json:"html_body" tfsdk:"html_body"`
-	HtmlUrl              string     `json:"html_url" tfsdk:"html_url"`
-	Id                   string     `json:"id" tfsdk:"id"`
-	IntoBranch           string     `json:"into_branch" tfsdk:"into_branch"`
-	IntoBranchShardCount float64    `json:"into_branch_shard_count" tfsdk:"into_branch_shard_count"`
-	IntoBranchSharded    bool       `json:"into_branch_sharded" tfsdk:"into_branch_sharded"`
-	Notes                string     `json:"notes" tfsdk:"notes"`
-	Number               float64    `json:"number" tfsdk:"number"`
-	State                string     `json:"state" tfsdk:"state"`
-	UpdatedAt            string     `json:"updated_at" tfsdk:"updated_at"`
-}
-type Organization struct {
-	AdminOnlyProductionAccess bool      `json:"admin_only_production_access" tfsdk:"admin_only_production_access"`
-	BillingEmail              *string   `json:"billing_email,omitempty" tfsdk:"billing_email"`
-	CanCreateDatabases        bool      `json:"can_create_databases" tfsdk:"can_create_databases"`
-	CreatedAt                 string    `json:"created_at" tfsdk:"created_at"`
-	DatabaseCount             float64   `json:"database_count" tfsdk:"database_count"`
-	Features                  *Features `json:"features,omitempty" tfsdk:"features"`
-	Flags                     *Flags    `json:"flags,omitempty" tfsdk:"flags"`
-	FreeDatabasesRemaining    float64   `json:"free_databases_remaining" tfsdk:"free_databases_remaining"`
-	HasPastDueInvoices        bool      `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
-	Id                        string    `json:"id" tfsdk:"id"`
-	IdpManagedRoles           bool      `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
-	Name                      string    `json:"name" tfsdk:"name"`
-	Plan                      string    `json:"plan" tfsdk:"plan"`
-	SingleTenancy             bool      `json:"single_tenancy" tfsdk:"single_tenancy"`
-	SleepingDatabaseCount     float64   `json:"sleeping_database_count" tfsdk:"sleeping_database_count"`
-	Sso                       bool      `json:"sso" tfsdk:"sso"`
-	SsoDirectory              bool      `json:"sso_directory" tfsdk:"sso_directory"`
-	SsoPortalUrl              *string   `json:"sso_portal_url,omitempty" tfsdk:"sso_portal_url"`
-	UpdatedAt                 string    `json:"updated_at" tfsdk:"updated_at"`
-	ValidBillingInfo          bool      `json:"valid_billing_info" tfsdk:"valid_billing_info"`
-}
-type SchemaSnapshot struct {
-	CreatedAt string `json:"created_at" tfsdk:"created_at"`
-	Id        string `json:"id" tfsdk:"id"`
-	Name      string `json:"name" tfsdk:"name"`
-	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
-	Url       string `json:"url" tfsdk:"url"`
-}
-type Backup struct {
-	Actor                Actor          `json:"actor" tfsdk:"actor"`
-	BackupPolicy         BackupPolicy   `json:"backup_policy" tfsdk:"backup_policy"`
-	CreatedAt            string         `json:"created_at" tfsdk:"created_at"`
-	EstimatedStorageCost float64        `json:"estimated_storage_cost" tfsdk:"estimated_storage_cost"`
-	Id                   string         `json:"id" tfsdk:"id"`
-	Name                 string         `json:"name" tfsdk:"name"`
-	Required             bool           `json:"required" tfsdk:"required"`
-	RestoredBranches     *[]string      `json:"restored_branches,omitempty" tfsdk:"restored_branches"`
-	SchemaSnapshot       SchemaSnapshot `json:"schema_snapshot" tfsdk:"schema_snapshot"`
-	Size                 float64        `json:"size" tfsdk:"size"`
-	State                string         `json:"state" tfsdk:"state"`
-	UpdatedAt            string         `json:"updated_at" tfsdk:"updated_at"`
-}
-type DataImport struct {
-	DataSource        DataSource `json:"data_source" tfsdk:"data_source"`
-	FinishedAt        string     `json:"finished_at" tfsdk:"finished_at"`
-	ImportCheckErrors string     `json:"import_check_errors" tfsdk:"import_check_errors"`
-	StartedAt         string     `json:"started_at" tfsdk:"started_at"`
-	State             string     `json:"state" tfsdk:"state"`
-}
-type DeployReview struct {
-	Actor     Actor  `json:"actor" tfsdk:"actor"`
-	Body      string `json:"body" tfsdk:"body"`
-	CreatedAt string `json:"created_at" tfsdk:"created_at"`
-	HtmlBody  string `json:"html_body" tfsdk:"html_body"`
-	Id        string `json:"id" tfsdk:"id"`
-	State     string `json:"state" tfsdk:"state"`
-	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
-}
-type Deployment struct {
-	AutoCutover       bool    `json:"auto_cutover" tfsdk:"auto_cutover"`
-	CreatedAt         string  `json:"created_at" tfsdk:"created_at"`
-	CutoverAt         *string `json:"cutover_at,omitempty" tfsdk:"cutover_at"`
-	CutoverExpiring   bool    `json:"cutover_expiring" tfsdk:"cutover_expiring"`
-	DeployCheckErrors *string `json:"deploy_check_errors,omitempty" tfsdk:"deploy_check_errors"`
-	FinishedAt        *string `json:"finished_at,omitempty" tfsdk:"finished_at"`
-	Id                string  `json:"id" tfsdk:"id"`
-	QueuedAt          *string `json:"queued_at,omitempty" tfsdk:"queued_at"`
-	ReadyToCutoverAt  *string `json:"ready_to_cutover_at,omitempty" tfsdk:"ready_to_cutover_at"`
-	StartedAt         *string `json:"started_at,omitempty" tfsdk:"started_at"`
-	State             string  `json:"state" tfsdk:"state"`
-	SubmittedAt       string  `json:"submitted_at" tfsdk:"submitted_at"`
-	UpdatedAt         string  `json:"updated_at" tfsdk:"updated_at"`
-}
-type OauthDatabaseAccesses struct {
-	Accesses  []string `json:"accesses" tfsdk:"accesses"`
-	Databases []string `json:"databases" tfsdk:"databases"`
-}
-type OauthTokenWithDetails struct {
-	ActorDisplayName        string                  `json:"actor_display_name" tfsdk:"actor_display_name"`
-	ActorId                 string                  `json:"actor_id" tfsdk:"actor_id"`
-	ActorType               string                  `json:"actor_type" tfsdk:"actor_type"`
-	AvatarUrl               string                  `json:"avatar_url" tfsdk:"avatar_url"`
-	CreatedAt               string                  `json:"created_at" tfsdk:"created_at"`
-	DisplayName             string                  `json:"display_name" tfsdk:"display_name"`
-	ExpiresAt               string                  `json:"expires_at" tfsdk:"expires_at"`
-	Id                      string                  `json:"id" tfsdk:"id"`
-	LastUsedAt              string                  `json:"last_used_at" tfsdk:"last_used_at"`
-	Name                    string                  `json:"name" tfsdk:"name"`
-	OauthAccessesByResource OauthAccessesByResource `json:"oauth_accesses_by_resource" tfsdk:"oauth_accesses_by_resource"`
-	UpdatedAt               string                  `json:"updated_at" tfsdk:"updated_at"`
-}
-type Password struct {
-	AccessHostUrl  string         `json:"access_host_url" tfsdk:"access_host_url"`
-	Actor          *Actor         `json:"actor,omitempty" tfsdk:"actor"`
-	CreatedAt      string         `json:"created_at" tfsdk:"created_at"`
-	DatabaseBranch PasswordBranch `json:"database_branch" tfsdk:"database_branch"`
-	DeletedAt      *string        `json:"deleted_at,omitempty" tfsdk:"deleted_at"`
-	ExpiresAt      *string        `json:"expires_at,omitempty" tfsdk:"expires_at"`
-	Id             string         `json:"id" tfsdk:"id"`
-	Integrations   []string       `json:"integrations" tfsdk:"integrations"`
-	Name           string         `json:"name" tfsdk:"name"`
-	Region         *Region        `json:"region,omitempty" tfsdk:"region"`
-	Renewable      bool           `json:"renewable" tfsdk:"renewable"`
-	Role           string         `json:"role" tfsdk:"role"`
-	TtlSeconds     float64        `json:"ttl_seconds" tfsdk:"ttl_seconds"`
-	Username       *string        `json:"username,omitempty" tfsdk:"username"`
-}
-type Features struct {
-	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
-	SingleTenancy *bool `json:"single_tenancy,omitempty" tfsdk:"single_tenancy"`
-	Sso           *bool `json:"sso,omitempty" tfsdk:"sso"`
-}
-type OauthUserAccesses struct {
-	Accesses []string `json:"accesses" tfsdk:"accesses"`
-	Users    []string `json:"users" tfsdk:"users"`
-}
-type PasswordWithPlaintext struct {
-	AccessHostUrl  string         `json:"access_host_url" tfsdk:"access_host_url"`
-	Actor          *Actor         `json:"actor,omitempty" tfsdk:"actor"`
-	CreatedAt      string         `json:"created_at" tfsdk:"created_at"`
-	DatabaseBranch PasswordBranch `json:"database_branch" tfsdk:"database_branch"`
-	DeletedAt      *string        `json:"deleted_at,omitempty" tfsdk:"deleted_at"`
-	ExpiresAt      *string        `json:"expires_at,omitempty" tfsdk:"expires_at"`
-	Id             string         `json:"id" tfsdk:"id"`
-	Integrations   []string       `json:"integrations" tfsdk:"integrations"`
-	Name           string         `json:"name" tfsdk:"name"`
-	PlainText      string         `json:"plain_text" tfsdk:"plain_text"`
-	Region         *Region        `json:"region,omitempty" tfsdk:"region"`
-	Renewable      bool           `json:"renewable" tfsdk:"renewable"`
-	Role           string         `json:"role" tfsdk:"role"`
-	TtlSeconds     float64        `json:"ttl_seconds" tfsdk:"ttl_seconds"`
-	Username       *string        `json:"username,omitempty" tfsdk:"username"`
-}
-type Actor struct {
-	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
-	DisplayName string `json:"display_name" tfsdk:"display_name"`
-	Id          string `json:"id" tfsdk:"id"`
-}
 type DeployRequest struct {
 	Actor                Actor   `json:"actor" tfsdk:"actor"`
 	Approved             bool    `json:"approved" tfsdk:"approved"`
@@ -272,12 +60,102 @@ type DeployRequest struct {
 	State                string  `json:"state" tfsdk:"state"`
 	UpdatedAt            string  `json:"updated_at" tfsdk:"updated_at"`
 }
+type OauthAccessesByResource struct {
+	Branch       OauthBranchAccesses       `json:"branch" tfsdk:"branch"`
+	Database     OauthDatabaseAccesses     `json:"database" tfsdk:"database"`
+	Organization OauthOrganizationAccesses `json:"organization" tfsdk:"organization"`
+	User         OauthUserAccesses         `json:"user" tfsdk:"user"`
+}
+type PasswordWithPlaintext struct {
+	AccessHostUrl  string         `json:"access_host_url" tfsdk:"access_host_url"`
+	Actor          *Actor         `json:"actor,omitempty" tfsdk:"actor"`
+	CreatedAt      string         `json:"created_at" tfsdk:"created_at"`
+	DatabaseBranch PasswordBranch `json:"database_branch" tfsdk:"database_branch"`
+	DeletedAt      *string        `json:"deleted_at,omitempty" tfsdk:"deleted_at"`
+	ExpiresAt      *string        `json:"expires_at,omitempty" tfsdk:"expires_at"`
+	Id             string         `json:"id" tfsdk:"id"`
+	Integrations   []string       `json:"integrations" tfsdk:"integrations"`
+	Name           string         `json:"name" tfsdk:"name"`
+	PlainText      string         `json:"plain_text" tfsdk:"plain_text"`
+	Region         *Region        `json:"region,omitempty" tfsdk:"region"`
+	Renewable      bool           `json:"renewable" tfsdk:"renewable"`
+	Role           string         `json:"role" tfsdk:"role"`
+	TtlSeconds     float64        `json:"ttl_seconds" tfsdk:"ttl_seconds"`
+	Username       *string        `json:"username,omitempty" tfsdk:"username"`
+}
+type ReadOnlyRegion struct {
+	Actor       Actor  `json:"actor" tfsdk:"actor"`
+	CreatedAt   string `json:"created_at" tfsdk:"created_at"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+	Ready       bool   `json:"ready" tfsdk:"ready"`
+	ReadyAt     string `json:"ready_at" tfsdk:"ready_at"`
+	Region      Region `json:"region" tfsdk:"region"`
+	UpdatedAt   string `json:"updated_at" tfsdk:"updated_at"`
+}
+type Backup struct {
+	Actor                Actor          `json:"actor" tfsdk:"actor"`
+	BackupPolicy         BackupPolicy   `json:"backup_policy" tfsdk:"backup_policy"`
+	CreatedAt            string         `json:"created_at" tfsdk:"created_at"`
+	EstimatedStorageCost float64        `json:"estimated_storage_cost" tfsdk:"estimated_storage_cost"`
+	Id                   string         `json:"id" tfsdk:"id"`
+	Name                 string         `json:"name" tfsdk:"name"`
+	Required             bool           `json:"required" tfsdk:"required"`
+	RestoredBranches     *[]string      `json:"restored_branches,omitempty" tfsdk:"restored_branches"`
+	SchemaSnapshot       SchemaSnapshot `json:"schema_snapshot" tfsdk:"schema_snapshot"`
+	Size                 float64        `json:"size" tfsdk:"size"`
+	State                string         `json:"state" tfsdk:"state"`
+	UpdatedAt            string         `json:"updated_at" tfsdk:"updated_at"`
+}
+type CreatedOauthToken struct {
+	ActorDisplayName      *string   `json:"actor_display_name,omitempty" tfsdk:"actor_display_name"`
+	ActorId               *string   `json:"actor_id,omitempty" tfsdk:"actor_id"`
+	DisplayName           *string   `json:"display_name,omitempty" tfsdk:"display_name"`
+	Name                  *string   `json:"name,omitempty" tfsdk:"name"`
+	PlainTextRefreshToken *string   `json:"plain_text_refresh_token,omitempty" tfsdk:"plain_text_refresh_token"`
+	ServiceTokenAccesses  *[]string `json:"service_token_accesses,omitempty" tfsdk:"service_token_accesses"`
+	Token                 *string   `json:"token,omitempty" tfsdk:"token"`
+}
+type DeployReview struct {
+	Actor     Actor  `json:"actor" tfsdk:"actor"`
+	Body      string `json:"body" tfsdk:"body"`
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	HtmlBody  string `json:"html_body" tfsdk:"html_body"`
+	Id        string `json:"id" tfsdk:"id"`
+	State     string `json:"state" tfsdk:"state"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
 type Flags struct {
 	ExampleFlag *string `json:"example_flag,omitempty" tfsdk:"example_flag"`
 }
-type OauthBranchAccesses struct {
-	Accesses []string `json:"accesses" tfsdk:"accesses"`
-	Branches []string `json:"branches" tfsdk:"branches"`
+type OauthTokenWithDetails struct {
+	ActorDisplayName        string                  `json:"actor_display_name" tfsdk:"actor_display_name"`
+	ActorId                 string                  `json:"actor_id" tfsdk:"actor_id"`
+	ActorType               string                  `json:"actor_type" tfsdk:"actor_type"`
+	AvatarUrl               string                  `json:"avatar_url" tfsdk:"avatar_url"`
+	CreatedAt               string                  `json:"created_at" tfsdk:"created_at"`
+	DisplayName             string                  `json:"display_name" tfsdk:"display_name"`
+	ExpiresAt               string                  `json:"expires_at" tfsdk:"expires_at"`
+	Id                      string                  `json:"id" tfsdk:"id"`
+	LastUsedAt              string                  `json:"last_used_at" tfsdk:"last_used_at"`
+	Name                    string                  `json:"name" tfsdk:"name"`
+	OauthAccessesByResource OauthAccessesByResource `json:"oauth_accesses_by_resource" tfsdk:"oauth_accesses_by_resource"`
+	UpdatedAt               string                  `json:"updated_at" tfsdk:"updated_at"`
+}
+type Deployment struct {
+	AutoCutover       bool    `json:"auto_cutover" tfsdk:"auto_cutover"`
+	CreatedAt         string  `json:"created_at" tfsdk:"created_at"`
+	CutoverAt         *string `json:"cutover_at,omitempty" tfsdk:"cutover_at"`
+	CutoverExpiring   bool    `json:"cutover_expiring" tfsdk:"cutover_expiring"`
+	DeployCheckErrors *string `json:"deploy_check_errors,omitempty" tfsdk:"deploy_check_errors"`
+	FinishedAt        *string `json:"finished_at,omitempty" tfsdk:"finished_at"`
+	Id                string  `json:"id" tfsdk:"id"`
+	QueuedAt          *string `json:"queued_at,omitempty" tfsdk:"queued_at"`
+	ReadyToCutoverAt  *string `json:"ready_to_cutover_at,omitempty" tfsdk:"ready_to_cutover_at"`
+	StartedAt         *string `json:"started_at,omitempty" tfsdk:"started_at"`
+	State             string  `json:"state" tfsdk:"state"`
+	SubmittedAt       string  `json:"submitted_at" tfsdk:"submitted_at"`
+	UpdatedAt         string  `json:"updated_at" tfsdk:"updated_at"`
 }
 type OauthToken struct {
 	ActorDisplayName string `json:"actor_display_name" tfsdk:"actor_display_name"`
@@ -292,23 +170,46 @@ type OauthToken struct {
 	Name             string `json:"name" tfsdk:"name"`
 	UpdatedAt        string `json:"updated_at" tfsdk:"updated_at"`
 }
-type DeployOperation struct {
-	CanDropData          bool     `json:"can_drop_data" tfsdk:"can_drop_data"`
-	CreatedAt            string   `json:"created_at" tfsdk:"created_at"`
-	DdlStatement         string   `json:"ddl_statement" tfsdk:"ddl_statement"`
-	DeployErrorDocsUrl   string   `json:"deploy_error_docs_url" tfsdk:"deploy_error_docs_url"`
-	DeployErrors         []string `json:"deploy_errors" tfsdk:"deploy_errors"`
-	EtaSeconds           float64  `json:"eta_seconds" tfsdk:"eta_seconds"`
-	Id                   string   `json:"id" tfsdk:"id"`
-	KeyspaceName         string   `json:"keyspace_name" tfsdk:"keyspace_name"`
-	OperationName        string   `json:"operation_name" tfsdk:"operation_name"`
-	ProgressPercentage   float64  `json:"progress_percentage" tfsdk:"progress_percentage"`
-	State                string   `json:"state" tfsdk:"state"`
-	SyntaxHighlightedDdl string   `json:"syntax_highlighted_ddl" tfsdk:"syntax_highlighted_ddl"`
-	TableName            string   `json:"table_name" tfsdk:"table_name"`
-	TableRecentlyUsed    bool     `json:"table_recently_used" tfsdk:"table_recently_used"`
-	TableRecentlyUsedAt  string   `json:"table_recently_used_at" tfsdk:"table_recently_used_at"`
-	UpdatedAt            string   `json:"updated_at" tfsdk:"updated_at"`
+type Region struct {
+	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
+	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
+	Id                string   `json:"id" tfsdk:"id"`
+	Location          string   `json:"location" tfsdk:"location"`
+	Provider          string   `json:"provider" tfsdk:"provider"`
+	PublicIpAddresses []string `json:"public_ip_addresses" tfsdk:"public_ip_addresses"`
+	Slug              string   `json:"slug" tfsdk:"slug"`
+}
+type OauthApplication struct {
+	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
+	ClientId    string   `json:"client_id" tfsdk:"client_id"`
+	CreatedAt   string   `json:"created_at" tfsdk:"created_at"`
+	Domain      string   `json:"domain" tfsdk:"domain"`
+	Id          string   `json:"id" tfsdk:"id"`
+	Name        string   `json:"name" tfsdk:"name"`
+	RedirectUri string   `json:"redirect_uri" tfsdk:"redirect_uri"`
+	Scopes      []string `json:"scopes" tfsdk:"scopes"`
+	Tokens      float64  `json:"tokens" tfsdk:"tokens"`
+	UpdatedAt   string   `json:"updated_at" tfsdk:"updated_at"`
+}
+type OauthBranchAccesses struct {
+	Accesses []string `json:"accesses" tfsdk:"accesses"`
+	Branches []string `json:"branches" tfsdk:"branches"`
+}
+type Password struct {
+	AccessHostUrl  string         `json:"access_host_url" tfsdk:"access_host_url"`
+	Actor          *Actor         `json:"actor,omitempty" tfsdk:"actor"`
+	CreatedAt      string         `json:"created_at" tfsdk:"created_at"`
+	DatabaseBranch PasswordBranch `json:"database_branch" tfsdk:"database_branch"`
+	DeletedAt      *string        `json:"deleted_at,omitempty" tfsdk:"deleted_at"`
+	ExpiresAt      *string        `json:"expires_at,omitempty" tfsdk:"expires_at"`
+	Id             string         `json:"id" tfsdk:"id"`
+	Integrations   []string       `json:"integrations" tfsdk:"integrations"`
+	Name           string         `json:"name" tfsdk:"name"`
+	Region         *Region        `json:"region,omitempty" tfsdk:"region"`
+	Renewable      bool           `json:"renewable" tfsdk:"renewable"`
+	Role           string         `json:"role" tfsdk:"role"`
+	TtlSeconds     float64        `json:"ttl_seconds" tfsdk:"ttl_seconds"`
+	Username       *string        `json:"username,omitempty" tfsdk:"username"`
 }
 type PasswordBranch struct {
 	AccessHostUrl    string `json:"access_host_url" tfsdk:"access_host_url"`
@@ -317,20 +218,22 @@ type PasswordBranch struct {
 	Name             string `json:"name" tfsdk:"name"`
 	Production       bool   `json:"production" tfsdk:"production"`
 }
-type User struct {
-	AvatarUrl               *string `json:"avatar_url,omitempty" tfsdk:"avatar_url"`
-	CreatedAt               *string `json:"created_at,omitempty" tfsdk:"created_at"`
-	DefaultOrganizationId   *string `json:"default_organization_id,omitempty" tfsdk:"default_organization_id"`
-	DirectoryManaged        *bool   `json:"directory_managed,omitempty" tfsdk:"directory_managed"`
-	DisplayName             *string `json:"display_name,omitempty" tfsdk:"display_name"`
-	Email                   *string `json:"email,omitempty" tfsdk:"email"`
-	EmailVerified           *bool   `json:"email_verified,omitempty" tfsdk:"email_verified"`
-	Id                      *string `json:"id,omitempty" tfsdk:"id"`
-	Managed                 *bool   `json:"managed,omitempty" tfsdk:"managed"`
-	Name                    *string `json:"name,omitempty" tfsdk:"name"`
-	Sso                     *bool   `json:"sso,omitempty" tfsdk:"sso"`
-	TwoFactorAuthConfigured *bool   `json:"two_factor_auth_configured,omitempty" tfsdk:"two_factor_auth_configured"`
-	UpdatedAt               *string `json:"updated_at,omitempty" tfsdk:"updated_at"`
+type SchemaSnapshot struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+	Url       string `json:"url" tfsdk:"url"`
+}
+type TableSchema struct {
+	Html string `json:"html" tfsdk:"html"`
+	Name string `json:"name" tfsdk:"name"`
+	Raw  string `json:"raw" tfsdk:"raw"`
+}
+type DataSource struct {
+	Database string `json:"database" tfsdk:"database"`
+	Hostname string `json:"hostname" tfsdk:"hostname"`
+	Port     string `json:"port" tfsdk:"port"`
 }
 type Database struct {
 	AllowDataBranching                bool        `json:"allow_data_branching" tfsdk:"allow_data_branching"`
@@ -368,6 +271,173 @@ type Database struct {
 	UpdatedAt                         string      `json:"updated_at" tfsdk:"updated_at"`
 	Url                               string      `json:"url" tfsdk:"url"`
 }
+type OauthUserAccesses struct {
+	Accesses []string `json:"accesses" tfsdk:"accesses"`
+	Users    []string `json:"users" tfsdk:"users"`
+}
+type Organization struct {
+	AdminOnlyProductionAccess bool      `json:"admin_only_production_access" tfsdk:"admin_only_production_access"`
+	BillingEmail              *string   `json:"billing_email,omitempty" tfsdk:"billing_email"`
+	CanCreateDatabases        bool      `json:"can_create_databases" tfsdk:"can_create_databases"`
+	CreatedAt                 string    `json:"created_at" tfsdk:"created_at"`
+	DatabaseCount             float64   `json:"database_count" tfsdk:"database_count"`
+	Features                  *Features `json:"features,omitempty" tfsdk:"features"`
+	Flags                     *Flags    `json:"flags,omitempty" tfsdk:"flags"`
+	FreeDatabasesRemaining    float64   `json:"free_databases_remaining" tfsdk:"free_databases_remaining"`
+	HasPastDueInvoices        bool      `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
+	Id                        string    `json:"id" tfsdk:"id"`
+	IdpManagedRoles           bool      `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
+	Name                      string    `json:"name" tfsdk:"name"`
+	Plan                      string    `json:"plan" tfsdk:"plan"`
+	SingleTenancy             bool      `json:"single_tenancy" tfsdk:"single_tenancy"`
+	SleepingDatabaseCount     float64   `json:"sleeping_database_count" tfsdk:"sleeping_database_count"`
+	Sso                       bool      `json:"sso" tfsdk:"sso"`
+	SsoDirectory              bool      `json:"sso_directory" tfsdk:"sso_directory"`
+	SsoPortalUrl              *string   `json:"sso_portal_url,omitempty" tfsdk:"sso_portal_url"`
+	UpdatedAt                 string    `json:"updated_at" tfsdk:"updated_at"`
+	ValidBillingInfo          bool      `json:"valid_billing_info" tfsdk:"valid_billing_info"`
+}
+type QueuedDeployRequest struct {
+	AutoCutover       bool    `json:"auto_cutover" tfsdk:"auto_cutover"`
+	CreatedAt         string  `json:"created_at" tfsdk:"created_at"`
+	CutoverAt         *string `json:"cutover_at,omitempty" tfsdk:"cutover_at"`
+	CutoverExpiring   bool    `json:"cutover_expiring" tfsdk:"cutover_expiring"`
+	DeployCheckErrors *string `json:"deploy_check_errors,omitempty" tfsdk:"deploy_check_errors"`
+	FinishedAt        *string `json:"finished_at,omitempty" tfsdk:"finished_at"`
+	Id                string  `json:"id" tfsdk:"id"`
+	QueuedAt          *string `json:"queued_at,omitempty" tfsdk:"queued_at"`
+	ReadyToCutoverAt  *string `json:"ready_to_cutover_at,omitempty" tfsdk:"ready_to_cutover_at"`
+	StartedAt         *string `json:"started_at,omitempty" tfsdk:"started_at"`
+	State             string  `json:"state" tfsdk:"state"`
+	SubmittedAt       string  `json:"submitted_at" tfsdk:"submitted_at"`
+	UpdatedAt         string  `json:"updated_at" tfsdk:"updated_at"`
+}
+type Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type DataImport struct {
+	DataSource        DataSource `json:"data_source" tfsdk:"data_source"`
+	FinishedAt        string     `json:"finished_at" tfsdk:"finished_at"`
+	ImportCheckErrors string     `json:"import_check_errors" tfsdk:"import_check_errors"`
+	StartedAt         string     `json:"started_at" tfsdk:"started_at"`
+	State             string     `json:"state" tfsdk:"state"`
+}
+type DeployOperation struct {
+	CanDropData          bool     `json:"can_drop_data" tfsdk:"can_drop_data"`
+	CreatedAt            string   `json:"created_at" tfsdk:"created_at"`
+	DdlStatement         string   `json:"ddl_statement" tfsdk:"ddl_statement"`
+	DeployErrorDocsUrl   string   `json:"deploy_error_docs_url" tfsdk:"deploy_error_docs_url"`
+	DeployErrors         []string `json:"deploy_errors" tfsdk:"deploy_errors"`
+	EtaSeconds           float64  `json:"eta_seconds" tfsdk:"eta_seconds"`
+	Id                   string   `json:"id" tfsdk:"id"`
+	KeyspaceName         string   `json:"keyspace_name" tfsdk:"keyspace_name"`
+	OperationName        string   `json:"operation_name" tfsdk:"operation_name"`
+	ProgressPercentage   float64  `json:"progress_percentage" tfsdk:"progress_percentage"`
+	State                string   `json:"state" tfsdk:"state"`
+	SyntaxHighlightedDdl string   `json:"syntax_highlighted_ddl" tfsdk:"syntax_highlighted_ddl"`
+	TableName            string   `json:"table_name" tfsdk:"table_name"`
+	TableRecentlyUsed    bool     `json:"table_recently_used" tfsdk:"table_recently_used"`
+	TableRecentlyUsedAt  string   `json:"table_recently_used_at" tfsdk:"table_recently_used_at"`
+	UpdatedAt            string   `json:"updated_at" tfsdk:"updated_at"`
+}
+type OauthOrganizationAccesses struct {
+	Accesses      []string `json:"accesses" tfsdk:"accesses"`
+	Organizations []string `json:"organizations" tfsdk:"organizations"`
+}
+type RestoredFromBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type OauthDatabaseAccesses struct {
+	Accesses  []string `json:"accesses" tfsdk:"accesses"`
+	Databases []string `json:"databases" tfsdk:"databases"`
+}
+type User struct {
+	AvatarUrl               *string `json:"avatar_url,omitempty" tfsdk:"avatar_url"`
+	CreatedAt               *string `json:"created_at,omitempty" tfsdk:"created_at"`
+	DefaultOrganizationId   *string `json:"default_organization_id,omitempty" tfsdk:"default_organization_id"`
+	DirectoryManaged        *bool   `json:"directory_managed,omitempty" tfsdk:"directory_managed"`
+	DisplayName             *string `json:"display_name,omitempty" tfsdk:"display_name"`
+	Email                   *string `json:"email,omitempty" tfsdk:"email"`
+	EmailVerified           *bool   `json:"email_verified,omitempty" tfsdk:"email_verified"`
+	Id                      *string `json:"id,omitempty" tfsdk:"id"`
+	Managed                 *bool   `json:"managed,omitempty" tfsdk:"managed"`
+	Name                    *string `json:"name,omitempty" tfsdk:"name"`
+	Sso                     *bool   `json:"sso,omitempty" tfsdk:"sso"`
+	TwoFactorAuthConfigured *bool   `json:"two_factor_auth_configured,omitempty" tfsdk:"two_factor_auth_configured"`
+	UpdatedAt               *string `json:"updated_at,omitempty" tfsdk:"updated_at"`
+}
+type BackupPolicy struct {
+	CreatedAt      string  `json:"created_at" tfsdk:"created_at"`
+	FrequencyUnit  string  `json:"frequency_unit" tfsdk:"frequency_unit"`
+	FrequencyValue float64 `json:"frequency_value" tfsdk:"frequency_value"`
+	Id             string  `json:"id" tfsdk:"id"`
+	LastRanAt      string  `json:"last_ran_at" tfsdk:"last_ran_at"`
+	Name           string  `json:"name" tfsdk:"name"`
+	NextRunAt      string  `json:"next_run_at" tfsdk:"next_run_at"`
+	RetentionUnit  string  `json:"retention_unit" tfsdk:"retention_unit"`
+	RetentionValue float64 `json:"retention_value" tfsdk:"retention_value"`
+	ScheduleDay    string  `json:"schedule_day" tfsdk:"schedule_day"`
+	ScheduleWeek   string  `json:"schedule_week" tfsdk:"schedule_week"`
+	Target         string  `json:"target" tfsdk:"target"`
+	UpdatedAt      string  `json:"updated_at" tfsdk:"updated_at"`
+}
+type Branch struct {
+	AccessHostUrl               *string             `json:"access_host_url,omitempty" tfsdk:"access_host_url"`
+	Actor                       *Actor              `json:"actor,omitempty" tfsdk:"actor"`
+	ClusterRateName             string              `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
+	CreatedAt                   string              `json:"created_at" tfsdk:"created_at"`
+	HtmlUrl                     string              `json:"html_url" tfsdk:"html_url"`
+	Id                          string              `json:"id" tfsdk:"id"`
+	InitialRestoreId            *string             `json:"initial_restore_id,omitempty" tfsdk:"initial_restore_id"`
+	MysqlAddress                string              `json:"mysql_address" tfsdk:"mysql_address"`
+	MysqlEdgeAddress            string              `json:"mysql_edge_address" tfsdk:"mysql_edge_address"`
+	Name                        string              `json:"name" tfsdk:"name"`
+	ParentBranch                *string             `json:"parent_branch,omitempty" tfsdk:"parent_branch"`
+	Production                  bool                `json:"production" tfsdk:"production"`
+	Ready                       bool                `json:"ready" tfsdk:"ready"`
+	Region                      *Region             `json:"region,omitempty" tfsdk:"region"`
+	RestoreChecklistCompletedAt *string             `json:"restore_checklist_completed_at,omitempty" tfsdk:"restore_checklist_completed_at"`
+	RestoredFromBranch          *RestoredFromBranch `json:"restored_from_branch,omitempty" tfsdk:"restored_from_branch"`
+	SchemaLastUpdatedAt         string              `json:"schema_last_updated_at" tfsdk:"schema_last_updated_at"`
+	ShardCount                  *float64            `json:"shard_count,omitempty" tfsdk:"shard_count"`
+	Sharded                     bool                `json:"sharded" tfsdk:"sharded"`
+	UpdatedAt                   string              `json:"updated_at" tfsdk:"updated_at"`
+}
+type DeployRequestWithDeployment struct {
+	Actor                Actor      `json:"actor" tfsdk:"actor"`
+	Approved             bool       `json:"approved" tfsdk:"approved"`
+	Branch               string     `json:"branch" tfsdk:"branch"`
+	BranchDeleted        bool       `json:"branch_deleted" tfsdk:"branch_deleted"`
+	BranchDeletedAt      string     `json:"branch_deleted_at" tfsdk:"branch_deleted_at"`
+	BranchDeletedBy      Actor      `json:"branch_deleted_by" tfsdk:"branch_deleted_by"`
+	ClosedAt             string     `json:"closed_at" tfsdk:"closed_at"`
+	ClosedBy             Actor      `json:"closed_by" tfsdk:"closed_by"`
+	CreatedAt            string     `json:"created_at" tfsdk:"created_at"`
+	DeployedAt           string     `json:"deployed_at" tfsdk:"deployed_at"`
+	Deployment           Deployment `json:"deployment" tfsdk:"deployment"`
+	DeploymentState      string     `json:"deployment_state" tfsdk:"deployment_state"`
+	HtmlBody             string     `json:"html_body" tfsdk:"html_body"`
+	HtmlUrl              string     `json:"html_url" tfsdk:"html_url"`
+	Id                   string     `json:"id" tfsdk:"id"`
+	IntoBranch           string     `json:"into_branch" tfsdk:"into_branch"`
+	IntoBranchShardCount float64    `json:"into_branch_shard_count" tfsdk:"into_branch_shard_count"`
+	IntoBranchSharded    bool       `json:"into_branch_sharded" tfsdk:"into_branch_sharded"`
+	Notes                string     `json:"notes" tfsdk:"notes"`
+	Number               float64    `json:"number" tfsdk:"number"`
+	State                string     `json:"state" tfsdk:"state"`
+	UpdatedAt            string     `json:"updated_at" tfsdk:"updated_at"`
+}
+type Features struct {
+	Insights      *bool `json:"insights,omitempty" tfsdk:"insights"`
+	SingleTenancy *bool `json:"single_tenancy,omitempty" tfsdk:"single_tenancy"`
+	Sso           *bool `json:"sso,omitempty" tfsdk:"sso"`
+}
 type LintError struct {
 	AutoIncrementColumnNames []string `json:"auto_increment_column_names" tfsdk:"auto_increment_column_names"`
 	CharsetName              string   `json:"charset_name" tfsdk:"charset_name"`
@@ -387,75 +457,8 @@ type LintError struct {
 	TableName                string   `json:"table_name" tfsdk:"table_name"`
 	VindexName               string   `json:"vindex_name" tfsdk:"vindex_name"`
 }
-type OauthOrganizationAccesses struct {
-	Accesses      []string `json:"accesses" tfsdk:"accesses"`
-	Organizations []string `json:"organizations" tfsdk:"organizations"`
-}
-type Region struct {
-	DisplayName       string   `json:"display_name" tfsdk:"display_name"`
-	Enabled           bool     `json:"enabled" tfsdk:"enabled"`
-	Id                string   `json:"id" tfsdk:"id"`
-	Location          string   `json:"location" tfsdk:"location"`
-	Provider          string   `json:"provider" tfsdk:"provider"`
-	PublicIpAddresses []string `json:"public_ip_addresses" tfsdk:"public_ip_addresses"`
-	Slug              string   `json:"slug" tfsdk:"slug"`
-}
-type TableSchema struct {
-	Html string `json:"html" tfsdk:"html"`
-	Name string `json:"name" tfsdk:"name"`
-	Raw  string `json:"raw" tfsdk:"raw"`
-}
-type BackupPolicy struct {
-	CreatedAt      string  `json:"created_at" tfsdk:"created_at"`
-	FrequencyUnit  string  `json:"frequency_unit" tfsdk:"frequency_unit"`
-	FrequencyValue float64 `json:"frequency_value" tfsdk:"frequency_value"`
-	Id             string  `json:"id" tfsdk:"id"`
-	LastRanAt      string  `json:"last_ran_at" tfsdk:"last_ran_at"`
-	Name           string  `json:"name" tfsdk:"name"`
-	NextRunAt      string  `json:"next_run_at" tfsdk:"next_run_at"`
-	RetentionUnit  string  `json:"retention_unit" tfsdk:"retention_unit"`
-	RetentionValue float64 `json:"retention_value" tfsdk:"retention_value"`
-	ScheduleDay    string  `json:"schedule_day" tfsdk:"schedule_day"`
-	ScheduleWeek   string  `json:"schedule_week" tfsdk:"schedule_week"`
-	Target         string  `json:"target" tfsdk:"target"`
-	UpdatedAt      string  `json:"updated_at" tfsdk:"updated_at"`
-}
-type CreatedOauthToken struct {
-	ActorDisplayName      *string   `json:"actor_display_name,omitempty" tfsdk:"actor_display_name"`
-	ActorId               *string   `json:"actor_id,omitempty" tfsdk:"actor_id"`
-	DisplayName           *string   `json:"display_name,omitempty" tfsdk:"display_name"`
-	Name                  *string   `json:"name,omitempty" tfsdk:"name"`
-	PlainTextRefreshToken *string   `json:"plain_text_refresh_token,omitempty" tfsdk:"plain_text_refresh_token"`
-	ServiceTokenAccesses  *[]string `json:"service_token_accesses,omitempty" tfsdk:"service_token_accesses"`
-	Token                 *string   `json:"token,omitempty" tfsdk:"token"`
-}
-type OauthAccessesByResource struct {
-	Branch       OauthBranchAccesses       `json:"branch" tfsdk:"branch"`
-	Database     OauthDatabaseAccesses     `json:"database" tfsdk:"database"`
-	Organization OauthOrganizationAccesses `json:"organization" tfsdk:"organization"`
-	User         OauthUserAccesses         `json:"user" tfsdk:"user"`
-}
-type OauthApplication struct {
-	Avatar      *string  `json:"avatar,omitempty" tfsdk:"avatar"`
-	ClientId    string   `json:"client_id" tfsdk:"client_id"`
-	CreatedAt   string   `json:"created_at" tfsdk:"created_at"`
-	Domain      string   `json:"domain" tfsdk:"domain"`
-	Id          string   `json:"id" tfsdk:"id"`
-	Name        string   `json:"name" tfsdk:"name"`
-	RedirectUri string   `json:"redirect_uri" tfsdk:"redirect_uri"`
-	Scopes      []string `json:"scopes" tfsdk:"scopes"`
-	Tokens      float64  `json:"tokens" tfsdk:"tokens"`
-	UpdatedAt   string   `json:"updated_at" tfsdk:"updated_at"`
-}
-type ReadOnlyRegion struct {
-	Actor       Actor  `json:"actor" tfsdk:"actor"`
-	CreatedAt   string `json:"created_at" tfsdk:"created_at"`
-	DisplayName string `json:"display_name" tfsdk:"display_name"`
-	Id          string `json:"id" tfsdk:"id"`
-	Ready       bool   `json:"ready" tfsdk:"ready"`
-	ReadyAt     string `json:"ready_at" tfsdk:"ready_at"`
-	Region      Region `json:"region" tfsdk:"region"`
-	UpdatedAt   string `json:"updated_at" tfsdk:"updated_at"`
+type ListOrganizationsRes500 struct {
+	*ErrorResponse
 }
 type ListOrganizationsRes200 struct {
 	Data []Organization `json:"data" tfsdk:"data"`
@@ -467,9 +470,6 @@ type ListOrganizationsRes403 struct {
 	*ErrorResponse
 }
 type ListOrganizationsRes404 struct {
-	*ErrorResponse
-}
-type ListOrganizationsRes500 struct {
 	*ErrorResponse
 }
 
@@ -537,6 +537,9 @@ func (cl *Client) ListOrganizations(ctx context.Context, page *int, perPage *int
 	return res200, err
 }
 
+type GetOrganizationRes401 struct {
+	*ErrorResponse
+}
 type GetOrganizationRes403 struct {
 	*ErrorResponse
 }
@@ -546,9 +549,8 @@ type GetOrganizationRes404 struct {
 type GetOrganizationRes500 struct {
 	*ErrorResponse
 }
-type GetOrganizationRes200 struct{}
-type GetOrganizationRes401 struct {
-	*ErrorResponse
+type GetOrganizationRes200 struct {
+	Organization
 }
 
 func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *GetOrganizationRes200, err error) {
@@ -612,6 +614,9 @@ type UpdateOrganizationReq struct {
 	IdpManagedRoles                 *bool   `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
 	RequireAdminForProductionAccess *bool   `json:"require_admin_for_production_access,omitempty" tfsdk:"require_admin_for_production_access"`
 }
+type UpdateOrganizationRes401 struct {
+	*ErrorResponse
+}
 type UpdateOrganizationRes403 struct {
 	*ErrorResponse
 }
@@ -621,9 +626,8 @@ type UpdateOrganizationRes404 struct {
 type UpdateOrganizationRes500 struct {
 	*ErrorResponse
 }
-type UpdateOrganizationRes200 struct{}
-type UpdateOrganizationRes401 struct {
-	*ErrorResponse
+type UpdateOrganizationRes200 struct {
+	Organization
 }
 
 func (cl *Client) UpdateOrganization(ctx context.Context, name string, req UpdateOrganizationReq) (res200 *UpdateOrganizationRes200, err error) {
@@ -686,6 +690,12 @@ func (cl *Client) UpdateOrganization(ctx context.Context, name string, req Updat
 	return res200, err
 }
 
+type ListRegionsForOrganizationRes404 struct {
+	*ErrorResponse
+}
+type ListRegionsForOrganizationRes500 struct {
+	*ErrorResponse
+}
 type ListRegionsForOrganizationRes200 struct {
 	Data []Region `json:"data" tfsdk:"data"`
 }
@@ -693,12 +703,6 @@ type ListRegionsForOrganizationRes401 struct {
 	*ErrorResponse
 }
 type ListRegionsForOrganizationRes403 struct {
-	*ErrorResponse
-}
-type ListRegionsForOrganizationRes404 struct {
-	*ErrorResponse
-}
-type ListRegionsForOrganizationRes500 struct {
 	*ErrorResponse
 }
 
@@ -766,12 +770,6 @@ func (cl *Client) ListRegionsForOrganization(ctx context.Context, name string, p
 	return res200, err
 }
 
-type ListDatabasesRes401 struct {
-	*ErrorResponse
-}
-type ListDatabasesRes403 struct {
-	*ErrorResponse
-}
 type ListDatabasesRes404 struct {
 	*ErrorResponse
 }
@@ -780,6 +778,12 @@ type ListDatabasesRes500 struct {
 }
 type ListDatabasesRes200 struct {
 	Data []Database `json:"data" tfsdk:"data"`
+}
+type ListDatabasesRes401 struct {
+	*ErrorResponse
+}
+type ListDatabasesRes403 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) ListDatabases(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListDatabasesRes200, err error) {
@@ -853,17 +857,19 @@ type CreateDatabaseReq struct {
 	Plan        *string `json:"plan,omitempty" tfsdk:"plan"`
 	Region      *string `json:"region,omitempty" tfsdk:"region"`
 }
-type CreateDatabaseRes500 struct {
-	*ErrorResponse
-}
-type CreateDatabaseRes201 struct{}
-type CreateDatabaseRes401 struct {
-	*ErrorResponse
-}
 type CreateDatabaseRes403 struct {
 	*ErrorResponse
 }
 type CreateDatabaseRes404 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes500 struct {
+	*ErrorResponse
+}
+type CreateDatabaseRes201 struct {
+	Database
+}
+type CreateDatabaseRes401 struct {
 	*ErrorResponse
 }
 
@@ -927,9 +933,6 @@ func (cl *Client) CreateDatabase(ctx context.Context, organization string, req C
 	return res201, err
 }
 
-type ListBranchesRes200 struct {
-	Data []Branch `json:"data" tfsdk:"data"`
-}
 type ListBranchesRes401 struct {
 	*ErrorResponse
 }
@@ -941,6 +944,9 @@ type ListBranchesRes404 struct {
 }
 type ListBranchesRes500 struct {
 	*ErrorResponse
+}
+type ListBranchesRes200 struct {
+	Data []Branch `json:"data" tfsdk:"data"`
 }
 
 func (cl *Client) ListBranches(ctx context.Context, organization string, database string, page *int, perPage *int) (res200 *ListBranchesRes200, err error) {
@@ -1012,17 +1018,19 @@ type CreateBranchReq struct {
 	Name         string  `json:"name" tfsdk:"name"`
 	ParentBranch string  `json:"parent_branch" tfsdk:"parent_branch"`
 }
-type CreateBranchRes404 struct {
-	*ErrorResponse
-}
 type CreateBranchRes500 struct {
 	*ErrorResponse
 }
-type CreateBranchRes201 struct{}
+type CreateBranchRes201 struct {
+	Branch
+}
 type CreateBranchRes401 struct {
 	*ErrorResponse
 }
 type CreateBranchRes403 struct {
+	*ErrorResponse
+}
+type CreateBranchRes404 struct {
 	*ErrorResponse
 }
 
@@ -1086,12 +1094,6 @@ func (cl *Client) CreateBranch(ctx context.Context, organization string, databas
 	return res201, err
 }
 
-type ListBackupsRes401 struct {
-	*ErrorResponse
-}
-type ListBackupsRes403 struct {
-	*ErrorResponse
-}
 type ListBackupsRes404 struct {
 	*ErrorResponse
 }
@@ -1100,6 +1102,12 @@ type ListBackupsRes500 struct {
 }
 type ListBackupsRes200 struct {
 	Data []Backup `json:"data" tfsdk:"data"`
+}
+type ListBackupsRes401 struct {
+	*ErrorResponse
+}
+type ListBackupsRes403 struct {
+	*ErrorResponse
 }
 
 func (cl *Client) ListBackups(ctx context.Context, organization string, database string, branch string, page *int, perPage *int) (res200 *ListBackupsRes200, err error) {
@@ -1171,10 +1179,9 @@ type CreateBackupReq struct {
 	RetentionUnit  *string  `json:"retention_unit,omitempty" tfsdk:"retention_unit"`
 	RetentionValue *float64 `json:"retention_value,omitempty" tfsdk:"retention_value"`
 }
-type CreateBackupRes500 struct {
-	*ErrorResponse
+type CreateBackupRes201 struct {
+	Backup
 }
-type CreateBackupRes201 struct{}
 type CreateBackupRes401 struct {
 	*ErrorResponse
 }
@@ -1182,6 +1189,9 @@ type CreateBackupRes403 struct {
 	*ErrorResponse
 }
 type CreateBackupRes404 struct {
+	*ErrorResponse
+}
+type CreateBackupRes500 struct {
 	*ErrorResponse
 }
 
@@ -1245,10 +1255,6 @@ func (cl *Client) CreateBackup(ctx context.Context, organization string, databas
 	return res201, err
 }
 
-type GetBackupRes200 struct{}
-type GetBackupRes401 struct {
-	*ErrorResponse
-}
 type GetBackupRes403 struct {
 	*ErrorResponse
 }
@@ -1256,6 +1262,12 @@ type GetBackupRes404 struct {
 	*ErrorResponse
 }
 type GetBackupRes500 struct {
+	*ErrorResponse
+}
+type GetBackupRes200 struct {
+	Backup
+}
+type GetBackupRes401 struct {
 	*ErrorResponse
 }
 
@@ -1315,10 +1327,6 @@ func (cl *Client) GetBackup(ctx context.Context, organization string, database s
 	return res200, err
 }
 
-type DeleteBackupRes204 struct{}
-type DeleteBackupRes401 struct {
-	*ErrorResponse
-}
 type DeleteBackupRes403 struct {
 	*ErrorResponse
 }
@@ -1326,6 +1334,10 @@ type DeleteBackupRes404 struct {
 	*ErrorResponse
 }
 type DeleteBackupRes500 struct {
+	*ErrorResponse
+}
+type DeleteBackupRes204 struct{}
+type DeleteBackupRes401 struct {
 	*ErrorResponse
 }
 
@@ -1385,6 +1397,9 @@ func (cl *Client) DeleteBackup(ctx context.Context, organization string, databas
 	return res204, err
 }
 
+type ListPasswordsRes200 struct {
+	Data []Password `json:"data" tfsdk:"data"`
+}
 type ListPasswordsRes401 struct {
 	*ErrorResponse
 }
@@ -1396,9 +1411,6 @@ type ListPasswordsRes404 struct {
 }
 type ListPasswordsRes500 struct {
 	*ErrorResponse
-}
-type ListPasswordsRes200 struct {
-	Data []Password `json:"data" tfsdk:"data"`
 }
 
 func (cl *Client) ListPasswords(ctx context.Context, organization string, database string, branch string, readOnlyRegionId *string, page *int, perPage *int) (res200 *ListPasswordsRes200, err error) {
@@ -1473,13 +1485,6 @@ type CreatePasswordReq struct {
 	Role *string  `json:"role,omitempty" tfsdk:"role"`
 	Ttl  *float64 `json:"ttl,omitempty" tfsdk:"ttl"`
 }
-type CreatePasswordRes422 struct {
-	*ErrorResponse
-}
-type CreatePasswordRes500 struct {
-	*ErrorResponse
-}
-type CreatePasswordRes201 struct{}
 type CreatePasswordRes401 struct {
 	*ErrorResponse
 }
@@ -1488,6 +1493,15 @@ type CreatePasswordRes403 struct {
 }
 type CreatePasswordRes404 struct {
 	*ErrorResponse
+}
+type CreatePasswordRes422 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes500 struct {
+	*ErrorResponse
+}
+type CreatePasswordRes201 struct {
+	PasswordWithPlaintext
 }
 
 func (cl *Client) CreatePassword(ctx context.Context, organization string, database string, branch string, req CreatePasswordReq) (res201 *CreatePasswordRes201, err error) {
@@ -1556,17 +1570,19 @@ func (cl *Client) CreatePassword(ctx context.Context, organization string, datab
 	return res201, err
 }
 
-type GetPasswordRes404 struct {
-	*ErrorResponse
+type GetPasswordRes200 struct {
+	Password
 }
-type GetPasswordRes500 struct {
-	*ErrorResponse
-}
-type GetPasswordRes200 struct{}
 type GetPasswordRes401 struct {
 	*ErrorResponse
 }
 type GetPasswordRes403 struct {
+	*ErrorResponse
+}
+type GetPasswordRes404 struct {
+	*ErrorResponse
+}
+type GetPasswordRes500 struct {
 	*ErrorResponse
 }
 
@@ -1631,6 +1647,9 @@ func (cl *Client) GetPassword(ctx context.Context, organization string, database
 	return res200, err
 }
 
+type DeletePasswordRes500 struct {
+	*ErrorResponse
+}
 type DeletePasswordRes204 struct{}
 type DeletePasswordRes401 struct {
 	*ErrorResponse
@@ -1639,9 +1658,6 @@ type DeletePasswordRes403 struct {
 	*ErrorResponse
 }
 type DeletePasswordRes404 struct {
-	*ErrorResponse
-}
-type DeletePasswordRes500 struct {
 	*ErrorResponse
 }
 
@@ -1704,17 +1720,19 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 type UpdatePasswordReq struct {
 	Name string `json:"name" tfsdk:"name"`
 }
-type UpdatePasswordRes500 struct {
-	*ErrorResponse
-}
-type UpdatePasswordRes200 struct{}
-type UpdatePasswordRes401 struct {
-	*ErrorResponse
-}
 type UpdatePasswordRes403 struct {
 	*ErrorResponse
 }
 type UpdatePasswordRes404 struct {
+	*ErrorResponse
+}
+type UpdatePasswordRes500 struct {
+	*ErrorResponse
+}
+type UpdatePasswordRes200 struct {
+	Password
+}
+type UpdatePasswordRes401 struct {
 	*ErrorResponse
 }
 
@@ -1781,18 +1799,20 @@ func (cl *Client) UpdatePassword(ctx context.Context, organization string, datab
 type RenewPasswordReq struct {
 	ReadOnlyRegionId *string `json:"read_only_region_id,omitempty" tfsdk:"read_only_region_id"`
 }
+type RenewPasswordRes401 struct {
+	*ErrorResponse
+}
+type RenewPasswordRes403 struct {
+	*ErrorResponse
+}
 type RenewPasswordRes404 struct {
 	*ErrorResponse
 }
 type RenewPasswordRes500 struct {
 	*ErrorResponse
 }
-type RenewPasswordRes200 struct{}
-type RenewPasswordRes401 struct {
-	*ErrorResponse
-}
-type RenewPasswordRes403 struct {
-	*ErrorResponse
+type RenewPasswordRes200 struct {
+	PasswordWithPlaintext
 }
 
 func (cl *Client) RenewPassword(ctx context.Context, organization string, database string, branch string, id string, req RenewPasswordReq) (res200 *RenewPasswordRes200, err error) {
@@ -1855,7 +1875,12 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 	return res200, err
 }
 
-type GetBranchRes200 struct{}
+type GetBranchRes500 struct {
+	*ErrorResponse
+}
+type GetBranchRes200 struct {
+	Branch
+}
 type GetBranchRes401 struct {
 	*ErrorResponse
 }
@@ -1863,9 +1888,6 @@ type GetBranchRes403 struct {
 	*ErrorResponse
 }
 type GetBranchRes404 struct {
-	*ErrorResponse
-}
-type GetBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -1925,6 +1947,9 @@ func (cl *Client) GetBranch(ctx context.Context, organization string, database s
 	return res200, err
 }
 
+type DeleteBranchRes404 struct {
+	*ErrorResponse
+}
 type DeleteBranchRes500 struct {
 	*ErrorResponse
 }
@@ -1933,9 +1958,6 @@ type DeleteBranchRes401 struct {
 	*ErrorResponse
 }
 type DeleteBranchRes403 struct {
-	*ErrorResponse
-}
-type DeleteBranchRes404 struct {
 	*ErrorResponse
 }
 
@@ -1995,7 +2017,12 @@ func (cl *Client) DeleteBranch(ctx context.Context, organization string, databas
 	return res204, err
 }
 
-type DemoteBranchRes200 struct{}
+type DemoteBranchRes500 struct {
+	*ErrorResponse
+}
+type DemoteBranchRes200 struct {
+	Branch
+}
 type DemoteBranchRes401 struct {
 	*ErrorResponse
 }
@@ -2003,9 +2030,6 @@ type DemoteBranchRes403 struct {
 	*ErrorResponse
 }
 type DemoteBranchRes404 struct {
-	*ErrorResponse
-}
-type DemoteBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -2074,7 +2098,9 @@ type PromoteBranchRes404 struct {
 type PromoteBranchRes500 struct {
 	*ErrorResponse
 }
-type PromoteBranchRes200 struct{}
+type PromoteBranchRes200 struct {
+	Branch
+}
 type PromoteBranchRes401 struct {
 	*ErrorResponse
 }
@@ -2135,7 +2161,6 @@ func (cl *Client) PromoteBranch(ctx context.Context, organization string, databa
 	return res200, err
 }
 
-type EnableSafeMigrationsForBranchRes200 struct{}
 type EnableSafeMigrationsForBranchRes401 struct {
 	*ErrorResponse
 }
@@ -2147,6 +2172,9 @@ type EnableSafeMigrationsForBranchRes404 struct {
 }
 type EnableSafeMigrationsForBranchRes500 struct {
 	*ErrorResponse
+}
+type EnableSafeMigrationsForBranchRes200 struct {
+	Branch
 }
 
 func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organization string, database string, name string) (res200 *EnableSafeMigrationsForBranchRes200, err error) {
@@ -2205,17 +2233,19 @@ func (cl *Client) EnableSafeMigrationsForBranch(ctx context.Context, organizatio
 	return res200, err
 }
 
-type DisableSafeMigrationsForBranchRes404 struct {
-	*ErrorResponse
+type DisableSafeMigrationsForBranchRes200 struct {
+	Branch
 }
-type DisableSafeMigrationsForBranchRes500 struct {
-	*ErrorResponse
-}
-type DisableSafeMigrationsForBranchRes200 struct{}
 type DisableSafeMigrationsForBranchRes401 struct {
 	*ErrorResponse
 }
 type DisableSafeMigrationsForBranchRes403 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes404 struct {
+	*ErrorResponse
+}
+type DisableSafeMigrationsForBranchRes500 struct {
 	*ErrorResponse
 }
 
@@ -2526,7 +2556,9 @@ type CreateDeployRequestReq struct {
 	IntoBranch *string `json:"into_branch,omitempty" tfsdk:"into_branch"`
 	Notes      *string `json:"notes,omitempty" tfsdk:"notes"`
 }
-type CreateDeployRequestRes201 struct{}
+type CreateDeployRequestRes201 struct {
+	DeployRequestWithDeployment
+}
 
 func (cl *Client) CreateDeployRequest(ctx context.Context, organization string, database string, req CreateDeployRequestReq) (res201 *CreateDeployRequestRes201, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests"})
@@ -2564,7 +2596,9 @@ func (cl *Client) CreateDeployRequest(ctx context.Context, organization string, 
 	return res201, err
 }
 
-type GetDeployRequestRes200 struct{}
+type GetDeployRequestRes200 struct {
+	DeployRequestWithDeployment
+}
 
 func (cl *Client) GetDeployRequest(ctx context.Context, organization string, database string, number string) (res200 *GetDeployRequestRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number})
@@ -2601,7 +2635,9 @@ func (cl *Client) GetDeployRequest(ctx context.Context, organization string, dat
 type CloseDeployRequestReq struct {
 	State *string `json:"state,omitempty" tfsdk:"state"`
 }
-type CloseDeployRequestRes200 struct{}
+type CloseDeployRequestRes200 struct {
+	DeployRequestWithDeployment
+}
 
 func (cl *Client) CloseDeployRequest(ctx context.Context, organization string, database string, number string, req CloseDeployRequestReq) (res200 *CloseDeployRequestRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number})
@@ -2639,7 +2675,9 @@ func (cl *Client) CloseDeployRequest(ctx context.Context, organization string, d
 	return res200, err
 }
 
-type CompleteGatedDeployRequestRes200 struct{}
+type CompleteGatedDeployRequestRes200 struct {
+	DeployRequest
+}
 
 func (cl *Client) CompleteGatedDeployRequest(ctx context.Context, organization string, database string, number string) (res200 *CompleteGatedDeployRequestRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/apply-deploy"})
@@ -2676,7 +2714,9 @@ func (cl *Client) CompleteGatedDeployRequest(ctx context.Context, organization s
 type UpdateAutoApplyForDeployRequestReq struct {
 	Enable *bool `json:"enable,omitempty" tfsdk:"enable"`
 }
-type UpdateAutoApplyForDeployRequestRes200 struct{}
+type UpdateAutoApplyForDeployRequestRes200 struct {
+	DeployRequest
+}
 
 func (cl *Client) UpdateAutoApplyForDeployRequest(ctx context.Context, organization string, database string, number string, req UpdateAutoApplyForDeployRequestReq) (res200 *UpdateAutoApplyForDeployRequestRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/auto-apply"})
@@ -2714,7 +2754,9 @@ func (cl *Client) UpdateAutoApplyForDeployRequest(ctx context.Context, organizat
 	return res200, err
 }
 
-type CancelQueuedDeployRequestRes200 struct{}
+type CancelQueuedDeployRequestRes200 struct {
+	DeployRequest
+}
 
 func (cl *Client) CancelQueuedDeployRequest(ctx context.Context, organization string, database string, number string) (res200 *CancelQueuedDeployRequestRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/cancel"})
@@ -2748,7 +2790,9 @@ func (cl *Client) CancelQueuedDeployRequest(ctx context.Context, organization st
 	return res200, err
 }
 
-type CompleteErroredDeployRes200 struct{}
+type CompleteErroredDeployRes200 struct {
+	DeployRequest
+}
 
 func (cl *Client) CompleteErroredDeploy(ctx context.Context, organization string, database string, number string) (res200 *CompleteErroredDeployRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/complete-deploy"})
@@ -2782,7 +2826,9 @@ func (cl *Client) CompleteErroredDeploy(ctx context.Context, organization string
 	return res200, err
 }
 
-type QueueDeployRequestRes200 struct{}
+type QueueDeployRequestRes200 struct {
+	DeployRequest
+}
 
 func (cl *Client) QueueDeployRequest(ctx context.Context, organization string, database string, number string) (res200 *QueueDeployRequestRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/deploy"})
@@ -2816,7 +2862,9 @@ func (cl *Client) QueueDeployRequest(ctx context.Context, organization string, d
 	return res200, err
 }
 
-type GetDeploymentRes200 struct{}
+type GetDeploymentRes200 struct {
+	Deployment
+}
 
 func (cl *Client) GetDeployment(ctx context.Context, organization string, database string, number string) (res200 *GetDeploymentRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/deployment"})
@@ -2894,7 +2942,9 @@ func (cl *Client) ListDeployOperations(ctx context.Context, organization string,
 	return res200, err
 }
 
-type CompleteRevertRes200 struct{}
+type CompleteRevertRes200 struct {
+	DeployRequest
+}
 
 func (cl *Client) CompleteRevert(ctx context.Context, organization string, database string, number string) (res200 *CompleteRevertRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/revert"})
@@ -2968,7 +3018,9 @@ type ReviewDeployRequestReq struct {
 	Body  *string `json:"body,omitempty" tfsdk:"body"`
 	State *string `json:"state,omitempty" tfsdk:"state"`
 }
-type ReviewDeployRequestRes201 struct{}
+type ReviewDeployRequestRes201 struct {
+	DeployReview
+}
 
 func (cl *Client) ReviewDeployRequest(ctx context.Context, organization string, database string, number string, req ReviewDeployRequestReq) (res201 *ReviewDeployRequestRes201, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/reviews"})
@@ -3006,7 +3058,9 @@ func (cl *Client) ReviewDeployRequest(ctx context.Context, organization string, 
 	return res201, err
 }
 
-type SkipRevertPeriodRes200 struct{}
+type SkipRevertPeriodRes200 struct {
+	DeployRequest
+}
 
 func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, database string, number string) (res200 *SkipRevertPeriodRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/skip-revert"})
@@ -3052,7 +3106,9 @@ type GetDatabaseRes404 struct {
 type GetDatabaseRes500 struct {
 	*ErrorResponse
 }
-type GetDatabaseRes200 struct{}
+type GetDatabaseRes200 struct {
+	Database
+}
 
 func (cl *Client) GetDatabase(ctx context.Context, organization string, name string) (res200 *GetDatabaseRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + name})
@@ -3110,9 +3166,6 @@ func (cl *Client) GetDatabase(ctx context.Context, organization string, name str
 	return res200, err
 }
 
-type DeleteDatabaseRes403 struct {
-	*ErrorResponse
-}
 type DeleteDatabaseRes404 struct {
 	*ErrorResponse
 }
@@ -3121,6 +3174,9 @@ type DeleteDatabaseRes500 struct {
 }
 type DeleteDatabaseRes204 struct{}
 type DeleteDatabaseRes401 struct {
+	*ErrorResponse
+}
+type DeleteDatabaseRes403 struct {
 	*ErrorResponse
 }
 
@@ -3192,17 +3248,19 @@ type UpdateDatabaseSettingsReq struct {
 	RequireApprovalForDeploy   *bool   `json:"require_approval_for_deploy,omitempty" tfsdk:"require_approval_for_deploy"`
 	RestrictBranchRegion       *bool   `json:"restrict_branch_region,omitempty" tfsdk:"restrict_branch_region"`
 }
-type UpdateDatabaseSettingsRes403 struct {
-	*ErrorResponse
-}
 type UpdateDatabaseSettingsRes404 struct {
 	*ErrorResponse
 }
 type UpdateDatabaseSettingsRes500 struct {
 	*ErrorResponse
 }
-type UpdateDatabaseSettingsRes200 struct{}
+type UpdateDatabaseSettingsRes200 struct {
+	Database
+}
 type UpdateDatabaseSettingsRes401 struct {
+	*ErrorResponse
+}
+type UpdateDatabaseSettingsRes403 struct {
 	*ErrorResponse
 }
 
@@ -3266,6 +3324,9 @@ func (cl *Client) UpdateDatabaseSettings(ctx context.Context, organization strin
 	return res200, err
 }
 
+type ListReadOnlyRegionsRes200 struct {
+	Data []ReadOnlyRegion `json:"data" tfsdk:"data"`
+}
 type ListReadOnlyRegionsRes401 struct {
 	*ErrorResponse
 }
@@ -3277,9 +3338,6 @@ type ListReadOnlyRegionsRes404 struct {
 }
 type ListReadOnlyRegionsRes500 struct {
 	*ErrorResponse
-}
-type ListReadOnlyRegionsRes200 struct {
-	Data []ReadOnlyRegion `json:"data" tfsdk:"data"`
 }
 
 func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, name string, page *int, perPage *int) (res200 *ListReadOnlyRegionsRes200, err error) {
@@ -3346,12 +3404,6 @@ func (cl *Client) ListReadOnlyRegions(ctx context.Context, organization string, 
 	return res200, err
 }
 
-type ListDatabaseRegionsRes200 struct {
-	Data []Region `json:"data" tfsdk:"data"`
-}
-type ListDatabaseRegionsRes401 struct {
-	*ErrorResponse
-}
 type ListDatabaseRegionsRes403 struct {
 	*ErrorResponse
 }
@@ -3359,6 +3411,12 @@ type ListDatabaseRegionsRes404 struct {
 	*ErrorResponse
 }
 type ListDatabaseRegionsRes500 struct {
+	*ErrorResponse
+}
+type ListDatabaseRegionsRes200 struct {
+	Data []Region `json:"data" tfsdk:"data"`
+}
+type ListDatabaseRegionsRes401 struct {
 	*ErrorResponse
 }
 
@@ -3426,9 +3484,6 @@ func (cl *Client) ListDatabaseRegions(ctx context.Context, organization string, 
 	return res200, err
 }
 
-type ListOauthApplicationsRes403 struct {
-	*ErrorResponse
-}
 type ListOauthApplicationsRes404 struct {
 	*ErrorResponse
 }
@@ -3439,6 +3494,9 @@ type ListOauthApplicationsRes200 struct {
 	Data []OauthApplication `json:"data" tfsdk:"data"`
 }
 type ListOauthApplicationsRes401 struct {
+	*ErrorResponse
+}
+type ListOauthApplicationsRes403 struct {
 	*ErrorResponse
 }
 
@@ -3506,6 +3564,12 @@ func (cl *Client) ListOauthApplications(ctx context.Context, organization string
 	return res200, err
 }
 
+type GetOauthApplicationRes200 struct {
+	OauthApplication
+}
+type GetOauthApplicationRes401 struct {
+	*ErrorResponse
+}
 type GetOauthApplicationRes403 struct {
 	*ErrorResponse
 }
@@ -3513,10 +3577,6 @@ type GetOauthApplicationRes404 struct {
 	*ErrorResponse
 }
 type GetOauthApplicationRes500 struct {
-	*ErrorResponse
-}
-type GetOauthApplicationRes200 struct{}
-type GetOauthApplicationRes401 struct {
 	*ErrorResponse
 }
 
@@ -3576,12 +3636,6 @@ func (cl *Client) GetOauthApplication(ctx context.Context, organization string, 
 	return res200, err
 }
 
-type ListOauthTokensRes404 struct {
-	*ErrorResponse
-}
-type ListOauthTokensRes500 struct {
-	*ErrorResponse
-}
 type ListOauthTokensRes200 struct {
 	Data []OauthToken `json:"data" tfsdk:"data"`
 }
@@ -3589,6 +3643,12 @@ type ListOauthTokensRes401 struct {
 	*ErrorResponse
 }
 type ListOauthTokensRes403 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes404 struct {
+	*ErrorResponse
+}
+type ListOauthTokensRes500 struct {
 	*ErrorResponse
 }
 
@@ -3656,6 +3716,12 @@ func (cl *Client) ListOauthTokens(ctx context.Context, organization string, appl
 	return res200, err
 }
 
+type GetOauthTokenRes500 struct {
+	*ErrorResponse
+}
+type GetOauthTokenRes200 struct {
+	OauthTokenWithDetails
+}
 type GetOauthTokenRes401 struct {
 	*ErrorResponse
 }
@@ -3665,10 +3731,6 @@ type GetOauthTokenRes403 struct {
 type GetOauthTokenRes404 struct {
 	*ErrorResponse
 }
-type GetOauthTokenRes500 struct {
-	*ErrorResponse
-}
-type GetOauthTokenRes200 struct{}
 
 func (cl *Client) GetOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res200 *GetOauthTokenRes200, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -3726,6 +3788,7 @@ func (cl *Client) GetOauthToken(ctx context.Context, organization string, applic
 	return res200, err
 }
 
+type DeleteOauthTokenRes204 struct{}
 type DeleteOauthTokenRes401 struct {
 	*ErrorResponse
 }
@@ -3738,7 +3801,6 @@ type DeleteOauthTokenRes404 struct {
 type DeleteOauthTokenRes500 struct {
 	*ErrorResponse
 }
-type DeleteOauthTokenRes204 struct{}
 
 func (cl *Client) DeleteOauthToken(ctx context.Context, organization string, applicationId string, tokenId string) (res204 *DeleteOauthTokenRes204, err error) {
 	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/oauth-applications/" + applicationId + "/tokens/" + tokenId})
@@ -3804,6 +3866,12 @@ type CreateOrRenewOauthTokenReq struct {
 	RedirectUri  *string `json:"redirect_uri,omitempty" tfsdk:"redirect_uri"`
 	RefreshToken *string `json:"refresh_token,omitempty" tfsdk:"refresh_token"`
 }
+type CreateOrRenewOauthTokenRes200 struct {
+	CreatedOauthToken
+}
+type CreateOrRenewOauthTokenRes403 struct {
+	*ErrorResponse
+}
 type CreateOrRenewOauthTokenRes404 struct {
 	*ErrorResponse
 }
@@ -3811,10 +3879,6 @@ type CreateOrRenewOauthTokenRes422 struct {
 	*ErrorResponse
 }
 type CreateOrRenewOauthTokenRes500 struct {
-	*ErrorResponse
-}
-type CreateOrRenewOauthTokenRes200 struct{}
-type CreateOrRenewOauthTokenRes403 struct {
 	*ErrorResponse
 }
 
@@ -3887,7 +3951,9 @@ type GetCurrentUserRes404 struct {
 type GetCurrentUserRes500 struct {
 	*ErrorResponse
 }
-type GetCurrentUserRes200 struct{}
+type GetCurrentUserRes200 struct {
+	User
+}
 type GetCurrentUserRes401 struct {
 	*ErrorResponse
 }
