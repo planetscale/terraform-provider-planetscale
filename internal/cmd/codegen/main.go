@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	specFilepath := flag.String("spec", "", "")
+	specFilepath := flag.String("spec", "../../../openapi-spec.json", "")
 	flag.Parse()
 
 	if err := realMain(*specFilepath); err != nil {
@@ -46,13 +46,23 @@ func realMain(specFilepath string) error {
 		return fmt.Errorf("generating error struct: %w", err)
 	}
 
+	for name, defn := range spec.Definitions {
+		ll := slog.With("definition", name)
+		typeName := snakeToCamel(name)
+		ll = ll.With("type_name", typeName)
+		ll.Info("generating type for definition")
+		if err := genParamStruct(spec.Definitions, f, typeName, &defn); err != nil {
+			return fmt.Errorf("generating type for definition %q: %w", name, err)
+		}
+	}
+
 	paths := maps.Keys(spec.Paths.Paths)
 	sort.Strings(paths)
 	for _, path := range paths {
 		ll := slog.With("path", path)
 		pathItem := spec.Paths.Paths[path]
 		props := pathItem.PathItemProps
-		if err := handlePath(ll, f, path, props); err != nil {
+		if err := handlePath(ll, spec.Definitions, f, path, props); err != nil {
 			return fmt.Errorf("handling path %q: %w", path, err)
 		}
 	}
@@ -60,39 +70,39 @@ func realMain(specFilepath string) error {
 	return f.Render(os.Stdout)
 }
 
-func handlePath(ll *slog.Logger, f *jen.File, path string, props spec.PathItemProps) error {
+func handlePath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path string, props spec.PathItemProps) error {
 	if props.Get != nil {
-		if err := handleVerbPath(ll, f, path, "GET", props.Get); err != nil {
+		if err := handleVerbPath(ll, defns, f, path, "GET", props.Get); err != nil {
 			return fmt.Errorf("handling GET props: %w", err)
 		}
 	}
 	if props.Put != nil {
-		if err := handleVerbPath(ll, f, path, "PUT", props.Put); err != nil {
+		if err := handleVerbPath(ll, defns, f, path, "PUT", props.Put); err != nil {
 			return fmt.Errorf("handling PUT props: %w", err)
 		}
 	}
 	if props.Post != nil {
-		if err := handleVerbPath(ll, f, path, "POST", props.Post); err != nil {
+		if err := handleVerbPath(ll, defns, f, path, "POST", props.Post); err != nil {
 			return fmt.Errorf("handling POST props: %w", err)
 		}
 	}
 	if props.Delete != nil {
-		if err := handleVerbPath(ll, f, path, "DELETE", props.Delete); err != nil {
+		if err := handleVerbPath(ll, defns, f, path, "DELETE", props.Delete); err != nil {
 			return fmt.Errorf("handling DELETE props: %w", err)
 		}
 	}
 	if props.Options != nil {
-		if err := handleVerbPath(ll, f, path, "OPTIONS", props.Options); err != nil {
+		if err := handleVerbPath(ll, defns, f, path, "OPTIONS", props.Options); err != nil {
 			return fmt.Errorf("handling OPTIONS props: %w", err)
 		}
 	}
 	if props.Head != nil {
-		if err := handleVerbPath(ll, f, path, "HEAD", props.Head); err != nil {
+		if err := handleVerbPath(ll, defns, f, path, "HEAD", props.Head); err != nil {
 			return fmt.Errorf("handling HEAD props: %w", err)
 		}
 	}
 	if props.Patch != nil {
-		if err := handleVerbPath(ll, f, path, "PATCH", props.Patch); err != nil {
+		if err := handleVerbPath(ll, defns, f, path, "PATCH", props.Patch); err != nil {
 			return fmt.Errorf("handling PATCH props: %w", err)
 		}
 	}
@@ -100,7 +110,7 @@ func handlePath(ll *slog.Logger, f *jen.File, path string, props spec.PathItemPr
 	return nil
 }
 
-func handleVerbPath(ll *slog.Logger, f *jen.File, path, verb string, operation *spec.Operation) error {
+func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, verb string, operation *spec.Operation) error {
 	ll.Info("looking at prop", "verb", verb)
 	pathParams, queryParams, reqBody, err := splitParams(operation.Parameters)
 	if err != nil {
@@ -110,7 +120,7 @@ func handleVerbPath(ll *slog.Logger, f *jen.File, path, verb string, operation *
 	var reqBodyStructName string
 	if reqBody != nil {
 		reqBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Req"
-		if err := genParamStruct(f, reqBodyStructName, reqBody.Schema); err != nil {
+		if err := genParamStruct(defns, f, reqBodyStructName, reqBody.Schema); err != nil {
 			return fmt.Errorf("generating call param struct: %w", err)
 		}
 	}
@@ -121,11 +131,11 @@ func handleVerbPath(ll *slog.Logger, f *jen.File, path, verb string, operation *
 		resBodyStructName := kebabToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
 		res := operation.Responses.StatusCodeResponses[code]
 		if code < 400 {
-			if err := genParamStruct(f, resBodyStructName, res.Schema); err != nil {
+			if err := genParamStruct(defns, f, resBodyStructName, res.Schema); err != nil {
 				return fmt.Errorf("generating call response struct: %w", err)
 			}
 		} else {
-			if err := genErrRespParamStruct(f, resBodyStructName, res.Schema); err != nil {
+			if err := genErrRespParamStruct(defns, f, resBodyStructName, res.Schema); err != nil {
 				return fmt.Errorf("generating call response struct: %w", err)
 			}
 		}

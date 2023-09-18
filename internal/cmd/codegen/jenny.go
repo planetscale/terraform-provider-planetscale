@@ -12,7 +12,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func genParamStruct(file *jen.File, typename string, body *spec.Schema) error {
+func genParamStruct(defns spec.Definitions, file *jen.File, typename string, body *spec.Schema) error {
 	toField := func(item spec.OrderSchemaItem) (jen.Code, error) {
 		fieldName := snakeToCamel(item.Name)
 		f := jen.Id(fieldName)
@@ -39,22 +39,41 @@ func genParamStruct(file *jen.File, typename string, body *spec.Schema) error {
 			case item.Items.Schema.Type.Contains("object"):
 				itemTypename = typename + "_" + fieldName + "Item"
 
-				if err := genParamStruct(file, itemTypename, item.Items.Schema); err != nil {
+				if err := genParamStruct(defns, file, itemTypename, item.Items.Schema); err != nil {
 					return nil, fmt.Errorf("generating child item type: %w", err)
 				}
 			case item.Items.Schema.Type.Contains("array"):
 				return nil, fmt.Errorf("arrays of array aren't supported")
+			case item.Items.Schema.Ref.GetURL() != nil || item.Items.Schema.Ref.GetURL().Fragment != "":
+				fragment := item.Items.Schema.Ref.GetURL().Fragment
+				defnName := strings.TrimPrefix(fragment, "/definitions/")
+				_, ok := defns[defnName]
+				if !ok {
+					return nil, fmt.Errorf("no definition with name %q exists in the openapi spec", defnName)
+				}
+				itemTypename = snakeToCamel(defnName)
 			}
 			f = f.Id("[]" + itemTypename)
 
 		case item.Type.Contains("object"):
 			itemTypename := typename + "_" + fieldName
-			if err := genParamStruct(file, itemTypename, &item.Schema); err != nil {
+			if err := genParamStruct(defns, file, itemTypename, &item.Schema); err != nil {
 				return nil, fmt.Errorf("generating child item type: %w", err)
 			}
 			f = f.Id(itemTypename)
 		default:
-			return nil, fmt.Errorf("unhandled item type %v", item.Type)
+			// perhaps it's a ref?
+			if item.Ref.GetURL() == nil || item.Ref.GetURL().Fragment == "" {
+				return nil, fmt.Errorf("unhandled item type %v", item.Type)
+			}
+			fragment := item.Ref.GetURL().Fragment
+			defnName := strings.TrimPrefix(fragment, "/definitions/")
+			_, ok := defns[defnName]
+			if !ok {
+				return nil, fmt.Errorf("no definition with name %q exists in the openapi spec", defnName)
+			}
+			defnTypeName := snakeToCamel(defnName)
+			f = f.Id(defnTypeName)
 		}
 		jsonTag := item.Name
 		if isOptional {
@@ -81,7 +100,7 @@ func genParamStruct(file *jen.File, typename string, body *spec.Schema) error {
 	return nil
 }
 
-func genErrRespParamStruct(file *jen.File, typename string, body *spec.Schema) error {
+func genErrRespParamStruct(defns spec.Definitions, file *jen.File, typename string, body *spec.Schema) error {
 	toField := func(item spec.OrderSchemaItem) (jen.Code, error) {
 		fieldName := snakeToCamel(item.Name)
 		f := jen.Id(fieldName)
@@ -108,7 +127,7 @@ func genErrRespParamStruct(file *jen.File, typename string, body *spec.Schema) e
 			case item.Items.Schema.Type.Contains("object"):
 				itemTypename = typename + "_" + fieldName + "Item"
 
-				if err := genParamStruct(file, itemTypename, item.Items.Schema); err != nil {
+				if err := genParamStruct(defns, file, itemTypename, item.Items.Schema); err != nil {
 					return nil, fmt.Errorf("generating child item type: %w", err)
 				}
 			case item.Items.Schema.Type.Contains("array"):
@@ -118,7 +137,7 @@ func genErrRespParamStruct(file *jen.File, typename string, body *spec.Schema) e
 
 		case item.Type.Contains("object"):
 			itemTypename := typename + "_" + fieldName
-			if err := genParamStruct(file, itemTypename, &item.Schema); err != nil {
+			if err := genParamStruct(defns, file, itemTypename, &item.Schema); err != nil {
 				return nil, fmt.Errorf("generating child item type: %w", err)
 			}
 			f = f.Id(itemTypename)
