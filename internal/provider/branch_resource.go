@@ -242,7 +242,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 
 	data.Name = res201.Name
-	data.ParentBranch = types.StringValue(res201.ParentBranch)
+	data.ParentBranch = types.StringPointerValue(res201.ParentBranch)
 	data.AccessHostUrl = types.StringPointerValue(res201.AccessHostUrl)
 	data.ClusterRateName = types.StringValue(res201.ClusterRateName)
 	data.CreatedAt = types.StringValue(res201.CreatedAt)
@@ -305,12 +305,7 @@ func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 
 	data.Name = res200.Name
-	// TODO: fix to a pointer if the openapi spec gets fixed to mark parent branch as nullable
-	if res200.ParentBranch == "" {
-		data.ParentBranch = types.StringNull()
-	} else {
-		data.ParentBranch = types.StringValue(res200.ParentBranch)
-	}
+	data.ParentBranch = types.StringPointerValue(res200.ParentBranch)
 	data.AccessHostUrl = types.StringPointerValue(res200.AccessHostUrl)
 	data.ClusterRateName = types.StringValue(res200.ClusterRateName)
 	data.CreatedAt = types.StringValue(res200.CreatedAt)
@@ -367,6 +362,7 @@ func (r *branchResource) Update(ctx context.Context, req resource.UpdateRequest,
 			if err != nil {
 				resp.Diagnostics.AddAttributeError(path.Root("production"), "Failed to promote branch", "Unable to promote branch to production: "+err.Error())
 			}
+
 		} else {
 			res200, err := r.client.DemoteBranch(ctx, data.Organization, data.Database, data.Name)
 			if err != nil {

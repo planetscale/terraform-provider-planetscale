@@ -127,10 +127,19 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 
 	responses := make(map[int]string)
 	resCodes := maps.Keys(operation.Responses.StatusCodeResponses)
+	successResponseTypes := 0
+	for _, code := range resCodes {
+		if code < 400 {
+			successResponseTypes++
+		}
+	}
 	for _, code := range resCodes {
 		resBodyStructName := kebabToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
 		res := operation.Responses.StatusCodeResponses[code]
 		if code < 400 {
+			if successResponseTypes == 1 {
+				resBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Res"
+			}
 			respSchema := res.ResponseProps.Schema
 
 			if respSchema != nil && respSchema.Ref.GetURL() != nil && respSchema.Ref.GetURL().Fragment != "" {

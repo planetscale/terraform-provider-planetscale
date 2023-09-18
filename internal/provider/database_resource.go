@@ -86,7 +86,6 @@ type databaseResourceModel struct {
 	MigrationTableName                types.String  `tfsdk:"migration_table_name"`
 	MultipleAdminsRequiredForDeletion types.Bool    `tfsdk:"multiple_admins_required_for_deletion"`
 	Name                              types.String  `tfsdk:"name"`
-	Notes                             types.String  `tfsdk:"notes"`
 	Plan                              types.String  `tfsdk:"plan"`
 	ClusterSize                       types.String  `tfsdk:"cluster_size"`
 	ProductionBranchWebConsole        types.Bool    `tfsdk:"production_branch_web_console"`
@@ -219,7 +218,6 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		Name:        name,
 		Plan:        stringValueIfKnown(data.Plan),
 		ClusterSize: stringValueIfKnown(data.ClusterSize),
-		Notes:       stringValueIfKnown(data.Notes),
 		Region:      stringValueIfKnown(data.Region),
 	}
 	res201, err := r.client.CreateDatabase(ctx, orgName, createDbReq)
@@ -237,7 +235,7 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 	data.AllowDataBranching = types.BoolValue(res201.AllowDataBranching)
 	data.AtBackupRestoreBranchesLimit = types.BoolValue(res201.AtBackupRestoreBranchesLimit)
 	data.AtDevelopmentBranchLimit = types.BoolValue(res201.AtDevelopmentBranchLimit)
-	data.AutomaticMigrations = types.BoolValue(res201.AutomaticMigrations)
+	data.AutomaticMigrations = types.BoolPointerValue(res201.AutomaticMigrations)
 	data.BranchesCount = types.Float64Value(res201.BranchesCount)
 	data.BranchesUrl = types.StringValue(res201.BranchesUrl)
 	data.CreatedAt = types.StringValue(res201.CreatedAt)
@@ -253,7 +251,6 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 	data.MigrationTableName = types.StringPointerValue(res201.MigrationTableName)
 	data.MultipleAdminsRequiredForDeletion = types.BoolValue(res201.MultipleAdminsRequiredForDeletion)
 	data.Name = types.StringValue(res201.Name)
-	data.Notes = types.StringPointerValue(res201.Notes)
 	data.Plan = types.StringValue(res201.Plan)
 	data.ProductionBranchWebConsole = types.BoolValue(res201.ProductionBranchWebConsole)
 	data.ProductionBranchesCount = types.Float64Value(res201.ProductionBranchesCount)
@@ -332,7 +329,7 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	data.AllowDataBranching = types.BoolValue(res200.AllowDataBranching)
 	data.AtBackupRestoreBranchesLimit = types.BoolValue(res200.AtBackupRestoreBranchesLimit)
 	data.AtDevelopmentBranchLimit = types.BoolValue(res200.AtDevelopmentBranchLimit)
-	data.AutomaticMigrations = types.BoolValue(res200.AutomaticMigrations)
+	data.AutomaticMigrations = types.BoolPointerValue(res200.AutomaticMigrations)
 	data.BranchesCount = types.Float64Value(res200.BranchesCount)
 	data.BranchesUrl = types.StringValue(res200.BranchesUrl)
 	data.CreatedAt = types.StringValue(res200.CreatedAt)
@@ -348,7 +345,6 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	data.MigrationTableName = types.StringPointerValue(res200.MigrationTableName)
 	data.MultipleAdminsRequiredForDeletion = types.BoolValue(res200.MultipleAdminsRequiredForDeletion)
 	data.Name = types.StringValue(res200.Name)
-	data.Notes = types.StringPointerValue(res200.Notes)
 	data.Plan = types.StringValue(res200.Plan)
 	data.ProductionBranchWebConsole = types.BoolValue(res200.ProductionBranchWebConsole)
 	data.ProductionBranchesCount = types.Float64Value(res200.ProductionBranchesCount)
@@ -406,7 +402,6 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		InsightsRawQueries:         boolIfDifferent(old.InsightsRawQueries, data.InsightsRawQueries, &changedUpdatableSettings),
 		MigrationFramework:         stringIfDifferent(old.MigrationFramework, data.MigrationFramework, &changedUpdatableSettings),
 		MigrationTableName:         stringIfDifferent(old.MigrationTableName, data.MigrationTableName, &changedUpdatableSettings),
-		Notes:                      stringIfDifferent(old.Notes, data.Notes, &changedUpdatableSettings),
 		ProductionBranchWebConsole: boolIfDifferent(old.ProductionBranchWebConsole, data.ProductionBranchWebConsole, &changedUpdatableSettings),
 		RequireApprovalForDeploy:   boolIfDifferent(old.RequireApprovalForDeploy, data.RequireApprovalForDeploy, &changedUpdatableSettings),
 		RestrictBranchRegion:       boolIfDifferent(old.RestrictBranchRegion, data.RestrictBranchRegion, &changedUpdatableSettings),
@@ -422,7 +417,7 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		data.AllowDataBranching = types.BoolValue(res200.AllowDataBranching)
 		data.AtBackupRestoreBranchesLimit = types.BoolValue(res200.AtBackupRestoreBranchesLimit)
 		data.AtDevelopmentBranchLimit = types.BoolValue(res200.AtDevelopmentBranchLimit)
-		data.AutomaticMigrations = types.BoolValue(res200.AutomaticMigrations)
+		data.AutomaticMigrations = types.BoolPointerValue(res200.AutomaticMigrations)
 		data.BranchesCount = types.Float64Value(res200.BranchesCount)
 		data.BranchesUrl = types.StringValue(res200.BranchesUrl)
 		data.CreatedAt = types.StringValue(res200.CreatedAt)
@@ -438,7 +433,6 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		data.MigrationTableName = types.StringPointerValue(res200.MigrationTableName)
 		data.MultipleAdminsRequiredForDeletion = types.BoolValue(res200.MultipleAdminsRequiredForDeletion)
 		data.Name = types.StringValue(res200.Name)
-		data.Notes = types.StringPointerValue(res200.Notes)
 		data.Plan = types.StringValue(res200.Plan)
 		data.ClusterSize = old.ClusterSize
 		data.ProductionBranchWebConsole = types.BoolValue(res200.ProductionBranchWebConsole)

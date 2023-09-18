@@ -64,7 +64,7 @@ type branchesBranchDataSourceModel struct {
 	InitialRestoreId            *string                                    `tfsdk:"initial_restore_id"`
 	MysqlAddress                string                                     `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            string                                     `tfsdk:"mysql_edge_address"`
-	ParentBranch                string                                     `tfsdk:"parent_branch"`
+	ParentBranch                *string                                    `tfsdk:"parent_branch"`
 	Region                      *branchesRegionDataSourceModel             `tfsdk:"region"`
 	Production                  bool                                       `tfsdk:"production"`
 	Ready                       bool                                       `tfsdk:"ready"`

@@ -70,7 +70,6 @@ type databaseDataSourceModel struct {
 	MigrationFramework                types.String           `tfsdk:"migration_framework"`
 	MigrationTableName                types.String           `tfsdk:"migration_table_name"`
 	MultipleAdminsRequiredForDeletion types.Bool             `tfsdk:"multiple_admins_required_for_deletion"`
-	Notes                             types.String           `tfsdk:"notes"`
 	Plan                              types.String           `tfsdk:"plan"`
 	ProductionBranchWebConsole        types.Bool             `tfsdk:"production_branch_web_console"`
 	ProductionBranchesCount           types.Float64          `tfsdk:"production_branches_count"`
@@ -198,7 +197,7 @@ func (d *databaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 		AllowDataBranching:                types.BoolValue(res200.AllowDataBranching),
 		AtBackupRestoreBranchesLimit:      types.BoolValue(res200.AtBackupRestoreBranchesLimit),
 		AtDevelopmentBranchLimit:          types.BoolValue(res200.AtDevelopmentBranchLimit),
-		AutomaticMigrations:               types.BoolValue(res200.AutomaticMigrations),
+		AutomaticMigrations:               types.BoolPointerValue(res200.AutomaticMigrations),
 		BranchesCount:                     types.Float64Value(res200.BranchesCount),
 		BranchesUrl:                       types.StringValue(res200.BranchesUrl),
 		CreatedAt:                         types.StringValue(res200.CreatedAt),
@@ -213,7 +212,6 @@ func (d *databaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 		MigrationFramework:                types.StringPointerValue(res200.MigrationFramework),
 		MigrationTableName:                types.StringPointerValue(res200.MigrationTableName),
 		MultipleAdminsRequiredForDeletion: types.BoolValue(res200.MultipleAdminsRequiredForDeletion),
-		Notes:                             types.StringPointerValue(res200.Notes),
 		Plan:                              types.StringValue(res200.Plan),
 		ProductionBranchWebConsole:        types.BoolValue(res200.ProductionBranchWebConsole),
 		ProductionBranchesCount:           types.Float64Value(res200.ProductionBranchesCount),
