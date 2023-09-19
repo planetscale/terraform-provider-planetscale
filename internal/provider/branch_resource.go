@@ -40,7 +40,7 @@ type branchResourceModel struct {
 	Name                        types.String  `tfsdk:"name"`
 	ParentBranch                types.String  `tfsdk:"parent_branch"`
 	AccessHostUrl               types.String  `tfsdk:"access_host_url"`
-	Actor                       types.Object  `tfsdk:"api_actor"`
+	Actor                       types.Object  `tfsdk:"actor"`
 	ClusterRateName             types.String  `tfsdk:"cluster_rate_name"`
 	CreatedAt                   types.String  `tfsdk:"created_at"`
 	HtmlUrl                     types.String  `tfsdk:"html_url"`
@@ -142,7 +142,7 @@ func (r *branchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"restore_checklist_completed_at": schema.StringAttribute{Computed: true},
 			"restored_from_branch": schema.SingleNestedAttribute{
 				Computed:   true,
-				Attributes: regionResourceSchemaAttribute,
+				Attributes: restoredFromBranchSchemaAttribute,
 			},
 			"schema_last_updated_at": schema.StringAttribute{Computed: true},
 			"shard_count":            schema.Float64Attribute{Computed: true},
