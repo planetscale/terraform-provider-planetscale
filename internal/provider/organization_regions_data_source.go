@@ -6,7 +6,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -23,19 +22,9 @@ type organizationRegionsDataSource struct {
 	client *planetscale.Client
 }
 
-type organizationRegionDataSourceModel struct {
-	DisplayName       string   `tfsdk:"display_name"`
-	Enabled           bool     `tfsdk:"enabled"`
-	Id                string   `tfsdk:"id"`
-	Location          string   `tfsdk:"location"`
-	Provider          string   `tfsdk:"provider"`
-	PublicIpAddresses []string `tfsdk:"public_ip_addresses"`
-	Slug              string   `tfsdk:"slug"`
-}
-
 type organizationRegionsDataSourceModel struct {
-	Organization string                              `tfsdk:"organization"`
-	Regions      []organizationRegionDataSourceModel `tfsdk:"regions"`
+	Organization string                  `tfsdk:"organization"`
+	Regions      []regionDataSourceModel `tfsdk:"regions"`
 }
 
 func (d *organizationRegionsDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -48,15 +37,7 @@ func (d *organizationRegionsDataSource) Schema(ctx context.Context, req datasour
 		"regions": schema.ListNestedAttribute{
 			Computed: true,
 			NestedObject: schema.NestedAttributeObject{
-				Attributes: map[string]schema.Attribute{
-					"slug":                schema.StringAttribute{Computed: true},
-					"display_name":        schema.StringAttribute{Computed: true},
-					"enabled":             schema.BoolAttribute{Computed: true},
-					"id":                  schema.StringAttribute{Computed: true},
-					"location":            schema.StringAttribute{Computed: true},
-					"provider":            schema.StringAttribute{Computed: true},
-					"public_ip_addresses": schema.ListAttribute{Computed: true, ElementType: types.StringType},
-				},
+				Attributes: regionDataSourceSchemaAttribute,
 			},
 		},
 	}}
@@ -88,33 +69,30 @@ func (d *organizationRegionsDataSource) Read(ctx context.Context, req datasource
 
 	orgName := data.Organization
 
-	res200, err := d.client.ListRegionsForOrganization(ctx, orgName, nil, nil)
+	res, err := d.client.ListRegionsForOrganization(ctx, orgName, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read organization regions", err.Error())
 		return
 	}
-	if res200 == nil {
+	if res == nil {
 		resp.Diagnostics.AddError("Unable to read organization regions", "no data")
 		return
 	}
-	regions := make([]organizationRegionDataSourceModel, 0, len(res200.Data))
-	for _, rg := range res200.Data {
-		regions = append(regions, organizationRegionDataSourceModel{
-			DisplayName:       rg.DisplayName,
-			Enabled:           rg.Enabled,
-			Id:                rg.Id,
-			Location:          rg.Location,
-			Provider:          rg.Provider,
-			PublicIpAddresses: rg.PublicIpAddresses,
-			Slug:              rg.Slug,
-		})
-	}
 	state := organizationRegionsDataSourceModel{
 		Organization: data.Organization,
-		Regions:      regions,
+		Regions:      make([]regionDataSourceModel, 0, len(res.Data)),
 	}
-	diags := resp.State.Set(ctx, &state)
-	resp.Diagnostics.Append(diags...)
+	for _, item := range res.Data {
+		item := item
+		out := regionDataSourceModel{}
+		diags := out.fromClient(&item)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		state.Regions = append(state.Regions, out)
+	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}

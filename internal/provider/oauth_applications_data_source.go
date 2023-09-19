@@ -6,7 +6,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -21,19 +20,6 @@ func newOAuthApplicationsDataSource() datasource.DataSource {
 
 type oauthApplicationsDataSource struct {
 	client *planetscale.Client
-}
-
-type oauthApplicationDataSourceModel struct {
-	Avatar      *string  `tfsdk:"avatar"`
-	ClientId    string   `tfsdk:"client_id"`
-	CreatedAt   string   `tfsdk:"created_at"`
-	Domain      string   `tfsdk:"domain"`
-	Id          string   `tfsdk:"id"`
-	Name        string   `tfsdk:"name"`
-	RedirectUri string   `tfsdk:"redirect_uri"`
-	Scopes      []string `tfsdk:"scopes"`
-	Tokens      float64  `tfsdk:"tokens"`
-	UpdatedAt   string   `tfsdk:"updated_at"`
 }
 
 type oauthApplicationsDataSourceModel struct {
@@ -51,18 +37,7 @@ func (d *oauthApplicationsDataSource) Schema(ctx context.Context, req datasource
 		"applications": schema.ListNestedAttribute{
 			Computed: true,
 			NestedObject: schema.NestedAttributeObject{
-				Attributes: map[string]schema.Attribute{
-					"avatar":       schema.StringAttribute{Computed: true},
-					"client_id":    schema.StringAttribute{Computed: true},
-					"created_at":   schema.StringAttribute{Computed: true},
-					"domain":       schema.StringAttribute{Computed: true},
-					"id":           schema.StringAttribute{Computed: true},
-					"name":         schema.StringAttribute{Computed: true},
-					"redirect_uri": schema.StringAttribute{Computed: true},
-					"scopes":       schema.ListAttribute{Computed: true, ElementType: types.StringType},
-					"tokens":       schema.Float64Attribute{Computed: true},
-					"updated_at":   schema.StringAttribute{Computed: true},
-				},
+				Attributes: oauthApplicationAttribute,
 			},
 		},
 	}}
@@ -89,35 +64,28 @@ func (d *oauthApplicationsDataSource) Read(ctx context.Context, req datasource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res200, err := d.client.ListOauthApplications(ctx, data.Organization, nil, nil)
+	res, err := d.client.ListOauthApplications(ctx, data.Organization, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to list oauth applications", err.Error())
 		return
 	}
-	if res200 == nil {
+	if res == nil {
 		resp.Diagnostics.AddError("Unable to list oauth applications", "no data")
 		return
 	}
 
-	var list []oauthApplicationDataSourceModel
-	for _, el := range res200.Data {
-		list = append(list, oauthApplicationDataSourceModel{
-			Avatar:      el.Avatar,
-			ClientId:    el.ClientId,
-			CreatedAt:   el.CreatedAt,
-			Domain:      el.Domain,
-			Id:          el.Id,
-			Name:        el.Name,
-			RedirectUri: el.RedirectUri,
-			Scopes:      el.Scopes,
-			Tokens:      el.Tokens,
-			UpdatedAt:   el.UpdatedAt,
-		})
-	}
-
 	state := oauthApplicationsDataSourceModel{
 		Organization: data.Organization,
-		Applications: list,
+		Applications: make([]oauthApplicationDataSourceModel, 0, len(res.Data)),
+	}
+	for _, item := range res.Data {
+		item := item
+		el := oauthApplicationDataSourceModel{}
+		resp.Diagnostics.Append(el.fromClient(&item)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		state.Applications = append(state.Applications, el)
 	}
 
 	diags := resp.State.Set(ctx, &state)

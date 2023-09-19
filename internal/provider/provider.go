@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -182,14 +181,6 @@ type roundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (fn roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return fn(req)
-}
-
-func stringListAttr(els []string) []attr.Value {
-	out := make([]attr.Value, 0, len(els))
-	for _, el := range els {
-		out = append(out, types.StringValue(el))
-	}
-	return out
 }
 
 func boolIfDifferent(oldBool, newBool types.Bool, wasChanged *bool) *bool {

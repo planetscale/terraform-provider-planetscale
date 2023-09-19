@@ -6,7 +6,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -28,27 +27,7 @@ type branchSchemaLintDataSourceModel struct {
 	Database     string `tfsdk:"database"`
 	Branch       string `tfsdk:"branch"`
 
-	Errors []branchSchemaLintErrorDataSourceModel `tfsdk:"errors"`
-}
-
-type branchSchemaLintErrorDataSourceModel struct {
-	AutoIncrementColumnNames []string `tfsdk:"auto_increment_column_names"`
-	CharsetName              string   `tfsdk:"charset_name"`
-	CheckConstraintName      string   `tfsdk:"check_constraint_name"`
-	ColumnName               string   `tfsdk:"column_name"`
-	DocsUrl                  string   `tfsdk:"docs_url"`
-	EngineName               string   `tfsdk:"engine_name"`
-	EnumValue                string   `tfsdk:"enum_value"`
-	ErrorDescription         string   `tfsdk:"error_description"`
-	ForeignKeyColumnNames    []string `tfsdk:"foreign_key_column_names"`
-	JsonPath                 string   `tfsdk:"json_path"`
-	KeyspaceName             string   `tfsdk:"keyspace_name"`
-	LintError                string   `tfsdk:"lint_error"`
-	PartitionName            string   `tfsdk:"partition_name"`
-	PartitioningType         string   `tfsdk:"partitioning_type"`
-	SubjectType              string   `tfsdk:"subject_type"`
-	TableName                string   `tfsdk:"table_name"`
-	VindexName               string   `tfsdk:"vindex_name"`
+	Errors []lintErrorDataSourceModel `tfsdk:"errors"`
 }
 
 func (d *branchSchemaLintDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -63,25 +42,7 @@ func (d *branchSchemaLintDataSource) Schema(ctx context.Context, req datasource.
 		"errors": schema.ListNestedAttribute{
 			Computed: true,
 			NestedObject: schema.NestedAttributeObject{
-				Attributes: map[string]schema.Attribute{
-					"auto_increment_column_names": schema.ListAttribute{Computed: true, ElementType: types.StringType},
-					"charset_name":                schema.StringAttribute{Computed: true},
-					"check_constraint_name":       schema.StringAttribute{Computed: true},
-					"column_name":                 schema.StringAttribute{Computed: true},
-					"docs_url":                    schema.StringAttribute{Computed: true},
-					"engine_name":                 schema.StringAttribute{Computed: true},
-					"enum_value":                  schema.StringAttribute{Computed: true},
-					"error_description":           schema.StringAttribute{Computed: true},
-					"foreign_key_column_names":    schema.ListAttribute{Computed: true, ElementType: types.StringType},
-					"json_path":                   schema.StringAttribute{Computed: true},
-					"keyspace_name":               schema.StringAttribute{Computed: true},
-					"lint_error":                  schema.StringAttribute{Computed: true},
-					"partition_name":              schema.StringAttribute{Computed: true},
-					"partitioning_type":           schema.StringAttribute{Computed: true},
-					"subject_type":                schema.StringAttribute{Computed: true},
-					"table_name":                  schema.StringAttribute{Computed: true},
-					"vindex_name":                 schema.StringAttribute{Computed: true},
-				},
+				Attributes: lintErrorDataSourceSchemaAttribute,
 			},
 		},
 	}}
@@ -125,28 +86,16 @@ func (d *branchSchemaLintDataSource) Read(ctx context.Context, req datasource.Re
 		Organization: data.Organization,
 		Database:     data.Database,
 		Branch:       data.Branch,
-		Errors:       make([]branchSchemaLintErrorDataSourceModel, 0, len(res200.Data)),
+		Errors:       make([]lintErrorDataSourceModel, 0, len(res200.Data)),
 	}
 	for _, item := range res200.Data {
-		state.Errors = append(state.Errors, branchSchemaLintErrorDataSourceModel{
-			AutoIncrementColumnNames: item.AutoIncrementColumnNames,
-			CharsetName:              item.CharsetName,
-			CheckConstraintName:      item.CheckConstraintName,
-			ColumnName:               item.ColumnName,
-			DocsUrl:                  item.DocsUrl,
-			EngineName:               item.EngineName,
-			EnumValue:                item.EnumValue,
-			ErrorDescription:         item.ErrorDescription,
-			ForeignKeyColumnNames:    item.ForeignKeyColumnNames,
-			JsonPath:                 item.JsonPath,
-			KeyspaceName:             item.KeyspaceName,
-			LintError:                item.LintError,
-			PartitionName:            item.PartitionName,
-			PartitioningType:         item.PartitioningType,
-			SubjectType:              item.SubjectType,
-			TableName:                item.TableName,
-			VindexName:               item.VindexName,
-		})
+		item := item
+		le := lintErrorDataSourceModel{}
+		resp.Diagnostics.Append(le.fromClient(&item)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		state.Errors = append(state.Errors, le)
 	}
 
 	diags := resp.State.Set(ctx, &state)

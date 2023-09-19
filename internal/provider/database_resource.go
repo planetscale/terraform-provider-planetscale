@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,7 +15,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
@@ -34,38 +32,9 @@ type databaseResource struct {
 	client *planetscale.Client
 }
 
-type importDataSourceResourceModel struct {
-	Database types.String `tfsdk:"database"`
-	Hostname types.String `tfsdk:"hostname"`
-	Port     types.String `tfsdk:"port"`
-}
-
-var importDataSourceResourceAttrTypes = map[string]attr.Type{
-	"database": basetypes.StringType{},
-	"hostname": basetypes.StringType{},
-	"port":     basetypes.StringType{},
-}
-
-type importResourceModel struct {
-	DataSource        importDataSourceResourceModel `tfsdk:"data_source"`
-	FinishedAt        types.String                  `tfsdk:"finished_at"`
-	ImportCheckErrors types.String                  `tfsdk:"import_check_errors"`
-	StartedAt         types.String                  `tfsdk:"started_at"`
-	State             types.String                  `tfsdk:"state"`
-}
-
-var importResourceAttrTypes = map[string]attr.Type{
-	"data_source":         basetypes.ObjectType{AttrTypes: importDataSourceResourceAttrTypes},
-	"finished_at":         basetypes.StringType{},
-	"import_check_errors": basetypes.StringType{},
-	"started_at":          basetypes.StringType{},
-	"state":               basetypes.StringType{},
-}
-
 type databaseResourceModel struct {
-	Organization types.String `tfsdk:"organization"`
-	Id           types.String `tfsdk:"id"`
-
+	Organization                      types.String  `tfsdk:"organization"`
+	Id                                types.String  `tfsdk:"id"`
 	AllowDataBranching                types.Bool    `tfsdk:"allow_data_branching"`
 	AtBackupRestoreBranchesLimit      types.Bool    `tfsdk:"at_backup_restore_branches_limit"`
 	AtDevelopmentBranchLimit          types.Bool    `tfsdk:"at_development_branch_limit"`
@@ -100,6 +69,58 @@ type databaseResourceModel struct {
 	Type                              types.String  `tfsdk:"type"`
 	UpdatedAt                         types.String  `tfsdk:"updated_at"`
 	Url                               types.String  `tfsdk:"url"`
+}
+
+func (mdl *databaseResourceModel) fromClient(ctx context.Context, database *planetscale.Database, clusterSize types.String) (diags diag.Diagnostics) {
+	if database == nil {
+		return diags
+	}
+	var (
+		dataImportDiags diag.Diagnostics
+	)
+	mdl.DataImport, dataImportDiags = types.ObjectValueFrom(ctx, importResourceAttrTypes, database.DataImport)
+
+	diags.Append(dataImportDiags...)
+
+	mdl.Id = types.StringValue(database.Id)
+	mdl.AllowDataBranching = types.BoolValue(database.AllowDataBranching)
+	mdl.AtBackupRestoreBranchesLimit = types.BoolValue(database.AtBackupRestoreBranchesLimit)
+	mdl.AtDevelopmentBranchLimit = types.BoolValue(database.AtDevelopmentBranchLimit)
+	mdl.AutomaticMigrations = types.BoolPointerValue(database.AutomaticMigrations)
+	mdl.BranchesCount = types.Float64Value(database.BranchesCount)
+	mdl.BranchesUrl = types.StringValue(database.BranchesUrl)
+	mdl.CreatedAt = types.StringValue(database.CreatedAt)
+	mdl.DefaultBranch = types.StringValue(database.DefaultBranch)
+	mdl.DefaultBranchReadOnlyRegionsCount = types.Float64Value(database.DefaultBranchReadOnlyRegionsCount)
+	mdl.DefaultBranchShardCount = types.Float64Value(database.DefaultBranchShardCount)
+	mdl.DefaultBranchTableCount = types.Float64Value(database.DefaultBranchTableCount)
+	mdl.DevelopmentBranchesCount = types.Float64Value(database.DevelopmentBranchesCount)
+	mdl.HtmlUrl = types.StringValue(database.HtmlUrl)
+	mdl.InsightsRawQueries = types.BoolValue(database.InsightsRawQueries)
+	mdl.IssuesCount = types.Float64Value(database.IssuesCount)
+	mdl.MigrationFramework = types.StringPointerValue(database.MigrationFramework)
+	mdl.MigrationTableName = types.StringPointerValue(database.MigrationTableName)
+	mdl.MultipleAdminsRequiredForDeletion = types.BoolValue(database.MultipleAdminsRequiredForDeletion)
+	mdl.Name = types.StringValue(database.Name)
+	mdl.Plan = types.StringValue(database.Plan)
+	mdl.ClusterSize = clusterSize
+	mdl.ProductionBranchWebConsole = types.BoolValue(database.ProductionBranchWebConsole)
+	mdl.ProductionBranchesCount = types.Float64Value(database.ProductionBranchesCount)
+	mdl.Ready = types.BoolValue(database.Ready)
+	mdl.Region = types.StringValue(database.Region.Slug)
+	mdl.RequireApprovalForDeploy = types.BoolValue(database.RequireApprovalForDeploy)
+	mdl.RestrictBranchRegion = types.BoolValue(database.RestrictBranchRegion)
+	mdl.SchemaLastUpdatedAt = types.StringPointerValue(database.SchemaLastUpdatedAt)
+	mdl.Sharded = types.BoolValue(database.Sharded)
+	mdl.State = types.StringValue(database.State)
+	mdl.Type = types.StringValue(database.Type)
+	mdl.UpdatedAt = types.StringValue(database.UpdatedAt)
+	mdl.Url = types.StringValue(database.Url)
+
+	if mdl.ClusterSize.IsUnknown() {
+		mdl.ClusterSize = types.StringNull()
+	}
+	return diags
 }
 
 func (r *databaseResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -220,80 +241,19 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		ClusterSize: stringValueIfKnown(data.ClusterSize),
 		Region:      stringValueIfKnown(data.Region),
 	}
-	res201, err := r.client.CreateDatabase(ctx, orgName, createDbReq)
+	res, err := r.client.CreateDatabase(ctx, orgName, createDbReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database, got error: %s", err))
 		return
 	}
-	if res201 == nil {
+	if res == nil {
 		resp.Diagnostics.AddError("Unable to create databases", "no data")
 		return
 	}
-
-	data.Id = types.StringValue(res201.Id)
-
-	data.AllowDataBranching = types.BoolValue(res201.AllowDataBranching)
-	data.AtBackupRestoreBranchesLimit = types.BoolValue(res201.AtBackupRestoreBranchesLimit)
-	data.AtDevelopmentBranchLimit = types.BoolValue(res201.AtDevelopmentBranchLimit)
-	data.AutomaticMigrations = types.BoolPointerValue(res201.AutomaticMigrations)
-	data.BranchesCount = types.Float64Value(res201.BranchesCount)
-	data.BranchesUrl = types.StringValue(res201.BranchesUrl)
-	data.CreatedAt = types.StringValue(res201.CreatedAt)
-	data.DefaultBranch = types.StringValue(res201.DefaultBranch)
-	data.DefaultBranchReadOnlyRegionsCount = types.Float64Value(res201.DefaultBranchReadOnlyRegionsCount)
-	data.DefaultBranchShardCount = types.Float64Value(res201.DefaultBranchShardCount)
-	data.DefaultBranchTableCount = types.Float64Value(res201.DefaultBranchTableCount)
-	data.DevelopmentBranchesCount = types.Float64Value(res201.DevelopmentBranchesCount)
-	data.HtmlUrl = types.StringValue(res201.HtmlUrl)
-	data.InsightsRawQueries = types.BoolValue(res201.InsightsRawQueries)
-	data.IssuesCount = types.Float64Value(res201.IssuesCount)
-	data.MigrationFramework = types.StringPointerValue(res201.MigrationFramework)
-	data.MigrationTableName = types.StringPointerValue(res201.MigrationTableName)
-	data.MultipleAdminsRequiredForDeletion = types.BoolValue(res201.MultipleAdminsRequiredForDeletion)
-	data.Name = types.StringValue(res201.Name)
-	data.Plan = types.StringValue(res201.Plan)
-	data.ProductionBranchWebConsole = types.BoolValue(res201.ProductionBranchWebConsole)
-	data.ProductionBranchesCount = types.Float64Value(res201.ProductionBranchesCount)
-	data.Ready = types.BoolValue(res201.Ready)
-	data.RequireApprovalForDeploy = types.BoolValue(res201.RequireApprovalForDeploy)
-	data.RestrictBranchRegion = types.BoolValue(res201.RestrictBranchRegion)
-	data.SchemaLastUpdatedAt = types.StringPointerValue(res201.SchemaLastUpdatedAt)
-	data.Sharded = types.BoolValue(res201.Sharded)
-	data.State = types.StringValue(res201.State)
-	data.Type = types.StringValue(res201.Type)
-	data.UpdatedAt = types.StringValue(res201.UpdatedAt)
-	data.Url = types.StringValue(res201.Url)
-	data.Region = types.StringValue(res201.Region.Slug)
-	if data.ClusterSize.IsUnknown() {
-		data.ClusterSize = types.StringNull()
+	resp.Diagnostics.Append(data.fromClient(ctx, &res.Database, data.ClusterSize)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	if res201.DataImport == nil {
-		tflog.Info(ctx, "no dataimport in read database")
-		// do nothing
-	} else {
-		var diErr diag.Diagnostics
-		data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, &importResourceModel{
-			DataSource: importDataSourceResourceModel{
-				Database: types.StringValue(res201.DataImport.DataSource.Database),
-				Hostname: types.StringValue(res201.DataImport.DataSource.Hostname),
-				Port:     types.StringValue(res201.DataImport.DataSource.Port),
-			},
-			FinishedAt:        types.StringValue(res201.DataImport.FinishedAt),
-			ImportCheckErrors: types.StringValue(res201.DataImport.ImportCheckErrors),
-			StartedAt:         types.StringValue(res201.DataImport.StartedAt),
-			State:             types.StringValue(res201.DataImport.State),
-		})
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
-			return
-		}
-	}
-
-	// Write logs using the tflog package
-	// Documentation: https://terraform.io/plugin/log
-	tflog.Trace(ctx, "created a database resource")
-
-	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 

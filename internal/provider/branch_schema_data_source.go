@@ -29,13 +29,7 @@ type branchSchemaDataSourceModel struct {
 	Branch       string       `tfsdk:"branch"`
 	Keyspace     types.String `tfsdk:"keyspace"`
 
-	Tables []branchSchemaTableDataSourceModel `tfsdk:"tables"`
-}
-
-type branchSchemaTableDataSourceModel struct {
-	Html string `tfsdk:"html"`
-	Name string `tfsdk:"name"`
-	Raw  string `tfsdk:"raw"`
+	Tables []tableSchemaDataSourceModel `tfsdk:"tables"`
 }
 
 func (d *branchSchemaDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -51,11 +45,7 @@ func (d *branchSchemaDataSource) Schema(ctx context.Context, req datasource.Sche
 		"tables": schema.ListNestedAttribute{
 			Computed: true,
 			NestedObject: schema.NestedAttributeObject{
-				Attributes: map[string]schema.Attribute{
-					"html": schema.StringAttribute{Computed: true},
-					"name": schema.StringAttribute{Computed: true},
-					"raw":  schema.StringAttribute{Computed: true},
-				},
+				Attributes: tableSchemaDataSourceSchemaAttribute,
 			},
 		},
 	}}
@@ -77,21 +67,17 @@ func (d *branchSchemaDataSource) Configure(ctx context.Context, req datasource.C
 }
 
 func (d *branchSchemaDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-
 	var data *branchSchemaDataSourceModel
-
-	// Read Terraform prior state data into the model
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	res200, err := d.client.GetBranchSchema(ctx, data.Organization, data.Database, data.Branch, stringValueIfKnown(data.Keyspace))
+	res, err := d.client.GetBranchSchema(ctx, data.Organization, data.Database, data.Branch, stringValueIfKnown(data.Keyspace))
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read database branch schema", err.Error())
 		return
 	}
-	if res200 == nil {
+	if res == nil {
 		resp.Diagnostics.AddError("Unable to read database branch schema", "no data")
 		return
 	}
@@ -100,14 +86,12 @@ func (d *branchSchemaDataSource) Read(ctx context.Context, req datasource.ReadRe
 		Database:     data.Database,
 		Branch:       data.Branch,
 		Keyspace:     data.Keyspace,
-		Tables:       make([]branchSchemaTableDataSourceModel, 0, len(res200.Data)),
+		Tables:       make([]tableSchemaDataSourceModel, 0, len(res.Data)),
 	}
-	for _, item := range res200.Data {
-		state.Tables = append(state.Tables, branchSchemaTableDataSourceModel{
-			Html: item.Html,
-			Name: item.Name,
-			Raw:  item.Raw,
-		})
+	for _, item := range res.Data {
+		item := item
+		el := tableSchemaDataSourceModel{}
+		resp.Diagnostics.Append(el.fromClient(&item)...)
 	}
 
 	diags := resp.State.Set(ctx, &state)
