@@ -61,37 +61,31 @@ type organizationDataSourceModel struct {
 	ValidBillingInfo          types.Bool               `tfsdk:"valid_billing_info"`
 }
 
-func (mdl *organizationDataSourceModel) fromClient(org *planetscale.Organization) (diags diag.Diagnostics) {
+func organizationFromClient(org *planetscale.Organization, diags diag.Diagnostics) *organizationDataSourceModel {
 	if org == nil {
-		return diags
+		return nil
 	}
-	if org.Features != nil {
-		mdl.Features = &featuresDataSourceModel{}
+	return &organizationDataSourceModel{
+		Features:                  featuresFromClient(org.Features, diags),
+		Flags:                     flagsFromClient(org.Flags, diags),
+		AdminOnlyProductionAccess: types.BoolValue(org.AdminOnlyProductionAccess),
+		BillingEmail:              types.StringPointerValue(org.BillingEmail),
+		CanCreateDatabases:        types.BoolValue(org.CanCreateDatabases),
+		CreatedAt:                 types.StringValue(org.CreatedAt),
+		DatabaseCount:             types.Float64Value(org.DatabaseCount),
+		FreeDatabasesRemaining:    types.Float64Value(org.FreeDatabasesRemaining),
+		HasPastDueInvoices:        types.BoolValue(org.HasPastDueInvoices),
+		Id:                        types.StringValue(org.Id),
+		Name:                      types.StringValue(org.Name),
+		Plan:                      types.StringValue(org.Plan),
+		SingleTenancy:             types.BoolValue(org.SingleTenancy),
+		SleepingDatabaseCount:     types.Float64Value(org.SleepingDatabaseCount),
+		Sso:                       types.BoolValue(org.Sso),
+		SsoDirectory:              types.BoolValue(org.SsoDirectory),
+		SsoPortalUrl:              types.StringPointerValue(org.SsoPortalUrl),
+		UpdatedAt:                 types.StringValue(org.UpdatedAt),
+		ValidBillingInfo:          types.BoolValue(org.ValidBillingInfo),
 	}
-	if org.Flags != nil {
-		mdl.Flags = &flagsDataSourceModel{}
-	}
-	diags.Append(mdl.Features.fromClient(org.Features)...)
-	diags.Append(mdl.Flags.fromClient(org.Flags)...)
-
-	mdl.AdminOnlyProductionAccess = types.BoolValue(org.AdminOnlyProductionAccess)
-	mdl.BillingEmail = types.StringPointerValue(org.BillingEmail)
-	mdl.CanCreateDatabases = types.BoolValue(org.CanCreateDatabases)
-	mdl.CreatedAt = types.StringValue(org.CreatedAt)
-	mdl.DatabaseCount = types.Float64Value(org.DatabaseCount)
-	mdl.FreeDatabasesRemaining = types.Float64Value(org.FreeDatabasesRemaining)
-	mdl.HasPastDueInvoices = types.BoolValue(org.HasPastDueInvoices)
-	mdl.Id = types.StringValue(org.Id)
-	mdl.Name = types.StringValue(org.Name)
-	mdl.Plan = types.StringValue(org.Plan)
-	mdl.SingleTenancy = types.BoolValue(org.SingleTenancy)
-	mdl.SleepingDatabaseCount = types.Float64Value(org.SleepingDatabaseCount)
-	mdl.Sso = types.BoolValue(org.Sso)
-	mdl.SsoDirectory = types.BoolValue(org.SsoDirectory)
-	mdl.SsoPortalUrl = types.StringPointerValue(org.SsoPortalUrl)
-	mdl.UpdatedAt = types.StringValue(org.UpdatedAt)
-	mdl.ValidBillingInfo = types.BoolValue(org.ValidBillingInfo)
-	return diags
 }
 
 var featuresDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -106,14 +100,15 @@ type featuresDataSourceModel struct {
 	Sso           types.Bool `tfsdk:"sso"`
 }
 
-func (mdl *featuresDataSourceModel) fromClient(features *planetscale.Features) (diags diag.Diagnostics) {
+func featuresFromClient(features *planetscale.Features, diags diag.Diagnostics) *featuresDataSourceModel {
 	if features == nil {
-		return diags
+		return nil
 	}
-	mdl.Insights = types.BoolPointerValue(features.Insights)
-	mdl.SingleTenancy = types.BoolPointerValue(features.SingleTenancy)
-	mdl.Sso = types.BoolPointerValue(features.Sso)
-	return diags
+	return &featuresDataSourceModel{
+		Insights:      types.BoolPointerValue(features.Insights),
+		SingleTenancy: types.BoolPointerValue(features.SingleTenancy),
+		Sso:           types.BoolPointerValue(features.Sso),
+	}
 }
 
 var flagsDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -124,12 +119,13 @@ type flagsDataSourceModel struct {
 	ExampleFlag types.String `tfsdk:"example_flag"`
 }
 
-func (mdl *flagsDataSourceModel) fromClient(flags *planetscale.Flags) (diags diag.Diagnostics) {
+func flagsFromClient(flags *planetscale.Flags, diags diag.Diagnostics) *flagsDataSourceModel {
 	if flags == nil {
-		return diags
+		return nil
 	}
-	mdl.ExampleFlag = types.StringPointerValue(flags.ExampleFlag)
-	return diags
+	return &flagsDataSourceModel{
+		ExampleFlag: types.StringPointerValue(flags.ExampleFlag),
+	}
 }
 
 type dataSourceDataSourceModel struct {
@@ -138,14 +134,12 @@ type dataSourceDataSourceModel struct {
 	Port     types.String `tfsdk:"port"`
 }
 
-func (mdl *dataSourceDataSourceModel) fromClient(dataSource *planetscale.DataSource) (diags diag.Diagnostics) {
-	if dataSource == nil {
-		return diags
+func dataSourceFromClient(dataSource planetscale.DataSource, diags diag.Diagnostics) dataSourceDataSourceModel {
+	return dataSourceDataSourceModel{
+		Database: types.StringValue(dataSource.Database),
+		Hostname: types.StringValue(dataSource.Hostname),
+		Port:     types.StringValue(dataSource.Port),
 	}
-	mdl.Database = types.StringValue(dataSource.Database)
-	mdl.Hostname = types.StringValue(dataSource.Hostname)
-	mdl.Port = types.StringValue(dataSource.Port)
-	return diags
 }
 
 type dataImportDataSourceModel struct {
@@ -156,21 +150,22 @@ type dataImportDataSourceModel struct {
 	State             types.String              `tfsdk:"state"`
 }
 
-func (mdl *dataImportDataSourceModel) fromClient(dataImport *planetscale.DataImport) (diags diag.Diagnostics) {
+func dataImportFromClient(dataImport *planetscale.DataImport, diags diag.Diagnostics) *dataImportDataSourceModel {
 	if dataImport == nil {
-		return diags
+		return nil
 	}
-	diags.Append(mdl.DataSource.fromClient(&dataImport.DataSource)...)
-	mdl.FinishedAt = types.StringValue(dataImport.FinishedAt)
-	mdl.ImportCheckErrors = types.StringValue(dataImport.ImportCheckErrors)
-	mdl.StartedAt = types.StringValue(dataImport.StartedAt)
-	mdl.State = types.StringValue(dataImport.State)
-	return diags
+	return &dataImportDataSourceModel{
+		DataSource:        dataSourceFromClient(dataImport.DataSource, diags),
+		FinishedAt:        types.StringValue(dataImport.FinishedAt),
+		ImportCheckErrors: types.StringValue(dataImport.ImportCheckErrors),
+		StartedAt:         types.StringValue(dataImport.StartedAt),
+		State:             types.StringValue(dataImport.State),
+	}
 }
 
 func databaseDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
 	return map[string]schema.Attribute{
-		"organization":                     schema.StringAttribute{Required: true},
+		"organization":                     schema.StringAttribute{Required: !computedName, Computed: computedName},
 		"name":                             schema.StringAttribute{Required: !computedName, Computed: computedName},
 		"id":                               schema.StringAttribute{Computed: true},
 		"allow_data_branching":             schema.BoolAttribute{Computed: true, Optional: true},
@@ -208,7 +203,6 @@ func databaseDataSourceSchemaAttribute(computedName bool) map[string]schema.Attr
 		"migration_framework":                    schema.StringAttribute{Computed: true, Optional: true},
 		"migration_table_name":                   schema.StringAttribute{Computed: true, Optional: true},
 		"multiple_admins_required_for_deletion":  schema.BoolAttribute{Computed: true, Optional: true},
-		"notes":                                  schema.StringAttribute{Computed: true, Optional: true},
 		"plan":                                   schema.StringAttribute{Computed: true, Optional: true},
 		"production_branch_web_console":          schema.BoolAttribute{Computed: true, Optional: true},
 		"production_branches_count":              schema.Float64Attribute{Computed: true},
@@ -229,6 +223,7 @@ func databaseDataSourceSchemaAttribute(computedName bool) map[string]schema.Attr
 }
 
 type databaseDataSourceModel struct {
+	Organization                      string                     `tfsdk:"organization"`
 	AllowDataBranching                types.Bool                 `tfsdk:"allow_data_branching"`
 	AtBackupRestoreBranchesLimit      types.Bool                 `tfsdk:"at_backup_restore_branches_limit"`
 	AtDevelopmentBranchLimit          types.Bool                 `tfsdk:"at_development_branch_limit"`
@@ -254,7 +249,7 @@ type databaseDataSourceModel struct {
 	ProductionBranchWebConsole        types.Bool                 `tfsdk:"production_branch_web_console"`
 	ProductionBranchesCount           types.Float64              `tfsdk:"production_branches_count"`
 	Ready                             types.Bool                 `tfsdk:"ready"`
-	Region                            regionDataSourceModel      `tfsdk:"region"`
+	Region                            *regionDataSourceModel     `tfsdk:"region"`
 	RequireApprovalForDeploy          types.Bool                 `tfsdk:"require_approval_for_deploy"`
 	RestrictBranchRegion              types.Bool                 `tfsdk:"restrict_branch_region"`
 	SchemaLastUpdatedAt               types.String               `tfsdk:"schema_last_updated_at"`
@@ -265,49 +260,47 @@ type databaseDataSourceModel struct {
 	Url                               types.String               `tfsdk:"url"`
 }
 
-func (mdl *databaseDataSourceModel) fromClient(database *planetscale.Database) (diags diag.Diagnostics) {
+func databaseFromClient(database *planetscale.Database, orgName string, diags diag.Diagnostics) *databaseDataSourceModel {
 	if database == nil {
-		return diags
+		return nil
 	}
-	if database.DataImport != nil {
-		mdl.DataImport = &dataImportDataSourceModel{}
+	return &databaseDataSourceModel{
+		Organization:                      orgName,
+		DataImport:                        dataImportFromClient(database.DataImport, diags),
+		Region:                            regionFromClient(&database.Region, diags),
+		AllowDataBranching:                types.BoolValue(database.AllowDataBranching),
+		AtBackupRestoreBranchesLimit:      types.BoolValue(database.AtBackupRestoreBranchesLimit),
+		AtDevelopmentBranchLimit:          types.BoolValue(database.AtDevelopmentBranchLimit),
+		AutomaticMigrations:               types.BoolPointerValue(database.AutomaticMigrations),
+		BranchesCount:                     types.Float64Value(database.BranchesCount),
+		BranchesUrl:                       types.StringValue(database.BranchesUrl),
+		CreatedAt:                         types.StringValue(database.CreatedAt),
+		DefaultBranch:                     types.StringValue(database.DefaultBranch),
+		DefaultBranchReadOnlyRegionsCount: types.Float64Value(database.DefaultBranchReadOnlyRegionsCount),
+		DefaultBranchShardCount:           types.Float64Value(database.DefaultBranchShardCount),
+		DefaultBranchTableCount:           types.Float64Value(database.DefaultBranchTableCount),
+		DevelopmentBranchesCount:          types.Float64Value(database.DevelopmentBranchesCount),
+		HtmlUrl:                           types.StringValue(database.HtmlUrl),
+		Id:                                types.StringValue(database.Id),
+		InsightsRawQueries:                types.BoolValue(database.InsightsRawQueries),
+		IssuesCount:                       types.Float64Value(database.IssuesCount),
+		MigrationFramework:                types.StringPointerValue(database.MigrationFramework),
+		MigrationTableName:                types.StringPointerValue(database.MigrationTableName),
+		MultipleAdminsRequiredForDeletion: types.BoolValue(database.MultipleAdminsRequiredForDeletion),
+		Name:                              types.StringValue(database.Name),
+		Plan:                              types.StringValue(database.Plan),
+		ProductionBranchWebConsole:        types.BoolValue(database.ProductionBranchWebConsole),
+		ProductionBranchesCount:           types.Float64Value(database.ProductionBranchesCount),
+		Ready:                             types.BoolValue(database.Ready),
+		RequireApprovalForDeploy:          types.BoolValue(database.RequireApprovalForDeploy),
+		RestrictBranchRegion:              types.BoolValue(database.RestrictBranchRegion),
+		SchemaLastUpdatedAt:               types.StringPointerValue(database.SchemaLastUpdatedAt),
+		Sharded:                           types.BoolValue(database.Sharded),
+		State:                             types.StringValue(database.State),
+		Type:                              types.StringValue(database.Type),
+		UpdatedAt:                         types.StringValue(database.UpdatedAt),
+		Url:                               types.StringValue(database.Url),
 	}
-	diags.Append(mdl.DataImport.fromClient(database.DataImport)...)
-	diags.Append(mdl.Region.fromClient(&database.Region)...)
-
-	mdl.AllowDataBranching = types.BoolValue(database.AllowDataBranching)
-	mdl.AtBackupRestoreBranchesLimit = types.BoolValue(database.AtBackupRestoreBranchesLimit)
-	mdl.AtDevelopmentBranchLimit = types.BoolValue(database.AtDevelopmentBranchLimit)
-	mdl.AutomaticMigrations = types.BoolPointerValue(database.AutomaticMigrations)
-	mdl.BranchesCount = types.Float64Value(database.BranchesCount)
-	mdl.BranchesUrl = types.StringValue(database.BranchesUrl)
-	mdl.CreatedAt = types.StringValue(database.CreatedAt)
-	mdl.DefaultBranch = types.StringValue(database.DefaultBranch)
-	mdl.DefaultBranchReadOnlyRegionsCount = types.Float64Value(database.DefaultBranchReadOnlyRegionsCount)
-	mdl.DefaultBranchShardCount = types.Float64Value(database.DefaultBranchShardCount)
-	mdl.DefaultBranchTableCount = types.Float64Value(database.DefaultBranchTableCount)
-	mdl.DevelopmentBranchesCount = types.Float64Value(database.DevelopmentBranchesCount)
-	mdl.HtmlUrl = types.StringValue(database.HtmlUrl)
-	mdl.Id = types.StringValue(database.Id)
-	mdl.InsightsRawQueries = types.BoolValue(database.InsightsRawQueries)
-	mdl.IssuesCount = types.Float64Value(database.IssuesCount)
-	mdl.MigrationFramework = types.StringPointerValue(database.MigrationFramework)
-	mdl.MigrationTableName = types.StringPointerValue(database.MigrationTableName)
-	mdl.MultipleAdminsRequiredForDeletion = types.BoolValue(database.MultipleAdminsRequiredForDeletion)
-	mdl.Name = types.StringValue(database.Name)
-	mdl.Plan = types.StringValue(database.Plan)
-	mdl.ProductionBranchWebConsole = types.BoolValue(database.ProductionBranchWebConsole)
-	mdl.ProductionBranchesCount = types.Float64Value(database.ProductionBranchesCount)
-	mdl.Ready = types.BoolValue(database.Ready)
-	mdl.RequireApprovalForDeploy = types.BoolValue(database.RequireApprovalForDeploy)
-	mdl.RestrictBranchRegion = types.BoolValue(database.RestrictBranchRegion)
-	mdl.SchemaLastUpdatedAt = types.StringPointerValue(database.SchemaLastUpdatedAt)
-	mdl.Sharded = types.BoolValue(database.Sharded)
-	mdl.State = types.StringValue(database.State)
-	mdl.Type = types.StringValue(database.Type)
-	mdl.UpdatedAt = types.StringValue(database.UpdatedAt)
-	mdl.Url = types.StringValue(database.Url)
-	return diags
 }
 
 var branchDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -369,43 +362,32 @@ type branchDataSourceModel struct {
 	UpdatedAt                   types.String                       `tfsdk:"updated_at"`
 }
 
-func (mdl *branchDataSourceModel) fromClient(branch *planetscale.Branch) (diags diag.Diagnostics) {
+func branchFromClient(branch *planetscale.Branch, diags diag.Diagnostics) *branchDataSourceModel {
 	if branch == nil {
-		return diags
+		return nil
 	}
-	if branch.Actor != nil {
-		mdl.Actor = &actorDataSourceModel{}
+	return &branchDataSourceModel{
+		Actor:                       actorFromClient(branch.Actor, diags),
+		Region:                      regionFromClient(branch.Region, diags),
+		RestoredFromBranch:          restoredFromBranchFromClient(branch.RestoredFromBranch, diags),
+		Name:                        types.StringValue(branch.Name),
+		AccessHostUrl:               types.StringPointerValue(branch.AccessHostUrl),
+		ClusterRateName:             types.StringValue(branch.ClusterRateName),
+		CreatedAt:                   types.StringValue(branch.CreatedAt),
+		HtmlUrl:                     types.StringValue(branch.HtmlUrl),
+		Id:                          types.StringValue(branch.Id),
+		InitialRestoreId:            types.StringPointerValue(branch.InitialRestoreId),
+		MysqlAddress:                types.StringValue(branch.MysqlAddress),
+		MysqlEdgeAddress:            types.StringValue(branch.MysqlEdgeAddress),
+		ParentBranch:                types.StringPointerValue(branch.ParentBranch),
+		Production:                  types.BoolValue(branch.Production),
+		Ready:                       types.BoolValue(branch.Ready),
+		RestoreChecklistCompletedAt: types.StringPointerValue(branch.RestoreChecklistCompletedAt),
+		SchemaLastUpdatedAt:         types.StringValue(branch.SchemaLastUpdatedAt),
+		ShardCount:                  types.Float64PointerValue(branch.ShardCount),
+		Sharded:                     types.BoolValue(branch.Sharded),
+		UpdatedAt:                   types.StringValue(branch.UpdatedAt),
 	}
-	diags.Append(mdl.Actor.fromClient(branch.Actor)...)
-
-	if branch.Region != nil {
-		mdl.Region = &regionDataSourceModel{}
-	}
-	diags.Append(mdl.Region.fromClient(branch.Region)...)
-
-	if branch.RestoredFromBranch != nil {
-		mdl.RestoredFromBranch = &restoredFromBranchDataSourceModel{}
-	}
-	diags.Append(mdl.RestoredFromBranch.fromClient(branch.RestoredFromBranch)...)
-
-	mdl.Name = types.StringValue(branch.Name)
-	mdl.AccessHostUrl = types.StringPointerValue(branch.AccessHostUrl)
-	mdl.ClusterRateName = types.StringValue(branch.ClusterRateName)
-	mdl.CreatedAt = types.StringValue(branch.CreatedAt)
-	mdl.HtmlUrl = types.StringValue(branch.HtmlUrl)
-	mdl.Id = types.StringValue(branch.Id)
-	mdl.InitialRestoreId = types.StringPointerValue(branch.InitialRestoreId)
-	mdl.MysqlAddress = types.StringValue(branch.MysqlAddress)
-	mdl.MysqlEdgeAddress = types.StringValue(branch.MysqlEdgeAddress)
-	mdl.ParentBranch = types.StringPointerValue(branch.ParentBranch)
-	mdl.Production = types.BoolValue(branch.Production)
-	mdl.Ready = types.BoolValue(branch.Ready)
-	mdl.RestoreChecklistCompletedAt = types.StringPointerValue(branch.RestoreChecklistCompletedAt)
-	mdl.SchemaLastUpdatedAt = types.StringValue(branch.SchemaLastUpdatedAt)
-	mdl.ShardCount = types.Float64PointerValue(branch.ShardCount)
-	mdl.Sharded = types.BoolValue(branch.Sharded)
-	mdl.UpdatedAt = types.StringValue(branch.UpdatedAt)
-	return diags
 }
 
 var actorDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -420,14 +402,15 @@ type actorDataSourceModel struct {
 	Id          types.String `tfsdk:"id"`
 }
 
-func (mdl *actorDataSourceModel) fromClient(actor *planetscale.Actor) (diags diag.Diagnostics) {
+func actorFromClient(actor *planetscale.Actor, diags diag.Diagnostics) *actorDataSourceModel {
 	if actor == nil {
-		return diags
+		return nil
 	}
-	mdl.AvatarUrl = types.StringValue(actor.AvatarUrl)
-	mdl.DisplayName = types.StringValue(actor.DisplayName)
-	mdl.Id = types.StringValue(actor.Id)
-	return diags
+	return &actorDataSourceModel{
+		AvatarUrl:   types.StringValue(actor.AvatarUrl),
+		DisplayName: types.StringValue(actor.DisplayName),
+		Id:          types.StringValue(actor.Id),
+	}
 }
 
 var regionDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -450,18 +433,19 @@ type regionDataSourceModel struct {
 	Slug              types.String `tfsdk:"slug"`
 }
 
-func (mdl *regionDataSourceModel) fromClient(region *planetscale.Region) (diags diag.Diagnostics) {
+func regionFromClient(region *planetscale.Region, diags diag.Diagnostics) *regionDataSourceModel {
 	if region == nil {
-		return diags
+		return nil
 	}
-	mdl.DisplayName = types.StringValue(region.DisplayName)
-	mdl.Enabled = types.BoolValue(region.Enabled)
-	mdl.Id = types.StringValue(region.Id)
-	mdl.Location = types.StringValue(region.Location)
-	mdl.Provider = types.StringValue(region.Provider)
-	mdl.PublicIpAddresses = stringsToListValue(region.PublicIpAddresses, diags)
-	mdl.Slug = types.StringValue(region.Slug)
-	return diags
+	return &regionDataSourceModel{
+		DisplayName:       types.StringValue(region.DisplayName),
+		Enabled:           types.BoolValue(region.Enabled),
+		Id:                types.StringValue(region.Id),
+		Location:          types.StringValue(region.Location),
+		Provider:          types.StringValue(region.Provider),
+		PublicIpAddresses: stringsToListValue(region.PublicIpAddresses, diags),
+		Slug:              types.StringValue(region.Slug),
+	}
 }
 
 var readOnlyRegionDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -501,21 +485,21 @@ type readOnlyRegionDataSourceModel struct {
 	UpdatedAt   types.String          `tfsdk:"updated_at"`
 }
 
-func (mdl *readOnlyRegionDataSourceModel) fromClient(readOnlyRegion *planetscale.ReadOnlyRegion) (diags diag.Diagnostics) {
+func readOnlyRegionFromClient(readOnlyRegion *planetscale.ReadOnlyRegion, diags diag.Diagnostics) *readOnlyRegionDataSourceModel {
 	if readOnlyRegion == nil {
-		return diags
+		return nil
 	}
-	diags.Append(mdl.Actor.fromClient(&readOnlyRegion.Actor)...)
-	diags.Append(mdl.Region.fromClient(&readOnlyRegion.Region)...)
 
-	mdl.CreatedAt = types.StringValue(readOnlyRegion.CreatedAt)
-	mdl.DisplayName = types.StringValue(readOnlyRegion.DisplayName)
-	mdl.Id = types.StringValue(readOnlyRegion.Id)
-	mdl.Ready = types.BoolValue(readOnlyRegion.Ready)
-	mdl.ReadyAt = types.StringValue(readOnlyRegion.ReadyAt)
-	mdl.UpdatedAt = types.StringValue(readOnlyRegion.UpdatedAt)
-
-	return diags
+	return &readOnlyRegionDataSourceModel{
+		Actor:       *actorFromClient(&readOnlyRegion.Actor, diags),
+		Region:      *regionFromClient(&readOnlyRegion.Region, diags),
+		CreatedAt:   types.StringValue(readOnlyRegion.CreatedAt),
+		DisplayName: types.StringValue(readOnlyRegion.DisplayName),
+		Id:          types.StringValue(readOnlyRegion.Id),
+		Ready:       types.BoolValue(readOnlyRegion.Ready),
+		ReadyAt:     types.StringValue(readOnlyRegion.ReadyAt),
+		UpdatedAt:   types.StringValue(readOnlyRegion.UpdatedAt),
+	}
 }
 
 var restoredFromBranchDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -534,16 +518,17 @@ type restoredFromBranchDataSourceModel struct {
 	UpdatedAt types.String `tfsdk:"updated_at"`
 }
 
-func (mdl *restoredFromBranchDataSourceModel) fromClient(rfb *planetscale.RestoredFromBranch) (diags diag.Diagnostics) {
+func restoredFromBranchFromClient(rfb *planetscale.RestoredFromBranch, diags diag.Diagnostics) *restoredFromBranchDataSourceModel {
 	if rfb == nil {
-		return diags
+		return nil
 	}
-	mdl.CreatedAt = types.StringValue(rfb.CreatedAt)
-	mdl.DeletedAt = types.StringValue(rfb.DeletedAt)
-	mdl.Id = types.StringValue(rfb.Id)
-	mdl.Name = types.StringValue(rfb.Name)
-	mdl.UpdatedAt = types.StringValue(rfb.UpdatedAt)
-	return diags
+	return &restoredFromBranchDataSourceModel{
+		CreatedAt: types.StringValue(rfb.CreatedAt),
+		DeletedAt: types.StringValue(rfb.DeletedAt),
+		Id:        types.StringValue(rfb.Id),
+		Name:      types.StringValue(rfb.Name),
+		UpdatedAt: types.StringValue(rfb.UpdatedAt),
+	}
 }
 
 var tableSchemaDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -558,14 +543,15 @@ type tableSchemaDataSourceModel struct {
 	Raw  types.String `tfsdk:"raw"`
 }
 
-func (mdl *tableSchemaDataSourceModel) fromClient(ts *planetscale.TableSchema) (diags diag.Diagnostics) {
+func tableSchemaFromClient(ts *planetscale.TableSchema, diags diag.Diagnostics) *tableSchemaDataSourceModel {
 	if ts == nil {
-		return diags
+		return nil
 	}
-	mdl.Html = types.StringValue(ts.Html)
-	mdl.Name = types.StringValue(ts.Name)
-	mdl.Raw = types.StringValue(ts.Raw)
-	return diags
+	return &tableSchemaDataSourceModel{
+		Html: types.StringValue(ts.Html),
+		Name: types.StringValue(ts.Name),
+		Raw:  types.StringValue(ts.Raw),
+	}
 }
 
 var lintErrorDataSourceSchemaAttribute = map[string]schema.Attribute{
@@ -608,28 +594,29 @@ type lintErrorDataSourceModel struct {
 	VindexName               types.String `tfsdk:"vindex_name"`
 }
 
-func (mdl *lintErrorDataSourceModel) fromClient(le *planetscale.LintError) (diags diag.Diagnostics) {
+func lintErrorFromClient(le *planetscale.LintError, diags diag.Diagnostics) *lintErrorDataSourceModel {
 	if le == nil {
-		return diags
+		return nil
 	}
-	mdl.AutoIncrementColumnNames = stringsToListValue(le.AutoIncrementColumnNames, diags)
-	mdl.CharsetName = types.StringValue(le.CharsetName)
-	mdl.CheckConstraintName = types.StringValue(le.CheckConstraintName)
-	mdl.ColumnName = types.StringValue(le.ColumnName)
-	mdl.DocsUrl = types.StringValue(le.DocsUrl)
-	mdl.EngineName = types.StringValue(le.EngineName)
-	mdl.EnumValue = types.StringValue(le.EnumValue)
-	mdl.ErrorDescription = types.StringValue(le.ErrorDescription)
-	mdl.ForeignKeyColumnNames = stringsToListValue(le.ForeignKeyColumnNames, diags)
-	mdl.JsonPath = types.StringValue(le.JsonPath)
-	mdl.KeyspaceName = types.StringValue(le.KeyspaceName)
-	mdl.LintError = types.StringValue(le.LintError)
-	mdl.PartitionName = types.StringValue(le.PartitionName)
-	mdl.PartitioningType = types.StringValue(le.PartitioningType)
-	mdl.SubjectType = types.StringValue(le.SubjectType)
-	mdl.TableName = types.StringValue(le.TableName)
-	mdl.VindexName = types.StringValue(le.VindexName)
-	return diags
+	return &lintErrorDataSourceModel{
+		AutoIncrementColumnNames: stringsToListValue(le.AutoIncrementColumnNames, diags),
+		CharsetName:              types.StringValue(le.CharsetName),
+		CheckConstraintName:      types.StringValue(le.CheckConstraintName),
+		ColumnName:               types.StringValue(le.ColumnName),
+		DocsUrl:                  types.StringValue(le.DocsUrl),
+		EngineName:               types.StringValue(le.EngineName),
+		EnumValue:                types.StringValue(le.EnumValue),
+		ErrorDescription:         types.StringValue(le.ErrorDescription),
+		ForeignKeyColumnNames:    stringsToListValue(le.ForeignKeyColumnNames, diags),
+		JsonPath:                 types.StringValue(le.JsonPath),
+		KeyspaceName:             types.StringValue(le.KeyspaceName),
+		LintError:                types.StringValue(le.LintError),
+		PartitionName:            types.StringValue(le.PartitionName),
+		PartitioningType:         types.StringValue(le.PartitioningType),
+		SubjectType:              types.StringValue(le.SubjectType),
+		TableName:                types.StringValue(le.TableName),
+		VindexName:               types.StringValue(le.VindexName),
+	}
 }
 
 var oauthApplicationAttribute = map[string]schema.Attribute{
@@ -658,21 +645,22 @@ type oauthApplicationDataSourceModel struct {
 	UpdatedAt   types.String  `tfsdk:"updated_at"`
 }
 
-func (mdl *oauthApplicationDataSourceModel) fromClient(oa *planetscale.OauthApplication) (diags diag.Diagnostics) {
+func oauthApplicationFromClient(oa *planetscale.OauthApplication, diags diag.Diagnostics) *oauthApplicationDataSourceModel {
 	if oa == nil {
-		return diags
+		return nil
 	}
-	mdl.Avatar = types.StringPointerValue(oa.Avatar)
-	mdl.ClientId = types.StringValue(oa.ClientId)
-	mdl.CreatedAt = types.StringValue(oa.CreatedAt)
-	mdl.Domain = types.StringValue(oa.Domain)
-	mdl.Id = types.StringValue(oa.Id)
-	mdl.Name = types.StringValue(oa.Name)
-	mdl.RedirectUri = types.StringValue(oa.RedirectUri)
-	mdl.Scopes = stringsToListValue(oa.Scopes, diags)
-	mdl.Tokens = types.Float64Value(oa.Tokens)
-	mdl.UpdatedAt = types.StringValue(oa.UpdatedAt)
-	return diags
+	return &oauthApplicationDataSourceModel{
+		Avatar:      types.StringPointerValue(oa.Avatar),
+		ClientId:    types.StringValue(oa.ClientId),
+		CreatedAt:   types.StringValue(oa.CreatedAt),
+		Domain:      types.StringValue(oa.Domain),
+		Id:          types.StringValue(oa.Id),
+		Name:        types.StringValue(oa.Name),
+		RedirectUri: types.StringValue(oa.RedirectUri),
+		Scopes:      stringsToListValue(oa.Scopes, diags),
+		Tokens:      types.Float64Value(oa.Tokens),
+		UpdatedAt:   types.StringValue(oa.UpdatedAt),
+	}
 }
 
 func stringsToListValue(in []string, diags diag.Diagnostics) types.List {

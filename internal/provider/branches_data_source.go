@@ -85,13 +85,10 @@ func (d *branchesDataSource) Read(ctx context.Context, req datasource.ReadReques
 
 	for _, item := range res.Data {
 		item := item
-		out := branchDataSourceModel{}
-		diags := out.fromClient(&item)
-		resp.Diagnostics.Append(diags...)
+		state.Branches = append(state.Branches, *branchFromClient(&item, resp.Diagnostics))
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		state.Branches = append(state.Branches, out)
 	}
 	diags := resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)

@@ -73,13 +73,10 @@ func (d *databaseReadOnlyRegionsDataSource) Read(ctx context.Context, req dataso
 	}
 	for _, item := range res.Data {
 		item := item
-		out := readOnlyRegionDataSourceModel{}
-		diags := out.fromClient(&item)
-		resp.Diagnostics.Append(diags...)
+		state.Regions = append(state.Regions, *readOnlyRegionFromClient(&item, resp.Diagnostics))
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		state.Regions = append(state.Regions, out)
 	}
 
 	diags := resp.State.Set(ctx, &state)

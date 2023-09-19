@@ -27,6 +27,9 @@ type databasesDataSourceModel struct {
 	Databases    []databaseDataSourceModel `tfsdk:"databases"`
 }
 
+type databasesListItemDataSourceModel struct {
+}
+
 func (d *databasesDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_databases"
 }
@@ -80,12 +83,10 @@ func (d *databasesDataSource) Read(ctx context.Context, req datasource.ReadReque
 	}
 	for _, item := range res.Data {
 		item := item
-		out := databaseDataSourceModel{}
-		resp.Diagnostics.Append(out.fromClient(&item)...)
+		state.Databases = append(state.Databases, *databaseFromClient(&item, orgName, resp.Diagnostics))
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		state.Databases = append(state.Databases, out)
 	}
 	diags := resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)

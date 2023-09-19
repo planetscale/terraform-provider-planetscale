@@ -68,12 +68,10 @@ func (d *branchDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Unable to read database branch", "no data")
 		return
 	}
-	state := TTbranchDataSourceModel{
-		Organization: data.Organization,
-		Database:     data.Database,
+	state := branchFromClient(&res.Branch, resp.Diagnostics)
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	resp.Diagnostics.Append(state.branchDataSourceModel.fromClient(&res.Branch)...)
-
 	diags := resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {

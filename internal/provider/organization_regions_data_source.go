@@ -84,13 +84,10 @@ func (d *organizationRegionsDataSource) Read(ctx context.Context, req datasource
 	}
 	for _, item := range res.Data {
 		item := item
-		out := regionDataSourceModel{}
-		diags := out.fromClient(&item)
-		resp.Diagnostics.Append(diags...)
+		state.Regions = append(state.Regions, *regionFromClient(&item, resp.Diagnostics))
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		state.Regions = append(state.Regions, out)
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {

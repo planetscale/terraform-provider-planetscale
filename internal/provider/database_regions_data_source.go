@@ -85,17 +85,17 @@ func (d *databaseRegionsDataSource) Read(ctx context.Context, req datasource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res200, err := d.client.ListDatabaseRegions(ctx, data.Organization, data.Name, nil, nil)
+	res, err := d.client.ListDatabaseRegions(ctx, data.Organization, data.Name, nil, nil)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to list database regions", err.Error())
 		return
 	}
-	if res200 == nil {
+	if res == nil {
 		resp.Diagnostics.AddError("Received a nil database regions list", "")
 		return
 	}
 	state := databaseRegionsDataSourceModel{}
-	for _, region := range res200.Data {
+	for _, region := range res.Data {
 		state.Regions = append(state.Regions, databaseRegionDataSourceModel{
 			DisplayName:       region.DisplayName,
 			Enabled:           region.Enabled,

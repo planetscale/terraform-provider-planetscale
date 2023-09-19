@@ -90,12 +90,10 @@ func (d *branchSchemaLintDataSource) Read(ctx context.Context, req datasource.Re
 	}
 	for _, item := range res200.Data {
 		item := item
-		le := lintErrorDataSourceModel{}
-		resp.Diagnostics.Append(le.fromClient(&item)...)
+		state.Errors = append(state.Errors, *lintErrorFromClient(&item, resp.Diagnostics))
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		state.Errors = append(state.Errors, le)
 	}
 
 	diags := resp.State.Set(ctx, &state)

@@ -12,26 +12,42 @@ provider "planetscale" {
 
 data "planetscale_organizations" "test" {}
 
-# data "planetscale_organization_regions" "test" {
-#   organization = data.planetscale_organizations.test.organizations.0.name
-# }
+output "orgs" {
+  value = data.planetscale_organizations.test
+}
 
-# output "my_regions" {
-#   value = data.planetscale_organization_regions.test
-# }
+data "planetscale_organization" "test" {
+  name = data.planetscale_organizations.test.organizations.0.name
+}
 
-# data "planetscale_databases" "test" {
-#   organization = data.planetscale_organizations.test.organizations.0.name
-# }
+output "org" {
+  value = data.planetscale_organization.test
+}
 
-# output "my_dbs" {
-#   value = data.planetscale_databases.test
-# }
+data "planetscale_organization_regions" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+}
 
-# data "planetscale_database" "my_db" {
-#   organization = data.planetscale_organizations.test.organizations.0.name
-#   name         = "again"
-# }
+output "org_regions" {
+  value = data.planetscale_organization_regions.test
+}
+
+data "planetscale_databases" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+}
+
+output "dbs" {
+  value = data.planetscale_databases.test
+}
+
+data "planetscale_database" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+  name         = "again"
+}
+
+output "db" {
+  value = data.planetscale_database.test
+}
 
 # resource "planetscale_database" "my_db" {
 #   organization = data.planetscale_organizations.test.organizations.0.name

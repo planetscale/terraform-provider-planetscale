@@ -71,56 +71,52 @@ type databaseResourceModel struct {
 	Url                               types.String  `tfsdk:"url"`
 }
 
-func (mdl *databaseResourceModel) fromClient(ctx context.Context, database *planetscale.Database, clusterSize types.String) (diags diag.Diagnostics) {
+func databaseResourcefromClient(ctx context.Context, database *planetscale.Database, clusterSize types.String, diags diag.Diagnostics) *databaseResourceModel {
 	if database == nil {
-		return diags
+		return nil
 	}
-	var (
-		dataImportDiags diag.Diagnostics
-	)
-	mdl.DataImport, dataImportDiags = types.ObjectValueFrom(ctx, importResourceAttrTypes, database.DataImport)
-
-	diags.Append(dataImportDiags...)
-
-	mdl.Id = types.StringValue(database.Id)
-	mdl.AllowDataBranching = types.BoolValue(database.AllowDataBranching)
-	mdl.AtBackupRestoreBranchesLimit = types.BoolValue(database.AtBackupRestoreBranchesLimit)
-	mdl.AtDevelopmentBranchLimit = types.BoolValue(database.AtDevelopmentBranchLimit)
-	mdl.AutomaticMigrations = types.BoolPointerValue(database.AutomaticMigrations)
-	mdl.BranchesCount = types.Float64Value(database.BranchesCount)
-	mdl.BranchesUrl = types.StringValue(database.BranchesUrl)
-	mdl.CreatedAt = types.StringValue(database.CreatedAt)
-	mdl.DefaultBranch = types.StringValue(database.DefaultBranch)
-	mdl.DefaultBranchReadOnlyRegionsCount = types.Float64Value(database.DefaultBranchReadOnlyRegionsCount)
-	mdl.DefaultBranchShardCount = types.Float64Value(database.DefaultBranchShardCount)
-	mdl.DefaultBranchTableCount = types.Float64Value(database.DefaultBranchTableCount)
-	mdl.DevelopmentBranchesCount = types.Float64Value(database.DevelopmentBranchesCount)
-	mdl.HtmlUrl = types.StringValue(database.HtmlUrl)
-	mdl.InsightsRawQueries = types.BoolValue(database.InsightsRawQueries)
-	mdl.IssuesCount = types.Float64Value(database.IssuesCount)
-	mdl.MigrationFramework = types.StringPointerValue(database.MigrationFramework)
-	mdl.MigrationTableName = types.StringPointerValue(database.MigrationTableName)
-	mdl.MultipleAdminsRequiredForDeletion = types.BoolValue(database.MultipleAdminsRequiredForDeletion)
-	mdl.Name = types.StringValue(database.Name)
-	mdl.Plan = types.StringValue(database.Plan)
-	mdl.ClusterSize = clusterSize
-	mdl.ProductionBranchWebConsole = types.BoolValue(database.ProductionBranchWebConsole)
-	mdl.ProductionBranchesCount = types.Float64Value(database.ProductionBranchesCount)
-	mdl.Ready = types.BoolValue(database.Ready)
-	mdl.Region = types.StringValue(database.Region.Slug)
-	mdl.RequireApprovalForDeploy = types.BoolValue(database.RequireApprovalForDeploy)
-	mdl.RestrictBranchRegion = types.BoolValue(database.RestrictBranchRegion)
-	mdl.SchemaLastUpdatedAt = types.StringPointerValue(database.SchemaLastUpdatedAt)
-	mdl.Sharded = types.BoolValue(database.Sharded)
-	mdl.State = types.StringValue(database.State)
-	mdl.Type = types.StringValue(database.Type)
-	mdl.UpdatedAt = types.StringValue(database.UpdatedAt)
-	mdl.Url = types.StringValue(database.Url)
-
-	if mdl.ClusterSize.IsUnknown() {
-		mdl.ClusterSize = types.StringNull()
+	if clusterSize.IsUnknown() {
+		clusterSize = types.StringNull()
 	}
-	return diags
+	dataImport, diags := types.ObjectValueFrom(ctx, importResourceAttrTypes, database.DataImport)
+	diags.Append(diags...)
+	return &databaseResourceModel{
+		DataImport:                        dataImport,
+		Id:                                types.StringValue(database.Id),
+		AllowDataBranching:                types.BoolValue(database.AllowDataBranching),
+		AtBackupRestoreBranchesLimit:      types.BoolValue(database.AtBackupRestoreBranchesLimit),
+		AtDevelopmentBranchLimit:          types.BoolValue(database.AtDevelopmentBranchLimit),
+		AutomaticMigrations:               types.BoolPointerValue(database.AutomaticMigrations),
+		BranchesCount:                     types.Float64Value(database.BranchesCount),
+		BranchesUrl:                       types.StringValue(database.BranchesUrl),
+		CreatedAt:                         types.StringValue(database.CreatedAt),
+		DefaultBranch:                     types.StringValue(database.DefaultBranch),
+		DefaultBranchReadOnlyRegionsCount: types.Float64Value(database.DefaultBranchReadOnlyRegionsCount),
+		DefaultBranchShardCount:           types.Float64Value(database.DefaultBranchShardCount),
+		DefaultBranchTableCount:           types.Float64Value(database.DefaultBranchTableCount),
+		DevelopmentBranchesCount:          types.Float64Value(database.DevelopmentBranchesCount),
+		HtmlUrl:                           types.StringValue(database.HtmlUrl),
+		InsightsRawQueries:                types.BoolValue(database.InsightsRawQueries),
+		IssuesCount:                       types.Float64Value(database.IssuesCount),
+		MigrationFramework:                types.StringPointerValue(database.MigrationFramework),
+		MigrationTableName:                types.StringPointerValue(database.MigrationTableName),
+		MultipleAdminsRequiredForDeletion: types.BoolValue(database.MultipleAdminsRequiredForDeletion),
+		Name:                              types.StringValue(database.Name),
+		Plan:                              types.StringValue(database.Plan),
+		ClusterSize:                       clusterSize,
+		ProductionBranchWebConsole:        types.BoolValue(database.ProductionBranchWebConsole),
+		ProductionBranchesCount:           types.Float64Value(database.ProductionBranchesCount),
+		Ready:                             types.BoolValue(database.Ready),
+		Region:                            types.StringValue(database.Region.Slug),
+		RequireApprovalForDeploy:          types.BoolValue(database.RequireApprovalForDeploy),
+		RestrictBranchRegion:              types.BoolValue(database.RestrictBranchRegion),
+		SchemaLastUpdatedAt:               types.StringPointerValue(database.SchemaLastUpdatedAt),
+		Sharded:                           types.BoolValue(database.Sharded),
+		State:                             types.StringValue(database.State),
+		Type:                              types.StringValue(database.Type),
+		UpdatedAt:                         types.StringValue(database.UpdatedAt),
+		Url:                               types.StringValue(database.Url),
+	}
 }
 
 func (r *databaseResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -209,9 +205,7 @@ func (r *databaseResource) Configure(ctx context.Context, req resource.Configure
 	if req.ProviderData == nil {
 		return
 	}
-
 	client, ok := req.ProviderData.(*planetscale.Client)
-
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
@@ -220,7 +214,6 @@ func (r *databaseResource) Configure(ctx context.Context, req resource.Configure
 
 		return
 	}
-
 	r.client = client
 }
 
@@ -250,7 +243,7 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError("Unable to create databases", "no data")
 		return
 	}
-	resp.Diagnostics.Append(data.fromClient(ctx, &res.Database, data.ClusterSize)...)
+	data = databaseResourcefromClient(ctx, &res.Database, data.ClusterSize, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -279,53 +272,16 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	res200, err := r.client.GetDatabase(ctx, org.ValueString(), name.ValueString())
+	res, err := r.client.GetDatabase(ctx, org.ValueString(), name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read database, got error: %s", err))
 		return
 	}
 
-	data.Id = types.StringValue(res200.Id)
-	data.AllowDataBranching = types.BoolValue(res200.AllowDataBranching)
-	data.AtBackupRestoreBranchesLimit = types.BoolValue(res200.AtBackupRestoreBranchesLimit)
-	data.AtDevelopmentBranchLimit = types.BoolValue(res200.AtDevelopmentBranchLimit)
-	data.AutomaticMigrations = types.BoolPointerValue(res200.AutomaticMigrations)
-	data.BranchesCount = types.Float64Value(res200.BranchesCount)
-	data.BranchesUrl = types.StringValue(res200.BranchesUrl)
-	data.CreatedAt = types.StringValue(res200.CreatedAt)
-	data.DefaultBranch = types.StringValue(res200.DefaultBranch)
-	data.DefaultBranchReadOnlyRegionsCount = types.Float64Value(res200.DefaultBranchReadOnlyRegionsCount)
-	data.DefaultBranchShardCount = types.Float64Value(res200.DefaultBranchShardCount)
-	data.DefaultBranchTableCount = types.Float64Value(res200.DefaultBranchTableCount)
-	data.DevelopmentBranchesCount = types.Float64Value(res200.DevelopmentBranchesCount)
-	data.HtmlUrl = types.StringValue(res200.HtmlUrl)
-	data.InsightsRawQueries = types.BoolValue(res200.InsightsRawQueries)
-	data.IssuesCount = types.Float64Value(res200.IssuesCount)
-	data.MigrationFramework = types.StringPointerValue(res200.MigrationFramework)
-	data.MigrationTableName = types.StringPointerValue(res200.MigrationTableName)
-	data.MultipleAdminsRequiredForDeletion = types.BoolValue(res200.MultipleAdminsRequiredForDeletion)
-	data.Name = types.StringValue(res200.Name)
-	data.Plan = types.StringValue(res200.Plan)
-	data.ProductionBranchWebConsole = types.BoolValue(res200.ProductionBranchWebConsole)
-	data.ProductionBranchesCount = types.Float64Value(res200.ProductionBranchesCount)
-	data.Ready = types.BoolValue(res200.Ready)
-	data.RequireApprovalForDeploy = types.BoolValue(res200.RequireApprovalForDeploy)
-	data.RestrictBranchRegion = types.BoolValue(res200.RestrictBranchRegion)
-	data.SchemaLastUpdatedAt = types.StringPointerValue(res200.SchemaLastUpdatedAt)
-	data.Sharded = types.BoolValue(res200.Sharded)
-	data.State = types.StringValue(res200.State)
-	data.Type = types.StringValue(res200.Type)
-	data.UpdatedAt = types.StringValue(res200.UpdatedAt)
-	data.Url = types.StringValue(res200.Url)
-
-	var diErr diag.Diagnostics
-	data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, res200.DataImport)
-	if diErr.HasError() {
-		resp.Diagnostics.Append(diErr.Errors()...)
+	data = databaseResourcefromClient(ctx, &res.Database, data.ClusterSize, resp.Diagnostics)
+	if resp.Diagnostics.HasError() {
 		return
 	}
-	data.Region = types.StringValue(res200.Region.Slug)
-
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -368,52 +324,15 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	if changedUpdatableSettings {
-		res200, err := r.client.UpdateDatabaseSettings(ctx, org.ValueString(), name.ValueString(), updateReq)
+		res, err := r.client.UpdateDatabaseSettings(ctx, org.ValueString(), name.ValueString(), updateReq)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update database settings, got error: %s", err))
 			return
 		}
-		data.Id = types.StringValue(res200.Id)
-		data.AllowDataBranching = types.BoolValue(res200.AllowDataBranching)
-		data.AtBackupRestoreBranchesLimit = types.BoolValue(res200.AtBackupRestoreBranchesLimit)
-		data.AtDevelopmentBranchLimit = types.BoolValue(res200.AtDevelopmentBranchLimit)
-		data.AutomaticMigrations = types.BoolPointerValue(res200.AutomaticMigrations)
-		data.BranchesCount = types.Float64Value(res200.BranchesCount)
-		data.BranchesUrl = types.StringValue(res200.BranchesUrl)
-		data.CreatedAt = types.StringValue(res200.CreatedAt)
-		data.DefaultBranch = types.StringValue(res200.DefaultBranch)
-		data.DefaultBranchReadOnlyRegionsCount = types.Float64Value(res200.DefaultBranchReadOnlyRegionsCount)
-		data.DefaultBranchShardCount = types.Float64Value(res200.DefaultBranchShardCount)
-		data.DefaultBranchTableCount = types.Float64Value(res200.DefaultBranchTableCount)
-		data.DevelopmentBranchesCount = types.Float64Value(res200.DevelopmentBranchesCount)
-		data.HtmlUrl = types.StringValue(res200.HtmlUrl)
-		data.InsightsRawQueries = types.BoolValue(res200.InsightsRawQueries)
-		data.IssuesCount = types.Float64Value(res200.IssuesCount)
-		data.MigrationFramework = types.StringPointerValue(res200.MigrationFramework)
-		data.MigrationTableName = types.StringPointerValue(res200.MigrationTableName)
-		data.MultipleAdminsRequiredForDeletion = types.BoolValue(res200.MultipleAdminsRequiredForDeletion)
-		data.Name = types.StringValue(res200.Name)
-		data.Plan = types.StringValue(res200.Plan)
-		data.ClusterSize = old.ClusterSize
-		data.ProductionBranchWebConsole = types.BoolValue(res200.ProductionBranchWebConsole)
-		data.ProductionBranchesCount = types.Float64Value(res200.ProductionBranchesCount)
-		data.Ready = types.BoolValue(res200.Ready)
-		data.RequireApprovalForDeploy = types.BoolValue(res200.RequireApprovalForDeploy)
-		data.RestrictBranchRegion = types.BoolValue(res200.RestrictBranchRegion)
-		data.SchemaLastUpdatedAt = types.StringPointerValue(res200.SchemaLastUpdatedAt)
-		data.Sharded = types.BoolValue(res200.Sharded)
-		data.State = types.StringValue(res200.State)
-		data.Type = types.StringValue(res200.Type)
-		data.UpdatedAt = types.StringValue(res200.UpdatedAt)
-		data.Url = types.StringValue(res200.Url)
-
-		var diErr diag.Diagnostics
-		data.DataImport, diErr = types.ObjectValueFrom(ctx, importResourceAttrTypes, res200.DataImport)
-		if diErr.HasError() {
-			resp.Diagnostics.Append(diErr.Errors()...)
+		data = databaseResourcefromClient(ctx, &res.Database, data.ClusterSize, resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
 			return
 		}
-		data.Region = types.StringValue(res200.Region.Slug)
 	}
 
 	// Save updated data into Terraform state
@@ -441,12 +360,12 @@ func (r *databaseResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
-	res204, err := r.client.DeleteDatabase(ctx, org.ValueString(), name.ValueString())
+	res, err := r.client.DeleteDatabase(ctx, org.ValueString(), name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete database, got error: %s", err))
 		return
 	}
-	_ = res204
+	_ = res
 }
 
 func (r *databaseResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

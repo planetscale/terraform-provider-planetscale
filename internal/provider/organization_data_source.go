@@ -60,9 +60,11 @@ func (d *organizationDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Received a nil organization", "")
 		return
 	}
-	state := organizationDataSourceModel{}
-	resp.Diagnostics.Append(state.fromClient(&res.Organization)...)
-	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+	data = organizationFromClient(&res.Organization, resp.Diagnostics)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}

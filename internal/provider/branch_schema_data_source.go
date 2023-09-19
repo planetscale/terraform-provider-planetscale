@@ -90,8 +90,10 @@ func (d *branchSchemaDataSource) Read(ctx context.Context, req datasource.ReadRe
 	}
 	for _, item := range res.Data {
 		item := item
-		el := tableSchemaDataSourceModel{}
-		resp.Diagnostics.Append(el.fromClient(&item)...)
+		state.Tables = append(state.Tables, *tableSchemaFromClient(&item, resp.Diagnostics))
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	diags := resp.State.Set(ctx, &state)

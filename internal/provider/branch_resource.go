@@ -59,41 +59,38 @@ type branchResourceModel struct {
 	UpdatedAt                   types.String  `tfsdk:"updated_at"`
 }
 
-func (mdl *branchResourceModel) fromClient(ctx context.Context, branch *planetscale.Branch) (diags diag.Diagnostics) {
+func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, diags diag.Diagnostics) *branchResourceModel {
 	if branch == nil {
-		return diags
+		return nil
 	}
-	var (
-		actorDiags  diag.Diagnostics
-		regionDiags diag.Diagnostics
-		rfbDiags    diag.Diagnostics
-	)
-	mdl.Actor, actorDiags = types.ObjectValueFrom(ctx, actorResourceAttrTypes, branch.Actor)
-	mdl.Region, regionDiags = types.ObjectValueFrom(ctx, regionResourceAttrTypes, branch.Region)
-	mdl.RestoredFromBranch, rfbDiags = types.ObjectValueFrom(ctx, restoredFromBranchResourceAttrTypes, branch.RestoredFromBranch)
-
-	diags.Append(actorDiags...)
-	diags.Append(regionDiags...)
-	diags.Append(rfbDiags...)
-
-	mdl.Name = types.StringValue(branch.Name)
-	mdl.ParentBranch = types.StringPointerValue(branch.ParentBranch)
-	mdl.AccessHostUrl = types.StringPointerValue(branch.AccessHostUrl)
-	mdl.ClusterRateName = types.StringValue(branch.ClusterRateName)
-	mdl.CreatedAt = types.StringValue(branch.CreatedAt)
-	mdl.HtmlUrl = types.StringValue(branch.HtmlUrl)
-	mdl.Id = types.StringValue(branch.Id)
-	mdl.InitialRestoreId = types.StringPointerValue(branch.InitialRestoreId)
-	mdl.MysqlAddress = types.StringValue(branch.MysqlAddress)
-	mdl.MysqlEdgeAddress = types.StringValue(branch.MysqlEdgeAddress)
-	mdl.Production = types.BoolValue(branch.Production)
-	mdl.Ready = types.BoolValue(branch.Ready)
-	mdl.RestoreChecklistCompletedAt = types.StringPointerValue(branch.RestoreChecklistCompletedAt)
-	mdl.SchemaLastUpdatedAt = types.StringValue(branch.SchemaLastUpdatedAt)
-	mdl.ShardCount = types.Float64PointerValue(branch.ShardCount)
-	mdl.Sharded = types.BoolValue(branch.Sharded)
-	mdl.UpdatedAt = types.StringValue(branch.UpdatedAt)
-	return diags
+	actor, diags := types.ObjectValueFrom(ctx, actorResourceAttrTypes, branch.Actor)
+	diags.Append(diags...)
+	region, diags := types.ObjectValueFrom(ctx, regionResourceAttrTypes, branch.Region)
+	diags.Append(diags...)
+	restoredFromBranch, diags := types.ObjectValueFrom(ctx, restoredFromBranchResourceAttrTypes, branch.RestoredFromBranch)
+	diags.Append(diags...)
+	return &branchResourceModel{
+		Actor:                       actor,
+		Region:                      region,
+		RestoredFromBranch:          restoredFromBranch,
+		Name:                        types.StringValue(branch.Name),
+		ParentBranch:                types.StringPointerValue(branch.ParentBranch),
+		AccessHostUrl:               types.StringPointerValue(branch.AccessHostUrl),
+		ClusterRateName:             types.StringValue(branch.ClusterRateName),
+		CreatedAt:                   types.StringValue(branch.CreatedAt),
+		HtmlUrl:                     types.StringValue(branch.HtmlUrl),
+		Id:                          types.StringValue(branch.Id),
+		InitialRestoreId:            types.StringPointerValue(branch.InitialRestoreId),
+		MysqlAddress:                types.StringValue(branch.MysqlAddress),
+		MysqlEdgeAddress:            types.StringValue(branch.MysqlEdgeAddress),
+		Production:                  types.BoolValue(branch.Production),
+		Ready:                       types.BoolValue(branch.Ready),
+		RestoreChecklistCompletedAt: types.StringPointerValue(branch.RestoreChecklistCompletedAt),
+		SchemaLastUpdatedAt:         types.StringValue(branch.SchemaLastUpdatedAt),
+		ShardCount:                  types.Float64PointerValue(branch.ShardCount),
+		Sharded:                     types.BoolValue(branch.Sharded),
+		UpdatedAt:                   types.StringValue(branch.UpdatedAt),
+	}
 }
 
 func (r *branchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -157,9 +154,7 @@ func (r *branchResource) Configure(ctx context.Context, req resource.ConfigureRe
 	if req.ProviderData == nil {
 		return
 	}
-
 	client, ok := req.ProviderData.(*planetscale.Client)
-
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
@@ -168,7 +163,6 @@ func (r *branchResource) Configure(ctx context.Context, req resource.ConfigureRe
 
 		return
 	}
-
 	r.client = client
 }
 
@@ -212,7 +206,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	resp.Diagnostics.Append(data.fromClient(ctx, &res.Branch)...)
+	data = branchResourceFromClient(ctx, &res.Branch, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -239,7 +233,7 @@ func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	resp.Diagnostics.Append(data.fromClient(ctx, &res.Branch)...)
+	data = branchResourceFromClient(ctx, &res.Branch, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -279,11 +273,10 @@ func (r *branchResource) Update(ctx context.Context, req resource.UpdateRequest,
 			branch = res.Branch
 		}
 	}
-	resp.Diagnostics.Append(data.fromClient(ctx, &branch)...)
+	data = branchResourceFromClient(ctx, &branch, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 

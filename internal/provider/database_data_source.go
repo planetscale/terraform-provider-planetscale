@@ -6,6 +6,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -20,12 +21,6 @@ func newDatabaseDataSource() datasource.DataSource {
 
 type databaseDataSource struct {
 	client *planetscale.Client
-}
-
-type TTdatabaseDataSourceModel struct {
-	Organization string `tfsdk:"organization"`
-
-	databaseDataSourceModel
 }
 
 func (d *databaseDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -52,9 +47,10 @@ func (d *databaseDataSource) Configure(ctx context.Context, req datasource.Confi
 }
 
 func (d *databaseDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *TTdatabaseDataSourceModel
+	var data *databaseDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
+		tflog.Error(ctx, "unable to read config")
 		return
 	}
 	res, err := d.client.GetDatabase(ctx, data.Organization, data.Name.ValueString())
@@ -66,13 +62,14 @@ func (d *databaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError("Received a nil database", "")
 		return
 	}
-	state := TTdatabaseDataSourceModel{
-		Organization: data.Organization,
+	state := databaseFromClient(&res.Database, data.Organization, resp.Diagnostics)
+	if resp.Diagnostics.HasError() {
+		tflog.Error(ctx, "unable to convert client object to tf model")
+		return
 	}
-	resp.Diagnostics.Append(state.fromClient(&res.Database)...)
-
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
+		tflog.Error(ctx, "unable to store tf model")
 		return
 	}
 }

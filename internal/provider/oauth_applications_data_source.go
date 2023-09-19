@@ -80,12 +80,10 @@ func (d *oauthApplicationsDataSource) Read(ctx context.Context, req datasource.R
 	}
 	for _, item := range res.Data {
 		item := item
-		el := oauthApplicationDataSourceModel{}
-		resp.Diagnostics.Append(el.fromClient(&item)...)
+		state.Applications = append(state.Applications, *oauthApplicationFromClient(&item, resp.Diagnostics))
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		state.Applications = append(state.Applications, el)
 	}
 
 	diags := resp.State.Set(ctx, &state)
