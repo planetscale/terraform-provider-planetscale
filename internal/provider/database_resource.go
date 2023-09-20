@@ -344,7 +344,6 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		}
 	}
 
-	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 

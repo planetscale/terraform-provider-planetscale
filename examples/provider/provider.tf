@@ -16,25 +16,25 @@ data "planetscale_organizations" "test" {}
 #   value = data.planetscale_organizations.test
 # }
 
-# data "planetscale_organization" "test" {
-#   name = data.planetscale_organizations.test.organizations.0.name
-# }
+data "planetscale_organization" "test" {
+  name = data.planetscale_organizations.test.organizations.0.name
+}
 
 # output "org" {
 #   value = data.planetscale_organization.test
 # }
 
-# data "planetscale_organization_regions" "test" {
-#   organization = data.planetscale_organizations.test.organizations.0.name
-# }
+data "planetscale_organization_regions" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+}
 
 # output "org_regions" {
 #   value = data.planetscale_organization_regions.test
 # }
 
-# data "planetscale_databases" "test" {
-#   organization = data.planetscale_organizations.test.organizations.0.name
-# }
+data "planetscale_databases" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+}
 
 # output "dbs" {
 #   value = data.planetscale_databases.test
@@ -49,58 +49,58 @@ data "planetscale_database" "test" {
 #   value = data.planetscale_database.test
 # }
 
-# data "planetscale_database_regions" "test" {
-#   organization = data.planetscale_database.test.organization
-#   name = data.planetscale_database.test.name
-# }
+data "planetscale_database_regions" "test" {
+  organization = data.planetscale_database.test.organization
+  name         = data.planetscale_database.test.name
+}
 
 # output "database_regions" {
 #   value = data.planetscale_database_regions.test
 # }
 
-# data "planetscale_database_read_only_regions" "test" {
-#   organization = data.planetscale_database.test.organization
-#   name = data.planetscale_database.test.name
-# }
+data "planetscale_database_read_only_regions" "test" {
+  organization = data.planetscale_database.test.organization
+  name         = data.planetscale_database.test.name
+}
 
 # output "database_ro_regions" {
 #   value = data.planetscale_database_regions.test
 # }
 
-# data "planetscale_branches" "test" {
-#   organization = data.planetscale_database.test.organization
-#   database = data.planetscale_database.test.name
-# }
+data "planetscale_branches" "test" {
+  organization = data.planetscale_database.test.organization
+  database     = data.planetscale_database.test.name
+}
 
 # output "branches" {
 #   value = data.planetscale_branches.test
 # }
 
-# data "planetscale_branch" "test" {
-#   organization = data.planetscale_database.test.organization
-#   database = data.planetscale_database.test.name
-#   name = "main"
-# }
+data "planetscale_branch" "test" {
+  organization = data.planetscale_database.test.organization
+  database     = data.planetscale_database.test.name
+  name         = "main"
+}
 
 # output "branch" {
 #   value = data.planetscale_branch.test
 # }
 
-# data "planetscale_branch_schema" "test" {
-#   organization = data.planetscale_database.test.organization
-#   database = data.planetscale_database.test.name
-#   branch = data.planetscale_branch.test.name
-# }
+data "planetscale_branch_schema" "test" {
+  organization = data.planetscale_database.test.organization
+  database     = data.planetscale_database.test.name
+  branch       = data.planetscale_branch.test.name
+}
 
 # output "branch_schema" {
 #   value = data.planetscale_branch_schema.test
 # }
 
-# data "planetscale_branch_schema_lint" "test" {
-#   organization = data.planetscale_database.test.organization
-#   database = data.planetscale_database.test.name
-#   branch = data.planetscale_branch.test.name
-# }
+data "planetscale_branch_schema_lint" "test" {
+  organization = data.planetscale_database.test.organization
+  database     = data.planetscale_database.test.name
+  branch       = data.planetscale_branch.test.name
+}
 
 # output "schema_lint" {
 #   value = data.planetscale_branch_schema_lint.test
@@ -127,32 +127,53 @@ data "planetscale_database" "test" {
 data "planetscale_backups" "test" {
   organization = data.planetscale_organizations.test.organizations.0.name
   database     = data.planetscale_database.test.name
-  branch       = resource.planetscale_branch.test.name
+  branch       = data.planetscale_branch.test.name
 }
 
 output "backups" {
   value = data.planetscale_backups.test
 }
 
-resource "planetscale_database" "test" {
-  organization = data.planetscale_organizations.test.organizations.0.name
-  name         = "again"
-}
-
-resource "planetscale_branch" "test" {
-  organization  = data.planetscale_organizations.test.organizations.0.name
-  database      = data.planetscale_database.test.name
-  name          = "world"
-  parent_branch = "main"
-}
-
-resource "planetscale_backup" "test" {
+data "planetscale_backup" "test" {
   organization = data.planetscale_organizations.test.organizations.0.name
   database     = data.planetscale_database.test.name
-  branch       = resource.planetscale_branch.test.name
-  name         = "antoine_was_here"
-  backup_policy = {
-    retention_unit  = "day"
-    retention_value = 1
-  }
+  branch       = data.planetscale_branch.test.name
+  id           = data.planetscale_backups.test.backups.0.id
 }
+
+output "backup" {
+  value = data.planetscale_backup.test
+}
+
+data "planetscale_passwords" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+  database     = data.planetscale_database.test.name
+  branch       = data.planetscale_branch.test.name
+}
+
+output "passwords" {
+  value = data.planetscale_passwords.test
+}
+
+# resource "planetscale_database" "test" {
+#   organization = data.planetscale_organizations.test.organizations.0.name
+#   name         = "again"
+# }
+
+# resource "planetscale_branch" "test" {
+#   organization  = data.planetscale_organizations.test.organizations.0.name
+#   database      = data.planetscale_database.test.name
+#   name          = "world"
+#   parent_branch = "main"
+# }
+
+# resource "planetscale_backup" "test" {
+#   organization = data.planetscale_organizations.test.organizations.0.name
+#   database     = data.planetscale_database.test.name
+#   branch       = resource.planetscale_branch.test.name
+#   name         = "antoine_was_here"
+#   backup_policy = {
+#     retention_unit  = "day"
+#     retention_value = 1
+#   }
+# }

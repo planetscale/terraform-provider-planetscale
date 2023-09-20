@@ -751,14 +751,122 @@ func schemaSnapshotFromClient(schemaSnapshot *planetscale.SchemaSnapshot, diags 
 	}
 }
 
-func backupDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
-	return map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"database":     schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"branch":       schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"name":         schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"id":           schema.StringAttribute{Required: !computedName, Computed: computedName},
+var branchForPasswordDataSourceSchemaAttribute = map[string]schema.Attribute{
+	"access_host_url":    schema.StringAttribute{Computed: true},
+	"id":                 schema.StringAttribute{Computed: true},
+	"mysql_edge_address": schema.StringAttribute{Computed: true},
+	"name":               schema.StringAttribute{Computed: true},
+	"production":         schema.BoolAttribute{Computed: true},
+}
 
+type branchForPasswordDataSourceModel struct {
+	AccessHostUrl    types.String `tfsdk:"access_host_url"`
+	Id               types.String `tfsdk:"id"`
+	MysqlEdgeAddress types.String `tfsdk:"mysql_edge_address"`
+	Name             types.String `tfsdk:"name"`
+	Production       types.Bool   `tfsdk:"production"`
+}
+
+func branchForPasswordFromClient(branchForPassword *planetscale.BranchForPassword, diags diag.Diagnostics) *branchForPasswordDataSourceModel {
+	if branchForPassword == nil {
+		return nil
+	}
+	return &branchForPasswordDataSourceModel{
+		AccessHostUrl:    types.StringValue(branchForPassword.AccessHostUrl),
+		Id:               types.StringValue(branchForPassword.Id),
+		MysqlEdgeAddress: types.StringValue(branchForPassword.MysqlEdgeAddress),
+		Name:             types.StringValue(branchForPassword.Name),
+		Production:       types.BoolValue(branchForPassword.Production),
+	}
+}
+
+func passwordDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
+	return map[string]schema.Attribute{
+		"organization":        schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"database":            schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"branch":              schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"id":                  schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"read_only_region_id": schema.StringAttribute{Optional: !computedName, Computed: computedName},
+		"access_host_url":     schema.StringAttribute{Computed: true},
+		"actor": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: actorDataSourceSchemaAttribute,
+		},
+		"created_at": schema.StringAttribute{Computed: true},
+		"database_branch": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: branchForPasswordDataSourceSchemaAttribute,
+		},
+		"deleted_at":   schema.StringAttribute{Computed: true},
+		"expires_at":   schema.StringAttribute{Computed: true},
+		"integrations": schema.ListAttribute{Computed: true, ElementType: types.StringType},
+		"name":         schema.StringAttribute{Computed: true},
+		"region": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: regionDataSourceSchemaAttribute,
+		},
+		"renewable":   schema.BoolAttribute{Computed: true},
+		"role":        schema.StringAttribute{Computed: true},
+		"ttl_seconds": schema.Float64Attribute{Computed: true},
+		"username":    schema.StringAttribute{Computed: true},
+	}
+}
+
+type passwordDataSourceModel struct {
+	Organization     types.String                      `tfsdk:"organization"`
+	Database         types.String                      `tfsdk:"database"`
+	Branch           types.String                      `tfsdk:"branch"`
+	ReadOnlyRegionId types.String                      `tfsdk:"read_only_region_id"`
+	Id               types.String                      `tfsdk:"id"`
+	AccessHostUrl    types.String                      `tfsdk:"access_host_url"`
+	Actor            *actorDataSourceModel             `tfsdk:"actor"`
+	CreatedAt        types.String                      `tfsdk:"created_at"`
+	DatabaseBranch   *branchForPasswordDataSourceModel `tfsdk:"database_branch"`
+	DeletedAt        types.String                      `tfsdk:"deleted_at"`
+	ExpiresAt        types.String                      `tfsdk:"expires_at"`
+	Integrations     types.List                        `tfsdk:"integrations"`
+	Name             types.String                      `tfsdk:"name"`
+	Region           *regionDataSourceModel            `tfsdk:"region"`
+	Renewable        types.Bool                        `tfsdk:"renewable"`
+	Role             types.String                      `tfsdk:"role"`
+	TtlSeconds       types.Float64                     `tfsdk:"ttl_seconds"`
+	Username         types.String                      `tfsdk:"username"`
+}
+
+func passwordFromClient(password *planetscale.Password, organization, database, branch string, readOnlyRegionID *string, diags diag.Diagnostics) *passwordDataSourceModel {
+	if password == nil {
+		return nil
+	}
+	return &passwordDataSourceModel{
+		Organization:     types.StringValue(organization),
+		Database:         types.StringValue(database),
+		Branch:           types.StringValue(branch),
+		ReadOnlyRegionId: types.StringPointerValue(readOnlyRegionID),
+		AccessHostUrl:    types.StringValue(password.AccessHostUrl),
+		Actor:            actorFromClient(password.Actor, diags),
+		CreatedAt:        types.StringValue(password.CreatedAt),
+		DatabaseBranch:   branchForPasswordFromClient(&password.DatabaseBranch, diags),
+		DeletedAt:        types.StringPointerValue(password.DeletedAt),
+		ExpiresAt:        types.StringPointerValue(password.ExpiresAt),
+		Id:               types.StringValue(password.Id),
+		Integrations:     stringsToListValue(password.Integrations, diags),
+		Name:             types.StringValue(password.Name),
+		Region:           regionFromClient(password.Region, diags),
+		Renewable:        types.BoolValue(password.Renewable),
+		Role:             types.StringValue(password.Role),
+		TtlSeconds:       types.Float64Value(password.TtlSeconds),
+		Username:         types.StringPointerValue(password.Username),
+	}
+}
+
+func backupDataSourceSchemaAttribute(computedID bool) map[string]schema.Attribute {
+	return map[string]schema.Attribute{
+		"organization": schema.StringAttribute{Required: !computedID, Computed: computedID},
+		"database":     schema.StringAttribute{Required: !computedID, Computed: computedID},
+		"branch":       schema.StringAttribute{Required: !computedID, Computed: computedID},
+		"id":           schema.StringAttribute{Required: !computedID, Computed: computedID},
+
+		"name": schema.StringAttribute{Computed: true},
 		"actor": schema.SingleNestedAttribute{
 			Computed:   true,
 			Attributes: actorDataSourceSchemaAttribute,

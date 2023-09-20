@@ -138,3 +138,11 @@ var schemaSnapshotResourceAttrTypes = map[string]attr.Type{
 	"updated_at": basetypes.StringType{},
 	"url":        basetypes.StringType{},
 }
+
+var databaseBranchResourceAttrTypes = map[string]attr.Type{
+	"access_host_url":    basetypes.StringType{},
+	"id":                 basetypes.StringType{},
+	"mysql_edge_address": basetypes.StringType{},
+	"name":               basetypes.StringType{},
+	"production":         basetypes.BoolType{},
+}
