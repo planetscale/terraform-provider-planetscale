@@ -94,7 +94,10 @@ func (d *databaseRegionsDataSource) Read(ctx context.Context, req datasource.Rea
 		resp.Diagnostics.AddError("Received a nil database regions list", "")
 		return
 	}
-	state := databaseRegionsDataSourceModel{}
+	state := databaseRegionsDataSourceModel{
+		Organization: data.Organization,
+		Name:         data.Name,
+	}
 	for _, region := range res.Data {
 		state.Regions = append(state.Regions, databaseRegionDataSourceModel{
 			DisplayName:       region.DisplayName,

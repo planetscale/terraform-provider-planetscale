@@ -39,7 +39,7 @@ func (d *branchesDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 		"branches": schema.ListNestedAttribute{
 			Computed: true,
 			NestedObject: schema.NestedAttributeObject{
-				Attributes: branchDataSourceSchemaAttribute,
+				Attributes: branchDataSourceSchemaAttribute(true),
 			},
 		},
 	}}
@@ -85,7 +85,7 @@ func (d *branchesDataSource) Read(ctx context.Context, req datasource.ReadReques
 
 	for _, item := range res.Data {
 		item := item
-		state.Branches = append(state.Branches, *branchFromClient(&item, resp.Diagnostics))
+		state.Branches = append(state.Branches, *branchFromClient(&item, data.Organization, data.Database, resp.Diagnostics))
 		if resp.Diagnostics.HasError() {
 			return
 		}

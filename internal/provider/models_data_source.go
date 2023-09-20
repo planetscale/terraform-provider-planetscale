@@ -303,43 +303,48 @@ func databaseFromClient(database *planetscale.Database, orgName string, diags di
 	}
 }
 
-var branchDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"organization": schema.StringAttribute{Required: true},
-	"database":     schema.StringAttribute{Required: true},
-	"name":         schema.StringAttribute{Required: true},
+func branchDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
+	return map[string]schema.Attribute{
+		"organization": schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"database":     schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"name":         schema.StringAttribute{Required: !computedName, Computed: computedName},
 
-	"access_host_url":                schema.StringAttribute{Computed: true},
-	"cluster_rate_name":              schema.StringAttribute{Computed: true},
-	"created_at":                     schema.StringAttribute{Computed: true},
-	"html_url":                       schema.StringAttribute{Computed: true},
-	"id":                             schema.StringAttribute{Computed: true},
-	"initial_restore_id":             schema.StringAttribute{Computed: true},
-	"mysql_address":                  schema.StringAttribute{Computed: true},
-	"mysql_edge_address":             schema.StringAttribute{Computed: true},
-	"parent_branch":                  schema.StringAttribute{Computed: true},
-	"production":                     schema.BoolAttribute{Computed: true},
-	"ready":                          schema.BoolAttribute{Computed: true},
-	"restore_checklist_completed_at": schema.StringAttribute{Computed: true},
-	"schema_last_updated_at":         schema.StringAttribute{Computed: true},
-	"shard_count":                    schema.Float64Attribute{Computed: true},
-	"sharded":                        schema.BoolAttribute{Computed: true},
-	"updated_at":                     schema.StringAttribute{Computed: true},
+		"access_host_url":                schema.StringAttribute{Computed: true},
+		"cluster_rate_name":              schema.StringAttribute{Computed: true},
+		"created_at":                     schema.StringAttribute{Computed: true},
+		"html_url":                       schema.StringAttribute{Computed: true},
+		"id":                             schema.StringAttribute{Computed: true},
+		"initial_restore_id":             schema.StringAttribute{Computed: true},
+		"mysql_address":                  schema.StringAttribute{Computed: true},
+		"mysql_edge_address":             schema.StringAttribute{Computed: true},
+		"parent_branch":                  schema.StringAttribute{Computed: true},
+		"production":                     schema.BoolAttribute{Computed: true},
+		"ready":                          schema.BoolAttribute{Computed: true},
+		"restore_checklist_completed_at": schema.StringAttribute{Computed: true},
+		"schema_last_updated_at":         schema.StringAttribute{Computed: true},
+		"shard_count":                    schema.Float64Attribute{Computed: true},
+		"sharded":                        schema.BoolAttribute{Computed: true},
+		"updated_at":                     schema.StringAttribute{Computed: true},
 
-	"actor": schema.SingleNestedAttribute{
-		Computed:   true,
-		Attributes: actorDataSourceSchemaAttribute,
-	},
-	"region": schema.SingleNestedAttribute{
-		Computed:   true,
-		Attributes: regionDataSourceSchemaAttribute,
-	},
-	"restored_from_branch": schema.SingleNestedAttribute{
-		Computed:   true,
-		Attributes: restoredFromBranchDataSourceSchemaAttribute,
-	},
+		"actor": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: actorDataSourceSchemaAttribute,
+		},
+		"region": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: regionDataSourceSchemaAttribute,
+		},
+		"restored_from_branch": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: restoredFromBranchDataSourceSchemaAttribute,
+		},
+	}
 }
 
 type branchDataSourceModel struct {
+	Organization                types.String                       `tfsdk:"organization"`
+	Database                    types.String                       `tfsdk:"database"`
+	Name                        types.String                       `tfsdk:"name"`
 	AccessHostUrl               types.String                       `tfsdk:"access_host_url"`
 	Actor                       *actorDataSourceModel              `tfsdk:"actor"`
 	ClusterRateName             types.String                       `tfsdk:"cluster_rate_name"`
@@ -349,7 +354,6 @@ type branchDataSourceModel struct {
 	InitialRestoreId            types.String                       `tfsdk:"initial_restore_id"`
 	MysqlAddress                types.String                       `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                       `tfsdk:"mysql_edge_address"`
-	Name                        types.String                       `tfsdk:"name"`
 	ParentBranch                types.String                       `tfsdk:"parent_branch"`
 	Production                  types.Bool                         `tfsdk:"production"`
 	Ready                       types.Bool                         `tfsdk:"ready"`
@@ -362,11 +366,13 @@ type branchDataSourceModel struct {
 	UpdatedAt                   types.String                       `tfsdk:"updated_at"`
 }
 
-func branchFromClient(branch *planetscale.Branch, diags diag.Diagnostics) *branchDataSourceModel {
+func branchFromClient(branch *planetscale.Branch, organization, database string, diags diag.Diagnostics) *branchDataSourceModel {
 	if branch == nil {
 		return nil
 	}
 	return &branchDataSourceModel{
+		Organization:                types.StringValue(organization),
+		Database:                    types.StringValue(database),
 		Actor:                       actorFromClient(branch.Actor, diags),
 		Region:                      regionFromClient(branch.Region, diags),
 		RestoredFromBranch:          restoredFromBranchFromClient(branch.RestoredFromBranch, diags),

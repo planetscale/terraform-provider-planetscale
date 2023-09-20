@@ -71,7 +71,7 @@ type databaseResourceModel struct {
 	Url                               types.String  `tfsdk:"url"`
 }
 
-func databaseResourcefromClient(ctx context.Context, database *planetscale.Database, clusterSize types.String, diags diag.Diagnostics) *databaseResourceModel {
+func databaseResourcefromClient(ctx context.Context, database *planetscale.Database, organization, clusterSize types.String, diags diag.Diagnostics) *databaseResourceModel {
 	if database == nil {
 		return nil
 	}
@@ -81,6 +81,7 @@ func databaseResourcefromClient(ctx context.Context, database *planetscale.Datab
 	dataImport, diags := types.ObjectValueFrom(ctx, importResourceAttrTypes, database.DataImport)
 	diags.Append(diags...)
 	return &databaseResourceModel{
+		Organization:                      organization,
 		DataImport:                        dataImport,
 		Id:                                types.StringValue(database.Id),
 		AllowDataBranching:                types.BoolValue(database.AllowDataBranching),
@@ -176,7 +177,6 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"migration_framework":                    schema.StringAttribute{Computed: true, Optional: true},
 			"migration_table_name":                   schema.StringAttribute{Computed: true, Optional: true},
 			"multiple_admins_required_for_deletion":  schema.BoolAttribute{Computed: true, Optional: true},
-			"notes":                                  schema.StringAttribute{Computed: true, Optional: true},
 			"plan":                                   schema.StringAttribute{Computed: true, Optional: true},
 			"cluster_size":                           schema.StringAttribute{Computed: true, Optional: true},
 			"production_branch_web_console":          schema.BoolAttribute{Computed: true, Optional: true},
@@ -225,16 +225,25 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	orgName := data.Organization.ValueString()
-	name := data.Name.ValueString()
+	org := data.Organization
+	name := data.Name
+
+	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
+		return
+	}
+	if name.IsNull() || name.IsUnknown() || name.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("name"), "name is required", "a name must be provided and cannot be empty")
+		return
+	}
 
 	createDbReq := planetscale.CreateDatabaseReq{
-		Name:        name,
+		Name:        name.ValueString(),
 		Plan:        stringValueIfKnown(data.Plan),
 		ClusterSize: stringValueIfKnown(data.ClusterSize),
 		Region:      stringValueIfKnown(data.Region),
 	}
-	res, err := r.client.CreateDatabase(ctx, orgName, createDbReq)
+	res, err := r.client.CreateDatabase(ctx, org.ValueString(), createDbReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database, got error: %s", err))
 		return
@@ -243,7 +252,7 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError("Unable to create databases", "no data")
 		return
 	}
-	data = databaseResourcefromClient(ctx, &res.Database, data.ClusterSize, resp.Diagnostics)
+	data = databaseResourcefromClient(ctx, &res.Database, data.Organization, data.ClusterSize, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -278,7 +287,7 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	data = databaseResourcefromClient(ctx, &res.Database, data.ClusterSize, resp.Diagnostics)
+	data = databaseResourcefromClient(ctx, &res.Database, data.Organization, data.ClusterSize, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -329,7 +338,7 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update database settings, got error: %s", err))
 			return
 		}
-		data = databaseResourcefromClient(ctx, &res.Database, data.ClusterSize, resp.Diagnostics)
+		data = databaseResourcefromClient(ctx, &res.Database, data.Organization, data.ClusterSize, resp.Diagnostics)
 		if resp.Diagnostics.HasError() {
 			return
 		}

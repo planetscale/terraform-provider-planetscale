@@ -12,114 +12,127 @@ provider "planetscale" {
 
 data "planetscale_organizations" "test" {}
 
-output "orgs" {
-  value = data.planetscale_organizations.test
-}
+# output "orgs" {
+#   value = data.planetscale_organizations.test
+# }
 
-data "planetscale_organization" "test" {
-  name = data.planetscale_organizations.test.organizations.0.name
-}
+# data "planetscale_organization" "test" {
+#   name = data.planetscale_organizations.test.organizations.0.name
+# }
 
-output "org" {
-  value = data.planetscale_organization.test
-}
+# output "org" {
+#   value = data.planetscale_organization.test
+# }
 
-data "planetscale_organization_regions" "test" {
-  organization = data.planetscale_organizations.test.organizations.0.name
-}
+# data "planetscale_organization_regions" "test" {
+#   organization = data.planetscale_organizations.test.organizations.0.name
+# }
 
-output "org_regions" {
-  value = data.planetscale_organization_regions.test
-}
+# output "org_regions" {
+#   value = data.planetscale_organization_regions.test
+# }
 
-data "planetscale_databases" "test" {
-  organization = data.planetscale_organizations.test.organizations.0.name
-}
+# data "planetscale_databases" "test" {
+#   organization = data.planetscale_organizations.test.organizations.0.name
+# }
 
-output "dbs" {
-  value = data.planetscale_databases.test
-}
+# output "dbs" {
+#   value = data.planetscale_databases.test
+# }
 
 data "planetscale_database" "test" {
   organization = data.planetscale_organizations.test.organizations.0.name
   name         = "again"
 }
 
-output "db" {
-  value = data.planetscale_database.test
-}
-
-# resource "planetscale_database" "my_db" {
-#   organization = data.planetscale_organizations.test.organizations.0.name
-#   name = "again"
+# output "db" {
+#   value = data.planetscale_database.test
 # }
 
-# data "planetscale_database_regions" "my_regions" {
-#   organization = resource.planetscale_database.my_db.organization
-#   name = resource.planetscale_database.my_db.name
+# data "planetscale_database_regions" "test" {
+#   organization = data.planetscale_database.test.organization
+#   name = data.planetscale_database.test.name
 # }
 
-# data "planetscale_database_read_only_regions" "my_ro_regions" {
-#   organization = resource.planetscale_database.my_db.organization
-#   name = resource.planetscale_database.my_db.name
+# output "database_regions" {
+#   value = data.planetscale_database_regions.test
 # }
 
-# data "planetscale_branches" "my_branches" {
-#   organization = data.planetscale_database.my_db.organization
-#   database = data.planetscale_database.my_db.name
+# data "planetscale_database_read_only_regions" "test" {
+#   organization = data.planetscale_database.test.organization
+#   name = data.planetscale_database.test.name
 # }
 
-# output "my_branches" {
-#   value = data.planetscale_branches.my_branches
+# output "database_ro_regions" {
+#   value = data.planetscale_database_regions.test
 # }
 
-# data "planetscale_branch" "my_branch" {
-#   organization = data.planetscale_database.my_db.organization
-#   database = data.planetscale_database.my_db.name
-#   name = "world"
+# data "planetscale_branches" "test" {
+#   organization = data.planetscale_database.test.organization
+#   database = data.planetscale_database.test.name
 # }
 
-# output "my_branch" {
-#   value = data.planetscale_branch.my_branch
+# output "branches" {
+#   value = data.planetscale_branches.test
 # }
 
-# data "planetscale_branch_schema" "my_schema" {
-#   organization = resource.planetscale_database.my_db.organization
-#   database = resource.planetscale_database.my_db.name
-#   branch = data.planetscale_branch.my_branch.name
+# data "planetscale_branch" "test" {
+#   organization = data.planetscale_database.test.organization
+#   database = data.planetscale_database.test.name
+#   name = "main"
 # }
 
-# output "my_schema" {
-#   value = data.planetscale_branch_schema.my_schema
+# output "branch" {
+#   value = data.planetscale_branch.test
 # }
 
-# data "planetscale_branch_schema_lint" "my_schema_lint" {
-#   organization = resource.planetscale_database.my_db.organization
-#   database = resource.planetscale_database.my_db.name
-#   branch = data.planetscale_branch.my_branch.name
+# data "planetscale_branch_schema" "test" {
+#   organization = data.planetscale_database.test.organization
+#   database = data.planetscale_database.test.name
+#   branch = data.planetscale_branch.test.name
 # }
 
-# output "my_schema_lint" {
-#   value = data.planetscale_branch_schema_lint.my_schema_lint
+# output "branch_schema" {
+#   value = data.planetscale_branch_schema.test
 # }
 
-# resource "planetscale_branch" "test" {
-#   organization  = data.planetscale_organizations.test.organizations.0.name
-#   database      = data.planetscale_database.my_db.name
-#   name          = "world"
-#   parent_branch = "main"
+# data "planetscale_branch_schema_lint" "test" {
+#   organization = data.planetscale_database.test.organization
+#   database = data.planetscale_database.test.name
+#   branch = data.planetscale_branch.test.name
 # }
+
+# output "schema_lint" {
+#   value = data.planetscale_branch_schema_lint.test
+# }
+
+# requires a feature flag
 
 # data "planetscale_oauth_applications" "test" {
-#   organization = data.planetscale_organizations.test.organizations.0.name
+#   organization = data.planetscale_organization.test.name
 # }
 
-# output "my_oauth_apps" {
+# output "oauth_apps" {
 #   value = data.planetscale_oauth_applications.test
 # }
+
+# doesn't work right now for some reason
 
 # data "planetscale_user" "test" {}
 
 # output "current_user" {
 #   value = data.planetscale_user.test
 # }
+
+
+resource "planetscale_database" "test" {
+  organization =  data.planetscale_organizations.test.organizations.0.name
+  name = "again"
+}
+
+resource "planetscale_branch" "test" {
+  organization  = data.planetscale_organizations.test.organizations.0.name
+  database      = data.planetscale_database.test.name
+  name          = "world"
+  parent_branch = "main"
+}

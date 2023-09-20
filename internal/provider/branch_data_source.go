@@ -22,20 +22,12 @@ type branchDataSource struct {
 	client *planetscale.Client
 }
 
-type TTbranchDataSourceModel struct {
-	Organization string `tfsdk:"organization"`
-	Database     string `tfsdk:"database"`
-	Name         string `tfsdk:"name"`
-
-	branchDataSourceModel
-}
-
 func (d *branchDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_branch"
 }
 
 func (d *branchDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: branchDataSourceSchemaAttribute}
+	resp.Schema = schema.Schema{Attributes: branchDataSourceSchemaAttribute(false)}
 }
 
 func (d *branchDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
@@ -54,12 +46,12 @@ func (d *branchDataSource) Configure(ctx context.Context, req datasource.Configu
 }
 
 func (d *branchDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *TTbranchDataSourceModel
+	var data *branchDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := d.client.GetBranch(ctx, data.Organization, data.Database, data.Name)
+	res, err := d.client.GetBranch(ctx, data.Organization.ValueString(), data.Database.ValueString(), data.Name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read database branch", err.Error())
 		return
@@ -68,7 +60,7 @@ func (d *branchDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Unable to read database branch", "no data")
 		return
 	}
-	state := branchFromClient(&res.Branch, resp.Diagnostics)
+	state := branchFromClient(&res.Branch, data.Organization.ValueString(), data.Database.ValueString(), resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}

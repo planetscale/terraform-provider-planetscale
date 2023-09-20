@@ -59,7 +59,7 @@ type branchResourceModel struct {
 	UpdatedAt                   types.String  `tfsdk:"updated_at"`
 }
 
-func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, diags diag.Diagnostics) *branchResourceModel {
+func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, organization, database types.String, diags diag.Diagnostics) *branchResourceModel {
 	if branch == nil {
 		return nil
 	}
@@ -70,6 +70,9 @@ func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, d
 	restoredFromBranch, diags := types.ObjectValueFrom(ctx, restoredFromBranchResourceAttrTypes, branch.RestoredFromBranch)
 	diags.Append(diags...)
 	return &branchResourceModel{
+		Organization: organization,
+		Database:     database,
+
 		Actor:                       actor,
 		Region:                      region,
 		RestoredFromBranch:          restoredFromBranch,
@@ -174,8 +177,22 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	orgName := data.Organization.ValueString()
-	dbName := data.Database.ValueString()
+	org := data.Organization
+	database := data.Database
+	name := data.Name
+
+	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
+		return
+	}
+	if database.IsNull() || database.IsUnknown() || database.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("database"), "database is required", "a database must be provided and cannot be empty")
+		return
+	}
+	if name.IsNull() || name.IsUnknown() || name.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("name"), "name is required", "a name must be provided and cannot be empty")
+		return
+	}
 
 	parentBranch := stringValueIfKnown(data.ParentBranch)
 	if parentBranch == nil {
@@ -184,7 +201,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 
 	createReq := planetscale.CreateBranchReq{
-		Name:         data.Name.ValueString(),
+		Name:         name.ValueString(),
 		ParentBranch: *parentBranch,
 	}
 	if !(data.RestoredFromBranch.IsNull() || data.RestoredFromBranch.IsUnknown()) {
@@ -196,7 +213,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		backupID := rfb.Id.String()
 		createReq.BackupId = &backupID
 	}
-	res, err := r.client.CreateBranch(ctx, orgName, dbName, createReq)
+	res, err := r.client.CreateBranch(ctx, org.ValueString(), database.ValueString(), createReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create branch, got error: %s", err))
 		return
@@ -206,7 +223,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	data = branchResourceFromClient(ctx, &res.Branch, resp.Diagnostics)
+	data = branchResourceFromClient(ctx, &res.Branch, data.Organization, data.Database, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -223,17 +240,30 @@ func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	org := data.Organization.ValueString()
-	database := data.Database.ValueString()
-	name := data.Name.ValueString()
+	org := data.Organization
+	database := data.Database
+	name := data.Name
 
-	res, err := r.client.GetBranch(ctx, org, database, name)
+	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
+		return
+	}
+	if database.IsNull() || database.IsUnknown() || database.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("database"), "database is required", "a database must be provided and cannot be empty")
+		return
+	}
+	if name.IsNull() || name.IsUnknown() || name.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("name"), "name is required", "a name must be provided and cannot be empty")
+		return
+	}
+
+	res, err := r.client.GetBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read branch, got error: %s", err))
 		return
 	}
 
-	data = branchResourceFromClient(ctx, &res.Branch, resp.Diagnostics)
+	data = branchResourceFromClient(ctx, &res.Branch, data.Organization, data.Database, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -251,29 +281,48 @@ func (r *branchResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
-	org := data.Organization.ValueString()
-	database := data.Database.ValueString()
-	name := data.Name.ValueString()
+	org := data.Organization
+	database := data.Database
+	name := data.Name
+
+	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
+		return
+	}
+	if database.IsNull() || database.IsUnknown() || database.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("database"), "database is required", "a database must be provided and cannot be empty")
+		return
+	}
+	if name.IsNull() || name.IsUnknown() || name.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("name"), "name is required", "a name must be provided and cannot be empty")
+		return
+	}
 
 	productionWasChanged := false
 	isProduction := boolIfDifferent(old.Production, data.Production, &productionWasChanged)
 	var branch planetscale.Branch
 	if productionWasChanged {
 		if *isProduction {
-			res, err := r.client.PromoteBranch(ctx, org, database, name)
+			res, err := r.client.PromoteBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
 			if err != nil {
 				resp.Diagnostics.AddAttributeError(path.Root("production"), "Failed to promote branch", "Unable to promote branch to production: "+err.Error())
+				if resp.Diagnostics.HasError() {
+					return
+				}
 			}
 			branch = res.Branch
 		} else {
-			res, err := r.client.DemoteBranch(ctx, org, database, name)
+			res, err := r.client.DemoteBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
 			if err != nil {
 				resp.Diagnostics.AddAttributeError(path.Root("production"), "Failed to demote branch", "Unable to demote branch from production: "+err.Error())
+				if resp.Diagnostics.HasError() {
+					return
+				}
 			}
 			branch = res.Branch
 		}
 	}
-	data = branchResourceFromClient(ctx, &branch, resp.Diagnostics)
+	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -287,11 +336,24 @@ func (r *branchResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	org := data.Organization.ValueString()
-	database := data.Database.ValueString()
-	name := data.Name.ValueString()
+	org := data.Organization
+	database := data.Database
+	name := data.Name
 
-	res, err := r.client.DeleteBranch(ctx, org, database, name)
+	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
+		return
+	}
+	if database.IsNull() || database.IsUnknown() || database.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("database"), "database is required", "a database must be provided and cannot be empty")
+		return
+	}
+	if name.IsNull() || name.IsUnknown() || name.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("name"), "name is required", "a name must be provided and cannot be empty")
+		return
+	}
+
+	res, err := r.client.DeleteBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete branch, got error: %s", err))
 		return
