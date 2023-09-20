@@ -995,10 +995,6 @@
                   "type": "string",
                   "description": "Name of the database"
                 },
-                "notes": {
-                  "type": "string",
-                  "description": "Notes about the database"
-                },
                 "region": {
                   "type": "string",
                   "description": "The region the database will be deployed in. If left blank, defaults to the organization's default region."
@@ -1933,7 +1929,7 @@
                         "description": "The size of the backup"
                       },
                       "estimated_storage_cost": {
-                        "type": "number",
+                        "type": "string",
                         "description": "The estimated storage cost of the backup"
                       },
                       "created_at": {
@@ -2226,7 +2222,7 @@
                   "description": "The size of the backup"
                 },
                 "estimated_storage_cost": {
-                  "type": "number",
+                  "type": "string",
                   "description": "The estimated storage cost of the backup"
                 },
                 "created_at": {
@@ -2492,7 +2488,7 @@
                   "description": "The size of the backup"
                 },
                 "estimated_storage_cost": {
-                  "type": "number",
+                  "type": "string",
                   "description": "The estimated storage cost of the backup"
                 },
                 "created_at": {
@@ -9477,10 +9473,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "notes": {
-                  "type": "string",
-                  "description": "Notes on the database"
-                },
                 "automatic_migrations": {
                   "type": "boolean",
                   "description": "Whether or not to copy migration data to new branches and in deploy requests."

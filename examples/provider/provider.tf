@@ -124,10 +124,19 @@ data "planetscale_database" "test" {
 #   value = data.planetscale_user.test
 # }
 
+data "planetscale_backups" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+  database     = data.planetscale_database.test.name
+  branch       = resource.planetscale_branch.test.name
+}
+
+output "backups" {
+  value = data.planetscale_backups.test
+}
 
 resource "planetscale_database" "test" {
-  organization =  data.planetscale_organizations.test.organizations.0.name
-  name = "again"
+  organization = data.planetscale_organizations.test.organizations.0.name
+  name         = "again"
 }
 
 resource "planetscale_branch" "test" {
@@ -135,4 +144,15 @@ resource "planetscale_branch" "test" {
   database      = data.planetscale_database.test.name
   name          = "world"
   parent_branch = "main"
+}
+
+resource "planetscale_backup" "test" {
+  organization = data.planetscale_organizations.test.organizations.0.name
+  database     = data.planetscale_database.test.name
+  branch       = resource.planetscale_branch.test.name
+  name         = "antoine_was_here"
+  backup_policy = {
+    retention_unit  = "day"
+    retention_value = 1
+  }
 }

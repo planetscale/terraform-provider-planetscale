@@ -3,6 +3,9 @@ package provider
 import (
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -75,4 +78,63 @@ var importResourceAttrTypes = map[string]attr.Type{
 	"import_check_errors": basetypes.StringType{},
 	"started_at":          basetypes.StringType{},
 	"state":               basetypes.StringType{},
+}
+
+var backupPolicyResourceAttribute = map[string]schema.Attribute{
+	"retention_unit": schema.StringAttribute{
+		Required: true,
+		PlanModifiers: []planmodifier.String{
+			stringplanmodifier.RequiresReplace(),
+		},
+	},
+	"retention_value": schema.Float64Attribute{
+		Required: true,
+		PlanModifiers: []planmodifier.Float64{
+			float64planmodifier.RequiresReplace(),
+		},
+	},
+	// read-only
+	"created_at":      schema.StringAttribute{Computed: true},
+	"frequency_unit":  schema.StringAttribute{Computed: true},
+	"frequency_value": schema.Float64Attribute{Computed: true},
+	"id":              schema.StringAttribute{Computed: true},
+	"last_ran_at":     schema.StringAttribute{Computed: true},
+	"name":            schema.StringAttribute{Computed: true},
+	"next_run_at":     schema.StringAttribute{Computed: true},
+	"schedule_day":    schema.StringAttribute{Computed: true},
+	"schedule_week":   schema.StringAttribute{Computed: true},
+	"target":          schema.StringAttribute{Computed: true},
+	"updated_at":      schema.StringAttribute{Computed: true},
+}
+
+var backupPolicyResourceAttrTypes = map[string]attr.Type{
+	"created_at":      basetypes.StringType{},
+	"frequency_unit":  basetypes.StringType{},
+	"frequency_value": basetypes.Float64Type{},
+	"id":              basetypes.StringType{},
+	"last_ran_at":     basetypes.StringType{},
+	"name":            basetypes.StringType{},
+	"next_run_at":     basetypes.StringType{},
+	"retention_unit":  basetypes.StringType{},
+	"retention_value": basetypes.Float64Type{},
+	"schedule_day":    basetypes.StringType{},
+	"schedule_week":   basetypes.StringType{},
+	"target":          basetypes.StringType{},
+	"updated_at":      basetypes.StringType{},
+}
+
+var schemaSnapshotResourceAttribute = map[string]schema.Attribute{
+	"created_at": schema.StringAttribute{Computed: true},
+	"id":         schema.StringAttribute{Computed: true},
+	"name":       schema.StringAttribute{Computed: true},
+	"updated_at": schema.StringAttribute{Computed: true},
+	"url":        schema.StringAttribute{Computed: true},
+}
+
+var schemaSnapshotResourceAttrTypes = map[string]attr.Type{
+	"created_at": basetypes.StringType{},
+	"id":         basetypes.StringType{},
+	"name":       basetypes.StringType{},
+	"updated_at": basetypes.StringType{},
+	"url":        basetypes.StringType{},
 }

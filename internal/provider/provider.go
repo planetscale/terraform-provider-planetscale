@@ -129,6 +129,7 @@ func (p *PlanetScaleProvider) Resources(ctx context.Context) []func() resource.R
 	return []func() resource.Resource{
 		newDatabaseResource,
 		newBranchResource,
+		newBackupResource,
 	}
 }
 
@@ -145,6 +146,8 @@ func (p *PlanetScaleProvider) DataSources(ctx context.Context) []func() datasour
 		newBranchDataSource,
 		newBranchSchemaDataSource,
 		newBranchSchemaLintDataSource,
+		newBackupDataSource,
+		newBackupsDataSource,
 		newOAuthApplicationsDataSource,
 		newUserDataSource,
 	}

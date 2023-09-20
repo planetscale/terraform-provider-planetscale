@@ -669,6 +669,163 @@ func oauthApplicationFromClient(oa *planetscale.OauthApplication, diags diag.Dia
 	}
 }
 
+var backupPolicyDataSourceSchemaAttribute = map[string]schema.Attribute{
+	"id":              schema.StringAttribute{Computed: true},
+	"created_at":      schema.StringAttribute{Computed: true},
+	"frequency_unit":  schema.StringAttribute{Computed: true},
+	"frequency_value": schema.Float64Attribute{Computed: true},
+	"last_ran_at":     schema.StringAttribute{Computed: true},
+	"name":            schema.StringAttribute{Computed: true},
+	"next_run_at":     schema.StringAttribute{Computed: true},
+	"retention_unit":  schema.StringAttribute{Computed: true},
+	"retention_value": schema.Float64Attribute{Computed: true},
+	"schedule_day":    schema.StringAttribute{Computed: true},
+	"schedule_week":   schema.StringAttribute{Computed: true},
+	"target":          schema.StringAttribute{Computed: true},
+	"updated_at":      schema.StringAttribute{Computed: true},
+}
+
+type backupPolicyDataSourceModel struct {
+	CreatedAt      types.String  `tfsdk:"created_at"`
+	FrequencyUnit  types.String  `tfsdk:"frequency_unit"`
+	FrequencyValue types.Float64 `tfsdk:"frequency_value"`
+	Id             types.String  `tfsdk:"id"`
+	LastRanAt      types.String  `tfsdk:"last_ran_at"`
+	Name           types.String  `tfsdk:"name"`
+	NextRunAt      types.String  `tfsdk:"next_run_at"`
+	RetentionUnit  types.String  `tfsdk:"retention_unit"`
+	RetentionValue types.Float64 `tfsdk:"retention_value"`
+	ScheduleDay    types.String  `tfsdk:"schedule_day"`
+	ScheduleWeek   types.String  `tfsdk:"schedule_week"`
+	Target         types.String  `tfsdk:"target"`
+	UpdatedAt      types.String  `tfsdk:"updated_at"`
+}
+
+func backupPolicyFromClient(backupPolicy *planetscale.BackupPolicy, diags diag.Diagnostics) *backupPolicyDataSourceModel {
+	if backupPolicy == nil {
+		return nil
+	}
+	return &backupPolicyDataSourceModel{
+		CreatedAt:      types.StringValue(backupPolicy.CreatedAt),
+		FrequencyUnit:  types.StringValue(backupPolicy.FrequencyUnit),
+		FrequencyValue: types.Float64Value(backupPolicy.FrequencyValue),
+		Id:             types.StringValue(backupPolicy.Id),
+		LastRanAt:      types.StringValue(backupPolicy.LastRanAt),
+		Name:           types.StringValue(backupPolicy.Name),
+		NextRunAt:      types.StringValue(backupPolicy.NextRunAt),
+		RetentionUnit:  types.StringValue(backupPolicy.RetentionUnit),
+		RetentionValue: types.Float64Value(backupPolicy.RetentionValue),
+		ScheduleDay:    types.StringValue(backupPolicy.ScheduleDay),
+		ScheduleWeek:   types.StringValue(backupPolicy.ScheduleWeek),
+		Target:         types.StringValue(backupPolicy.Target),
+		UpdatedAt:      types.StringValue(backupPolicy.UpdatedAt),
+	}
+}
+
+var schemaSnapshotDataSourceSchemaAttribute = map[string]schema.Attribute{
+	"created_at": schema.StringAttribute{Computed: true},
+	"id":         schema.StringAttribute{Computed: true},
+	"name":       schema.StringAttribute{Computed: true},
+	"updated_at": schema.StringAttribute{Computed: true},
+	"url":        schema.StringAttribute{Computed: true},
+}
+
+type schemaSnapshotDataSourceModel struct {
+	CreatedAt types.String `tfsdk:"created_at"`
+	Id        types.String `tfsdk:"id"`
+	Name      types.String `tfsdk:"name"`
+	UpdatedAt types.String `tfsdk:"updated_at"`
+	Url       types.String `tfsdk:"url"`
+}
+
+func schemaSnapshotFromClient(schemaSnapshot *planetscale.SchemaSnapshot, diags diag.Diagnostics) *schemaSnapshotDataSourceModel {
+	if schemaSnapshot == nil {
+		return nil
+	}
+	return &schemaSnapshotDataSourceModel{
+		CreatedAt: types.StringValue(schemaSnapshot.CreatedAt),
+		Id:        types.StringValue(schemaSnapshot.Id),
+		Name:      types.StringValue(schemaSnapshot.Name),
+		UpdatedAt: types.StringValue(schemaSnapshot.UpdatedAt),
+		Url:       types.StringValue(schemaSnapshot.Url),
+	}
+}
+
+func backupDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
+	return map[string]schema.Attribute{
+		"organization": schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"database":     schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"branch":       schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"name":         schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"id":           schema.StringAttribute{Required: !computedName, Computed: computedName},
+
+		"actor": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: actorDataSourceSchemaAttribute,
+		},
+		"backup_policy": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: backupPolicyDataSourceSchemaAttribute,
+		},
+		"schema_snapshot": schema.SingleNestedAttribute{
+			Computed:   true,
+			Attributes: schemaSnapshotDataSourceSchemaAttribute,
+		},
+		"created_at":             schema.StringAttribute{Computed: true},
+		"estimated_storage_cost": schema.StringAttribute{Computed: true},
+		"required":               schema.BoolAttribute{Computed: true},
+		"restored_branches":      schema.ListAttribute{Computed: true, ElementType: types.StringType},
+		"size":                   schema.Float64Attribute{Computed: true},
+		"state":                  schema.StringAttribute{Computed: true},
+		"updated_at":             schema.StringAttribute{Computed: true},
+	}
+}
+
+type backupDataSourceModel struct {
+	Organization         types.String                   `tfsdk:"organization"`
+	Database             types.String                   `tfsdk:"database"`
+	Branch               types.String                   `tfsdk:"branch"`
+	Name                 types.String                   `tfsdk:"name"`
+	Id                   types.String                   `tfsdk:"id"`
+	Actor                *actorDataSourceModel          `tfsdk:"actor"`
+	BackupPolicy         *backupPolicyDataSourceModel   `tfsdk:"backup_policy"`
+	CreatedAt            types.String                   `tfsdk:"created_at"`
+	EstimatedStorageCost types.String                   `tfsdk:"estimated_storage_cost"`
+	Required             types.Bool                     `tfsdk:"required"`
+	RestoredBranches     types.List                     `tfsdk:"restored_branches"`
+	SchemaSnapshot       *schemaSnapshotDataSourceModel `tfsdk:"schema_snapshot"`
+	Size                 types.Float64                  `tfsdk:"size"`
+	State                types.String                   `tfsdk:"state"`
+	UpdatedAt            types.String                   `tfsdk:"updated_at"`
+}
+
+func backupFromClient(backup *planetscale.Backup, organization, database, branch string, diags diag.Diagnostics) *backupDataSourceModel {
+	if backup == nil {
+		return nil
+	}
+	restoredBranches := types.ListNull(types.StringType)
+	if backup.RestoredBranches != nil {
+		restoredBranches = stringsToListValue(*backup.RestoredBranches, diags)
+	}
+	return &backupDataSourceModel{
+		Organization:         types.StringValue(organization),
+		Database:             types.StringValue(database),
+		Branch:               types.StringValue(branch),
+		Name:                 types.StringValue(backup.Name),
+		Actor:                actorFromClient(&backup.Actor, diags),
+		BackupPolicy:         backupPolicyFromClient(&backup.BackupPolicy, diags),
+		CreatedAt:            types.StringValue(backup.CreatedAt),
+		EstimatedStorageCost: types.StringValue(backup.EstimatedStorageCost),
+		Id:                   types.StringValue(backup.Id),
+		Required:             types.BoolValue(backup.Required),
+		RestoredBranches:     restoredBranches,
+		SchemaSnapshot:       schemaSnapshotFromClient(&backup.SchemaSnapshot, diags),
+		Size:                 types.Float64Value(backup.Size),
+		State:                types.StringValue(backup.State),
+		UpdatedAt:            types.StringValue(backup.UpdatedAt),
+	}
+}
+
 func stringsToListValue(in []string, diags diag.Diagnostics) types.List {
 	out := make([]attr.Value, 0, len(in))
 	for _, el := range in {
