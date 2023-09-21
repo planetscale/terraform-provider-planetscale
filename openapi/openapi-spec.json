@@ -2923,13 +2923,6 @@
                           "access_host_url",
                           "mysql_edge_address"
                         ]
-                      },
-                      "integrations": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "Integrations the password is associated with"
                       }
                     },
                     "additionalProperties": false,
@@ -2941,8 +2934,7 @@
                       "ttl_seconds",
                       "access_host_url",
                       "renewable",
-                      "database_branch",
-                      "integrations"
+                      "database_branch"
                     ]
                   }
                 }
@@ -3179,13 +3171,6 @@
                     "mysql_edge_address"
                   ]
                 },
-                "integrations": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Integrations the password is associated with"
-                },
                 "plain_text": {
                   "type": "string",
                   "description": "The plain text password"
@@ -3201,7 +3186,6 @@
                 "access_host_url",
                 "renewable",
                 "database_branch",
-                "integrations",
                 "plain_text"
               ]
             }
@@ -3415,13 +3399,6 @@
                     "access_host_url",
                     "mysql_edge_address"
                   ]
-                },
-                "integrations": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Integrations the password is associated with"
                 }
               },
               "additionalProperties": false,
@@ -3433,8 +3410,7 @@
                 "ttl_seconds",
                 "access_host_url",
                 "renewable",
-                "database_branch",
-                "integrations"
+                "database_branch"
               ]
             }
           }
@@ -3656,13 +3632,6 @@
                     "access_host_url",
                     "mysql_edge_address"
                   ]
-                },
-                "integrations": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Integrations the password is associated with"
                 }
               },
               "additionalProperties": false,
@@ -3674,8 +3643,7 @@
                 "ttl_seconds",
                 "access_host_url",
                 "renewable",
-                "database_branch",
-                "integrations"
+                "database_branch"
               ]
             }
           }
@@ -3955,13 +3923,6 @@
                     "mysql_edge_address"
                   ]
                 },
-                "integrations": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "description": "Integrations the password is associated with"
-                },
                 "plain_text": {
                   "type": "string",
                   "description": "The plain text password"
@@ -3977,7 +3938,6 @@
                 "access_host_url",
                 "renewable",
                 "database_branch",
-                "integrations",
                 "plain_text"
               ]
             }

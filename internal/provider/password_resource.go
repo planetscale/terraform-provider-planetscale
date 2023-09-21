@@ -45,7 +45,6 @@ type passwordResourceModel struct {
 	DatabaseBranch types.Object  `tfsdk:"database_branch"`
 	DeletedAt      types.String  `tfsdk:"deleted_at"`
 	ExpiresAt      types.String  `tfsdk:"expires_at"`
-	Integrations   types.List    `tfsdk:"integrations"`
 	Region         types.Object  `tfsdk:"region"`
 	Renewable      types.Bool    `tfsdk:"renewable"`
 	Role           types.String  `tfsdk:"role"`
@@ -53,9 +52,12 @@ type passwordResourceModel struct {
 	Username       types.String  `tfsdk:"username"`
 
 	PlainText types.String `tfsdk:"plaintext"`
+
+	// manually removed from spec because currently buggy
+	// Integrations   types.List    `tfsdk:"integrations"`
 }
 
-func passwordResourceFromClient(ctx context.Context, password *planetscale.Password, organization, database, branch types.String, diags diag.Diagnostics) *passwordResourceModel {
+func passwordResourceFromClient(ctx context.Context, password *planetscale.Password, organization, database, branch, plainText types.String, diags diag.Diagnostics) *passwordResourceModel {
 	if password == nil {
 		return nil
 	}
@@ -78,12 +80,16 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 		DeletedAt:      types.StringPointerValue(password.DeletedAt),
 		ExpiresAt:      types.StringPointerValue(password.ExpiresAt),
 		Id:             types.StringValue(password.Id),
-		Integrations:   stringsToListValue(password.Integrations, diags),
 		Region:         region,
 		Renewable:      types.BoolValue(password.Renewable),
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
+
+		PlainText: plainText,
+
+		// manually removed from spec because currently buggy
+		// Integrations:   stringsToListValue(password.Integrations, diags),
 	}
 }
 
@@ -110,7 +116,6 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 		DeletedAt:      types.StringPointerValue(password.DeletedAt),
 		ExpiresAt:      types.StringPointerValue(password.ExpiresAt),
 		Id:             types.StringValue(password.Id),
-		Integrations:   stringsToListValue(password.Integrations, diags),
 		Region:         region,
 		Renewable:      types.BoolValue(password.Renewable),
 		Role:           types.StringValue(password.Role),
@@ -118,6 +123,9 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 		Username:       types.StringPointerValue(password.Username),
 
 		PlainText: types.StringValue(password.PlainText),
+
+		// manually removed from spec because currently buggy
+		// Integrations:   stringsToListValue(password.Integrations, diags),
 	}
 }
 
@@ -140,27 +148,40 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				stringplanmodifier.RequiresReplace(),
 			}},
 
-			"role": schema.StringAttribute{Optional: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"ttl_seconds": schema.Float64Attribute{Optional: true, PlanModifiers: []planmodifier.Float64{
-				float64planmodifier.RequiresReplace(),
-			}},
+			"role": schema.StringAttribute{
+				Optional: true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+			},
+			"ttl_seconds": schema.Float64Attribute{
+				Optional: true,
+				Computed: true,
+				PlanModifiers: []planmodifier.Float64{
+					float64planmodifier.RequiresReplaceIfConfigured(),
+				},
+			},
 			// updatable
 			"name": schema.StringAttribute{Optional: true},
 
 			// read-only
 			"id":              schema.StringAttribute{Computed: true},
+			"actor":           schema.SingleNestedAttribute{Computed: true, Attributes: actorResourceSchemaAttribute},
+			"database_branch": schema.SingleNestedAttribute{Computed: true, Attributes: databaseBranchResourceAttribute},
+			"region":          schema.SingleNestedAttribute{Computed: true, Attributes: regionResourceSchemaAttribute},
 			"access_host_url": schema.StringAttribute{Computed: true},
-			"actor":           schema.ObjectAttribute{Computed: true},
 			"created_at":      schema.StringAttribute{Computed: true},
-			"database_branch": schema.ObjectAttribute{Computed: true},
 			"deleted_at":      schema.StringAttribute{Computed: true},
 			"expires_at":      schema.StringAttribute{Computed: true},
-			"integrations":    schema.ListAttribute{Computed: true},
-			"region":          schema.ObjectAttribute{Computed: true},
 			"renewable":       schema.BoolAttribute{Computed: true},
 			"username":        schema.StringAttribute{Computed: true},
+
+			// read-only, sensitive
+			"plaintext": schema.StringAttribute{Sensitive: true, Computed: true},
+
+			// manually removed from spec because currently buggy
+			// "integrations":    schema.ListAttribute{Computed: true, ElementType: types.StringType},
 		},
 	}
 }
@@ -225,7 +246,14 @@ func (r *passwordResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError("Unable to create passwords", "no data")
 		return
 	}
-	data = passwordWithPlaintextResourceFromClient(ctx, &res.PasswordWithPlaintext, data.Organization, data.Database, data.Branch, resp.Diagnostics)
+	data = passwordWithPlaintextResourceFromClient(
+		ctx,
+		&res.PasswordWithPlaintext,
+		data.Organization,
+		data.Database,
+		data.Branch,
+		resp.Diagnostics,
+	)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -269,19 +297,19 @@ func (r *passwordResource) Read(ctx context.Context, req resource.ReadRequest, r
 		database.ValueString(),
 		branch.ValueString(),
 		id.ValueString(),
-		nil,
+		nil, // not sure why this would need a region id
 	)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read password, got error: %s", err))
 		return
 	}
-
 	data = passwordResourceFromClient(
 		ctx,
 		&res.Password,
 		data.Organization,
 		data.Database,
 		data.Branch,
+		data.PlainText,
 		resp.Diagnostics,
 	)
 	if resp.Diagnostics.HasError() {
@@ -327,6 +355,7 @@ func (r *passwordResource) Update(ctx context.Context, req resource.UpdateReques
 	changedUpdatableSettings := false
 	name := stringIfDifferent(old.Name, data.Name, &changedUpdatableSettings)
 
+	var state *passwordResourceModel
 	if changedUpdatableSettings && name != nil {
 		updateReq := planetscale.UpdatePasswordReq{
 			Name: *name,
@@ -343,13 +372,21 @@ func (r *passwordResource) Update(ctx context.Context, req resource.UpdateReques
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update password settings, got error: %s", err))
 			return
 		}
-		data = passwordResourceFromClient(ctx, &res.Password, data.Organization, data.Database, data.Branch, resp.Diagnostics)
+		state = passwordResourceFromClient(
+			ctx,
+			&res.Password,
+			data.Organization,
+			data.Database,
+			data.Branch,
+			data.PlainText,
+			resp.Diagnostics,
+		)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
 func (r *passwordResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {

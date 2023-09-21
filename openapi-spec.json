@@ -4997,8 +4997,7 @@
         "ttl_seconds",
         "access_host_url",
         "renewable",
-        "database_branch",
-        "integrations"
+        "database_branch"
       ],
       "properties": {
         "access_host_url": {
@@ -5026,13 +5025,6 @@
         "id": {
           "description": "The ID for the password",
           "type": "string"
-        },
-        "integrations": {
-          "description": "Integrations the password is associated with",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "name": {
           "description": "The display name for the password",
@@ -5071,7 +5063,6 @@
         "access_host_url",
         "renewable",
         "database_branch",
-        "integrations",
         "plain_text"
       ],
       "properties": {
@@ -5100,13 +5091,6 @@
         "id": {
           "description": "The ID for the password",
           "type": "string"
-        },
-        "integrations": {
-          "description": "Integrations the password is associated with",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "name": {
           "description": "The display name for the password",

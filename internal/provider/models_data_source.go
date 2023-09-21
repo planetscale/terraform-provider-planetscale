@@ -797,10 +797,9 @@ func passwordDataSourceSchemaAttribute(computedName bool) map[string]schema.Attr
 			Computed:   true,
 			Attributes: branchForPasswordDataSourceSchemaAttribute,
 		},
-		"deleted_at":   schema.StringAttribute{Computed: true},
-		"expires_at":   schema.StringAttribute{Computed: true},
-		"integrations": schema.ListAttribute{Computed: true, ElementType: types.StringType},
-		"name":         schema.StringAttribute{Computed: true},
+		"deleted_at": schema.StringAttribute{Computed: true},
+		"expires_at": schema.StringAttribute{Computed: true},
+		"name":       schema.StringAttribute{Computed: true},
 		"region": schema.SingleNestedAttribute{
 			Computed:   true,
 			Attributes: regionDataSourceSchemaAttribute,
@@ -809,6 +808,9 @@ func passwordDataSourceSchemaAttribute(computedName bool) map[string]schema.Attr
 		"role":        schema.StringAttribute{Computed: true},
 		"ttl_seconds": schema.Float64Attribute{Computed: true},
 		"username":    schema.StringAttribute{Computed: true},
+
+		// manually removed from spec because currently buggy
+		// "integrations": schema.ListAttribute{Computed: true, ElementType: types.StringType},
 	}
 }
 
@@ -824,13 +826,15 @@ type passwordDataSourceModel struct {
 	DatabaseBranch   *branchForPasswordDataSourceModel `tfsdk:"database_branch"`
 	DeletedAt        types.String                      `tfsdk:"deleted_at"`
 	ExpiresAt        types.String                      `tfsdk:"expires_at"`
-	Integrations     types.List                        `tfsdk:"integrations"`
 	Name             types.String                      `tfsdk:"name"`
 	Region           *regionDataSourceModel            `tfsdk:"region"`
 	Renewable        types.Bool                        `tfsdk:"renewable"`
 	Role             types.String                      `tfsdk:"role"`
 	TtlSeconds       types.Float64                     `tfsdk:"ttl_seconds"`
 	Username         types.String                      `tfsdk:"username"`
+
+	// manually removed from spec because currently buggy
+	// Integrations     types.List                        `tfsdk:"integrations"`
 }
 
 func passwordFromClient(password *planetscale.Password, organization, database, branch string, readOnlyRegionID *string, diags diag.Diagnostics) *passwordDataSourceModel {
@@ -849,13 +853,14 @@ func passwordFromClient(password *planetscale.Password, organization, database, 
 		DeletedAt:        types.StringPointerValue(password.DeletedAt),
 		ExpiresAt:        types.StringPointerValue(password.ExpiresAt),
 		Id:               types.StringValue(password.Id),
-		Integrations:     stringsToListValue(password.Integrations, diags),
 		Name:             types.StringValue(password.Name),
 		Region:           regionFromClient(password.Region, diags),
 		Renewable:        types.BoolValue(password.Renewable),
 		Role:             types.StringValue(password.Role),
 		TtlSeconds:       types.Float64Value(password.TtlSeconds),
 		Username:         types.StringPointerValue(password.Username),
+		// manually removed from spec because currently buggy
+		// Integrations:     stringsToListValue(password.Integrations, diags),
 	}
 }
 
