@@ -3,12 +3,12 @@
 page_title: "planetscale_oauth_applications Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  A list of PlanetScale OAuth applications. (requires feature flag)
 ---
 
 # planetscale_oauth_applications (Data Source)
 
-
+A list of PlanetScale OAuth applications. (requires feature flag)
 
 ## Example Usage
 
@@ -40,13 +40,13 @@ output "oauth_apps" {
 
 Read-Only:
 
-- `avatar` (String)
-- `client_id` (String)
-- `created_at` (String)
-- `domain` (String)
-- `id` (String)
-- `name` (String)
-- `redirect_uri` (String)
-- `scopes` (List of String)
-- `tokens` (Number)
-- `updated_at` (String)
+- `avatar` (String) The image source for the OAuth application's avatar.
+- `client_id` (String) The OAuth application's unique client id.
+- `created_at` (String) When the OAuth application was created.
+- `domain` (String) The domain of the OAuth application. Used for verification of a valid redirect uri.
+- `id` (String) The ID of the OAuth application.
+- `name` (String) The name of the OAuth application.
+- `redirect_uri` (String) The redirect URI of the OAuth application.
+- `scopes` (List of String) The scopes that the OAuth application requires on a user's accout.
+- `tokens` (Number) The number of tokens issued by the OAuth application.
+- `updated_at` (String) When the OAuth application was last updated.

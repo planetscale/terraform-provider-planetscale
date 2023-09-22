@@ -37,18 +37,22 @@ func (d *branchSchemaDataSource) Metadata(ctx context.Context, req datasource.Me
 }
 
 func (d *branchSchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: true},
-		"database":     schema.StringAttribute{Required: true},
-		"branch":       schema.StringAttribute{Required: true},
-		"keyspace":     schema.StringAttribute{Optional: true},
-		"tables": schema.ListNestedAttribute{
-			Computed: true,
-			NestedObject: schema.NestedAttributeObject{
-				Attributes: tableSchemaDataSourceSchemaAttribute,
+	resp.Schema = schema.Schema{
+		Description:         "The schema of a PlanetScale branch.",
+		MarkdownDescription: "The schema of a PlanetScale branch.",
+		Attributes: map[string]schema.Attribute{
+			"organization": schema.StringAttribute{Required: true},
+			"database":     schema.StringAttribute{Required: true},
+			"branch":       schema.StringAttribute{Required: true},
+			"keyspace":     schema.StringAttribute{Optional: true},
+			"tables": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: tableSchemaDataSourceSchemaAttribute,
+				},
 			},
 		},
-	}}
+	}
 }
 
 func (d *branchSchemaDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

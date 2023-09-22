@@ -3,12 +3,12 @@
 page_title: "planetscale_database Resource - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  A PlanetScale database
+  A PlanetScale database.
 ---
 
 # planetscale_database (Resource)
 
-A PlanetScale database
+A PlanetScale database.
 
 ## Example Usage
 
@@ -24,65 +24,64 @@ resource "planetscale_database" "example" {
 
 ### Required
 
-- `name` (String)
-- `organization` (String)
+- `name` (String) The name of this database.
+- `organization` (String) The organization this database belongs to.
 
 ### Optional
 
-- `allow_data_branching` (Boolean)
-- `automatic_migrations` (Boolean)
-- `cluster_size` (String)
-- `default_branch` (String)
-- `insights_raw_queries` (Boolean)
-- `issues_count` (Number)
-- `migration_framework` (String)
-- `migration_table_name` (String)
-- `multiple_admins_required_for_deletion` (Boolean)
-- `plan` (String)
-- `production_branch_web_console` (Boolean)
-- `region` (String)
-- `require_approval_for_deploy` (Boolean)
-- `restrict_branch_region` (Boolean)
+- `allow_data_branching` (Boolean) Whether seeding branches with data is enabled for all branches.
+- `automatic_migrations` (Boolean) Whether to automatically manage Rails migrations during deploy requests.
+- `cluster_size` (String) The size of the database cluster plan.
+- `default_branch` (String) The default branch for the database.
+- `insights_raw_queries` (Boolean) The URL to see this database's branches in the web UI.
+- `issues_count` (Number) The total number of ongoing issues within a database.
+- `migration_framework` (String) Framework used for applying migrations.
+- `migration_table_name` (String) Table name to use for copying schema migration data.
+- `multiple_admins_required_for_deletion` (Boolean) If the database requires multiple admins for deletion.
+- `plan` (String) The database plan.
+- `production_branch_web_console` (Boolean) Whether web console is enabled for production branches.
+- `region` (String) The region the database lives in.
+- `require_approval_for_deploy` (Boolean) Whether an approval is required to deploy schema changes to this database.
+- `restrict_branch_region` (Boolean) Whether to restrict branch creation to one region.
 
 ### Read-Only
 
-- `at_backup_restore_branches_limit` (Boolean)
-- `at_development_branch_limit` (Boolean)
-- `branches_count` (Number)
-- `branches_url` (String)
-- `created_at` (String)
-- `data_import` (Attributes) (see [below for nested schema](#nestedatt--data_import))
-- `default_branch_read_only_regions_count` (Number)
-- `default_branch_shard_count` (Number)
-- `default_branch_table_count` (Number)
-- `development_branches_count` (Number)
-- `html_url` (String)
-- `id` (String) The ID of this resource.
-- `production_branches_count` (Number)
-- `ready` (Boolean)
-- `schema_last_updated_at` (String)
-- `sharded` (Boolean)
-- `state` (String)
-- `type` (String)
-- `updated_at` (String)
-- `url` (String)
+- `at_backup_restore_branches_limit` (Boolean) If the database has reached its backup restored branch limit.
+- `at_development_branch_limit` (Boolean) If the database has reached its development branch limit.
+- `branches_count` (Number) The total number of database branches.
+- `branches_url` (String) The URL to retrieve this database's branches via the API.
+- `created_at` (String) When the database was created.
+- `data_import` (Attributes) If the database was created from an import, describes the import process. (see [below for nested schema](#nestedatt--data_import))
+- `default_branch_read_only_regions_count` (Number) Number of read only regions in the default branch.
+- `default_branch_shard_count` (Number) Number of shards in the default branch.
+- `default_branch_table_count` (Number) Number of tables in the default branch schema.
+- `development_branches_count` (Number) The total number of database development branches.
+- `html_url` (String) The total number of database development branches.
+- `id` (String) The ID of the database.
+- `production_branches_count` (Number) The total number of database production branches.
+- `ready` (Boolean) If the database is ready to be used.
+- `schema_last_updated_at` (String) When the default branch schema was last changed.
+- `sharded` (Boolean) If the database is sharded.
+- `state` (String) State of the database.
+- `updated_at` (String) When the database was last updated.
+- `url` (String) The URL to the database API endpoint.
 
 <a id="nestedatt--data_import"></a>
 ### Nested Schema for `data_import`
 
 Read-Only:
 
-- `data_source` (Attributes) (see [below for nested schema](#nestedatt--data_import--data_source))
-- `finished_at` (String)
-- `import_check_errors` (String)
-- `started_at` (String)
-- `state` (String)
+- `data_source` (Attributes) Connection information for the source of the data for the import. (see [below for nested schema](#nestedatt--data_import--data_source))
+- `finished_at` (String) When the import finished.
+- `import_check_errors` (String) Errors encountered while preparing the import.
+- `started_at` (String) When the import started.
+- `state` (String) The state of the import, one of: pending, queued, in_progress, complete, cancelled, error.
 
 <a id="nestedatt--data_import--data_source"></a>
 ### Nested Schema for `data_import.data_source`
 
 Required:
 
-- `database` (String)
-- `hostname` (String)
-- `port` (String)
+- `database` (String) The name of the database imported from.
+- `hostname` (String) The hostname where the database lives.
+- `port` (String) The port on which the database listens on the host.

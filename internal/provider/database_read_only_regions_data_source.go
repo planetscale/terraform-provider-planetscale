@@ -22,7 +22,7 @@ type databaseReadOnlyRegionsDataSource struct {
 	client *planetscale.Client
 }
 
-type TTreadOnlyRegionsDataSourceModel struct {
+type readOnlyRegionsDataSourceModel struct {
 	Organization string                          `tfsdk:"organization"`
 	Name         string                          `tfsdk:"name"`
 	Regions      []readOnlyRegionDataSourceModel `tfsdk:"regions"`
@@ -33,7 +33,11 @@ func (d *databaseReadOnlyRegionsDataSource) Metadata(ctx context.Context, req da
 }
 
 func (d *databaseReadOnlyRegionsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: readOnlyRegionDataSourceSchemaAttribute}
+	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale read-only regions.",
+		MarkdownDescription: "A list of PlanetScale read-only regions.",
+		Attributes:          readOnlyRegionsDataSourceSchemaAttribute,
+	}
 }
 
 func (d *databaseReadOnlyRegionsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
@@ -52,7 +56,7 @@ func (d *databaseReadOnlyRegionsDataSource) Configure(ctx context.Context, req d
 }
 
 func (d *databaseReadOnlyRegionsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *TTreadOnlyRegionsDataSourceModel
+	var data *readOnlyRegionsDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -66,7 +70,7 @@ func (d *databaseReadOnlyRegionsDataSource) Read(ctx context.Context, req dataso
 		resp.Diagnostics.AddError("Received a nil database read only regions list", "")
 		return
 	}
-	state := TTreadOnlyRegionsDataSourceModel{
+	state := readOnlyRegionsDataSourceModel{
 		Organization: data.Organization,
 		Name:         data.Name,
 		Regions:      make([]readOnlyRegionDataSourceModel, 0, len(res.Data)),

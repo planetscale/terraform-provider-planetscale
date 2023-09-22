@@ -102,52 +102,116 @@ func (r *branchResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *branchResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "A PlanetScale branch",
+		Description:         "A PlanetScale branch.",
+		MarkdownDescription: "A PlanetScale branch.",
 		Attributes: map[string]schema.Attribute{
-			"organization": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"database": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"name": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"parent_branch": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
+			"organization": schema.StringAttribute{
+				Description: "The organization this branch belongs to.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"database": schema.StringAttribute{
+				Description: "The database this branch belongs to.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"name": schema.StringAttribute{
+				Description: "The name of the branch.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"parent_branch": schema.StringAttribute{
+				Description: "The name of the parent branch from which the branch was created.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
 
 			// updatable
-			"production": schema.BoolAttribute{Computed: true, Optional: true},
+			"production": schema.BoolAttribute{
+				Description: "Whether or not the branch is a production branch.",
+				Computed:    true, Optional: true,
+			},
 
 			// read only
-			"id":              schema.StringAttribute{Computed: true},
-			"access_host_url": schema.StringAttribute{Computed: true},
+			"id": schema.StringAttribute{
+				Description: "The ID of the branch.",
+				Computed:    true,
+			},
+			"access_host_url": schema.StringAttribute{
+				Description: "The access host URL for the branch. This is a legacy field, use `mysql_edge_address`.",
+				Computed:    true,
+			},
 			"actor": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: actorResourceSchemaAttribute,
+				Description: "The actor who created this branch.",
+				Computed:    true,
+				Attributes:  actorResourceSchemaAttribute,
 			},
-			"cluster_rate_name":  schema.StringAttribute{Computed: true},
-			"created_at":         schema.StringAttribute{Computed: true},
-			"html_url":           schema.StringAttribute{Computed: true},
-			"initial_restore_id": schema.StringAttribute{Computed: true},
-			"mysql_address":      schema.StringAttribute{Computed: true},
-			"mysql_edge_address": schema.StringAttribute{Computed: true},
+			"cluster_rate_name": schema.StringAttribute{
+				Description: "The SKU representing the branch's cluster size.",
+				Computed:    true,
+			},
+			"created_at": schema.StringAttribute{
+				Description: "When the branch was created.",
+				Computed:    true,
+			},
+			"html_url": schema.StringAttribute{
+				Description: "Planetscale app URL for the branch.",
+				Computed:    true,
+			},
+			"initial_restore_id": schema.StringAttribute{
+				Description: "The ID of the backup from which the branch was restored.",
+				Computed:    true,
+			},
+			"mysql_address": schema.StringAttribute{
+				Description: "The MySQL address for the branch.",
+				Computed:    true,
+			},
+			"mysql_edge_address": schema.StringAttribute{
+				Description: "The address of the MySQL provider for the branch.",
+				Computed:    true,
+			},
 			"region": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: regionResourceSchemaAttribute,
+				Description: "The region in which this branch lives.",
+				Computed:    true,
+				Attributes:  regionResourceSchemaAttribute,
 			},
-			"ready":                          schema.BoolAttribute{Computed: true},
-			"restore_checklist_completed_at": schema.StringAttribute{Computed: true},
+			"ready": schema.BoolAttribute{
+				Description: "Whether or not the branch is ready to serve queries.",
+				Computed:    true,
+			},
+			"restore_checklist_completed_at": schema.StringAttribute{
+				Description: "When a user last marked a backup restore checklist as completed.",
+				Computed:    true,
+			},
 			"restored_from_branch": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: restoredFromBranchSchemaAttribute,
+				Description: "todo",
+				Computed:    true,
+				Attributes:  restoredFromBranchSchemaAttribute,
 			},
-			"schema_last_updated_at": schema.StringAttribute{Computed: true},
-			"shard_count":            schema.Float64Attribute{Computed: true},
-			"sharded":                schema.BoolAttribute{Computed: true},
-			"updated_at":             schema.StringAttribute{Computed: true},
+			"schema_last_updated_at": schema.StringAttribute{
+				Description: "When the schema for the branch was last updated.",
+				Computed:    true,
+			},
+			"shard_count": schema.Float64Attribute{
+				Description: "The number of shards in the branch.",
+				Computed:    true,
+			},
+			"sharded": schema.BoolAttribute{
+				Description: "Whether or not the branch is sharded.",
+				Computed:    true,
+			},
+			"updated_at": schema.StringAttribute{
+				Description: "When the branch was last updated.",
+				Computed:    true,
+			},
 		},
 	}
 }

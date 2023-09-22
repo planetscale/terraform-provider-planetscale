@@ -35,6 +35,8 @@ func (d *backupsDataSource) Metadata(ctx context.Context, req datasource.Metadat
 
 func (d *backupsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale backups.",
+		MarkdownDescription: "A list of PlanetScale backups.",
 		Attributes: map[string]schema.Attribute{
 			"organization": schema.StringAttribute{Required: true},
 			"database":     schema.StringAttribute{Required: true},

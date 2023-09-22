@@ -3,12 +3,12 @@
 page_title: "planetscale_branch_schema Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  The schema of a PlanetScale branch.
 ---
 
 # planetscale_branch_schema (Data Source)
 
-
+The schema of a PlanetScale branch.
 
 ## Example Usage
 
@@ -46,6 +46,6 @@ output "branch_schema" {
 
 Read-Only:
 
-- `html` (String)
-- `name` (String)
-- `raw` (String)
+- `html` (String) Syntax highlighted HTML for the table's schema.
+- `name` (String) Name of the table.
+- `raw` (String) The table's schema.

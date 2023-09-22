@@ -27,7 +27,11 @@ func (d *branchDataSource) Metadata(ctx context.Context, req datasource.Metadata
 }
 
 func (d *branchDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: branchDataSourceSchemaAttribute(false)}
+	resp.Schema = schema.Schema{
+		Description:         "A PlanetScale branch.",
+		MarkdownDescription: "A PlanetScale branch.",
+		Attributes:          branchDataSourceSchemaAttribute(false),
+	}
 }
 
 func (d *branchDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

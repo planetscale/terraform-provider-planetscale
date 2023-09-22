@@ -27,7 +27,11 @@ func (d *backupDataSource) Metadata(ctx context.Context, req datasource.Metadata
 }
 
 func (d *backupDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: backupDataSourceSchemaAttribute(false)}
+	resp.Schema = schema.Schema{
+		Description:         "A PlanetScale backup.",
+		MarkdownDescription: "A PlanetScale backup.",
+		Attributes:          backupDataSourceSchemaAttribute(false),
+	}
 }
 
 func (d *backupDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

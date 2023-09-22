@@ -35,17 +35,21 @@ func (d *branchSchemaLintDataSource) Metadata(ctx context.Context, req datasourc
 }
 
 func (d *branchSchemaLintDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: true},
-		"database":     schema.StringAttribute{Required: true},
-		"branch":       schema.StringAttribute{Required: true},
-		"errors": schema.ListNestedAttribute{
-			Computed: true,
-			NestedObject: schema.NestedAttributeObject{
-				Attributes: lintErrorDataSourceSchemaAttribute,
+	resp.Schema = schema.Schema{
+		Description:         "Linting errors for the schema of a PlanetScale branch.",
+		MarkdownDescription: "Linting errors for the schema of a PlanetScale branch.",
+		Attributes: map[string]schema.Attribute{
+			"organization": schema.StringAttribute{Required: true},
+			"database":     schema.StringAttribute{Required: true},
+			"branch":       schema.StringAttribute{Required: true},
+			"errors": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: lintErrorDataSourceSchemaAttribute,
+				},
 			},
 		},
-	}}
+	}
 }
 
 func (d *branchSchemaLintDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

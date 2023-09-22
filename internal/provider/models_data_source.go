@@ -10,32 +10,88 @@ import (
 
 func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
 	return map[string]schema.Attribute{
-		"name": schema.StringAttribute{Required: !computedName, Computed: computedName},
-
-		"admin_only_production_access": schema.BoolAttribute{Computed: true},
-		"billing_email":                schema.StringAttribute{Computed: true},
-		"can_create_databases":         schema.BoolAttribute{Computed: true},
-		"created_at":                   schema.StringAttribute{Computed: true},
-		"database_count":               schema.Float64Attribute{Computed: true},
+		"name": schema.StringAttribute{
+			Description: "The name of the organization.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"admin_only_production_access": schema.BoolAttribute{
+			Description: "Whether or not only administrators can access production branches in the organization.",
+			Computed:    true,
+		},
+		"billing_email": schema.StringAttribute{
+			Description: "The billing email of the organization.",
+			Computed:    true,
+		},
+		"can_create_databases": schema.BoolAttribute{
+			Description: "Whether or not more databases can be created in the organization.",
+			Computed:    true,
+		},
+		"created_at": schema.StringAttribute{
+			Description: "When the organization was created.",
+			Computed:    true,
+		},
+		"database_count": schema.Float64Attribute{
+			Description: "The number of databases in the organization.",
+			Computed:    true,
+		},
 		"features": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: featuresDataSourceSchemaAttribute,
+			Description: "Features that are enabled on the organization.",
+			Computed:    true,
+			Attributes:  featuresDataSourceSchemaAttribute,
 		},
 		"flags": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: flagsDataSourceSchemaAttribute,
+			Description: ".",
+			Computed:    true,
+			Attributes:  flagsDataSourceSchemaAttribute,
 		},
-		"free_databases_remaining": schema.Float64Attribute{Computed: true},
-		"has_past_due_invoices":    schema.BoolAttribute{Computed: true},
-		"id":                       schema.StringAttribute{Computed: true},
-		"plan":                     schema.StringAttribute{Computed: true},
-		"single_tenancy":           schema.BoolAttribute{Computed: true},
-		"sleeping_database_count":  schema.Float64Attribute{Computed: true},
-		"sso":                      schema.BoolAttribute{Computed: true},
-		"sso_directory":            schema.BoolAttribute{Computed: true},
-		"sso_portal_url":           schema.StringAttribute{Computed: true},
-		"updated_at":               schema.StringAttribute{Computed: true},
-		"valid_billing_info":       schema.BoolAttribute{Computed: true},
+		"free_databases_remaining": schema.Float64Attribute{
+			Description: "The number of remaining free databases that can be created in the organization.",
+			Computed:    true,
+		},
+		"has_past_due_invoices": schema.BoolAttribute{
+			Description: "Whether or not the organization has past due billing invoices.",
+			Computed:    true,
+		},
+		"id": schema.StringAttribute{
+			Description: "The ID for the organization.",
+			Computed:    true,
+		},
+		"idp_managed_roles": schema.BoolAttribute{
+			Description: "Whether or not the IdP provider is be responsible for managing roles in PlanetScale.",
+			Computed:    true,
+		},
+		"plan": schema.StringAttribute{
+			Description: "The billing plan of the organization.",
+			Computed:    true,
+		},
+		"single_tenancy": schema.BoolAttribute{
+			Description: "Whether or not the organization has single tenancy enabled.",
+			Computed:    true,
+		},
+		"sleeping_database_count": schema.Float64Attribute{
+			Description: "The number of sleeping databases in the organization.",
+			Computed:    true,
+		},
+		"sso": schema.BoolAttribute{
+			Description: "Whether or not SSO is enabled on the organization.",
+			Computed:    true,
+		},
+		"sso_directory": schema.BoolAttribute{
+			Description: "Whether or not the organization uses a WorkOS directory.",
+			Computed:    true,
+		},
+		"sso_portal_url": schema.StringAttribute{
+			Description: "The URL of the organization's SSO portal.",
+			Computed:    true,
+		},
+		"updated_at": schema.StringAttribute{
+			Description: "When the organization was last updated.",
+			Computed:    true,
+		},
+		"valid_billing_info": schema.BoolAttribute{
+			Description: "Whether or not the organization's billing information is valid.",
+			Computed:    true,
+		},
 	}
 }
 
@@ -59,6 +115,7 @@ type organizationDataSourceModel struct {
 	SsoPortalUrl              types.String             `tfsdk:"sso_portal_url"`
 	UpdatedAt                 types.String             `tfsdk:"updated_at"`
 	ValidBillingInfo          types.Bool               `tfsdk:"valid_billing_info"`
+	IdpManagedRoles           types.Bool               `tfsdk:"idp_managed_roles"`
 }
 
 func organizationFromClient(org *planetscale.Organization, diags diag.Diagnostics) *organizationDataSourceModel {
@@ -85,6 +142,7 @@ func organizationFromClient(org *planetscale.Organization, diags diag.Diagnostic
 		SsoPortalUrl:              types.StringPointerValue(org.SsoPortalUrl),
 		UpdatedAt:                 types.StringValue(org.UpdatedAt),
 		ValidBillingInfo:          types.BoolValue(org.ValidBillingInfo),
+		IdpManagedRoles:           types.BoolValue(org.IdpManagedRoles),
 	}
 }
 
@@ -165,60 +223,179 @@ func dataImportFromClient(dataImport *planetscale.DataImport, diags diag.Diagnos
 
 func databaseDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
 	return map[string]schema.Attribute{
-		"organization":                     schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"name":                             schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"id":                               schema.StringAttribute{Computed: true},
-		"allow_data_branching":             schema.BoolAttribute{Computed: true, Optional: true},
-		"at_backup_restore_branches_limit": schema.BoolAttribute{Computed: true},
-		"at_development_branch_limit":      schema.BoolAttribute{Computed: true},
-		"automatic_migrations":             schema.BoolAttribute{Computed: true, Optional: true},
-		"branches_count":                   schema.Float64Attribute{Computed: true},
-		"branches_url":                     schema.StringAttribute{Computed: true},
-		"created_at":                       schema.StringAttribute{Computed: true},
+		"organization": schema.StringAttribute{
+			Description: "The organization this database belongs to.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"name": schema.StringAttribute{
+			Description: "The name of this database.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"id": schema.StringAttribute{
+			Description: "The ID of the database.",
+			Computed:    true,
+		},
+		"allow_data_branching": schema.BoolAttribute{
+			Description: "Whether seeding branches with data is enabled for all branches.",
+			Computed:    true, Optional: true,
+		},
+		"at_backup_restore_branches_limit": schema.BoolAttribute{
+			Description: "If the database has reached its backup restored branch limit.",
+			Computed:    true,
+		},
+		"at_development_branch_limit": schema.BoolAttribute{
+			Description: "If the database has reached its development branch limit.",
+			Computed:    true,
+		},
+		"automatic_migrations": schema.BoolAttribute{
+			Description: "Whether to automatically manage Rails migrations during deploy requests.",
+			Computed:    true, Optional: true,
+		},
+		"branches_count": schema.Float64Attribute{
+			Description: "The total number of database branches.",
+			Computed:    true,
+		},
+		"branches_url": schema.StringAttribute{
+			Description: "The URL to retrieve this database's branches via the API.",
+			Computed:    true,
+		},
+		"created_at": schema.StringAttribute{
+			Description: "When the database was created.",
+			Computed:    true,
+		},
 		"data_import": schema.SingleNestedAttribute{
-			Optional: true,
+			Description: "If the database was created from an import, describes the import process.",
+			Optional:    true,
 			Attributes: map[string]schema.Attribute{
 				"data_source": schema.SingleNestedAttribute{
-					Computed: true,
+					Description: "Connection information for the source of the data for the import.",
+					Computed:    true,
 					Attributes: map[string]schema.Attribute{
-						"database": schema.StringAttribute{Required: true},
-						"hostname": schema.StringAttribute{Required: true},
-						"port":     schema.StringAttribute{Required: true},
+						"database": schema.StringAttribute{
+							Description: "The name of the database imported from.",
+							Required:    true,
+						},
+						"hostname": schema.StringAttribute{
+							Description: "The hostname where the database lives.",
+							Required:    true,
+						},
+						"port": schema.StringAttribute{
+							Description: "The port on which the database listens on the host.",
+							Required:    true,
+						},
 					},
 				},
-				"finished_at":         schema.StringAttribute{Computed: true},
-				"import_check_errors": schema.StringAttribute{Computed: true},
-				"started_at":          schema.StringAttribute{Computed: true},
-				"state":               schema.StringAttribute{Computed: true},
+				"finished_at": schema.StringAttribute{
+					Description: "When the import finished.",
+					Computed:    true,
+				},
+				"import_check_errors": schema.StringAttribute{
+					Description: "Errors encountered while preparing the import.",
+					Computed:    true,
+				},
+				"started_at": schema.StringAttribute{
+					Description: "When the import started.",
+					Computed:    true,
+				},
+				"state": schema.StringAttribute{
+					Description: "The state of the import, one of: pending, queued, in_progress, complete, cancelled, error.",
+					Computed:    true,
+				},
 			},
 		},
-		"default_branch":                         schema.StringAttribute{Computed: true, Optional: true},
-		"default_branch_read_only_regions_count": schema.Float64Attribute{Computed: true},
-		"default_branch_shard_count":             schema.Float64Attribute{Computed: true},
-		"default_branch_table_count":             schema.Float64Attribute{Computed: true},
-		"development_branches_count":             schema.Float64Attribute{Computed: true},
-		"html_url":                               schema.StringAttribute{Computed: true},
-		"insights_raw_queries":                   schema.BoolAttribute{Computed: true, Optional: true},
-		"issues_count":                           schema.Float64Attribute{Computed: true, Optional: true},
-		"migration_framework":                    schema.StringAttribute{Computed: true, Optional: true},
-		"migration_table_name":                   schema.StringAttribute{Computed: true, Optional: true},
-		"multiple_admins_required_for_deletion":  schema.BoolAttribute{Computed: true, Optional: true},
-		"plan":                                   schema.StringAttribute{Computed: true, Optional: true},
-		"production_branch_web_console":          schema.BoolAttribute{Computed: true, Optional: true},
-		"production_branches_count":              schema.Float64Attribute{Computed: true},
-		"ready":                                  schema.BoolAttribute{Computed: true},
+		"default_branch": schema.StringAttribute{
+			Description: "The default branch for the database.",
+			Computed:    true, Optional: true,
+		},
+		"default_branch_read_only_regions_count": schema.Float64Attribute{
+			Description: "Number of read only regions in the default branch.",
+			Computed:    true,
+		},
+		"default_branch_shard_count": schema.Float64Attribute{
+			Description: "Number of shards in the default branch.",
+			Computed:    true,
+		},
+		"default_branch_table_count": schema.Float64Attribute{
+			Description: "Number of tables in the default branch schema.",
+			Computed:    true,
+		},
+		"development_branches_count": schema.Float64Attribute{
+			Description: "The total number of database development branches.",
+			Computed:    true,
+		},
+		"html_url": schema.StringAttribute{
+			Description: "The total number of database development branches.",
+			Computed:    true,
+		},
+		"insights_raw_queries": schema.BoolAttribute{
+			Description: "The URL to see this database's branches in the web UI.",
+			Computed:    true, Optional: true,
+		},
+		"issues_count": schema.Float64Attribute{
+			Description: "The total number of ongoing issues within a database.",
+			Computed:    true, Optional: true,
+		},
+		"migration_framework": schema.StringAttribute{
+			Description: "Framework used for applying migrations.",
+			Computed:    true, Optional: true,
+		},
+		"migration_table_name": schema.StringAttribute{
+			Description: "Table name to use for copying schema migration data.",
+			Computed:    true, Optional: true,
+		},
+		"multiple_admins_required_for_deletion": schema.BoolAttribute{
+			Description: "If the database requires multiple admins for deletion.",
+			Computed:    true, Optional: true,
+		},
+		"plan": schema.StringAttribute{
+			Description: "The database plan.",
+			Computed:    true, Optional: true,
+		},
+		"production_branch_web_console": schema.BoolAttribute{
+			Description: "Whether web console is enabled for production branches.",
+			Computed:    true, Optional: true,
+		},
+		"production_branches_count": schema.Float64Attribute{
+			Description: "The total number of database production branches.",
+			Computed:    true,
+		},
+		"ready": schema.BoolAttribute{
+			Description: "If the database is ready to be used.",
+			Computed:    true,
+		},
 		"region": schema.SingleNestedAttribute{
-			Computed: true, Optional: true,
+			Description: "The region the database lives in.",
+			Computed:    true, Optional: true,
 			Attributes: regionDataSourceSchemaAttribute,
 		},
-		"require_approval_for_deploy": schema.BoolAttribute{Computed: true, Optional: true},
-		"restrict_branch_region":      schema.BoolAttribute{Computed: true, Optional: true},
-		"schema_last_updated_at":      schema.StringAttribute{Computed: true},
-		"sharded":                     schema.BoolAttribute{Computed: true},
-		"state":                       schema.StringAttribute{Computed: true},
-		"type":                        schema.StringAttribute{Computed: true},
-		"updated_at":                  schema.StringAttribute{Computed: true},
-		"url":                         schema.StringAttribute{Computed: true},
+		"require_approval_for_deploy": schema.BoolAttribute{
+			Description: "Whether an approval is required to deploy schema changes to this database.",
+			Computed:    true, Optional: true,
+		},
+		"restrict_branch_region": schema.BoolAttribute{
+			Description: "Whether to restrict branch creation to one region.",
+			Computed:    true, Optional: true,
+		},
+		"schema_last_updated_at": schema.StringAttribute{
+			Description: "When the default branch schema was last changed.",
+			Computed:    true,
+		},
+		"sharded": schema.BoolAttribute{
+			Description: "If the database is sharded.",
+			Computed:    true,
+		},
+		"state": schema.StringAttribute{
+			Description: "State of the database.",
+			Computed:    true,
+		},
+		"updated_at": schema.StringAttribute{
+			Description: "When the database was last updated.",
+			Computed:    true,
+		},
+		"url": schema.StringAttribute{
+			Description: "The URL to the database API endpoint.",
+			Computed:    true,
+		},
 	}
 }
 
@@ -255,7 +432,6 @@ type databaseDataSourceModel struct {
 	SchemaLastUpdatedAt               types.String               `tfsdk:"schema_last_updated_at"`
 	Sharded                           types.Bool                 `tfsdk:"sharded"`
 	State                             types.String               `tfsdk:"state"`
-	Type                              types.String               `tfsdk:"type"`
 	UpdatedAt                         types.String               `tfsdk:"updated_at"`
 	Url                               types.String               `tfsdk:"url"`
 }
@@ -297,7 +473,6 @@ func databaseFromClient(database *planetscale.Database, orgName string, diags di
 		SchemaLastUpdatedAt:               types.StringPointerValue(database.SchemaLastUpdatedAt),
 		Sharded:                           types.BoolValue(database.Sharded),
 		State:                             types.StringValue(database.State),
-		Type:                              types.StringValue(database.Type),
 		UpdatedAt:                         types.StringValue(database.UpdatedAt),
 		Url:                               types.StringValue(database.Url),
 	}
@@ -305,38 +480,98 @@ func databaseFromClient(database *planetscale.Database, orgName string, diags di
 
 func branchDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
 	return map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"database":     schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"name":         schema.StringAttribute{Required: !computedName, Computed: computedName},
+		"organization": schema.StringAttribute{
+			Description: "The organization this branch belongs to.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"database": schema.StringAttribute{
+			Description: "The database this branch belongs to.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"name": schema.StringAttribute{
+			Description: "The name of the branch.",
+			Required:    !computedName, Computed: computedName,
+		},
 
-		"access_host_url":                schema.StringAttribute{Computed: true},
-		"cluster_rate_name":              schema.StringAttribute{Computed: true},
-		"created_at":                     schema.StringAttribute{Computed: true},
-		"html_url":                       schema.StringAttribute{Computed: true},
-		"id":                             schema.StringAttribute{Computed: true},
-		"initial_restore_id":             schema.StringAttribute{Computed: true},
-		"mysql_address":                  schema.StringAttribute{Computed: true},
-		"mysql_edge_address":             schema.StringAttribute{Computed: true},
-		"parent_branch":                  schema.StringAttribute{Computed: true},
-		"production":                     schema.BoolAttribute{Computed: true},
-		"ready":                          schema.BoolAttribute{Computed: true},
-		"restore_checklist_completed_at": schema.StringAttribute{Computed: true},
-		"schema_last_updated_at":         schema.StringAttribute{Computed: true},
-		"shard_count":                    schema.Float64Attribute{Computed: true},
-		"sharded":                        schema.BoolAttribute{Computed: true},
-		"updated_at":                     schema.StringAttribute{Computed: true},
+		"access_host_url": schema.StringAttribute{
+			Description: "The access host URL for the branch. This is a legacy field, use `mysql_edge_address`.",
+			Computed:    true,
+		},
+		"cluster_rate_name": schema.StringAttribute{
+			Description: "The SKU representing the branch's cluster size.",
+			Computed:    true,
+		},
+		"created_at": schema.StringAttribute{
+			Description: "When the branch was created.",
+			Computed:    true,
+		},
+		"html_url": schema.StringAttribute{
+			Description: "Planetscale app URL for the branch.",
+			Computed:    true,
+		},
+		"id": schema.StringAttribute{
+			Description: "The ID of the branch.",
+			Computed:    true,
+		},
+		"initial_restore_id": schema.StringAttribute{
+			Description: "The ID of the backup from which the branch was restored.",
+			Computed:    true,
+		},
+		"mysql_address": schema.StringAttribute{
+			Description: "The MySQL address for the branch.",
+			Computed:    true,
+		},
+		"mysql_edge_address": schema.StringAttribute{
+			Description: "The address of the MySQL provider for the branch.",
+			Computed:    true,
+		},
+		"parent_branch": schema.StringAttribute{
+			Description: "The name of the parent branch from which the branch was created.",
+			Computed:    true,
+		},
+		"production": schema.BoolAttribute{
+			Description: "Whether or not the branch is a production branch.",
+			Computed:    true,
+		},
+		"ready": schema.BoolAttribute{
+			Description: "Whether or not the branch is ready to serve queries.",
+			Computed:    true,
+		},
+		"restore_checklist_completed_at": schema.StringAttribute{
+			Description: "When a user last marked a backup restore checklist as completed.",
+			Computed:    true,
+		},
+		"schema_last_updated_at": schema.StringAttribute{
+			Description: "When the schema for the branch was last updated.",
+			Computed:    true,
+		},
+		"shard_count": schema.Float64Attribute{
+			Description: "The number of shards in the branch.",
+			Computed:    true,
+		},
+		"sharded": schema.BoolAttribute{
+			Description: "Whether or not the branch is sharded.",
+			Computed:    true,
+		},
+		"updated_at": schema.StringAttribute{
+			Description: "When the branch was last updated.",
+			Computed:    true,
+		},
 
 		"actor": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: actorDataSourceSchemaAttribute,
+			Description: "The actor who created this branch.",
+			Computed:    true,
+			Attributes:  actorDataSourceSchemaAttribute,
 		},
 		"region": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: regionDataSourceSchemaAttribute,
+			Description: "The region in which this branch lives.",
+			Computed:    true,
+			Attributes:  regionDataSourceSchemaAttribute,
 		},
 		"restored_from_branch": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: restoredFromBranchDataSourceSchemaAttribute,
+			Description: "",
+			Computed:    true,
+			Attributes:  restoredFromBranchDataSourceSchemaAttribute,
 		},
 	}
 }
@@ -397,9 +632,15 @@ func branchFromClient(branch *planetscale.Branch, organization, database string,
 }
 
 var actorDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"avatar_url":   schema.StringAttribute{Computed: true},
-	"display_name": schema.StringAttribute{Computed: true},
-	"id":           schema.StringAttribute{Computed: true},
+	"avatar_url": schema.StringAttribute{
+		Computed: true, Description: "The URL of the actor's avatar",
+	},
+	"display_name": schema.StringAttribute{
+		Computed: true, Description: "The name of the actor",
+	},
+	"id": schema.StringAttribute{
+		Computed: true, Description: "The ID of the actor",
+	},
 }
 
 type actorDataSourceModel struct {
@@ -420,13 +661,34 @@ func actorFromClient(actor *planetscale.Actor, diags diag.Diagnostics) *actorDat
 }
 
 var regionDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"display_name":        schema.StringAttribute{Computed: true},
-	"enabled":             schema.BoolAttribute{Computed: true},
-	"id":                  schema.StringAttribute{Computed: true},
-	"location":            schema.StringAttribute{Computed: true},
-	"provider":            schema.StringAttribute{Computed: true},
-	"public_ip_addresses": schema.ListAttribute{Computed: true, ElementType: types.StringType},
-	"slug":                schema.StringAttribute{Computed: true},
+	"display_name": schema.StringAttribute{
+		Description: "Name of the region.",
+		Computed:    true,
+	},
+	"enabled": schema.BoolAttribute{
+		Description: "Whether or not the region is currently active.",
+		Computed:    true,
+	},
+	"id": schema.StringAttribute{
+		Description: "The ID of the region.",
+		Computed:    true,
+	},
+	"location": schema.StringAttribute{
+		Description: "Location of the region.",
+		Computed:    true,
+	},
+	"provider": schema.StringAttribute{
+		Description: "Provider for the region (ex. AWS).",
+		Computed:    true,
+	},
+	"public_ip_addresses": schema.ListAttribute{
+		Description: "Public IP addresses for the region.",
+		Computed:    true, ElementType: types.StringType,
+	},
+	"slug": schema.StringAttribute{
+		Description: "The slug of the region.",
+		Computed:    true,
+	},
 }
 
 type regionDataSourceModel struct {
@@ -454,26 +716,53 @@ func regionFromClient(region *planetscale.Region, diags diag.Diagnostics) *regio
 	}
 }
 
-var readOnlyRegionDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"organization": schema.StringAttribute{Required: true},
-	"name":         schema.StringAttribute{Required: true},
+var readOnlyRegionsDataSourceSchemaAttribute = map[string]schema.Attribute{
+	"organization": schema.StringAttribute{
+		Description: "The organization for which the read-only regions are available.",
+		Required:    true,
+	},
+	"name": schema.StringAttribute{
+		Description: "The name of the database for which the read-only regions are available.",
+		Required:    true,
+	},
 	"regions": schema.ListNestedAttribute{
-		Computed: true,
+		Description: "The list of read-only regions available for the database.",
+		Computed:    true,
 		NestedObject: schema.NestedAttributeObject{
 			Attributes: map[string]schema.Attribute{
 				"actor": schema.SingleNestedAttribute{
-					Computed:   true,
-					Attributes: actorDataSourceSchemaAttribute,
+					Description: "The actor that created the read-only region.",
+					Computed:    true,
+					Attributes:  actorDataSourceSchemaAttribute,
 				},
-				"created_at":   schema.StringAttribute{Computed: true},
-				"display_name": schema.StringAttribute{Computed: true},
-				"id":           schema.StringAttribute{Computed: true},
-				"ready":        schema.BoolAttribute{Computed: true},
-				"ready_at":     schema.StringAttribute{Computed: true},
-				"updated_at":   schema.StringAttribute{Computed: true},
+				"created_at": schema.StringAttribute{
+					Description: "When the read-only region was created.",
+					Computed:    true,
+				},
+				"display_name": schema.StringAttribute{
+					Description: "The name of the read-only region.",
+					Computed:    true,
+				},
+				"id": schema.StringAttribute{
+					Description: "The ID of the read-only region.",
+					Computed:    true,
+				},
+				"ready": schema.BoolAttribute{
+					Description: "Whether or not the read-only region is ready to serve queries.",
+					Computed:    true,
+				},
+				"ready_at": schema.StringAttribute{
+					Description: "When the read-only region was ready to serve queries.",
+					Computed:    true,
+				},
+				"updated_at": schema.StringAttribute{
+					Description: "When the read-only region was last updated.",
+					Computed:    true,
+				},
 				"region": schema.SingleNestedAttribute{
-					Computed:   true,
-					Attributes: regionDataSourceSchemaAttribute,
+					Description: "The details of the read-only region.",
+					Computed:    true,
+					Attributes:  regionDataSourceSchemaAttribute,
 				},
 			},
 		},
@@ -509,11 +798,26 @@ func readOnlyRegionFromClient(readOnlyRegion *planetscale.ReadOnlyRegion, diags 
 }
 
 var restoredFromBranchDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"created_at": schema.StringAttribute{Computed: true},
-	"deleted_at": schema.StringAttribute{Computed: true},
-	"id":         schema.StringAttribute{Computed: true},
-	"name":       schema.StringAttribute{Computed: true},
-	"updated_at": schema.StringAttribute{Computed: true},
+	"created_at": schema.StringAttribute{
+		Description: "When the resource was created.",
+		Computed:    true,
+	},
+	"deleted_at": schema.StringAttribute{
+		Description: "When the resource was deleted, if deleted.",
+		Computed:    true,
+	},
+	"id": schema.StringAttribute{
+		Description: "The ID for the resource.",
+		Computed:    true,
+	},
+	"name": schema.StringAttribute{
+		Description: "The name for the resource.",
+		Computed:    true,
+	},
+	"updated_at": schema.StringAttribute{
+		Description: "When the resource was last updated.",
+		Computed:    true,
+	},
 }
 
 type restoredFromBranchDataSourceModel struct {
@@ -538,9 +842,18 @@ func restoredFromBranchFromClient(rfb *planetscale.RestoredFromBranch, diags dia
 }
 
 var tableSchemaDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"html": schema.StringAttribute{Computed: true},
-	"name": schema.StringAttribute{Computed: true},
-	"raw":  schema.StringAttribute{Computed: true},
+	"html": schema.StringAttribute{
+		Description: "Syntax highlighted HTML for the table's schema.",
+		Computed:    true,
+	},
+	"name": schema.StringAttribute{
+		Description: "Name of the table.",
+		Computed:    true,
+	},
+	"raw": schema.StringAttribute{
+		Description: "The table's schema.",
+		Computed:    true,
+	},
 }
 
 type tableSchemaDataSourceModel struct {
@@ -561,23 +874,74 @@ func tableSchemaFromClient(ts *planetscale.TableSchema, diags diag.Diagnostics) 
 }
 
 var lintErrorDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"auto_increment_column_names": schema.ListAttribute{Computed: true, ElementType: types.StringType},
-	"charset_name":                schema.StringAttribute{Computed: true},
-	"check_constraint_name":       schema.StringAttribute{Computed: true},
-	"column_name":                 schema.StringAttribute{Computed: true},
-	"docs_url":                    schema.StringAttribute{Computed: true},
-	"engine_name":                 schema.StringAttribute{Computed: true},
-	"enum_value":                  schema.StringAttribute{Computed: true},
-	"error_description":           schema.StringAttribute{Computed: true},
-	"foreign_key_column_names":    schema.ListAttribute{Computed: true, ElementType: types.StringType},
-	"json_path":                   schema.StringAttribute{Computed: true},
-	"keyspace_name":               schema.StringAttribute{Computed: true},
-	"lint_error":                  schema.StringAttribute{Computed: true},
-	"partition_name":              schema.StringAttribute{Computed: true},
-	"partitioning_type":           schema.StringAttribute{Computed: true},
-	"subject_type":                schema.StringAttribute{Computed: true},
-	"table_name":                  schema.StringAttribute{Computed: true},
-	"vindex_name":                 schema.StringAttribute{Computed: true},
+	"auto_increment_column_names": schema.ListAttribute{
+		Description: "A list of invalid auto-incremented columns.",
+		Computed:    true, ElementType: types.StringType,
+	},
+	"charset_name": schema.StringAttribute{
+		Description: "The charset of the schema.",
+		Computed:    true,
+	},
+	"check_constraint_name": schema.StringAttribute{
+		Description: "The name of the invalid check constraint.",
+		Computed:    true,
+	},
+	"column_name": schema.StringAttribute{
+		Description: "The column in a table relevant to the error.",
+		Computed:    true,
+	},
+	"docs_url": schema.StringAttribute{
+		Description: "A link to the documentation related to the error.",
+		Computed:    true,
+	},
+	"engine_name": schema.StringAttribute{
+		Description: "The engine of the schema.",
+		Computed:    true,
+	},
+	"enum_value": schema.StringAttribute{
+		Description: "The name of the invalid enum value.",
+		Computed:    true,
+	},
+	"error_description": schema.StringAttribute{
+		Description: "A description for the error that occurred.",
+		Computed:    true,
+	},
+	"foreign_key_column_names": schema.ListAttribute{
+		Description: "A list of invalid foreign key columns in a table.",
+		Computed:    true, ElementType: types.StringType,
+	},
+	"json_path": schema.StringAttribute{
+		Description: "The path for an invalid JSON column.",
+		Computed:    true,
+	},
+	"keyspace_name": schema.StringAttribute{
+		Description: "The keyspace of the schema with the error.",
+		Computed:    true,
+	},
+	"lint_error": schema.StringAttribute{
+		Description: "Code representing.",
+		Computed:    true,
+	},
+	"partition_name": schema.StringAttribute{
+		Description: "The name of the invalid partition in the schema.",
+		Computed:    true,
+	},
+	"partitioning_type": schema.StringAttribute{
+		Description: "The name of the invalid partitioning type.",
+		Computed:    true,
+	},
+	"subject_type": schema.StringAttribute{
+		Description: "The subject for the errors.",
+		Computed:    true,
+	},
+	"table_name": schema.StringAttribute{
+		Description: "The table with the error.",
+		Computed:    true,
+	},
+	"vindex_name": schema.StringAttribute{
+		Description: "The name of the vindex for the schema.",
+		Computed:    true,
+	},
 }
 
 type lintErrorDataSourceModel struct {
@@ -626,16 +990,46 @@ func lintErrorFromClient(le *planetscale.LintError, diags diag.Diagnostics) *lin
 }
 
 var oauthApplicationAttribute = map[string]schema.Attribute{
-	"avatar":       schema.StringAttribute{Computed: true},
-	"client_id":    schema.StringAttribute{Computed: true},
-	"created_at":   schema.StringAttribute{Computed: true},
-	"domain":       schema.StringAttribute{Computed: true},
-	"id":           schema.StringAttribute{Computed: true},
-	"name":         schema.StringAttribute{Computed: true},
-	"redirect_uri": schema.StringAttribute{Computed: true},
-	"scopes":       schema.ListAttribute{Computed: true, ElementType: types.StringType},
-	"tokens":       schema.Float64Attribute{Computed: true},
-	"updated_at":   schema.StringAttribute{Computed: true},
+	"avatar": schema.StringAttribute{
+		Description: "The image source for the OAuth application's avatar.",
+		Computed:    true,
+	},
+	"client_id": schema.StringAttribute{
+		Description: "The OAuth application's unique client id.",
+		Computed:    true,
+	},
+	"created_at": schema.StringAttribute{
+		Description: "When the OAuth application was created.",
+		Computed:    true,
+	},
+	"domain": schema.StringAttribute{
+		Description: "The domain of the OAuth application. Used for verification of a valid redirect uri.",
+		Computed:    true,
+	},
+	"id": schema.StringAttribute{
+		Description: "The ID of the OAuth application.",
+		Computed:    true,
+	},
+	"name": schema.StringAttribute{
+		Description: "The name of the OAuth application.",
+		Computed:    true,
+	},
+	"redirect_uri": schema.StringAttribute{
+		Description: "The redirect URI of the OAuth application.",
+		Computed:    true,
+	},
+	"scopes": schema.ListAttribute{
+		Description: "The scopes that the OAuth application requires on a user's accout.",
+		Computed:    true, ElementType: types.StringType,
+	},
+	"tokens": schema.Float64Attribute{
+		Description: "The number of tokens issued by the OAuth application.",
+		Computed:    true,
+	},
+	"updated_at": schema.StringAttribute{
+		Description: "When the OAuth application was last updated.",
+		Computed:    true,
+	},
 }
 
 type oauthApplicationDataSourceModel struct {
@@ -670,19 +1064,58 @@ func oauthApplicationFromClient(oa *planetscale.OauthApplication, diags diag.Dia
 }
 
 var backupPolicyDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"id":              schema.StringAttribute{Computed: true},
-	"created_at":      schema.StringAttribute{Computed: true},
-	"frequency_unit":  schema.StringAttribute{Computed: true},
-	"frequency_value": schema.Float64Attribute{Computed: true},
-	"last_ran_at":     schema.StringAttribute{Computed: true},
-	"name":            schema.StringAttribute{Computed: true},
-	"next_run_at":     schema.StringAttribute{Computed: true},
-	"retention_unit":  schema.StringAttribute{Computed: true},
-	"retention_value": schema.Float64Attribute{Computed: true},
-	"schedule_day":    schema.StringAttribute{Computed: true},
-	"schedule_week":   schema.StringAttribute{Computed: true},
-	"target":          schema.StringAttribute{Computed: true},
-	"updated_at":      schema.StringAttribute{Computed: true},
+	"id": schema.StringAttribute{
+		Description: "The ID of the backup policy.",
+		Computed:    true,
+	},
+	"created_at": schema.StringAttribute{
+		Description: "When the backup policy was created.",
+		Computed:    true,
+	},
+	"frequency_unit": schema.StringAttribute{
+		Description: "The unit for the frequency of the backup policy.",
+		Computed:    true,
+	},
+	"frequency_value": schema.Float64Attribute{
+		Description: "A number value for the frequency of the backup policy.",
+		Computed:    true,
+	},
+	"last_ran_at": schema.StringAttribute{
+		Description: "When the backup was last run.",
+		Computed:    true,
+	},
+	"name": schema.StringAttribute{
+		Description: "The name of the backup policy.",
+		Computed:    true,
+	},
+	"next_run_at": schema.StringAttribute{
+		Description: "When the backup will next run.",
+		Computed:    true,
+	},
+	"retention_unit": schema.StringAttribute{
+		Description: "The unit for the retention period of the backup policy.",
+		Computed:    true,
+	},
+	"retention_value": schema.Float64Attribute{
+		Description: "A number value for the retention period of the backup policy.",
+		Computed:    true,
+	},
+	"schedule_day": schema.StringAttribute{
+		Description: "Day of the week that the backup is scheduled.",
+		Computed:    true,
+	},
+	"schedule_week": schema.StringAttribute{
+		Description: "Week of the month that the backup is scheduled.",
+		Computed:    true,
+	},
+	"target": schema.StringAttribute{
+		Description: "Whether the backup policy is for a production or development database, or for a database branch.",
+		Computed:    true,
+	},
+	"updated_at": schema.StringAttribute{
+		Description: "When the backup policy was last updated.",
+		Computed:    true,
+	},
 }
 
 type backupPolicyDataSourceModel struct {
@@ -722,35 +1155,6 @@ func backupPolicyFromClient(backupPolicy *planetscale.BackupPolicy, diags diag.D
 	}
 }
 
-var schemaSnapshotDataSourceSchemaAttribute = map[string]schema.Attribute{
-	"created_at": schema.StringAttribute{Computed: true},
-	"id":         schema.StringAttribute{Computed: true},
-	"name":       schema.StringAttribute{Computed: true},
-	"updated_at": schema.StringAttribute{Computed: true},
-	"url":        schema.StringAttribute{Computed: true},
-}
-
-type schemaSnapshotDataSourceModel struct {
-	CreatedAt types.String `tfsdk:"created_at"`
-	Id        types.String `tfsdk:"id"`
-	Name      types.String `tfsdk:"name"`
-	UpdatedAt types.String `tfsdk:"updated_at"`
-	Url       types.String `tfsdk:"url"`
-}
-
-func schemaSnapshotFromClient(schemaSnapshot *planetscale.SchemaSnapshot, diags diag.Diagnostics) *schemaSnapshotDataSourceModel {
-	if schemaSnapshot == nil {
-		return nil
-	}
-	return &schemaSnapshotDataSourceModel{
-		CreatedAt: types.StringValue(schemaSnapshot.CreatedAt),
-		Id:        types.StringValue(schemaSnapshot.Id),
-		Name:      types.StringValue(schemaSnapshot.Name),
-		UpdatedAt: types.StringValue(schemaSnapshot.UpdatedAt),
-		Url:       types.StringValue(schemaSnapshot.Url),
-	}
-}
-
 var branchForPasswordDataSourceSchemaAttribute = map[string]schema.Attribute{
 	"access_host_url":    schema.StringAttribute{Computed: true},
 	"id":                 schema.StringAttribute{Computed: true},
@@ -782,32 +1186,77 @@ func branchForPasswordFromClient(branchForPassword *planetscale.BranchForPasswor
 
 func passwordDataSourceSchemaAttribute(computedName bool) map[string]schema.Attribute {
 	return map[string]schema.Attribute{
-		"organization":        schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"database":            schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"branch":              schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"id":                  schema.StringAttribute{Required: !computedName, Computed: computedName},
-		"read_only_region_id": schema.StringAttribute{Optional: !computedName, Computed: computedName},
-		"access_host_url":     schema.StringAttribute{Computed: true},
+		"organization": schema.StringAttribute{
+			Description: "The organization this database branch password belongs to.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"database": schema.StringAttribute{
+			Description: "The datanase this branch password belongs to.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"branch": schema.StringAttribute{
+			Description: "The branch this password belongs to..",
+			Required:    !computedName, Computed: computedName,
+		},
+		"id": schema.StringAttribute{
+			Description: "The ID for the password.",
+			Required:    !computedName, Computed: computedName,
+		},
+		"read_only_region_id": schema.StringAttribute{
+			Description: "If the password is for a read-only region, the ID of the region.",
+			Optional:    !computedName, Computed: computedName,
+		},
+		"access_host_url": schema.StringAttribute{
+			Description: "The host URL for the password.",
+			Computed:    true,
+		},
 		"actor": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: actorDataSourceSchemaAttribute,
+			Description: "The actor that created this branch.",
+			Computed:    true,
+			Attributes:  actorDataSourceSchemaAttribute,
 		},
-		"created_at": schema.StringAttribute{Computed: true},
+		"created_at": schema.StringAttribute{
+			Description: "When the password was created.",
+			Computed:    true,
+		},
 		"database_branch": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: branchForPasswordDataSourceSchemaAttribute,
+			Description: "The branch this password is allowed to access.",
+			Computed:    true,
+			Attributes:  branchForPasswordDataSourceSchemaAttribute,
 		},
-		"deleted_at": schema.StringAttribute{Computed: true},
-		"expires_at": schema.StringAttribute{Computed: true},
-		"name":       schema.StringAttribute{Computed: true},
+		"deleted_at": schema.StringAttribute{
+			Description: "When the password was deleted.",
+			Computed:    true,
+		},
+		"expires_at": schema.StringAttribute{
+			Description: "When the password will expire.",
+			Computed:    true,
+		},
+		"name": schema.StringAttribute{
+			Description: "The display name for the password.",
+			Computed:    true,
+		},
 		"region": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: regionDataSourceSchemaAttribute,
+			Description: "The region in which this password can be used.",
+			Computed:    true,
+			Attributes:  regionDataSourceSchemaAttribute,
 		},
-		"renewable":   schema.BoolAttribute{Computed: true},
-		"role":        schema.StringAttribute{Computed: true},
-		"ttl_seconds": schema.Float64Attribute{Computed: true},
-		"username":    schema.StringAttribute{Computed: true},
+		"renewable": schema.BoolAttribute{
+			Description: "Whether or not the password can be renewed.",
+			Computed:    true,
+		},
+		"role": schema.StringAttribute{
+			Description: "The role for the password.",
+			Computed:    true,
+		},
+		"ttl_seconds": schema.Float64Attribute{
+			Description: "Time to live (in seconds) for the password. The password will be invalid and unrenewable when TTL has passed.",
+			Computed:    true,
+		},
+		"username": schema.StringAttribute{
+			Description: "The username for the password.",
+			Computed:    true,
+		},
 
 		// manually removed from spec because currently buggy
 		// "integrations": schema.ListAttribute{Computed: true, ElementType: types.StringType},
@@ -866,50 +1315,81 @@ func passwordFromClient(password *planetscale.Password, organization, database, 
 
 func backupDataSourceSchemaAttribute(computedID bool) map[string]schema.Attribute {
 	return map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: !computedID, Computed: computedID},
-		"database":     schema.StringAttribute{Required: !computedID, Computed: computedID},
-		"branch":       schema.StringAttribute{Required: !computedID, Computed: computedID},
-		"id":           schema.StringAttribute{Required: !computedID, Computed: computedID},
-
-		"name": schema.StringAttribute{Computed: true},
+		"organization": schema.StringAttribute{
+			Description: "The organization this backup belongs to.",
+			Required:    !computedID, Computed: computedID,
+		},
+		"database": schema.StringAttribute{
+			Description: "The database this backup belongs to.",
+			Required:    !computedID, Computed: computedID,
+		},
+		"branch": schema.StringAttribute{
+			Description: "The branch this backup belongs to.",
+			Required:    !computedID, Computed: computedID,
+		},
+		"id": schema.StringAttribute{
+			Description: "The ID of the backup.",
+			Required:    !computedID, Computed: computedID,
+		},
+		"name": schema.StringAttribute{
+			Description: "The name of the backup.",
+			Computed:    true,
+		},
 		"actor": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: actorDataSourceSchemaAttribute,
+			Description: "The actor that created the backup.",
+			Computed:    true, Attributes: actorDataSourceSchemaAttribute,
 		},
 		"backup_policy": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: backupPolicyDataSourceSchemaAttribute,
+			Description: "The backup policy being followed.",
+			Computed:    true,
+			Attributes:  backupPolicyDataSourceSchemaAttribute,
 		},
-		"schema_snapshot": schema.SingleNestedAttribute{
-			Computed:   true,
-			Attributes: schemaSnapshotDataSourceSchemaAttribute,
+		"created_at": schema.StringAttribute{
+			Description: "When the backup was created.",
+			Computed:    true,
 		},
-		"created_at":             schema.StringAttribute{Computed: true},
-		"estimated_storage_cost": schema.StringAttribute{Computed: true},
-		"required":               schema.BoolAttribute{Computed: true},
-		"restored_branches":      schema.ListAttribute{Computed: true, ElementType: types.StringType},
-		"size":                   schema.Float64Attribute{Computed: true},
-		"state":                  schema.StringAttribute{Computed: true},
-		"updated_at":             schema.StringAttribute{Computed: true},
+		"estimated_storage_cost": schema.StringAttribute{
+			Description: "The estimated storage cost of the backup.",
+			Computed:    true,
+		},
+		"required": schema.BoolAttribute{
+			Description: "Whether or not the backup policy is required.",
+			Computed:    true,
+		},
+		"restored_branches": schema.ListAttribute{
+			Description: "Branches that have been restored with this backup.",
+			Computed:    true, ElementType: types.StringType,
+		},
+		"size": schema.Float64Attribute{
+			Description: "The size of the backup.",
+			Computed:    true,
+		},
+		"state": schema.StringAttribute{
+			Description: "The current state of the backup.",
+			Computed:    true,
+		},
+		"updated_at": schema.StringAttribute{
+			Description: "When the backup was last updated.",
+			Computed:    true,
+		},
 	}
 }
 
 type backupDataSourceModel struct {
-	Organization         types.String                   `tfsdk:"organization"`
-	Database             types.String                   `tfsdk:"database"`
-	Branch               types.String                   `tfsdk:"branch"`
-	Name                 types.String                   `tfsdk:"name"`
-	Id                   types.String                   `tfsdk:"id"`
-	Actor                *actorDataSourceModel          `tfsdk:"actor"`
-	BackupPolicy         *backupPolicyDataSourceModel   `tfsdk:"backup_policy"`
-	CreatedAt            types.String                   `tfsdk:"created_at"`
-	EstimatedStorageCost types.String                   `tfsdk:"estimated_storage_cost"`
-	Required             types.Bool                     `tfsdk:"required"`
-	RestoredBranches     types.List                     `tfsdk:"restored_branches"`
-	SchemaSnapshot       *schemaSnapshotDataSourceModel `tfsdk:"schema_snapshot"`
-	Size                 types.Float64                  `tfsdk:"size"`
-	State                types.String                   `tfsdk:"state"`
-	UpdatedAt            types.String                   `tfsdk:"updated_at"`
+	Organization         types.String                 `tfsdk:"organization"`
+	Database             types.String                 `tfsdk:"database"`
+	Branch               types.String                 `tfsdk:"branch"`
+	Name                 types.String                 `tfsdk:"name"`
+	Id                   types.String                 `tfsdk:"id"`
+	Actor                *actorDataSourceModel        `tfsdk:"actor"`
+	BackupPolicy         *backupPolicyDataSourceModel `tfsdk:"backup_policy"`
+	CreatedAt            types.String                 `tfsdk:"created_at"`
+	EstimatedStorageCost types.String                 `tfsdk:"estimated_storage_cost"`
+	Required             types.Bool                   `tfsdk:"required"`
+	RestoredBranches     types.List                   `tfsdk:"restored_branches"`
+	Size                 types.Float64                `tfsdk:"size"`
+	State                types.String                 `tfsdk:"state"`
+	UpdatedAt            types.String                 `tfsdk:"updated_at"`
 }
 
 func backupFromClient(backup *planetscale.Backup, organization, database, branch string, diags diag.Diagnostics) *backupDataSourceModel {
@@ -932,7 +1412,6 @@ func backupFromClient(backup *planetscale.Backup, organization, database, branch
 		Id:                   types.StringValue(backup.Id),
 		Required:             types.BoolValue(backup.Required),
 		RestoredBranches:     restoredBranches,
-		SchemaSnapshot:       schemaSnapshotFromClient(&backup.SchemaSnapshot, diags),
 		Size:                 types.Float64Value(backup.Size),
 		State:                types.StringValue(backup.State),
 		UpdatedAt:            types.StringValue(backup.UpdatedAt),

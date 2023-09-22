@@ -3,12 +3,12 @@
 page_title: "planetscale_organizations Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  A list of PlanetScale organizations.
 ---
 
 # planetscale_organizations (Data Source)
 
-
+A list of PlanetScale organizations.
 
 ## Example Usage
 
@@ -32,25 +32,26 @@ output "orgs" {
 
 Read-Only:
 
-- `admin_only_production_access` (Boolean)
-- `billing_email` (String)
-- `can_create_databases` (Boolean)
-- `created_at` (String)
-- `database_count` (Number)
-- `features` (Attributes) (see [below for nested schema](#nestedatt--organizations--features))
-- `flags` (Attributes) (see [below for nested schema](#nestedatt--organizations--flags))
-- `free_databases_remaining` (Number)
-- `has_past_due_invoices` (Boolean)
-- `id` (String)
-- `name` (String)
-- `plan` (String)
-- `single_tenancy` (Boolean)
-- `sleeping_database_count` (Number)
-- `sso` (Boolean)
-- `sso_directory` (Boolean)
-- `sso_portal_url` (String)
-- `updated_at` (String)
-- `valid_billing_info` (Boolean)
+- `admin_only_production_access` (Boolean) Whether or not only administrators can access production branches in the organization.
+- `billing_email` (String) The billing email of the organization.
+- `can_create_databases` (Boolean) Whether or not more databases can be created in the organization.
+- `created_at` (String) When the organization was created.
+- `database_count` (Number) The number of databases in the organization.
+- `features` (Attributes) Features that are enabled on the organization. (see [below for nested schema](#nestedatt--organizations--features))
+- `flags` (Attributes) . (see [below for nested schema](#nestedatt--organizations--flags))
+- `free_databases_remaining` (Number) The number of remaining free databases that can be created in the organization.
+- `has_past_due_invoices` (Boolean) Whether or not the organization has past due billing invoices.
+- `id` (String) The ID for the organization.
+- `idp_managed_roles` (Boolean) Whether or not the IdP provider is be responsible for managing roles in PlanetScale.
+- `name` (String) The name of the organization.
+- `plan` (String) The billing plan of the organization.
+- `single_tenancy` (Boolean) Whether or not the organization has single tenancy enabled.
+- `sleeping_database_count` (Number) The number of sleeping databases in the organization.
+- `sso` (Boolean) Whether or not SSO is enabled on the organization.
+- `sso_directory` (Boolean) Whether or not the organization uses a WorkOS directory.
+- `sso_portal_url` (String) The URL of the organization's SSO portal.
+- `updated_at` (String) When the organization was last updated.
+- `valid_billing_info` (Boolean) Whether or not the organization's billing information is valid.
 
 <a id="nestedatt--organizations--features"></a>
 ### Nested Schema for `organizations.features`

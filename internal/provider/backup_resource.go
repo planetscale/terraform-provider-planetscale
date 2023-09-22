@@ -45,7 +45,6 @@ type backupResourceModel struct {
 	Id                   types.String  `tfsdk:"id"`
 	Required             types.Bool    `tfsdk:"required"`
 	RestoredBranches     types.List    `tfsdk:"restored_branches"`
-	SchemaSnapshot       types.Object  `tfsdk:"schema_snapshot"`
 	Size                 types.Float64 `tfsdk:"size"`
 	State                types.String  `tfsdk:"state"`
 	UpdatedAt            types.String  `tfsdk:"updated_at"`
@@ -58,8 +57,6 @@ func backupResourceFromClient(ctx context.Context, backup *planetscale.Backup, o
 	actor, diags := types.ObjectValueFrom(ctx, actorResourceAttrTypes, backup.Actor)
 	diags.Append(diags...)
 	backupPolicy, diags := types.ObjectValueFrom(ctx, backupPolicyResourceAttrTypes, backup.BackupPolicy)
-	diags.Append(diags...)
-	schemaSnapshot, diags := types.ObjectValueFrom(ctx, schemaSnapshotResourceAttrTypes, backup.SchemaSnapshot)
 	diags.Append(diags...)
 
 	restoredBranch := types.ListNull(types.StringType)
@@ -76,7 +73,6 @@ func backupResourceFromClient(ctx context.Context, backup *planetscale.Backup, o
 
 		Name:                 types.StringValue(backup.Name),
 		Actor:                actor,
-		SchemaSnapshot:       schemaSnapshot,
 		CreatedAt:            types.StringValue(backup.CreatedAt),
 		EstimatedStorageCost: types.StringValue(backup.EstimatedStorageCost),
 		Id:                   types.StringValue(backup.Id),
@@ -94,43 +90,77 @@ func (r *backupResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *backupResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
+		Description:         "A PlanetScale backup.",
 		MarkdownDescription: "A PlanetScale backup",
 		Attributes: map[string]schema.Attribute{
-			"organization": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"database": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"branch": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"name": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
+			"organization": schema.StringAttribute{
+				Description: "The organization in which the database branch being backed up belongs to.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				}},
+			"database": schema.StringAttribute{
+				Description: "The database to which the branch being backed up belongs to.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				}},
+			"branch": schema.StringAttribute{
+				Description: "The branch being backed up.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				}},
+			"name": schema.StringAttribute{
+				Description: "The name of the backup.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				}},
 			"backup_policy": schema.SingleNestedAttribute{
-				Required:   true,
-				Attributes: backupPolicyResourceAttribute,
+				Description: ".",
+				Required:    true,
+				Attributes:  backupPolicyResourceAttribute,
 			},
 
 			// read only
 			"actor": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: actorResourceSchemaAttribute,
+				Description: ".",
+				Computed:    true,
+				Attributes:  actorResourceSchemaAttribute,
 			},
-			"schema_snapshot": schema.SingleNestedAttribute{
-				Computed:   true,
-				Attributes: schemaSnapshotResourceAttribute,
+			"id": schema.StringAttribute{
+				Description: "The ID of the backup.",
+				Computed:    true,
 			},
-			"id":                     schema.StringAttribute{Computed: true},
-			"created_at":             schema.StringAttribute{Computed: true},
-			"estimated_storage_cost": schema.StringAttribute{Computed: true},
-			"required":               schema.BoolAttribute{Computed: true},
-			"restored_branches":      schema.ListAttribute{Computed: true, ElementType: types.StringType},
-			"size":                   schema.Float64Attribute{Computed: true},
-			"state":                  schema.StringAttribute{Computed: true},
-			"updated_at":             schema.StringAttribute{Computed: true},
+			"created_at": schema.StringAttribute{
+				Description: "When the backup was created.",
+				Computed:    true,
+			},
+			"estimated_storage_cost": schema.StringAttribute{
+				Description: "The estimated storage cost of the backup.",
+				Computed:    true,
+			},
+			"required": schema.BoolAttribute{
+				Description: "Whether or not the backup policy is required.",
+				Computed:    true,
+			},
+			"restored_branches": schema.ListAttribute{
+				Description: "Branches that have been restored with this backup.",
+				Computed:    true, ElementType: types.StringType,
+			},
+			"size": schema.Float64Attribute{
+				Description: "The size of the backup.",
+				Computed:    true,
+			},
+			"state": schema.StringAttribute{
+				Description: "The current state of the backup.",
+				Computed:    true,
+			},
+			"updated_at": schema.StringAttribute{
+				Description: "When the backup was last updated.",
+				Computed:    true,
+			},
 		},
 	}
 }

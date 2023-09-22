@@ -43,21 +43,64 @@ func (d *userDataSource) Metadata(ctx context.Context, req datasource.MetadataRe
 }
 
 func (d *userDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"id":                         schema.StringAttribute{Computed: true},
-		"name":                       schema.StringAttribute{Computed: true},
-		"avatar_url":                 schema.StringAttribute{Computed: true},
-		"created_at":                 schema.StringAttribute{Computed: true},
-		"default_organization_id":    schema.StringAttribute{Computed: true},
-		"directory_managed":          schema.BoolAttribute{Computed: true},
-		"display_name":               schema.StringAttribute{Computed: true},
-		"email":                      schema.StringAttribute{Computed: true},
-		"email_verified":             schema.BoolAttribute{Computed: true},
-		"managed":                    schema.BoolAttribute{Computed: true},
-		"sso":                        schema.BoolAttribute{Computed: true},
-		"two_factor_auth_configured": schema.BoolAttribute{Computed: true},
-		"updated_at":                 schema.StringAttribute{Computed: true},
-	}}
+	resp.Schema = schema.Schema{
+		Description:         "A PlanetScale user.",
+		MarkdownDescription: "A PlanetScale user.",
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Description: "The ID of the user.",
+				Computed:    true,
+			},
+			"name": schema.StringAttribute{
+				Description: "The name of the user.",
+				Computed:    true,
+			},
+			"avatar_url": schema.StringAttribute{
+				Description: "The URL source of the user's avatar.",
+				Computed:    true,
+			},
+			"created_at": schema.StringAttribute{
+				Description: "When the user was created.",
+				Computed:    true,
+			},
+			"default_organization_id": schema.StringAttribute{
+				Description: "The default organization for the user.",
+				Computed:    true,
+			},
+			"directory_managed": schema.BoolAttribute{
+				Description: "Whether or not the user is managed by a WorkOS directory.",
+				Computed:    true,
+			},
+			"display_name": schema.StringAttribute{
+				Description: "The display name of the user.",
+				Computed:    true,
+			},
+			"email": schema.StringAttribute{
+				Description: "The email of the user.",
+				Computed:    true,
+			},
+			"email_verified": schema.BoolAttribute{
+				Description: "Whether or not the user is verified by email.",
+				Computed:    true,
+			},
+			"managed": schema.BoolAttribute{
+				Description: "Whether or not the user is managed by an authentication provider.",
+				Computed:    true,
+			},
+			"sso": schema.BoolAttribute{
+				Description: "Whether or not the user is managed by WorkOS.",
+				Computed:    true,
+			},
+			"two_factor_auth_configured": schema.BoolAttribute{
+				Description: "Whether or not the user has configured two factor authentication.",
+				Computed:    true,
+			},
+			"updated_at": schema.StringAttribute{
+				Description: "When the user was last updated.",
+				Computed:    true,
+			},
+		},
+	}
 }
 
 func (d *userDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

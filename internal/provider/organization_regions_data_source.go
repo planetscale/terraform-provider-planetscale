@@ -32,15 +32,19 @@ func (d *organizationRegionsDataSource) Metadata(ctx context.Context, req dataso
 }
 
 func (d *organizationRegionsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: true},
-		"regions": schema.ListNestedAttribute{
-			Computed: true,
-			NestedObject: schema.NestedAttributeObject{
-				Attributes: regionDataSourceSchemaAttribute,
+	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale regions for the organization.",
+		MarkdownDescription: "A list of PlanetScale regions for the organization.",
+		Attributes: map[string]schema.Attribute{
+			"organization": schema.StringAttribute{Required: true},
+			"regions": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: regionDataSourceSchemaAttribute,
+				},
 			},
 		},
-	}}
+	}
 }
 
 func (d *organizationRegionsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

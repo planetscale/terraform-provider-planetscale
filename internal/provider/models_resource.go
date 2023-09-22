@@ -1,19 +1,30 @@
 package provider
 
 import (
+	"bytes"
+	"context"
+	"strings"
+
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 var actorResourceSchemaAttribute = map[string]schema.Attribute{
-	"avatar_url":   schema.StringAttribute{Computed: true},
-	"display_name": schema.StringAttribute{Computed: true},
-	"id":           schema.StringAttribute{Computed: true},
+	"avatar_url": schema.StringAttribute{
+		Computed: true, Description: "The URL of the actor's avatar",
+	},
+	"display_name": schema.StringAttribute{
+		Computed: true, Description: "The name of the actor",
+	},
+	"id": schema.StringAttribute{
+		Computed: true, Description: "The ID of the actor",
+	},
 }
 
 var actorResourceAttrTypes = map[string]attr.Type{
@@ -23,13 +34,34 @@ var actorResourceAttrTypes = map[string]attr.Type{
 }
 
 var regionResourceSchemaAttribute = map[string]schema.Attribute{
-	"display_name":        schema.StringAttribute{Computed: true},
-	"enabled":             schema.BoolAttribute{Computed: true},
-	"id":                  schema.StringAttribute{Computed: true},
-	"location":            schema.StringAttribute{Computed: true},
-	"provider":            schema.StringAttribute{Computed: true},
-	"public_ip_addresses": schema.ListAttribute{Computed: true, ElementType: types.StringType},
-	"slug":                schema.StringAttribute{Computed: true},
+	"display_name": schema.StringAttribute{
+		Description: "Name of the region.",
+		Computed:    true,
+	},
+	"enabled": schema.BoolAttribute{
+		Description: "Whether or not the region is currently active.",
+		Computed:    true,
+	},
+	"id": schema.StringAttribute{
+		Description: "The ID of the region.",
+		Computed:    true,
+	},
+	"location": schema.StringAttribute{
+		Description: "Location of the region.",
+		Computed:    true,
+	},
+	"provider": schema.StringAttribute{
+		Description: "Provider for the region (ex. AWS).",
+		Computed:    true,
+	},
+	"public_ip_addresses": schema.ListAttribute{
+		Description: "Public IP addresses for the region.",
+		Computed:    true, ElementType: types.StringType,
+	},
+	"slug": schema.StringAttribute{
+		Description: "The slug of the region.",
+		Computed:    true,
+	},
 }
 
 var regionResourceAttrTypes = map[string]attr.Type{
@@ -43,11 +75,26 @@ var regionResourceAttrTypes = map[string]attr.Type{
 }
 
 var restoredFromBranchSchemaAttribute = map[string]schema.Attribute{
-	"created_at": schema.StringAttribute{Computed: true},
-	"deleted_at": schema.StringAttribute{Computed: true},
-	"id":         schema.StringAttribute{Computed: true},
-	"name":       schema.StringAttribute{Computed: true},
-	"updated_at": schema.StringAttribute{Computed: true},
+	"created_at": schema.StringAttribute{
+		Description: "When the resource was created.",
+		Computed:    true,
+	},
+	"deleted_at": schema.StringAttribute{
+		Description: "When the resource was deleted, if deleted.",
+		Computed:    true,
+	},
+	"id": schema.StringAttribute{
+		Description: "The ID for the resource.",
+		Computed:    true,
+	},
+	"name": schema.StringAttribute{
+		Description: "The name for the resource.",
+		Computed:    true,
+	},
+	"updated_at": schema.StringAttribute{
+		Description: "When the resource was last updated.",
+		Computed:    true,
+	},
 }
 
 var restoredFromBranchResourceAttrTypes = map[string]attr.Type{
@@ -82,29 +129,64 @@ var importResourceAttrTypes = map[string]attr.Type{
 
 var backupPolicyResourceAttribute = map[string]schema.Attribute{
 	"retention_unit": schema.StringAttribute{
-		Required: true,
+		Description: "The unit for the retention period of the backup policy.",
+		Required:    true,
 		PlanModifiers: []planmodifier.String{
 			stringplanmodifier.RequiresReplace(),
 		},
 	},
 	"retention_value": schema.Float64Attribute{
-		Required: true,
+		Description: "A number value for the retention period of the backup policy.",
+		Required:    true,
 		PlanModifiers: []planmodifier.Float64{
 			float64planmodifier.RequiresReplace(),
 		},
 	},
 	// read-only
-	"created_at":      schema.StringAttribute{Computed: true},
-	"frequency_unit":  schema.StringAttribute{Computed: true},
-	"frequency_value": schema.Float64Attribute{Computed: true},
-	"id":              schema.StringAttribute{Computed: true},
-	"last_ran_at":     schema.StringAttribute{Computed: true},
-	"name":            schema.StringAttribute{Computed: true},
-	"next_run_at":     schema.StringAttribute{Computed: true},
-	"schedule_day":    schema.StringAttribute{Computed: true},
-	"schedule_week":   schema.StringAttribute{Computed: true},
-	"target":          schema.StringAttribute{Computed: true},
-	"updated_at":      schema.StringAttribute{Computed: true},
+	"id": schema.StringAttribute{
+		Description: "The ID of the backup policy.",
+		Computed:    true,
+	},
+	"created_at": schema.StringAttribute{
+		Description: "When the backup policy was created.",
+		Computed:    true,
+	},
+	"frequency_unit": schema.StringAttribute{
+		Description: "The unit for the frequency of the backup policy.",
+		Computed:    true,
+	},
+	"frequency_value": schema.Float64Attribute{
+		Description: "A number value for the frequency of the backup policy.",
+		Computed:    true,
+	},
+	"last_ran_at": schema.StringAttribute{
+		Description: "When the backup was last run.",
+		Computed:    true,
+	},
+	"name": schema.StringAttribute{
+		Description: "The name of the backup policy.",
+		Computed:    true,
+	},
+	"next_run_at": schema.StringAttribute{
+		Description: "When the backup will next run.",
+		Computed:    true,
+	},
+	"schedule_day": schema.StringAttribute{
+		Description: "Day of the week that the backup is scheduled.",
+		Computed:    true,
+	},
+	"schedule_week": schema.StringAttribute{
+		Description: "Week of the month that the backup is scheduled.",
+		Computed:    true,
+	},
+	"target": schema.StringAttribute{
+		Description: "Whether the backup policy is for a production or development database, or for a database branch.",
+		Computed:    true,
+	},
+	"updated_at": schema.StringAttribute{
+		Description: "When the backup policy was last updated.",
+		Computed:    true,
+	},
 }
 
 var backupPolicyResourceAttrTypes = map[string]attr.Type{
@@ -123,22 +205,6 @@ var backupPolicyResourceAttrTypes = map[string]attr.Type{
 	"updated_at":      basetypes.StringType{},
 }
 
-var schemaSnapshotResourceAttribute = map[string]schema.Attribute{
-	"created_at": schema.StringAttribute{Computed: true},
-	"id":         schema.StringAttribute{Computed: true},
-	"name":       schema.StringAttribute{Computed: true},
-	"updated_at": schema.StringAttribute{Computed: true},
-	"url":        schema.StringAttribute{Computed: true},
-}
-
-var schemaSnapshotResourceAttrTypes = map[string]attr.Type{
-	"created_at": basetypes.StringType{},
-	"id":         basetypes.StringType{},
-	"name":       basetypes.StringType{},
-	"updated_at": basetypes.StringType{},
-	"url":        basetypes.StringType{},
-}
-
 var databaseBranchResourceAttribute = map[string]schema.Attribute{
 	"access_host_url":    schema.StringAttribute{Computed: true},
 	"id":                 schema.StringAttribute{Computed: true},
@@ -153,4 +219,40 @@ var databaseBranchResourceAttrTypes = map[string]attr.Type{
 	"mysql_edge_address": basetypes.StringType{},
 	"name":               basetypes.StringType{},
 	"production":         basetypes.BoolType{},
+}
+
+func enumStringValidator(values ...string) validator.String {
+	return enumValidator{values: values}
+}
+
+type enumValidator struct {
+	values []string
+}
+
+func (val enumValidator) Description(context.Context) string {
+	return "must be one of " + strings.Join(val.values, ", ")
+}
+
+func (val enumValidator) MarkdownDescription(context.Context) string {
+	buf := bytes.NewBufferString("must be one of ")
+	for i, v := range val.values {
+		if i == len(val.values)-1 {
+			buf.WriteString(" or ")
+		} else if i != 0 {
+			buf.WriteString(", ")
+		}
+		buf.WriteRune('`')
+		buf.WriteString(v)
+		buf.WriteRune('`')
+	}
+	return buf.String()
+}
+
+func (val enumValidator) ValidateString(ctx context.Context, req validator.StringRequest, res *validator.StringResponse) {
+	for _, v := range val.values {
+		if req.ConfigValue.ValueString() == v {
+			return
+		}
+	}
+	res.Diagnostics.AddError("invalid value", "the following value isn't valid: "+req.ConfigValue.ValueString())
 }

@@ -30,46 +30,45 @@ resource "planetscale_backup" "example" {
 
 ### Required
 
-- `backup_policy` (Attributes) (see [below for nested schema](#nestedatt--backup_policy))
-- `branch` (String)
-- `database` (String)
-- `name` (String)
-- `organization` (String)
+- `backup_policy` (Attributes) . (see [below for nested schema](#nestedatt--backup_policy))
+- `branch` (String) The branch being backed up.
+- `database` (String) The database to which the branch being backed up belongs to.
+- `name` (String) The name of the backup.
+- `organization` (String) The organization in which the database branch being backed up belongs to.
 
 ### Read-Only
 
-- `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
-- `created_at` (String)
-- `estimated_storage_cost` (String)
-- `id` (String) The ID of this resource.
-- `required` (Boolean)
-- `restored_branches` (List of String)
-- `schema_snapshot` (Attributes) (see [below for nested schema](#nestedatt--schema_snapshot))
-- `size` (Number)
-- `state` (String)
-- `updated_at` (String)
+- `actor` (Attributes) . (see [below for nested schema](#nestedatt--actor))
+- `created_at` (String) When the backup was created.
+- `estimated_storage_cost` (String) The estimated storage cost of the backup.
+- `id` (String) The ID of the backup.
+- `required` (Boolean) Whether or not the backup policy is required.
+- `restored_branches` (List of String) Branches that have been restored with this backup.
+- `size` (Number) The size of the backup.
+- `state` (String) The current state of the backup.
+- `updated_at` (String) When the backup was last updated.
 
 <a id="nestedatt--backup_policy"></a>
 ### Nested Schema for `backup_policy`
 
 Required:
 
-- `retention_unit` (String)
-- `retention_value` (Number)
+- `retention_unit` (String) The unit for the retention period of the backup policy.
+- `retention_value` (Number) A number value for the retention period of the backup policy.
 
 Read-Only:
 
-- `created_at` (String)
-- `frequency_unit` (String)
-- `frequency_value` (Number)
-- `id` (String)
-- `last_ran_at` (String)
-- `name` (String)
-- `next_run_at` (String)
-- `schedule_day` (String)
-- `schedule_week` (String)
-- `target` (String)
-- `updated_at` (String)
+- `created_at` (String) When the backup policy was created.
+- `frequency_unit` (String) The unit for the frequency of the backup policy.
+- `frequency_value` (Number) A number value for the frequency of the backup policy.
+- `id` (String) The ID of the backup policy.
+- `last_ran_at` (String) When the backup was last run.
+- `name` (String) The name of the backup policy.
+- `next_run_at` (String) When the backup will next run.
+- `schedule_day` (String) Day of the week that the backup is scheduled.
+- `schedule_week` (String) Week of the month that the backup is scheduled.
+- `target` (String) Whether the backup policy is for a production or development database, or for a database branch.
+- `updated_at` (String) When the backup policy was last updated.
 
 
 <a id="nestedatt--actor"></a>
@@ -77,18 +76,6 @@ Read-Only:
 
 Read-Only:
 
-- `avatar_url` (String)
-- `display_name` (String)
-- `id` (String)
-
-
-<a id="nestedatt--schema_snapshot"></a>
-### Nested Schema for `schema_snapshot`
-
-Read-Only:
-
-- `created_at` (String)
-- `id` (String)
-- `name` (String)
-- `updated_at` (String)
-- `url` (String)
+- `avatar_url` (String) The URL of the actor's avatar
+- `display_name` (String) The name of the actor
+- `id` (String) The ID of the actor

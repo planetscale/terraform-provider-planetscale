@@ -3,12 +3,12 @@
 page_title: "planetscale_database_regions Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  A list of PlanetScale regions.
 ---
 
 # planetscale_database_regions (Data Source)
 
-
+A list of PlanetScale regions.
 
 ## Example Usage
 
@@ -28,22 +28,22 @@ output "database_regions" {
 
 ### Required
 
-- `name` (String)
-- `organization` (String)
+- `name` (String) The database for which the regions are available.
+- `organization` (String) The organization for which the regions are available.
 
 ### Read-Only
 
-- `regions` (Attributes List) (see [below for nested schema](#nestedatt--regions))
+- `regions` (Attributes List) The list of regions available for the database. (see [below for nested schema](#nestedatt--regions))
 
 <a id="nestedatt--regions"></a>
 ### Nested Schema for `regions`
 
 Read-Only:
 
-- `display_name` (String)
-- `enabled` (Boolean)
-- `id` (String)
-- `location` (String)
-- `provider` (String)
-- `public_ip_addresses` (List of String)
-- `slug` (String)
+- `display_name` (String) Name of the region.
+- `enabled` (Boolean) Whether or not the region is currently active.
+- `id` (String) The ID of the region.
+- `location` (String) Location of the region.
+- `provider` (String) Provider for the region (ex. AWS).
+- `public_ip_addresses` (List of String) Public IP addresses for the region.
+- `slug` (String) The slug of the region.

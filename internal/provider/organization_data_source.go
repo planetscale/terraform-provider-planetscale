@@ -27,7 +27,11 @@ func (d *organizationDataSource) Metadata(ctx context.Context, req datasource.Me
 }
 
 func (d *organizationDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: organizationDataSourceSchemaAttribute(false)}
+	resp.Schema = schema.Schema{
+		Description:         "A PlanetScale organization.",
+		MarkdownDescription: "A PlanetScale organization.",
+		Attributes:          organizationDataSourceSchemaAttribute(false),
+	}
 }
 
 func (d *organizationDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

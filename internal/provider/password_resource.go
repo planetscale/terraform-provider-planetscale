@@ -135,50 +135,96 @@ func (r *passwordResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "A PlanetScale password",
+		Description:         "A PlanetScale database password.",
+		MarkdownDescription: "A PlanetScale database password.",
 		Attributes: map[string]schema.Attribute{
-			"organization": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"database": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"branch": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
+			"organization": schema.StringAttribute{
+				Description: "The organization this database branch password belongs to.",
+				Required:    true, PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"database": schema.StringAttribute{
+				Description: "The datanase this branch password belongs to.",
+				Required:    true, PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"branch": schema.StringAttribute{
+				Description: "The branch this password belongs to.",
+				Required:    true, PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
 
 			"role": schema.StringAttribute{
-				Optional: true,
-				Computed: true,
+				Description: "The role for the password.",
+				Optional:    true,
+				Computed:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
 			"ttl_seconds": schema.Float64Attribute{
-				Optional: true,
-				Computed: true,
+				Description: "Time to live (in seconds) for the password. The password will be invalid and unrenewable when TTL has passed.",
+				Optional:    true,
+				Computed:    true,
 				PlanModifiers: []planmodifier.Float64{
 					float64planmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
 			// updatable
-			"name": schema.StringAttribute{Optional: true},
+			"name": schema.StringAttribute{
+				Description: "The display name for the password.",
+				Optional:    true,
+			},
 
 			// read-only
-			"id":              schema.StringAttribute{Computed: true},
-			"actor":           schema.SingleNestedAttribute{Computed: true, Attributes: actorResourceSchemaAttribute},
-			"database_branch": schema.SingleNestedAttribute{Computed: true, Attributes: databaseBranchResourceAttribute},
-			"region":          schema.SingleNestedAttribute{Computed: true, Attributes: regionResourceSchemaAttribute},
-			"access_host_url": schema.StringAttribute{Computed: true},
-			"created_at":      schema.StringAttribute{Computed: true},
-			"deleted_at":      schema.StringAttribute{Computed: true},
-			"expires_at":      schema.StringAttribute{Computed: true},
-			"renewable":       schema.BoolAttribute{Computed: true},
-			"username":        schema.StringAttribute{Computed: true},
+			"id": schema.StringAttribute{
+				Description: "The ID for the password.",
+				Computed:    true,
+			},
+			"actor": schema.SingleNestedAttribute{
+				Description: "The actor that created this branch.",
+				Computed:    true, Attributes: actorResourceSchemaAttribute,
+			},
+			"database_branch": schema.SingleNestedAttribute{
+				Description: "The branch this password is allowed to access.",
+				Computed:    true, Attributes: databaseBranchResourceAttribute,
+			},
+			"region": schema.SingleNestedAttribute{
+				Description: "The region in which this password can be used.",
+				Computed:    true, Attributes: regionResourceSchemaAttribute,
+			},
+			"access_host_url": schema.StringAttribute{
+				Description: "The host URL for the password.",
+				Computed:    true,
+			},
+			"created_at": schema.StringAttribute{
+				Description: "When the password was created.",
+				Computed:    true,
+			},
+			"deleted_at": schema.StringAttribute{
+				Description: "When the password was deleted.",
+				Computed:    true,
+			},
+			"expires_at": schema.StringAttribute{
+				Description: "When the password will expire.",
+				Computed:    true,
+			},
+			"renewable": schema.BoolAttribute{
+				Description: "Whether or not the password can be renewed.",
+				Computed:    true,
+			},
+			"username": schema.StringAttribute{
+				Description: "The username for the password.",
+				Computed:    true,
+			},
 
 			// read-only, sensitive
-			"plaintext": schema.StringAttribute{Sensitive: true, Computed: true},
+			"plaintext": schema.StringAttribute{
+				Description: "The plaintext password, only available if the password was created by this provider.",
+				Sensitive:   true, Computed: true},
 
 			// manually removed from spec because currently buggy
 			// "integrations":    schema.ListAttribute{Computed: true, ElementType: types.StringType},

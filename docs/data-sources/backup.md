@@ -3,12 +3,12 @@
 page_title: "planetscale_backup Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  A PlanetScale backup.
 ---
 
 # planetscale_backup (Data Source)
 
-
+A PlanetScale backup.
 
 ## Example Usage
 
@@ -30,33 +30,32 @@ output "backup" {
 
 ### Required
 
-- `branch` (String)
-- `database` (String)
-- `organization` (String)
+- `branch` (String) The branch this backup belongs to.
+- `database` (String) The database this backup belongs to.
+- `id` (String) The ID of the backup.
+- `organization` (String) The organization this backup belongs to.
 
 ### Read-Only
 
-- `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
-- `backup_policy` (Attributes) (see [below for nested schema](#nestedatt--backup_policy))
-- `created_at` (String)
-- `estimated_storage_cost` (String)
-- `id` (String) The ID of this resource.
-- `name` (String)
-- `required` (Boolean)
-- `restored_branches` (List of String)
-- `schema_snapshot` (Attributes) (see [below for nested schema](#nestedatt--schema_snapshot))
-- `size` (Number)
-- `state` (String)
-- `updated_at` (String)
+- `actor` (Attributes) The actor that created the backup. (see [below for nested schema](#nestedatt--actor))
+- `backup_policy` (Attributes) The backup policy being followed. (see [below for nested schema](#nestedatt--backup_policy))
+- `created_at` (String) When the backup was created.
+- `estimated_storage_cost` (String) The estimated storage cost of the backup.
+- `name` (String) The name of the backup.
+- `required` (Boolean) Whether or not the backup policy is required.
+- `restored_branches` (List of String) Branches that have been restored with this backup.
+- `size` (Number) The size of the backup.
+- `state` (String) The current state of the backup.
+- `updated_at` (String) When the backup was last updated.
 
 <a id="nestedatt--actor"></a>
 ### Nested Schema for `actor`
 
 Read-Only:
 
-- `avatar_url` (String)
-- `display_name` (String)
-- `id` (String)
+- `avatar_url` (String) The URL of the actor's avatar
+- `display_name` (String) The name of the actor
+- `id` (String) The ID of the actor
 
 
 <a id="nestedatt--backup_policy"></a>
@@ -64,28 +63,16 @@ Read-Only:
 
 Read-Only:
 
-- `created_at` (String)
-- `frequency_unit` (String)
-- `frequency_value` (Number)
-- `id` (String)
-- `last_ran_at` (String)
-- `name` (String)
-- `next_run_at` (String)
-- `retention_unit` (String)
-- `retention_value` (Number)
-- `schedule_day` (String)
-- `schedule_week` (String)
-- `target` (String)
-- `updated_at` (String)
-
-
-<a id="nestedatt--schema_snapshot"></a>
-### Nested Schema for `schema_snapshot`
-
-Read-Only:
-
-- `created_at` (String)
-- `id` (String)
-- `name` (String)
-- `updated_at` (String)
-- `url` (String)
+- `created_at` (String) When the backup policy was created.
+- `frequency_unit` (String) The unit for the frequency of the backup policy.
+- `frequency_value` (Number) A number value for the frequency of the backup policy.
+- `id` (String) The ID of the backup policy.
+- `last_ran_at` (String) When the backup was last run.
+- `name` (String) The name of the backup policy.
+- `next_run_at` (String) When the backup will next run.
+- `retention_unit` (String) The unit for the retention period of the backup policy.
+- `retention_value` (Number) A number value for the retention period of the backup policy.
+- `schedule_day` (String) Day of the week that the backup is scheduled.
+- `schedule_week` (String) Week of the month that the backup is scheduled.
+- `target` (String) Whether the backup policy is for a production or development database, or for a database branch.
+- `updated_at` (String) When the backup policy was last updated.

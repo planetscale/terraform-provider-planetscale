@@ -3,12 +3,12 @@
 page_title: "planetscale_branch_schema_lint Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  Linting errors for the schema of a PlanetScale branch.
 ---
 
 # planetscale_branch_schema_lint (Data Source)
 
-
+Linting errors for the schema of a PlanetScale branch.
 
 ## Example Usage
 
@@ -42,20 +42,20 @@ output "schema_lint" {
 
 Read-Only:
 
-- `auto_increment_column_names` (List of String)
-- `charset_name` (String)
-- `check_constraint_name` (String)
-- `column_name` (String)
-- `docs_url` (String)
-- `engine_name` (String)
-- `enum_value` (String)
-- `error_description` (String)
-- `foreign_key_column_names` (List of String)
-- `json_path` (String)
-- `keyspace_name` (String)
-- `lint_error` (String)
-- `partition_name` (String)
-- `partitioning_type` (String)
-- `subject_type` (String)
-- `table_name` (String)
-- `vindex_name` (String)
+- `auto_increment_column_names` (List of String) A list of invalid auto-incremented columns.
+- `charset_name` (String) The charset of the schema.
+- `check_constraint_name` (String) The name of the invalid check constraint.
+- `column_name` (String) The column in a table relevant to the error.
+- `docs_url` (String) A link to the documentation related to the error.
+- `engine_name` (String) The engine of the schema.
+- `enum_value` (String) The name of the invalid enum value.
+- `error_description` (String) A description for the error that occurred.
+- `foreign_key_column_names` (List of String) A list of invalid foreign key columns in a table.
+- `json_path` (String) The path for an invalid JSON column.
+- `keyspace_name` (String) The keyspace of the schema with the error.
+- `lint_error` (String) Code representing.
+- `partition_name` (String) The name of the invalid partition in the schema.
+- `partitioning_type` (String) The name of the invalid partitioning type.
+- `subject_type` (String) The subject for the errors.
+- `table_name` (String) The table with the error.
+- `vindex_name` (String) The name of the vindex for the schema.

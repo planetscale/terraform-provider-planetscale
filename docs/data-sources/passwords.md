@@ -3,12 +3,12 @@
 page_title: "planetscale_passwords Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  A list of PlanetScale database passwords.
 ---
 
 # planetscale_passwords (Data Source)
 
-
+A list of PlanetScale database passwords.
 
 ## Example Usage
 
@@ -46,32 +46,32 @@ output "passwords" {
 
 Read-Only:
 
-- `access_host_url` (String)
-- `actor` (Attributes) (see [below for nested schema](#nestedatt--passwords--actor))
-- `branch` (String)
-- `created_at` (String)
-- `database` (String)
-- `database_branch` (Attributes) (see [below for nested schema](#nestedatt--passwords--database_branch))
-- `deleted_at` (String)
-- `expires_at` (String)
-- `id` (String)
-- `name` (String)
-- `organization` (String)
-- `read_only_region_id` (String)
-- `region` (Attributes) (see [below for nested schema](#nestedatt--passwords--region))
-- `renewable` (Boolean)
-- `role` (String)
-- `ttl_seconds` (Number)
-- `username` (String)
+- `access_host_url` (String) The host URL for the password.
+- `actor` (Attributes) The actor that created this branch. (see [below for nested schema](#nestedatt--passwords--actor))
+- `branch` (String) The branch this password belongs to..
+- `created_at` (String) When the password was created.
+- `database` (String) The datanase this branch password belongs to.
+- `database_branch` (Attributes) The branch this password is allowed to access. (see [below for nested schema](#nestedatt--passwords--database_branch))
+- `deleted_at` (String) When the password was deleted.
+- `expires_at` (String) When the password will expire.
+- `id` (String) The ID for the password.
+- `name` (String) The display name for the password.
+- `organization` (String) The organization this database branch password belongs to.
+- `read_only_region_id` (String) If the password is for a read-only region, the ID of the region.
+- `region` (Attributes) The region in which this password can be used. (see [below for nested schema](#nestedatt--passwords--region))
+- `renewable` (Boolean) Whether or not the password can be renewed.
+- `role` (String) The role for the password.
+- `ttl_seconds` (Number) Time to live (in seconds) for the password. The password will be invalid and unrenewable when TTL has passed.
+- `username` (String) The username for the password.
 
 <a id="nestedatt--passwords--actor"></a>
 ### Nested Schema for `passwords.actor`
 
 Read-Only:
 
-- `avatar_url` (String)
-- `display_name` (String)
-- `id` (String)
+- `avatar_url` (String) The URL of the actor's avatar
+- `display_name` (String) The name of the actor
+- `id` (String) The ID of the actor
 
 
 <a id="nestedatt--passwords--database_branch"></a>
@@ -91,10 +91,10 @@ Read-Only:
 
 Read-Only:
 
-- `display_name` (String)
-- `enabled` (Boolean)
-- `id` (String)
-- `location` (String)
-- `provider` (String)
-- `public_ip_addresses` (List of String)
-- `slug` (String)
+- `display_name` (String) Name of the region.
+- `enabled` (Boolean) Whether or not the region is currently active.
+- `id` (String) The ID of the region.
+- `location` (String) Location of the region.
+- `provider` (String) Provider for the region (ex. AWS).
+- `public_ip_addresses` (List of String) Public IP addresses for the region.
+- `slug` (String) The slug of the region.

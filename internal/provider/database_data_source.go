@@ -28,7 +28,11 @@ func (d *databaseDataSource) Metadata(ctx context.Context, req datasource.Metada
 }
 
 func (d *databaseDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: databaseDataSourceSchemaAttribute(false)}
+	resp.Schema = schema.Schema{
+		Description:         "A PlanetScale database.",
+		MarkdownDescription: "A PlanetScale database.",
+		Attributes:          databaseDataSourceSchemaAttribute(false),
+	}
 }
 
 func (d *databaseDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

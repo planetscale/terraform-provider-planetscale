@@ -37,6 +37,8 @@ func (d *passwordsDataSource) Metadata(ctx context.Context, req datasource.Metad
 
 func (d *passwordsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale database passwords.",
+		MarkdownDescription: "A list of PlanetScale database passwords.",
 		Attributes: map[string]schema.Attribute{
 			"organization":        schema.StringAttribute{Required: true},
 			"database":            schema.StringAttribute{Required: true},

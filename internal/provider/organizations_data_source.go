@@ -31,14 +31,18 @@ func (d *organizationsDataSource) Metadata(ctx context.Context, req datasource.M
 }
 
 func (d *organizationsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"organizations": schema.ListNestedAttribute{
-			Computed: true,
-			NestedObject: schema.NestedAttributeObject{
-				Attributes: organizationDataSourceSchemaAttribute(true),
+	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale organizations.",
+		MarkdownDescription: "A list of PlanetScale organizations.",
+		Attributes: map[string]schema.Attribute{
+			"organizations": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: organizationDataSourceSchemaAttribute(true),
+				},
 			},
 		},
-	}}
+	}
 }
 
 func (d *organizationsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

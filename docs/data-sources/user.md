@@ -3,12 +3,12 @@
 page_title: "planetscale_user Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  A PlanetScale user.
 ---
 
 # planetscale_user (Data Source)
 
-
+A PlanetScale user.
 
 ## Example Usage
 
@@ -27,16 +27,16 @@ output "current_user" {
 
 ### Read-Only
 
-- `avatar_url` (String)
-- `created_at` (String)
-- `default_organization_id` (String)
-- `directory_managed` (Boolean)
-- `display_name` (String)
-- `email` (String)
-- `email_verified` (Boolean)
-- `id` (String) The ID of this resource.
-- `managed` (Boolean)
-- `name` (String)
-- `sso` (Boolean)
-- `two_factor_auth_configured` (Boolean)
-- `updated_at` (String)
+- `avatar_url` (String) The URL source of the user's avatar.
+- `created_at` (String) When the user was created.
+- `default_organization_id` (String) The default organization for the user.
+- `directory_managed` (Boolean) Whether or not the user is managed by a WorkOS directory.
+- `display_name` (String) The display name of the user.
+- `email` (String) The email of the user.
+- `email_verified` (Boolean) Whether or not the user is verified by email.
+- `id` (String) The ID of the user.
+- `managed` (Boolean) Whether or not the user is managed by an authentication provider.
+- `name` (String) The name of the user.
+- `sso` (Boolean) Whether or not the user is managed by WorkOS.
+- `two_factor_auth_configured` (Boolean) Whether or not the user has configured two factor authentication.
+- `updated_at` (String) When the user was last updated.

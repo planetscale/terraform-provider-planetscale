@@ -147,7 +147,11 @@ func handlePath(doc *spec.Swagger, rule ExtractRule, path spec.PathItem) error {
 		case parent.Type.Contains("object"):
 			if path == "" {
 				// the root schema itself is changed
+				desc := resp.Schema.Description
+				nullable := resp.Schema.Nullable
 				resp.Schema = spec.RefSchema(ref.String())
+				resp.Schema.Description = desc
+				resp.Schema.Nullable = nullable
 			} else {
 				parent.Properties[path] = *spec.RefSchema(ref.String())
 			}

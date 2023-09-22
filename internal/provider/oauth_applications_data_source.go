@@ -32,15 +32,19 @@ func (d *oauthApplicationsDataSource) Metadata(ctx context.Context, req datasour
 }
 
 func (d *oauthApplicationsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: true},
-		"applications": schema.ListNestedAttribute{
-			Computed: true,
-			NestedObject: schema.NestedAttributeObject{
-				Attributes: oauthApplicationAttribute,
+	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale OAuth applications. (requires feature flag)",
+		MarkdownDescription: "A list of PlanetScale OAuth applications. (requires feature flag)",
+		Attributes: map[string]schema.Attribute{
+			"organization": schema.StringAttribute{Required: true},
+			"applications": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: oauthApplicationAttribute,
+				},
 			},
 		},
-	}}
+	}
 }
 
 func (d *oauthApplicationsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

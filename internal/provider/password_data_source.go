@@ -27,7 +27,11 @@ func (d *passwordDataSource) Metadata(ctx context.Context, req datasource.Metada
 }
 
 func (d *passwordDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: passwordDataSourceSchemaAttribute(false)}
+	resp.Schema = schema.Schema{
+		Description:         "A PlanetScale database password.",
+		MarkdownDescription: "A PlanetScale database password.",
+		Attributes:          passwordDataSourceSchemaAttribute(false),
+	}
 }
 
 func (d *passwordDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

@@ -6,7 +6,6 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -44,24 +43,27 @@ func (d *databaseRegionsDataSource) Metadata(ctx context.Context, req datasource
 }
 
 func (d *databaseRegionsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: true},
-		"name":         schema.StringAttribute{Required: true},
-		"regions": schema.ListNestedAttribute{
-			Computed: true,
-			NestedObject: schema.NestedAttributeObject{
-				Attributes: map[string]schema.Attribute{
-					"slug":                schema.StringAttribute{Computed: true},
-					"display_name":        schema.StringAttribute{Computed: true},
-					"enabled":             schema.BoolAttribute{Computed: true},
-					"id":                  schema.StringAttribute{Computed: true},
-					"location":            schema.StringAttribute{Computed: true},
-					"provider":            schema.StringAttribute{Computed: true},
-					"public_ip_addresses": schema.ListAttribute{Computed: true, ElementType: types.StringType},
+	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale regions.",
+		MarkdownDescription: "A list of PlanetScale regions.",
+		Attributes: map[string]schema.Attribute{
+			"organization": schema.StringAttribute{
+				Description: "The organization for which the regions are available.",
+				Required:    true,
+			},
+			"name": schema.StringAttribute{
+				Description: "The database for which the regions are available.",
+				Required:    true,
+			},
+			"regions": schema.ListNestedAttribute{
+				Description: "The list of regions available for the database.",
+				Computed:    true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: regionDataSourceSchemaAttribute,
 				},
 			},
 		},
-	}}
+	}
 }
 
 func (d *databaseRegionsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {

@@ -3,12 +3,12 @@
 page_title: "planetscale_branches Data Source - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  
+  A list of PlanetScale branches.
 ---
 
 # planetscale_branches (Data Source)
 
-
+A list of PlanetScale branches.
 
 ## Example Usage
 
@@ -40,37 +40,37 @@ output "branches" {
 
 Read-Only:
 
-- `access_host_url` (String)
-- `actor` (Attributes) (see [below for nested schema](#nestedatt--branches--actor))
-- `cluster_rate_name` (String)
-- `created_at` (String)
-- `database` (String)
-- `html_url` (String)
-- `id` (String)
-- `initial_restore_id` (String)
-- `mysql_address` (String)
-- `mysql_edge_address` (String)
-- `name` (String)
-- `organization` (String)
-- `parent_branch` (String)
-- `production` (Boolean)
-- `ready` (Boolean)
-- `region` (Attributes) (see [below for nested schema](#nestedatt--branches--region))
-- `restore_checklist_completed_at` (String)
+- `access_host_url` (String) The access host URL for the branch. This is a legacy field, use `mysql_edge_address`.
+- `actor` (Attributes) The actor who created this branch. (see [below for nested schema](#nestedatt--branches--actor))
+- `cluster_rate_name` (String) The SKU representing the branch's cluster size.
+- `created_at` (String) When the branch was created.
+- `database` (String) The database this branch belongs to.
+- `html_url` (String) Planetscale app URL for the branch.
+- `id` (String) The ID of the branch.
+- `initial_restore_id` (String) The ID of the backup from which the branch was restored.
+- `mysql_address` (String) The MySQL address for the branch.
+- `mysql_edge_address` (String) The address of the MySQL provider for the branch.
+- `name` (String) The name of the branch.
+- `organization` (String) The organization this branch belongs to.
+- `parent_branch` (String) The name of the parent branch from which the branch was created.
+- `production` (Boolean) Whether or not the branch is a production branch.
+- `ready` (Boolean) Whether or not the branch is ready to serve queries.
+- `region` (Attributes) The region in which this branch lives. (see [below for nested schema](#nestedatt--branches--region))
+- `restore_checklist_completed_at` (String) When a user last marked a backup restore checklist as completed.
 - `restored_from_branch` (Attributes) (see [below for nested schema](#nestedatt--branches--restored_from_branch))
-- `schema_last_updated_at` (String)
-- `shard_count` (Number)
-- `sharded` (Boolean)
-- `updated_at` (String)
+- `schema_last_updated_at` (String) When the schema for the branch was last updated.
+- `shard_count` (Number) The number of shards in the branch.
+- `sharded` (Boolean) Whether or not the branch is sharded.
+- `updated_at` (String) When the branch was last updated.
 
 <a id="nestedatt--branches--actor"></a>
 ### Nested Schema for `branches.actor`
 
 Read-Only:
 
-- `avatar_url` (String)
-- `display_name` (String)
-- `id` (String)
+- `avatar_url` (String) The URL of the actor's avatar
+- `display_name` (String) The name of the actor
+- `id` (String) The ID of the actor
 
 
 <a id="nestedatt--branches--region"></a>
@@ -78,13 +78,13 @@ Read-Only:
 
 Read-Only:
 
-- `display_name` (String)
-- `enabled` (Boolean)
-- `id` (String)
-- `location` (String)
-- `provider` (String)
-- `public_ip_addresses` (List of String)
-- `slug` (String)
+- `display_name` (String) Name of the region.
+- `enabled` (Boolean) Whether or not the region is currently active.
+- `id` (String) The ID of the region.
+- `location` (String) Location of the region.
+- `provider` (String) Provider for the region (ex. AWS).
+- `public_ip_addresses` (List of String) Public IP addresses for the region.
+- `slug` (String) The slug of the region.
 
 
 <a id="nestedatt--branches--restored_from_branch"></a>
@@ -92,8 +92,8 @@ Read-Only:
 
 Read-Only:
 
-- `created_at` (String)
-- `deleted_at` (String)
-- `id` (String)
-- `name` (String)
-- `updated_at` (String)
+- `created_at` (String) When the resource was created.
+- `deleted_at` (String) When the resource was deleted, if deleted.
+- `id` (String) The ID for the resource.
+- `name` (String) The name for the resource.
+- `updated_at` (String) When the resource was last updated.

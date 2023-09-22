@@ -66,7 +66,6 @@ type databaseResourceModel struct {
 	SchemaLastUpdatedAt               types.String  `tfsdk:"schema_last_updated_at"`
 	Sharded                           types.Bool    `tfsdk:"sharded"`
 	State                             types.String  `tfsdk:"state"`
-	Type                              types.String  `tfsdk:"type"`
 	UpdatedAt                         types.String  `tfsdk:"updated_at"`
 	Url                               types.String  `tfsdk:"url"`
 }
@@ -114,7 +113,6 @@ func databaseResourcefromClient(ctx context.Context, database *planetscale.Datab
 		SchemaLastUpdatedAt:               types.StringPointerValue(database.SchemaLastUpdatedAt),
 		Sharded:                           types.BoolValue(database.Sharded),
 		State:                             types.StringValue(database.State),
-		Type:                              types.StringValue(database.Type),
 		UpdatedAt:                         types.StringValue(database.UpdatedAt),
 		Url:                               types.StringValue(database.Url),
 	}
@@ -126,76 +124,196 @@ func (r *databaseResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "A PlanetScale database",
+		Description:         "A PlanetScale database.",
+		MarkdownDescription: "A PlanetScale database.",
 		Attributes: map[string]schema.Attribute{
-			"organization": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
-			"name": schema.StringAttribute{Required: true, PlanModifiers: []planmodifier.String{
-				stringplanmodifier.RequiresReplace(),
-			}},
+			"organization": schema.StringAttribute{
+				Description: "The organization this database belongs to.",
+				Required:    true, PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"name": schema.StringAttribute{
+				Description: "The name of this database.",
+				Required:    true, PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
 
 			"id": schema.StringAttribute{
-				Computed: true,
+				Description: "The ID of the database.",
+				Computed:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"allow_data_branching":             schema.BoolAttribute{Computed: true, Optional: true},
-			"at_backup_restore_branches_limit": schema.BoolAttribute{Computed: true},
-			"at_development_branch_limit":      schema.BoolAttribute{Computed: true},
-			"automatic_migrations":             schema.BoolAttribute{Computed: true, Optional: true},
-			"branches_count":                   schema.Float64Attribute{Computed: true},
-			"branches_url":                     schema.StringAttribute{Computed: true},
-			"created_at":                       schema.StringAttribute{Computed: true},
+			"allow_data_branching": schema.BoolAttribute{
+				Description: "Whether seeding branches with data is enabled for all branches.",
+				Computed:    true, Optional: true,
+			},
+			"at_backup_restore_branches_limit": schema.BoolAttribute{
+				Description: "If the database has reached its backup restored branch limit.",
+				Computed:    true,
+			},
+			"at_development_branch_limit": schema.BoolAttribute{
+				Description: "If the database has reached its development branch limit.",
+				Computed:    true,
+			},
+			"automatic_migrations": schema.BoolAttribute{
+				Description: "Whether to automatically manage Rails migrations during deploy requests.",
+				Computed:    true, Optional: true,
+			},
+			"branches_count": schema.Float64Attribute{
+				Description: "The total number of database branches.",
+				Computed:    true,
+			},
+			"branches_url": schema.StringAttribute{
+				Description: "The URL to retrieve this database's branches via the API.",
+				Computed:    true,
+			},
+			"created_at": schema.StringAttribute{
+				Description: "When the database was created.",
+				Computed:    true,
+			},
 			"data_import": schema.SingleNestedAttribute{
-				Computed: true,
+				Description: "If the database was created from an import, describes the import process.",
+				Computed:    true,
 				Attributes: map[string]schema.Attribute{
 					"data_source": schema.SingleNestedAttribute{
-						Computed: true,
+						Description: "Connection information for the source of the data for the import.",
+						Computed:    true,
 						Attributes: map[string]schema.Attribute{
-							"database": schema.StringAttribute{Required: true},
-							"hostname": schema.StringAttribute{Required: true},
-							"port":     schema.StringAttribute{Required: true},
+							"database": schema.StringAttribute{
+								Description: "The name of the database imported from.",
+								Required:    true,
+							},
+							"hostname": schema.StringAttribute{
+								Description: "The hostname where the database lives.",
+								Required:    true,
+							},
+							"port": schema.StringAttribute{
+								Description: "The port on which the database listens on the host.",
+								Required:    true,
+							},
 						},
 					},
-					"finished_at":         schema.StringAttribute{Computed: true},
-					"import_check_errors": schema.StringAttribute{Computed: true},
-					"started_at":          schema.StringAttribute{Computed: true},
-					"state":               schema.StringAttribute{Computed: true},
+					"finished_at": schema.StringAttribute{
+						Description: "When the import finished.",
+						Computed:    true,
+					},
+					"import_check_errors": schema.StringAttribute{
+						Description: "Errors encountered while preparing the import.",
+						Computed:    true,
+					},
+					"started_at": schema.StringAttribute{
+						Description: "When the import started.",
+						Computed:    true,
+					},
+					"state": schema.StringAttribute{
+						Description: "The state of the import, one of: pending, queued, in_progress, complete, cancelled, error.",
+						Computed:    true,
+					},
 				},
 			},
-			"default_branch":                         schema.StringAttribute{Computed: true, Optional: true},
-			"default_branch_read_only_regions_count": schema.Float64Attribute{Computed: true},
-			"default_branch_shard_count":             schema.Float64Attribute{Computed: true},
-			"default_branch_table_count":             schema.Float64Attribute{Computed: true},
-			"development_branches_count":             schema.Float64Attribute{Computed: true},
-			"html_url":                               schema.StringAttribute{Computed: true},
-			"insights_raw_queries":                   schema.BoolAttribute{Computed: true, Optional: true},
-			"issues_count":                           schema.Float64Attribute{Computed: true, Optional: true},
-			"migration_framework":                    schema.StringAttribute{Computed: true, Optional: true},
-			"migration_table_name":                   schema.StringAttribute{Computed: true, Optional: true},
-			"multiple_admins_required_for_deletion":  schema.BoolAttribute{Computed: true, Optional: true},
-			"plan":                                   schema.StringAttribute{Computed: true, Optional: true},
-			"cluster_size":                           schema.StringAttribute{Computed: true, Optional: true},
-			"production_branch_web_console":          schema.BoolAttribute{Computed: true, Optional: true},
-			"production_branches_count":              schema.Float64Attribute{Computed: true},
-			"ready":                                  schema.BoolAttribute{Computed: true},
+			"default_branch": schema.StringAttribute{
+				Description: "The default branch for the database.",
+				Computed:    true, Optional: true,
+			},
+			"default_branch_read_only_regions_count": schema.Float64Attribute{
+				Description: "Number of read only regions in the default branch.",
+				Computed:    true,
+			},
+			"default_branch_shard_count": schema.Float64Attribute{
+				Description: "Number of shards in the default branch.",
+				Computed:    true,
+			},
+			"default_branch_table_count": schema.Float64Attribute{
+				Description: "Number of tables in the default branch schema.",
+				Computed:    true,
+			},
+			"development_branches_count": schema.Float64Attribute{
+				Description: "The total number of database development branches.",
+				Computed:    true,
+			},
+			"html_url": schema.StringAttribute{
+				Description: "The total number of database development branches.",
+				Computed:    true,
+			},
+			"insights_raw_queries": schema.BoolAttribute{
+				Description: "The URL to see this database's branches in the web UI.",
+				Computed:    true, Optional: true,
+			},
+			"issues_count": schema.Float64Attribute{
+				Description: "The total number of ongoing issues within a database.",
+				Computed:    true, Optional: true,
+			},
+			"migration_framework": schema.StringAttribute{
+				Description: "Framework used for applying migrations.",
+				Computed:    true, Optional: true,
+			},
+			"migration_table_name": schema.StringAttribute{
+				Description: "Table name to use for copying schema migration data.",
+				Computed:    true, Optional: true,
+			},
+			"multiple_admins_required_for_deletion": schema.BoolAttribute{
+				Description: "If the database requires multiple admins for deletion.",
+				Computed:    true, Optional: true,
+			},
+			"plan": schema.StringAttribute{
+				Description: "The database plan.",
+				Computed:    true, Optional: true,
+			},
+			"cluster_size": schema.StringAttribute{
+				Description: "The size of the database cluster plan.",
+				Computed:    true, Optional: true,
+			},
+			"production_branch_web_console": schema.BoolAttribute{
+				Description: "Whether web console is enabled for production branches.",
+				Computed:    true, Optional: true,
+			},
+			"production_branches_count": schema.Float64Attribute{
+				Description: "The total number of database production branches.",
+				Computed:    true,
+			},
+			"ready": schema.BoolAttribute{
+				Description: "If the database is ready to be used.",
+				Computed:    true,
+			},
 			"region": schema.StringAttribute{
-				Computed: true, Optional: true,
+				Description: "The region the database lives in.",
+				Computed:    true, Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 			},
-			"require_approval_for_deploy": schema.BoolAttribute{Computed: true, Optional: true},
-			"restrict_branch_region":      schema.BoolAttribute{Computed: true, Optional: true},
-			"schema_last_updated_at":      schema.StringAttribute{Computed: true},
-			"sharded":                     schema.BoolAttribute{Computed: true},
-			"state":                       schema.StringAttribute{Computed: true},
-			"type":                        schema.StringAttribute{Computed: true},
-			"updated_at":                  schema.StringAttribute{Computed: true},
-			"url":                         schema.StringAttribute{Computed: true},
+			"require_approval_for_deploy": schema.BoolAttribute{
+				Description: "Whether an approval is required to deploy schema changes to this database.",
+				Computed:    true, Optional: true,
+			},
+			"restrict_branch_region": schema.BoolAttribute{
+				Description: "Whether to restrict branch creation to one region.",
+				Computed:    true, Optional: true,
+			},
+			"schema_last_updated_at": schema.StringAttribute{
+				Description: "When the default branch schema was last changed.",
+				Computed:    true,
+			},
+			"sharded": schema.BoolAttribute{
+				Description: "If the database is sharded.",
+				Computed:    true,
+			},
+			"state": schema.StringAttribute{
+				Description: "State of the database.",
+				Computed:    true,
+			},
+			"updated_at": schema.StringAttribute{
+				Description: "When the database was last updated.",
+				Computed:    true,
+			},
+			"url": schema.StringAttribute{
+				Description: "The URL to the database API endpoint.",
+				Computed:    true,
+			},
 		},
 	}
 }

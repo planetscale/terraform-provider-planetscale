@@ -35,15 +35,19 @@ func (d *databasesDataSource) Metadata(ctx context.Context, req datasource.Metad
 }
 
 func (d *databasesDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
-	resp.Schema = schema.Schema{Attributes: map[string]schema.Attribute{
-		"organization": schema.StringAttribute{Required: true},
-		"databases": schema.ListNestedAttribute{
-			Computed: true,
-			NestedObject: schema.NestedAttributeObject{
-				Attributes: databaseDataSourceSchemaAttribute(true),
+	resp.Schema = schema.Schema{
+		Description:         "A list of PlanetScale databases.",
+		MarkdownDescription: "A list of PlanetScale databases.",
+		Attributes: map[string]schema.Attribute{
+			"organization": schema.StringAttribute{Required: true},
+			"databases": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: databaseDataSourceSchemaAttribute(true),
+				},
 			},
 		},
-	}}
+	}
 }
 
 func (d *databasesDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
