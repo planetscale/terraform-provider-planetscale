@@ -20,7 +20,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.2
+          ruby-version: '3.1'
           bundler-cache: false
-      - run: sudo gem install license_finder
+      - run: gem install license_finder
       - run: license_finder
