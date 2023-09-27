@@ -12,9 +12,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func genEmbedStruct(file *jen.File, typename, embedname string) error {
+func genEmbedStruct(file *jen.File, typename, embedname string) {
 	file.Type().Id(typename).Struct(jen.Id(embedname))
-	return nil
 }
 
 func genParamStruct(defns spec.Definitions, file *jen.File, typename string, body *spec.Schema) error {
@@ -180,7 +179,7 @@ func genErrRespParamStruct(defns spec.Definitions, file *jen.File, typename stri
 func genClientStruct(
 	file *jen.File,
 	spec *spec.Swagger,
-) error {
+) {
 	file.Type().Id("Client").Struct(
 		jen.Id("httpCl").Op("*").Qual("net/http", "Client"),
 		jen.Id("baseURL").Op("*").Qual("net/url", "URL"),
@@ -206,13 +205,11 @@ func genClientStruct(
 			jen.Id("baseURL").Op(":").Id("baseURL"),
 		))
 	})
-	return nil
 }
 
 func genErrorStruct(
 	file *jen.File,
-	spec *spec.Swagger,
-) error {
+) {
 	file.Type().Id("ErrorResponse").Struct(
 		jen.Id("Code").Id("string").Tag(map[string]string{"json": "code"}),
 		jen.Id("Message").Id("string").Tag(map[string]string{"json": "message"}),
@@ -229,8 +226,6 @@ func genErrorStruct(
 			),
 		)
 	})
-
-	return nil
 }
 
 func genClientCall(

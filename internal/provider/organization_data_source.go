@@ -64,7 +64,7 @@ func (d *organizationDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Received a nil organization", "")
 		return
 	}
-	data = organizationFromClient(&res.Organization, resp.Diagnostics)
+	data = organizationFromClient(&res.Organization)
 	if resp.Diagnostics.HasError() {
 		return
 	}

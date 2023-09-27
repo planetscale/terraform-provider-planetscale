@@ -1,16 +1,11 @@
 package provider
 
 import (
-	"bytes"
-	"context"
-	"strings"
-
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -219,40 +214,4 @@ var databaseBranchResourceAttrTypes = map[string]attr.Type{
 	"mysql_edge_address": basetypes.StringType{},
 	"name":               basetypes.StringType{},
 	"production":         basetypes.BoolType{},
-}
-
-func enumStringValidator(values ...string) validator.String {
-	return enumValidator{values: values}
-}
-
-type enumValidator struct {
-	values []string
-}
-
-func (val enumValidator) Description(context.Context) string {
-	return "must be one of " + strings.Join(val.values, ", ")
-}
-
-func (val enumValidator) MarkdownDescription(context.Context) string {
-	buf := bytes.NewBufferString("must be one of ")
-	for i, v := range val.values {
-		if i == len(val.values)-1 {
-			buf.WriteString(" or ")
-		} else if i != 0 {
-			buf.WriteString(", ")
-		}
-		buf.WriteRune('`')
-		buf.WriteString(v)
-		buf.WriteRune('`')
-	}
-	return buf.String()
-}
-
-func (val enumValidator) ValidateString(ctx context.Context, req validator.StringRequest, res *validator.StringResponse) {
-	for _, v := range val.values {
-		if req.ConfigValue.ValueString() == v {
-			return
-		}
-	}
-	res.Diagnostics.AddError("invalid value", "the following value isn't valid: "+req.ConfigValue.ValueString())
 }

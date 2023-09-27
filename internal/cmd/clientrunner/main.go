@@ -77,7 +77,3 @@ type RoundtripperFunc func(*http.Request) (*http.Response, error)
 func (fn RoundtripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return fn(req)
 }
-
-func ptr[T any](v T) *T {
-	return &v
-}

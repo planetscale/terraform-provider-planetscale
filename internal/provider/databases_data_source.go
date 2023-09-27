@@ -27,9 +27,6 @@ type databasesDataSourceModel struct {
 	Databases    []databaseDataSourceModel `tfsdk:"databases"`
 }
 
-type databasesListItemDataSourceModel struct {
-}
-
 func (d *databasesDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_databases"
 }

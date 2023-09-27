@@ -94,7 +94,7 @@ func (d *branchSchemaDataSource) Read(ctx context.Context, req datasource.ReadRe
 	}
 	for _, item := range res.Data {
 		item := item
-		state.Tables = append(state.Tables, *tableSchemaFromClient(&item, resp.Diagnostics))
+		state.Tables = append(state.Tables, *tableSchemaFromClient(&item))
 		if resp.Diagnostics.HasError() {
 			return
 		}

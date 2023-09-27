@@ -71,10 +71,7 @@ func (d *organizationsDataSource) Read(ctx context.Context, req datasource.ReadR
 	}
 	for _, item := range res.Data {
 		item := item
-		state.Organizations = append(state.Organizations, *organizationFromClient(&item, resp.Diagnostics))
-		if resp.Diagnostics.HasError() {
-			return
-		}
+		state.Organizations = append(state.Organizations, *organizationFromClient(&item))
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
