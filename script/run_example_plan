@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+
+function main() {
+    go install github.com/planetscale/terraform-provider-planetscale
+    terraform -chdir=$root/examples/provider plan
+}
+
+main

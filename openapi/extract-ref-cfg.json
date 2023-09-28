@@ -1,0 +1,209 @@
+{
+    "extractions": [
+        {"path": "/organizations", "method": "get", "responses": 200, "prop": "data.features","become_ref": "features"},
+        {"path": "/organizations", "method": "get", "responses": 200, "prop": "data.flags", "become_ref": "flags"},
+        {"path": "/organizations", "method": "get", "responses": 200, "prop": "data", "become_ref": "organization"},
+
+        {"path": "/organizations/{name}", "method": "get", "responses": 200, "prop": "features", "become_ref": "features"},
+        {"path": "/organizations/{name}", "method": "get", "responses": 200, "prop": "flags", "become_ref": "flags"},
+        {"path": "/organizations/{name}", "method": "get", "responses": 200, "prop": "", "become_ref": "organization"},
+
+        {"path": "/organizations/{name}", "method": "patch", "responses": 200, "prop": "features", "become_ref": "features"},
+        {"path": "/organizations/{name}", "method": "patch", "responses": 200, "prop": "flags", "become_ref": "flags"},
+        {"path": "/organizations/{name}", "method": "patch", "responses": 200, "prop": "", "become_ref": "organization"},
+
+        {"path": "/organizations/{name}/regions", "method": "get", "responses": 200, "prop": "data", "become_ref": "region"},
+
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data.region", "become_ref": "region"},
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data.data_import.data_source", "become_ref": "data_source"},
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data.data_import", "become_ref": "data_import"},
+        {"path": "/organizations/{organization}/databases", "method": "get", "responses": 200, "prop": "data", "become_ref": "database"},
+
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "region", "become_ref": "region"},
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "data_import.data_source", "become_ref": "data_source"},
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "data_import", "become_ref": "data_import"},
+        {"path": "/organizations/{organization}/databases", "method": "post", "responses": 201, "prop": "", "become_ref": "database"},
+
+        {"path": "/organizations/{organization}/databases/{name}", "method": "get", "responses": 200, "prop": "region", "become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{name}", "method": "get", "responses": 200, "prop": "data_import.data_source", "become_ref": "data_source"},
+        {"path": "/organizations/{organization}/databases/{name}", "method": "get", "responses": 200, "prop": "data_import", "become_ref": "data_import"},
+        {"path": "/organizations/{organization}/databases/{name}", "method": "get", "responses": 200, "prop": "", "become_ref": "database"},
+
+        {"path": "/organizations/{organization}/databases/{name}", "method": "patch", "responses": 200, "prop": "region", "become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{name}", "method": "patch", "responses": 200, "prop": "data_import.data_source", "become_ref": "data_source"},
+        {"path": "/organizations/{organization}/databases/{name}", "method": "patch", "responses": 200, "prop": "data_import", "become_ref": "data_import"},
+        {"path": "/organizations/{organization}/databases/{name}", "method": "patch", "responses": 200, "prop": "", "become_ref": "database"},
+
+        {"path": "/organizations/{organization}/databases/{name}/read-only-regions", "method": "get", "responses": 200, "prop": "data.actor", "become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{name}/read-only-regions", "method": "get", "responses": 200, "prop": "data.region", "become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{name}/read-only-regions", "method": "get", "responses": 200, "prop": "data", "become_ref": "read_only_region"},
+
+        {"path": "/organizations/{organization}/databases/{name}/regions", "method": "get", "responses": 200, "prop": "data", "become_ref": "region"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data.region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data.restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "get","responses": 200,"prop": "data","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches","method": "post","responses": 201,"prop": "","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}","method": "get","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}","method": "get","responses": 200,"prop": "restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}","method": "get","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}","method": "get","responses": 200,"prop": "","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/demote","method": "post","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/demote","method": "post","responses": 200,"prop": "restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/demote","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/demote","method": "post","responses": 200,"prop": "","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/promote","method": "post","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/promote","method": "post","responses": 200,"prop": "restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/promote","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/promote","method": "post","responses": 200,"prop": "","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "post","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "post","responses": 200,"prop": "restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "post","responses": 200,"prop": "","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "delete","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "delete","responses": 200,"prop": "restored_from_branch","become_ref": "restored_from_branch"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "delete","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/safe-migrations","method": "delete","responses": 200,"prop": "","become_ref": "branch"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/schema","method": "get","responses": 200,"prop": "data","become_ref": "table_schema"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{name}/schema/lint","method": "get","responses": 200,"prop": "data","become_ref": "lint_error"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-queue","method": "get","responses": 200,"prop": "data","become_ref": "queued_deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "get","responses": 200,"prop": "data.branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "get","responses": 200,"prop": "data.closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "get","responses": 200,"prop": "data","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "post","responses": 201,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "post","responses": 201,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "post","responses": 201,"prop": "deployment","become_ref": "deployment"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests","method": "post","responses": 201,"prop": "","become_ref": "deploy_request_with_deployment"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "get","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "get","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "get","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "get","responses": 200,"prop": "deployment","become_ref": "deployment"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "get","responses": 200,"prop": "","become_ref": "deploy_request_with_deployment"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "patch","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "patch","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "patch","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "patch","responses": 200,"prop": "deployment","become_ref": "deployment"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}","method": "patch","responses": 200,"prop": "","become_ref": "deploy_request_with_deployment"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/apply-deploy","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/apply-deploy","method": "post","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/apply-deploy","method": "post","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/apply-deploy","method": "post","responses": 200,"prop": "","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/auto-apply","method": "put","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/auto-apply","method": "put","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/auto-apply","method": "put","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/auto-apply","method": "put","responses": 200,"prop": "","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/cancel","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/cancel","method": "post","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/cancel","method": "post","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/cancel","method": "post","responses": 200,"prop": "","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/complete-deploy","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/complete-deploy","method": "post","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/complete-deploy","method": "post","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/complete-deploy","method": "post","responses": 200,"prop": "","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/deploy","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/deploy","method": "post","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/deploy","method": "post","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/deploy","method": "post","responses": 200,"prop": "","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/deployment","method": "get","responses": 200,"prop": "","become_ref": "deployment"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/operations","method": "get","responses": 200,"prop": "data","become_ref": "deploy_operation"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/revert","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/revert","method": "post","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/revert","method": "post","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/revert","method": "post","responses": 200,"prop": "","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/reviews","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/reviews","method": "get","responses": 200,"prop": "data","become_ref": "deploy_review"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/reviews","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/reviews","method": "post","responses": 201,"prop": "","become_ref": "deploy_review"},
+
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/skip-revert","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/skip-revert","method": "post","responses": 200,"prop": "branch_deleted_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/skip-revert","method": "post","responses": 200,"prop": "closed_by","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/deploy-requests/{number}/skip-revert","method": "post","responses": 200,"prop": "","become_ref": "deploy_request"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}", "method": "get", "responses": 200, "prop": "actor", "become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}", "method": "get", "responses": 200, "prop": "backup_policy", "become_ref": "backup_policy"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}", "method": "get", "responses": 200, "prop": "schema_snapshot", "become_ref": "schema_snapshot"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}", "method": "get", "responses": 200, "prop": "", "become_ref": "backup"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.backup_policy","become_ref": "backup_policy"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data.schema_snapshot","become_ref": "schema_snapshot"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "get","responses": 200,"prop": "data","become_ref": "backup"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 201,"prop": "backup_policy","become_ref": "backup_policy"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 201,"prop": "schema_snapshot","become_ref": "schema_snapshot"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/backups","method": "post","responses": 201,"prop": "","become_ref": "backup"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data.actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data.database_branch","become_ref": "branch_for_password"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data.region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "get","responses": 200,"prop": "data","become_ref": "password"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "database_branch","become_ref": "branch_for_password"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords","method": "post","responses": 201,"prop": "","become_ref": "password_with_plaintext"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "database_branch","become_ref": "branch_for_password"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "get","responses": 200,"prop": "","become_ref": "password"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "database_branch","become_ref": "branch_for_password"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}","method": "patch","responses": 200,"prop": "","become_ref": "password"},
+
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "actor","become_ref": "actor"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "database_branch","become_ref": "branch_for_password"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "region","become_ref": "region"},
+        {"path": "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew","method": "post","responses": 200,"prop": "","become_ref": "password_with_plaintext"},
+
+        {"path": "/organizations/{organization}/oauth-applications", "method": "get", "responses": 200, "prop": "data", "become_ref": "oauth_application"},
+
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}", "method": "get", "responses": 200, "prop": "", "become_ref": "oauth_application"},
+
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}/tokens", "method": "get", "responses": 200, "prop": "data", "become_ref": "oauth_token"},
+
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}/tokens/{token_id}", "method": "get", "responses": 200, "prop": "oauth_accesses_by_resource.branch", "become_ref": "oauth_branch_accesses"},
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}/tokens/{token_id}", "method": "get", "responses": 200, "prop": "oauth_accesses_by_resource.database", "become_ref": "oauth_database_accesses"},
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}/tokens/{token_id}", "method": "get", "responses": 200, "prop": "oauth_accesses_by_resource.organization", "become_ref": "oauth_organization_accesses"},
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}/tokens/{token_id}", "method": "get", "responses": 200, "prop": "oauth_accesses_by_resource.user", "become_ref": "oauth_user_accesses"},
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}/tokens/{token_id}", "method": "get", "responses": 200, "prop": "oauth_accesses_by_resource", "become_ref": "oauth_accesses_by_resource"},
+        {"path": "/organizations/{organization}/oauth-applications/{application_id}/tokens/{token_id}", "method": "get", "responses": 200, "prop": "", "become_ref": "oauth_token_with_details"},
+
+        {"path": "/organizations/{organization}/oauth-applications/{id}/token", "method": "post", "responses": 200, "prop": "", "become_ref": "created_oauth_token"},
+
+        {"path": "/user", "method": "get", "responses": 200, "prop": "", "become_ref": "user"}
+    ]
+}
