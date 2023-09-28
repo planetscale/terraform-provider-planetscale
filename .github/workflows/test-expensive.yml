@@ -4,6 +4,9 @@ name: Acceptance Tests
 # This GitHub action runs your tests for each pull request and push.
 # Optionally, you can turn it on using a schedule for regular testing.
 on:
+  pull_request:
+    paths-ignore:
+      - 'README.md'
   merge_group:
 
 # Testing only needs permissions to read the repository contents.
