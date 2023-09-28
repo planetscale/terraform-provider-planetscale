@@ -53,7 +53,7 @@ jobs:
             (echo; echo "Unexpected difference in directories after code generation. Run 'go generate ./...' command and commit."; exit 1)
 
   test:
-    name: Terraform Provider Acceptance Tests
+    name: Terraform Provider Tests
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
