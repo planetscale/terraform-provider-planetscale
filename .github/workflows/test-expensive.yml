@@ -1,21 +1,37 @@
 # Terraform Provider testing workflow.
 name: Acceptance Tests
 
-# This GitHub action runs your tests for each pull request and push.
-# Optionally, you can turn it on using a schedule for regular testing.
 on:
   pull_request:
     paths-ignore:
       - 'README.md'
   merge_group:
+    types: [checks_requested]
 
-# Testing only needs permissions to read the repository contents.
 permissions:
   contents: read
 
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+      - uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - run: go mod download
+      - run: go build -v .
+      - name: Run linters
+        uses: golangci/golangci-lint-action@639cd343e1d3b897ff35927a75193d57cfcba299 # v3.6.0
+        with:
+          version: latest
+
   test:
     name: Terraform Provider Acceptance Tests
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
