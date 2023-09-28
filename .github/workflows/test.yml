@@ -1,5 +1,4 @@
-# Terraform Provider testing workflow.
-name: Tests
+name: basic
 
 on:
   pull_request:
@@ -16,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    name: Build
+    name: build
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -33,6 +32,7 @@ jobs:
           version: latest
 
   generate:
+    name: generate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
@@ -51,14 +51,13 @@ jobs:
             (echo; echo "Unexpected difference in directories after code generation. Run 'go generate ./...' command and commit."; exit 1)
 
   test:
-    name: Terraform Provider Tests
+    name: unit
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
-        # list whatever Terraform versions here you would like to support
         terraform:
           - '1.0.*'
           - '1.1.*'

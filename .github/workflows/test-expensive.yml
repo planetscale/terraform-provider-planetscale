@@ -1,5 +1,4 @@
-# Terraform Provider testing workflow.
-name: Acceptance Tests
+name: extensive
 
 on:
   merge_group:
@@ -10,7 +9,7 @@ permissions:
 
 jobs:
   build:
-    name: Build
+    name: build
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -27,7 +26,7 @@ jobs:
           version: latest
 
   test:
-    name: Terraform Provider Acceptance Tests
+    name: integration
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
