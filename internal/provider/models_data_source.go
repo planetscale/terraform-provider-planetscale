@@ -118,13 +118,13 @@ type organizationDataSourceModel struct {
 	IdpManagedRoles           types.Bool               `tfsdk:"idp_managed_roles"`
 }
 
-func organizationFromClient(org *planetscale.Organization, diags diag.Diagnostics) *organizationDataSourceModel {
+func organizationFromClient(org *planetscale.Organization) *organizationDataSourceModel {
 	if org == nil {
 		return nil
 	}
 	return &organizationDataSourceModel{
-		Features:                  featuresFromClient(org.Features, diags),
-		Flags:                     flagsFromClient(org.Flags, diags),
+		Features:                  featuresFromClient(org.Features),
+		Flags:                     flagsFromClient(org.Flags),
 		AdminOnlyProductionAccess: types.BoolValue(org.AdminOnlyProductionAccess),
 		BillingEmail:              types.StringPointerValue(org.BillingEmail),
 		CanCreateDatabases:        types.BoolValue(org.CanCreateDatabases),
@@ -158,7 +158,7 @@ type featuresDataSourceModel struct {
 	Sso           types.Bool `tfsdk:"sso"`
 }
 
-func featuresFromClient(features *planetscale.Features, diags diag.Diagnostics) *featuresDataSourceModel {
+func featuresFromClient(features *planetscale.Features) *featuresDataSourceModel {
 	if features == nil {
 		return nil
 	}
@@ -177,7 +177,7 @@ type flagsDataSourceModel struct {
 	ExampleFlag types.String `tfsdk:"example_flag"`
 }
 
-func flagsFromClient(flags *planetscale.Flags, diags diag.Diagnostics) *flagsDataSourceModel {
+func flagsFromClient(flags *planetscale.Flags) *flagsDataSourceModel {
 	if flags == nil {
 		return nil
 	}
@@ -192,7 +192,7 @@ type dataSourceDataSourceModel struct {
 	Port     types.String `tfsdk:"port"`
 }
 
-func dataSourceFromClient(dataSource planetscale.DataSource, diags diag.Diagnostics) dataSourceDataSourceModel {
+func dataSourceFromClient(dataSource planetscale.DataSource) dataSourceDataSourceModel {
 	return dataSourceDataSourceModel{
 		Database: types.StringValue(dataSource.Database),
 		Hostname: types.StringValue(dataSource.Hostname),
@@ -208,12 +208,12 @@ type dataImportDataSourceModel struct {
 	State             types.String              `tfsdk:"state"`
 }
 
-func dataImportFromClient(dataImport *planetscale.DataImport, diags diag.Diagnostics) *dataImportDataSourceModel {
+func dataImportFromClient(dataImport *planetscale.DataImport) *dataImportDataSourceModel {
 	if dataImport == nil {
 		return nil
 	}
 	return &dataImportDataSourceModel{
-		DataSource:        dataSourceFromClient(dataImport.DataSource, diags),
+		DataSource:        dataSourceFromClient(dataImport.DataSource),
 		FinishedAt:        types.StringValue(dataImport.FinishedAt),
 		ImportCheckErrors: types.StringValue(dataImport.ImportCheckErrors),
 		StartedAt:         types.StringValue(dataImport.StartedAt),
@@ -442,7 +442,7 @@ func databaseFromClient(database *planetscale.Database, orgName string, diags di
 	}
 	return &databaseDataSourceModel{
 		Organization:                      orgName,
-		DataImport:                        dataImportFromClient(database.DataImport, diags),
+		DataImport:                        dataImportFromClient(database.DataImport),
 		Region:                            regionFromClient(&database.Region, diags),
 		AllowDataBranching:                types.BoolValue(database.AllowDataBranching),
 		AtBackupRestoreBranchesLimit:      types.BoolValue(database.AtBackupRestoreBranchesLimit),
@@ -608,9 +608,9 @@ func branchFromClient(branch *planetscale.Branch, organization, database string,
 	return &branchDataSourceModel{
 		Organization:                types.StringValue(organization),
 		Database:                    types.StringValue(database),
-		Actor:                       actorFromClient(branch.Actor, diags),
+		Actor:                       actorFromClient(branch.Actor),
 		Region:                      regionFromClient(branch.Region, diags),
-		RestoredFromBranch:          restoredFromBranchFromClient(branch.RestoredFromBranch, diags),
+		RestoredFromBranch:          restoredFromBranchFromClient(branch.RestoredFromBranch),
 		Name:                        types.StringValue(branch.Name),
 		AccessHostUrl:               types.StringPointerValue(branch.AccessHostUrl),
 		ClusterRateName:             types.StringValue(branch.ClusterRateName),
@@ -649,7 +649,7 @@ type actorDataSourceModel struct {
 	Id          types.String `tfsdk:"id"`
 }
 
-func actorFromClient(actor *planetscale.Actor, diags diag.Diagnostics) *actorDataSourceModel {
+func actorFromClient(actor *planetscale.Actor) *actorDataSourceModel {
 	if actor == nil {
 		return nil
 	}
@@ -786,7 +786,7 @@ func readOnlyRegionFromClient(readOnlyRegion *planetscale.ReadOnlyRegion, diags 
 	}
 
 	return &readOnlyRegionDataSourceModel{
-		Actor:       *actorFromClient(&readOnlyRegion.Actor, diags),
+		Actor:       *actorFromClient(&readOnlyRegion.Actor),
 		Region:      *regionFromClient(&readOnlyRegion.Region, diags),
 		CreatedAt:   types.StringValue(readOnlyRegion.CreatedAt),
 		DisplayName: types.StringValue(readOnlyRegion.DisplayName),
@@ -828,7 +828,7 @@ type restoredFromBranchDataSourceModel struct {
 	UpdatedAt types.String `tfsdk:"updated_at"`
 }
 
-func restoredFromBranchFromClient(rfb *planetscale.RestoredFromBranch, diags diag.Diagnostics) *restoredFromBranchDataSourceModel {
+func restoredFromBranchFromClient(rfb *planetscale.RestoredFromBranch) *restoredFromBranchDataSourceModel {
 	if rfb == nil {
 		return nil
 	}
@@ -862,7 +862,7 @@ type tableSchemaDataSourceModel struct {
 	Raw  types.String `tfsdk:"raw"`
 }
 
-func tableSchemaFromClient(ts *planetscale.TableSchema, diags diag.Diagnostics) *tableSchemaDataSourceModel {
+func tableSchemaFromClient(ts *planetscale.TableSchema) *tableSchemaDataSourceModel {
 	if ts == nil {
 		return nil
 	}
@@ -1134,7 +1134,7 @@ type backupPolicyDataSourceModel struct {
 	UpdatedAt      types.String  `tfsdk:"updated_at"`
 }
 
-func backupPolicyFromClient(backupPolicy *planetscale.BackupPolicy, diags diag.Diagnostics) *backupPolicyDataSourceModel {
+func backupPolicyFromClient(backupPolicy *planetscale.BackupPolicy) *backupPolicyDataSourceModel {
 	if backupPolicy == nil {
 		return nil
 	}
@@ -1171,7 +1171,7 @@ type branchForPasswordDataSourceModel struct {
 	Production       types.Bool   `tfsdk:"production"`
 }
 
-func branchForPasswordFromClient(branchForPassword *planetscale.BranchForPassword, diags diag.Diagnostics) *branchForPasswordDataSourceModel {
+func branchForPasswordFromClient(branchForPassword *planetscale.BranchForPassword) *branchForPasswordDataSourceModel {
 	if branchForPassword == nil {
 		return nil
 	}
@@ -1296,9 +1296,9 @@ func passwordFromClient(password *planetscale.Password, organization, database, 
 		Branch:           types.StringValue(branch),
 		ReadOnlyRegionId: types.StringPointerValue(readOnlyRegionID),
 		AccessHostUrl:    types.StringValue(password.AccessHostUrl),
-		Actor:            actorFromClient(password.Actor, diags),
+		Actor:            actorFromClient(password.Actor),
 		CreatedAt:        types.StringValue(password.CreatedAt),
-		DatabaseBranch:   branchForPasswordFromClient(&password.DatabaseBranch, diags),
+		DatabaseBranch:   branchForPasswordFromClient(&password.DatabaseBranch),
 		DeletedAt:        types.StringPointerValue(password.DeletedAt),
 		ExpiresAt:        types.StringPointerValue(password.ExpiresAt),
 		Id:               types.StringValue(password.Id),
@@ -1405,8 +1405,8 @@ func backupFromClient(backup *planetscale.Backup, organization, database, branch
 		Database:             types.StringValue(database),
 		Branch:               types.StringValue(branch),
 		Name:                 types.StringValue(backup.Name),
-		Actor:                actorFromClient(&backup.Actor, diags),
-		BackupPolicy:         backupPolicyFromClient(&backup.BackupPolicy, diags),
+		Actor:                actorFromClient(&backup.Actor),
+		BackupPolicy:         backupPolicyFromClient(&backup.BackupPolicy),
 		CreatedAt:            types.StringValue(backup.CreatedAt),
 		EstimatedStorageCost: types.StringValue(backup.EstimatedStorageCost),
 		Id:                   types.StringValue(backup.Id),

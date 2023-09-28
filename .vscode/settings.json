@@ -1,0 +1,6 @@
+{
+    "go.testEnvVars": {
+        "TF_ACC": "true"
+    },
+    "go.testEnvFile": "${workspaceFolder}/.env"
+}
