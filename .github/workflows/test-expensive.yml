@@ -42,3 +42,4 @@ jobs:
           PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
           TF_ACC: "1"
         timeout-minutes: 10
+      - run: sleep 600
