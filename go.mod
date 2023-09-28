@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/terraform-plugin-testing v1.5.1
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8
 	github.com/pkg/errors v0.9.1
-	github.com/sergi/go-diff v1.2.0
+	github.com/sergi/go-diff v1.3.1
 	golang.org/x/exp v0.0.0-20230809150735-7b3493d9a819
 	golang.org/x/oauth2 v0.12.0
 	golang.org/x/text v0.13.0
