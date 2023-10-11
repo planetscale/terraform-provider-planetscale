@@ -7,11 +7,14 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/providervalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -20,16 +23,20 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var _ provider.Provider = &PlanetScaleProvider{}
+var _ provider.ProviderWithConfigValidators = &PlanetScaleProvider{}
 
 type PlanetScaleProvider struct {
 	version string
+	debug   bool
 }
 
 type PlanetScaleProviderModel struct {
 	Endpoint types.String `tfsdk:"endpoint"`
 
-	ServiceTokenName types.String `tfsdk:"service_token_name"`
+	AccessToken types.String `tfsdk:"access_token"`
+
+	ServiceTokenName  types.String `tfsdk:"service_token_name"`
+	ServiceTokenValue types.String `tfsdk:"service_token_value"`
 }
 
 func (p *PlanetScaleProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -37,16 +44,50 @@ func (p *PlanetScaleProvider) Metadata(ctx context.Context, req provider.Metadat
 	resp.Version = p.version
 }
 
+func (p *PlanetScaleProvider) ConfigValidators(context.Context) []provider.ConfigValidator {
+	return []provider.ConfigValidator{
+		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token")),
+		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token_name")),
+		providervalidator.RequiredTogether(path.MatchRoot("service_token"), path.MatchRoot("service_token_name")),
+	}
+}
+
 func (p *PlanetScaleProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
+		MarkdownDescription: `The PlanetScale provider allows using the OpenAPI surface of our public API. To use this provider, one of the following are required:
+
+- access token credentials, configured or stored in the environment variable ` + "`PLANETSCALE_ACCESS_TOKEN`" + `
+- service token credentials, configured or stored in the environment variables ` + "`PLANETSCALE_SERVICE_TOKEN_NAME`" + ` and ` + "`PLANETSCALE_SERVICE_TOKEN`" + `
+
+Note that the provider is not production ready and only for early testing at this time.`,
 		Attributes: map[string]schema.Attribute{
 			"endpoint": schema.StringAttribute{
-				MarkdownDescription: "Example provider attribute",
+				MarkdownDescription: "If set, points the API client to a different endpoint than `https:://api.planetscale.com/v1`.",
 				Optional:            true,
 			},
-			"service_token_name": schema.StringAttribute{
-				MarkdownDescription: "Name of the service token to use",
+			"access_token": schema.StringAttribute{
+				MarkdownDescription: "Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `service_token_name` and `service_token`.",
 				Optional:            true,
+				Sensitive:           true,
+				Validators: []validator.String{
+					stringvalidator.ConflictsWith(path.MatchRoot("service_token_name")),
+					stringvalidator.ConflictsWith(path.MatchRoot("service_token")),
+				},
+			},
+			"service_token_name": schema.StringAttribute{
+				MarkdownDescription: "Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`.",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.ConflictsWith(path.MatchRoot("access_token_name")),
+				},
+			},
+			"service_token": schema.StringAttribute{
+				MarkdownDescription: "Value of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN`. Mutually exclusive with `access_token`.",
+				Optional:            true,
+				Sensitive:           true,
+				Validators: []validator.String{
+					stringvalidator.ConflictsWith(path.MatchRoot("access_token_name")),
+				},
 			},
 		},
 	}
@@ -60,15 +101,20 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 	}
 
 	var (
+		initrt  http.RoundTripper
+		rt      http.RoundTripper
+		baseURL *url.URL
+	)
+	if !p.debug {
+		initrt = http.DefaultTransport
+	} else {
 		initrt = debugRoundTripper(func(req, res []byte) {
 			tflog.Debug(ctx, "roundtripper", map[string]interface{}{
 				"req": string(req),
 				"res": string(res),
 			})
 		}, http.DefaultTransport)
-		rt      http.RoundTripper
-		baseURL *url.URL
-	)
+	}
 	if !data.Endpoint.IsNull() {
 		u, err := url.Parse(data.Endpoint.ValueString())
 		if err != nil {
@@ -78,13 +124,10 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 		baseURL = u
 	}
 	var (
-		accessToken       = os.Getenv("PLANETSCALE_ACCESS_TOKEN")
-		serviceTokenName  = os.Getenv("PLANETSCALE_SERVICE_TOKEN_NAME")
-		serviceTokenValue = os.Getenv("PLANETSCALE_SERVICE_TOKEN")
+		accessToken       = stringValueOrDefault(data.AccessToken, os.Getenv("PLANETSCALE_ACCESS_TOKEN"))
+		serviceTokenName  = stringValueOrDefault(data.ServiceTokenName, os.Getenv("PLANETSCALE_SERVICE_TOKEN_NAME"))
+		serviceTokenValue = stringValueOrDefault(data.ServiceTokenValue, os.Getenv("PLANETSCALE_SERVICE_TOKEN"))
 	)
-	if !data.ServiceTokenName.IsNull() {
-		serviceTokenName = data.ServiceTokenName.ValueString()
-	}
 	switch {
 	case accessToken != "" && serviceTokenName == "" && serviceTokenValue == "":
 		tok := &oauth2.Token{AccessToken: accessToken}
@@ -104,7 +147,7 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 		resp.Diagnostics.AddError("Incomplete PlanetScale service token credentials.",
 			"Both of `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN` must be set.")
 	default:
-		resp.Diagnostics.AddError("Ambiguous PlanetScale credentials.", "You must set only either of an access token or a service token, but not both:\n"+
+		resp.Diagnostics.AddError("Ambiguous PlanetScale credentials.", "You must set only an access token or a service token, but not both:\n"+
 			"- `PLANETSCALE_ACCESS_TOKEN`\n"+
 			"- `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN`")
 	}
@@ -149,10 +192,11 @@ func (p *PlanetScaleProvider) DataSources(ctx context.Context) []func() datasour
 	}
 }
 
-func New(version string) func() provider.Provider {
+func New(version string, debug bool) func() provider.Provider {
 	return func() provider.Provider {
 		return &PlanetScaleProvider{
 			version: version,
+			debug:   debug,
 		}
 	}
 }
@@ -210,4 +254,11 @@ func stringValueIfKnown(v basetypes.StringValue) *string {
 		return nil
 	}
 	return v.ValueStringPointer()
+}
+
+func stringValueOrDefault(v basetypes.StringValue, def string) string {
+	if v.IsUnknown() || v.IsNull() {
+		return def
+	}
+	return v.ValueString()
 }

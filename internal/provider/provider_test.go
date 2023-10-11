@@ -13,7 +13,7 @@ import (
 )
 
 var testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
-	"planetscale": providerserver.NewProtocol6WithError(New("test")()),
+	"planetscale": providerserver.NewProtocol6WithError(New("test", false)()),
 }
 
 func testAccPreCheck(t *testing.T) {
