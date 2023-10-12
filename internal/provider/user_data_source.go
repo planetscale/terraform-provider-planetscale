@@ -44,8 +44,11 @@ func (d *userDataSource) Metadata(ctx context.Context, req datasource.MetadataRe
 
 func (d *userDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description:         "A PlanetScale user.",
-		MarkdownDescription: "A PlanetScale user.",
+		Description: "A PlanetScale user.",
+		MarkdownDescription: `A PlanetScale user.
+
+Known limitations:
+- Does not work when the provider is configured with a service token.`,
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Description: "The ID of the user.",
