@@ -1,4 +1,4 @@
-name: Verify dependency licenses
+name: licenses check
 
 on:
   push:
