@@ -3,12 +3,19 @@
 page_title: "planetscale Provider"
 subcategory: ""
 description: |-
-  
+  The PlanetScale provider allows using the OpenAPI surface of our public API. To use this provider, one of the following are required:
+  access token credentials, configured or stored in the environment variable PLANETSCALE_ACCESS_TOKENservice token credentials, configured or stored in the environment variables PLANETSCALE_SERVICE_TOKEN_NAME and PLANETSCALE_SERVICE_TOKEN
+  Note that the provider is not production ready and only for early testing at this time.
 ---
 
 # planetscale Provider
 
+The PlanetScale provider allows using the OpenAPI surface of our public API. To use this provider, one of the following are required:
 
+- access token credentials, configured or stored in the environment variable `PLANETSCALE_ACCESS_TOKEN`
+- service token credentials, configured or stored in the environment variables `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN`
+
+Note that the provider is not production ready and only for early testing at this time.
 
 ## Example Usage
 
@@ -31,5 +38,7 @@ provider "planetscale" {
 
 ### Optional
 
-- `endpoint` (String) Example provider attribute
-- `service_token_name` (String) Name of the service token to use
+- `access_token` (String, Sensitive) Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `service_token_name` and `service_token`.
+- `endpoint` (String) If set, points the API client to a different endpoint than `https:://api.planetscale.com/v1`.
+- `service_token` (String, Sensitive) Value of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN`. Mutually exclusive with `access_token`.
+- `service_token_name` (String) Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`.

@@ -71,3 +71,9 @@
     :why:
     :versions: []
     :when: 2023-09-25 21:56:32.197702000 Z
+- - :approve
+  - github.com/hashicorp/terraform-plugin-framework-validators
+  - :who:
+    :why:
+    :versions: []
+    :when: 2023-10-11 21:59:00.000000000 Z
