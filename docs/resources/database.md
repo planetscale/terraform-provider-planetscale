@@ -4,11 +4,16 @@ page_title: "planetscale_database Resource - terraform-provider-planetscale"
 subcategory: ""
 description: |-
   A PlanetScale database.
+  Known limitations:
+  - When the provider is configured with a service token, the service token needs to manually be granted permission on this database resource. This can be done in the UI or via the CLI (pscale service-token add-access).
 ---
 
 # planetscale_database (Resource)
 
 A PlanetScale database.
+
+Known limitations:
+- When the provider is configured with a service token, the service token needs to manually be granted permission on this database resource. This can be done in the UI or via the CLI (`pscale service-token add-access`).
 
 ## Example Usage
 
