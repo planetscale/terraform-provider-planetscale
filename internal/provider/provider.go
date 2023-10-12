@@ -36,7 +36,7 @@ type PlanetScaleProviderModel struct {
 	AccessToken types.String `tfsdk:"access_token"`
 
 	ServiceTokenName  types.String `tfsdk:"service_token_name"`
-	ServiceTokenValue types.String `tfsdk:"service_token_value"`
+	ServiceTokenValue types.String `tfsdk:"service_token"`
 }
 
 func (p *PlanetScaleProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
