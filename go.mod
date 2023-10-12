@@ -16,7 +16,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sergi/go-diff v1.2.0
 	golang.org/x/exp v0.0.0-20230809150735-7b3493d9a819
-	golang.org/x/oauth2 v0.10.0
+	golang.org/x/oauth2 v0.13.0
 	golang.org/x/text v0.13.0
 )
 
