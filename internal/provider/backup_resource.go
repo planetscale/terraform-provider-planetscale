@@ -90,8 +90,11 @@ func (r *backupResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *backupResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description:         "A PlanetScale backup.",
-		MarkdownDescription: "A PlanetScale backup",
+		Description: "A PlanetScale backup.",
+		MarkdownDescription: `A PlanetScale backup.
+
+Known limitations:
+- It is not currently possible to manage backup schedules, only retention periods.`,
 		Attributes: map[string]schema.Attribute{
 			"organization": schema.StringAttribute{
 				Description: "The organization in which the database branch being backed up belongs to.",

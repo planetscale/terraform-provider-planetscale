@@ -6,6 +6,8 @@ description: |-
   The PlanetScale provider allows using the OpenAPI surface of our public API. To use this provider, one of the following are required:
   access token credentials, configured or stored in the environment variable PLANETSCALE_ACCESS_TOKENservice token credentials, configured or stored in the environment variables PLANETSCALE_SERVICE_TOKEN_NAME and PLANETSCALE_SERVICE_TOKEN
   Note that the provider is not production ready and only for early testing at this time.
+  Known limitations:
+  - Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.
 ---
 
 # planetscale Provider
@@ -16,6 +18,9 @@ The PlanetScale provider allows using the OpenAPI surface of our public API. To 
 - service token credentials, configured or stored in the environment variables `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN`
 
 Note that the provider is not production ready and only for early testing at this time.
+
+Known limitations:
+- Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.
 
 ## Example Usage
 
@@ -29,7 +34,7 @@ terraform {
 }
 
 provider "planetscale" {
-  service_token_name = "luq1jk0pjccp"
+  service_token_name = "8fbddg0zlq0r"
 }
 ```
 
