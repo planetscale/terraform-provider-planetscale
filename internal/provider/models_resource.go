@@ -147,11 +147,11 @@ var backupPolicyResourceAttribute = map[string]schema.Attribute{
 		Computed:    true,
 	},
 	"frequency_unit": schema.StringAttribute{
-		Description: "The unit for the frequency of the backup policy.",
+		Description: "The unit for the frequency of the backup policy. Not configurable for now.",
 		Computed:    true,
 	},
 	"frequency_value": schema.Float64Attribute{
-		Description: "A number value for the frequency of the backup policy.",
+		Description: "A number value for the frequency of the backup policy. Not configurable for now.",
 		Computed:    true,
 	},
 	"last_ran_at": schema.StringAttribute{

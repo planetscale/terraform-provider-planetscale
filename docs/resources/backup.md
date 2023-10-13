@@ -35,7 +35,7 @@ resource "planetscale_backup" "example" {
 
 ### Required
 
-- `backup_policy` (Attributes) . (see [below for nested schema](#nestedatt--backup_policy))
+- `backup_policy` (Attributes) The policy used by the backup. (see [below for nested schema](#nestedatt--backup_policy))
 - `branch` (String) The branch being backed up.
 - `database` (String) The database to which the branch being backed up belongs to.
 - `name` (String) The name of the backup.
@@ -64,8 +64,8 @@ Required:
 Read-Only:
 
 - `created_at` (String) When the backup policy was created.
-- `frequency_unit` (String) The unit for the frequency of the backup policy.
-- `frequency_value` (Number) A number value for the frequency of the backup policy.
+- `frequency_unit` (String) The unit for the frequency of the backup policy. Not configurable for now.
+- `frequency_value` (Number) A number value for the frequency of the backup policy. Not configurable for now.
 - `id` (String) The ID of the backup policy.
 - `last_ran_at` (String) When the backup was last run.
 - `name` (String) The name of the backup policy.

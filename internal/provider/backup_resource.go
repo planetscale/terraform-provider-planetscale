@@ -121,7 +121,7 @@ Known limitations:
 					stringplanmodifier.RequiresReplace(),
 				}},
 			"backup_policy": schema.SingleNestedAttribute{
-				Description: ".",
+				Description: "The policy used by the backup.",
 				Required:    true,
 				Attributes:  backupPolicyResourceAttribute,
 			},
