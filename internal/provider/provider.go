@@ -48,7 +48,6 @@ func (p *PlanetScaleProvider) ConfigValidators(context.Context) []provider.Confi
 	return []provider.ConfigValidator{
 		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token")),
 		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token_name")),
-		providervalidator.RequiredTogether(path.MatchRoot("service_token"), path.MatchRoot("service_token_name")),
 	}
 }
 
