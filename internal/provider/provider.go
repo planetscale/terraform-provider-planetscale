@@ -81,7 +81,7 @@ Known limitations:
 				MarkdownDescription: "Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`.",
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.ConflictsWith(path.MatchRoot("access_token_name")),
+					stringvalidator.ConflictsWith(path.MatchRoot("access_token")),
 				},
 			},
 			"service_token": schema.StringAttribute{
@@ -89,7 +89,7 @@ Known limitations:
 				Optional:            true,
 				Sensitive:           true,
 				Validators: []validator.String{
-					stringvalidator.ConflictsWith(path.MatchRoot("access_token_name")),
+					stringvalidator.ConflictsWith(path.MatchRoot("access_token")),
 				},
 			},
 		},
