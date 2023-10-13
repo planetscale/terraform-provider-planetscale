@@ -3,12 +3,17 @@
 page_title: "planetscale_backup Resource - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  A PlanetScale backup
+  A PlanetScale backup.
+  Known limitations:
+  - It is not currently possible to manage backup schedules, only retention periods.
 ---
 
 # planetscale_backup (Resource)
 
-A PlanetScale backup
+A PlanetScale backup.
+
+Known limitations:
+- It is not currently possible to manage backup schedules, only retention periods.
 
 ## Example Usage
 

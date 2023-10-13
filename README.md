@@ -4,6 +4,10 @@ Work in progress Terraform provider for PlanetScale.
 
 Not ready for general consumption.
 
+## Docs?
+
+👉 [Docs!](https://registry.terraform.io/providers/planetscale/planetscale/latest/docs)
+
 ## Usage
 
 To use this provider, include the following blocks in your Terraform code:

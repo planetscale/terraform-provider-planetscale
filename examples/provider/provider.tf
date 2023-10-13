@@ -7,5 +7,5 @@ terraform {
 }
 
 provider "planetscale" {
-  service_token_name = "luq1jk0pjccp"
+  service_token_name = "8fbddg0zlq0r"
 }
