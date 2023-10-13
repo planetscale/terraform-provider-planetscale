@@ -37,7 +37,8 @@ provider "planetscale" {
 
 ## Known limitations
 
-- Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (pscale service-token add-access)
+- Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.
+- Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (`pscale service-token add-access`)
 
 ## Contributing
 
