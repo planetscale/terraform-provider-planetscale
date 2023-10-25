@@ -7,6 +7,7 @@ import (
 	"context"
 	"flag"
 	"log"
+	"os"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/planetscale/terraform-provider-planetscale/internal/provider"
@@ -44,7 +45,8 @@ func main() {
 		Debug:   debug,
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New(version, debug), opts)
+	debugProvider := os.Getenv("TF_PS_PROVIDER_DEBUG") != ""
+	err := providerserver.Serve(context.Background(), provider.New(version, debug || debugProvider), opts)
 
 	if err != nil {
 		log.Fatal(err.Error())
