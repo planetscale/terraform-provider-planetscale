@@ -158,7 +158,14 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 		return
 	}
 
-	client := planetscale.NewClient(&http.Client{Transport: rt}, baseURL)
+	client := planetscale.NewClient(
+		&http.Client{
+			Transport: roundTripperFunc(func(r *http.Request) (*http.Response, error) {
+				r.Header.Set("User-Agent", "PlanetScale_Terraform_Provider/"+p.version+" (Terraform "+req.TerraformVersion+")")
+				return rt.RoundTrip(r)
+			}),
+		}, baseURL,
+	)
 
 	resp.DataSourceData = client
 	resp.ResourceData = client
