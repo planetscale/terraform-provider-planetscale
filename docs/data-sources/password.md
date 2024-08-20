@@ -31,7 +31,7 @@ output "password" {
 ### Required
 
 - `branch` (String) The branch this password belongs to..
-- `database` (String) The datanase this branch password belongs to.
+- `database` (String) The database this branch password belongs to.
 - `id` (String) The ID for the password.
 - `organization` (String) The organization this database branch password belongs to.
 

@@ -50,7 +50,7 @@ Read-Only:
 - `actor` (Attributes) The actor that created this branch. (see [below for nested schema](#nestedatt--passwords--actor))
 - `branch` (String) The branch this password belongs to..
 - `created_at` (String) When the password was created.
-- `database` (String) The datanase this branch password belongs to.
+- `database` (String) The database this branch password belongs to.
 - `database_branch` (Attributes) The branch this password is allowed to access. (see [below for nested schema](#nestedatt--passwords--database_branch))
 - `deleted_at` (String) When the password was deleted.
 - `expires_at` (String) When the password will expire.

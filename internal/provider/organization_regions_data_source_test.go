@@ -26,14 +26,13 @@ var regions = []string{
 }
 
 func TestAccOrganizationRegionsDataSource(t *testing.T) {
-	orgName := "planetscale-terraform-testing"
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Read testing
 			{
-				Config: testAccOrganizationRegionsDataSourceConfig(orgName),
+				Config: testAccOrganizationRegionsDataSourceConfig(testAccOrg),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttrWith("data.planetscale_organization_regions.test", "regions.#", checkIntegerMin(1)),
 					resource.TestCheckResourceAttrWith("data.planetscale_organization_regions.test", "regions.0.slug", checkOneOf(regions...)),

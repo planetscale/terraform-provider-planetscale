@@ -21,8 +21,10 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &backupResource{}
-var _ resource.ResourceWithImportState = &backupResource{}
+var (
+	_ resource.Resource                = &backupResource{}
+	_ resource.ResourceWithImportState = &backupResource{}
+)
 
 func newBackupResource() resource.Resource {
 	return &backupResource{}
@@ -101,25 +103,29 @@ Known limitations:
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
-				}},
+				},
+			},
 			"database": schema.StringAttribute{
 				Description: "The database to which the branch being backed up belongs to.",
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
-				}},
+				},
+			},
 			"branch": schema.StringAttribute{
 				Description: "The branch being backed up.",
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
-				}},
+				},
+			},
 			"name": schema.StringAttribute{
 				Description: "The name of the backup.",
 				Required:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
-				}},
+				},
+			},
 			"backup_policy": schema.SingleNestedAttribute{
 				Description: "The policy used by the backup.",
 				Required:    true,
@@ -281,6 +287,11 @@ func (r *backupResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	res, err := r.client.GetBackup(ctx, org.ValueString(), database.ValueString(), branch.ValueString(), id.ValueString())
 	if err != nil {
+		if notFoundErr, ok := err.(*planetscale.GetBackupRes404); ok {
+			tflog.Warn(ctx, fmt.Sprintf("Backup not found, removing from state: %s", notFoundErr.Message))
+			resp.State.RemoveResource(ctx)
+			return
+		}
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read backup, got error: %s", err))
 		return
 	}
