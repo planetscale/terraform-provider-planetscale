@@ -21,8 +21,6 @@ jobs:
       - uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
         with:
           go-version-file: 'go.mod'
-          cache: true
-      - run: go mod download
       - run: go build -v .
       - name: Run linters
         uses: golangci/golangci-lint-action@639cd343e1d3b897ff35927a75193d57cfcba299 # v3.6.0
@@ -30,14 +28,13 @@ jobs:
           version: latest
 
   generate:
-    name: generate
+    name: generate diff test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
         with:
           go-version-file: 'go.mod'
-          cache: true
       - uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
         with:
           terraform_version: 1.6.1
@@ -57,23 +54,24 @@ jobs:
       fail-fast: false
       matrix:
         terraform:
-          - '1.0.*'
-          - '1.1.*'
-          - '1.2.*'
-          - '1.3.*'
-          - '1.4.*'
-          - '1.5.*'
+          # TODO: only test one for now since we are creating and destroying actual
+          # resources. Decide which versions to support when we are closer to a supported
+          # release.
+          # - '1.0.*'
+          # - '1.1.*'
+          # - '1.2.*'
+          # - '1.3.*'
+          # - '1.4.*'
+          # - '1.5.*'
           - '1.6.*'
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
         with:
           go-version-file: 'go.mod'
-          cache: true
       - uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
         with:
           terraform_version: ${{ matrix.terraform }}
           terraform_wrapper: false
-      - run: go mod download
       - run: go test -cover ./...
         timeout-minutes: 10
