@@ -1191,7 +1191,7 @@ func passwordDataSourceSchemaAttribute(computedName bool) map[string]schema.Attr
 			Required:    !computedName, Computed: computedName,
 		},
 		"database": schema.StringAttribute{
-			Description: "The datanase this branch password belongs to.",
+			Description: "The database this branch password belongs to.",
 			Required:    !computedName, Computed: computedName,
 		},
 		"branch": schema.StringAttribute{

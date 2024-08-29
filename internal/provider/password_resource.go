@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -21,8 +22,10 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &passwordResource{}
-var _ resource.ResourceWithImportState = &passwordResource{}
+var (
+	_ resource.Resource                = &passwordResource{}
+	_ resource.ResourceWithImportState = &passwordResource{}
+)
 
 func newPasswordResource() resource.Resource {
 	return &passwordResource{}
@@ -140,19 +143,22 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 		Attributes: map[string]schema.Attribute{
 			"organization": schema.StringAttribute{
 				Description: "The organization this database branch password belongs to.",
-				Required:    true, PlanModifiers: []planmodifier.String{
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"database": schema.StringAttribute{
-				Description: "The datanase this branch password belongs to.",
-				Required:    true, PlanModifiers: []planmodifier.String{
+				Description: "The database this branch password belongs to.",
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"branch": schema.StringAttribute{
 				Description: "The branch this password belongs to.",
-				Required:    true, PlanModifiers: []planmodifier.String{
+				Required:    true,
+				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
@@ -186,15 +192,21 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"actor": schema.SingleNestedAttribute{
 				Description: "The actor that created this branch.",
-				Computed:    true, Attributes: actorResourceSchemaAttribute,
+				Computed:    true,
+				Attributes:  actorResourceSchemaAttribute,
 			},
 			"database_branch": schema.SingleNestedAttribute{
 				Description: "The branch this password is allowed to access.",
-				Computed:    true, Attributes: databaseBranchResourceAttribute,
+				Computed:    true,
+				Attributes:  databaseBranchResourceAttribute,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplace(),
+				},
 			},
 			"region": schema.SingleNestedAttribute{
 				Description: "The region in which this password can be used.",
-				Computed:    true, Attributes: regionResourceSchemaAttribute,
+				Computed:    true,
+				Attributes:  regionResourceSchemaAttribute,
 			},
 			"access_host_url": schema.StringAttribute{
 				Description: "The host URL for the password.",
@@ -224,7 +236,8 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			// read-only, sensitive
 			"plaintext": schema.StringAttribute{
 				Description: "The plaintext password, only available if the password was created by this provider.",
-				Sensitive:   true, Computed: true},
+				Sensitive:   true, Computed: true,
+			},
 
 			// manually removed from spec because currently buggy
 			// "integrations":    schema.ListAttribute{Computed: true, ElementType: types.StringType},
@@ -346,6 +359,11 @@ func (r *passwordResource) Read(ctx context.Context, req resource.ReadRequest, r
 		nil, // not sure why this would need a region id
 	)
 	if err != nil {
+		if notFoundErr, ok := err.(*planetscale.GetPasswordRes404); ok {
+			tflog.Warn(ctx, fmt.Sprintf("Password not found, removing from state: %s", notFoundErr.Message))
+			resp.State.RemoveResource(ctx)
+			return
+		}
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read password, got error: %s", err))
 		return
 	}
@@ -477,7 +495,7 @@ func (r *passwordResource) ImportState(ctx context.Context, req resource.ImportS
 	if len(idParts) != 4 || idParts[0] == "" || idParts[1] == "" || idParts[2] == "" || idParts[3] == "" {
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: organization,database,name,id. Got: %q", req.ID),
+			fmt.Sprintf("Expected import identifier with format: organization,database,branch,id. Got: %q", req.ID),
 		)
 		return
 	}

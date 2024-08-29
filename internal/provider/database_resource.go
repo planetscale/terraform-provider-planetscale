@@ -20,8 +20,10 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &databaseResource{}
-var _ resource.ResourceWithImportState = &databaseResource{}
+var (
+	_ resource.Resource                = &databaseResource{}
+	_ resource.ResourceWithImportState = &databaseResource{}
+)
 
 func newDatabaseResource() resource.Resource {
 	return &databaseResource{}
@@ -404,6 +406,11 @@ func (r *databaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 	res, err := r.client.GetDatabase(ctx, org.ValueString(), name.ValueString())
 	if err != nil {
+		if notFoundErr, ok := err.(*planetscale.GetDatabaseRes404); ok {
+			tflog.Warn(ctx, fmt.Sprintf("Database not found, removing from state: %s", notFoundErr.Message))
+			resp.State.RemoveResource(ctx)
+			return
+		}
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read database, got error: %s", err))
 		return
 	}
@@ -489,12 +496,11 @@ func (r *databaseResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
-	res, err := r.client.DeleteDatabase(ctx, org.ValueString(), name.ValueString())
+	_, err := r.client.DeleteDatabase(ctx, org.ValueString(), name.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete database, got error: %s", err))
 		return
 	}
-	_ = res
 }
 
 func (r *databaseResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
@@ -510,5 +516,4 @@ func (r *databaseResource) ImportState(ctx context.Context, req resource.ImportS
 
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization"), idParts[0])...)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[1])...)
-
 }
