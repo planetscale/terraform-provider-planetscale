@@ -64,8 +64,6 @@ jobs:
           terraform_wrapper: false
       - run: make testacc
         env:
-          # TODO: switch back to service-tokens when we can use them to run the fulll acctest suite
-          # PLANETSCALE_SERVICE_TOKEN_NAME: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_NAME }}
-          # PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
-          PLANETSCALE_ACCESS_TOKEN: ${{ secrets.PLANETSCALE_ACCESS_TOKEN }}
+          PLANETSCALE_SERVICE_TOKEN_NAME: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_NAME }}
+          PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
         timeout-minutes: 10

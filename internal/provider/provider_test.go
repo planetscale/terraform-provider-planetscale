@@ -40,16 +40,24 @@ func testAccPreCheck(t *testing.T) {
 	//       more easily re-use it here and maintain the logic around access and service-token lookups
 	if testAccAPIClient == nil {
 		accessToken := os.Getenv("PLANETSCALE_ACCESS_TOKEN")
-		if accessToken == "" {
-			t.Fatal("PLANETSCALE_ACCESS_TOKEN must be set for acceptance tests")
+		if accessToken != "" {
+			tok := &oauth2.Token{AccessToken: accessToken}
+			rt := &oauth2.Transport{
+				Base:   http.DefaultTransport,
+				Source: oauth2.StaticTokenSource(tok),
+			}
+			testAccAPIClient = planetscale.NewClient(&http.Client{Transport: rt}, nil)
 		}
 
-		tok := &oauth2.Token{AccessToken: accessToken}
-		rt := &oauth2.Transport{
-			Base:   http.DefaultTransport,
-			Source: oauth2.StaticTokenSource(tok),
+		serviceTokenName := os.Getenv("PLANETSCALE_SERVICE_TOKEN_NAME")
+		serviceTokenValue := os.Getenv("PLANETSCALE_SERVICE_TOKEN")
+		if serviceTokenName != "" && serviceTokenValue != "" {
+			rt := roundTripperFunc(func(r *http.Request) (*http.Response, error) {
+				r.Header.Set("Authorization", serviceTokenName+":"+serviceTokenValue)
+				return http.DefaultTransport.RoundTrip(r)
+			})
+			testAccAPIClient = planetscale.NewClient(&http.Client{Transport: rt}, nil)
 		}
-		testAccAPIClient = planetscale.NewClient(&http.Client{Transport: rt}, nil)
 	}
 }
 
