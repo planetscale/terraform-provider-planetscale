@@ -1,9 +1,11 @@
 package provider
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"testing"
+	"text/template"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,17 +14,21 @@ import (
 
 func TestAccPasswordResource(t *testing.T) {
 	dbName := acctest.RandomWithPrefix("testacc-passwd-db")
+	branchName := acctest.RandomWithPrefix("branch")
 	passwdName := acctest.RandomWithPrefix("testacc-passwd")
-	branchName := "main"
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, passwdName),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName),
 				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_database.test", "default_branch", "main"),
+					resource.TestCheckResourceAttr("planetscale_database.test", "cluster_size", "PS-10"),
+					resource.TestCheckResourceAttr("planetscale_branch.test", "name", branchName),
+					resource.TestCheckResourceAttr("planetscale_branch.test", "parent_branch", "main"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
 				),
@@ -46,11 +52,7 @@ func TestAccPasswordResource(t *testing.T) {
 				ImportStateVerifyIgnore: []string{"plaintext"},
 			},
 			// Update and Read testing
-			// TODO: Implement a test for password Update. Best current idea is to update the
-			//       password's branch to a new branch, but that requires the ability to
-			//       create a database and branch in a single plan which is currently broken
-			//       due to the async nature of planetscale_database.
-			// Delete testing automatically occurs in TestCase
+			// TODO: Implement a test for password Update.
 		},
 	})
 }
@@ -61,18 +63,18 @@ func TestAccPasswordResource(t *testing.T) {
 // https://github.com/planetscale/terraform-provider-planetscale/issues/53
 func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 	dbName := acctest.RandomWithPrefix("testacc-passwd-db")
+	branchName := acctest.RandomWithPrefix("branch")
 	passwdName := acctest.RandomWithPrefix("testacc-passwd")
-	branchName := "main"
 
 	passId := ""
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, passwdName),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
@@ -111,35 +113,44 @@ func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 	})
 }
 
-func testAccPasswordResourceConfig(dbName, passwdName string) string {
-	return fmt.Sprintf(`
+func testAccPasswordResourceConfig(dbName, branchName, passwdName string) string {
+	const tmpl = `
 resource "planetscale_database" "test" {
-  name           = "%s"
-  organization   = "%s"
+  name           = "{{.DBName}}"
+  organization   = "{{.Org}}"
   cluster_size   = "PS-10"
   default_branch = "main"
 }
 
-# TODO: Uncomment when the issue with branch creation after db creation is solved, then we can
-#       also expand the test coverage for password to include a change from one branch to another.
-# resource "planetscale_branch" "two" {
-#   name          = "TODO"
-#   organization  = "TODO"
-#   database      = planetscale_database.test.name
-#   parent_branch = planetscale_database.test.default_branch
-# }
+resource "planetscale_branch" "test" {
+  name          = "{{.BranchName}}"
+  organization  = "{{.Org}}"
+  database      = planetscale_database.test.name
+  parent_branch = planetscale_database.test.default_branch
+}
 
 resource "planetscale_password" "test" {
-  name         = "%s"
-  organization = "%s"
+  name         = "{{.PasswdName}}"
+  organization = "{{.Org}}"
   database     = planetscale_database.test.name
-  branch       = planetscale_database.test.default_branch
+  branch       = planetscale_branch.test.name
 }
-  `, dbName, testAccOrg, passwdName, testAccOrg)
+`
+	t := template.Must(template.New("config").Parse(tmpl))
+	var buf bytes.Buffer
+	err := t.Execute(&buf, map[string]string{
+		"Org":        testAccOrg,
+		"DBName":     dbName,
+		"BranchName": branchName,
+		"PasswdName": passwdName,
+	})
+	if err != nil {
+		return ""
+	}
+	return buf.String()
 }
 
 func getPasswordIDFromState(state *terraform.State, resourceName string) (string, error) {
-	// resourceName := "planetscale_password.test"
 	var rawState map[string]string
 	for _, m := range state.Modules {
 		if len(m.Resources) > 0 {

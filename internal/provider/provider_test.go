@@ -17,8 +17,10 @@ import (
 
 const testAccOrg = "planetscale-terraform-testing"
 
+var debugProvider = os.Getenv("TF_PS_PROVIDER_DEBUG") != ""
+
 var testAccProtoV6ProviderFactories = map[string]func() (tfprotov6.ProviderServer, error){
-	"planetscale": providerserver.NewProtocol6WithError(New("test", false)()),
+	"planetscale": providerserver.NewProtocol6WithError(New("test", debugProvider)()),
 }
 
 var testAccAPIClient *planetscale.Client

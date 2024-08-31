@@ -12,7 +12,7 @@ import (
 func TestAccDatabaseResource(t *testing.T) {
 	dbName := acctest.RandomWithPrefix("testacc-db")
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
@@ -20,7 +20,6 @@ func TestAccDatabaseResource(t *testing.T) {
 			{
 				Config: testAccDatabaseResourceConfig(dbName, "PS-10"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					// resource.TestCheckResourceAttr("planetscale_database.test", "id", "todo"),
 					resource.TestCheckResourceAttr("planetscale_database.test", "production_branches_count", "1"),
 					resource.TestCheckResourceAttr("planetscale_database.test", "default_branch", "main"),
 					resource.TestCheckResourceAttr("planetscale_database.test", "cluster_size", "PS-10"),
@@ -39,7 +38,6 @@ func TestAccDatabaseResource(t *testing.T) {
 			{
 				Config: testAccDatabaseResourceConfig(dbName, "PS-20"),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					// resource.TestCheckResourceAttr("planetscale_database.test", "id", "todo"),
 					resource.TestCheckResourceAttr("planetscale_database.test", "production_branches_count", "1"),
 					resource.TestCheckResourceAttr("planetscale_database.test", "default_branch", "main"),
 					resource.TestCheckResourceAttr("planetscale_database.test", "cluster_size", "PS-20"),
@@ -57,7 +55,7 @@ func TestAccDatabaseResource(t *testing.T) {
 func TestAccDatabaseResource_OutOfBandDelete(t *testing.T) {
 	dbName := acctest.RandomWithPrefix("testacc-db-oob")
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{

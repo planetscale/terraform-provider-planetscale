@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -17,12 +18,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &branchResource{}
-var _ resource.ResourceWithImportState = &branchResource{}
+var (
+	_ resource.Resource                = &branchResource{}
+	_ resource.ResourceWithImportState = &branchResource{}
+)
 
 func newBranchResource() resource.Resource {
 	return &branchResource{}
@@ -287,6 +291,35 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
+	// wait for branch to enter ready state
+	createState := &retry.StateChangeConf{
+		Delay:      5 * time.Second, // initial delay before the first check
+		Timeout:    10 * time.Minute,
+		MinTimeout: 5 * time.Second,
+
+		Pending: []string{"not-ready"},
+		Target:  []string{"ready"},
+
+		Refresh: func() (interface{}, string, error) {
+			res, err := r.client.GetBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
+			if err != nil {
+				return nil, "", err
+			}
+			if res.Branch.Ready {
+				return res, "ready", nil
+			}
+			return res, "not-ready", nil
+		},
+	}
+	_, err = createState.WaitForStateContext(ctx)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to create database",
+			fmt.Sprintf("Branch %s never became ready; got error: %s", name.ValueString(), err),
+		)
+		return
+	}
+
 	data = branchResourceFromClient(ctx, &res.Branch, data.Organization, data.Database, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
@@ -323,6 +356,11 @@ func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	res, err := r.client.GetBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
 	if err != nil {
+		if notFoundErr, ok := err.(*planetscale.GetBranchRes404); ok {
+			tflog.Warn(ctx, fmt.Sprintf("Branch not found, removing from state: %s", notFoundErr.Message))
+			resp.State.RemoveResource(ctx)
+			return
+		}
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read branch, got error: %s", err))
 		return
 	}
