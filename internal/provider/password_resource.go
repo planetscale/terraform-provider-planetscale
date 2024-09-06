@@ -356,7 +356,7 @@ func (r *passwordResource) Read(ctx context.Context, req resource.ReadRequest, r
 		database.ValueString(),
 		branch.ValueString(),
 		id.ValueString(),
-		nil, // not sure why this would need a region id
+		// nil, // not sure why this would need a region id
 	)
 	if err != nil {
 		if notFoundErr, ok := err.(*planetscale.GetPasswordRes404); ok {

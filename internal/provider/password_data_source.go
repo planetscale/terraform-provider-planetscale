@@ -61,7 +61,7 @@ func (d *passwordDataSource) Read(ctx context.Context, req datasource.ReadReques
 		data.Database.ValueString(),
 		data.Branch.ValueString(),
 		data.Id.ValueString(),
-		data.ReadOnlyRegionId.ValueStringPointer(),
+		// data.ReadOnlyRegionId.ValueStringPointer(),
 	)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to read database password", err.Error())

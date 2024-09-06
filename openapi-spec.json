@@ -10,10 +10,10 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "\n<p>PlanetScale API</p>\n&copy; 2023 PlanetScale, Inc.",
+    "description": "\n<p>PlanetScale API</p>\n&copy; 2024 PlanetScale, Inc.",
     "title": "PlanetScale API",
     "version": "v1",
-    "x-copyright": "&copy; 2023 PlanetScale, Inc."
+    "x-copyright": "&copy; 2024 PlanetScale, Inc."
   },
   "host": "api.planetscale.com",
   "basePath": "/v1",
@@ -28,7 +28,7 @@
           "Organizations"
         ],
         "summary": "List organizations",
-        "operationId": "list-organizations",
+        "operationId": "list_organizations",
         "parameters": [
           {
             "type": "number",
@@ -89,7 +89,7 @@
           "Organizations"
         ],
         "summary": "Get an organization",
-        "operationId": "get-an-organization",
+        "operationId": "get_organization",
         "parameters": [
           {
             "type": "string",
@@ -129,7 +129,7 @@
           "Organizations"
         ],
         "summary": "Update an organization",
-        "operationId": "update-an-organization",
+        "operationId": "update_organization",
         "parameters": [
           {
             "type": "string",
@@ -152,9 +152,9 @@
                   "description": "Whether or not the IdP provider is be responsible for managing roles in PlanetScale",
                   "type": "boolean"
                 },
-                "require_admin_for_production_access": {
-                  "description": "Whether or not only admins can access production",
-                  "type": "boolean"
+                "invoice_budget_amount": {
+                  "description": "The expected monthly budget for the organization",
+                  "type": "number"
                 }
               },
               "additionalProperties": false
@@ -183,6 +183,161 @@
         }
       }
     },
+    "/organizations/{name}/audit-log": {
+      "get": {
+        "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_audit_logs`\n\n",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "List audit logs",
+        "operationId": "list_audit_logs",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization",
+            "name": "name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets the audit logs for the organization",
+            "schema": {
+              "type": "object",
+              "required": [
+                "has_next",
+                "has_prev",
+                "cursor_start",
+                "cursor_end",
+                "data"
+              ],
+              "properties": {
+                "cursor_end": {
+                  "description": "The ID of the last audit log in the current results",
+                  "type": "string"
+                },
+                "cursor_start": {
+                  "description": "The ID of the first audit log in the current results",
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "actor_id",
+                      "actor_type",
+                      "auditable_id",
+                      "auditable_type",
+                      "target_id",
+                      "target_type",
+                      "locale",
+                      "target_display_name",
+                      "actor_display_name",
+                      "auditable_display_name",
+                      "action",
+                      "remote_ip",
+                      "created_at",
+                      "metadata"
+                    ],
+                    "properties": {
+                      "action": {
+                        "description": "The action that was taken",
+                        "type": "string"
+                      },
+                      "actor_display_name": {
+                        "description": "The name of the actor",
+                        "type": "string"
+                      },
+                      "actor_id": {
+                        "description": "The ID of the actor",
+                        "type": "string"
+                      },
+                      "actor_type": {
+                        "description": "The type of the actor. Such as 'User' or 'ServiceToken'",
+                        "type": "string"
+                      },
+                      "auditable_display_name": {
+                        "description": "The name of the auditable object",
+                        "type": "string"
+                      },
+                      "auditable_id": {
+                        "description": "The ID of the auditable object",
+                        "type": "string"
+                      },
+                      "auditable_type": {
+                        "description": "The type of the auditable. Such as 'Organization' or 'Database'",
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "description": "When the audit log was created",
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "The ID for the audit log",
+                        "type": "string"
+                      },
+                      "locale": {
+                        "description": "The location of the actor based on their IP address",
+                        "type": "string"
+                      },
+                      "metadata": {
+                        "description": "Additional metadata containing details about the change",
+                        "type": "object",
+                        "additionalProperties": true
+                      },
+                      "remote_ip": {
+                        "description": "The IP address of the actor",
+                        "type": "string"
+                      },
+                      "target_display_name": {
+                        "description": "The name of the target",
+                        "type": "string"
+                      },
+                      "target_id": {
+                        "description": "The ID of the target",
+                        "type": "string"
+                      },
+                      "target_type": {
+                        "description": "The type of the target. Such as 'DatabaseBranch' or 'DatabaseBranchPassword'",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "has_next": {
+                  "description": "Whether there is a next page of results",
+                  "type": "boolean"
+                },
+                "has_prev": {
+                  "description": "Whether there is a previous page of results",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/organizations/{name}/regions": {
       "get": {
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_organization`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| User | `read_organizations` |\n| Organization | `read_organization` |",
@@ -193,7 +348,7 @@
           "Organizations"
         ],
         "summary": "List regions for an organization",
-        "operationId": "list-regions-for-an-organization",
+        "operationId": "list_regions_for_organization",
         "parameters": [
           {
             "type": "string",
@@ -253,7 +408,7 @@
     },
     "/organizations/{organization}/databases": {
       "get": {
-        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |",
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |",
         "consumes": [
           "application/json"
         ],
@@ -261,7 +416,7 @@
           "Databases"
         ],
         "summary": "List databases",
-        "operationId": "list-databases",
+        "operationId": "list_databases",
         "parameters": [
           {
             "type": "string",
@@ -327,7 +482,7 @@
           "Databases"
         ],
         "summary": "Create a database",
-        "operationId": "create-a-database",
+        "operationId": "create_database",
         "parameters": [
           {
             "type": "string",
@@ -342,19 +497,16 @@
             "schema": {
               "type": "object",
               "required": [
-                "name"
+                "name",
+                "cluster_size"
               ],
               "properties": {
                 "cluster_size": {
-                  "description": "The database cluster size. This is required for Scaler Pro databases. Options: PS_10, PS_20, PS_40, PS_80, PS_160, PS_320, PS_400, PS_640, PS_700, PS_900, PS_1280, PS_1400, PS_1800, PS_2100, PS_2560, PS_2700, PS_2800.",
+                  "description": "The database cluster size. Options: PS_10, PS_20, PS_40, PS_80, PS_160, PS_320, PS_400, PS_640, PS_700, PS_900, PS_1280, PS_1400, PS_1800, PS_2100, PS_2560, PS_2700, PS_2800.",
                   "type": "string"
                 },
                 "name": {
                   "description": "Name of the database",
-                  "type": "string"
-                },
-                "plan": {
-                  "description": "The database billing plan. Options: 'hobby', 'scaler', or 'scaler_pro'.",
                   "type": "string"
                 },
                 "region": {
@@ -398,19 +550,19 @@
           "Database branches"
         ],
         "summary": "List branches",
-        "operationId": "list-branches",
+        "operationId": "list_branches",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the database the branch belongs to",
-            "name": "database",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the database the branch belongs to",
+            "name": "database",
             "in": "path",
             "required": true
           },
@@ -471,19 +623,19 @@
           "Database branches"
         ],
         "summary": "Create a branch",
-        "operationId": "create-a-branch",
+        "operationId": "create_branch",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the database the branch belongs to",
-            "name": "database",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the database the branch belongs to",
+            "name": "database",
             "in": "path",
             "required": true
           },
@@ -546,12 +698,12 @@
           "Backups"
         ],
         "summary": "List backups",
-        "operationId": "list-backups",
+        "operationId": "list_backups",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "branch",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -564,8 +716,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "branch",
             "in": "path",
             "required": true
           },
@@ -626,12 +778,12 @@
           "Backups"
         ],
         "summary": "Create a backup",
-        "operationId": "create-a-backup",
+        "operationId": "create_backup",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "branch",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -644,8 +796,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "branch",
             "in": "path",
             "required": true
           },
@@ -711,19 +863,12 @@
           "Backups"
         ],
         "summary": "Get a backup",
-        "operationId": "get-a-backup",
+        "operationId": "get_backup",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "branch",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "The name of the database the branch belongs to",
-            "name": "database",
+            "description": "The ID for the backup",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -736,8 +881,15 @@
           },
           {
             "type": "string",
-            "description": "The ID for the backup",
-            "name": "id",
+            "description": "The name of the database the branch belongs to",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the branch",
+            "name": "branch",
             "in": "path",
             "required": true
           }
@@ -772,19 +924,12 @@
           "Backups"
         ],
         "summary": "Delete a backup",
-        "operationId": "delete-a-backup",
+        "operationId": "delete_backup",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "branch",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "The name of the database the branch belongs to",
-            "name": "database",
+            "description": "The ID of the backup",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -797,8 +942,15 @@
           },
           {
             "type": "string",
-            "description": "The ID of the backup",
-            "name": "id",
+            "description": "The name of the database the branch belongs to",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the branch",
+            "name": "branch",
             "in": "path",
             "required": true
           }
@@ -806,6 +958,282 @@
         "responses": {
           "204": {
             "description": "Delete a backup"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `write_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_backups` |\n| Database | `write_backups` |\n| Branch | `write_backups` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Backups"
+        ],
+        "summary": "Update a backup",
+        "operationId": "update_backup",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The ID of the backup",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the database the branch belongs to",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the branch",
+            "name": "branch",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "protected": {
+                  "description": "Whether the backup is protected from deletion or not",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the backup",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "state",
+                "size",
+                "estimated_storage_cost",
+                "created_at",
+                "updated_at",
+                "required",
+                "schema_snapshot"
+              ],
+              "properties": {
+                "actor": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "display_name",
+                    "avatar_url"
+                  ],
+                  "properties": {
+                    "avatar_url": {
+                      "description": "The URL of the actor's avatar",
+                      "type": "string"
+                    },
+                    "display_name": {
+                      "description": "The name of the actor",
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The ID of the actor",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "backup_policy": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "target",
+                    "retention_value",
+                    "retention_unit",
+                    "frequency_value",
+                    "frequency_unit",
+                    "schedule_day",
+                    "schedule_week",
+                    "created_at",
+                    "updated_at",
+                    "last_ran_at",
+                    "next_run_at"
+                  ],
+                  "properties": {
+                    "created_at": {
+                      "description": "When the backup policy was created",
+                      "type": "string"
+                    },
+                    "frequency_unit": {
+                      "description": "The unit for the frequency of the backup policy",
+                      "type": "string"
+                    },
+                    "frequency_value": {
+                      "description": "A number value for the frequency of the backup policy",
+                      "type": "number"
+                    },
+                    "id": {
+                      "description": "The ID of the backup policy",
+                      "type": "string"
+                    },
+                    "last_ran_at": {
+                      "description": "When the backup was last run",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name of the backup policy",
+                      "type": "string"
+                    },
+                    "next_run_at": {
+                      "description": "When the backup will next run",
+                      "type": "string"
+                    },
+                    "retention_unit": {
+                      "description": "The unit for the retention period of the backup policy",
+                      "type": "string"
+                    },
+                    "retention_value": {
+                      "description": "A number value for the retention period of the backup policy",
+                      "type": "number"
+                    },
+                    "schedule_day": {
+                      "description": "Day of the week that the backup is scheduled",
+                      "type": "string",
+                      "enum": [
+                        "0..6"
+                      ]
+                    },
+                    "schedule_week": {
+                      "description": "Week of the month that the backup is scheduled",
+                      "type": "string",
+                      "enum": [
+                        "0..3"
+                      ]
+                    },
+                    "target": {
+                      "description": "Whether the backup policy is for a production or development database, or for a database branch",
+                      "type": "string",
+                      "enum": [
+                        "production",
+                        "development",
+                        "branch"
+                      ]
+                    },
+                    "updated_at": {
+                      "description": "When the backup policy was last updated",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "created_at": {
+                  "description": "When the backup was created",
+                  "type": "string"
+                },
+                "estimated_storage_cost": {
+                  "description": "The estimated storage cost of the backup",
+                  "type": "number"
+                },
+                "id": {
+                  "description": "The ID of the backup",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "The name of the backup",
+                  "type": "string"
+                },
+                "required": {
+                  "description": "Whether or not the backup policy is required",
+                  "type": "boolean"
+                },
+                "restored_branches": {
+                  "description": "Branches that have been restored with this backup",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "schema_snapshot": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "url",
+                    "name",
+                    "created_at",
+                    "updated_at"
+                  ],
+                  "properties": {
+                    "created_at": {
+                      "description": "When the schema snapshot was created",
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The ID of the schema snapshot",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name of the schema snapshot",
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "description": "When the schema snapshot was last updated",
+                      "type": "string"
+                    },
+                    "url": {
+                      "description": "The URL to the schema snapshot in the PlanetScale app",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "size": {
+                  "description": "The size of the backup",
+                  "type": "number"
+                },
+                "state": {
+                  "description": "The current state of the backup",
+                  "type": "string",
+                  "enum": [
+                    "pending",
+                    "running",
+                    "success",
+                    "failed",
+                    "canceled",
+                    "ignored"
+                  ]
+                },
+                "updated_at": {
+                  "description": "When the backup was last updated",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -832,12 +1260,12 @@
           "Database branch passwords"
         ],
         "summary": "List passwords",
-        "operationId": "list-passwords",
+        "operationId": "list_passwords",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch the password belongs to",
-            "name": "branch",
+            "description": "The name of the organization the password belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -850,8 +1278,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the password belongs to",
-            "name": "organization",
+            "description": "The name of the branch the password belongs to",
+            "name": "branch",
             "in": "path",
             "required": true
           },
@@ -910,7 +1338,7 @@
         }
       },
       "post": {
-        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `create_branch_password`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |",
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |",
         "consumes": [
           "application/json"
         ],
@@ -918,12 +1346,12 @@
           "Database branch passwords"
         ],
         "summary": "Create a password",
-        "operationId": "create-a-password",
+        "operationId": "create_password",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch the password belongs to",
-            "name": "branch",
+            "description": "The name of the organization the password belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -936,8 +1364,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the password belongs to",
-            "name": "organization",
+            "description": "The name of the branch the password belongs to",
+            "name": "branch",
             "in": "path",
             "required": true
           },
@@ -950,6 +1378,10 @@
                 "name": {
                   "description": "Optional name of the password",
                   "type": "string"
+                },
+                "replica": {
+                  "description": "Whether the password is for a read replica",
+                  "type": "boolean"
                 },
                 "role": {
                   "description": "The database role of the password (i.e. admin)",
@@ -1005,19 +1437,12 @@
           "Database branch passwords"
         ],
         "summary": "Get a password",
-        "operationId": "get-a-password",
+        "operationId": "get_password",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the password",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "The name of the branch the password belongs to",
-            "name": "branch",
+            "description": "The name of the organization the password belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1030,16 +1455,17 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the password belongs to",
-            "name": "organization",
+            "description": "The name of the branch the password belongs to",
+            "name": "branch",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "A read-only region of the database branch. If present, the password results will be filtered to only those in the region",
-            "name": "read_only_region_id",
-            "in": "query"
+            "description": "The ID of the password",
+            "name": "id",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
@@ -1072,19 +1498,12 @@
           "Database branch passwords"
         ],
         "summary": "Delete a password",
-        "operationId": "delete-a-password",
+        "operationId": "delete_password",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the password",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "The name of the branch the password belongs to",
-            "name": "branch",
+            "description": "The name of the organization the password belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1097,8 +1516,15 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the password belongs to",
-            "name": "organization",
+            "description": "The name of the branch the password belongs to",
+            "name": "branch",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The ID of the password",
+            "name": "id",
             "in": "path",
             "required": true
           }
@@ -1122,7 +1548,7 @@
         }
       },
       "patch": {
-        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `create_branch_password`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |",
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |",
         "consumes": [
           "application/json"
         ],
@@ -1130,19 +1556,12 @@
           "Database branch passwords"
         ],
         "summary": "Update a password",
-        "operationId": "update-a-password",
+        "operationId": "update_password",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the password",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "The name of the branch the password belongs to",
-            "name": "branch",
+            "description": "The name of the organization the password belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1155,8 +1574,15 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the password belongs to",
-            "name": "organization",
+            "description": "The name of the branch the password belongs to",
+            "name": "branch",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The ID of the password",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -1202,7 +1628,7 @@
     },
     "/organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew": {
       "post": {
-        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `create_branch_password`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |",
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |",
         "consumes": [
           "application/json"
         ],
@@ -1210,19 +1636,12 @@
           "Database branch passwords"
         ],
         "summary": "Renew a password",
-        "operationId": "renew-a-password",
+        "operationId": "renew_password",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the password",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "The name of the branch the password belongs to",
-            "name": "branch",
+            "description": "The name of the organization the password belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1235,24 +1654,17 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the password belongs to",
-            "name": "organization",
+            "description": "The name of the branch the password belongs to",
+            "name": "branch",
             "in": "path",
             "required": true
           },
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "read_only_region_id": {
-                  "description": "A read-only region of the database branch. If present, the password results will be filtered to only those in the region",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
+            "type": "string",
+            "description": "The ID of the password",
+            "name": "id",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
@@ -1287,12 +1699,12 @@
           "Database branches"
         ],
         "summary": "Get a branch",
-        "operationId": "get-a-branch",
+        "operationId": "get_branch",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1305,8 +1717,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -1341,12 +1753,12 @@
           "Database branches"
         ],
         "summary": "Delete a branch",
-        "operationId": "delete-a-branch",
+        "operationId": "delete_branch",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1359,8 +1771,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -1368,6 +1780,76 @@
         "responses": {
           "204": {
             "description": "Delete a branch"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization}/databases/{database}/branches/{name}/cluster": {
+      "patch": {
+        "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `write_database`\n\n",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Database branches"
+        ],
+        "summary": "Change a branch cluster configuration",
+        "operationId": "update_branch_cluster_config",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the database the branch belongs to",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the branch to configure",
+            "name": "name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": [
+                "cluster_size"
+              ],
+              "properties": {
+                "cluster_size": {
+                  "description": "The new size of the database cluster: PS_10, PS_20,…",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Returns an empty response body"
           },
           "401": {
             "description": "Unauthorized"
@@ -1394,12 +1876,12 @@
           "Database branches"
         ],
         "summary": "Demote a branch",
-        "operationId": "demote-a-branch",
+        "operationId": "demote_branch",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1412,8 +1894,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -1450,12 +1932,12 @@
           "Database branches"
         ],
         "summary": "Promote a branch",
-        "operationId": "promote-a-branch",
+        "operationId": "promote_branch",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1468,8 +1950,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -1506,12 +1988,12 @@
           "Database branches"
         ],
         "summary": "Enable safe migrations for a branch",
-        "operationId": "enable-safe-migrations-for-a-branch",
+        "operationId": "enable_safe_migrations",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1524,8 +2006,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -1560,12 +2042,12 @@
           "Database branches"
         ],
         "summary": "Disable safe migrations for a branch",
-        "operationId": "disable-safe-migrations-for-a-branch",
+        "operationId": "disable_safe_migrations",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1578,8 +2060,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -1616,12 +2098,12 @@
           "Database branches"
         ],
         "summary": "Get a branch schema",
-        "operationId": "get-a-branch-schema",
+        "operationId": "get_branch_schema",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1634,8 +2116,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           },
@@ -1690,12 +2172,12 @@
           "Database branches"
         ],
         "summary": "Lint a branch schema",
-        "operationId": "lint-a-branch-schema",
+        "operationId": "lint_branch_schema",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the branch",
-            "name": "name",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1708,8 +2190,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the branch belongs to",
-            "name": "organization",
+            "description": "The name of the branch",
+            "name": "name",
             "in": "path",
             "required": true
           },
@@ -1772,19 +2254,19 @@
           "Deploy requests"
         ],
         "summary": "Get the deploy queue",
-        "operationId": "get-the-deploy-queue",
+        "operationId": "get_deploy_queue",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the deploy request's database",
-            "name": "database",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The name of the deploy request's database",
+            "name": "database",
             "in": "path",
             "required": true
           }
@@ -1807,6 +2289,18 @@
               },
               "additionalProperties": false
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -1821,19 +2315,19 @@
           "Deploy requests"
         ],
         "summary": "List deploy requests",
-        "operationId": "list-deploy-requests",
+        "operationId": "list_deploy_requests",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the deploy request's database",
-            "name": "database",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The name of the deploy request's database",
+            "name": "database",
             "in": "path",
             "required": true
           },
@@ -1888,6 +2382,18 @@
               },
               "additionalProperties": false
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -1900,15 +2406,8 @@
           "Deploy requests"
         ],
         "summary": "Create a deploy request",
-        "operationId": "create-a-deploy-request",
+        "operationId": "create_deploy_request",
         "parameters": [
-          {
-            "type": "string",
-            "description": "The name of the deploy request's database",
-            "name": "database",
-            "in": "path",
-            "required": true
-          },
           {
             "type": "string",
             "description": "The name of the deploy request's organization",
@@ -1917,11 +2416,30 @@
             "required": true
           },
           {
+            "type": "string",
+            "description": "The name of the deploy request's database",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
+              "required": [
+                "branch",
+                "into_branch"
+              ],
               "properties": {
+                "auto_cutover": {
+                  "description": "Whether or not to enable auto_cutover for the deploy request. When enabled, will auto cutover to the new schema as soon as it is ready.",
+                  "type": "boolean"
+                },
+                "auto_delete_branch": {
+                  "description": "Whether or not to enable auto_delete_branch for the deploy request. When enabled, will delete the branch once the DR successfully completes.",
+                  "type": "boolean"
+                },
                 "branch": {
                   "description": "The name of the branch the deploy request is created from",
                   "type": "string"
@@ -1945,6 +2463,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request_with_deployment"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -1959,12 +2489,12 @@
           "Deploy requests"
         ],
         "summary": "Get a deploy request",
-        "operationId": "get-a-deploy-request",
+        "operationId": "get_deploy_request",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -1977,8 +2507,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -1989,6 +2519,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request_with_deployment"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2001,12 +2543,12 @@
           "Deploy requests"
         ],
         "summary": "Close a deploy request",
-        "operationId": "close-a-deploy-request",
+        "operationId": "close_deploy_request",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2019,8 +2561,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           },
@@ -2048,6 +2590,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request_with_deployment"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2062,12 +2616,12 @@
           "Deploy requests"
         ],
         "summary": "Complete a gated deploy request",
-        "operationId": "complete-a-gated-deploy-request",
+        "operationId": "complete_gated_deploy_request",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2080,8 +2634,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2092,6 +2646,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2106,12 +2672,12 @@
           "Deploy requests"
         ],
         "summary": "Update auto-apply for deploy request",
-        "operationId": "update-auto-apply-for-deploy-request",
+        "operationId": "update_auto_apply",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2124,8 +2690,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           },
@@ -2150,6 +2716,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2164,12 +2742,12 @@
           "Deploy requests"
         ],
         "summary": "Cancel a queued deploy request",
-        "operationId": "cancel-a-queued-deploy-request",
+        "operationId": "cancel_deploy_request",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2182,8 +2760,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2194,6 +2772,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2208,12 +2798,12 @@
           "Deploy requests"
         ],
         "summary": "Complete an errored deploy",
-        "operationId": "complete-an-errored-deploy",
+        "operationId": "complete_errored_deploy",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2226,8 +2816,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2238,6 +2828,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2252,12 +2854,12 @@
           "Deploy requests"
         ],
         "summary": "Queue a deploy request",
-        "operationId": "queue-a-deploy-request",
+        "operationId": "queue_deploy_request",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the organization the deploy request belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2270,8 +2872,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the deploy request belongs to",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2282,6 +2884,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2296,12 +2910,12 @@
           "Deploy requests"
         ],
         "summary": "Get a deployment",
-        "operationId": "get-a-deployment",
+        "operationId": "get_deployment",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2314,8 +2928,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2326,6 +2940,18 @@
             "schema": {
               "$ref": "#/definitions/deployment"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2340,12 +2966,12 @@
           "Deploy requests"
         ],
         "summary": "List deploy operations",
-        "operationId": "list-deploy-operations",
+        "operationId": "list_deploy_operations",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the organization the deploy request belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2358,8 +2984,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the deploy request belongs to",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           },
@@ -2396,6 +3022,18 @@
               },
               "additionalProperties": false
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2410,12 +3048,12 @@
           "Deploy requests"
         ],
         "summary": "Complete a revert",
-        "operationId": "complete-a-revert",
+        "operationId": "complete_revert",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2428,8 +3066,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2440,6 +3078,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_request"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2454,12 +3104,12 @@
           "Deploy requests"
         ],
         "summary": "List deploy request reviews",
-        "operationId": "list-deploy-request-reviews",
+        "operationId": "list_deploy_request_reviews",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the organization the deploy request belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2472,8 +3122,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the deploy request belongs to",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2496,6 +3146,18 @@
               },
               "additionalProperties": false
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2508,12 +3170,12 @@
           "Deploy requests"
         ],
         "summary": "Review a deploy request",
-        "operationId": "review-a-deploy-request",
+        "operationId": "review_deploy_request",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the organization the deploy request belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2526,8 +3188,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the deploy request belongs to",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           },
@@ -2560,6 +3222,18 @@
             "schema": {
               "$ref": "#/definitions/deploy_review"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2574,12 +3248,12 @@
           "Deploy requests"
         ],
         "summary": "Skip revert period",
-        "operationId": "skip-revert-period",
+        "operationId": "skip_revert_period",
         "parameters": [
           {
             "type": "string",
-            "description": "The number of the deploy request",
-            "name": "number",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -2592,8 +3266,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the deploy request's organization",
-            "name": "organization",
+            "description": "The number of the deploy request",
+            "name": "number",
             "in": "path",
             "required": true
           }
@@ -2604,13 +3278,25 @@
             "schema": {
               "$ref": "#/definitions/deploy_request"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
     "/organizations/{organization}/databases/{name}": {
       "get": {
-        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |",
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |",
         "consumes": [
           "application/json"
         ],
@@ -2618,19 +3304,19 @@
           "Databases"
         ],
         "summary": "Get a database",
-        "operationId": "get-a-database",
+        "operationId": "get_database",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the database",
-            "name": "name",
+            "description": "The name of the organization the database belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the database belongs to",
-            "name": "organization",
+            "description": "The name of the database",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -2665,19 +3351,19 @@
           "Databases"
         ],
         "summary": "Delete a database",
-        "operationId": "delete-a-database",
+        "operationId": "delete_database",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the database",
-            "name": "name",
+            "description": "The name of the organization the database belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the database belongs to",
-            "name": "organization",
+            "description": "The name of the database",
+            "name": "name",
             "in": "path",
             "required": true
           }
@@ -2709,19 +3395,19 @@
           "Databases"
         ],
         "summary": "Update database settings",
-        "operationId": "update-database-settings",
+        "operationId": "update_database_settings",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the database",
-            "name": "name",
+            "description": "The name of the organization the database belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the database belongs to",
-            "name": "organization",
+            "description": "The name of the database",
+            "name": "name",
             "in": "path",
             "required": true
           },
@@ -2796,7 +3482,7 @@
     },
     "/organizations/{organization}/databases/{name}/read-only-regions": {
       "get": {
-        "description": "List read-only regions for the database's default branch\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |",
+        "description": "List read-only regions for the database's default branch\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |",
         "consumes": [
           "application/json"
         ],
@@ -2804,19 +3490,19 @@
           "Databases"
         ],
         "summary": "List read-only regions",
-        "operationId": "list-read-only-regions",
+        "operationId": "list_read_only_regions",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the database",
-            "name": "name",
+            "description": "The name of the organization the database belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the database belongs to",
-            "name": "organization",
+            "description": "The name of the database",
+            "name": "name",
             "in": "path",
             "required": true
           },
@@ -2871,7 +3557,7 @@
     },
     "/organizations/{organization}/databases/{name}/regions": {
       "get": {
-        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |",
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |",
         "consumes": [
           "application/json"
         ],
@@ -2879,19 +3565,19 @@
           "Databases"
         ],
         "summary": "List database regions",
-        "operationId": "list-database-regions",
+        "operationId": "list_database_regions",
         "parameters": [
           {
             "type": "string",
-            "description": "The name of the database",
-            "name": "name",
+            "description": "The name of the organization the database belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the database belongs to",
-            "name": "organization",
+            "description": "The name of the database",
+            "name": "name",
             "in": "path",
             "required": true
           },
@@ -2944,6 +3630,303 @@
         }
       }
     },
+    "/organizations/{organization}/invoices": {
+      "get": {
+        "description": "Get the invoices for an organization\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_invoices`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_invoices` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get invoices",
+        "operationId": "list_invoices",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "number",
+            "default": 1,
+            "description": "If provided, specifies the page offset of returned results",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "number",
+            "default": 25,
+            "description": "If provided, specifies the number of returned results",
+            "name": "per_page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets the invoices for an organization",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "total",
+                      "billing_period_start",
+                      "billing_period_end"
+                    ],
+                    "properties": {
+                      "billing_period_end": {
+                        "description": "End of the billing period",
+                        "type": "string"
+                      },
+                      "billing_period_start": {
+                        "description": "Start of the billing period",
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "The ID for the invoice",
+                        "type": "string"
+                      },
+                      "total": {
+                        "description": "The total amount of the invoice",
+                        "type": "number"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization}/invoices/{id}": {
+      "get": {
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_invoices`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_invoices` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get an invoice",
+        "operationId": "get_invoice",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The ID of the invoice",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns an invoice",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "total",
+                "billing_period_start",
+                "billing_period_end"
+              ],
+              "properties": {
+                "billing_period_end": {
+                  "description": "End of the billing period",
+                  "type": "string"
+                },
+                "billing_period_start": {
+                  "description": "Start of the billing period",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "The ID for the invoice",
+                  "type": "string"
+                },
+                "total": {
+                  "description": "The total amount of the invoice",
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization}/invoices/{id}/line-items": {
+      "get": {
+        "description": "Get the line items for an invoice\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_invoices`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_invoices` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get invoice line items",
+        "operationId": "get_invoice_line_items",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The ID of the invoice",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets the line items for an invoice",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "subtotal",
+                      "description",
+                      "metric_name",
+                      "database_id",
+                      "database_name",
+                      "resource"
+                    ],
+                    "properties": {
+                      "database_id": {
+                        "description": "The ID for the billed database",
+                        "type": "string"
+                      },
+                      "database_name": {
+                        "description": "The name for the billed database",
+                        "type": "string"
+                      },
+                      "description": {
+                        "description": "The description for the line item",
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "The ID for the line item",
+                        "type": "string"
+                      },
+                      "metric_name": {
+                        "description": "The metric describes what is being billed for. Such as PS_10 or Storage.",
+                        "type": "string"
+                      },
+                      "resource": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "created_at",
+                          "updated_at",
+                          "deleted_at"
+                        ],
+                        "properties": {
+                          "created_at": {
+                            "description": "When the resource was created",
+                            "type": "string"
+                          },
+                          "deleted_at": {
+                            "description": "When the resource was deleted, if deleted",
+                            "type": "string"
+                          },
+                          "id": {
+                            "description": "The ID for the resource",
+                            "type": "string"
+                          },
+                          "name": {
+                            "description": "The name for the resource",
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "description": "When the resource was last updated",
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "subtotal": {
+                        "description": "The total for the line item",
+                        "type": "number"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/organizations/{organization}/oauth-applications": {
       "get": {
         "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_oauth_applications`\n\n",
@@ -2954,7 +3937,7 @@
           "OAuth applications"
         ],
         "summary": "List OAuth applications",
-        "operationId": "list-oauth-applications",
+        "operationId": "list_oauth_applications",
         "parameters": [
           {
             "type": "string",
@@ -3022,19 +4005,19 @@
           "OAuth applications"
         ],
         "summary": "Get an OAuth application",
-        "operationId": "get-an-oauth-application",
+        "operationId": "get_oauth_application",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the OAuth application",
-            "name": "application_id",
+            "description": "The name of the organization the OAuth application belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the OAuth application belongs to",
-            "name": "organization",
+            "description": "The ID of the OAuth application",
+            "name": "application_id",
             "in": "path",
             "required": true
           }
@@ -3071,19 +4054,19 @@
           "OAuth applications"
         ],
         "summary": "List OAuth tokens",
-        "operationId": "list-oauth-tokens",
+        "operationId": "list_oauth_tokens",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the OAuth application",
-            "name": "application_id",
+            "description": "The name of the organization the OAuth application belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the OAuth application belongs to",
-            "name": "organization",
+            "description": "The ID of the OAuth application",
+            "name": "application_id",
             "in": "path",
             "required": true
           },
@@ -3146,12 +4129,12 @@
           "OAuth applications"
         ],
         "summary": "Get an OAuth token",
-        "operationId": "get-an-oauth-token",
+        "operationId": "get_oauth_token",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the OAuth application token",
-            "name": "token_id",
+            "description": "The name of the organization the OAuth application belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -3164,8 +4147,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the OAuth application belongs to",
-            "name": "organization",
+            "description": "The ID of the OAuth application token",
+            "name": "token_id",
             "in": "path",
             "required": true
           }
@@ -3200,12 +4183,12 @@
           "OAuth applications"
         ],
         "summary": "Delete an OAuth token",
-        "operationId": "delete-an-oauth-token",
+        "operationId": "delete_oauth_token",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the OAuth application token",
-            "name": "token_id",
+            "description": "The name of the organization the OAuth application belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
@@ -3218,8 +4201,8 @@
           },
           {
             "type": "string",
-            "description": "The name of the organization the OAuth application belongs to",
-            "name": "organization",
+            "description": "The ID of the OAuth application token",
+            "name": "token_id",
             "in": "path",
             "required": true
           }
@@ -3253,19 +4236,19 @@
           "OAuth tokens"
         ],
         "summary": "Create or renew an OAuth token",
-        "operationId": "create-or-renew-an-oauth-token",
+        "operationId": "create_oauth_token",
         "parameters": [
           {
             "type": "string",
-            "description": "The ID of the OAuth application",
-            "name": "id",
+            "description": "The name of the organization the OAuth application belongs to",
+            "name": "organization",
             "in": "path",
             "required": true
           },
           {
             "type": "string",
-            "description": "The name of the organization the OAuth application belongs to",
-            "name": "organization",
+            "description": "The ID of the OAuth application",
+            "name": "id",
             "in": "path",
             "required": true
           },
@@ -3335,6 +4318,105 @@
         }
       }
     },
+    "/regions": {
+      "get": {
+        "description": "Endpoint is available without authentication.\n",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Regions"
+        ],
+        "summary": "List public regions",
+        "operationId": "get_regions",
+        "parameters": [
+          {
+            "type": "number",
+            "default": 1,
+            "description": "If provided, specifies the page offset of returned results",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "number",
+            "default": 25,
+            "description": "If provided, specifies the number of returned results",
+            "name": "per_page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the available public PlanetScale regions",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "provider",
+                      "public_ip_addresses",
+                      "display_name",
+                      "location",
+                      "slug"
+                    ],
+                    "properties": {
+                      "display_name": {
+                        "description": "Name of the region",
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "The ID of the region",
+                        "type": "string"
+                      },
+                      "location": {
+                        "description": "Location of the region",
+                        "type": "string"
+                      },
+                      "provider": {
+                        "description": "Provider for the region (ex. AWS)",
+                        "type": "string"
+                      },
+                      "public_ip_addresses": {
+                        "description": "Public IP addresses for the region",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "slug": {
+                        "description": "The slug of the region",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/user": {
       "get": {
         "description": "Get the user associated with this service token\n### Authorization\nA   OAuth token must have at least one of the following   scopes in order to use this API endpoint:\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| User | `read_user` |",
@@ -3345,7 +4427,7 @@
           "Users"
         ],
         "summary": "Get current user",
-        "operationId": "get-current-user",
+        "operationId": "get_current_user",
         "responses": {
           "200": {
             "description": "Returns the current user that is associated with this service token",
@@ -3397,7 +4479,6 @@
       "type": "object",
       "required": [
         "id",
-        "actor",
         "name",
         "state",
         "size",
@@ -3405,7 +4486,6 @@
         "created_at",
         "updated_at",
         "required",
-        "backup_policy",
         "schema_snapshot"
       ],
       "properties": {
@@ -3421,7 +4501,7 @@
         },
         "estimated_storage_cost": {
           "description": "The estimated storage cost of the backup",
-          "type": "string"
+          "type": "number"
         },
         "id": {
           "description": "The ID of the backup",
@@ -3566,13 +4646,10 @@
         "production",
         "sharded",
         "html_url",
-        "cluster_rate_name"
+        "cluster_rate_name",
+        "safe_migrations"
       ],
       "properties": {
-        "access_host_url": {
-          "description": "The access host URL for the branch. This is a legacy field, use `mysql_edge_address`",
-          "type": "string"
-        },
         "actor": {
           "$ref": "#/definitions/actor"
         },
@@ -3590,10 +4667,6 @@
         },
         "id": {
           "description": "The ID of the branch",
-          "type": "string"
-        },
-        "initial_restore_id": {
-          "description": "The ID of the backup from which the branch was restored",
           "type": "string"
         },
         "mysql_address": {
@@ -3629,6 +4702,10 @@
         },
         "restored_from_branch": {
           "$ref": "#/definitions/restored_from_branch"
+        },
+        "safe_migrations": {
+          "description": "Whether or not the branch has safe migrations enabled",
+          "type": "boolean"
         },
         "schema_last_updated_at": {
           "description": "When the schema for the branch was last updated",
@@ -3771,7 +4848,6 @@
       "type": "object",
       "required": [
         "id",
-        "type",
         "url",
         "branches_url",
         "branches_count",
@@ -3780,7 +4856,6 @@
         "issues_count",
         "multiple_admins_required_for_deletion",
         "ready",
-        "at_development_branch_limit",
         "at_backup_restore_branches_limit",
         "region",
         "html_url",
@@ -3807,10 +4882,6 @@
         },
         "at_backup_restore_branches_limit": {
           "description": "If the database has reached its backup restored branch limit",
-          "type": "boolean"
-        },
-        "at_development_branch_limit": {
-          "description": "If the database has reached its development branch limit",
           "type": "boolean"
         },
         "automatic_migrations": {
@@ -3920,10 +4991,6 @@
         },
         "state": {
           "description": "State of the database",
-          "type": "string"
-        },
-        "type": {
-          "description": "The object type",
           "type": "string"
         },
         "updated_at": {
@@ -4043,6 +5110,7 @@
         "actor",
         "closed_by",
         "branch",
+        "branch_id",
         "branch_deleted",
         "branch_deleted_by",
         "branch_deleted_at",
@@ -4083,6 +5151,10 @@
         "branch_deleted_by": {
           "$ref": "#/definitions/actor"
         },
+        "branch_id": {
+          "description": "The id of the branch the deploy request was created from",
+          "type": "string"
+        },
         "closed_at": {
           "description": "When the deploy request was closed",
           "type": "string"
@@ -4117,6 +5189,7 @@
             "complete_error",
             "complete_pending_revert",
             "in_progress_revert",
+            "in_progress_revert_vschema",
             "complete_revert",
             "complete_revert_error",
             "cancelled",
@@ -4178,6 +5251,7 @@
         "actor",
         "closed_by",
         "branch",
+        "branch_id",
         "branch_deleted",
         "branch_deleted_by",
         "branch_deleted_at",
@@ -4219,6 +5293,10 @@
         "branch_deleted_by": {
           "$ref": "#/definitions/actor"
         },
+        "branch_id": {
+          "description": "The id of the branch the deploy request was created from",
+          "type": "string"
+        },
         "closed_at": {
           "description": "When the deploy request was closed",
           "type": "string"
@@ -4256,6 +5334,7 @@
             "complete_error",
             "complete_pending_revert",
             "in_progress_revert",
+            "in_progress_revert_vschema",
             "complete_revert",
             "complete_revert_error",
             "cancelled",
@@ -4426,6 +5505,7 @@
             "complete_error",
             "complete_pending_revert",
             "in_progress_revert",
+            "in_progress_revert_vschema",
             "complete_revert",
             "complete_revert_error",
             "cancelled",
@@ -4898,25 +5978,15 @@
         "sso_directory",
         "single_tenancy",
         "has_past_due_invoices",
-        "can_create_databases",
-        "free_databases_remaining",
         "database_count",
         "sleeping_database_count",
-        "admin_only_production_access",
-        "idp_managed_roles"
+        "idp_managed_roles",
+        "invoice_budget_amount"
       ],
       "properties": {
-        "admin_only_production_access": {
-          "description": "Whether or not only administrators can access production branches in the organization",
-          "type": "boolean"
-        },
         "billing_email": {
           "description": "The billing email of the organization",
           "type": "string"
-        },
-        "can_create_databases": {
-          "description": "Whether or not more databases can be created in the organization",
-          "type": "boolean"
         },
         "created_at": {
           "description": "When the organization was created",
@@ -4932,10 +6002,6 @@
         "flags": {
           "$ref": "#/definitions/flags"
         },
-        "free_databases_remaining": {
-          "description": "The number of remaining free databases that can be created in the organization",
-          "type": "number"
-        },
         "has_past_due_invoices": {
           "description": "Whether or not the organization has past due billing invoices",
           "type": "boolean"
@@ -4947,6 +6013,10 @@
         "idp_managed_roles": {
           "description": "Whether or not the IdP provider is be responsible for managing roles in PlanetScale",
           "type": "boolean"
+        },
+        "invoice_budget_amount": {
+          "description": "The expected monthly budget for the organization",
+          "type": "number"
         },
         "name": {
           "description": "The name of the organization",
@@ -4996,6 +6066,7 @@
         "created_at",
         "ttl_seconds",
         "access_host_url",
+        "replica",
         "renewable",
         "database_branch"
       ],
@@ -5037,6 +6108,10 @@
           "description": "Whether or not the password can be renewed",
           "type": "boolean"
         },
+        "replica": {
+          "description": "Whether or not the password is for a read replica",
+          "type": "boolean"
+        },
         "role": {
           "description": "The role for the password",
           "type": "string"
@@ -5061,6 +6136,7 @@
         "created_at",
         "ttl_seconds",
         "access_host_url",
+        "replica",
         "renewable",
         "database_branch",
         "plain_text"
@@ -5105,6 +6181,10 @@
         },
         "renewable": {
           "description": "Whether or not the password can be renewed",
+          "type": "boolean"
+        },
+        "replica": {
+          "description": "Whether or not the password is for a read replica",
           "type": "boolean"
         },
         "role": {
@@ -5193,6 +6273,7 @@
             "complete_error",
             "complete_pending_revert",
             "in_progress_revert",
+            "in_progress_revert_vschema",
             "complete_revert",
             "complete_revert_error",
             "cancelled",
@@ -5393,6 +6474,9 @@
     },
     "user": {
       "type": "object",
+      "required": [
+        "default_organization"
+      ],
       "properties": {
         "avatar_url": {
           "description": "The URL source of the user's avatar",
@@ -5402,9 +6486,38 @@
           "description": "When the user was created",
           "type": "string"
         },
-        "default_organization_id": {
-          "description": "The default organization for the user",
-          "type": "string"
+        "default_organization": {
+          "type": "object",
+          "required": [
+            "id",
+            "name",
+            "created_at",
+            "updated_at",
+            "deleted_at"
+          ],
+          "properties": {
+            "created_at": {
+              "description": "When the resource was created",
+              "type": "string"
+            },
+            "deleted_at": {
+              "description": "When the resource was deleted, if deleted",
+              "type": "string"
+            },
+            "id": {
+              "description": "The ID for the resource",
+              "type": "string"
+            },
+            "name": {
+              "description": "The name for the resource",
+              "type": "string"
+            },
+            "updated_at": {
+              "description": "When the resource was last updated",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
         },
         "directory_managed": {
           "description": "Whether or not the user is managed by a WorkOS directory",
@@ -5470,12 +6583,16 @@
       "name": "Backups"
     },
     {
-      "description": "          API endpoints for managing databases within an organization.\n",
-      "name": "Databases"
-    },
-    {
       "description": "          API endpoints for managing database branch passwords.\n",
       "name": "Database branch passwords"
+    },
+    {
+      "description": "            API endpoints for managing database deploy requests.\n",
+      "name": "Deploy requests"
+    },
+    {
+      "description": "          API endpoints for managing databases within an organization.\n",
+      "name": "Databases"
     },
     {
       "description": "          API endpoints for fetching OAuth applications.\n",
@@ -5490,12 +6607,12 @@
       "name": "Organizations"
     },
     {
-      "description": "          API endpoints for fetching user information.\n",
-      "name": "Users"
+      "description": "          API endpoints for fetching invoice information.\n",
+      "name": "Invoices"
     },
     {
-      "description": "            API endpoints for managing database deploy requests.\n",
-      "name": "Deploy requests"
+      "description": "          API endpoints for fetching user information.\n",
+      "name": "Users"
     }
   ],
   "x-readme": {

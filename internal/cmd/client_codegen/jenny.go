@@ -236,14 +236,15 @@ func genClientCall(
 	reqBodyTypeName string,
 	responseTypeNames map[int]string,
 ) error {
-
 	args := []jen.Code{jen.Id("ctx").Qual("context", "Context")}
 
 	path = strings.TrimPrefix(path, "/")
+	// log.Printf("JOE: %s %s", verb, path)
 
 	pathBuilderArg, pathArgs := pathInterpolator(path, pathArgs)
 	for _, pathArg := range pathArgs {
 		argName := lowerSnakeToCamel(pathArg.Name)
+		// log.Printf("JOE: %s %s", pathArg.Name, argName)
 
 		argF := jen.Id(argName)
 		switch pathArg.Type {
@@ -370,12 +371,10 @@ func genClientCall(
 		g.Defer().Id("res").Dot("Body").Dot("Close").Call()
 
 		g.Switch(jen.Id("res").Dot("StatusCode")).BlockFunc(func(g *jen.Group) {
-
 			for _, code := range codes {
 				returnValName := "res" + strconv.Itoa(code)
 				returnValTypeName := responseTypeNames[code]
 				if code < 400 {
-
 					g.Case(jen.Lit(code)).Block(
 						jen.Id(returnValName).Op("=").New(jen.Id(returnValTypeName)),
 						jen.Id("err").Op("=").Qual("encoding/json", "NewDecoder").Call(jen.Id("res").Dot("Body")).Dot("Decode").Call(jen.Op("&").Id(returnValName)),

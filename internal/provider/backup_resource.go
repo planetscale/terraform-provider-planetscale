@@ -43,7 +43,7 @@ type backupResourceModel struct {
 	Actor                types.Object  `tfsdk:"actor"`
 	BackupPolicy         types.Object  `tfsdk:"backup_policy"`
 	CreatedAt            types.String  `tfsdk:"created_at"`
-	EstimatedStorageCost types.String  `tfsdk:"estimated_storage_cost"`
+	EstimatedStorageCost types.Float64 `tfsdk:"estimated_storage_cost"`
 	Id                   types.String  `tfsdk:"id"`
 	Required             types.Bool    `tfsdk:"required"`
 	RestoredBranches     types.List    `tfsdk:"restored_branches"`
@@ -76,7 +76,7 @@ func backupResourceFromClient(ctx context.Context, backup *planetscale.Backup, o
 		Name:                 types.StringValue(backup.Name),
 		Actor:                actor,
 		CreatedAt:            types.StringValue(backup.CreatedAt),
-		EstimatedStorageCost: types.StringValue(backup.EstimatedStorageCost),
+		EstimatedStorageCost: types.Float64Value(backup.EstimatedStorageCost),
 		Id:                   types.StringValue(backup.Id),
 		Required:             types.BoolValue(backup.Required),
 		RestoredBranches:     restoredBranch,

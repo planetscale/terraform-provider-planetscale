@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -118,7 +119,8 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 
 	var reqBodyStructName string
 	if reqBody != nil {
-		reqBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Req"
+		// reqBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Req"
+		reqBodyStructName = snakeToCamel(removeFillerWords(operation.ID)) + "Req"
 		if err := genParamStruct(defns, f, reqBodyStructName, reqBody.Schema); err != nil {
 			return fmt.Errorf("generating call param struct: %w", err)
 		}
@@ -134,11 +136,15 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 		}
 	}
 	for _, code := range resCodes {
-		resBodyStructName := kebabToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
+		// resBodyStructName := kebabToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
+		resBodyStructName := snakeToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
+		log.Printf("JOE: resBodyStructName: %s\n", resBodyStructName)
 		res := operation.Responses.StatusCodeResponses[code]
 		if code < 400 {
 			if successResponseTypes == 1 {
-				resBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Res"
+				// resBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Res"
+				resBodyStructName = snakeToCamel(removeFillerWords(operation.ID)) + "Res"
+				log.Printf("JOE: resBodyStructName-2: %s\n", resBodyStructName)
 			}
 			respSchema := res.ResponseProps.Schema
 
@@ -164,7 +170,9 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 		responses[code] = resBodyStructName
 	}
 
-	clientCallFuncName := kebabToCamel(removeFillerWords(operation.ID))
+	// clientCallFuncName := kebabToCamel(removeFillerWords(operation.ID))
+	log.Printf("JOE: clientcall: %s", snakeToCamel(removeFillerWords(operation.ID)))
+	clientCallFuncName := snakeToCamel(removeFillerWords(operation.ID))
 	if err := genClientCall(f, path, verb, clientCallFuncName, pathParams, queryParams, reqBodyStructName, responses); err != nil {
 		return fmt.Errorf("generating client call method: %w", err)
 	}
@@ -173,8 +181,11 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 }
 
 func removeFillerWords(name string) string {
+	name = strings.ReplaceAll(name, "post", "create")
+	name = strings.ReplaceAll(name, "patch", "update")
 	name = strings.ReplaceAll(name, "-an-", "-")
 	name = strings.ReplaceAll(name, "-a-", "-")
+	log.Printf("JOE: removeFillerWords(%q) = %q", orig, name)
 	return name
 }
 
@@ -183,6 +194,7 @@ func kebabToCamel(kebab string) string {
 	for _, w := range strings.Split(kebab, "-") {
 		out.WriteString(cases.Title(language.AmericanEnglish).String(w))
 	}
+	log.Printf("JOE: kebabToCamel(%q) = %q", kebab, out.String())
 	return out.String()
 }
 
@@ -191,10 +203,12 @@ func snakeToCamel(snake string) string {
 	for _, w := range strings.Split(snake, "_") {
 		out.WriteString(cases.Title(language.AmericanEnglish).String(w))
 	}
+	log.Printf("JOE: snakeToCamel(%q) = %q", snake, out.String())
 	return out.String()
 }
 
 func lowerSnakeToCamel(snake string) string {
+	// log.Printf("JOE: lowerSnakeToCamel(%q)", snake)
 	var out strings.Builder
 	for i, w := range strings.Split(snake, "_") {
 		if i == 0 {
@@ -203,6 +217,7 @@ func lowerSnakeToCamel(snake string) string {
 			out.WriteString(cases.Title(language.AmericanEnglish).String(w))
 		}
 	}
+	log.Printf("JOE: lowerSnakeToCamel(%q) = %q", snake, out.String())
 	return out.String()
 }
 

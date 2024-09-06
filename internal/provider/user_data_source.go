@@ -137,9 +137,9 @@ func (d *userDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 	state := userDataSourceModel{
-		AvatarUrl:               res200.AvatarUrl,
-		CreatedAt:               res200.CreatedAt,
-		DefaultOrganizationId:   res200.DefaultOrganizationId,
+		AvatarUrl: res200.AvatarUrl,
+		CreatedAt: res200.CreatedAt,
+		// DefaultOrganizationId:   res200.DefaultOrganizationId,
 		DirectoryManaged:        res200.DirectoryManaged,
 		DisplayName:             res200.DisplayName,
 		Email:                   res200.Email,

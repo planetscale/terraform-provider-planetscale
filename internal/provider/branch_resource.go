@@ -41,15 +41,15 @@ type branchResourceModel struct {
 	Organization types.String `tfsdk:"organization"`
 	Database     types.String `tfsdk:"database"`
 
-	Name                        types.String  `tfsdk:"name"`
-	ParentBranch                types.String  `tfsdk:"parent_branch"`
-	AccessHostUrl               types.String  `tfsdk:"access_host_url"`
-	Actor                       types.Object  `tfsdk:"actor"`
-	ClusterRateName             types.String  `tfsdk:"cluster_rate_name"`
-	CreatedAt                   types.String  `tfsdk:"created_at"`
-	HtmlUrl                     types.String  `tfsdk:"html_url"`
-	Id                          types.String  `tfsdk:"id"`
-	InitialRestoreId            types.String  `tfsdk:"initial_restore_id"`
+	Name         types.String `tfsdk:"name"`
+	ParentBranch types.String `tfsdk:"parent_branch"`
+	// AccessHostUrl               types.String  `tfsdk:"access_host_url"`
+	Actor           types.Object `tfsdk:"actor"`
+	ClusterRateName types.String `tfsdk:"cluster_rate_name"`
+	CreatedAt       types.String `tfsdk:"created_at"`
+	HtmlUrl         types.String `tfsdk:"html_url"`
+	Id              types.String `tfsdk:"id"`
+	// InitialRestoreId            types.String  `tfsdk:"initial_restore_id"`
 	MysqlAddress                types.String  `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String  `tfsdk:"mysql_edge_address"`
 	Region                      types.Object  `tfsdk:"region"`
@@ -77,17 +77,17 @@ func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, o
 		Organization: organization,
 		Database:     database,
 
-		Actor:                       actor,
-		Region:                      region,
-		RestoredFromBranch:          restoredFromBranch,
-		Name:                        types.StringValue(branch.Name),
-		ParentBranch:                types.StringPointerValue(branch.ParentBranch),
-		AccessHostUrl:               types.StringPointerValue(branch.AccessHostUrl),
-		ClusterRateName:             types.StringValue(branch.ClusterRateName),
-		CreatedAt:                   types.StringValue(branch.CreatedAt),
-		HtmlUrl:                     types.StringValue(branch.HtmlUrl),
-		Id:                          types.StringValue(branch.Id),
-		InitialRestoreId:            types.StringPointerValue(branch.InitialRestoreId),
+		Actor:              actor,
+		Region:             region,
+		RestoredFromBranch: restoredFromBranch,
+		Name:               types.StringValue(branch.Name),
+		ParentBranch:       types.StringPointerValue(branch.ParentBranch),
+		// AccessHostUrl:               types.StringPointerValue(branch.AccessHostUrl),
+		ClusterRateName: types.StringValue(branch.ClusterRateName),
+		CreatedAt:       types.StringValue(branch.CreatedAt),
+		HtmlUrl:         types.StringValue(branch.HtmlUrl),
+		Id:              types.StringValue(branch.Id),
+		// InitialRestoreId:            types.StringPointerValue(branch.InitialRestoreId),
 		MysqlAddress:                types.StringValue(branch.MysqlAddress),
 		MysqlEdgeAddress:            types.StringValue(branch.MysqlEdgeAddress),
 		Production:                  types.BoolValue(branch.Production),
