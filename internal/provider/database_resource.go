@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -16,6 +17,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
 
@@ -375,6 +377,36 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError("Unable to create databases", "no data")
 		return
 	}
+
+	// wait for db to enter ready state
+	createState := &retry.StateChangeConf{
+		Delay:      5 * time.Second, // initial delay before the first check
+		Timeout:    10 * time.Minute,
+		MinTimeout: 5 * time.Second,
+
+		Pending: []string{"not-ready"},
+		Target:  []string{"ready"},
+
+		Refresh: func() (interface{}, string, error) {
+			res, err := r.client.GetDatabase(ctx, org.ValueString(), name.ValueString())
+			if err != nil {
+				return nil, "", err
+			}
+			if res.Database.Ready {
+				return res, "ready", nil
+			}
+			return res, "not-ready", nil
+		},
+	}
+	_, err = createState.WaitForStateContext(ctx)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to create database",
+			fmt.Sprintf("Database %s never became ready; got error: %s", name.ValueString(), err),
+		)
+		return
+	}
+
 	data = databaseResourcefromClient(ctx, &res.Database, data.Organization, data.ClusterSize, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return

@@ -46,6 +46,18 @@ Note that this provider builds on top of the OpenAPI part of the PlanetScale API
 
 Contributions should follow this workflow, or integrate with it.
 
+### Tests
+
+You will need to set either `PLANETSCALE_ACCESS_TOKEN` or `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN` to run acceptance tests.
+
+The org to create resources under is currently hardcoded in the tests. You may need to change this to match your own org.  Acceptance tests create real resources in your PlanetScale org.
+
+Run all tests: `make testacc`
+
+Run specific test: `make testacc TESTARGS='-run ^TestAccBranchResource$'`
+
+Debug logs: `TF_PS_PROVIDER_DEBUG=1 TF_LOG=debug make testacc` (or `TF_LOG=trace`)
+
 ## License
 
 MPL v2.0
