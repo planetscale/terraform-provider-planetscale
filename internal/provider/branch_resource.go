@@ -41,15 +41,13 @@ type branchResourceModel struct {
 	Organization types.String `tfsdk:"organization"`
 	Database     types.String `tfsdk:"database"`
 
-	Name         types.String `tfsdk:"name"`
-	ParentBranch types.String `tfsdk:"parent_branch"`
-	// AccessHostUrl               types.String  `tfsdk:"access_host_url"`
-	Actor           types.Object `tfsdk:"actor"`
-	ClusterRateName types.String `tfsdk:"cluster_rate_name"`
-	CreatedAt       types.String `tfsdk:"created_at"`
-	HtmlUrl         types.String `tfsdk:"html_url"`
-	Id              types.String `tfsdk:"id"`
-	// InitialRestoreId            types.String  `tfsdk:"initial_restore_id"`
+	Name                        types.String  `tfsdk:"name"`
+	ParentBranch                types.String  `tfsdk:"parent_branch"`
+	Actor                       types.Object  `tfsdk:"actor"`
+	ClusterRateName             types.String  `tfsdk:"cluster_rate_name"`
+	CreatedAt                   types.String  `tfsdk:"created_at"`
+	HtmlUrl                     types.String  `tfsdk:"html_url"`
+	Id                          types.String  `tfsdk:"id"`
 	MysqlAddress                types.String  `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String  `tfsdk:"mysql_edge_address"`
 	Region                      types.Object  `tfsdk:"region"`
@@ -77,17 +75,15 @@ func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, o
 		Organization: organization,
 		Database:     database,
 
-		Actor:              actor,
-		Region:             region,
-		RestoredFromBranch: restoredFromBranch,
-		Name:               types.StringValue(branch.Name),
-		ParentBranch:       types.StringPointerValue(branch.ParentBranch),
-		// AccessHostUrl:               types.StringPointerValue(branch.AccessHostUrl),
-		ClusterRateName: types.StringValue(branch.ClusterRateName),
-		CreatedAt:       types.StringValue(branch.CreatedAt),
-		HtmlUrl:         types.StringValue(branch.HtmlUrl),
-		Id:              types.StringValue(branch.Id),
-		// InitialRestoreId:            types.StringPointerValue(branch.InitialRestoreId),
+		Actor:                       actor,
+		Region:                      region,
+		RestoredFromBranch:          restoredFromBranch,
+		Name:                        types.StringValue(branch.Name),
+		ParentBranch:                types.StringPointerValue(branch.ParentBranch),
+		ClusterRateName:             types.StringValue(branch.ClusterRateName),
+		CreatedAt:                   types.StringValue(branch.CreatedAt),
+		HtmlUrl:                     types.StringValue(branch.HtmlUrl),
+		Id:                          types.StringValue(branch.Id),
 		MysqlAddress:                types.StringValue(branch.MysqlAddress),
 		MysqlEdgeAddress:            types.StringValue(branch.MysqlEdgeAddress),
 		Production:                  types.BoolValue(branch.Production),
@@ -149,10 +145,6 @@ func (r *branchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: "The ID of the branch.",
 				Computed:    true,
 			},
-			"access_host_url": schema.StringAttribute{
-				Description: "The access host URL for the branch. This is a legacy field, use `mysql_edge_address`.",
-				Computed:    true,
-			},
 			"actor": schema.SingleNestedAttribute{
 				Description: "The actor who created this branch.",
 				Computed:    true,
@@ -168,10 +160,6 @@ func (r *branchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			},
 			"html_url": schema.StringAttribute{
 				Description: "Planetscale app URL for the branch.",
-				Computed:    true,
-			},
-			"initial_restore_id": schema.StringAttribute{
-				Description: "The ID of the backup from which the branch was restored.",
 				Computed:    true,
 			},
 			"mysql_address": schema.StringAttribute{

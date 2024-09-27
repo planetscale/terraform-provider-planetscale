@@ -12,10 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 )
@@ -47,6 +47,8 @@ type backupResourceModel struct {
 	Id                   types.String  `tfsdk:"id"`
 	Required             types.Bool    `tfsdk:"required"`
 	RestoredBranches     types.List    `tfsdk:"restored_branches"`
+	RetentionUnit        types.String  `tfsdk:"retention_unit"`
+	RetentionValue       types.Float64 `tfsdk:"retention_value"`
 	Size                 types.Float64 `tfsdk:"size"`
 	State                types.String  `tfsdk:"state"`
 	UpdatedAt            types.String  `tfsdk:"updated_at"`
@@ -126,13 +128,27 @@ Known limitations:
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"backup_policy": schema.SingleNestedAttribute{
-				Description: "The policy used by the backup.",
+			"retention_unit": schema.StringAttribute{
+				Description: "The unit for the retention period of the backup policy.",
 				Required:    true,
-				Attributes:  backupPolicyResourceAttribute,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"retention_value": schema.Float64Attribute{
+				Description: "A number value for the retention period of the backup policy.",
+				Required:    true,
+				PlanModifiers: []planmodifier.Float64{
+					float64planmodifier.RequiresReplace(),
+				},
 			},
 
 			// read only
+			"backup_policy": schema.SingleNestedAttribute{
+				Description: "The policy used by the backup.",
+				Computed:    true,
+				Attributes:  backupPolicyResourceAttribute,
+			},
 			"actor": schema.SingleNestedAttribute{
 				Description: ".",
 				Computed:    true,
@@ -146,7 +162,7 @@ Known limitations:
 				Description: "When the backup was created.",
 				Computed:    true,
 			},
-			"estimated_storage_cost": schema.StringAttribute{
+			"estimated_storage_cost": schema.Float64Attribute{
 				Description: "The estimated storage cost of the backup.",
 				Computed:    true,
 			},
@@ -203,7 +219,8 @@ func (r *backupResource) Create(ctx context.Context, req resource.CreateRequest,
 	database := data.Database
 	branch := data.Branch
 	name := data.Name
-	backupPolicy := data.BackupPolicy
+	retentionUnit := data.RetentionUnit
+	retentionValue := data.RetentionValue
 
 	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
 		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
@@ -221,20 +238,19 @@ func (r *backupResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddAttributeError(path.Root("name"), "name is required", "a name must be provided and cannot be empty")
 		return
 	}
-	if backupPolicy.IsNull() || backupPolicy.IsUnknown() {
-		resp.Diagnostics.AddAttributeError(path.Root("backup_policy"), "backup_policy is required", "a backup_policy must be provided and cannot be empty")
+	if retentionUnit.IsNull() || retentionUnit.IsUnknown() || retentionUnit.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("retention_unit"), "retention_unit is required", "a retention_unit must be provided and cannot be empty")
 		return
 	}
-	var bp backupPolicyDataSourceModel
-	resp.Diagnostics.Append(backupPolicy.As(ctx, &bp, basetypes.ObjectAsOptions{})...)
-	if resp.Diagnostics.HasError() {
+	if retentionValue.IsNull() || retentionValue.IsUnknown() || retentionValue.ValueFloat64() == 0 {
+		resp.Diagnostics.AddAttributeError(path.Root("retention_value"), "retention_value is required", "a retention_value must be provided and cannot be empty")
 		return
 	}
 
 	createReq := planetscale.CreateBackupReq{
 		Name:           name.ValueStringPointer(),
-		RetentionUnit:  bp.RetentionUnit.ValueStringPointer(),
-		RetentionValue: bp.RetentionValue.ValueFloat64Pointer(),
+		RetentionUnit:  retentionUnit.ValueStringPointer(),
+		RetentionValue: retentionValue.ValueFloat64Pointer(),
 	}
 	res, err := r.client.CreateBackup(ctx, org.ValueString(), database.ValueString(), branch.ValueString(), createReq)
 	if err != nil {
@@ -250,6 +266,9 @@ func (r *backupResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	data.RetentionUnit = retentionUnit
+	data.RetentionValue = retentionValue
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -267,6 +286,8 @@ func (r *backupResource) Read(ctx context.Context, req resource.ReadRequest, res
 	database := data.Database
 	branch := data.Branch
 	id := data.Id
+	retentionUnit := data.RetentionUnit
+	retentionValue := data.RetentionValue
 
 	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
 		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
@@ -282,6 +303,14 @@ func (r *backupResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 	if id.IsNull() || id.IsUnknown() || id.ValueString() == "" {
 		resp.Diagnostics.AddAttributeError(path.Root("id"), "id is required", "an ID must be provided and cannot be empty")
+		return
+	}
+	if retentionUnit.IsNull() || retentionUnit.IsUnknown() || retentionUnit.ValueString() == "" {
+		resp.Diagnostics.AddAttributeError(path.Root("retention_unit"), "retention_unit is required", "a retention_unit must be provided and cannot be empty")
+		return
+	}
+	if retentionValue.IsNull() || retentionValue.IsUnknown() || retentionValue.ValueFloat64() == 0 {
+		resp.Diagnostics.AddAttributeError(path.Root("retention_value"), "retention_value is required", "a retention_value must be provided and cannot be empty")
 		return
 	}
 
@@ -300,11 +329,17 @@ func (r *backupResource) Read(ctx context.Context, req resource.ReadRequest, res
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	// add the retention unit and value to the data model from existing state
+	// since it is not returned by the API.
+	data.RetentionUnit = retentionUnit
+	data.RetentionValue = retentionValue
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
 func (r *backupResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	// nothing to do, backups have no updatable settings
+	// TODO: backups have one updatable field: protected (bool). https://api-docs.planetscale.com/reference/update_backup
 }
 
 func (r *backupResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
