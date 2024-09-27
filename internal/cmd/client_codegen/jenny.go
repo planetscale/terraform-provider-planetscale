@@ -239,12 +239,10 @@ func genClientCall(
 	args := []jen.Code{jen.Id("ctx").Qual("context", "Context")}
 
 	path = strings.TrimPrefix(path, "/")
-	// log.Printf("JOE: %s %s", verb, path)
 
 	pathBuilderArg, pathArgs := pathInterpolator(path, pathArgs)
 	for _, pathArg := range pathArgs {
 		argName := lowerSnakeToCamel(pathArg.Name)
-		// log.Printf("JOE: %s %s", pathArg.Name, argName)
 
 		argF := jen.Id(argName)
 		switch pathArg.Type {
