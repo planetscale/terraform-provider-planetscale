@@ -13,3 +13,4 @@ testacc:
 generate:
 	bash ./script/update_openapi_spec
 	bash ./script/generate
+	go gnenerate ./...

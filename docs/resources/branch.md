@@ -37,13 +37,11 @@ resource "planetscale_branch" "example" {
 
 ### Read-Only
 
-- `access_host_url` (String) The access host URL for the branch. This is a legacy field, use `mysql_edge_address`.
 - `actor` (Attributes) The actor who created this branch. (see [below for nested schema](#nestedatt--actor))
 - `cluster_rate_name` (String) The SKU representing the branch's cluster size.
 - `created_at` (String) When the branch was created.
 - `html_url` (String) Planetscale app URL for the branch.
 - `id` (String) The ID of the branch.
-- `initial_restore_id` (String) The ID of the backup from which the branch was restored.
 - `mysql_address` (String) The MySQL address for the branch.
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch.
 - `ready` (Boolean) Whether or not the branch is ready to serve queries.
