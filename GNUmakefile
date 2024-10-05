@@ -13,6 +13,3 @@ testacc:
 generate:
 	bash ./script/update_openapi_spec
 	bash ./script/generate
-	# curl https://api.planetscale.com/v1/openapi-spec >./openapi/openapi-spec.json
-	# cd ./internal/cmd/extractref && go run . >../../../openapi-spec.json
-	# cd ./internal/cmd/client_codegen && go run . >../../client/planetscale/planetscale.go
