@@ -180,14 +180,6 @@ func removeFillerWords(name string) string {
 	return name
 }
 
-func kebabToCamel(kebab string) string {
-	var out strings.Builder
-	for _, w := range strings.Split(kebab, "-") {
-		out.WriteString(cases.Title(language.AmericanEnglish).String(w))
-	}
-	return out.String()
-}
-
 func snakeToCamel(snake string) string {
 	var out strings.Builder
 	for _, w := range strings.Split(snake, "_") {
