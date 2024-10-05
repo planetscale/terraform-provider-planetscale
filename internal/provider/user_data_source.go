@@ -23,19 +23,19 @@ type userDataSource struct {
 }
 
 type userDataSourceModel struct {
-	Id                      *string `tfsdk:"id"`
-	Name                    *string `tfsdk:"name"`
-	AvatarUrl               *string `tfsdk:"avatar_url"`
-	CreatedAt               *string `tfsdk:"created_at"`
-	DefaultOrganizationId   *string `tfsdk:"default_organization_id"`
-	DirectoryManaged        *bool   `tfsdk:"directory_managed"`
-	DisplayName             *string `tfsdk:"display_name"`
-	Email                   *string `tfsdk:"email"`
-	EmailVerified           *bool   `tfsdk:"email_verified"`
-	Managed                 *bool   `tfsdk:"managed"`
-	Sso                     *bool   `tfsdk:"sso"`
-	TwoFactorAuthConfigured *bool   `tfsdk:"two_factor_auth_configured"`
-	UpdatedAt               *string `tfsdk:"updated_at"`
+	Id                      *string                               `tfsdk:"id"`
+	Name                    *string                               `tfsdk:"name"`
+	AvatarUrl               *string                               `tfsdk:"avatar_url"`
+	CreatedAt               *string                               `tfsdk:"created_at"`
+	DefaultOrganization     *planetscale.User_DefaultOrganization `tfsdk:"default_organization"`
+	DirectoryManaged        *bool                                 `tfsdk:"directory_managed"`
+	DisplayName             *string                               `tfsdk:"display_name"`
+	Email                   *string                               `tfsdk:"email"`
+	EmailVerified           *bool                                 `tfsdk:"email_verified"`
+	Managed                 *bool                                 `tfsdk:"managed"`
+	Sso                     *bool                                 `tfsdk:"sso"`
+	TwoFactorAuthConfigured *bool                                 `tfsdk:"two_factor_auth_configured"`
+	UpdatedAt               *string                               `tfsdk:"updated_at"`
 }
 
 func (d *userDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -66,9 +66,31 @@ Known limitations:
 				Description: "When the user was created.",
 				Computed:    true,
 			},
-			"default_organization_id": schema.StringAttribute{
+			"default_organization": schema.SingleNestedAttribute{
 				Description: "The default organization for the user.",
 				Computed:    true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Description: "The ID of the organization.",
+						Computed:    true,
+					},
+					"name": schema.StringAttribute{
+						Description: "The name of the organization.",
+						Computed:    true,
+					},
+					"created_at": schema.StringAttribute{
+						Description: "When the organization was created.",
+						Computed:    true,
+					},
+					"updated_at": schema.StringAttribute{
+						Description: "When the organization was last updated.",
+						Computed:    true,
+					},
+					"deleted_at": schema.StringAttribute{
+						Description: "When the organization was last deleted.",
+						Computed:    true,
+					},
+				},
 			},
 			"directory_managed": schema.BoolAttribute{
 				Description: "Whether or not the user is managed by a WorkOS directory.",
@@ -137,10 +159,10 @@ func (d *userDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 	state := userDataSourceModel{
-		AvatarUrl: res200.AvatarUrl,
-		CreatedAt: res200.CreatedAt,
-		// DefaultOrganizationId:   res200.DefaultOrganizationId,
+		AvatarUrl:               res200.AvatarUrl,
+		CreatedAt:               res200.CreatedAt,
 		DirectoryManaged:        res200.DirectoryManaged,
+		DefaultOrganization:     &res200.DefaultOrganization,
 		DisplayName:             res200.DisplayName,
 		Email:                   res200.Email,
 		EmailVerified:           res200.EmailVerified,
