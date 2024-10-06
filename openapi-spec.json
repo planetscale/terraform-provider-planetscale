@@ -6587,10 +6587,6 @@
       "name": "Database branch passwords"
     },
     {
-      "description": "            API endpoints for managing database deploy requests.\n",
-      "name": "Deploy requests"
-    },
-    {
       "description": "          API endpoints for managing databases within an organization.\n",
       "name": "Databases"
     },
@@ -6607,12 +6603,16 @@
       "name": "Organizations"
     },
     {
-      "description": "          API endpoints for fetching invoice information.\n",
-      "name": "Invoices"
-    },
-    {
       "description": "          API endpoints for fetching user information.\n",
       "name": "Users"
+    },
+    {
+      "description": "            API endpoints for managing database deploy requests.\n",
+      "name": "Deploy requests"
+    },
+    {
+      "description": "          API endpoints for fetching invoice information.\n",
+      "name": "Invoices"
     }
   ],
   "x-readme": {

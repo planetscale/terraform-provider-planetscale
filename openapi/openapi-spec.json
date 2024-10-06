@@ -12076,10 +12076,6 @@
       "description": "          API endpoints for managing database branch passwords.\n"
     },
     {
-      "name": "Deploy requests",
-      "description": "            API endpoints for managing database deploy requests.\n"
-    },
-    {
       "name": "Databases",
       "description": "          API endpoints for managing databases within an organization.\n"
     },
@@ -12096,12 +12092,16 @@
       "description": "          API endpoints for managing organizations.\n"
     },
     {
-      "name": "Invoices",
-      "description": "          API endpoints for fetching invoice information.\n"
-    },
-    {
       "name": "Users",
       "description": "          API endpoints for fetching user information.\n"
+    },
+    {
+      "name": "Deploy requests",
+      "description": "            API endpoints for managing database deploy requests.\n"
+    },
+    {
+      "name": "Invoices",
+      "description": "          API endpoints for fetching invoice information.\n"
     }
   ],
   "securityDefinitions": {
