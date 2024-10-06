@@ -93,6 +93,14 @@ func genParamStruct(defns spec.Definitions, file *jen.File, typename string, bod
 	var fields []jen.Code
 	if body != nil {
 		for _, item := range body.Properties.ToOrderedSchemaItems() {
+
+			// XXX: skip `invoice_budget_amount` field. It's reported as a number/float64
+			// in the openapi spec, but the api is currently returning strings.
+			// TODO(joem): remove this when the issue is resolved in the api
+			if item.Name == "invoice_budget_amount" {
+				continue
+			}
+
 			f, err := toField(item)
 			if err != nil {
 				return fmt.Errorf("looking at item %q: %w", item.Name, err)
@@ -236,7 +244,6 @@ func genClientCall(
 	reqBodyTypeName string,
 	responseTypeNames map[int]string,
 ) error {
-
 	args := []jen.Code{jen.Id("ctx").Qual("context", "Context")}
 
 	path = strings.TrimPrefix(path, "/")
@@ -370,12 +377,10 @@ func genClientCall(
 		g.Defer().Id("res").Dot("Body").Dot("Close").Call()
 
 		g.Switch(jen.Id("res").Dot("StatusCode")).BlockFunc(func(g *jen.Group) {
-
 			for _, code := range codes {
 				returnValName := "res" + strconv.Itoa(code)
 				returnValTypeName := responseTypeNames[code]
 				if code < 400 {
-
 					g.Case(jen.Lit(code)).Block(
 						jen.Id(returnValName).Op("=").New(jen.Id(returnValTypeName)),
 						jen.Id("err").Op("=").Qual("encoding/json", "NewDecoder").Call(jen.Id("res").Dot("Body")).Dot("Decode").Call(jen.Op("&").Id(returnValName)),

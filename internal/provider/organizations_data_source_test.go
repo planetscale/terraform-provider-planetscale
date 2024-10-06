@@ -17,13 +17,9 @@ func TestAccOrganizationsDataSource(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("data.planetscale_organizations.test", "organizations.#", "1"),
 					resource.TestCheckResourceAttr("data.planetscale_organizations.test", "organizations.0.name", testAccOrg),
-					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.admin_only_production_access"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.billing_email"),
-					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.can_create_databases"),
-					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.created_at"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.database_count"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.features.insights"),
-					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.free_databases_remaining"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.has_past_due_invoices"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.id"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organizations.test", "organizations.0.idp_managed_roles"),

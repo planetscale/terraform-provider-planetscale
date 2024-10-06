@@ -16,13 +16,10 @@ func TestAccOrganizationDataSource(t *testing.T) {
 				Config: testAccOrganizationDataSourceConfig,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("data.planetscale_organization.test", "name", "planetscale-terraform-testing"),
-					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "admin_only_production_access"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "billing_email"),
-					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "can_create_databases"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "created_at"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "database_count"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "features.insights"),
-					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "free_databases_remaining"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "has_past_due_invoices"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "id"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "idp_managed_roles"),

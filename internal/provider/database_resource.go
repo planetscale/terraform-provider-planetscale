@@ -89,7 +89,7 @@ func databaseResourcefromClient(ctx context.Context, database *planetscale.Datab
 		Id:                                types.StringValue(database.Id),
 		AllowDataBranching:                types.BoolValue(database.AllowDataBranching),
 		AtBackupRestoreBranchesLimit:      types.BoolValue(database.AtBackupRestoreBranchesLimit),
-		AtDevelopmentBranchLimit:          types.BoolValue(database.AtDevelopmentBranchLimit),
+		AtDevelopmentBranchLimit:          types.BoolValue(false), // at_development_branch_limit removed from API, hardcode to false going forward
 		AutomaticMigrations:               types.BoolPointerValue(database.AutomaticMigrations),
 		BranchesCount:                     types.Float64Value(database.BranchesCount),
 		BranchesUrl:                       types.StringValue(database.BranchesUrl),
@@ -364,8 +364,7 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 
 	createDbReq := planetscale.CreateDatabaseReq{
 		Name:        name.ValueString(),
-		Plan:        stringValueIfKnown(data.Plan),
-		ClusterSize: stringValueIfKnown(data.ClusterSize),
+		ClusterSize: data.ClusterSize.ValueString(),
 		Region:      stringValueIfKnown(data.Region),
 	}
 	res, err := r.client.CreateDatabase(ctx, org.ValueString(), createDbReq)

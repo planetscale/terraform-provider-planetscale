@@ -5,7 +5,7 @@ set -euo pipefail
 root=$(git rev-parse --show-toplevel)
 
 function main() {
-    curl -q https://api.planetscale.com/v1/openapi-spec | jq . > ${root}/openapi/openapi-spec.json
+    curl -q https://api.planetscale.com/v1/openapi-spec | jq . >${root}/openapi/openapi-spec.json
 }
 
 main

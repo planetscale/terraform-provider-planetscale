@@ -47,7 +47,7 @@ Read-Only:
 - `branch` (String) The branch this backup belongs to.
 - `created_at` (String) When the backup was created.
 - `database` (String) The database this backup belongs to.
-- `estimated_storage_cost` (String) The estimated storage cost of the backup.
+- `estimated_storage_cost` (Number) The estimated storage cost of the backup.
 - `id` (String) The ID of the backup.
 - `name` (String) The name of the backup.
 - `organization` (String) The organization this backup belongs to.

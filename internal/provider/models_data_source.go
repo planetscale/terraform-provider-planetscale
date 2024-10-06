@@ -14,16 +14,8 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 			Description: "The name of the organization.",
 			Required:    !computedName, Computed: computedName,
 		},
-		"admin_only_production_access": schema.BoolAttribute{
-			Description: "Whether or not only administrators can access production branches in the organization.",
-			Computed:    true,
-		},
 		"billing_email": schema.StringAttribute{
 			Description: "The billing email of the organization.",
-			Computed:    true,
-		},
-		"can_create_databases": schema.BoolAttribute{
-			Description: "Whether or not more databases can be created in the organization.",
 			Computed:    true,
 		},
 		"created_at": schema.StringAttribute{
@@ -43,10 +35,6 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 			Description: ".",
 			Computed:    true,
 			Attributes:  flagsDataSourceSchemaAttribute,
-		},
-		"free_databases_remaining": schema.Float64Attribute{
-			Description: "The number of remaining free databases that can be created in the organization.",
-			Computed:    true,
 		},
 		"has_past_due_invoices": schema.BoolAttribute{
 			Description: "Whether or not the organization has past due billing invoices.",
@@ -96,26 +84,23 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 }
 
 type organizationDataSourceModel struct {
-	AdminOnlyProductionAccess types.Bool               `tfsdk:"admin_only_production_access"`
-	BillingEmail              types.String             `tfsdk:"billing_email"`
-	CanCreateDatabases        types.Bool               `tfsdk:"can_create_databases"`
-	CreatedAt                 types.String             `tfsdk:"created_at"`
-	DatabaseCount             types.Float64            `tfsdk:"database_count"`
-	Features                  *featuresDataSourceModel `tfsdk:"features"`
-	Flags                     *flagsDataSourceModel    `tfsdk:"flags"`
-	FreeDatabasesRemaining    types.Float64            `tfsdk:"free_databases_remaining"`
-	HasPastDueInvoices        types.Bool               `tfsdk:"has_past_due_invoices"`
-	Id                        types.String             `tfsdk:"id"`
-	Name                      types.String             `tfsdk:"name"`
-	Plan                      types.String             `tfsdk:"plan"`
-	SingleTenancy             types.Bool               `tfsdk:"single_tenancy"`
-	SleepingDatabaseCount     types.Float64            `tfsdk:"sleeping_database_count"`
-	Sso                       types.Bool               `tfsdk:"sso"`
-	SsoDirectory              types.Bool               `tfsdk:"sso_directory"`
-	SsoPortalUrl              types.String             `tfsdk:"sso_portal_url"`
-	UpdatedAt                 types.String             `tfsdk:"updated_at"`
-	ValidBillingInfo          types.Bool               `tfsdk:"valid_billing_info"`
-	IdpManagedRoles           types.Bool               `tfsdk:"idp_managed_roles"`
+	BillingEmail          types.String             `tfsdk:"billing_email"`
+	CreatedAt             types.String             `tfsdk:"created_at"`
+	DatabaseCount         types.Float64            `tfsdk:"database_count"`
+	Features              *featuresDataSourceModel `tfsdk:"features"`
+	Flags                 *flagsDataSourceModel    `tfsdk:"flags"`
+	HasPastDueInvoices    types.Bool               `tfsdk:"has_past_due_invoices"`
+	Id                    types.String             `tfsdk:"id"`
+	Name                  types.String             `tfsdk:"name"`
+	Plan                  types.String             `tfsdk:"plan"`
+	SingleTenancy         types.Bool               `tfsdk:"single_tenancy"`
+	SleepingDatabaseCount types.Float64            `tfsdk:"sleeping_database_count"`
+	Sso                   types.Bool               `tfsdk:"sso"`
+	SsoDirectory          types.Bool               `tfsdk:"sso_directory"`
+	SsoPortalUrl          types.String             `tfsdk:"sso_portal_url"`
+	UpdatedAt             types.String             `tfsdk:"updated_at"`
+	ValidBillingInfo      types.Bool               `tfsdk:"valid_billing_info"`
+	IdpManagedRoles       types.Bool               `tfsdk:"idp_managed_roles"`
 }
 
 func organizationFromClient(org *planetscale.Organization) *organizationDataSourceModel {
@@ -123,26 +108,23 @@ func organizationFromClient(org *planetscale.Organization) *organizationDataSour
 		return nil
 	}
 	return &organizationDataSourceModel{
-		Features:                  featuresFromClient(org.Features),
-		Flags:                     flagsFromClient(org.Flags),
-		AdminOnlyProductionAccess: types.BoolValue(org.AdminOnlyProductionAccess),
-		BillingEmail:              types.StringPointerValue(org.BillingEmail),
-		CanCreateDatabases:        types.BoolValue(org.CanCreateDatabases),
-		CreatedAt:                 types.StringValue(org.CreatedAt),
-		DatabaseCount:             types.Float64Value(org.DatabaseCount),
-		FreeDatabasesRemaining:    types.Float64Value(org.FreeDatabasesRemaining),
-		HasPastDueInvoices:        types.BoolValue(org.HasPastDueInvoices),
-		Id:                        types.StringValue(org.Id),
-		Name:                      types.StringValue(org.Name),
-		Plan:                      types.StringValue(org.Plan),
-		SingleTenancy:             types.BoolValue(org.SingleTenancy),
-		SleepingDatabaseCount:     types.Float64Value(org.SleepingDatabaseCount),
-		Sso:                       types.BoolValue(org.Sso),
-		SsoDirectory:              types.BoolValue(org.SsoDirectory),
-		SsoPortalUrl:              types.StringPointerValue(org.SsoPortalUrl),
-		UpdatedAt:                 types.StringValue(org.UpdatedAt),
-		ValidBillingInfo:          types.BoolValue(org.ValidBillingInfo),
-		IdpManagedRoles:           types.BoolValue(org.IdpManagedRoles),
+		Features:              featuresFromClient(org.Features),
+		Flags:                 flagsFromClient(org.Flags),
+		BillingEmail:          types.StringPointerValue(org.BillingEmail),
+		CreatedAt:             types.StringValue(org.CreatedAt),
+		DatabaseCount:         types.Float64Value(org.DatabaseCount),
+		HasPastDueInvoices:    types.BoolValue(org.HasPastDueInvoices),
+		Id:                    types.StringValue(org.Id),
+		Name:                  types.StringValue(org.Name),
+		Plan:                  types.StringValue(org.Plan),
+		SingleTenancy:         types.BoolValue(org.SingleTenancy),
+		SleepingDatabaseCount: types.Float64Value(org.SleepingDatabaseCount),
+		Sso:                   types.BoolValue(org.Sso),
+		SsoDirectory:          types.BoolValue(org.SsoDirectory),
+		SsoPortalUrl:          types.StringPointerValue(org.SsoPortalUrl),
+		UpdatedAt:             types.StringValue(org.UpdatedAt),
+		ValidBillingInfo:      types.BoolValue(org.ValidBillingInfo),
+		IdpManagedRoles:       types.BoolValue(org.IdpManagedRoles),
 	}
 }
 
@@ -403,7 +385,7 @@ type databaseDataSourceModel struct {
 	Organization                      string                     `tfsdk:"organization"`
 	AllowDataBranching                types.Bool                 `tfsdk:"allow_data_branching"`
 	AtBackupRestoreBranchesLimit      types.Bool                 `tfsdk:"at_backup_restore_branches_limit"`
-	AtDevelopmentBranchLimit          types.Bool                 `tfsdk:"at_development_branch_limit"`
+	AtDevelopmentBranchLimit          types.Bool                 `tfsdk:"at_development_branch_limit"` // XXX: deprecated. no longer exists in api
 	AutomaticMigrations               types.Bool                 `tfsdk:"automatic_migrations"`
 	BranchesCount                     types.Float64              `tfsdk:"branches_count"`
 	BranchesUrl                       types.String               `tfsdk:"branches_url"`
@@ -446,7 +428,6 @@ func databaseFromClient(database *planetscale.Database, orgName string, diags di
 		Region:                            regionFromClient(&database.Region, diags),
 		AllowDataBranching:                types.BoolValue(database.AllowDataBranching),
 		AtBackupRestoreBranchesLimit:      types.BoolValue(database.AtBackupRestoreBranchesLimit),
-		AtDevelopmentBranchLimit:          types.BoolValue(database.AtDevelopmentBranchLimit),
 		AutomaticMigrations:               types.BoolPointerValue(database.AutomaticMigrations),
 		BranchesCount:                     types.Float64Value(database.BranchesCount),
 		BranchesUrl:                       types.StringValue(database.BranchesUrl),
@@ -586,7 +567,6 @@ type branchDataSourceModel struct {
 	CreatedAt                   types.String                       `tfsdk:"created_at"`
 	HtmlUrl                     types.String                       `tfsdk:"html_url"`
 	Id                          types.String                       `tfsdk:"id"`
-	InitialRestoreId            types.String                       `tfsdk:"initial_restore_id"`
 	MysqlAddress                types.String                       `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                       `tfsdk:"mysql_edge_address"`
 	ParentBranch                types.String                       `tfsdk:"parent_branch"`
@@ -612,12 +592,10 @@ func branchFromClient(branch *planetscale.Branch, organization, database string,
 		Region:                      regionFromClient(branch.Region, diags),
 		RestoredFromBranch:          restoredFromBranchFromClient(branch.RestoredFromBranch),
 		Name:                        types.StringValue(branch.Name),
-		AccessHostUrl:               types.StringPointerValue(branch.AccessHostUrl),
 		ClusterRateName:             types.StringValue(branch.ClusterRateName),
 		CreatedAt:                   types.StringValue(branch.CreatedAt),
 		HtmlUrl:                     types.StringValue(branch.HtmlUrl),
 		Id:                          types.StringValue(branch.Id),
-		InitialRestoreId:            types.StringPointerValue(branch.InitialRestoreId),
 		MysqlAddress:                types.StringValue(branch.MysqlAddress),
 		MysqlEdgeAddress:            types.StringValue(branch.MysqlEdgeAddress),
 		ParentBranch:                types.StringPointerValue(branch.ParentBranch),
@@ -1348,7 +1326,7 @@ func backupDataSourceSchemaAttribute(computedID bool) map[string]schema.Attribut
 			Description: "When the backup was created.",
 			Computed:    true,
 		},
-		"estimated_storage_cost": schema.StringAttribute{
+		"estimated_storage_cost": schema.Float64Attribute{
 			Description: "The estimated storage cost of the backup.",
 			Computed:    true,
 		},
@@ -1384,7 +1362,7 @@ type backupDataSourceModel struct {
 	Actor                *actorDataSourceModel        `tfsdk:"actor"`
 	BackupPolicy         *backupPolicyDataSourceModel `tfsdk:"backup_policy"`
 	CreatedAt            types.String                 `tfsdk:"created_at"`
-	EstimatedStorageCost types.String                 `tfsdk:"estimated_storage_cost"`
+	EstimatedStorageCost types.Float64                `tfsdk:"estimated_storage_cost"`
 	Required             types.Bool                   `tfsdk:"required"`
 	RestoredBranches     types.List                   `tfsdk:"restored_branches"`
 	Size                 types.Float64                `tfsdk:"size"`
@@ -1405,10 +1383,10 @@ func backupFromClient(backup *planetscale.Backup, organization, database, branch
 		Database:             types.StringValue(database),
 		Branch:               types.StringValue(branch),
 		Name:                 types.StringValue(backup.Name),
-		Actor:                actorFromClient(&backup.Actor),
-		BackupPolicy:         backupPolicyFromClient(&backup.BackupPolicy),
+		Actor:                actorFromClient(backup.Actor),
+		BackupPolicy:         backupPolicyFromClient(backup.BackupPolicy),
 		CreatedAt:            types.StringValue(backup.CreatedAt),
-		EstimatedStorageCost: types.StringValue(backup.EstimatedStorageCost),
+		EstimatedStorageCost: types.Float64Value(backup.EstimatedStorageCost),
 		Id:                   types.StringValue(backup.Id),
 		Required:             types.BoolValue(backup.Required),
 		RestoredBranches:     restoredBranches,

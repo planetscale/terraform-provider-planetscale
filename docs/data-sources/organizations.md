@@ -32,14 +32,11 @@ output "orgs" {
 
 Read-Only:
 
-- `admin_only_production_access` (Boolean) Whether or not only administrators can access production branches in the organization.
 - `billing_email` (String) The billing email of the organization.
-- `can_create_databases` (Boolean) Whether or not more databases can be created in the organization.
 - `created_at` (String) When the organization was created.
 - `database_count` (Number) The number of databases in the organization.
 - `features` (Attributes) Features that are enabled on the organization. (see [below for nested schema](#nestedatt--organizations--features))
 - `flags` (Attributes) . (see [below for nested schema](#nestedatt--organizations--flags))
-- `free_databases_remaining` (Number) The number of remaining free databases that can be created in the organization.
 - `has_past_due_invoices` (Boolean) Whether or not the organization has past due billing invoices.
 - `id` (String) The ID for the organization.
 - `idp_managed_roles` (Boolean) Whether or not the IdP provider is be responsible for managing roles in PlanetScale.
