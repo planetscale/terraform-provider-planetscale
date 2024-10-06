@@ -14,16 +14,8 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 			Description: "The name of the organization.",
 			Required:    !computedName, Computed: computedName,
 		},
-		"admin_only_production_access": schema.BoolAttribute{
-			Description: "Whether or not only administrators can access production branches in the organization.",
-			Computed:    true,
-		},
 		"billing_email": schema.StringAttribute{
 			Description: "The billing email of the organization.",
-			Computed:    true,
-		},
-		"can_create_databases": schema.BoolAttribute{
-			Description: "Whether or not more databases can be created in the organization.",
 			Computed:    true,
 		},
 		"created_at": schema.StringAttribute{
@@ -43,10 +35,6 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 			Description: ".",
 			Computed:    true,
 			Attributes:  flagsDataSourceSchemaAttribute,
-		},
-		"free_databases_remaining": schema.Float64Attribute{
-			Description: "The number of remaining free databases that can be created in the organization.",
-			Computed:    true,
 		},
 		"has_past_due_invoices": schema.BoolAttribute{
 			Description: "Whether or not the organization has past due billing invoices.",
@@ -96,26 +84,23 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 }
 
 type organizationDataSourceModel struct {
-	AdminOnlyProductionAccess types.Bool               `tfsdk:"admin_only_production_access"`
-	BillingEmail              types.String             `tfsdk:"billing_email"`
-	CanCreateDatabases        types.Bool               `tfsdk:"can_create_databases"`
-	CreatedAt                 types.String             `tfsdk:"created_at"`
-	DatabaseCount             types.Float64            `tfsdk:"database_count"`
-	Features                  *featuresDataSourceModel `tfsdk:"features"`
-	Flags                     *flagsDataSourceModel    `tfsdk:"flags"`
-	FreeDatabasesRemaining    types.Float64            `tfsdk:"free_databases_remaining"`
-	HasPastDueInvoices        types.Bool               `tfsdk:"has_past_due_invoices"`
-	Id                        types.String             `tfsdk:"id"`
-	Name                      types.String             `tfsdk:"name"`
-	Plan                      types.String             `tfsdk:"plan"`
-	SingleTenancy             types.Bool               `tfsdk:"single_tenancy"`
-	SleepingDatabaseCount     types.Float64            `tfsdk:"sleeping_database_count"`
-	Sso                       types.Bool               `tfsdk:"sso"`
-	SsoDirectory              types.Bool               `tfsdk:"sso_directory"`
-	SsoPortalUrl              types.String             `tfsdk:"sso_portal_url"`
-	UpdatedAt                 types.String             `tfsdk:"updated_at"`
-	ValidBillingInfo          types.Bool               `tfsdk:"valid_billing_info"`
-	IdpManagedRoles           types.Bool               `tfsdk:"idp_managed_roles"`
+	BillingEmail          types.String             `tfsdk:"billing_email"`
+	CreatedAt             types.String             `tfsdk:"created_at"`
+	DatabaseCount         types.Float64            `tfsdk:"database_count"`
+	Features              *featuresDataSourceModel `tfsdk:"features"`
+	Flags                 *flagsDataSourceModel    `tfsdk:"flags"`
+	HasPastDueInvoices    types.Bool               `tfsdk:"has_past_due_invoices"`
+	Id                    types.String             `tfsdk:"id"`
+	Name                  types.String             `tfsdk:"name"`
+	Plan                  types.String             `tfsdk:"plan"`
+	SingleTenancy         types.Bool               `tfsdk:"single_tenancy"`
+	SleepingDatabaseCount types.Float64            `tfsdk:"sleeping_database_count"`
+	Sso                   types.Bool               `tfsdk:"sso"`
+	SsoDirectory          types.Bool               `tfsdk:"sso_directory"`
+	SsoPortalUrl          types.String             `tfsdk:"sso_portal_url"`
+	UpdatedAt             types.String             `tfsdk:"updated_at"`
+	ValidBillingInfo      types.Bool               `tfsdk:"valid_billing_info"`
+	IdpManagedRoles       types.Bool               `tfsdk:"idp_managed_roles"`
 }
 
 func organizationFromClient(org *planetscale.Organization) *organizationDataSourceModel {
