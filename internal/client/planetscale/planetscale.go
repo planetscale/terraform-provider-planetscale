@@ -343,7 +343,6 @@ type Organization struct {
 	HasPastDueInvoices    bool      `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
 	Id                    string    `json:"id" tfsdk:"id"`
 	IdpManagedRoles       bool      `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
-	InvoiceBudgetAmount   float64   `json:"invoice_budget_amount" tfsdk:"invoice_budget_amount"`
 	Name                  string    `json:"name" tfsdk:"name"`
 	Plan                  string    `json:"plan" tfsdk:"plan"`
 	SingleTenancy         bool      `json:"single_tenancy" tfsdk:"single_tenancy"`
@@ -615,9 +614,8 @@ func (cl *Client) GetOrganization(ctx context.Context, name string) (res200 *Get
 }
 
 type UpdateOrganizationReq struct {
-	BillingEmail        *string  `json:"billing_email,omitempty" tfsdk:"billing_email"`
-	IdpManagedRoles     *bool    `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
-	InvoiceBudgetAmount *float64 `json:"invoice_budget_amount,omitempty" tfsdk:"invoice_budget_amount"`
+	BillingEmail    *string `json:"billing_email,omitempty" tfsdk:"billing_email"`
+	IdpManagedRoles *bool   `json:"idp_managed_roles,omitempty" tfsdk:"idp_managed_roles"`
 }
 type UpdateOrganizationRes struct {
 	Organization

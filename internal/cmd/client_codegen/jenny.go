@@ -93,6 +93,14 @@ func genParamStruct(defns spec.Definitions, file *jen.File, typename string, bod
 	var fields []jen.Code
 	if body != nil {
 		for _, item := range body.Properties.ToOrderedSchemaItems() {
+
+			// XXX: skip `invoice_budget_amount` field. It's reported as a number/float64
+			// in the openapi spec, but the api is currently returning strings.
+			// TODO(joem): remove this when the issue is resolved in the api
+			if item.Name == "invoice_budget_amount" {
+				continue
+			}
+
 			f, err := toField(item)
 			if err != nil {
 				return fmt.Errorf("looking at item %q: %w", item.Name, err)
