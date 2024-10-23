@@ -35,23 +35,35 @@ resource "planetscale_backup" "example" {
 
 ### Required
 
-- `backup_policy` (Attributes) The policy used by the backup. (see [below for nested schema](#nestedatt--backup_policy))
 - `branch` (String) The branch being backed up.
 - `database` (String) The database to which the branch being backed up belongs to.
 - `name` (String) The name of the backup.
 - `organization` (String) The organization in which the database branch being backed up belongs to.
+- `retention_unit` (String) The unit for the retention period of the backup policy.
+- `retention_value` (Number) A number value for the retention period of the backup policy.
 
 ### Read-Only
 
 - `actor` (Attributes) . (see [below for nested schema](#nestedatt--actor))
+- `backup_policy` (Attributes) The policy used by the backup. (see [below for nested schema](#nestedatt--backup_policy))
 - `created_at` (String) When the backup was created.
-- `estimated_storage_cost` (String) The estimated storage cost of the backup.
+- `estimated_storage_cost` (Number) The estimated storage cost of the backup.
 - `id` (String) The ID of the backup.
 - `required` (Boolean) Whether or not the backup policy is required.
 - `restored_branches` (List of String) Branches that have been restored with this backup.
 - `size` (Number) The size of the backup.
 - `state` (String) The current state of the backup.
 - `updated_at` (String) When the backup was last updated.
+
+<a id="nestedatt--actor"></a>
+### Nested Schema for `actor`
+
+Read-Only:
+
+- `avatar_url` (String) The URL of the actor's avatar
+- `display_name` (String) The name of the actor
+- `id` (String) The ID of the actor
+
 
 <a id="nestedatt--backup_policy"></a>
 ### Nested Schema for `backup_policy`
@@ -74,13 +86,3 @@ Read-Only:
 - `schedule_week` (String) Week of the month that the backup is scheduled.
 - `target` (String) Whether the backup policy is for a production or development database, or for a database branch.
 - `updated_at` (String) When the backup policy was last updated.
-
-
-<a id="nestedatt--actor"></a>
-### Nested Schema for `actor`
-
-Read-Only:
-
-- `avatar_url` (String) The URL of the actor's avatar
-- `display_name` (String) The name of the actor
-- `id` (String) The ID of the actor

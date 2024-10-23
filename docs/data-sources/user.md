@@ -34,7 +34,7 @@ output "current_user" {
 
 - `avatar_url` (String) The URL source of the user's avatar.
 - `created_at` (String) When the user was created.
-- `default_organization_id` (String) The default organization for the user.
+- `default_organization` (Attributes) The default organization for the user. (see [below for nested schema](#nestedatt--default_organization))
 - `directory_managed` (Boolean) Whether or not the user is managed by a WorkOS directory.
 - `display_name` (String) The display name of the user.
 - `email` (String) The email of the user.
@@ -45,3 +45,14 @@ output "current_user" {
 - `sso` (Boolean) Whether or not the user is managed by WorkOS.
 - `two_factor_auth_configured` (Boolean) Whether or not the user has configured two factor authentication.
 - `updated_at` (String) When the user was last updated.
+
+<a id="nestedatt--default_organization"></a>
+### Nested Schema for `default_organization`
+
+Read-Only:
+
+- `created_at` (String) When the organization was created.
+- `deleted_at` (String) When the organization was last deleted.
+- `id` (String) The ID of the organization.
+- `name` (String) The name of the organization.
+- `updated_at` (String) When the organization was last updated.

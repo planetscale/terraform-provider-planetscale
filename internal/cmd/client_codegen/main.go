@@ -118,7 +118,7 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 
 	var reqBodyStructName string
 	if reqBody != nil {
-		reqBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Req"
+		reqBodyStructName = snakeToCamel(removeFillerWords(operation.ID)) + "Req"
 		if err := genParamStruct(defns, f, reqBodyStructName, reqBody.Schema); err != nil {
 			return fmt.Errorf("generating call param struct: %w", err)
 		}
@@ -134,11 +134,11 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 		}
 	}
 	for _, code := range resCodes {
-		resBodyStructName := kebabToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
+		resBodyStructName := snakeToCamel(removeFillerWords(operation.ID)) + "Res" + strconv.Itoa(code)
 		res := operation.Responses.StatusCodeResponses[code]
 		if code < 400 {
 			if successResponseTypes == 1 {
-				resBodyStructName = kebabToCamel(removeFillerWords(operation.ID)) + "Res"
+				resBodyStructName = snakeToCamel(removeFillerWords(operation.ID)) + "Res"
 			}
 			respSchema := res.ResponseProps.Schema
 
@@ -164,7 +164,7 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 		responses[code] = resBodyStructName
 	}
 
-	clientCallFuncName := kebabToCamel(removeFillerWords(operation.ID))
+	clientCallFuncName := snakeToCamel(removeFillerWords(operation.ID))
 	if err := genClientCall(f, path, verb, clientCallFuncName, pathParams, queryParams, reqBodyStructName, responses); err != nil {
 		return fmt.Errorf("generating client call method: %w", err)
 	}
@@ -173,17 +173,11 @@ func handleVerbPath(ll *slog.Logger, defns spec.Definitions, f *jen.File, path, 
 }
 
 func removeFillerWords(name string) string {
+	name = strings.ReplaceAll(name, "post", "create")
+	name = strings.ReplaceAll(name, "patch", "update")
 	name = strings.ReplaceAll(name, "-an-", "-")
 	name = strings.ReplaceAll(name, "-a-", "-")
 	return name
-}
-
-func kebabToCamel(kebab string) string {
-	var out strings.Builder
-	for _, w := range strings.Split(kebab, "-") {
-		out.WriteString(cases.Title(language.AmericanEnglish).String(w))
-	}
-	return out.String()
 }
 
 func snakeToCamel(snake string) string {

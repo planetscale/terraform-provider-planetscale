@@ -266,6 +266,14 @@ func stringValueIfKnown(v basetypes.StringValue) *string {
 	return v.ValueStringPointer()
 }
 
+//nolint:unused
+func float64ValueIfKnown(v basetypes.Float64Value) *float64 {
+	if v.IsUnknown() || v.IsNull() {
+		return nil
+	}
+	return v.ValueFloat64Pointer()
+}
+
 func stringValueOrDefault(v basetypes.StringValue, def string) string {
 	if v.IsUnknown() || v.IsNull() {
 		return def

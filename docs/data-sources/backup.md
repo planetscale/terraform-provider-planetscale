@@ -40,7 +40,7 @@ output "backup" {
 - `actor` (Attributes) The actor that created the backup. (see [below for nested schema](#nestedatt--actor))
 - `backup_policy` (Attributes) The backup policy being followed. (see [below for nested schema](#nestedatt--backup_policy))
 - `created_at` (String) When the backup was created.
-- `estimated_storage_cost` (String) The estimated storage cost of the backup.
+- `estimated_storage_cost` (Number) The estimated storage cost of the backup.
 - `name` (String) The name of the backup.
 - `required` (Boolean) Whether or not the backup policy is required.
 - `restored_branches` (List of String) Branches that have been restored with this backup.
