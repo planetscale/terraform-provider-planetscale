@@ -5,7 +5,7 @@ subcategory: ""
 description: |-
   A PlanetScale user.
   Known limitations:
-  - Does not work when the provider is configured with a service token.
+  Does not work when the provider is configured with a service token.
 ---
 
 # planetscale_user (Data Source)
