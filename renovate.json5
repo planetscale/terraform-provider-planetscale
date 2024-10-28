@@ -1,0 +1,7 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>planetscale/renovate-config",
+    "github>planetscale/renovate-config:weeklyBatchMinorPatchDigest"
+  ]
+}
