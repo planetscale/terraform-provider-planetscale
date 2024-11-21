@@ -362,17 +362,17 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	createDbReq := planetscale.CreateDatabaseReq{
+	createReq := planetscale.CreateDatabaseReq{
 		Name:        name.ValueString(),
 		ClusterSize: data.ClusterSize.ValueString(),
 		Region:      stringValueIfKnown(data.Region),
 	}
-	res, err := r.client.CreateDatabase(ctx, org.ValueString(), createDbReq)
+	createResp, err := r.client.CreateDatabase(ctx, org.ValueString(), createReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database, got error: %s", err))
 		return
 	}
-	if res == nil {
+	if createResp == nil {
 		resp.Diagnostics.AddError("Unable to create databases", "no data")
 		return
 	}
@@ -397,7 +397,7 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 			return res, "not-ready", nil
 		},
 	}
-	_, err = createState.WaitForStateContext(ctx)
+	db, err := createState.WaitForStateContext(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to create database",
@@ -406,7 +406,15 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	data = databaseResourcefromClient(ctx, &res.Database, data.Organization, data.ClusterSize, resp.Diagnostics)
+	// readyDB represents the most recent DB state returned from the API during the
+	// state refresh loop. This is the state we want to use to populate the Terraform state.
+	readyDB, ok := db.(*planetscale.GetDatabaseRes)
+	if !ok {
+		resp.Diagnostics.AddError("Unable to create database", "unexpected response from API")
+		return
+	}
+
+	data = databaseResourcefromClient(ctx, &readyDB.Database, data.Organization, data.ClusterSize, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
