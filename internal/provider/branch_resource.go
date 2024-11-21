@@ -269,12 +269,12 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		backupID := rfb.Id.String()
 		createReq.BackupId = &backupID
 	}
-	res, err := r.client.CreateBranch(ctx, org.ValueString(), database.ValueString(), createReq)
+	createResp, err := r.client.CreateBranch(ctx, org.ValueString(), database.ValueString(), createReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create branch, got error: %s", err))
 		return
 	}
-	if res == nil {
+	if createResp == nil {
 		resp.Diagnostics.AddError("Unable to create branchs", "no data")
 		return
 	}
@@ -299,7 +299,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 			return res, "not-ready", nil
 		},
 	}
-	_, err = createState.WaitForStateContext(ctx)
+	branch, err := createState.WaitForStateContext(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to create database",
@@ -308,7 +308,13 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	data = branchResourceFromClient(ctx, &res.Branch, data.Organization, data.Database, resp.Diagnostics)
+	readyBranch, ok := branch.(*planetscale.GetBranchRes)
+	if !ok {
+		resp.Diagnostics.AddError("Unable to create branch", "unexpected response from API")
+		return
+	}
+
+	data = branchResourceFromClient(ctx, &readyBranch.Branch, data.Organization, data.Database, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
