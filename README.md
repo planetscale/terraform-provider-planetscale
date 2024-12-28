@@ -38,7 +38,7 @@ provider "planetscale" {
 ## Known limitations
 
 - Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.
-- Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (`pscale service-token add-access`)
+- When using service tokens (recommended), ensure the token has the `create_databases` organization-level permission. This allows terraform to create new databases and automatically grants the token all other permissions on the databases created by the token.
 
 ## Contributing
 
