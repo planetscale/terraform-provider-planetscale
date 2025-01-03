@@ -32,7 +32,7 @@ func TestAccDatabaseResource(t *testing.T) {
 				ImportState:       true,
 				ImportStateVerify: true,
 				// TODO: API does not return cluster_size which causes a diff on import. When fixed, remove this:
-				ImportStateVerifyIgnore: []string{"cluster_size", "updated_at"},
+				ImportStateVerifyIgnore: []string{"cluster_size"},
 			},
 			// Update and Read testing
 			{

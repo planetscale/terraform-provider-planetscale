@@ -294,12 +294,12 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 				return nil, "", err
 			}
 			if res.Branch.Ready {
-				return res, "ready", nil
+				return res.Branch, "ready", nil
 			}
-			return res, "not-ready", nil
+			return res.Branch, "not-ready", nil
 		},
 	}
-	_, err = createState.WaitForStateContext(ctx)
+	branchRaw, err := createState.WaitForStateContext(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to create database",
@@ -308,7 +308,13 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	data = branchResourceFromClient(ctx, &res.Branch, data.Organization, data.Database, resp.Diagnostics)
+	branch, ok := branchRaw.(planetscale.Branch)
+	if !ok {
+		resp.Diagnostics.AddError("Unable to create branch", "no data")
+		return
+	}
+
+	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
