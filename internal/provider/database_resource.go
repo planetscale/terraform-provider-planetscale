@@ -392,12 +392,12 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 				return nil, "", err
 			}
 			if res.Database.Ready {
-				return res, "ready", nil
+				return res.Database, "ready", nil
 			}
-			return res, "not-ready", nil
+			return res.Database, "not-ready", nil
 		},
 	}
-	_, err = createState.WaitForStateContext(ctx)
+	dbRaw, err := createState.WaitForStateContext(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Unable to create database",
@@ -406,7 +406,13 @@ func (r *databaseResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	data = databaseResourcefromClient(ctx, &res.Database, data.Organization, data.ClusterSize, resp.Diagnostics)
+	db, ok := dbRaw.(planetscale.Database)
+	if !ok {
+		resp.Diagnostics.AddError("Unable to create database", "no data")
+		return
+	}
+
+	data = databaseResourcefromClient(ctx, &db, data.Organization, data.ClusterSize, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}

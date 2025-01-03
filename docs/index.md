@@ -7,8 +7,7 @@ description: |-
   access token credentials, configured or stored in the environment variable PLANETSCALE_ACCESS_TOKENservice token credentials, configured or stored in the environment variables PLANETSCALE_SERVICE_TOKEN_NAME and PLANETSCALE_SERVICE_TOKEN
   Note that the provider is not production ready and only for early testing at this time.
   Known limitations:
-  - Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.
-  - Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (pscale service-token add-access)
+  Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (pscale service-token add-access)
 ---
 
 # planetscale Provider
