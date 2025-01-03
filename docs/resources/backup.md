@@ -5,7 +5,7 @@ subcategory: ""
 description: |-
   A PlanetScale backup.
   Known limitations:
-  - It is not currently possible to manage backup schedules, only retention periods.
+  It is not currently possible to manage backup schedules, only retention periods.
 ---
 
 # planetscale_backup (Resource)
