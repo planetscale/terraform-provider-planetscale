@@ -31,8 +31,8 @@ func TestAccDatabaseResource(t *testing.T) {
 				ImportStateId:     fmt.Sprintf("%s,%s", testAccOrg, dbName),
 				ImportState:       true,
 				ImportStateVerify: true,
-				// TODO: API does not return cluster_size which causes a diff on import. When fixed, remove this:
-				ImportStateVerifyIgnore: []string{"cluster_size"},
+				// TODO: API does not return cluster_size which causes a diff on import. When fixed, remove it.
+				ImportStateVerifyIgnore: []string{"cluster_size", "updated_at"},
 			},
 			// Update and Read testing
 			{

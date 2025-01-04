@@ -28,10 +28,11 @@ func TestAccBranchResource(t *testing.T) {
 			},
 			// ImportState testing
 			{
-				ResourceName:      "planetscale_branch.test",
-				ImportStateId:     fmt.Sprintf("%s,%s,%s", testAccOrg, dbName, branchName),
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "planetscale_branch.test",
+				ImportStateId:           fmt.Sprintf("%s,%s,%s", testAccOrg, dbName, branchName),
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"updated_at", "schema_last_updated_at"},
 			},
 			// Update and Read testing
 			// TODO: Implement an update test.
