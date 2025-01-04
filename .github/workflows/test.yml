@@ -64,4 +64,3 @@ jobs:
         with:
           go-version-file: 'go.mod'
       - run: go test -cover ./...
-        timeout-minutes: 10

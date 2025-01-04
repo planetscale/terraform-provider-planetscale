@@ -18,6 +18,11 @@ on:
 permissions:
   contents: read
 
+# Ensures only 1 action runs per PR and previous is canceled on new trigger
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: build
@@ -44,6 +49,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         terraform:
           - '1.6.*'
@@ -73,6 +79,7 @@ jobs:
     if: '!github.event.pull_request.head.repo.fork'
     timeout-minutes: 15
     strategy:
+      max-parallel: 2
       fail-fast: false
       matrix:
         tofu:
