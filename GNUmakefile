@@ -1,5 +1,9 @@
 default: testacc
 
+.PHONY: build
+build:
+	CGO_ENABLED=0 go build -v -trimpath .
+
 .PHONY: lint
 lint:
 	golangci-lint run -v ./...
@@ -14,3 +18,7 @@ generate:
 	bash ./script/update_openapi_spec
 	bash ./script/generate
 	go generate ./...
+
+.PHONY: sweep
+sweep:
+	bash ./script/sweep

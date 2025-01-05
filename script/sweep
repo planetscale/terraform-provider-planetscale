@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# delete db's older than 24 hours in the test org whose name starts with "testacc"
+
+set -eou pipefail
+
+ORG="${ORG:-planetscale-terraform-testing}"
+
+pscale database list --org "$ORG" --format json |
+  jq -r '.[] | select(
+    (.name | startswith("testacc")) and
+    (.created_at | sub("\\.\\d+"; "") | fromdateiso8601 < (now - 86400))).name' |
+  while read -r dbname; do
+    pscale database delete "$dbname" --org "$ORG" --force
+  done
