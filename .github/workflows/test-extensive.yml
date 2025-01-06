@@ -94,7 +94,7 @@ jobs:
       - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
         with:
           go-version-file: 'go.mod'
-      - uses: opentofu/setup-opentofu@v1
+      - uses: opentofu/setup-opentofu@592200bd4b9bbf4772ace78f887668b1aee8f716 # v1
         with:
           tofu_version: ${{ matrix.tofu }}
           tofu_wrapper: false
