@@ -4,11 +4,13 @@ on:
   pull_request:
     paths-ignore:
       - 'README.md'
+      - 'renovate.json5'
   push:
     branches:
       - main
     paths-ignore:
       - 'README.md'
+      - 'renovate.json5'
 
 permissions:
   contents: read

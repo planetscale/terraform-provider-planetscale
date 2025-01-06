@@ -4,11 +4,19 @@ on:
   push:
     branches:
       - main
+    paths:
+      - go.mod
+      - go.sum
+      - '**.go'
   merge_group:
     type:
       - checks_requested
 
   pull_request:
+    paths:
+      - go.mod
+      - go.sum
+      - '**.go'
     types:
       - opened
       - synchronize

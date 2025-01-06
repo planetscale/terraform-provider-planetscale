@@ -18,10 +18,5 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
-          bundler-cache: false
-      - run: gem install license_finder
+      - run: sudo gem install license_finder
       - run: license_finder

@@ -3,5 +3,6 @@
   "extends": [
     "github>planetscale/renovate-config",
     "github>planetscale/renovate-config:weeklyBatchMinorPatchDigest"
-  ]
+  ],
+  "prConcurrentLimit": 1
 }
