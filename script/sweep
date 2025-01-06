@@ -7,9 +7,11 @@ ORG="${ORG:-planetscale-terraform-testing}"
 AGE_SECS="${AGE_SECS:-86400}"
 
 pscale database list --org "$ORG" --format json |
-  jq --arg age "$AGE_SECS" -r '.[] | select(
+	jq --arg age "$AGE_SECS" \
+		-r '.[] | select(
     (.name | startswith("testacc")) and
-    (.created_at | sub("\\.\\d+"; "") | fromdateiso8601 < (now - ($age | tonumber)))).name' |
-  while read -r dbname; do
-    pscale database delete "$dbname" --org "$ORG" --force
-  done
+    (.created_at | sub("\\.\\d+"; "") | fromdateiso8601 < (now - ($age | tonumber))))
+    .name' |
+	while read -r dbname; do
+		pscale database delete "$dbname" --org "$ORG" --force
+	done
