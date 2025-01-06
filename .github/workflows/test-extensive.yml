@@ -18,6 +18,11 @@ on:
 permissions:
   contents: read
 
+# Ensures only 1 action runs per PR and previous is canceled on new trigger
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: build
@@ -36,25 +41,20 @@ jobs:
         with:
           version: latest
 
-  test:
-    name: integration
+  test-terraform:
+    name: integration-terraform
     needs: build
     runs-on: ubuntu-latest
+    if: '!github.event.pull_request.head.repo.fork'
     timeout-minutes: 15
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         terraform:
-          # TODO: only test one for now since we are creating and destroying actual
-          # resources. Decide which versions to support when we are closer to a supported
-          # release.
-          # - '1.0.*'
-          # - '1.1.*'
-          # - '1.2.*'
-          # - '1.3.*'
-          # - '1.4.*'
-          # - '1.5.*'
           - '1.6.*'
+          - '1.9.*'
+          - latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -66,6 +66,38 @@ jobs:
         with:
           terraform_version: ${{ matrix.terraform }}
           terraform_wrapper: false
+      - run: make testacc
+        env:
+          PLANETSCALE_SERVICE_TOKEN_NAME: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_NAME }}
+          PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+        timeout-minutes: 10
+
+  test-tofu:
+    name: integration-tofu
+    needs: build
+    runs-on: ubuntu-latest
+    if: '!github.event.pull_request.head.repo.fork'
+    timeout-minutes: 15
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        tofu:
+          - '1.6.*'
+          - '1.7.*'
+          - '1.8.*'
+          - latest
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
+        with:
+          go-version-file: 'go.mod'
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: ${{ matrix.tofu }}
+          tofu_wrapper: false
       - run: make testacc
         env:
           PLANETSCALE_SERVICE_TOKEN_NAME: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_NAME }}

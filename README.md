@@ -58,6 +58,8 @@ Run specific test: `make testacc TESTARGS='-run ^TestAccBranchResource$'`
 
 Debug logs: `TF_PS_PROVIDER_DEBUG=1 TF_LOG=debug make testacc` (or `TF_LOG=trace`)
 
+From time to time it may be necessary to manually cleanup databases created by the acceptance tests. Running `make sweep` will delete all db's created by the acceptance tests older than 24 hours. Alternatively you may run `AGE_SECS=900 make sweep` to supply a shorter age threshold.
+
 ## License
 
 MPL v2.0
