@@ -4,11 +4,17 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'README.md'
+      - 'renovate.json5'
   merge_group:
     type:
       - checks_requested
 
   pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'renovate.json5'
     types:
       - opened
       - synchronize
