@@ -90,3 +90,12 @@ Required:
 - `database` (String) The name of the database imported from.
 - `hostname` (String) The hostname where the database lives.
 - `port` (String) The port on which the database listens on the host.
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+# Databases can be imported using "org,database" as the identifier.
+terraform import planetscale_branch.example "org,database"
+```

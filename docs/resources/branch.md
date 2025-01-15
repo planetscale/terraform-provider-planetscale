@@ -87,3 +87,12 @@ Read-Only:
 - `id` (String) The ID for the resource.
 - `name` (String) The name for the resource.
 - `updated_at` (String) When the resource was last updated.
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+# Branches can be imported using "org,database,branch" as the identifier.
+terraform import planetscale_branch.example "org,database,branch"
+```

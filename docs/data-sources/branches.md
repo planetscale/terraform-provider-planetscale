@@ -58,6 +58,7 @@ Read-Only:
 - `region` (Attributes) The region in which this branch lives. (see [below for nested schema](#nestedatt--branches--region))
 - `restore_checklist_completed_at` (String) When a user last marked a backup restore checklist as completed.
 - `restored_from_branch` (Attributes) (see [below for nested schema](#nestedatt--branches--restored_from_branch))
+- `safe_migrations` (Boolean) Whether safe migrations are enabled for this branch.
 - `schema_last_updated_at` (String) When the schema for the branch was last updated.
 - `shard_count` (Number) The number of shards in the branch.
 - `sharded` (Boolean) Whether or not the branch is sharded.
