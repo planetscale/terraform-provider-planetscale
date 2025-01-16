@@ -567,6 +567,7 @@ type branchDataSourceModel struct {
 	CreatedAt                   types.String                       `tfsdk:"created_at"`
 	HtmlUrl                     types.String                       `tfsdk:"html_url"`
 	Id                          types.String                       `tfsdk:"id"`
+	InitialRestoreId            types.String                       `tfsdk:"initial_restore_id"`
 	MysqlAddress                types.String                       `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                       `tfsdk:"mysql_edge_address"`
 	ParentBranch                types.String                       `tfsdk:"parent_branch"`
