@@ -11,7 +11,7 @@ lint:
 # Run acceptance tests
 .PHONY: testacc
 testacc:
-	TF_ACC=1 go test ./... -v $(TESTARGS) -timeout 120m
+	TF_ACC=1 go test -parallel=2 ./... -v $(TESTARGS) -timeout 120m
 
 .PHONY: generate
 generate:
