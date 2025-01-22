@@ -522,6 +522,10 @@ func branchDataSourceSchemaAttribute(computedName bool) map[string]schema.Attrib
 			Description: "When a user last marked a backup restore checklist as completed.",
 			Computed:    true,
 		},
+		"safe_migrations": schema.BoolAttribute{
+			Description: "Whether safe migrations are enabled for this branch.",
+			Computed:    true,
+		},
 		"schema_last_updated_at": schema.StringAttribute{
 			Description: "When the schema for the branch was last updated.",
 			Computed:    true,
@@ -576,6 +580,7 @@ type branchDataSourceModel struct {
 	Region                      *regionDataSourceModel             `tfsdk:"region"`
 	RestoreChecklistCompletedAt types.String                       `tfsdk:"restore_checklist_completed_at"`
 	RestoredFromBranch          *restoredFromBranchDataSourceModel `tfsdk:"restored_from_branch"`
+	SafeMigrations              types.Bool                         `tfsdk:"safe_migrations"`
 	SchemaLastUpdatedAt         types.String                       `tfsdk:"schema_last_updated_at"`
 	ShardCount                  types.Float64                      `tfsdk:"shard_count"`
 	Sharded                     types.Bool                         `tfsdk:"sharded"`
@@ -603,10 +608,49 @@ func branchFromClient(branch *planetscale.Branch, organization, database string,
 		Production:                  types.BoolValue(branch.Production),
 		Ready:                       types.BoolValue(branch.Ready),
 		RestoreChecklistCompletedAt: types.StringPointerValue(branch.RestoreChecklistCompletedAt),
+		SafeMigrations:              types.BoolValue(branch.SafeMigrations),
 		SchemaLastUpdatedAt:         types.StringValue(branch.SchemaLastUpdatedAt),
 		ShardCount:                  types.Float64PointerValue(branch.ShardCount),
 		Sharded:                     types.BoolValue(branch.Sharded),
 		UpdatedAt:                   types.StringValue(branch.UpdatedAt),
+	}
+}
+
+var branchSafeMigrationsDataSourceSchemaAttribute = map[string]schema.Attribute{
+	"organization": schema.StringAttribute{
+		Description: "The organization this branch belongs to.",
+		Required:    true,
+	},
+	"database": schema.StringAttribute{
+		Description: "The database this branch belongs to.",
+		Required:    true,
+	},
+	"branch": schema.StringAttribute{
+		Description: "The name of the branch this safe migrations configuration belongs to.",
+		Required:    true,
+	},
+	"enabled": schema.BoolAttribute{
+		Description: "Whether safe migrations are enabled for this branch.",
+		Computed:    true,
+	},
+}
+
+type branchSafeMigrationsDataSourceModel struct {
+	Organization types.String `tfsdk:"organization"`
+	Database     types.String `tfsdk:"database"`
+	Branch       types.String `tfsdk:"branch"`
+	Enabled      types.Bool   `tfsdk:"enabled"`
+}
+
+func branchSafeMigrationsFromClient(branch *planetscale.Branch, organization, database string) *branchSafeMigrationsDataSourceModel {
+	if branch == nil {
+		return nil
+	}
+	return &branchSafeMigrationsDataSourceModel{
+		Organization: types.StringValue(organization),
+		Database:     types.StringValue(database),
+		Branch:       types.StringValue(branch.Name),
+		Enabled:      types.BoolValue(branch.SafeMigrations),
 	}
 }
 

@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -13,9 +14,9 @@ func TestAccOrganizationDataSource(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Read testing
 			{
-				Config: testAccOrganizationDataSourceConfig,
+				Config: testAccOrganizationDataSourceConfig(),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("data.planetscale_organization.test", "name", "planetscale-terraform-testing"),
+					resource.TestCheckResourceAttr("data.planetscale_organization.test", "name", testAccOrg),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "billing_email"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "created_at"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "database_count"),
@@ -36,8 +37,10 @@ func TestAccOrganizationDataSource(t *testing.T) {
 	})
 }
 
-const testAccOrganizationDataSourceConfig = `
+func testAccOrganizationDataSourceConfig() string {
+	return fmt.Sprintf(`
 data "planetscale_organization" "test" {
-	name = "planetscale-terraform-testing"
+	name = "%s"
 }
-`
+`, testAccOrg)
+}
