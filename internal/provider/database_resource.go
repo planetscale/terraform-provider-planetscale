@@ -132,7 +132,7 @@ func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaReques
 		MarkdownDescription: `A PlanetScale database.
 
 Known limitations:
-- When the provider is configured with a service token, the service token needs to manually be granted permission on this database resource. This can be done in the UI or via the CLI (` + "`pscale service-token add-access`" + `).`,
+- When using service tokens (recommended), ensure the token has the ` + "`create_databases`" + ` organization-level permission. This allows terraform to create new databases and automatically grants the token all other permissions on the databases created by the token.`,
 		Attributes: map[string]schema.Attribute{
 			"organization": schema.StringAttribute{
 				Description: "The organization this database belongs to.",

@@ -28,14 +28,14 @@ var testAccAPIClient *planetscale.Client
 func testAccPreCheck(t *testing.T) {
 	var (
 		accessToken       = os.Getenv("PLANETSCALE_ACCESS_TOKEN")
-		serviceTokenName  = os.Getenv("PLANETSCALE_SERVICE_TOKEN_NAME")
+		serviceTokenID    = os.Getenv("PLANETSCALE_SERVICE_TOKEN_ID")
 		serviceTokenValue = os.Getenv("PLANETSCALE_SERVICE_TOKEN")
 	)
 	switch {
 	case accessToken != "":
-	case serviceTokenName != "" && serviceTokenValue != "":
+	case serviceTokenID != "" && serviceTokenValue != "":
 	default:
-		t.Fatalf("must have either PLANETSCALE_ACCESS_TOKEN or both of (PLANETSCALE_SERVICE_TOKEN_NAME, PLANETSCALE_SERVICE_TOKEN)")
+		t.Fatalf("must have either PLANETSCALE_ACCESS_TOKEN or both of (PLANETSCALE_SERVICE_TOKEN_ID, PLANETSCALE_SERVICE_TOKEN)")
 	}
 
 	// TODO: factor client creation out of the provider.go Configure() func so we can
@@ -51,11 +51,11 @@ func testAccPreCheck(t *testing.T) {
 			testAccAPIClient = planetscale.NewClient(&http.Client{Transport: rt}, nil)
 		}
 
-		serviceTokenName := os.Getenv("PLANETSCALE_SERVICE_TOKEN_NAME")
+		serviceTokenID := os.Getenv("PLANETSCALE_SERVICE_TOKEN_ID")
 		serviceTokenValue := os.Getenv("PLANETSCALE_SERVICE_TOKEN")
-		if serviceTokenName != "" && serviceTokenValue != "" {
+		if serviceTokenID != "" && serviceTokenValue != "" {
 			rt := roundTripperFunc(func(r *http.Request) (*http.Response, error) {
-				r.Header.Set("Authorization", serviceTokenName+":"+serviceTokenValue)
+				r.Header.Set("Authorization", serviceTokenID+":"+serviceTokenValue)
 				return http.DefaultTransport.RoundTrip(r)
 			})
 			testAccAPIClient = planetscale.NewClient(&http.Client{Transport: rt}, nil)

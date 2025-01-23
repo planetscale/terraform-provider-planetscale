@@ -7,7 +7,7 @@ description: |-
   access token credentials, configured or stored in the environment variable PLANETSCALE_ACCESS_TOKENservice token credentials, configured or stored in the environment variables PLANETSCALE_SERVICE_TOKEN_NAME and PLANETSCALE_SERVICE_TOKEN
   Note that the provider is not production ready and only for early testing at this time.
   Known limitations:
-  Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (pscale service-token add-access)
+  Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.When using service tokens (recommended), ensure the token has the create_databases organization-level permission. This allows terraform to create new databases and automatically grants the token all other permissions on the databases created by the token.
 ---
 
 # planetscale Provider
@@ -21,7 +21,7 @@ Note that the provider is not production ready and only for early testing at thi
 
 Known limitations:
 - Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.
-- Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (`pscale service-token add-access`)
+- When using service tokens (recommended), ensure the token has the `create_databases` organization-level permission. This allows terraform to create new databases and automatically grants the token all other permissions on the databases created by the token.
 
 ## Example Usage
 
@@ -47,4 +47,5 @@ provider "planetscale" {
 - `access_token` (String, Sensitive) Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `service_token_name` and `service_token`.
 - `endpoint` (String) If set, points the API client to a different endpoint than `https:://api.planetscale.com/v1`.
 - `service_token` (String, Sensitive) Value of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN`. Mutually exclusive with `access_token`.
-- `service_token_name` (String) Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`.
+- `service_token_id` (String) ID of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_ID`. Mutually exclusive with `access_token`.
+- `service_token_name` (String, Deprecated) Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`. (Deprecated, use `service_token_id` instead)
