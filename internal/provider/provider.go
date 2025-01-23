@@ -48,7 +48,8 @@ func (p *PlanetScaleProvider) Metadata(ctx context.Context, req provider.Metadat
 func (p *PlanetScaleProvider) ConfigValidators(context.Context) []provider.ConfigValidator {
 	return []provider.ConfigValidator{
 		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token")),
-		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token_name")),
+		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token_id")),
+		providervalidator.Conflicting(path.MatchRoot("access_token"), path.MatchRoot("service_token_name")), // service_token_name is deprecated
 	}
 }
 
@@ -57,7 +58,7 @@ func (p *PlanetScaleProvider) Schema(ctx context.Context, req provider.SchemaReq
 		MarkdownDescription: `The PlanetScale provider allows using the OpenAPI surface of our public API. To use this provider, one of the following are required:
 
 - access token credentials, configured or stored in the environment variable ` + "`PLANETSCALE_ACCESS_TOKEN`" + `
-- service token credentials, configured or stored in the environment variables ` + "`PLANETSCALE_SERVICE_TOKEN_NAME`" + ` and ` + "`PLANETSCALE_SERVICE_TOKEN`" + `
+- service token credentials, configured or stored in the environment variables ` + "`PLANETSCALE_SERVICE_TOKEN_ID`" + ` and ` + "`PLANETSCALE_SERVICE_TOKEN`" + `
 
 Note that the provider is not production ready and only for early testing at this time.
 
@@ -70,7 +71,7 @@ Known limitations:
 				Optional:            true,
 			},
 			"access_token": schema.StringAttribute{
-				MarkdownDescription: "Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `service_token_name` and `service_token`.",
+				MarkdownDescription: "Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_ID`. Mutually exclusive with `service_token_id` and `service_token`.",
 				Optional:            true,
 				Sensitive:           true,
 				Validators: []validator.String{
@@ -149,7 +150,7 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 	// Adding this to `resp.Diagnostics` ensures it will be printed during typical
 	// terraform operations, whereas logging with `tflog.Warn()` will only show if the
 	// users specifies the `TF_LOG` env var.
-	if serviceTokenName != "" && serviceTokenID == "" {
+	if serviceTokenName != "" {
 		resp.Diagnostics.AddWarning(
 			"Deprecated Configuration",
 			"PLANETSCALE_SERVICE_TOKEN_NAME is deprecated. Please use PLANETSCALE_SERVICE_TOKEN_ID instead.",
