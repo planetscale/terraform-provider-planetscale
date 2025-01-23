@@ -22,13 +22,13 @@ terraform {
 }
 ```
 
-You must then configure the provider to either use a service token, or an access token. Either can be configured in the provider config block, or via env vars (`PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN`, or `PLANETSCALE_ACCESS_TOKEN`):
+You must then configure the provider to either use a service token, or an access token. Either can be configured in the provider config block, or via env vars (`PLANETSCALE_SERVICE_TOKEN_ID` and `PLANETSCALE_SERVICE_TOKEN`, or `PLANETSCALE_ACCESS_TOKEN`):
 
 ```hcl
 provider "planetscale" {
   # use a service token
-  service_token_name = "..." # ID of the service token to use, e.g "8fbddg0zlq0r"
-  service_token      = "..." # Secret for the service token.
+  service_token_id = "..." # ID of the service token to use, e.g "8fbddg0zlq0r"
+  service_token    = "..." # Secret for the service token.
 
   # or use an access token
   access_token       = "..." # Secret for the access token.
@@ -48,7 +48,7 @@ Contributions should follow this workflow, or integrate with it.
 
 ### Tests
 
-You will need to set either `PLANETSCALE_ACCESS_TOKEN` or `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN` to run acceptance tests.
+You will need to set either `PLANETSCALE_ACCESS_TOKEN` or `PLANETSCALE_SERVICE_TOKEN_ID` and `PLANETSCALE_SERVICE_TOKEN` to run acceptance tests.
 
 The org to create resources under is currently hardcoded in the tests. You may need to change this to match your own org.  Acceptance tests create real resources in your PlanetScale org.
 

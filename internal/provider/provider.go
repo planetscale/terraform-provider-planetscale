@@ -35,7 +35,8 @@ type PlanetScaleProviderModel struct {
 
 	AccessToken types.String `tfsdk:"access_token"`
 
-	ServiceTokenName  types.String `tfsdk:"service_token_name"`
+	ServiceTokenID    types.String `tfsdk:"service_token_id"`   // new preferred field
+	ServiceTokenName  types.String `tfsdk:"service_token_name"` // deprecated
 	ServiceTokenValue types.String `tfsdk:"service_token"`
 }
 
@@ -62,7 +63,7 @@ Note that the provider is not production ready and only for early testing at thi
 
 Known limitations:
 - Support for deployments, deploy queues, deploy requests and reverts is not implemented at this time. If you have a use case for it, please let us know in the repository issues.
-- Service tokens don't immediately have read/write access on the resources they create. For now, access must be granted via the UI or via the CLI (` + "`pscale service-token add-access`" + `)`,
+- When using service tokens (recommended), ensure the token has the ` + "`create_databases`" + ` organization-level permission. This allows terraform to create new databases and automatically grants the token all other permissions on the databases created by the token.`,
 		Attributes: map[string]schema.Attribute{
 			"endpoint": schema.StringAttribute{
 				MarkdownDescription: "If set, points the API client to a different endpoint than `https:://api.planetscale.com/v1`.",
@@ -74,14 +75,25 @@ Known limitations:
 				Sensitive:           true,
 				Validators: []validator.String{
 					stringvalidator.ConflictsWith(path.MatchRoot("service_token_name")),
+					stringvalidator.ConflictsWith(path.MatchRoot("service_token_id")),
 					stringvalidator.ConflictsWith(path.MatchRoot("service_token")),
 				},
 			},
-			"service_token_name": schema.StringAttribute{
-				MarkdownDescription: "Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`.",
+			"service_token_id": schema.StringAttribute{
+				MarkdownDescription: "ID of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_ID`. Mutually exclusive with `access_token`.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.ConflictsWith(path.MatchRoot("access_token")),
+					stringvalidator.ConflictsWith(path.MatchRoot("service_token_name")),
+				},
+			},
+			"service_token_name": schema.StringAttribute{
+				MarkdownDescription: "Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`. (Deprecated, use `service_token_id` instead)",
+				Optional:            true,
+				DeprecationMessage:  "Use service_token_id instead. This field will be removed in a future version.",
+				Validators: []validator.String{
+					stringvalidator.ConflictsWith(path.MatchRoot("access_token")),
+					stringvalidator.ConflictsWith(path.MatchRoot("service_token_id")),
 				},
 			},
 			"service_token": schema.StringAttribute{
@@ -128,31 +140,50 @@ func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.Config
 	}
 	var (
 		accessToken       = stringValueOrDefault(data.AccessToken, os.Getenv("PLANETSCALE_ACCESS_TOKEN"))
+		serviceTokenID    = stringValueOrDefault(data.ServiceTokenID, os.Getenv("PLANETSCALE_SERVICE_TOKEN_ID"))
 		serviceTokenName  = stringValueOrDefault(data.ServiceTokenName, os.Getenv("PLANETSCALE_SERVICE_TOKEN_NAME"))
 		serviceTokenValue = stringValueOrDefault(data.ServiceTokenValue, os.Getenv("PLANETSCALE_SERVICE_TOKEN"))
 	)
+
+	// Warn if the deprecated PLANETSCALE_SERVICE_TOKEN_NAME env var is used.
+	// Adding this to `resp.Diagnostics` ensures it will be printed during typical
+	// terraform operations, whereas logging with `tflog.Warn()` will only show if the
+	// users specifies the `TF_LOG` env var.
+	if serviceTokenName != "" && serviceTokenID == "" {
+		resp.Diagnostics.AddWarning(
+			"Deprecated Configuration",
+			"PLANETSCALE_SERVICE_TOKEN_NAME is deprecated. Please use PLANETSCALE_SERVICE_TOKEN_ID instead.",
+		)
+	}
+
+	// Use serviceTokenID if available, fall back to serviceTokenName
+	effectiveTokenID := serviceTokenID
+	if effectiveTokenID == "" {
+		effectiveTokenID = serviceTokenName
+	}
+
 	switch {
-	case accessToken != "" && serviceTokenName == "" && serviceTokenValue == "":
+	case accessToken != "" && effectiveTokenID == "" && serviceTokenValue == "":
 		tok := &oauth2.Token{AccessToken: accessToken}
 		rt = &oauth2.Transport{Base: initrt, Source: oauth2.StaticTokenSource(tok)}
-	case accessToken == "" && serviceTokenName != "" && serviceTokenValue != "":
+	case accessToken == "" && effectiveTokenID != "" && serviceTokenValue != "":
 		rt = roundTripperFunc(func(r *http.Request) (*http.Response, error) {
-			r.Header.Set("Authorization", serviceTokenName+":"+serviceTokenValue)
+			r.Header.Set("Authorization", effectiveTokenID+":"+serviceTokenValue)
 			return initrt.RoundTrip(r)
 		})
-	case accessToken == "" && serviceTokenName == "" && serviceTokenValue == "":
+	case accessToken == "" && effectiveTokenID == "" && serviceTokenValue == "":
 		resp.Diagnostics.AddError("Missing PlanetScale credentials.",
 			"You must set either of:\n"+
 				"- `PLANETSCALE_ACCESS_TOKEN`\n"+
-				"- `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN`")
-	case accessToken == "" && serviceTokenName != "" && serviceTokenValue == "",
-		accessToken == "" && serviceTokenName == "" && serviceTokenValue != "":
+				"- `PLANETSCALE_SERVICE_TOKEN_ID` and `PLANETSCALE_SERVICE_TOKEN`")
+	case accessToken == "" && effectiveTokenID != "" && serviceTokenValue == "",
+		accessToken == "" && effectiveTokenID == "" && serviceTokenValue != "":
 		resp.Diagnostics.AddError("Incomplete PlanetScale service token credentials.",
-			"Both of `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN` must be set.")
+			"Both of `PLANETSCALE_SERVICE_TOKEN_ID` and `PLANETSCALE_SERVICE_TOKEN` must be set.")
 	default:
 		resp.Diagnostics.AddError("Ambiguous PlanetScale credentials.", "You must set only an access token or a service token, but not both:\n"+
 			"- `PLANETSCALE_ACCESS_TOKEN`\n"+
-			"- `PLANETSCALE_SERVICE_TOKEN_NAME` and `PLANETSCALE_SERVICE_TOKEN`")
+			"- `PLANETSCALE_SERVICE_TOKEN_ID` and `PLANETSCALE_SERVICE_TOKEN`")
 	}
 	if resp.Diagnostics.HasError() {
 		return
