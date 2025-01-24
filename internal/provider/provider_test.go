@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
@@ -8,8 +9,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 	"golang.org/x/oauth2"
@@ -84,5 +88,106 @@ func checkOneOf(values ...string) resource.CheckResourceAttrWithFunc {
 			}
 		}
 		return fmt.Errorf("value %q is not one of %s", value, strings.Join(values, ", "))
+	}
+}
+
+func TestProviderConfigure(t *testing.T) {
+	cases := map[string]struct {
+		config      map[string]tftypes.Value
+		expectWarn  bool
+		expectError bool
+	}{
+		"service_token_id only": {
+			config: map[string]tftypes.Value{
+				"service_token_name": tftypes.NewValue(tftypes.String, nil), // deprecated
+				"service_token_id":   tftypes.NewValue(tftypes.String, "token123"),
+				"service_token":      tftypes.NewValue(tftypes.String, "secret"),
+				"endpoint":           tftypes.NewValue(tftypes.String, nil),
+				"access_token":       tftypes.NewValue(tftypes.String, nil),
+			},
+			expectWarn:  false,
+			expectError: false,
+		},
+
+		"both access_token and service_token specified": {
+			config: map[string]tftypes.Value{
+				"service_token_name": tftypes.NewValue(tftypes.String, nil), // deprecated
+				"service_token_id":   tftypes.NewValue(tftypes.String, "token123"),
+				"service_token":      tftypes.NewValue(tftypes.String, "secret"),
+				"endpoint":           tftypes.NewValue(tftypes.String, nil),
+				"access_token":       tftypes.NewValue(tftypes.String, "acctoken123"),
+			},
+			expectWarn:  false,
+			expectError: true,
+		},
+
+		"deprecated service_token_name used": {
+			config: map[string]tftypes.Value{
+				"service_token_name": tftypes.NewValue(tftypes.String, "token123"), // deprecated
+				"service_token_id":   tftypes.NewValue(tftypes.String, nil),
+				"service_token":      tftypes.NewValue(tftypes.String, "secret"),
+				"endpoint":           tftypes.NewValue(tftypes.String, nil),
+				"access_token":       tftypes.NewValue(tftypes.String, nil),
+			},
+			expectWarn:  true,
+			expectError: false,
+		},
+
+		"deprecated service_token_name is used with service_token_id": {
+			config: map[string]tftypes.Value{
+				"service_token_name": tftypes.NewValue(tftypes.String, "token123"), // deprecated
+				"service_token_id":   tftypes.NewValue(tftypes.String, nil),
+				"service_token":      tftypes.NewValue(tftypes.String, "secret"),
+				"endpoint":           tftypes.NewValue(tftypes.String, nil),
+				"access_token":       tftypes.NewValue(tftypes.String, nil),
+			},
+			expectWarn:  true,
+			expectError: false,
+		},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			ctx := context.Background()
+			p := New("test", false)()
+
+			var schemaResp provider.SchemaResponse
+			p.Schema(ctx, provider.SchemaRequest{}, &schemaResp)
+
+			objectType := tftypes.Object{
+				AttributeTypes: map[string]tftypes.Type{
+					"endpoint":           tftypes.String,
+					"access_token":       tftypes.String,
+					"service_token_id":   tftypes.String,
+					"service_token_name": tftypes.String,
+					"service_token":      tftypes.String,
+				},
+			}
+
+			var req provider.ConfigureRequest
+			req.Config = tfsdk.Config{
+				Raw:    tftypes.NewValue(objectType, tc.config),
+				Schema: schemaResp.Schema,
+			}
+			var resp provider.ConfigureResponse
+
+			p.Configure(ctx, req, &resp)
+
+			// t.Logf("Diagnostics: %v", resp.Diagnostics)
+
+			if tc.expectWarn && resp.Diagnostics.WarningsCount() == 0 {
+				t.Error("expected warning but got none")
+			}
+			if !tc.expectWarn && resp.Diagnostics.WarningsCount() != 0 {
+				t.Errorf("unexpected warning: %v", resp.Diagnostics)
+			}
+
+			if tc.expectError && !resp.Diagnostics.HasError() {
+				t.Error("expected error but got none")
+			}
+			if !tc.expectError && resp.Diagnostics.HasError() {
+				t.Errorf("unexpected error: %v", resp.Diagnostics)
+			}
+		})
 	}
 }
