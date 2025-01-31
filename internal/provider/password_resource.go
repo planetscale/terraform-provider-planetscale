@@ -188,7 +188,7 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			"cidrs": schema.ListAttribute{
 				Description: "List of IP addresses or CIDR ranges that can use this password.",
 				Optional:    true,
-				Computed:    true,
+				Computed:    false,
 				ElementType: types.StringType,
 			},
 
