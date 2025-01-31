@@ -43,7 +43,6 @@ Read-Only:
 - `name` (String) The name of the organization.
 - `plan` (String) The billing plan of the organization.
 - `single_tenancy` (Boolean) Whether or not the organization has single tenancy enabled.
-- `sleeping_database_count` (Number) The number of sleeping databases in the organization.
 - `sso` (Boolean) Whether or not SSO is enabled on the organization.
 - `sso_directory` (Boolean) Whether or not the organization uses a WorkOS directory.
 - `sso_portal_url` (String) The URL of the organization's SSO portal.

@@ -56,10 +56,6 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 			Description: "Whether or not the organization has single tenancy enabled.",
 			Computed:    true,
 		},
-		"sleeping_database_count": schema.Float64Attribute{
-			Description: "The number of sleeping databases in the organization.",
-			Computed:    true,
-		},
 		"sso": schema.BoolAttribute{
 			Description: "Whether or not SSO is enabled on the organization.",
 			Computed:    true,
