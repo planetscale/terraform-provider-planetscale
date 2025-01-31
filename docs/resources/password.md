@@ -37,6 +37,7 @@ output "password" {
 
 ### Optional
 
+- `cidrs` (List of String) List of IP addresses or CIDR ranges that can use this password.
 - `name` (String) The display name for the password.
 - `role` (String) The role for the password.
 - `ttl_seconds` (Number) Time to live (in seconds) for the password. The password will be invalid and unrenewable when TTL has passed.
