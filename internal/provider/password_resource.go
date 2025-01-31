@@ -71,6 +71,14 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 	diags.Append(diags...)
 	region, diags := types.ObjectValueFrom(ctx, regionResourceAttrTypes, password.Region)
 	diags.Append(diags...)
+
+	var cidrs types.List
+	if password.Cidrs != nil {
+		cidrs = stringsToListValue(password.Cidrs, diags)
+	} else {
+		cidrs = types.ListNull(types.StringType)
+	}
+
 	return &passwordResourceModel{
 		Organization: organization,
 		Database:     database,
@@ -89,7 +97,7 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
-		Cidrs:          stringsToListValue(password.Cidrs, diags),
+		Cidrs:          cidrs,
 		PlainText:      plainText,
 
 		// manually removed from spec because currently buggy
@@ -107,6 +115,14 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 	diags.Append(diags...)
 	region, diags := types.ObjectValueFrom(ctx, regionResourceAttrTypes, password.Region)
 	diags.Append(diags...)
+
+	var cidrs types.List
+	if password.Cidrs != nil {
+		cidrs = stringsToListValue(password.Cidrs, diags)
+	} else {
+		cidrs = types.ListNull(types.StringType)
+	}
+
 	return &passwordResourceModel{
 		Organization: organization,
 		Database:     database,
@@ -125,7 +141,7 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
-		Cidrs:          stringsToListValue(password.Cidrs, diags),
+		Cidrs:          cidrs,
 		PlainText:      types.StringValue(password.PlainText),
 
 		// manually removed from spec because currently buggy
