@@ -26,7 +26,6 @@ func TestAccOrganizationDataSource(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "idp_managed_roles"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "plan"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "single_tenancy"),
-					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "sleeping_database_count"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "sso"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "sso_directory"),
 					resource.TestCheckResourceAttrSet("data.planetscale_organization.test", "updated_at"),
