@@ -51,6 +51,7 @@ type passwordResourceModel struct {
 	Region         types.Object  `tfsdk:"region"`
 	Renewable      types.Bool    `tfsdk:"renewable"`
 	Role           types.String  `tfsdk:"role"`
+	Cidrs          types.List    `tfsdk:"cidrs"`
 	TtlSeconds     types.Float64 `tfsdk:"ttl_seconds"`
 	Username       types.String  `tfsdk:"username"`
 
@@ -88,8 +89,8 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
-
-		PlainText: plainText,
+		Cidrs:          stringsToListValue(password.Cidrs, diags),
+		PlainText:      plainText,
 
 		// manually removed from spec because currently buggy
 		// Integrations:   stringsToListValue(password.Integrations, diags),
@@ -124,8 +125,8 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
-
-		PlainText: types.StringValue(password.PlainText),
+		Cidrs:          stringsToListValue(password.Cidrs, diags),
+		PlainText:      types.StringValue(password.PlainText),
 
 		// manually removed from spec because currently buggy
 		// Integrations:   stringsToListValue(password.Integrations, diags),
@@ -183,6 +184,12 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			"name": schema.StringAttribute{
 				Description: "The display name for the password.",
 				Optional:    true,
+			},
+			"cidrs": schema.ListAttribute{
+				Description: "List of IP addresses or CIDR ranges that can use this password.",
+				Optional:    true,
+				Computed:    true,
+				ElementType: types.StringType,
 			},
 
 			// read-only
@@ -421,7 +428,7 @@ func (r *passwordResource) Update(ctx context.Context, req resource.UpdateReques
 	var state *passwordResourceModel
 	if changedUpdatableSettings && name != nil {
 		updateReq := planetscale.UpdatePasswordReq{
-			Name: *name,
+			Name: name,
 		}
 		res, err := r.client.UpdatePassword(
 			ctx,
