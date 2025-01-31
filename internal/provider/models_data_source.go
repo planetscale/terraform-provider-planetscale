@@ -84,23 +84,22 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 }
 
 type organizationDataSourceModel struct {
-	BillingEmail          types.String             `tfsdk:"billing_email"`
-	CreatedAt             types.String             `tfsdk:"created_at"`
-	DatabaseCount         types.Float64            `tfsdk:"database_count"`
-	Features              *featuresDataSourceModel `tfsdk:"features"`
-	Flags                 *flagsDataSourceModel    `tfsdk:"flags"`
-	HasPastDueInvoices    types.Bool               `tfsdk:"has_past_due_invoices"`
-	Id                    types.String             `tfsdk:"id"`
-	Name                  types.String             `tfsdk:"name"`
-	Plan                  types.String             `tfsdk:"plan"`
-	SingleTenancy         types.Bool               `tfsdk:"single_tenancy"`
-	SleepingDatabaseCount types.Float64            `tfsdk:"sleeping_database_count"`
-	Sso                   types.Bool               `tfsdk:"sso"`
-	SsoDirectory          types.Bool               `tfsdk:"sso_directory"`
-	SsoPortalUrl          types.String             `tfsdk:"sso_portal_url"`
-	UpdatedAt             types.String             `tfsdk:"updated_at"`
-	ValidBillingInfo      types.Bool               `tfsdk:"valid_billing_info"`
-	IdpManagedRoles       types.Bool               `tfsdk:"idp_managed_roles"`
+	BillingEmail       types.String             `tfsdk:"billing_email"`
+	CreatedAt          types.String             `tfsdk:"created_at"`
+	DatabaseCount      types.Float64            `tfsdk:"database_count"`
+	Features           *featuresDataSourceModel `tfsdk:"features"`
+	Flags              *flagsDataSourceModel    `tfsdk:"flags"`
+	HasPastDueInvoices types.Bool               `tfsdk:"has_past_due_invoices"`
+	Id                 types.String             `tfsdk:"id"`
+	Name               types.String             `tfsdk:"name"`
+	Plan               types.String             `tfsdk:"plan"`
+	SingleTenancy      types.Bool               `tfsdk:"single_tenancy"`
+	Sso                types.Bool               `tfsdk:"sso"`
+	SsoDirectory       types.Bool               `tfsdk:"sso_directory"`
+	SsoPortalUrl       types.String             `tfsdk:"sso_portal_url"`
+	UpdatedAt          types.String             `tfsdk:"updated_at"`
+	ValidBillingInfo   types.Bool               `tfsdk:"valid_billing_info"`
+	IdpManagedRoles    types.Bool               `tfsdk:"idp_managed_roles"`
 }
 
 func organizationFromClient(org *planetscale.Organization) *organizationDataSourceModel {
