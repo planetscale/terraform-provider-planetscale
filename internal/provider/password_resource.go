@@ -13,7 +13,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -212,6 +211,9 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			"id": schema.StringAttribute{
 				Description: "The ID for the password.",
 				Computed:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"actor": schema.SingleNestedAttribute{
 				Description: "The actor that created this branch.",
@@ -222,9 +224,6 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: "The branch this password is allowed to access.",
 				Computed:    true,
 				Attributes:  databaseBranchResourceAttribute,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplace(),
-				},
 			},
 			"region": schema.SingleNestedAttribute{
 				Description: "The region in which this password can be used.",
@@ -260,6 +259,9 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			"plaintext": schema.StringAttribute{
 				Description: "The plaintext password, only available if the password was created by this provider.",
 				Sensitive:   true, Computed: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 
 			// manually removed from spec because currently buggy
@@ -314,10 +316,17 @@ func (r *passwordResource) Create(ctx context.Context, req resource.CreateReques
 	role := data.Role
 	ttl := data.TtlSeconds
 
+	cidrs := make([]string, 0, len(data.Cidrs.Elements()))
+	resp.Diagnostics.Append(data.Cidrs.ElementsAs(ctx, &cidrs, false)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	createReq := planetscale.CreatePasswordReq{
-		Name: name.ValueStringPointer(),
-		Role: role.ValueStringPointer(),
-		Ttl:  ttl.ValueFloat64Pointer(),
+		Cidrs: &cidrs,
+		Name:  name.ValueStringPointer(),
+		Role:  role.ValueStringPointer(),
+		Ttl:   ttl.ValueFloat64Pointer(),
 	}
 	res, err := r.client.CreatePassword(ctx, org.ValueString(), database.ValueString(), branch.ValueString(), createReq)
 	if err != nil {
@@ -441,10 +450,20 @@ func (r *passwordResource) Update(ctx context.Context, req resource.UpdateReques
 	changedUpdatableSettings := false
 	name := stringIfDifferent(old.Name, data.Name, &changedUpdatableSettings)
 
+	if !old.Cidrs.Equal(data.Cidrs) {
+		changedUpdatableSettings = true
+	}
+	cidrs := make([]string, 0, len(data.Cidrs.Elements()))
+	resp.Diagnostics.Append(data.Cidrs.ElementsAs(ctx, &cidrs, false)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	var state *passwordResourceModel
-	if changedUpdatableSettings && name != nil {
+	if changedUpdatableSettings {
 		updateReq := planetscale.UpdatePasswordReq{
-			Name: name,
+			Name:  name,
+			Cidrs: &cidrs,
 		}
 		res, err := r.client.UpdatePassword(
 			ctx,
@@ -470,6 +489,8 @@ func (r *passwordResource) Update(ctx context.Context, req resource.UpdateReques
 		if resp.Diagnostics.HasError() {
 			return
 		}
+		// API does not return plaintext password, re-use from prior state
+		state.PlainText = old.PlainText
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
