@@ -97,6 +97,7 @@ func TestAccPasswordResource(t *testing.T) {
 			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv6Cidrs[1]),
 			// 	),
 			// },
+			// TODO: when the API supports ipv6:
 			// Update `cidrs` with ipv4 + ipv6 mixed ranges
 			// {
 			// 	Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", mixedCidrs),
@@ -106,6 +107,14 @@ func TestAccPasswordResource(t *testing.T) {
 			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", mixedCidrs[1]),
 			// 	),
 			// },
+			// Test removal of `cidrs`
+			{
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", nil),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckNoResourceAttr("planetscale_password.test", "cidrs"),
+					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "0"),
+				),
+			},
 		},
 	})
 }
