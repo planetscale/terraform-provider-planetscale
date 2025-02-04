@@ -14,6 +14,89 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
+func TestValidateNonOverlappingCIDRs(t *testing.T) {
+	tests := []struct {
+		name    string
+		cidrs   []string
+		wantErr bool
+	}{
+		{
+			name:    "empty list is valid",
+			cidrs:   []string{},
+			wantErr: false,
+		},
+		{
+			name:    "single CIDR is valid",
+			cidrs:   []string{"10.0.0.0/24"},
+			wantErr: false,
+		},
+		{
+			name:    "non-overlapping IPv4 CIDRs are valid",
+			cidrs:   []string{"10.0.0.0/24", "10.0.1.0/24", "192.168.1.0/24"},
+			wantErr: false,
+		},
+		{
+			name:    "non-overlapping IPv6 CIDRs are valid",
+			cidrs:   []string{"2001:db8::/32", "2001:db9::/32"},
+			wantErr: false,
+		},
+		{
+			name:    "mixed non-overlapping IPv4/IPv6 CIDRs are valid",
+			cidrs:   []string{"10.0.0.0/24", "2001:db8::/32"},
+			wantErr: false,
+		},
+		{
+			name:    "duplicated IPv4 CIDRs are invalid",
+			cidrs:   []string{"10.0.0.0/24", "10.0.0.0/24"},
+			wantErr: true,
+		},
+		{
+			name:    "overlapping IPv4 CIDRs are invalidd",
+			cidrs:   []string{"10.0.0.0/8", "10.1.0.0/8"},
+			wantErr: true,
+		},
+		{
+			name:    "containing IPv4 CIDRs",
+			cidrs:   []string{"10.0.0.0/16", "10.0.1.0/24"},
+			wantErr: true,
+		},
+		{
+			name:    "duplicated IPv6 CIDRs are invalid",
+			cidrs:   []string{"2001:db8::/32", "2001:db8::/32"},
+			wantErr: true,
+		},
+		{
+			name:    "overlapping IPv6 CIDRs are invalid",
+			cidrs:   []string{"2001:db8::/24", "2001:db8::/32"},
+			wantErr: true,
+		},
+		{
+			name:    "containing IPv6 CIDRs",
+			cidrs:   []string{"2001:db8::/32", "2001:db8:1::/48"},
+			wantErr: true,
+		},
+		{
+			name:    "invalid CIDR format",
+			cidrs:   []string{"10.0.0.0/24", "invalid"},
+			wantErr: true,
+		},
+		{
+			name:    "invalid CIDR prefix length",
+			cidrs:   []string{"10.0.0.0/24", "10.0.0.0/33"},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateNonOverlappingCIDRs(tt.cidrs)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("validateNonOverlappingCIDRs() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestAccPasswordResource(t *testing.T) {
 	dbName := acctest.RandomWithPrefix("testacc-passwd-db")
 	branchName := acctest.RandomWithPrefix("branch")
@@ -69,6 +152,7 @@ func TestAccPasswordResource(t *testing.T) {
 					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName+"-new"),
 				),
 			},
+
 			// TODO: when the API supports ipv6:
 			// Update 'cidrs' attribute with single ipv6 range:
 			// {
@@ -78,6 +162,7 @@ func TestAccPasswordResource(t *testing.T) {
 			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", ipv6Cidr[0]),
 			// 	),
 			// },
+
 			// Update `cidrs` with multiple ipv4 ranges
 			{
 				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", multiIPv4Cidrs),
@@ -87,6 +172,7 @@ func TestAccPasswordResource(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv4Cidrs[1]),
 				),
 			},
+
 			// TODO: when the API supports ipv6:
 			// Update `cidrs` with multiple ipv6 ranges
 			// {
@@ -97,6 +183,7 @@ func TestAccPasswordResource(t *testing.T) {
 			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv6Cidrs[1]),
 			// 	),
 			// },
+
 			// TODO: when the API supports ipv6:
 			// Update `cidrs` with ipv4 + ipv6 mixed ranges
 			// {
@@ -107,12 +194,13 @@ func TestAccPasswordResource(t *testing.T) {
 			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", mixedCidrs[1]),
 			// 	),
 			// },
+
 			// Test removal of `cidrs`
 			{
 				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", nil),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckNoResourceAttr("planetscale_password.test", "cidrs"),
-					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "0"),
+					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "1"),
 				),
 			},
 		},
@@ -125,7 +213,6 @@ func TestAccPasswordResource_ValidationFailures(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				// Minimal config that will fail validation
 				Config: `
                     resource "planetscale_password" "test" {
                         organization = "test-org"
@@ -136,7 +223,6 @@ func TestAccPasswordResource_ValidationFailures(t *testing.T) {
 				ExpectError: regexp.MustCompile("CIDR notation required"),
 			},
 			{
-				// Minimal config that will fail validation
 				Config: `
                     resource "planetscale_password" "test" {
                         organization = "test-org"
@@ -145,6 +231,26 @@ func TestAccPasswordResource_ValidationFailures(t *testing.T) {
                         cidrs      = ["2001:db8::1"]  # Missing prefix
                     }`,
 				ExpectError: regexp.MustCompile("CIDR notation required"),
+			},
+			{
+				Config: `
+                    resource "planetscale_password" "test" {
+                        organization = "test-org"
+                        database    = "test-db"
+                        branch     = "main"
+                        cidrs      = ["10.0.0.0/8", "10.1.0.0/8"]  # overlapping
+                    }`,
+				ExpectError: regexp.MustCompile("CIDR.+overlaps"),
+			},
+			{
+				Config: `
+                    resource "planetscale_password" "test" {
+                        organization = "test-org"
+                        database    = "test-db"
+                        branch     = "main"
+                        cidrs      = ["999.0.0.1/32"]  # invalid
+                    }`,
+				ExpectError: regexp.MustCompile("invalid CIDR"),
 			},
 		},
 	})

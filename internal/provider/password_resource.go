@@ -6,6 +6,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"net/netip"
 	"regexp"
 	"strings"
 
@@ -152,6 +153,58 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 	}
 }
 
+func validateNonOverlappingCIDRs(cidrs []string) error {
+	prefixes := make([]netip.Prefix, len(cidrs))
+	for i, cidr := range cidrs {
+		prefix, err := netip.ParsePrefix(cidr)
+		if err != nil {
+			return fmt.Errorf("invalid CIDR %q: %w", cidr, err)
+		}
+		prefixes[i] = prefix
+	}
+
+	for i := 0; i < len(prefixes); i++ {
+		for j := i + 1; j < len(prefixes); j++ {
+			if prefixes[i].Overlaps(prefixes[j]) {
+				return fmt.Errorf("CIDR %q overlaps with %q",
+					cidrs[i], cidrs[j])
+			}
+		}
+	}
+	return nil
+}
+
+type cidrValidator struct{}
+
+func (v cidrValidator) ValidateList(ctx context.Context, req validator.ListRequest, resp *validator.ListResponse) {
+	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+		return
+	}
+
+	var cidrs []string
+	diags := req.ConfigValue.ElementsAs(ctx, &cidrs, false)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if err := validateNonOverlappingCIDRs(cidrs); err != nil {
+		resp.Diagnostics.AddAttributeError(
+			req.Path,
+			"Invalid CIDR Configuration",
+			err.Error(),
+		)
+	}
+}
+
+func (v cidrValidator) Description(ctx context.Context) string {
+	return "validates that CIDRs do not overlap"
+}
+
+func (v cidrValidator) MarkdownDescription(ctx context.Context) string {
+	return "validates that CIDRs do not overlap"
+}
+
 func (r *passwordResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_password"
 }
@@ -205,7 +258,7 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				Optional:    true,
 			},
 			"cidrs": schema.ListAttribute{
-				Description: "List of IP addresses or CIDR ranges that can use this password.",
+				Description: "List of IP addresses or CIDR ranges that can use this password. Individual IPs must still contain a prefix, eg: 127.0.0.1/32",
 				Optional:    true,
 				Computed:    false,
 				ElementType: types.StringType,
@@ -216,6 +269,7 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 							"CIDR notation required (e.g. '127.0.0.1/32' for IPv4 or '2001:db8::/128' for IPv6)",
 						),
 					),
+					cidrValidator{},
 				},
 			},
 
