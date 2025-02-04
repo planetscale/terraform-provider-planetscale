@@ -200,7 +200,6 @@ func TestAccPasswordResource(t *testing.T) {
 				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", nil),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckNoResourceAttr("planetscale_password.test", "cidrs"),
-					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "1"),
 				),
 			},
 		},
