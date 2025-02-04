@@ -37,7 +37,7 @@ output "password" {
 
 ### Optional
 
-- `cidrs` (List of String) List of IP addresses or CIDR ranges that can use this password.
+- `cidrs` (List of String) List of IP addresses or CIDR ranges that can use this password. Individual IPs must still contain a prefix, eg: 127.0.0.1/32
 - `name` (String) The display name for the password.
 - `role` (String) The role for the password.
 - `ttl_seconds` (Number) Time to live (in seconds) for the password. The password will be invalid and unrenewable when TTL has passed.
