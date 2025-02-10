@@ -56,10 +56,6 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 			Description: "Whether or not the organization has single tenancy enabled.",
 			Computed:    true,
 		},
-		"sleeping_database_count": schema.Float64Attribute{
-			Description: "The number of sleeping databases in the organization.",
-			Computed:    true,
-		},
 		"sso": schema.BoolAttribute{
 			Description: "Whether or not SSO is enabled on the organization.",
 			Computed:    true,
@@ -84,23 +80,22 @@ func organizationDataSourceSchemaAttribute(computedName bool) map[string]schema.
 }
 
 type organizationDataSourceModel struct {
-	BillingEmail          types.String             `tfsdk:"billing_email"`
-	CreatedAt             types.String             `tfsdk:"created_at"`
-	DatabaseCount         types.Float64            `tfsdk:"database_count"`
-	Features              *featuresDataSourceModel `tfsdk:"features"`
-	Flags                 *flagsDataSourceModel    `tfsdk:"flags"`
-	HasPastDueInvoices    types.Bool               `tfsdk:"has_past_due_invoices"`
-	Id                    types.String             `tfsdk:"id"`
-	Name                  types.String             `tfsdk:"name"`
-	Plan                  types.String             `tfsdk:"plan"`
-	SingleTenancy         types.Bool               `tfsdk:"single_tenancy"`
-	SleepingDatabaseCount types.Float64            `tfsdk:"sleeping_database_count"`
-	Sso                   types.Bool               `tfsdk:"sso"`
-	SsoDirectory          types.Bool               `tfsdk:"sso_directory"`
-	SsoPortalUrl          types.String             `tfsdk:"sso_portal_url"`
-	UpdatedAt             types.String             `tfsdk:"updated_at"`
-	ValidBillingInfo      types.Bool               `tfsdk:"valid_billing_info"`
-	IdpManagedRoles       types.Bool               `tfsdk:"idp_managed_roles"`
+	BillingEmail       types.String             `tfsdk:"billing_email"`
+	CreatedAt          types.String             `tfsdk:"created_at"`
+	DatabaseCount      types.Float64            `tfsdk:"database_count"`
+	Features           *featuresDataSourceModel `tfsdk:"features"`
+	Flags              *flagsDataSourceModel    `tfsdk:"flags"`
+	HasPastDueInvoices types.Bool               `tfsdk:"has_past_due_invoices"`
+	Id                 types.String             `tfsdk:"id"`
+	Name               types.String             `tfsdk:"name"`
+	Plan               types.String             `tfsdk:"plan"`
+	SingleTenancy      types.Bool               `tfsdk:"single_tenancy"`
+	Sso                types.Bool               `tfsdk:"sso"`
+	SsoDirectory       types.Bool               `tfsdk:"sso_directory"`
+	SsoPortalUrl       types.String             `tfsdk:"sso_portal_url"`
+	UpdatedAt          types.String             `tfsdk:"updated_at"`
+	ValidBillingInfo   types.Bool               `tfsdk:"valid_billing_info"`
+	IdpManagedRoles    types.Bool               `tfsdk:"idp_managed_roles"`
 }
 
 func organizationFromClient(org *planetscale.Organization) *organizationDataSourceModel {
@@ -108,23 +103,22 @@ func organizationFromClient(org *planetscale.Organization) *organizationDataSour
 		return nil
 	}
 	return &organizationDataSourceModel{
-		Features:              featuresFromClient(org.Features),
-		Flags:                 flagsFromClient(org.Flags),
-		BillingEmail:          types.StringPointerValue(org.BillingEmail),
-		CreatedAt:             types.StringValue(org.CreatedAt),
-		DatabaseCount:         types.Float64Value(org.DatabaseCount),
-		HasPastDueInvoices:    types.BoolValue(org.HasPastDueInvoices),
-		Id:                    types.StringValue(org.Id),
-		Name:                  types.StringValue(org.Name),
-		Plan:                  types.StringValue(org.Plan),
-		SingleTenancy:         types.BoolValue(org.SingleTenancy),
-		SleepingDatabaseCount: types.Float64Value(org.SleepingDatabaseCount),
-		Sso:                   types.BoolValue(org.Sso),
-		SsoDirectory:          types.BoolValue(org.SsoDirectory),
-		SsoPortalUrl:          types.StringPointerValue(org.SsoPortalUrl),
-		UpdatedAt:             types.StringValue(org.UpdatedAt),
-		ValidBillingInfo:      types.BoolValue(org.ValidBillingInfo),
-		IdpManagedRoles:       types.BoolValue(org.IdpManagedRoles),
+		Features:           featuresFromClient(org.Features),
+		Flags:              flagsFromClient(org.Flags),
+		BillingEmail:       types.StringPointerValue(org.BillingEmail),
+		CreatedAt:          types.StringValue(org.CreatedAt),
+		DatabaseCount:      types.Float64Value(org.DatabaseCount),
+		HasPastDueInvoices: types.BoolValue(org.HasPastDueInvoices),
+		Id:                 types.StringValue(org.Id),
+		Name:               types.StringValue(org.Name),
+		Plan:               types.StringValue(org.Plan),
+		SingleTenancy:      types.BoolValue(org.SingleTenancy),
+		Sso:                types.BoolValue(org.Sso),
+		SsoDirectory:       types.BoolValue(org.SsoDirectory),
+		SsoPortalUrl:       types.StringPointerValue(org.SsoPortalUrl),
+		UpdatedAt:          types.StringValue(org.UpdatedAt),
+		ValidBillingInfo:   types.BoolValue(org.ValidBillingInfo),
+		IdpManagedRoles:    types.BoolValue(org.IdpManagedRoles),
 	}
 }
 

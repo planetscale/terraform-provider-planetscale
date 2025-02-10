@@ -335,27 +335,27 @@ type OauthUserAccesses struct {
 	Users    []string `json:"users" tfsdk:"users"`
 }
 type Organization struct {
-	BillingEmail          *string   `json:"billing_email,omitempty" tfsdk:"billing_email"`
-	CreatedAt             string    `json:"created_at" tfsdk:"created_at"`
-	DatabaseCount         float64   `json:"database_count" tfsdk:"database_count"`
-	Features              *Features `json:"features,omitempty" tfsdk:"features"`
-	Flags                 *Flags    `json:"flags,omitempty" tfsdk:"flags"`
-	HasPastDueInvoices    bool      `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
-	Id                    string    `json:"id" tfsdk:"id"`
-	IdpManagedRoles       bool      `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
-	Name                  string    `json:"name" tfsdk:"name"`
-	Plan                  string    `json:"plan" tfsdk:"plan"`
-	SingleTenancy         bool      `json:"single_tenancy" tfsdk:"single_tenancy"`
-	SleepingDatabaseCount float64   `json:"sleeping_database_count" tfsdk:"sleeping_database_count"`
-	Sso                   bool      `json:"sso" tfsdk:"sso"`
-	SsoDirectory          bool      `json:"sso_directory" tfsdk:"sso_directory"`
-	SsoPortalUrl          *string   `json:"sso_portal_url,omitempty" tfsdk:"sso_portal_url"`
-	UpdatedAt             string    `json:"updated_at" tfsdk:"updated_at"`
-	ValidBillingInfo      bool      `json:"valid_billing_info" tfsdk:"valid_billing_info"`
+	BillingEmail       *string   `json:"billing_email,omitempty" tfsdk:"billing_email"`
+	CreatedAt          string    `json:"created_at" tfsdk:"created_at"`
+	DatabaseCount      float64   `json:"database_count" tfsdk:"database_count"`
+	Features           *Features `json:"features,omitempty" tfsdk:"features"`
+	Flags              *Flags    `json:"flags,omitempty" tfsdk:"flags"`
+	HasPastDueInvoices bool      `json:"has_past_due_invoices" tfsdk:"has_past_due_invoices"`
+	Id                 string    `json:"id" tfsdk:"id"`
+	IdpManagedRoles    bool      `json:"idp_managed_roles" tfsdk:"idp_managed_roles"`
+	Name               string    `json:"name" tfsdk:"name"`
+	Plan               string    `json:"plan" tfsdk:"plan"`
+	SingleTenancy      bool      `json:"single_tenancy" tfsdk:"single_tenancy"`
+	Sso                bool      `json:"sso" tfsdk:"sso"`
+	SsoDirectory       bool      `json:"sso_directory" tfsdk:"sso_directory"`
+	SsoPortalUrl       *string   `json:"sso_portal_url,omitempty" tfsdk:"sso_portal_url"`
+	UpdatedAt          string    `json:"updated_at" tfsdk:"updated_at"`
+	ValidBillingInfo   bool      `json:"valid_billing_info" tfsdk:"valid_billing_info"`
 }
 type Password struct {
 	AccessHostUrl  string            `json:"access_host_url" tfsdk:"access_host_url"`
 	Actor          *Actor            `json:"actor,omitempty" tfsdk:"actor"`
+	Cidrs          []string          `json:"cidrs" tfsdk:"cidrs"`
 	CreatedAt      string            `json:"created_at" tfsdk:"created_at"`
 	DatabaseBranch BranchForPassword `json:"database_branch" tfsdk:"database_branch"`
 	DeletedAt      *string           `json:"deleted_at,omitempty" tfsdk:"deleted_at"`
@@ -372,6 +372,7 @@ type Password struct {
 type PasswordWithPlaintext struct {
 	AccessHostUrl  string            `json:"access_host_url" tfsdk:"access_host_url"`
 	Actor          *Actor            `json:"actor,omitempty" tfsdk:"actor"`
+	Cidrs          []string          `json:"cidrs" tfsdk:"cidrs"`
 	CreatedAt      string            `json:"created_at" tfsdk:"created_at"`
 	DatabaseBranch BranchForPassword `json:"database_branch" tfsdk:"database_branch"`
 	DeletedAt      *string           `json:"deleted_at,omitempty" tfsdk:"deleted_at"`
@@ -1609,6 +1610,86 @@ func (cl *Client) UpdateBackup(ctx context.Context, organization string, databas
 	return res200, err
 }
 
+type GetKeyspaceRolloutStatusRes_ShardsItem struct {
+	LastRolloutFinishedAt string `json:"last_rollout_finished_at" tfsdk:"last_rollout_finished_at"`
+	LastRolloutStartedAt  string `json:"last_rollout_started_at" tfsdk:"last_rollout_started_at"`
+	Name                  string `json:"name" tfsdk:"name"`
+	State                 string `json:"state" tfsdk:"state"`
+}
+type GetKeyspaceRolloutStatusRes struct {
+	Name   string                                   `json:"name" tfsdk:"name"`
+	Shards []GetKeyspaceRolloutStatusRes_ShardsItem `json:"shards" tfsdk:"shards"`
+	State  string                                   `json:"state" tfsdk:"state"`
+}
+type GetKeyspaceRolloutStatusRes401 struct {
+	*ErrorResponse
+}
+type GetKeyspaceRolloutStatusRes403 struct {
+	*ErrorResponse
+}
+type GetKeyspaceRolloutStatusRes404 struct {
+	*ErrorResponse
+}
+type GetKeyspaceRolloutStatusRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) GetKeyspaceRolloutStatus(ctx context.Context, organization string, database string, branch string, name string) (res200 *GetKeyspaceRolloutStatusRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/keyspaces/" + name + "/rollout-status"})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(GetKeyspaceRolloutStatusRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetKeyspaceRolloutStatusRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(GetKeyspaceRolloutStatusRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(GetKeyspaceRolloutStatusRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(GetKeyspaceRolloutStatusRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
 type ListPasswordsRes struct {
 	Data []Password `json:"data" tfsdk:"data"`
 }
@@ -1693,10 +1774,11 @@ func (cl *Client) ListPasswords(ctx context.Context, organization string, databa
 }
 
 type CreatePasswordReq struct {
-	Name    *string  `json:"name,omitempty" tfsdk:"name"`
-	Replica *bool    `json:"replica,omitempty" tfsdk:"replica"`
-	Role    *string  `json:"role,omitempty" tfsdk:"role"`
-	Ttl     *float64 `json:"ttl,omitempty" tfsdk:"ttl"`
+	Cidrs   *[]string `json:"cidrs,omitempty" tfsdk:"cidrs"`
+	Name    *string   `json:"name,omitempty" tfsdk:"name"`
+	Replica *bool     `json:"replica,omitempty" tfsdk:"replica"`
+	Role    *string   `json:"role,omitempty" tfsdk:"role"`
+	Ttl     *float64  `json:"ttl,omitempty" tfsdk:"ttl"`
 }
 type CreatePasswordRes struct {
 	PasswordWithPlaintext
@@ -1926,7 +2008,8 @@ func (cl *Client) DeletePassword(ctx context.Context, organization string, datab
 }
 
 type UpdatePasswordReq struct {
-	Name string `json:"name" tfsdk:"name"`
+	Cidrs *[]string `json:"cidrs,omitempty" tfsdk:"cidrs"`
+	Name  *string   `json:"name,omitempty" tfsdk:"name"`
 }
 type UpdatePasswordRes struct {
 	Password
@@ -3931,6 +4014,346 @@ func (cl *Client) SkipRevertPeriod(ctx context.Context, organization string, dat
 		}
 	case 500:
 		res500 := new(SkipRevertPeriodRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type GetDeployRequestThrottlerRes_Configurable struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetDeployRequestThrottlerRes struct {
+	Configurable   *GetDeployRequestThrottlerRes_Configurable `json:"configurable,omitempty" tfsdk:"configurable"`
+	Configurations []string                                   `json:"configurations" tfsdk:"configurations"`
+	Keyspaces      []string                                   `json:"keyspaces" tfsdk:"keyspaces"`
+}
+type GetDeployRequestThrottlerRes401 struct {
+	*ErrorResponse
+}
+type GetDeployRequestThrottlerRes403 struct {
+	*ErrorResponse
+}
+type GetDeployRequestThrottlerRes404 struct {
+	*ErrorResponse
+}
+type GetDeployRequestThrottlerRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) GetDeployRequestThrottler(ctx context.Context, organization string, database string, number string) (res200 *GetDeployRequestThrottlerRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/throttler"})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(GetDeployRequestThrottlerRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetDeployRequestThrottlerRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(GetDeployRequestThrottlerRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(GetDeployRequestThrottlerRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(GetDeployRequestThrottlerRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type UpdateDeployRequestThrottlerReq struct {
+	Configurations *[]string `json:"configurations,omitempty" tfsdk:"configurations"`
+	Ratio          *float64  `json:"ratio,omitempty" tfsdk:"ratio"`
+}
+type UpdateDeployRequestThrottlerRes_Configurable struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type UpdateDeployRequestThrottlerRes struct {
+	Configurable   *UpdateDeployRequestThrottlerRes_Configurable `json:"configurable,omitempty" tfsdk:"configurable"`
+	Configurations []string                                      `json:"configurations" tfsdk:"configurations"`
+	Keyspaces      []string                                      `json:"keyspaces" tfsdk:"keyspaces"`
+}
+type UpdateDeployRequestThrottlerRes401 struct {
+	*ErrorResponse
+}
+type UpdateDeployRequestThrottlerRes403 struct {
+	*ErrorResponse
+}
+type UpdateDeployRequestThrottlerRes404 struct {
+	*ErrorResponse
+}
+type UpdateDeployRequestThrottlerRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) UpdateDeployRequestThrottler(ctx context.Context, organization string, database string, number string, req UpdateDeployRequestThrottlerReq) (res200 *UpdateDeployRequestThrottlerRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/deploy-requests/" + number + "/throttler"})
+	body := bytes.NewBuffer(nil)
+	if err = json.NewEncoder(body).Encode(req); err != nil {
+		return res200, err
+	}
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), body)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(UpdateDeployRequestThrottlerRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(UpdateDeployRequestThrottlerRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(UpdateDeployRequestThrottlerRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(UpdateDeployRequestThrottlerRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(UpdateDeployRequestThrottlerRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type GetDatabaseThrottlerRes_Configurable struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetDatabaseThrottlerRes struct {
+	Configurable   *GetDatabaseThrottlerRes_Configurable `json:"configurable,omitempty" tfsdk:"configurable"`
+	Configurations []string                              `json:"configurations" tfsdk:"configurations"`
+	Keyspaces      []string                              `json:"keyspaces" tfsdk:"keyspaces"`
+}
+type GetDatabaseThrottlerRes401 struct {
+	*ErrorResponse
+}
+type GetDatabaseThrottlerRes403 struct {
+	*ErrorResponse
+}
+type GetDatabaseThrottlerRes404 struct {
+	*ErrorResponse
+}
+type GetDatabaseThrottlerRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) GetDatabaseThrottler(ctx context.Context, organization string, database string) (res200 *GetDatabaseThrottlerRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/throttler"})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(GetDatabaseThrottlerRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetDatabaseThrottlerRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(GetDatabaseThrottlerRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(GetDatabaseThrottlerRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(GetDatabaseThrottlerRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type UpdateDatabaseThrottlerReq struct {
+	Configurations *[]string `json:"configurations,omitempty" tfsdk:"configurations"`
+	Ratio          *float64  `json:"ratio,omitempty" tfsdk:"ratio"`
+}
+type UpdateDatabaseThrottlerRes_Configurable struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type UpdateDatabaseThrottlerRes struct {
+	Configurable   *UpdateDatabaseThrottlerRes_Configurable `json:"configurable,omitempty" tfsdk:"configurable"`
+	Configurations []string                                 `json:"configurations" tfsdk:"configurations"`
+	Keyspaces      []string                                 `json:"keyspaces" tfsdk:"keyspaces"`
+}
+type UpdateDatabaseThrottlerRes401 struct {
+	*ErrorResponse
+}
+type UpdateDatabaseThrottlerRes403 struct {
+	*ErrorResponse
+}
+type UpdateDatabaseThrottlerRes404 struct {
+	*ErrorResponse
+}
+type UpdateDatabaseThrottlerRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) UpdateDatabaseThrottler(ctx context.Context, organization string, database string, req UpdateDatabaseThrottlerReq) (res200 *UpdateDatabaseThrottlerRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/throttler"})
+	body := bytes.NewBuffer(nil)
+	if err = json.NewEncoder(body).Encode(req); err != nil {
+		return res200, err
+	}
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), body)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(UpdateDatabaseThrottlerRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(UpdateDatabaseThrottlerRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(UpdateDatabaseThrottlerRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(UpdateDatabaseThrottlerRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(UpdateDatabaseThrottlerRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 		if err == nil {
 			err = res500

@@ -2,9 +2,9 @@
   "swagger": "2.0",
   "info": {
     "title": "PlanetScale API",
-    "description": "\n<p>PlanetScale API</p>\n&copy; 2024 PlanetScale, Inc.",
+    "description": "\n<p>PlanetScale API</p>\n&copy; 2025 PlanetScale, Inc.",
     "version": "v1",
-    "x-copyright": "&copy; 2024 PlanetScale, Inc."
+    "x-copyright": "&copy; 2025 PlanetScale, Inc."
   },
   "basePath": "/v1",
   "consumes": [
@@ -108,10 +108,6 @@
                         "type": "number",
                         "description": "The number of databases in the organization"
                       },
-                      "sleeping_database_count": {
-                        "type": "number",
-                        "description": "The number of sleeping databases in the organization"
-                      },
                       "sso_portal_url": {
                         "type": "string",
                         "description": "The URL of the organization's SSO portal"
@@ -166,7 +162,6 @@
                       "single_tenancy",
                       "has_past_due_invoices",
                       "database_count",
-                      "sleeping_database_count",
                       "idp_managed_roles",
                       "invoice_budget_amount"
                     ]
@@ -177,7 +172,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "When using a service token, returns the list of organizations the service token has access to. When using an OAuth token, returns the list of organizations the user has access to.\n### Authorization\nA   OAuth token must have at least one of the following   scopes in order to use this API endpoint:\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| User | `read_organizations` |"
@@ -268,10 +264,6 @@
                   "type": "number",
                   "description": "The number of databases in the organization"
                 },
-                "sleeping_database_count": {
-                  "type": "number",
-                  "description": "The number of sleeping databases in the organization"
-                },
                 "sso_portal_url": {
                   "type": "string",
                   "description": "The URL of the organization's SSO portal"
@@ -326,11 +318,11 @@
                 "single_tenancy",
                 "has_past_due_invoices",
                 "database_count",
-                "sleeping_database_count",
                 "idp_managed_roles",
                 "invoice_budget_amount"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_organization`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| User | `read_organizations` |\n| Organization | `read_organization` |"
@@ -441,10 +433,6 @@
                   "type": "number",
                   "description": "The number of databases in the organization"
                 },
-                "sleeping_database_count": {
-                  "type": "number",
-                  "description": "The number of sleeping databases in the organization"
-                },
                 "sso_portal_url": {
                   "type": "string",
                   "description": "The URL of the organization's SSO portal"
@@ -499,11 +487,11 @@
                 "single_tenancy",
                 "has_past_due_invoices",
                 "database_count",
-                "sleeping_database_count",
                 "idp_managed_roles",
                 "invoice_budget_amount"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA   OAuth token must have at least one of the following   scopes in order to use this API endpoint:\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_organization` |"
@@ -658,7 +646,8 @@
                 "cursor_end",
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_audit_logs`\n\n"
@@ -769,7 +758,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_organization`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| User | `read_organizations` |\n| Organization | `read_organization` |"
@@ -1078,7 +1068,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |"
@@ -1385,7 +1376,8 @@
                 "created_at",
                 "updated_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `create_databases`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `create_databases` |"
@@ -1644,7 +1636,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
@@ -1901,7 +1894,8 @@
                 "cluster_rate_name",
                 "safe_migrations"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `create_branch`, `restore_production_branch_backup`, `restore_backup`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_branches`, `restore_production_branch_backups`, `restore_backups` |\n| Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |\n| Branch | `restore_backups` |"
@@ -2184,7 +2178,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_backups` |\n| Database | `read_backups` |\n| Branch | `read_backups` |"
@@ -2468,7 +2463,8 @@
                 "required",
                 "schema_snapshot"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `write_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_backups` |\n| Database | `write_backups` |\n| Branch | `write_backups` |"
@@ -2732,7 +2728,8 @@
                 "required",
                 "schema_snapshot"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_backups` |\n| Database | `read_backups` |\n| Branch | `read_backups` |"
@@ -3008,7 +3005,8 @@
                 "required",
                 "schema_snapshot"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `write_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_backups` |\n| Database | `write_backups` |\n| Branch | `write_backups` |"
@@ -3066,10 +3064,122 @@
             "description": "Internal Server Error"
           },
           "204": {
-            "description": "Delete a backup"
+            "description": "Delete a backup",
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `delete_backups`, `delete_production_branch_backups` |\n| Database | `delete_backups`, `delete_production_branch_backups` |\n| Branch | `delete_backups` |"
+      }
+    },
+    "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}/rollout-status": {
+      "get": {
+        "tags": [
+          "Database branch keyspaces"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "get_keyspace_rollout_status",
+        "summary": "Get keyspace rollout status",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization the branch belongs to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database the branch belongs to"
+          },
+          {
+            "name": "branch",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the branch"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the branch keyspace"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Returns information about a branch keyspace's rollout",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the keyspace"
+                },
+                "state": {
+                  "type": "string",
+                  "description": "The current state of the rollout at the keyspace level"
+                },
+                "shards": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the shard"
+                      },
+                      "last_rollout_started_at": {
+                        "type": "string",
+                        "description": "The time at which the rollout started"
+                      },
+                      "last_rollout_finished_at": {
+                        "type": "string",
+                        "description": "The time at which the rollout completed"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "The current state of the rollout at the shard level"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "name",
+                      "last_rollout_started_at",
+                      "last_rollout_finished_at",
+                      "state"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "state",
+                "shards"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n"
       }
     },
     "/organizations/{organization}/databases/{database}/branches/{branch}/passwords": {
@@ -3159,6 +3269,13 @@
                       "role": {
                         "type": "string",
                         "description": "The role for the password"
+                      },
+                      "cidrs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "List of IP addresses or CIDR ranges that can use this password"
                       },
                       "created_at": {
                         "type": "string",
@@ -3300,6 +3417,7 @@
                       "id",
                       "name",
                       "role",
+                      "cidrs",
                       "created_at",
                       "ttl_seconds",
                       "access_host_url",
@@ -3314,7 +3432,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |"
@@ -3377,6 +3496,13 @@
                 "ttl": {
                   "type": "number",
                   "description": "Time to live (in seconds) for the password. The password will be invalid when TTL has passed"
+                },
+                "cidrs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of IP addresses or CIDR ranges that can use this password"
                 }
               },
               "additionalProperties": false
@@ -3415,6 +3541,13 @@
                 "role": {
                   "type": "string",
                   "description": "The role for the password"
+                },
+                "cidrs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of IP addresses or CIDR ranges that can use this password"
                 },
                 "created_at": {
                   "type": "string",
@@ -3560,6 +3693,7 @@
                 "id",
                 "name",
                 "role",
+                "cidrs",
                 "created_at",
                 "ttl_seconds",
                 "access_host_url",
@@ -3568,7 +3702,8 @@
                 "database_branch",
                 "plain_text"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |"
@@ -3644,6 +3779,13 @@
                   "type": "string",
                   "description": "The role for the password"
                 },
+                "cidrs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of IP addresses or CIDR ranges that can use this password"
+                },
                 "created_at": {
                   "type": "string",
                   "description": "When the password was created"
@@ -3784,6 +3926,7 @@
                 "id",
                 "name",
                 "role",
+                "cidrs",
                 "created_at",
                 "ttl_seconds",
                 "access_host_url",
@@ -3791,7 +3934,8 @@
                 "renewable",
                 "database_branch"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |"
@@ -3843,12 +3987,16 @@
                 "name": {
                   "type": "string",
                   "description": "The name for the password"
+                },
+                "cidrs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of IP addresses or CIDR ranges that can use this password"
                 }
               },
-              "additionalProperties": false,
-              "required": [
-                "name"
-              ]
+              "additionalProperties": false
             }
           }
         ],
@@ -3881,6 +4029,13 @@
                 "role": {
                   "type": "string",
                   "description": "The role for the password"
+                },
+                "cidrs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of IP addresses or CIDR ranges that can use this password"
                 },
                 "created_at": {
                   "type": "string",
@@ -4022,6 +4177,7 @@
                 "id",
                 "name",
                 "role",
+                "cidrs",
                 "created_at",
                 "ttl_seconds",
                 "access_host_url",
@@ -4029,7 +4185,8 @@
                 "renewable",
                 "database_branch"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |"
@@ -4087,7 +4244,8 @@
             "description": "Internal Server Error"
           },
           "204": {
-            "description": "Deletes the password"
+            "description": "Deletes the password",
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `delete_production_branch_password`, `delete_branch_password`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |"
@@ -4162,6 +4320,13 @@
                 "role": {
                   "type": "string",
                   "description": "The role for the password"
+                },
+                "cidrs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of IP addresses or CIDR ranges that can use this password"
                 },
                 "created_at": {
                   "type": "string",
@@ -4307,6 +4472,7 @@
                 "id",
                 "name",
                 "role",
+                "cidrs",
                 "created_at",
                 "ttl_seconds",
                 "access_host_url",
@@ -4315,7 +4481,8 @@
                 "database_branch",
                 "plain_text"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |"
@@ -4555,7 +4722,8 @@
                 "cluster_rate_name",
                 "safe_migrations"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
@@ -4606,7 +4774,8 @@
             "description": "Internal Server Error"
           },
           "204": {
-            "description": "Delete a branch"
+            "description": "Delete a branch",
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `delete_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `delete_branches`, `delete_production_branches` |\n| Database | `delete_branches`, `delete_production_branches` |\n| Branch | `delete_branch` |"
@@ -4676,7 +4845,8 @@
             "description": "Internal Server Error"
           },
           "204": {
-            "description": "Returns an empty response body"
+            "description": "Returns an empty response body",
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `write_database`\n\n"
@@ -4916,7 +5086,8 @@
                 "cluster_rate_name",
                 "safe_migrations"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Demotes a branch from production to development\n### Authorization\nA   OAuth token must have at least one of the following   scopes in order to use this API endpoint:\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `demote_branches` |\n| Database | `demote_branches` |"
@@ -5156,7 +5327,8 @@
                 "cluster_rate_name",
                 "safe_migrations"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Promotes a branch from development to production\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `promote_branches` |\n| Database | `promote_branches` |"
@@ -5396,7 +5568,8 @@
                 "cluster_rate_name",
                 "safe_migrations"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n"
@@ -5634,7 +5807,8 @@
                 "cluster_rate_name",
                 "safe_migrations"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n"
@@ -5728,7 +5902,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
@@ -5911,7 +6086,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
@@ -6058,7 +6234,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "The deploy queue returns the current list of deploy requests in the order they will be deployed.\n"
@@ -6349,7 +6526,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "List deploy requests for a database\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_deploy_requests` |\n| Database | `read_deploy_requests` |"
@@ -6718,7 +6896,8 @@
                 "deployed_at",
                 "deployment"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_requests`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_deploy_requests` |\n| Database | `write_deploy_requests` |"
@@ -7062,7 +7241,8 @@
                 "deployed_at",
                 "deployment"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_deploy_requests` |\n| Database | `read_deploy_requests` |"
@@ -7421,7 +7601,8 @@
                 "deployed_at",
                 "deployment"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_deploy_requests` |\n| Database | `write_deploy_requests` |"
@@ -7675,7 +7856,8 @@
                 "closed_at",
                 "deployed_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
@@ -7943,7 +8125,8 @@
                 "closed_at",
                 "deployed_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Enables or disabled the auto-apply setting for a deploy request\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
@@ -8197,7 +8380,8 @@
                 "closed_at",
                 "deployed_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
@@ -8451,7 +8635,8 @@
                 "closed_at",
                 "deployed_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
@@ -8705,7 +8890,8 @@
                 "closed_at",
                 "deployed_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
@@ -8847,7 +9033,8 @@
                 "submitted_at",
                 "updated_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Get the deployment for a deploy request\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_deploy_requests` |\n| Database | `read_deploy_requests` |"
@@ -9025,7 +9212,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "List deploy operations for a deploy request\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_deploy_requests` |\n| Database | `read_deploy_requests` |"
@@ -9279,7 +9467,8 @@
                 "closed_at",
                 "deployed_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
@@ -9410,7 +9599,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_deploy_requests` |\n| Database | `read_deploy_requests` |"
@@ -9549,7 +9739,8 @@
                 "created_at",
                 "updated_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Review a deploy request by either approving or commenting on the deploy request\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `approve_deploy_request`, `review_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `approve_deploy_requests` |\n| Database | `approve_deploy_requests` |"
@@ -9803,10 +9994,479 @@
                 "closed_at",
                 "deployed_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Skips the revert period for a deploy request\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
+      }
+    },
+    "/organizations/{organization}/databases/{database}/deploy-requests/{number}/throttler": {
+      "get": {
+        "tags": [
+          "Deploy requests"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "get_deploy_request_throttler",
+        "summary": "Get deploy request throttler configurations",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the deploy request's organization"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the deploy request's database"
+          },
+          {
+            "name": "number",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The number of the deploy request"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Deploy request throttler configurations",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The ID for the resource"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name for the resource"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "When the resource was created"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "When the resource was last updated"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "description": "When the resource was deleted, if deleted"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ]
+                },
+                "keyspaces": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)"
+                },
+                "configurations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "keyspaces",
+                "configurations"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_deploy_requests` |\n| Database | `read_deploy_requests` |"
+      },
+      "patch": {
+        "tags": [
+          "Deploy requests"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "update_deploy_request_throttler",
+        "summary": "Update deploy request throttler configurations",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the deploy request's organization"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the deploy request's database"
+          },
+          {
+            "name": "number",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The number of the deploy request"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ratio": {
+                  "type": "number",
+                  "description": "A throttler ratio between 0 and 95 that will apply to all keyspaces affected by the deploy request. 0 effectively disables throttler, while 95 drastically slows down migrations in the deploy request"
+                },
+                "configurations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "If specifying throttler ratios per keyspace, an array of { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 }, one for each eligible keyspace"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Deploy request throttler configurations",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The ID for the resource"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name for the resource"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "When the resource was created"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "When the resource was last updated"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "description": "When the resource was deleted, if deleted"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ]
+                },
+                "keyspaces": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)"
+                },
+                "configurations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "keyspaces",
+                "configurations"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
+      }
+    },
+    "/organizations/{organization}/databases/{database}/throttler": {
+      "get": {
+        "tags": [
+          "Databases"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "get_database_throttler",
+        "summary": "Get database throttler configurations",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization that the throttled deploy requests belong to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database that the throttled deploy requests belong to"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Database throttler configurations",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The ID for the resource"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name for the resource"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "When the resource was created"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "When the resource was last updated"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "description": "When the resource was deleted, if deleted"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ]
+                },
+                "keyspaces": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)"
+                },
+                "configurations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "keyspaces",
+                "configurations"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |"
+      },
+      "patch": {
+        "tags": [
+          "Databases"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "update_database_throttler",
+        "summary": "Update database throttler configurations",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization that the throttled deploy requests belong to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database that the throttled deploy requests belong to"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ratio": {
+                  "type": "number",
+                  "description": "A throttler ratio between 0 and 95 that will apply to all keyspaces in the database. 0 effectively disables throttler, while 95 drastically slows down deploy request migrations"
+                },
+                "configurations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "If specifying throttler ratios per keyspace, an array of { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 }, one for each eligible keyspace"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Database throttler configurations",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The ID for the resource"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name for the resource"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "When the resource was created"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "When the resource was last updated"
+                    },
+                    "deleted_at": {
+                      "type": "string",
+                      "description": "When the resource was deleted, if deleted"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ]
+                },
+                "keyspaces": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)"
+                },
+                "configurations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "keyspaces",
+                "configurations"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |"
       }
     },
     "/organizations/{organization}/databases/{name}": {
@@ -10093,7 +10753,8 @@
                 "created_at",
                 "updated_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |"
@@ -10427,7 +11088,8 @@
                 "created_at",
                 "updated_at"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `write_database`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `write_databases` |\n| Database | `write_database` |"
@@ -10471,7 +11133,8 @@
             "description": "Internal Server Error"
           },
           "204": {
-            "description": "Deletes a database"
+            "description": "Deletes a database",
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `delete_database`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `delete_databases` |\n| Database | `delete_database` |"
@@ -10652,7 +11315,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "List read-only regions for the database's default branch\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |"
@@ -10770,7 +11434,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |"
@@ -10863,7 +11528,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Get the invoices for an organization\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_invoices`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_invoices` |"
@@ -10937,7 +11603,8 @@
                 "billing_period_start",
                 "billing_period_end"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_invoices`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_invoices` |"
@@ -11067,7 +11734,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Get the line items for an invoice\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_invoices`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_invoices` |"
@@ -11192,7 +11860,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_oauth_applications`\n\n"
@@ -11298,7 +11967,8 @@
                 "client_id",
                 "tokens"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_oauth_applications`\n\n"
@@ -11433,7 +12103,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "List OAuth tokens created by an OAuth application\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_oauth_tokens`\n\n"
@@ -11658,7 +12329,8 @@
                 "actor_type",
                 "oauth_accesses_by_resource"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_oauth_tokens`\n\n"
@@ -11709,7 +12381,8 @@
             "description": "Internal Server Error"
           },
           "204": {
-            "description": "Deletes an OAuth application's OAuth token"
+            "description": "Deletes an OAuth application's OAuth token",
+            "headers": {}
           }
         },
         "description": "\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `delete_oauth_tokens`\n\n"
@@ -11752,7 +12425,7 @@
                 },
                 "client_secret": {
                   "type": "string",
-                  "description": "The OAuth applicatin's client secret"
+                  "description": "The OAuth application's client secret"
                 },
                 "grant_type": {
                   "type": "string",
@@ -11835,7 +12508,8 @@
                 }
               },
               "additionalProperties": false
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Create an OAuth token from an authorization grant code, or refresh an OAuth token from a refresh token\n### Authorization\nA service token   must have at least one of the following access   in order to use this API endpoint:\n\n**Service Token Accesses**\n `write_oauth_tokens`\n\n"
@@ -11934,7 +12608,8 @@
               "required": [
                 "data"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Endpoint is available without authentication.\n"
@@ -12055,7 +12730,8 @@
               "required": [
                 "default_organization"
               ]
-            }
+            },
+            "headers": {}
           }
         },
         "description": "Get the user associated with this service token\n### Authorization\nA   OAuth token must have at least one of the following   scopes in order to use this API endpoint:\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| User | `read_user` |"
@@ -12072,12 +12748,16 @@
       "description": "          API endpoints for managing database branch backups.\n"
     },
     {
+      "name": "Database branch keyspaces",
+      "description": "          API endpoints for managing database branch keyspaces.\n"
+    },
+    {
       "name": "Database branch passwords",
       "description": "          API endpoints for managing database branch passwords.\n"
     },
     {
       "name": "Databases",
-      "description": "          API endpoints for managing databases within an organization.\n"
+      "description": "            API endpoints for managing databases within an organization.\n"
     },
     {
       "name": "OAuth applications",

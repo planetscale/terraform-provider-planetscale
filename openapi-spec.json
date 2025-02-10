@@ -10,10 +10,10 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "\n<p>PlanetScale API</p>\n&copy; 2024 PlanetScale, Inc.",
+    "description": "\n<p>PlanetScale API</p>\n&copy; 2025 PlanetScale, Inc.",
     "title": "PlanetScale API",
     "version": "v1",
-    "x-copyright": "&copy; 2024 PlanetScale, Inc."
+    "x-copyright": "&copy; 2025 PlanetScale, Inc."
   },
   "host": "api.planetscale.com",
   "basePath": "/v1",
@@ -1250,6 +1250,116 @@
         }
       }
     },
+    "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}/rollout-status": {
+      "get": {
+        "description": "\n",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Database branch keyspaces"
+        ],
+        "summary": "Get keyspace rollout status",
+        "operationId": "get_keyspace_rollout_status",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization the branch belongs to",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the database the branch belongs to",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the branch",
+            "name": "branch",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the branch keyspace",
+            "name": "name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns information about a branch keyspace's rollout",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "state",
+                "shards"
+              ],
+              "properties": {
+                "name": {
+                  "description": "The name of the keyspace",
+                  "type": "string"
+                },
+                "shards": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "last_rollout_started_at",
+                      "last_rollout_finished_at",
+                      "state"
+                    ],
+                    "properties": {
+                      "last_rollout_finished_at": {
+                        "description": "The time at which the rollout completed",
+                        "type": "string"
+                      },
+                      "last_rollout_started_at": {
+                        "description": "The time at which the rollout started",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The name of the shard",
+                        "type": "string"
+                      },
+                      "state": {
+                        "description": "The current state of the rollout at the shard level",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "state": {
+                  "description": "The current state of the rollout at the keyspace level",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/organizations/{organization}/databases/{database}/branches/{branch}/passwords": {
       "get": {
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |",
@@ -1375,6 +1485,13 @@
             "schema": {
               "type": "object",
               "properties": {
+                "cidrs": {
+                  "description": "List of IP addresses or CIDR ranges that can use this password",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "name": {
                   "description": "Optional name of the password",
                   "type": "string"
@@ -1591,10 +1708,14 @@
             "in": "body",
             "schema": {
               "type": "object",
-              "required": [
-                "name"
-              ],
               "properties": {
+                "cidrs": {
+                  "description": "List of IP addresses or CIDR ranges that can use this password",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
                 "name": {
                   "description": "The name for the password",
                   "type": "string"
@@ -3294,6 +3415,470 @@
         }
       }
     },
+    "/organizations/{organization}/databases/{database}/deploy-requests/{number}/throttler": {
+      "get": {
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_deploy_requests` |\n| Database | `read_deploy_requests` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Deploy requests"
+        ],
+        "summary": "Get deploy request throttler configurations",
+        "operationId": "get_deploy_request_throttler",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the deploy request's database",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The number of the deploy request",
+            "name": "number",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deploy request throttler configurations",
+            "schema": {
+              "type": "object",
+              "required": [
+                "keyspaces",
+                "configurations"
+              ],
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ],
+                  "properties": {
+                    "created_at": {
+                      "description": "When the resource was created",
+                      "type": "string"
+                    },
+                    "deleted_at": {
+                      "description": "When the resource was deleted, if deleted",
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The ID for the resource",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name for the resource",
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "description": "When the resource was last updated",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "configurations": {
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "keyspaces": {
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Deploy requests"
+        ],
+        "summary": "Update deploy request throttler configurations",
+        "operationId": "update_deploy_request_throttler",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the deploy request's organization",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the deploy request's database",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The number of the deploy request",
+            "name": "number",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "configurations": {
+                  "description": "If specifying throttler ratios per keyspace, an array of { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 }, one for each eligible keyspace",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ratio": {
+                  "description": "A throttler ratio between 0 and 95 that will apply to all keyspaces affected by the deploy request. 0 effectively disables throttler, while 95 drastically slows down migrations in the deploy request",
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deploy request throttler configurations",
+            "schema": {
+              "type": "object",
+              "required": [
+                "keyspaces",
+                "configurations"
+              ],
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ],
+                  "properties": {
+                    "created_at": {
+                      "description": "When the resource was created",
+                      "type": "string"
+                    },
+                    "deleted_at": {
+                      "description": "When the resource was deleted, if deleted",
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The ID for the resource",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name for the resource",
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "description": "When the resource was last updated",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "configurations": {
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "keyspaces": {
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/organizations/{organization}/databases/{database}/throttler": {
+      "get": {
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Databases"
+        ],
+        "summary": "Get database throttler configurations",
+        "operationId": "get_database_throttler",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization that the throttled deploy requests belong to",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the database that the throttled deploy requests belong to",
+            "name": "database",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database throttler configurations",
+            "schema": {
+              "type": "object",
+              "required": [
+                "keyspaces",
+                "configurations"
+              ],
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ],
+                  "properties": {
+                    "created_at": {
+                      "description": "When the resource was created",
+                      "type": "string"
+                    },
+                    "deleted_at": {
+                      "description": "When the resource was deleted, if deleted",
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The ID for the resource",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name for the resource",
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "description": "When the resource was last updated",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "configurations": {
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "keyspaces": {
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_deploy_request`, `create_deploy_request`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `deploy_deploy_requests` |\n| Database | `deploy_deploy_requests` |",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Databases"
+        ],
+        "summary": "Update database throttler configurations",
+        "operationId": "update_database_throttler",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name of the organization that the throttled deploy requests belong to",
+            "name": "organization",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "The name of the database that the throttled deploy requests belong to",
+            "name": "database",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "configurations": {
+                  "description": "If specifying throttler ratios per keyspace, an array of { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 }, one for each eligible keyspace",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ratio": {
+                  "description": "A throttler ratio between 0 and 95 that will apply to all keyspaces in the database. 0 effectively disables throttler, while 95 drastically slows down deploy request migrations",
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database throttler configurations",
+            "schema": {
+              "type": "object",
+              "required": [
+                "keyspaces",
+                "configurations"
+              ],
+              "properties": {
+                "configurable": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                  ],
+                  "properties": {
+                    "created_at": {
+                      "description": "When the resource was created",
+                      "type": "string"
+                    },
+                    "deleted_at": {
+                      "description": "When the resource was deleted, if deleted",
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The ID for the resource",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The name for the resource",
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "description": "When the resource was last updated",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "configurations": {
+                  "description": "An array of keyspace throttler configurations { \"keyspace_name\": \"mykeyspace\", \"ratio\": 10 } that exist in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "keyspaces": {
+                  "description": "Database keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/organizations/{organization}/databases/{name}": {
       "get": {
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_databases` |\n| Database | `read_database` |",
@@ -4268,7 +4853,7 @@
                   "type": "string"
                 },
                 "client_secret": {
-                  "description": "The OAuth applicatin's client secret",
+                  "description": "The OAuth application's client secret",
                   "type": "string"
                 },
                 "code": {
@@ -5979,7 +6564,6 @@
         "single_tenancy",
         "has_past_due_invoices",
         "database_count",
-        "sleeping_database_count",
         "idp_managed_roles",
         "invoice_budget_amount"
       ],
@@ -6030,10 +6614,6 @@
           "description": "Whether or not the organization has single tenancy enabled",
           "type": "boolean"
         },
-        "sleeping_database_count": {
-          "description": "The number of sleeping databases in the organization",
-          "type": "number"
-        },
         "sso": {
           "description": "Whether or not SSO is enabled on the organization",
           "type": "boolean"
@@ -6063,6 +6643,7 @@
         "id",
         "name",
         "role",
+        "cidrs",
         "created_at",
         "ttl_seconds",
         "access_host_url",
@@ -6077,6 +6658,13 @@
         },
         "actor": {
           "$ref": "#/definitions/actor"
+        },
+        "cidrs": {
+          "description": "List of IP addresses or CIDR ranges that can use this password",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "created_at": {
           "description": "When the password was created",
@@ -6133,6 +6721,7 @@
         "id",
         "name",
         "role",
+        "cidrs",
         "created_at",
         "ttl_seconds",
         "access_host_url",
@@ -6148,6 +6737,13 @@
         },
         "actor": {
           "$ref": "#/definitions/actor"
+        },
+        "cidrs": {
+          "description": "List of IP addresses or CIDR ranges that can use this password",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "created_at": {
           "description": "When the password was created",
@@ -6583,11 +7179,15 @@
       "name": "Backups"
     },
     {
+      "description": "          API endpoints for managing database branch keyspaces.\n",
+      "name": "Database branch keyspaces"
+    },
+    {
       "description": "          API endpoints for managing database branch passwords.\n",
       "name": "Database branch passwords"
     },
     {
-      "description": "          API endpoints for managing databases within an organization.\n",
+      "description": "            API endpoints for managing databases within an organization.\n",
       "name": "Databases"
     },
     {

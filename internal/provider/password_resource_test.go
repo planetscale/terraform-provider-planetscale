@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"regexp"
+	"strings"
 	"testing"
 	"text/template"
 
@@ -12,10 +14,99 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
+func TestValidateNonOverlappingCIDRs(t *testing.T) {
+	tests := []struct {
+		name    string
+		cidrs   []string
+		wantErr bool
+	}{
+		{
+			name:    "empty list is valid",
+			cidrs:   []string{},
+			wantErr: false,
+		},
+		{
+			name:    "single CIDR is valid",
+			cidrs:   []string{"10.0.0.0/24"},
+			wantErr: false,
+		},
+		{
+			name:    "non-overlapping IPv4 CIDRs are valid",
+			cidrs:   []string{"10.0.0.0/24", "10.0.1.0/24", "192.168.1.0/24"},
+			wantErr: false,
+		},
+		{
+			name:    "non-overlapping IPv6 CIDRs are valid",
+			cidrs:   []string{"2001:db8::/32", "2001:db9::/32"},
+			wantErr: false,
+		},
+		{
+			name:    "mixed non-overlapping IPv4/IPv6 CIDRs are valid",
+			cidrs:   []string{"10.0.0.0/24", "2001:db8::/32"},
+			wantErr: false,
+		},
+		{
+			name:    "duplicated IPv4 CIDRs are invalid",
+			cidrs:   []string{"10.0.0.0/24", "10.0.0.0/24"},
+			wantErr: true,
+		},
+		{
+			name:    "overlapping IPv4 CIDRs are invalidd",
+			cidrs:   []string{"10.0.0.0/8", "10.1.0.0/8"},
+			wantErr: true,
+		},
+		{
+			name:    "containing IPv4 CIDRs",
+			cidrs:   []string{"10.0.0.0/16", "10.0.1.0/24"},
+			wantErr: true,
+		},
+		{
+			name:    "duplicated IPv6 CIDRs are invalid",
+			cidrs:   []string{"2001:db8::/32", "2001:db8::/32"},
+			wantErr: true,
+		},
+		{
+			name:    "overlapping IPv6 CIDRs are invalid",
+			cidrs:   []string{"2001:db8::/24", "2001:db8::/32"},
+			wantErr: true,
+		},
+		{
+			name:    "containing IPv6 CIDRs",
+			cidrs:   []string{"2001:db8::/32", "2001:db8:1::/48"},
+			wantErr: true,
+		},
+		{
+			name:    "invalid CIDR format",
+			cidrs:   []string{"10.0.0.0/24", "invalid"},
+			wantErr: true,
+		},
+		{
+			name:    "invalid CIDR prefix length",
+			cidrs:   []string{"10.0.0.0/24", "10.0.0.0/33"},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateNonOverlappingCIDRs(tt.cidrs)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("validateNonOverlappingCIDRs() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestAccPasswordResource(t *testing.T) {
 	dbName := acctest.RandomWithPrefix("testacc-passwd-db")
 	branchName := acctest.RandomWithPrefix("branch")
 	passwdName := acctest.RandomWithPrefix("testacc-passwd")
+
+	ipv4Cidr := []string{"10.0.0.0/24"}
+	// ipv6Cidr := []string{"2001:db8::/64"}
+	multiIPv4Cidrs := []string{"10.0.0.0/16", "10.1.0.0/16"}
+	// multiIPv6Cidrs := []string{"2001:db8::/64", "2001:db9::/64"}
+	// mixedCidrs := []string{"10.0.0.0/8", "2001:db8::/64"}
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -23,16 +114,16 @@ func TestAccPasswordResource(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, ipv4Cidr),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("planetscale_database.test", "default_branch", "main"),
-					resource.TestCheckResourceAttr("planetscale_database.test", "cluster_size", "PS-10"),
-					resource.TestCheckResourceAttr("planetscale_branch.test", "name", branchName),
-					resource.TestCheckResourceAttr("planetscale_branch.test", "parent_branch", "main"),
+					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName),
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
+					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "1"),
+					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", ipv4Cidr[0]),
 				),
 			},
+
 			// ImportState testing
 			{
 				ResourceName:      "planetscale_password.test",
@@ -51,8 +142,115 @@ func TestAccPasswordResource(t *testing.T) {
 				// The actual password is not returned by the API, so we can't verify it here:
 				ImportStateVerifyIgnore: []string{"plaintext"},
 			},
-			// Update and Read testing
-			// TODO: Implement a test for password Update.
+
+			// Update tests:
+
+			// Update 'name' attribute:
+			{
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", ipv4Cidr),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName+"-new"),
+				),
+			},
+
+			// TODO: when the API supports ipv6:
+			// Update 'cidrs' attribute with single ipv6 range:
+			// {
+			// 	Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", ipv6Cidr),
+			// 	Check: resource.ComposeAggregateTestCheckFunc(
+			// 		resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "1"),
+			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", ipv6Cidr[0]),
+			// 	),
+			// },
+
+			// Update `cidrs` with multiple ipv4 ranges
+			{
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", multiIPv4Cidrs),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "2"),
+					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv4Cidrs[0]),
+					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv4Cidrs[1]),
+				),
+			},
+
+			// TODO: when the API supports ipv6:
+			// Update `cidrs` with multiple ipv6 ranges
+			// {
+			// 	Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", multiIPv6Cidrs),
+			// 	Check: resource.ComposeAggregateTestCheckFunc(
+			// 		resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "2"),
+			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv6Cidrs[0]),
+			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv6Cidrs[1]),
+			// 	),
+			// },
+
+			// TODO: when the API supports ipv6:
+			// Update `cidrs` with ipv4 + ipv6 mixed ranges
+			// {
+			// 	Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", mixedCidrs),
+			// 	Check: resource.ComposeAggregateTestCheckFunc(
+			// 		resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "2"),
+			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", mixedCidrs[0]),
+			// 		resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", mixedCidrs[1]),
+			// 	),
+			// },
+
+			// Test removal of `cidrs`
+			{
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", nil),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckNoResourceAttr("planetscale_password.test", "cidrs"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccPasswordResource_ValidationFailures(t *testing.T) {
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: `
+                    resource "planetscale_password" "test" {
+                        organization = "test-org"
+                        database    = "test-db"
+                        branch     = "main"
+                        cidrs      = ["192.168.1.1"]  # Missing prefix
+                    }`,
+				ExpectError: regexp.MustCompile("CIDR notation required"),
+			},
+			{
+				Config: `
+                    resource "planetscale_password" "test" {
+                        organization = "test-org"
+                        database    = "test-db"
+                        branch     = "main"
+                        cidrs      = ["2001:db8::1"]  # Missing prefix
+                    }`,
+				ExpectError: regexp.MustCompile("CIDR notation required"),
+			},
+			{
+				Config: `
+                    resource "planetscale_password" "test" {
+                        organization = "test-org"
+                        database    = "test-db"
+                        branch     = "main"
+                        cidrs      = ["10.0.0.0/8", "10.1.0.0/8"]  # overlapping
+                    }`,
+				ExpectError: regexp.MustCompile("CIDR.+overlaps"),
+			},
+			{
+				Config: `
+                    resource "planetscale_password" "test" {
+                        organization = "test-org"
+                        database    = "test-db"
+                        branch     = "main"
+                        cidrs      = ["999.0.0.1/32"]  # invalid
+                    }`,
+				ExpectError: regexp.MustCompile("invalid CIDR"),
+			},
 		},
 	})
 }
@@ -74,7 +272,7 @@ func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, nil),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
@@ -113,7 +311,7 @@ func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 	})
 }
 
-func testAccPasswordResourceConfig(dbName, branchName, passwdName string) string {
+func testAccPasswordResourceConfig(dbName, branchName, passwdName string, cidrs []string) string {
 	const tmpl = `
 resource "planetscale_database" "test" {
   name           = "{{.DBName}}"
@@ -134,6 +332,7 @@ resource "planetscale_password" "test" {
   organization = "{{.Org}}"
   database     = planetscale_database.test.name
   branch       = planetscale_branch.test.name
+	{{if .CIDRs}}cidrs = {{.CIDRs}}{{end}}
 }
 `
 	t := template.Must(template.New("config").Parse(tmpl))
@@ -143,11 +342,23 @@ resource "planetscale_password" "test" {
 		"DBName":     dbName,
 		"BranchName": branchName,
 		"PasswdName": passwdName,
+		"CIDRs":      terraformStringList(cidrs),
 	})
 	if err != nil {
 		return ""
 	}
 	return buf.String()
+}
+
+func terraformStringList(items []string) string {
+	if len(items) == 0 {
+		return `null`
+	}
+	quoted := make([]string, len(items))
+	for i, item := range items {
+		quoted[i] = fmt.Sprintf("%q", item)
+	}
+	return fmt.Sprintf("[%s]", strings.Join(quoted, ", "))
 }
 
 func getPasswordIDFromState(state *terraform.State, resourceName string) (string, error) {

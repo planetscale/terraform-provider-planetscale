@@ -6,16 +6,20 @@ package provider
 import (
 	"context"
 	"fmt"
+	"net/netip"
+	"regexp"
 	"strings"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
@@ -51,6 +55,7 @@ type passwordResourceModel struct {
 	Region         types.Object  `tfsdk:"region"`
 	Renewable      types.Bool    `tfsdk:"renewable"`
 	Role           types.String  `tfsdk:"role"`
+	Cidrs          types.List    `tfsdk:"cidrs"`
 	TtlSeconds     types.Float64 `tfsdk:"ttl_seconds"`
 	Username       types.String  `tfsdk:"username"`
 
@@ -70,6 +75,14 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 	diags.Append(diags...)
 	region, diags := types.ObjectValueFrom(ctx, regionResourceAttrTypes, password.Region)
 	diags.Append(diags...)
+
+	var cidrs types.List
+	if password.Cidrs != nil {
+		cidrs = stringsToListValue(password.Cidrs, diags)
+	} else {
+		cidrs = types.ListNull(types.StringType)
+	}
+
 	return &passwordResourceModel{
 		Organization: organization,
 		Database:     database,
@@ -88,8 +101,8 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
-
-		PlainText: plainText,
+		Cidrs:          cidrs,
+		PlainText:      plainText,
 
 		// manually removed from spec because currently buggy
 		// Integrations:   stringsToListValue(password.Integrations, diags),
@@ -106,6 +119,14 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 	diags.Append(diags...)
 	region, diags := types.ObjectValueFrom(ctx, regionResourceAttrTypes, password.Region)
 	diags.Append(diags...)
+
+	var cidrs types.List
+	if password.Cidrs != nil {
+		cidrs = stringsToListValue(password.Cidrs, diags)
+	} else {
+		cidrs = types.ListNull(types.StringType)
+	}
+
 	return &passwordResourceModel{
 		Organization: organization,
 		Database:     database,
@@ -124,12 +145,64 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
-
-		PlainText: types.StringValue(password.PlainText),
+		Cidrs:          cidrs,
+		PlainText:      types.StringValue(password.PlainText),
 
 		// manually removed from spec because currently buggy
 		// Integrations:   stringsToListValue(password.Integrations, diags),
 	}
+}
+
+func validateNonOverlappingCIDRs(cidrs []string) error {
+	prefixes := make([]netip.Prefix, len(cidrs))
+	for i, cidr := range cidrs {
+		prefix, err := netip.ParsePrefix(cidr)
+		if err != nil {
+			return fmt.Errorf("invalid CIDR %q: %w", cidr, err)
+		}
+		prefixes[i] = prefix
+	}
+
+	for i := 0; i < len(prefixes); i++ {
+		for j := i + 1; j < len(prefixes); j++ {
+			if prefixes[i].Overlaps(prefixes[j]) {
+				return fmt.Errorf("CIDR %q overlaps with %q",
+					cidrs[i], cidrs[j])
+			}
+		}
+	}
+	return nil
+}
+
+type cidrValidator struct{}
+
+func (v cidrValidator) ValidateList(ctx context.Context, req validator.ListRequest, resp *validator.ListResponse) {
+	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+		return
+	}
+
+	var cidrs []string
+	diags := req.ConfigValue.ElementsAs(ctx, &cidrs, false)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if err := validateNonOverlappingCIDRs(cidrs); err != nil {
+		resp.Diagnostics.AddAttributeError(
+			req.Path,
+			"Invalid CIDR Configuration",
+			err.Error(),
+		)
+	}
+}
+
+func (v cidrValidator) Description(ctx context.Context) string {
+	return "validates that CIDRs do not overlap"
+}
+
+func (v cidrValidator) MarkdownDescription(ctx context.Context) string {
+	return "validates that CIDRs do not overlap"
 }
 
 func (r *passwordResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -184,11 +257,29 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: "The display name for the password.",
 				Optional:    true,
 			},
+			"cidrs": schema.ListAttribute{
+				Description: "List of IP addresses or CIDR ranges that can use this password. Individual IPs must still contain a prefix, eg: 127.0.0.1/32",
+				Optional:    true,
+				Computed:    false,
+				ElementType: types.StringType,
+				Validators: []validator.List{
+					listvalidator.ValueStringsAre(
+						stringvalidator.RegexMatches(
+							regexp.MustCompile(`^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}$|^[0-9a-fA-F:]+/[0-9]{1,3}$`),
+							"CIDR notation required (e.g. '127.0.0.1/32' for IPv4 or '2001:db8::/128' for IPv6)",
+						),
+					),
+					cidrValidator{},
+				},
+			},
 
 			// read-only
 			"id": schema.StringAttribute{
 				Description: "The ID for the password.",
 				Computed:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"actor": schema.SingleNestedAttribute{
 				Description: "The actor that created this branch.",
@@ -199,9 +290,6 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: "The branch this password is allowed to access.",
 				Computed:    true,
 				Attributes:  databaseBranchResourceAttribute,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplace(),
-				},
 			},
 			"region": schema.SingleNestedAttribute{
 				Description: "The region in which this password can be used.",
@@ -237,6 +325,9 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			"plaintext": schema.StringAttribute{
 				Description: "The plaintext password, only available if the password was created by this provider.",
 				Sensitive:   true, Computed: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 
 			// manually removed from spec because currently buggy
@@ -291,10 +382,17 @@ func (r *passwordResource) Create(ctx context.Context, req resource.CreateReques
 	role := data.Role
 	ttl := data.TtlSeconds
 
+	cidrs := make([]string, 0, len(data.Cidrs.Elements()))
+	resp.Diagnostics.Append(data.Cidrs.ElementsAs(ctx, &cidrs, false)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	createReq := planetscale.CreatePasswordReq{
-		Name: name.ValueStringPointer(),
-		Role: role.ValueStringPointer(),
-		Ttl:  ttl.ValueFloat64Pointer(),
+		Cidrs: &cidrs,
+		Name:  name.ValueStringPointer(),
+		Role:  role.ValueStringPointer(),
+		Ttl:   ttl.ValueFloat64Pointer(),
 	}
 	res, err := r.client.CreatePassword(ctx, org.ValueString(), database.ValueString(), branch.ValueString(), createReq)
 	if err != nil {
@@ -418,10 +516,20 @@ func (r *passwordResource) Update(ctx context.Context, req resource.UpdateReques
 	changedUpdatableSettings := false
 	name := stringIfDifferent(old.Name, data.Name, &changedUpdatableSettings)
 
+	if !old.Cidrs.Equal(data.Cidrs) {
+		changedUpdatableSettings = true
+	}
+	cidrs := make([]string, 0, len(data.Cidrs.Elements()))
+	resp.Diagnostics.Append(data.Cidrs.ElementsAs(ctx, &cidrs, false)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	var state *passwordResourceModel
-	if changedUpdatableSettings && name != nil {
+	if changedUpdatableSettings {
 		updateReq := planetscale.UpdatePasswordReq{
-			Name: *name,
+			Name:  name,
+			Cidrs: &cidrs,
 		}
 		res, err := r.client.UpdatePassword(
 			ctx,
@@ -447,6 +555,8 @@ func (r *passwordResource) Update(ctx context.Context, req resource.UpdateReques
 		if resp.Diagnostics.HasError() {
 			return
 		}
+		// API does not return plaintext password, re-use from prior state
+		state.PlainText = old.PlainText
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
