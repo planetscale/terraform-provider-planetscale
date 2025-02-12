@@ -92,7 +92,7 @@ func checkOneOf(values ...string) resource.CheckResourceAttrWithFunc {
 	}
 }
 
-func checkExpectUpdate(resourceName string) resource.ConfigPlanChecks {
+func checkExpectUpdate(resourceName string) resource.ConfigPlanChecks { //nolint:unparam
 	return resource.ConfigPlanChecks{
 		PreApply: []plancheck.PlanCheck{
 			plancheck.ExpectResourceAction(resourceName, plancheck.ResourceActionUpdate),
@@ -100,7 +100,7 @@ func checkExpectUpdate(resourceName string) resource.ConfigPlanChecks {
 	}
 }
 
-func checkExpectRecreate(resourceName string) resource.ConfigPlanChecks {
+func checkExpectRecreate(resourceName string) resource.ConfigPlanChecks { //nolint:unused
 	return resource.ConfigPlanChecks{
 		PreApply: []plancheck.PlanCheck{
 			plancheck.ExpectResourceAction(resourceName, plancheck.ResourceActionReplace),
