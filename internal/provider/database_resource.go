@@ -146,6 +146,14 @@ Known limitations:
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"cluster_size": schema.StringAttribute{
+				Description: "The default plan size of the database's branches.",
+				Required:    true, PlanModifiers: []planmodifier.String{
+					// TODO(joem): Web console supports changing cluster_size without recreation, but the API does not
+					// currently expose this. Once the API supports this, change this to be updatable without recreation.
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
 
 			"id": schema.StringAttribute{
 				Description: "The ID of the database.",
@@ -252,7 +260,7 @@ Known limitations:
 			},
 			"issues_count": schema.Float64Attribute{
 				Description: "The total number of ongoing issues within a database.",
-				Computed:    true, Optional: true,
+				Computed:    true,
 			},
 			"migration_framework": schema.StringAttribute{
 				Description: "Framework used for applying migrations.",
@@ -264,15 +272,11 @@ Known limitations:
 			},
 			"multiple_admins_required_for_deletion": schema.BoolAttribute{
 				Description: "If the database requires multiple admins for deletion.",
-				Computed:    true, Optional: true,
+				Computed:    true,
 			},
 			"plan": schema.StringAttribute{
 				Description: "The database plan.",
-				Computed:    true, Optional: true,
-			},
-			"cluster_size": schema.StringAttribute{
-				Description: "The size of the database cluster plan.",
-				Computed:    true, Optional: true,
+				Computed:    true,
 			},
 			"production_branch_web_console": schema.BoolAttribute{
 				Description: "Whether web console is enabled for production branches.",

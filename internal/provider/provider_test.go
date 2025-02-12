@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/planetscale/terraform-provider-planetscale/internal/client/planetscale"
 	"golang.org/x/oauth2"
 )
@@ -88,6 +89,22 @@ func checkOneOf(values ...string) resource.CheckResourceAttrWithFunc {
 			}
 		}
 		return fmt.Errorf("value %q is not one of %s", value, strings.Join(values, ", "))
+	}
+}
+
+func checkExpectUpdate(resourceName string) resource.ConfigPlanChecks {
+	return resource.ConfigPlanChecks{
+		PreApply: []plancheck.PlanCheck{
+			plancheck.ExpectResourceAction(resourceName, plancheck.ResourceActionUpdate),
+		},
+	}
+}
+
+func checkExpectRecreate(resourceName string) resource.ConfigPlanChecks {
+	return resource.ConfigPlanChecks{
+		PreApply: []plancheck.PlanCheck{
+			plancheck.ExpectResourceAction(resourceName, plancheck.ResourceActionReplace),
+		},
 	}
 }
 
