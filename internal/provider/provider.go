@@ -67,7 +67,7 @@ Known limitations:
 - When using service tokens (recommended), ensure the token has the ` + "`create_databases`" + ` organization-level permission. This allows terraform to create new databases and automatically grants the token all other permissions on the databases created by the token.`,
 		Attributes: map[string]schema.Attribute{
 			"endpoint": schema.StringAttribute{
-				MarkdownDescription: "If set, points the API client to a different endpoint than `https:://api.planetscale.com/v1`.",
+				MarkdownDescription: "If set, points the API client to a different endpoint than `https://api.planetscale.com/v1`.",
 				Optional:            true,
 			},
 			"access_token": schema.StringAttribute{

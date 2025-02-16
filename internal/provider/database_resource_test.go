@@ -57,6 +57,20 @@ func TestAccDatabaseResource(t *testing.T) {
 					resource.TestCheckResourceAttr("planetscale_database.test", "allow_data_branching", "true"),
 				),
 			},
+			// Enable insights raw queries
+			{
+				Config: testAccDatabaseResourceConfigTemplate(map[string]string{
+					"organization":         testAccOrg,
+					"name":                 dbName,
+					"cluster_size":         "PS-10",
+					"allow_data_branching": "true",
+					"insights_raw_queries": "true",
+				}),
+				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_database.test", "insights_raw_queries", "true"),
+				),
+			},
 
 			// Enable automatic migrations
 			{
@@ -65,42 +79,35 @@ func TestAccDatabaseResource(t *testing.T) {
 					"name":                 dbName,
 					"cluster_size":         "PS-10",
 					"allow_data_branching": "true",
-					"automatic_migrations": "true",
-				}),
-				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("planetscale_database.test", "automatic_migrations", "true"),
-				),
-			},
-			// Enable insights raw queries
-			{
-				Config: testAccDatabaseResourceConfigTemplate(map[string]string{
-					"organization":         testAccOrg,
-					"name":                 dbName,
-					"cluster_size":         "PS-10",
-					"allow_data_branching": "true",
-					"automatic_migrations": "true",
 					"insights_raw_queries": "true",
-				}),
-				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("planetscale_database.test", "insights_raw_queries", "true"),
-				),
-			},
-			// Set migration framework
-			{
-				Config: testAccDatabaseResourceConfigTemplate(map[string]string{
-					"organization":         testAccOrg,
-					"name":                 dbName,
-					"cluster_size":         "PS-10",
-					"allow_data_branching": "true",
 					"automatic_migrations": "true",
-					"insights_raw_queries": "true",
+					"migration_table_name": "schema_migrations",
 					"migration_framework":  "rails",
 				}),
 				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
 				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_database.test", "automatic_migrations", "true"),
+					resource.TestCheckResourceAttr("planetscale_database.test", "migration_table_name", "schema_migrations"),
 					resource.TestCheckResourceAttr("planetscale_database.test", "migration_framework", "rails"),
+				),
+			},
+			// Change migration framework, rails -> other
+			{
+				Config: testAccDatabaseResourceConfigTemplate(map[string]string{
+					"organization":         testAccOrg,
+					"name":                 dbName,
+					"cluster_size":         "PS-10",
+					"allow_data_branching": "true",
+					"insights_raw_queries": "true",
+					"automatic_migrations": "true",
+					"migration_table_name": "schema_migrations",
+					"migration_framework":  "other",
+				}),
+				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_database.test", "automatic_migrations", "true"),
+					resource.TestCheckResourceAttr("planetscale_database.test", "migration_table_name", "schema_migrations"),
+					resource.TestCheckResourceAttr("planetscale_database.test", "migration_framework", "other"),
 				),
 			},
 
@@ -111,25 +118,14 @@ func TestAccDatabaseResource(t *testing.T) {
 					"name":                 dbName,
 					"cluster_size":         "PS-10",
 					"allow_data_branching": "false",
+					"insights_raw_queries": "true",
+					"automatic_migrations": "true",
+					"migration_table_name": "schema_migrations",
+					"migration_framework":  "other",
 				}),
 				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_database.test", "allow_data_branching", "false"),
-				),
-			},
-
-			// Disable automatic migrations
-			{
-				Config: testAccDatabaseResourceConfigTemplate(map[string]string{
-					"organization":         testAccOrg,
-					"name":                 dbName,
-					"cluster_size":         "PS-10",
-					"allow_data_branching": "false",
-					"automatic_migrations": "false",
-				}),
-				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
-				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("planetscale_database.test", "automatic_migrations", "false"),
 				),
 			},
 			// Disable insights raw queries
@@ -139,29 +135,44 @@ func TestAccDatabaseResource(t *testing.T) {
 					"name":                 dbName,
 					"cluster_size":         "PS-10",
 					"allow_data_branching": "false",
-					"automatic_migrations": "false",
 					"insights_raw_queries": "false",
+					"automatic_migrations": "true",
+					"migration_table_name": "schema_migrations",
+					"migration_framework":  "other",
 				}),
 				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_database.test", "insights_raw_queries", "false"),
 				),
 			},
-
-			// Change cluster_size should trigger a recreate.
-			// TODO: Update this test when the API supports in-place cluster_size changes: https://github.com/planetscale/terraform-provider-planetscale/issues/107
+			// Disable automatic migrations
 			{
 				Config: testAccDatabaseResourceConfigTemplate(map[string]string{
 					"organization":         testAccOrg,
 					"name":                 dbName,
 					"cluster_size":         "PS-10",
 					"allow_data_branching": "false",
-					"automatic_migrations": "false",
 					"insights_raw_queries": "false",
+					"automatic_migrations": "false",
 				}),
-				// Save test time by only checking the plan, not actually recreating, we know destroy+create works:
-				PlanOnly:         true,
 				ConfigPlanChecks: checkExpectUpdate("planetscale_database.test"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_database.test", "automatic_migrations", "false"),
+				),
+			},
+
+			// Change cluster_size should trigger a recreate.
+			{
+				Config: testAccDatabaseResourceConfigTemplate(map[string]string{
+					"organization": testAccOrg,
+					"name":         dbName,
+					"cluster_size": "PS-20",
+				}),
+				// TODO: Update this test when the API supports in-place cluster_size changes: https://github.com/planetscale/terraform-provider-planetscale/issues/107
+				ConfigPlanChecks: checkExpectRecreate("planetscale_database.test"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_database.test", "cluster_size", "PS-20"),
+				),
 			},
 		},
 	})
@@ -217,6 +228,7 @@ resource "planetscale_database" "test" {
     {{if .allow_data_branching}}allow_data_branching = {{.allow_data_branching}}{{end}}
     {{if .automatic_migrations}}automatic_migrations = {{.automatic_migrations}}{{end}}
     {{if .insights_raw_queries}}insights_raw_queries = {{.insights_raw_queries}}{{end}}
+    {{if .migration_table_name}}migration_table_name = "{{.migration_table_name}}"{{end}}
     {{if .migration_framework}}migration_framework = "{{.migration_framework}}"{{end}}
 }
 `

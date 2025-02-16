@@ -92,6 +92,8 @@ func checkOneOf(values ...string) resource.CheckResourceAttrWithFunc {
 	}
 }
 
+// checkExpectUpdate is a helper function for resource.TestStep/ConfigPlanChecks
+// to assert that the plan should updated the resource in place.
 func checkExpectUpdate(resourceName string) resource.ConfigPlanChecks { //nolint:unparam
 	return resource.ConfigPlanChecks{
 		PreApply: []plancheck.PlanCheck{
@@ -100,6 +102,8 @@ func checkExpectUpdate(resourceName string) resource.ConfigPlanChecks { //nolint
 	}
 }
 
+// checkExpectRecreate is a helper function for resource.TestStep/ConfigPlanChecks
+// to assert that the plan should recreate the resource.
 func checkExpectRecreate(resourceName string) resource.ConfigPlanChecks { //nolint:unused
 	return resource.ConfigPlanChecks{
 		PreApply: []plancheck.PlanCheck{

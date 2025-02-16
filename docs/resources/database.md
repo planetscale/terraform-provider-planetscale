@@ -37,7 +37,7 @@ resource "planetscale_database" "example" {
 ### Optional
 
 - `allow_data_branching` (Boolean) Whether seeding branches with data is enabled for all branches.
-- `automatic_migrations` (Boolean) Whether to automatically manage Rails migrations during deploy requests.
+- `automatic_migrations` (Boolean) Whether to automatically manage migrations during deploy requests. If true, `migration_table_name` and `migration_framework` must be set.
 - `default_branch` (String) The default branch for the database.
 - `insights_raw_queries` (Boolean) The URL to see this database's branches in the web UI.
 - `migration_framework` (String) Framework used for applying migrations.
