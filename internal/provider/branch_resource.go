@@ -314,6 +314,19 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
+	// After branch is ready, check if we need to promote it to a production branch
+	if !data.Production.IsNull() && data.Production.ValueBool() {
+		res, err := r.client.PromoteBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Unable to promote branch during creation",
+				fmt.Sprintf("Branch %s could not be promoted to production: %s", name.ValueString(), err),
+			)
+			return
+		}
+		branch = res.Branch
+	}
+
 	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
