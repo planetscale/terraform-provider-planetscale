@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
@@ -126,6 +127,42 @@ func (r *databaseResource) Metadata(ctx context.Context, req resource.MetadataRe
 	resp.TypeName = req.ProviderTypeName + "_database"
 }
 
+var _ validator.Bool = automaticMigrationsValidator{}
+
+type automaticMigrationsValidator struct{}
+
+func (v automaticMigrationsValidator) Description(ctx context.Context) string {
+	return "Validate that migration_table_name and migration_framework are set when automatic_migrations is true"
+}
+
+func (v automaticMigrationsValidator) MarkdownDescription(ctx context.Context) string {
+	return v.Description(ctx)
+}
+
+func (v automaticMigrationsValidator) ValidateBool(ctx context.Context, req validator.BoolRequest, resp *validator.BoolResponse) {
+	// If automatic_migrations is false, unknown, or null, do nothing.
+	if !req.ConfigValue.ValueBool() {
+		return
+	}
+	// When automatic_migrations is true, ensure that migration_table_name and migration_framework are set.
+	var config databaseResourceModel
+	req.Config.Get(ctx, &config)
+	if config.MigrationTableName.IsNull() {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("automatic_migrations"),
+			"Invalid configuration",
+			"migration_table_name must be set when automatic_migrations is true",
+		)
+	}
+	if config.MigrationFramework.IsNull() {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("automatic_migrations"),
+			"Invalid configuration",
+			"migration_framework must be set when automatic_migrations is true",
+		)
+	}
+}
+
 func (r *databaseResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Description: "A PlanetScale database.",
@@ -143,6 +180,14 @@ Known limitations:
 			"name": schema.StringAttribute{
 				Description: "The name of this database.",
 				Required:    true, PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"cluster_size": schema.StringAttribute{
+				Description: "The default plan size of the database's branches.",
+				Required:    true, PlanModifiers: []planmodifier.String{
+					// TODO(joem): Web console supports changing cluster_size without recreation, but the API does not
+					// currently expose this. Once the API supports this, change this to be updatable without recreation.
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
@@ -167,8 +212,12 @@ Known limitations:
 				Computed:    true,
 			},
 			"automatic_migrations": schema.BoolAttribute{
-				Description: "Whether to automatically manage Rails migrations during deploy requests.",
-				Computed:    true, Optional: true,
+				Description: "Whether to automatically manage migrations during deploy requests. If true, `migration_table_name` and `migration_framework` must be set.",
+				Computed:    true,
+				Optional:    true,
+				Validators: []validator.Bool{
+					automaticMigrationsValidator{},
+				},
 			},
 			"branches_count": schema.Float64Attribute{
 				Description: "The total number of database branches.",
@@ -252,7 +301,7 @@ Known limitations:
 			},
 			"issues_count": schema.Float64Attribute{
 				Description: "The total number of ongoing issues within a database.",
-				Computed:    true, Optional: true,
+				Computed:    true,
 			},
 			"migration_framework": schema.StringAttribute{
 				Description: "Framework used for applying migrations.",
@@ -264,15 +313,11 @@ Known limitations:
 			},
 			"multiple_admins_required_for_deletion": schema.BoolAttribute{
 				Description: "If the database requires multiple admins for deletion.",
-				Computed:    true, Optional: true,
+				Computed:    true,
 			},
 			"plan": schema.StringAttribute{
 				Description: "The database plan.",
-				Computed:    true, Optional: true,
-			},
-			"cluster_size": schema.StringAttribute{
-				Description: "The size of the database cluster plan.",
-				Computed:    true, Optional: true,
+				Computed:    true,
 			},
 			"production_branch_web_console": schema.BoolAttribute{
 				Description: "Whether web console is enabled for production branches.",
@@ -495,6 +540,20 @@ func (r *databaseResource) Update(ctx context.Context, req resource.UpdateReques
 		ProductionBranchWebConsole: boolIfDifferent(old.ProductionBranchWebConsole, data.ProductionBranchWebConsole, &changedUpdatableSettings),
 		RequireApprovalForDeploy:   boolIfDifferent(old.RequireApprovalForDeploy, data.RequireApprovalForDeploy, &changedUpdatableSettings),
 		RestrictBranchRegion:       boolIfDifferent(old.RestrictBranchRegion, data.RestrictBranchRegion, &changedUpdatableSettings),
+	}
+
+	// XXX: If any migration-related field changes, send all three.
+	// The API will fail if we only send the changed field. For example,
+	// If `automatic_migrations` was previously set to true and a payload
+	// only containing a change to `migration_framework` is sent, the API will
+	// reject the change.
+	if !old.AutomaticMigrations.Equal(data.AutomaticMigrations) ||
+		!old.MigrationFramework.Equal(data.MigrationFramework) ||
+		!old.MigrationTableName.Equal(data.MigrationTableName) {
+		changedUpdatableSettings = true
+		updateReq.AutomaticMigrations = data.AutomaticMigrations.ValueBoolPointer()
+		updateReq.MigrationFramework = stringValueIfKnown(data.MigrationFramework)
+		updateReq.MigrationTableName = stringValueIfKnown(data.MigrationTableName)
 	}
 
 	if changedUpdatableSettings {

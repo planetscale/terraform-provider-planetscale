@@ -45,7 +45,7 @@ provider "planetscale" {
 ### Optional
 
 - `access_token` (String, Sensitive) Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_ID`. Mutually exclusive with `service_token_id` and `service_token`.
-- `endpoint` (String) If set, points the API client to a different endpoint than `https:://api.planetscale.com/v1`.
+- `endpoint` (String) If set, points the API client to a different endpoint than `https://api.planetscale.com/v1`.
 - `service_token` (String, Sensitive) Value of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN`. Mutually exclusive with `access_token`.
 - `service_token_id` (String) ID of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_ID`. Mutually exclusive with `access_token`.
 - `service_token_name` (String, Deprecated) Name of the service token to use. Alternatively, use `PLANETSCALE_SERVICE_TOKEN_NAME`. Mutually exclusive with `access_token`. (Deprecated, use `service_token_id` instead)

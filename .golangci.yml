@@ -9,7 +9,8 @@ linters:
   enable:
     - durationcheck
     - errcheck
-    - exportloopref
+    # TODO: enable copyloopvar
+    #- copyloopvar
     - forcetypeassert
     - godot
     - gofmt
@@ -20,7 +21,7 @@ linters:
     - nilerr
     - predeclared
     - staticcheck
-    - tenv
+    - usetesting
     - unconvert
     - unparam
     - unused

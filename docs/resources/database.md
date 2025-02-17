@@ -21,6 +21,7 @@ Known limitations:
 resource "planetscale_database" "example" {
   organization = "example"
   name         = "anotherdb"
+  cluster_size = "PS_10"
 }
 ```
 
@@ -29,21 +30,18 @@ resource "planetscale_database" "example" {
 
 ### Required
 
+- `cluster_size` (String) The default plan size of the database's branches.
 - `name` (String) The name of this database.
 - `organization` (String) The organization this database belongs to.
 
 ### Optional
 
 - `allow_data_branching` (Boolean) Whether seeding branches with data is enabled for all branches.
-- `automatic_migrations` (Boolean) Whether to automatically manage Rails migrations during deploy requests.
-- `cluster_size` (String) The size of the database cluster plan.
+- `automatic_migrations` (Boolean) Whether to automatically manage migrations during deploy requests. If true, `migration_table_name` and `migration_framework` must be set.
 - `default_branch` (String) The default branch for the database.
 - `insights_raw_queries` (Boolean) The URL to see this database's branches in the web UI.
-- `issues_count` (Number) The total number of ongoing issues within a database.
 - `migration_framework` (String) Framework used for applying migrations.
 - `migration_table_name` (String) Table name to use for copying schema migration data.
-- `multiple_admins_required_for_deletion` (Boolean) If the database requires multiple admins for deletion.
-- `plan` (String) The database plan.
 - `production_branch_web_console` (Boolean) Whether web console is enabled for production branches.
 - `region` (String) The region the database lives in.
 - `require_approval_for_deploy` (Boolean) Whether an approval is required to deploy schema changes to this database.
@@ -63,6 +61,9 @@ resource "planetscale_database" "example" {
 - `development_branches_count` (Number) The total number of database development branches.
 - `html_url` (String) The total number of database development branches.
 - `id` (String) The ID of the database.
+- `issues_count` (Number) The total number of ongoing issues within a database.
+- `multiple_admins_required_for_deletion` (Boolean) If the database requires multiple admins for deletion.
+- `plan` (String) The database plan.
 - `production_branches_count` (Number) The total number of database production branches.
 - `ready` (Boolean) If the database is ready to be used.
 - `schema_last_updated_at` (String) When the default branch schema was last changed.
