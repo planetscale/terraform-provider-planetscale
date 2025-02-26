@@ -320,7 +320,7 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:    true,
 			},
 			"replica": schema.BoolAttribute{
-				Description: "Whether or not the password is a replica.",
+				Description: "When true, all queries from this password will be read-only and directed to a replica.",
 				Optional:    true,
 				Computed:    true,
 				PlanModifiers: []planmodifier.Bool{
