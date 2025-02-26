@@ -883,7 +883,7 @@
                                 "type": "string"
                               },
                               "port": {
-                                "type": "string"
+                                "type": "number"
                               },
                               "database": {
                                 "type": "string"
@@ -1198,7 +1198,7 @@
                           "type": "string"
                         },
                         "port": {
-                          "type": "string"
+                          "type": "number"
                         },
                         "database": {
                           "type": "string"
@@ -4486,6 +4486,517 @@
           }
         },
         "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `connect_production_branch`, `connect_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `manage_passwords`, `manage_production_branch_passwords` |\n| Database | `manage_passwords`, `manage_production_branch_passwords` |\n| Branch | `manage_passwords` |"
+      }
+    },
+    "/organizations/{organization}/databases/{database}/branches/{branch}/query-patterns": {
+      "get": {
+        "tags": [
+          "Query Insights reports"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "list_generated_query_patterns_reports",
+        "summary": "List generated query patterns reports",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization the branch belongs to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database the branch belongs to"
+          },
+          {
+            "name": "branch",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the branch"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "Returns the generated query patterns reports",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "has_next": {
+                  "type": "boolean",
+                  "description": "Whether there is a next page of results"
+                },
+                "has_prev": {
+                  "type": "boolean",
+                  "description": "Whether there is a previous page of results"
+                },
+                "cursor_start": {
+                  "type": "string",
+                  "description": "The ID of the first audit log in the current results"
+                },
+                "cursor_end": {
+                  "type": "string",
+                  "description": "The ID of the last audit log in the current results"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The ID for the query patterns download"
+                      },
+                      "actor_id": {
+                        "type": "string",
+                        "description": "The ID of the actor that created the query patterns download"
+                      },
+                      "actor_type": {
+                        "type": "string",
+                        "description": "The ID of the actor that created the query patterns download. Such as 'User' or 'ServiceToken'"
+                      },
+                      "state": {
+                        "type": "string",
+                        "description": "Whether the query patterns download is pending, completed, or failed"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "description": "When the query patterns download was created"
+                      },
+                      "finished_at": {
+                        "type": "string",
+                        "description": "When the query patterns download was completed"
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "The URL with the status of the query patterns download"
+                      },
+                      "download_url": {
+                        "type": "string",
+                        "description": "The URL to download the query patterns"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "actor_id",
+                      "actor_type",
+                      "state",
+                      "created_at",
+                      "finished_at",
+                      "url",
+                      "download_url"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "has_next",
+                "has_prev",
+                "cursor_start",
+                "cursor_end",
+                "data"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
+      },
+      "post": {
+        "tags": [
+          "Query Insights reports"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "create_query_patterns_report",
+        "summary": "Create a new query patterns report",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization the branch belongs to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database the branch belongs to"
+          },
+          {
+            "name": "branch",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the branch"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "201": {
+            "description": "The created query patterns download",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The ID for the query patterns download"
+                },
+                "actor_id": {
+                  "type": "string",
+                  "description": "The ID of the actor that created the query patterns download"
+                },
+                "actor_type": {
+                  "type": "string",
+                  "description": "The ID of the actor that created the query patterns download. Such as 'User' or 'ServiceToken'"
+                },
+                "state": {
+                  "type": "string",
+                  "description": "Whether the query patterns download is pending, completed, or failed"
+                },
+                "created_at": {
+                  "type": "string",
+                  "description": "When the query patterns download was created"
+                },
+                "finished_at": {
+                  "type": "string",
+                  "description": "When the query patterns download was completed"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The URL with the status of the query patterns download"
+                },
+                "download_url": {
+                  "type": "string",
+                  "description": "The URL to download the query patterns"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "actor_id",
+                "actor_type",
+                "state",
+                "created_at",
+                "finished_at",
+                "url",
+                "download_url"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
+      }
+    },
+    "/organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}": {
+      "get": {
+        "tags": [
+          "Query Insights reports"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "get_query_patterns_report_status",
+        "summary": "Show the status of a query patterns report",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization the branch belongs to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database the branch belongs to"
+          },
+          {
+            "name": "branch",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the branch"
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the query patterns report"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "The retrieved query patterns download",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The ID for the query patterns download"
+                },
+                "actor_id": {
+                  "type": "string",
+                  "description": "The ID of the actor that created the query patterns download"
+                },
+                "actor_type": {
+                  "type": "string",
+                  "description": "The ID of the actor that created the query patterns download. Such as 'User' or 'ServiceToken'"
+                },
+                "state": {
+                  "type": "string",
+                  "description": "Whether the query patterns download is pending, completed, or failed"
+                },
+                "created_at": {
+                  "type": "string",
+                  "description": "When the query patterns download was created"
+                },
+                "finished_at": {
+                  "type": "string",
+                  "description": "When the query patterns download was completed"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The URL with the status of the query patterns download"
+                },
+                "download_url": {
+                  "type": "string",
+                  "description": "The URL to download the query patterns"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "actor_id",
+                "actor_type",
+                "state",
+                "created_at",
+                "finished_at",
+                "url",
+                "download_url"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
+      },
+      "delete": {
+        "tags": [
+          "Query Insights reports"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "delete_query_patterns_report",
+        "summary": "Delete a query patterns report",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization the branch belongs to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database the branch belongs to"
+          },
+          {
+            "name": "branch",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the branch"
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the query patterns report"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "204": {
+            "description": "Delete a query patterns report",
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
+      }
+    },
+    "/organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}/download": {
+      "get": {
+        "tags": [
+          "Query Insights reports"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "get_query_patterns_report",
+        "summary": "Download a finished query patterns report",
+        "parameters": [
+          {
+            "name": "organization",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the organization the branch belongs to"
+          },
+          {
+            "name": "database",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the database the branch belongs to"
+          },
+          {
+            "name": "branch",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The name of the branch"
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the query patterns report"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "302": {
+            "description": "Redirect to the query patterns download",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The ID for the query patterns download"
+                },
+                "actor_id": {
+                  "type": "string",
+                  "description": "The ID of the actor that created the query patterns download"
+                },
+                "actor_type": {
+                  "type": "string",
+                  "description": "The ID of the actor that created the query patterns download. Such as 'User' or 'ServiceToken'"
+                },
+                "state": {
+                  "type": "string",
+                  "description": "Whether the query patterns download is pending, completed, or failed"
+                },
+                "created_at": {
+                  "type": "string",
+                  "description": "When the query patterns download was created"
+                },
+                "finished_at": {
+                  "type": "string",
+                  "description": "When the query patterns download was completed"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The URL with the status of the query patterns download"
+                },
+                "download_url": {
+                  "type": "string",
+                  "description": "The URL to download the query patterns"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "actor_id",
+                "actor_type",
+                "state",
+                "created_at",
+                "finished_at",
+                "url",
+                "download_url"
+              ]
+            },
+            "headers": {}
+          }
+        },
+        "description": "\n### Authorization\nA service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:\n\n**Service Token Accesses**\n `read_branch`\n\n**OAuth Scopes**\n\n | Resource | Scopes |\n| :------- | :---------- |\n| Organization | `read_branches` |\n| Database | `read_branches` |\n| Branch | `read_branch` |"
       }
     },
     "/organizations/{organization}/databases/{database}/branches/{name}": {
@@ -10575,7 +11086,7 @@
                           "type": "string"
                         },
                         "port": {
-                          "type": "string"
+                          "type": "number"
                         },
                         "database": {
                           "type": "string"
@@ -10807,7 +11318,7 @@
                 },
                 "restrict_branch_region": {
                   "type": "boolean",
-                  "description": "Whether or not to limit branch creation to the AWS us-east-1 region."
+                  "description": "Whether or not to limit branch creation to the same region as the one selected during database creation."
                 },
                 "allow_data_branching": {
                   "type": "boolean",
@@ -10910,7 +11421,7 @@
                           "type": "string"
                         },
                         "port": {
-                          "type": "string"
+                          "type": "number"
                         },
                         "database": {
                           "type": "string"
@@ -12770,6 +13281,10 @@
     {
       "name": "Organizations",
       "description": "          API endpoints for managing organizations.\n"
+    },
+    {
+      "name": "Query Insights reports",
+      "description": "          API endpoints for downloading query insights data.\n"
     },
     {
       "name": "Users",
