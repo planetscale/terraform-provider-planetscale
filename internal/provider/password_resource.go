@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -53,6 +54,7 @@ type passwordResourceModel struct {
 	DeletedAt      types.String  `tfsdk:"deleted_at"`
 	ExpiresAt      types.String  `tfsdk:"expires_at"`
 	Region         types.Object  `tfsdk:"region"`
+	Replica        types.Bool    `tfsdk:"replica"`
 	Renewable      types.Bool    `tfsdk:"renewable"`
 	Role           types.String  `tfsdk:"role"`
 	Cidrs          types.List    `tfsdk:"cidrs"`
@@ -98,6 +100,7 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 		Id:             types.StringValue(password.Id),
 		Region:         region,
 		Renewable:      types.BoolValue(password.Renewable),
+		Replica:        types.BoolValue(password.Replica),
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
@@ -315,6 +318,14 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 			"renewable": schema.BoolAttribute{
 				Description: "Whether or not the password can be renewed.",
 				Computed:    true,
+			},
+			"replica": schema.BoolAttribute{
+				Description: "Whether or not the password is a replica.",
+				Optional:    true,
+				Computed:    true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
+				},
 			},
 			"username": schema.StringAttribute{
 				Description: "The username for the password.",

@@ -114,13 +114,14 @@ func TestAccPasswordResource(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, ipv4Cidr),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, ipv4Cidr, true),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName),
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
 					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "1"),
 					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", ipv4Cidr[0]),
+					resource.TestCheckResourceAttr("planetscale_password.test", "replica", "true"),
 				),
 			},
 
@@ -147,7 +148,7 @@ func TestAccPasswordResource(t *testing.T) {
 
 			// Update 'name' attribute:
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", ipv4Cidr),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", ipv4Cidr, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName+"-new"),
 				),
@@ -165,7 +166,7 @@ func TestAccPasswordResource(t *testing.T) {
 
 			// Update `cidrs` with multiple ipv4 ranges
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", multiIPv4Cidrs),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", multiIPv4Cidrs, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "2"),
 					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv4Cidrs[0]),
@@ -197,7 +198,7 @@ func TestAccPasswordResource(t *testing.T) {
 
 			// Test removal of `cidrs`
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", nil),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", nil, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckNoResourceAttr("planetscale_password.test", "cidrs"),
 				),
@@ -272,7 +273,7 @@ func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, nil),
+				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, nil, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
@@ -311,7 +312,7 @@ func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 	})
 }
 
-func testAccPasswordResourceConfig(dbName, branchName, passwdName string, cidrs []string) string {
+func testAccPasswordResourceConfig(dbName, branchName, passwdName string, cidrs []string, replica bool) string {
 	const tmpl = `
 resource "planetscale_database" "test" {
   name           = "{{.DBName}}"
@@ -332,17 +333,19 @@ resource "planetscale_password" "test" {
   organization = "{{.Org}}"
   database     = planetscale_database.test.name
   branch       = planetscale_branch.test.name
+  replica      = {{.Replica}}
 	{{if .CIDRs}}cidrs = {{.CIDRs}}{{end}}
 }
 `
 	t := template.Must(template.New("config").Parse(tmpl))
 	var buf bytes.Buffer
-	err := t.Execute(&buf, map[string]string{
+	err := t.Execute(&buf, map[string]interface{}{
 		"Org":        testAccOrg,
 		"DBName":     dbName,
 		"BranchName": branchName,
 		"PasswdName": passwdName,
 		"CIDRs":      terraformStringList(cidrs),
+		"Replica":    replica,
 	})
 	if err != nil {
 		return ""
