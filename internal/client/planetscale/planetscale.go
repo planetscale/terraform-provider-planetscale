@@ -117,9 +117,9 @@ type DataImport struct {
 	State             string     `json:"state" tfsdk:"state"`
 }
 type DataSource struct {
-	Database string `json:"database" tfsdk:"database"`
-	Hostname string `json:"hostname" tfsdk:"hostname"`
-	Port     string `json:"port" tfsdk:"port"`
+	Database string  `json:"database" tfsdk:"database"`
+	Hostname string  `json:"hostname" tfsdk:"hostname"`
+	Port     float64 `json:"port" tfsdk:"port"`
 }
 type Database struct {
 	AllowDataBranching                bool        `json:"allow_data_branching" tfsdk:"allow_data_branching"`
@@ -2157,6 +2157,399 @@ func (cl *Client) RenewPassword(ctx context.Context, organization string, databa
 		err = nil
 	}
 	return res200, err
+}
+
+type ListGeneratedQueryPatternsReportsRes_DataItem struct {
+	ActorId     string `json:"actor_id" tfsdk:"actor_id"`
+	ActorType   string `json:"actor_type" tfsdk:"actor_type"`
+	CreatedAt   string `json:"created_at" tfsdk:"created_at"`
+	DownloadUrl string `json:"download_url" tfsdk:"download_url"`
+	FinishedAt  string `json:"finished_at" tfsdk:"finished_at"`
+	Id          string `json:"id" tfsdk:"id"`
+	State       string `json:"state" tfsdk:"state"`
+	Url         string `json:"url" tfsdk:"url"`
+}
+type ListGeneratedQueryPatternsReportsRes struct {
+	CursorEnd   string                                          `json:"cursor_end" tfsdk:"cursor_end"`
+	CursorStart string                                          `json:"cursor_start" tfsdk:"cursor_start"`
+	Data        []ListGeneratedQueryPatternsReportsRes_DataItem `json:"data" tfsdk:"data"`
+	HasNext     bool                                            `json:"has_next" tfsdk:"has_next"`
+	HasPrev     bool                                            `json:"has_prev" tfsdk:"has_prev"`
+}
+type ListGeneratedQueryPatternsReportsRes401 struct {
+	*ErrorResponse
+}
+type ListGeneratedQueryPatternsReportsRes403 struct {
+	*ErrorResponse
+}
+type ListGeneratedQueryPatternsReportsRes404 struct {
+	*ErrorResponse
+}
+type ListGeneratedQueryPatternsReportsRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) ListGeneratedQueryPatternsReports(ctx context.Context, organization string, database string, branch string) (res200 *ListGeneratedQueryPatternsReportsRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/query-patterns"})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(ListGeneratedQueryPatternsReportsRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListGeneratedQueryPatternsReportsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(ListGeneratedQueryPatternsReportsRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(ListGeneratedQueryPatternsReportsRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(ListGeneratedQueryPatternsReportsRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type CreateQueryPatternsReportRes struct {
+	ActorId     string `json:"actor_id" tfsdk:"actor_id"`
+	ActorType   string `json:"actor_type" tfsdk:"actor_type"`
+	CreatedAt   string `json:"created_at" tfsdk:"created_at"`
+	DownloadUrl string `json:"download_url" tfsdk:"download_url"`
+	FinishedAt  string `json:"finished_at" tfsdk:"finished_at"`
+	Id          string `json:"id" tfsdk:"id"`
+	State       string `json:"state" tfsdk:"state"`
+	Url         string `json:"url" tfsdk:"url"`
+}
+type CreateQueryPatternsReportRes401 struct {
+	*ErrorResponse
+}
+type CreateQueryPatternsReportRes403 struct {
+	*ErrorResponse
+}
+type CreateQueryPatternsReportRes404 struct {
+	*ErrorResponse
+}
+type CreateQueryPatternsReportRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) CreateQueryPatternsReport(ctx context.Context, organization string, database string, branch string) (res201 *CreateQueryPatternsReportRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/query-patterns"})
+	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), nil)
+	if err != nil {
+		return res201, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res201, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 201:
+		res201 = new(CreateQueryPatternsReportRes)
+		err = json.NewDecoder(res.Body).Decode(&res201)
+	case 401:
+		res401 := new(CreateQueryPatternsReportRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(CreateQueryPatternsReportRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(CreateQueryPatternsReportRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(CreateQueryPatternsReportRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res201, err
+}
+
+type GetQueryPatternsReportStatusRes struct {
+	ActorId     string `json:"actor_id" tfsdk:"actor_id"`
+	ActorType   string `json:"actor_type" tfsdk:"actor_type"`
+	CreatedAt   string `json:"created_at" tfsdk:"created_at"`
+	DownloadUrl string `json:"download_url" tfsdk:"download_url"`
+	FinishedAt  string `json:"finished_at" tfsdk:"finished_at"`
+	Id          string `json:"id" tfsdk:"id"`
+	State       string `json:"state" tfsdk:"state"`
+	Url         string `json:"url" tfsdk:"url"`
+}
+type GetQueryPatternsReportStatusRes401 struct {
+	*ErrorResponse
+}
+type GetQueryPatternsReportStatusRes403 struct {
+	*ErrorResponse
+}
+type GetQueryPatternsReportStatusRes404 struct {
+	*ErrorResponse
+}
+type GetQueryPatternsReportStatusRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) GetQueryPatternsReportStatus(ctx context.Context, organization string, database string, branch string, id string) (res200 *GetQueryPatternsReportStatusRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/query-patterns/" + id})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(GetQueryPatternsReportStatusRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetQueryPatternsReportStatusRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(GetQueryPatternsReportStatusRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(GetQueryPatternsReportStatusRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(GetQueryPatternsReportStatusRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type DeleteQueryPatternsReportRes struct{}
+type DeleteQueryPatternsReportRes401 struct {
+	*ErrorResponse
+}
+type DeleteQueryPatternsReportRes403 struct {
+	*ErrorResponse
+}
+type DeleteQueryPatternsReportRes404 struct {
+	*ErrorResponse
+}
+type DeleteQueryPatternsReportRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) DeleteQueryPatternsReport(ctx context.Context, organization string, database string, branch string, id string) (res204 *DeleteQueryPatternsReportRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/query-patterns/" + id})
+	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
+	if err != nil {
+		return res204, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res204, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 204:
+		res204 = new(DeleteQueryPatternsReportRes)
+		err = json.NewDecoder(res.Body).Decode(&res204)
+	case 401:
+		res401 := new(DeleteQueryPatternsReportRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(DeleteQueryPatternsReportRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(DeleteQueryPatternsReportRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(DeleteQueryPatternsReportRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res204, err
+}
+
+type GetQueryPatternsReportRes struct {
+	ActorId     string `json:"actor_id" tfsdk:"actor_id"`
+	ActorType   string `json:"actor_type" tfsdk:"actor_type"`
+	CreatedAt   string `json:"created_at" tfsdk:"created_at"`
+	DownloadUrl string `json:"download_url" tfsdk:"download_url"`
+	FinishedAt  string `json:"finished_at" tfsdk:"finished_at"`
+	Id          string `json:"id" tfsdk:"id"`
+	State       string `json:"state" tfsdk:"state"`
+	Url         string `json:"url" tfsdk:"url"`
+}
+type GetQueryPatternsReportRes401 struct {
+	*ErrorResponse
+}
+type GetQueryPatternsReportRes403 struct {
+	*ErrorResponse
+}
+type GetQueryPatternsReportRes404 struct {
+	*ErrorResponse
+}
+type GetQueryPatternsReportRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) GetQueryPatternsReport(ctx context.Context, organization string, database string, branch string, id string) (res302 *GetQueryPatternsReportRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/query-patterns/" + id + "/download"})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res302, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res302, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 302:
+		res302 = new(GetQueryPatternsReportRes)
+		err = json.NewDecoder(res.Body).Decode(&res302)
+	case 401:
+		res401 := new(GetQueryPatternsReportRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(GetQueryPatternsReportRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(GetQueryPatternsReportRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(GetQueryPatternsReportRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res302, err
 }
 
 type GetBranchRes struct {

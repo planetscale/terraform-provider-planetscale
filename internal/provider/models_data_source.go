@@ -163,16 +163,16 @@ func flagsFromClient(flags *planetscale.Flags) *flagsDataSourceModel {
 }
 
 type dataSourceDataSourceModel struct {
-	Database types.String `tfsdk:"database"`
-	Hostname types.String `tfsdk:"hostname"`
-	Port     types.String `tfsdk:"port"`
+	Database types.String  `tfsdk:"database"`
+	Hostname types.String  `tfsdk:"hostname"`
+	Port     types.Float64 `tfsdk:"port"`
 }
 
 func dataSourceFromClient(dataSource planetscale.DataSource) dataSourceDataSourceModel {
 	return dataSourceDataSourceModel{
 		Database: types.StringValue(dataSource.Database),
 		Hostname: types.StringValue(dataSource.Hostname),
-		Port:     types.StringValue(dataSource.Port),
+		Port:     types.Float64Value(dataSource.Port),
 	}
 }
 
