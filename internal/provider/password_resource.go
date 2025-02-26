@@ -145,6 +145,7 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 		Id:             types.StringValue(password.Id),
 		Region:         region,
 		Renewable:      types.BoolValue(password.Renewable),
+		Replica:        types.BoolValue(password.Replica),
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
