@@ -209,6 +209,41 @@ func (v cidrValidator) MarkdownDescription(ctx context.Context) string {
 	return "validates that CIDRs do not overlap"
 }
 
+type replicaValidator struct{}
+
+func (v replicaValidator) Description(ctx context.Context) string {
+	return "validates that replica can only be true when role is reader"
+}
+
+func (v replicaValidator) MarkdownDescription(ctx context.Context) string {
+	return "validates that replica can only be true when role is reader"
+}
+
+func (v replicaValidator) ValidateBool(ctx context.Context, req validator.BoolRequest, resp *validator.BoolResponse) {
+	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+		return
+	}
+
+	if !req.ConfigValue.ValueBool() {
+		return
+	}
+
+	var role types.String
+	diags := req.Config.GetAttribute(ctx, path.Root("role"), &role)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if role.IsNull() || role.IsUnknown() || role.ValueString() != "reader" {
+		resp.Diagnostics.AddAttributeError(
+			req.Path,
+			"Invalid Replica Configuration",
+			"replica can only be set to true when role is set to 'reader'",
+		)
+	}
+}
+
 func (r *passwordResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_password"
 }
@@ -326,6 +361,9 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:    true,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Validators: []validator.Bool{
+					replicaValidator{},
 				},
 			},
 			"username": schema.StringAttribute{
