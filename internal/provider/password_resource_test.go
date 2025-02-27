@@ -114,7 +114,7 @@ func TestAccPasswordResource(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, ipv4Cidr, true),
+				Config: testAccPasswordResourceConfig(dbName, branchName, true, passwdName, ipv4Cidr, true),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName),
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "reader"),
@@ -148,7 +148,7 @@ func TestAccPasswordResource(t *testing.T) {
 
 			// Update 'name' attribute:
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", ipv4Cidr, false),
+				Config: testAccPasswordResourceConfig(dbName, branchName, false, passwdName+"-new", ipv4Cidr, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName+"-new"),
 				),
@@ -166,7 +166,7 @@ func TestAccPasswordResource(t *testing.T) {
 
 			// Update `cidrs` with multiple ipv4 ranges
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", multiIPv4Cidrs, false),
+				Config: testAccPasswordResourceConfig(dbName, branchName, false, passwdName+"-new", multiIPv4Cidrs, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "2"),
 					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", multiIPv4Cidrs[0]),
@@ -198,7 +198,7 @@ func TestAccPasswordResource(t *testing.T) {
 
 			// Test removal of `cidrs`
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName+"-new", nil, false),
+				Config: testAccPasswordResourceConfig(dbName, branchName, false, passwdName+"-new", nil, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckNoResourceAttr("planetscale_password.test", "cidrs"),
 				),
@@ -273,7 +273,7 @@ func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, nil, false),
+				Config: testAccPasswordResourceConfig(dbName, branchName, false, passwdName, nil, false),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
@@ -312,7 +312,7 @@ func TestAccPasswordResource_OutOfBandDelete(t *testing.T) {
 	})
 }
 
-func testAccPasswordResourceConfig(dbName, branchName, passwdName string, cidrs []string, replica bool) string {
+func testAccPasswordResourceConfig(dbName, branchName string, production bool, passwdName string, cidrs []string, replica bool) string {
 	const tmpl = `
 resource "planetscale_database" "test" {
   name           = "{{.DBName}}"
@@ -326,6 +326,7 @@ resource "planetscale_branch" "test" {
   organization  = "{{.Org}}"
   database      = planetscale_database.test.name
   parent_branch = planetscale_database.test.default_branch
+  production    = {{.Production}}
 }
 
 resource "planetscale_password" "test" {
@@ -347,6 +348,7 @@ resource "planetscale_password" "test" {
 		"PasswdName": passwdName,
 		"CIDRs":      terraformStringList(cidrs),
 		"Replica":    replica,
+		"Production": production,
 	})
 	if err != nil {
 		return ""
