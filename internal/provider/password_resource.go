@@ -401,10 +401,11 @@ func (r *passwordResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	createReq := planetscale.CreatePasswordReq{
-		Cidrs: &cidrs,
-		Name:  name.ValueStringPointer(),
-		Role:  role.ValueStringPointer(),
-		Ttl:   ttl.ValueFloat64Pointer(),
+		Cidrs:   &cidrs,
+		Name:    name.ValueStringPointer(),
+		Role:    role.ValueStringPointer(),
+		Ttl:     ttl.ValueFloat64Pointer(),
+		Replica: data.Replica.ValueBoolPointer(),
 	}
 	res, err := r.client.CreatePassword(ctx, org.ValueString(), database.ValueString(), branch.ValueString(), createReq)
 	if err != nil {

@@ -117,7 +117,7 @@ func TestAccPasswordResource(t *testing.T) {
 				Config: testAccPasswordResourceConfig(dbName, branchName, passwdName, ipv4Cidr, true),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("planetscale_password.test", "name", passwdName),
-					resource.TestCheckResourceAttr("planetscale_password.test", "role", "admin"),
+					resource.TestCheckResourceAttr("planetscale_password.test", "role", "reader"),
 					resource.TestCheckResourceAttr("planetscale_password.test", "branch", branchName),
 					resource.TestCheckResourceAttr("planetscale_password.test", "cidrs.#", "1"),
 					resource.TestCheckTypeSetElemAttr("planetscale_password.test", "cidrs.*", ipv4Cidr[0]),
@@ -334,6 +334,7 @@ resource "planetscale_password" "test" {
   database     = planetscale_database.test.name
   branch       = planetscale_branch.test.name
   replica      = {{.Replica}}
+  {{if not .Replica}}role = "reader"{{end}}
 	{{if .CIDRs}}cidrs = {{.CIDRs}}{{end}}
 }
 `
