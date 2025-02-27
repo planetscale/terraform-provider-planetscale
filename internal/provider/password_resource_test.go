@@ -335,7 +335,7 @@ resource "planetscale_password" "test" {
   database     = planetscale_database.test.name
   branch       = planetscale_branch.test.name
   replica      = {{.Replica}}
-  {{if not .Replica}}role = "reader"{{end}}
+    {{if .Replica}}role = "reader"{{end}}
 	{{if .CIDRs}}cidrs = {{.CIDRs}}{{end}}
 }
 `
