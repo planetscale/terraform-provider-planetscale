@@ -39,6 +39,7 @@ output "password" {
 
 - `cidrs` (List of String) List of IP addresses or CIDR ranges that can use this password. Individual IPs must still contain a prefix, eg: 127.0.0.1/32
 - `name` (String) The display name for the password.
+- `replica` (Boolean) When true, all queries from this password will be read-only and directed to a replica. Requires role to be set to reader.
 - `role` (String) The role for the password.
 - `ttl_seconds` (Number) Time to live (in seconds) for the password. The password will be invalid and unrenewable when TTL has passed.
 

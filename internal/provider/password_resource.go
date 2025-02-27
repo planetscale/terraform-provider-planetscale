@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -53,6 +54,7 @@ type passwordResourceModel struct {
 	DeletedAt      types.String  `tfsdk:"deleted_at"`
 	ExpiresAt      types.String  `tfsdk:"expires_at"`
 	Region         types.Object  `tfsdk:"region"`
+	Replica        types.Bool    `tfsdk:"replica"`
 	Renewable      types.Bool    `tfsdk:"renewable"`
 	Role           types.String  `tfsdk:"role"`
 	Cidrs          types.List    `tfsdk:"cidrs"`
@@ -98,6 +100,7 @@ func passwordResourceFromClient(ctx context.Context, password *planetscale.Passw
 		Id:             types.StringValue(password.Id),
 		Region:         region,
 		Renewable:      types.BoolValue(password.Renewable),
+		Replica:        types.BoolValue(password.Replica),
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
@@ -142,6 +145,7 @@ func passwordWithPlaintextResourceFromClient(ctx context.Context, password *plan
 		Id:             types.StringValue(password.Id),
 		Region:         region,
 		Renewable:      types.BoolValue(password.Renewable),
+		Replica:        types.BoolValue(password.Replica),
 		Role:           types.StringValue(password.Role),
 		TtlSeconds:     types.Float64Value(password.TtlSeconds),
 		Username:       types.StringPointerValue(password.Username),
@@ -203,6 +207,41 @@ func (v cidrValidator) Description(ctx context.Context) string {
 
 func (v cidrValidator) MarkdownDescription(ctx context.Context) string {
 	return "validates that CIDRs do not overlap"
+}
+
+type replicaValidator struct{}
+
+func (v replicaValidator) Description(ctx context.Context) string {
+	return "validates that replica can only be true when role is reader"
+}
+
+func (v replicaValidator) MarkdownDescription(ctx context.Context) string {
+	return "validates that replica can only be true when role is reader"
+}
+
+func (v replicaValidator) ValidateBool(ctx context.Context, req validator.BoolRequest, resp *validator.BoolResponse) {
+	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+		return
+	}
+
+	if !req.ConfigValue.ValueBool() {
+		return
+	}
+
+	var role types.String
+	diags := req.Config.GetAttribute(ctx, path.Root("role"), &role)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if role.IsNull() || role.IsUnknown() || role.ValueString() != "reader" {
+		resp.Diagnostics.AddAttributeError(
+			req.Path,
+			"Invalid Replica Configuration",
+			"replica can only be set to true when role is set to 'reader'",
+		)
+	}
 }
 
 func (r *passwordResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -316,6 +355,17 @@ func (r *passwordResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: "Whether or not the password can be renewed.",
 				Computed:    true,
 			},
+			"replica": schema.BoolAttribute{
+				Description: "When true, all queries from this password will be read-only and directed to a replica. Requires role to be set to reader.",
+				Optional:    true,
+				Computed:    true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Validators: []validator.Bool{
+					replicaValidator{},
+				},
+			},
 			"username": schema.StringAttribute{
 				Description: "The username for the password.",
 				Computed:    true,
@@ -389,10 +439,11 @@ func (r *passwordResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	createReq := planetscale.CreatePasswordReq{
-		Cidrs: &cidrs,
-		Name:  name.ValueStringPointer(),
-		Role:  role.ValueStringPointer(),
-		Ttl:   ttl.ValueFloat64Pointer(),
+		Cidrs:   &cidrs,
+		Name:    name.ValueStringPointer(),
+		Role:    role.ValueStringPointer(),
+		Ttl:     ttl.ValueFloat64Pointer(),
+		Replica: data.Replica.ValueBoolPointer(),
 	}
 	res, err := r.client.CreatePassword(ctx, org.ValueString(), database.ValueString(), branch.ValueString(), createReq)
 	if err != nil {
