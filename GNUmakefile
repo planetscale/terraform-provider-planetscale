@@ -15,7 +15,7 @@ testacc:
 
 .PHONY: generate-docs
 generate-docs:
-	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
+	go tool github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
 
 .PHONY: generate
 generate:
