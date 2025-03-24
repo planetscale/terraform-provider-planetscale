@@ -260,7 +260,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		Name:         name.ValueString(),
 		ParentBranch: *parentBranch,
 	}
-	if !(data.RestoredFromBranch.IsNull() || data.RestoredFromBranch.IsUnknown()) {
+	if !data.RestoredFromBranch.IsNull() && !data.RestoredFromBranch.IsUnknown() {
 		var rfb restoredFromBranchResource
 		resp.Diagnostics.Append(data.RestoredFromBranch.As(ctx, &rfb, basetypes.ObjectAsOptions{})...)
 		if resp.Diagnostics.HasError() {
