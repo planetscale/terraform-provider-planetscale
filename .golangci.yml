@@ -28,6 +28,14 @@ linters:
       - third_party$
       - builtin$
       - examples$
+  settings:
+    staticcheck:
+      checks:
+        - all
+        # disable these:
+        - -QF1008
+        - -ST1003
+
 issues:
   max-same-issues: 0
 formatters:
