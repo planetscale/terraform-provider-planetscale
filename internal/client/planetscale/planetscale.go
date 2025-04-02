@@ -74,7 +74,7 @@ type BackupPolicy struct {
 }
 type Branch struct {
 	Actor                       *Actor              `json:"actor,omitempty" tfsdk:"actor"`
-	ClusterRateName             string              `json:"cluster_rate_name" tfsdk:"cluster_rate_name"`
+	ClusterName                 string              `json:"cluster_name" tfsdk:"cluster_name"`
 	CreatedAt                   string              `json:"created_at" tfsdk:"created_at"`
 	HtmlUrl                     string              `json:"html_url" tfsdk:"html_url"`
 	Id                          string              `json:"id" tfsdk:"id"`
@@ -1111,6 +1111,7 @@ func (cl *Client) ListBranches(ctx context.Context, organization string, databas
 
 type CreateBranchReq struct {
 	BackupId     *string `json:"backup_id,omitempty" tfsdk:"backup_id"`
+	ClusterSize  *string `json:"cluster_size,omitempty" tfsdk:"cluster_size"`
 	Name         string  `json:"name" tfsdk:"name"`
 	ParentBranch string  `json:"parent_branch" tfsdk:"parent_branch"`
 }
@@ -1591,6 +1592,474 @@ func (cl *Client) UpdateBackup(ctx context.Context, organization string, databas
 		}
 	case 500:
 		res500 := new(UpdateBackupRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type ListKeyspacesRes_DataItem_ReplicationDurabilityConstraints struct {
+	Strategy string `json:"strategy" tfsdk:"strategy"`
+}
+type ListKeyspacesRes_DataItem_VreplicationFlags struct {
+	AllowNoBlobBinlogRowImage bool `json:"allow_no_blob_binlog_row_image" tfsdk:"allow_no_blob_binlog_row_image"`
+	OptimizeInserts           bool `json:"optimize_inserts" tfsdk:"optimize_inserts"`
+	VplayerBatching           bool `json:"vplayer_batching" tfsdk:"vplayer_batching"`
+}
+type ListKeyspacesRes_DataItem struct {
+	ClusterName                      string                                                     `json:"cluster_name" tfsdk:"cluster_name"`
+	CreatedAt                        string                                                     `json:"created_at" tfsdk:"created_at"`
+	ExtraReplicas                    float64                                                    `json:"extra_replicas" tfsdk:"extra_replicas"`
+	Id                               string                                                     `json:"id" tfsdk:"id"`
+	Metal                            bool                                                       `json:"metal" tfsdk:"metal"`
+	Name                             string                                                     `json:"name" tfsdk:"name"`
+	Ready                            bool                                                       `json:"ready" tfsdk:"ready"`
+	Replicas                         float64                                                    `json:"replicas" tfsdk:"replicas"`
+	ReplicationDurabilityConstraints ListKeyspacesRes_DataItem_ReplicationDurabilityConstraints `json:"replication_durability_constraints" tfsdk:"replication_durability_constraints"`
+	ResizePending                    bool                                                       `json:"resize_pending" tfsdk:"resize_pending"`
+	Resizing                         bool                                                       `json:"resizing" tfsdk:"resizing"`
+	Sharded                          bool                                                       `json:"sharded" tfsdk:"sharded"`
+	Shards                           float64                                                    `json:"shards" tfsdk:"shards"`
+	UpdatedAt                        string                                                     `json:"updated_at" tfsdk:"updated_at"`
+	VectorPoolAllocation             float64                                                    `json:"vector_pool_allocation" tfsdk:"vector_pool_allocation"`
+	VreplicationFlags                ListKeyspacesRes_DataItem_VreplicationFlags                `json:"vreplication_flags" tfsdk:"vreplication_flags"`
+}
+type ListKeyspacesRes struct {
+	Data []ListKeyspacesRes_DataItem `json:"data" tfsdk:"data"`
+}
+type ListKeyspacesRes401 struct {
+	*ErrorResponse
+}
+type ListKeyspacesRes403 struct {
+	*ErrorResponse
+}
+type ListKeyspacesRes404 struct {
+	*ErrorResponse
+}
+type ListKeyspacesRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) ListKeyspaces(ctx context.Context, organization string, database string, branch string, page *int, perPage *int) (res200 *ListKeyspacesRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/keyspaces"})
+	q := u.Query()
+	if page != nil {
+		q.Set("page", strconv.Itoa(*page))
+	}
+	if perPage != nil {
+		q.Set("per_page", strconv.Itoa(*perPage))
+	}
+	u.RawQuery = q.Encode()
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(ListKeyspacesRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListKeyspacesRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(ListKeyspacesRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(ListKeyspacesRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(ListKeyspacesRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type CreateKeyspaceReq struct {
+	Name string `json:"name" tfsdk:"name"`
+}
+type CreateKeyspaceRes_ReplicationDurabilityConstraints struct {
+	Strategy string `json:"strategy" tfsdk:"strategy"`
+}
+type CreateKeyspaceRes_VreplicationFlags struct {
+	AllowNoBlobBinlogRowImage bool `json:"allow_no_blob_binlog_row_image" tfsdk:"allow_no_blob_binlog_row_image"`
+	OptimizeInserts           bool `json:"optimize_inserts" tfsdk:"optimize_inserts"`
+	VplayerBatching           bool `json:"vplayer_batching" tfsdk:"vplayer_batching"`
+}
+type CreateKeyspaceRes struct {
+	ClusterName                      string                                             `json:"cluster_name" tfsdk:"cluster_name"`
+	CreatedAt                        string                                             `json:"created_at" tfsdk:"created_at"`
+	ExtraReplicas                    float64                                            `json:"extra_replicas" tfsdk:"extra_replicas"`
+	Id                               string                                             `json:"id" tfsdk:"id"`
+	Metal                            bool                                               `json:"metal" tfsdk:"metal"`
+	Name                             string                                             `json:"name" tfsdk:"name"`
+	Ready                            bool                                               `json:"ready" tfsdk:"ready"`
+	Replicas                         float64                                            `json:"replicas" tfsdk:"replicas"`
+	ReplicationDurabilityConstraints CreateKeyspaceRes_ReplicationDurabilityConstraints `json:"replication_durability_constraints" tfsdk:"replication_durability_constraints"`
+	ResizePending                    bool                                               `json:"resize_pending" tfsdk:"resize_pending"`
+	Resizing                         bool                                               `json:"resizing" tfsdk:"resizing"`
+	Sharded                          bool                                               `json:"sharded" tfsdk:"sharded"`
+	Shards                           float64                                            `json:"shards" tfsdk:"shards"`
+	UpdatedAt                        string                                             `json:"updated_at" tfsdk:"updated_at"`
+	VectorPoolAllocation             float64                                            `json:"vector_pool_allocation" tfsdk:"vector_pool_allocation"`
+	VreplicationFlags                CreateKeyspaceRes_VreplicationFlags                `json:"vreplication_flags" tfsdk:"vreplication_flags"`
+}
+type CreateKeyspaceRes401 struct {
+	*ErrorResponse
+}
+type CreateKeyspaceRes403 struct {
+	*ErrorResponse
+}
+type CreateKeyspaceRes404 struct {
+	*ErrorResponse
+}
+type CreateKeyspaceRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) CreateKeyspace(ctx context.Context, organization string, database string, branch string, req CreateKeyspaceReq) (res200 *CreateKeyspaceRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/keyspaces"})
+	body := bytes.NewBuffer(nil)
+	if err = json.NewEncoder(body).Encode(req); err != nil {
+		return res200, err
+	}
+	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(CreateKeyspaceRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(CreateKeyspaceRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(CreateKeyspaceRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(CreateKeyspaceRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(CreateKeyspaceRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type GetKeyspaceRes_ReplicationDurabilityConstraints struct {
+	Strategy string `json:"strategy" tfsdk:"strategy"`
+}
+type GetKeyspaceRes_VreplicationFlags struct {
+	AllowNoBlobBinlogRowImage bool `json:"allow_no_blob_binlog_row_image" tfsdk:"allow_no_blob_binlog_row_image"`
+	OptimizeInserts           bool `json:"optimize_inserts" tfsdk:"optimize_inserts"`
+	VplayerBatching           bool `json:"vplayer_batching" tfsdk:"vplayer_batching"`
+}
+type GetKeyspaceRes struct {
+	ClusterName                      string                                          `json:"cluster_name" tfsdk:"cluster_name"`
+	CreatedAt                        string                                          `json:"created_at" tfsdk:"created_at"`
+	ExtraReplicas                    float64                                         `json:"extra_replicas" tfsdk:"extra_replicas"`
+	Id                               string                                          `json:"id" tfsdk:"id"`
+	Metal                            bool                                            `json:"metal" tfsdk:"metal"`
+	Name                             string                                          `json:"name" tfsdk:"name"`
+	Ready                            bool                                            `json:"ready" tfsdk:"ready"`
+	Replicas                         float64                                         `json:"replicas" tfsdk:"replicas"`
+	ReplicationDurabilityConstraints GetKeyspaceRes_ReplicationDurabilityConstraints `json:"replication_durability_constraints" tfsdk:"replication_durability_constraints"`
+	ResizePending                    bool                                            `json:"resize_pending" tfsdk:"resize_pending"`
+	Resizing                         bool                                            `json:"resizing" tfsdk:"resizing"`
+	Sharded                          bool                                            `json:"sharded" tfsdk:"sharded"`
+	Shards                           float64                                         `json:"shards" tfsdk:"shards"`
+	UpdatedAt                        string                                          `json:"updated_at" tfsdk:"updated_at"`
+	VectorPoolAllocation             float64                                         `json:"vector_pool_allocation" tfsdk:"vector_pool_allocation"`
+	VreplicationFlags                GetKeyspaceRes_VreplicationFlags                `json:"vreplication_flags" tfsdk:"vreplication_flags"`
+}
+type GetKeyspaceRes401 struct {
+	*ErrorResponse
+}
+type GetKeyspaceRes403 struct {
+	*ErrorResponse
+}
+type GetKeyspaceRes404 struct {
+	*ErrorResponse
+}
+type GetKeyspaceRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) GetKeyspace(ctx context.Context, organization string, database string, branch string, name string) (res200 *GetKeyspaceRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/keyspaces/" + name})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(GetKeyspaceRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetKeyspaceRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(GetKeyspaceRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(GetKeyspaceRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(GetKeyspaceRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type DeleteKeyspaceRes struct{}
+type DeleteKeyspaceRes401 struct {
+	*ErrorResponse
+}
+type DeleteKeyspaceRes403 struct {
+	*ErrorResponse
+}
+type DeleteKeyspaceRes404 struct {
+	*ErrorResponse
+}
+type DeleteKeyspaceRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) DeleteKeyspace(ctx context.Context, organization string, database string, branch string, name string) (res204 *DeleteKeyspaceRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/keyspaces/" + name})
+	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
+	if err != nil {
+		return res204, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res204, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 204:
+		res204 = new(DeleteKeyspaceRes)
+		err = json.NewDecoder(res.Body).Decode(&res204)
+	case 401:
+		res401 := new(DeleteKeyspaceRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(DeleteKeyspaceRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(DeleteKeyspaceRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(DeleteKeyspaceRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res204, err
+}
+
+type UpdateKeyspaceRes_ReplicationDurabilityConstraints struct {
+	Strategy string `json:"strategy" tfsdk:"strategy"`
+}
+type UpdateKeyspaceRes_VreplicationFlags struct {
+	AllowNoBlobBinlogRowImage bool `json:"allow_no_blob_binlog_row_image" tfsdk:"allow_no_blob_binlog_row_image"`
+	OptimizeInserts           bool `json:"optimize_inserts" tfsdk:"optimize_inserts"`
+	VplayerBatching           bool `json:"vplayer_batching" tfsdk:"vplayer_batching"`
+}
+type UpdateKeyspaceRes struct {
+	ClusterName                      string                                             `json:"cluster_name" tfsdk:"cluster_name"`
+	CreatedAt                        string                                             `json:"created_at" tfsdk:"created_at"`
+	ExtraReplicas                    float64                                            `json:"extra_replicas" tfsdk:"extra_replicas"`
+	Id                               string                                             `json:"id" tfsdk:"id"`
+	Metal                            bool                                               `json:"metal" tfsdk:"metal"`
+	Name                             string                                             `json:"name" tfsdk:"name"`
+	Ready                            bool                                               `json:"ready" tfsdk:"ready"`
+	Replicas                         float64                                            `json:"replicas" tfsdk:"replicas"`
+	ReplicationDurabilityConstraints UpdateKeyspaceRes_ReplicationDurabilityConstraints `json:"replication_durability_constraints" tfsdk:"replication_durability_constraints"`
+	ResizePending                    bool                                               `json:"resize_pending" tfsdk:"resize_pending"`
+	Resizing                         bool                                               `json:"resizing" tfsdk:"resizing"`
+	Sharded                          bool                                               `json:"sharded" tfsdk:"sharded"`
+	Shards                           float64                                            `json:"shards" tfsdk:"shards"`
+	UpdatedAt                        string                                             `json:"updated_at" tfsdk:"updated_at"`
+	VectorPoolAllocation             float64                                            `json:"vector_pool_allocation" tfsdk:"vector_pool_allocation"`
+	VreplicationFlags                UpdateKeyspaceRes_VreplicationFlags                `json:"vreplication_flags" tfsdk:"vreplication_flags"`
+}
+type UpdateKeyspaceRes401 struct {
+	*ErrorResponse
+}
+type UpdateKeyspaceRes403 struct {
+	*ErrorResponse
+}
+type UpdateKeyspaceRes404 struct {
+	*ErrorResponse
+}
+type UpdateKeyspaceRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) UpdateKeyspace(ctx context.Context, organization string, database string, branch string, name string) (res200 *UpdateKeyspaceRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/branches/" + branch + "/keyspaces/" + name})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(UpdateKeyspaceRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(UpdateKeyspaceRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(UpdateKeyspaceRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(UpdateKeyspaceRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(UpdateKeyspaceRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 		if err == nil {
 			err = res500
@@ -4766,6 +5235,2274 @@ func (cl *Client) UpdateDatabaseThrottler(ctx context.Context, organization stri
 	return res200, err
 }
 
+type ListWorkflowsRes_DataItem_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type ListWorkflowsRes_DataItem_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type ListWorkflowsRes_DataItem_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type ListWorkflowsRes_DataItem_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type ListWorkflowsRes_DataItem_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type ListWorkflowsRes_DataItem struct {
+	Actor               ListWorkflowsRes_DataItem_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                                      `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         ListWorkflowsRes_DataItem_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                                      `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         ListWorkflowsRes_DataItem_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                                      `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                                      `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           ListWorkflowsRes_DataItem_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                                      `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      ListWorkflowsRes_DataItem_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                        `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      ListWorkflowsRes_DataItem_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                                      `json:"id" tfsdk:"id"`
+	MayRetry            bool                                        `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                                      `json:"name" tfsdk:"name"`
+	Number              float64                                     `json:"number" tfsdk:"number"`
+	OnDdl               string                                      `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                        `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                        `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                                      `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           ListWorkflowsRes_DataItem_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                                      `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          ListWorkflowsRes_DataItem_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   ListWorkflowsRes_DataItem_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      ListWorkflowsRes_DataItem_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                                      `json:"started_at" tfsdk:"started_at"`
+	State               string                                      `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                                      `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   ListWorkflowsRes_DataItem_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                                      `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    ListWorkflowsRes_DataItem_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      ListWorkflowsRes_DataItem_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                                      `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                        `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                                      `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        ListWorkflowsRes_DataItem_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                                      `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                                      `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type ListWorkflowsRes struct {
+	Data []ListWorkflowsRes_DataItem `json:"data" tfsdk:"data"`
+}
+type ListWorkflowsRes401 struct {
+	*ErrorResponse
+}
+type ListWorkflowsRes403 struct {
+	*ErrorResponse
+}
+type ListWorkflowsRes404 struct {
+	*ErrorResponse
+}
+type ListWorkflowsRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) ListWorkflows(ctx context.Context, organization string, database string, page *int, perPage *int) (res200 *ListWorkflowsRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows"})
+	q := u.Query()
+	if page != nil {
+		q.Set("page", strconv.Itoa(*page))
+	}
+	if perPage != nil {
+		q.Set("per_page", strconv.Itoa(*perPage))
+	}
+	u.RawQuery = q.Encode()
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(ListWorkflowsRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListWorkflowsRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(ListWorkflowsRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(ListWorkflowsRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(ListWorkflowsRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type CreateWorkflowReq struct {
+	DeferSecondaryKeys *bool    `json:"defer_secondary_keys,omitempty" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace     *string  `json:"global_keyspace,omitempty" tfsdk:"global_keyspace"`
+	Name               string   `json:"name" tfsdk:"name"`
+	OnDdl              *string  `json:"on_ddl,omitempty" tfsdk:"on_ddl"`
+	SourceKeyspace     string   `json:"source_keyspace" tfsdk:"source_keyspace"`
+	Tables             []string `json:"tables" tfsdk:"tables"`
+	TargetKeyspace     string   `json:"target_keyspace" tfsdk:"target_keyspace"`
+}
+type CreateWorkflowRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type CreateWorkflowRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type CreateWorkflowRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type CreateWorkflowRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type CreateWorkflowRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type CreateWorkflowRes struct {
+	Actor               CreateWorkflowRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                              `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         CreateWorkflowRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                              `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         CreateWorkflowRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                              `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                              `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           CreateWorkflowRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                              `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      CreateWorkflowRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      CreateWorkflowRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                              `json:"id" tfsdk:"id"`
+	MayRetry            bool                                `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                              `json:"name" tfsdk:"name"`
+	Number              float64                             `json:"number" tfsdk:"number"`
+	OnDdl               string                              `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                              `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           CreateWorkflowRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                              `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          CreateWorkflowRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   CreateWorkflowRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      CreateWorkflowRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                              `json:"started_at" tfsdk:"started_at"`
+	State               string                              `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                              `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   CreateWorkflowRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                              `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    CreateWorkflowRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      CreateWorkflowRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                              `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                              `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        CreateWorkflowRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                              `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                              `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type CreateWorkflowRes401 struct {
+	*ErrorResponse
+}
+type CreateWorkflowRes403 struct {
+	*ErrorResponse
+}
+type CreateWorkflowRes404 struct {
+	*ErrorResponse
+}
+type CreateWorkflowRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) CreateWorkflow(ctx context.Context, organization string, database string, req CreateWorkflowReq) (res201 *CreateWorkflowRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows"})
+	body := bytes.NewBuffer(nil)
+	if err = json.NewEncoder(body).Encode(req); err != nil {
+		return res201, err
+	}
+	r, err := http.NewRequestWithContext(ctx, "POST", u.String(), body)
+	if err != nil {
+		return res201, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res201, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 201:
+		res201 = new(CreateWorkflowRes)
+		err = json.NewDecoder(res.Body).Decode(&res201)
+	case 401:
+		res401 := new(CreateWorkflowRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(CreateWorkflowRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(CreateWorkflowRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(CreateWorkflowRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res201, err
+}
+
+type GetWorkflowRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetWorkflowRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetWorkflowRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetWorkflowRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type GetWorkflowRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type GetWorkflowRes struct {
+	Actor               GetWorkflowRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                           `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         GetWorkflowRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                           `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         GetWorkflowRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                           `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                           `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           GetWorkflowRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                           `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      GetWorkflowRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                             `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      GetWorkflowRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                           `json:"id" tfsdk:"id"`
+	MayRetry            bool                             `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                           `json:"name" tfsdk:"name"`
+	Number              float64                          `json:"number" tfsdk:"number"`
+	OnDdl               string                           `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                             `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                             `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                           `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           GetWorkflowRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                           `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          GetWorkflowRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   GetWorkflowRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      GetWorkflowRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                           `json:"started_at" tfsdk:"started_at"`
+	State               string                           `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                           `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   GetWorkflowRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                           `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    GetWorkflowRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      GetWorkflowRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                           `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                             `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                           `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        GetWorkflowRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                           `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                           `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type GetWorkflowRes401 struct {
+	*ErrorResponse
+}
+type GetWorkflowRes403 struct {
+	*ErrorResponse
+}
+type GetWorkflowRes404 struct {
+	*ErrorResponse
+}
+type GetWorkflowRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) GetWorkflow(ctx context.Context, organization string, database string, number string) (res200 *GetWorkflowRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number})
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(GetWorkflowRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(GetWorkflowRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(GetWorkflowRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(GetWorkflowRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(GetWorkflowRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowCancelRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCancelRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCancelRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCancelRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCancelRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCancelRes struct {
+	Actor               WorkflowCancelRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                              `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowCancelRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                              `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowCancelRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                              `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                              `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowCancelRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                              `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowCancelRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowCancelRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                              `json:"id" tfsdk:"id"`
+	MayRetry            bool                                `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                              `json:"name" tfsdk:"name"`
+	Number              float64                             `json:"number" tfsdk:"number"`
+	OnDdl               string                              `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                              `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowCancelRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                              `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowCancelRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowCancelRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowCancelRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                              `json:"started_at" tfsdk:"started_at"`
+	State               string                              `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                              `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowCancelRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                              `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowCancelRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowCancelRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                              `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                              `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowCancelRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                              `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                              `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowCancelRes401 struct {
+	*ErrorResponse
+}
+type WorkflowCancelRes403 struct {
+	*ErrorResponse
+}
+type WorkflowCancelRes404 struct {
+	*ErrorResponse
+}
+type WorkflowCancelRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowCancel(ctx context.Context, organization string, database string, number string) (res200 *WorkflowCancelRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number})
+	r, err := http.NewRequestWithContext(ctx, "DELETE", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowCancelRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowCancelRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowCancelRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowCancelRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowCancelRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowCompleteRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCompleteRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCompleteRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCompleteRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCompleteRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCompleteRes struct {
+	Actor               WorkflowCompleteRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                                `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowCompleteRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                                `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowCompleteRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                                `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                                `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowCompleteRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                                `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowCompleteRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                  `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowCompleteRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                                `json:"id" tfsdk:"id"`
+	MayRetry            bool                                  `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                                `json:"name" tfsdk:"name"`
+	Number              float64                               `json:"number" tfsdk:"number"`
+	OnDdl               string                                `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                  `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                  `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                                `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowCompleteRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                                `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowCompleteRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowCompleteRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowCompleteRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                                `json:"started_at" tfsdk:"started_at"`
+	State               string                                `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                                `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowCompleteRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                                `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowCompleteRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowCompleteRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                                `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                  `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                                `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowCompleteRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                                `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                                `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowCompleteRes401 struct {
+	*ErrorResponse
+}
+type WorkflowCompleteRes403 struct {
+	*ErrorResponse
+}
+type WorkflowCompleteRes404 struct {
+	*ErrorResponse
+}
+type WorkflowCompleteRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowComplete(ctx context.Context, organization string, database string, number string) (res200 *WorkflowCompleteRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/complete"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowCompleteRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowCompleteRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowCompleteRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowCompleteRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowCompleteRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowCutoverRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCutoverRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCutoverRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCutoverRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowCutoverRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowCutoverRes struct {
+	Actor               WorkflowCutoverRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                               `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowCutoverRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                               `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowCutoverRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                               `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                               `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowCutoverRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                               `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowCutoverRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                 `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowCutoverRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                               `json:"id" tfsdk:"id"`
+	MayRetry            bool                                 `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                               `json:"name" tfsdk:"name"`
+	Number              float64                              `json:"number" tfsdk:"number"`
+	OnDdl               string                               `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                 `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                 `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                               `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowCutoverRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                               `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowCutoverRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowCutoverRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowCutoverRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                               `json:"started_at" tfsdk:"started_at"`
+	State               string                               `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                               `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowCutoverRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                               `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowCutoverRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowCutoverRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                               `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                 `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                               `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowCutoverRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                               `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                               `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowCutoverRes401 struct {
+	*ErrorResponse
+}
+type WorkflowCutoverRes403 struct {
+	*ErrorResponse
+}
+type WorkflowCutoverRes404 struct {
+	*ErrorResponse
+}
+type WorkflowCutoverRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowCutover(ctx context.Context, organization string, database string, number string) (res200 *WorkflowCutoverRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/cutover"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowCutoverRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowCutoverRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowCutoverRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowCutoverRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowCutoverRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowRetryRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowRetryRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowRetryRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowRetryRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowRetryRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowRetryRes struct {
+	Actor               WorkflowRetryRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                             `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowRetryRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                             `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowRetryRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                             `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                             `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowRetryRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                             `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowRetryRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                               `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowRetryRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                             `json:"id" tfsdk:"id"`
+	MayRetry            bool                               `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                             `json:"name" tfsdk:"name"`
+	Number              float64                            `json:"number" tfsdk:"number"`
+	OnDdl               string                             `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                               `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                               `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                             `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowRetryRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                             `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowRetryRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowRetryRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowRetryRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                             `json:"started_at" tfsdk:"started_at"`
+	State               string                             `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                             `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowRetryRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                             `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowRetryRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowRetryRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                             `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                               `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                             `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowRetryRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                             `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                             `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowRetryRes401 struct {
+	*ErrorResponse
+}
+type WorkflowRetryRes403 struct {
+	*ErrorResponse
+}
+type WorkflowRetryRes404 struct {
+	*ErrorResponse
+}
+type WorkflowRetryRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowRetry(ctx context.Context, organization string, database string, number string) (res200 *WorkflowRetryRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/retry"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowRetryRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowRetryRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowRetryRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowRetryRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowRetryRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowReverseCutoverRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseCutoverRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseCutoverRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseCutoverRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseCutoverRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseCutoverRes struct {
+	Actor               WorkflowReverseCutoverRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                                      `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowReverseCutoverRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                                      `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowReverseCutoverRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                                      `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                                      `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowReverseCutoverRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                                      `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowReverseCutoverRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                        `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowReverseCutoverRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                                      `json:"id" tfsdk:"id"`
+	MayRetry            bool                                        `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                                      `json:"name" tfsdk:"name"`
+	Number              float64                                     `json:"number" tfsdk:"number"`
+	OnDdl               string                                      `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                        `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                        `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                                      `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowReverseCutoverRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                                      `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowReverseCutoverRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowReverseCutoverRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowReverseCutoverRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                                      `json:"started_at" tfsdk:"started_at"`
+	State               string                                      `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                                      `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowReverseCutoverRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                                      `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowReverseCutoverRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowReverseCutoverRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                                      `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                        `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                                      `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowReverseCutoverRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                                      `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                                      `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowReverseCutoverRes401 struct {
+	*ErrorResponse
+}
+type WorkflowReverseCutoverRes403 struct {
+	*ErrorResponse
+}
+type WorkflowReverseCutoverRes404 struct {
+	*ErrorResponse
+}
+type WorkflowReverseCutoverRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowReverseCutover(ctx context.Context, organization string, database string, number string) (res200 *WorkflowReverseCutoverRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/reverse-cutover"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowReverseCutoverRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowReverseCutoverRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowReverseCutoverRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowReverseCutoverRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowReverseCutoverRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowReverseTrafficRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseTrafficRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseTrafficRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseTrafficRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowReverseTrafficRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowReverseTrafficRes struct {
+	Actor               WorkflowReverseTrafficRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                                      `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowReverseTrafficRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                                      `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowReverseTrafficRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                                      `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                                      `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowReverseTrafficRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                                      `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowReverseTrafficRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                        `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowReverseTrafficRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                                      `json:"id" tfsdk:"id"`
+	MayRetry            bool                                        `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                                      `json:"name" tfsdk:"name"`
+	Number              float64                                     `json:"number" tfsdk:"number"`
+	OnDdl               string                                      `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                        `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                        `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                                      `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowReverseTrafficRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                                      `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowReverseTrafficRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowReverseTrafficRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowReverseTrafficRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                                      `json:"started_at" tfsdk:"started_at"`
+	State               string                                      `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                                      `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowReverseTrafficRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                                      `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowReverseTrafficRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowReverseTrafficRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                                      `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                        `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                                      `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowReverseTrafficRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                                      `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                                      `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowReverseTrafficRes401 struct {
+	*ErrorResponse
+}
+type WorkflowReverseTrafficRes403 struct {
+	*ErrorResponse
+}
+type WorkflowReverseTrafficRes404 struct {
+	*ErrorResponse
+}
+type WorkflowReverseTrafficRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowReverseTraffic(ctx context.Context, organization string, database string, number string) (res200 *WorkflowReverseTrafficRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/reverse-traffic"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowReverseTrafficRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowReverseTrafficRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowReverseTrafficRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowReverseTrafficRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowReverseTrafficRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowSwitchPrimariesRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchPrimariesRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchPrimariesRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchPrimariesRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchPrimariesRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchPrimariesRes struct {
+	Actor               WorkflowSwitchPrimariesRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                                       `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowSwitchPrimariesRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                                       `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowSwitchPrimariesRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                                       `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                                       `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowSwitchPrimariesRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                                       `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowSwitchPrimariesRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                         `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowSwitchPrimariesRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                                       `json:"id" tfsdk:"id"`
+	MayRetry            bool                                         `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                                       `json:"name" tfsdk:"name"`
+	Number              float64                                      `json:"number" tfsdk:"number"`
+	OnDdl               string                                       `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                         `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                         `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                                       `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowSwitchPrimariesRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                                       `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowSwitchPrimariesRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowSwitchPrimariesRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowSwitchPrimariesRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                                       `json:"started_at" tfsdk:"started_at"`
+	State               string                                       `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                                       `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowSwitchPrimariesRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                                       `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowSwitchPrimariesRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowSwitchPrimariesRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                                       `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                         `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                                       `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowSwitchPrimariesRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                                       `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                                       `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowSwitchPrimariesRes401 struct {
+	*ErrorResponse
+}
+type WorkflowSwitchPrimariesRes403 struct {
+	*ErrorResponse
+}
+type WorkflowSwitchPrimariesRes404 struct {
+	*ErrorResponse
+}
+type WorkflowSwitchPrimariesRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowSwitchPrimaries(ctx context.Context, organization string, database string, number string) (res200 *WorkflowSwitchPrimariesRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/switch-primaries"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowSwitchPrimariesRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowSwitchPrimariesRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowSwitchPrimariesRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowSwitchPrimariesRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowSwitchPrimariesRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type WorkflowSwitchReplicasRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchReplicasRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchReplicasRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchReplicasRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type WorkflowSwitchReplicasRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type WorkflowSwitchReplicasRes struct {
+	Actor               WorkflowSwitchReplicasRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                                      `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         WorkflowSwitchReplicasRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                                      `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         WorkflowSwitchReplicasRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                                      `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                                      `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           WorkflowSwitchReplicasRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                                      `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      WorkflowSwitchReplicasRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                        `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      WorkflowSwitchReplicasRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                                      `json:"id" tfsdk:"id"`
+	MayRetry            bool                                        `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                                      `json:"name" tfsdk:"name"`
+	Number              float64                                     `json:"number" tfsdk:"number"`
+	OnDdl               string                                      `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                        `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                        `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                                      `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           WorkflowSwitchReplicasRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                                      `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          WorkflowSwitchReplicasRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   WorkflowSwitchReplicasRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      WorkflowSwitchReplicasRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                                      `json:"started_at" tfsdk:"started_at"`
+	State               string                                      `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                                      `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   WorkflowSwitchReplicasRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                                      `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    WorkflowSwitchReplicasRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      WorkflowSwitchReplicasRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                                      `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                        `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                                      `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        WorkflowSwitchReplicasRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                                      `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                                      `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type WorkflowSwitchReplicasRes401 struct {
+	*ErrorResponse
+}
+type WorkflowSwitchReplicasRes403 struct {
+	*ErrorResponse
+}
+type WorkflowSwitchReplicasRes404 struct {
+	*ErrorResponse
+}
+type WorkflowSwitchReplicasRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) WorkflowSwitchReplicas(ctx context.Context, organization string, database string, number string) (res200 *WorkflowSwitchReplicasRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/switch-replicas"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(WorkflowSwitchReplicasRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(WorkflowSwitchReplicasRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(WorkflowSwitchReplicasRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(WorkflowSwitchReplicasRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(WorkflowSwitchReplicasRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type VerifyWorkflowRes_Actor struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_CancelledBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_CompletedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_CutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_DatabaseBranch struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type VerifyWorkflowRes_GlobalKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type VerifyWorkflowRes_RetriedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_ReversedBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_ReversedCutoverBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_SourceKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type VerifyWorkflowRes_SwitchPrimariesBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_SwitchReplicasBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes_TargetKeyspace struct {
+	CreatedAt string `json:"created_at" tfsdk:"created_at"`
+	DeletedAt string `json:"deleted_at" tfsdk:"deleted_at"`
+	Id        string `json:"id" tfsdk:"id"`
+	Name      string `json:"name" tfsdk:"name"`
+	UpdatedAt string `json:"updated_at" tfsdk:"updated_at"`
+}
+type VerifyWorkflowRes_VerifyDataBy struct {
+	AvatarUrl   string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName string `json:"display_name" tfsdk:"display_name"`
+	Id          string `json:"id" tfsdk:"id"`
+}
+type VerifyWorkflowRes struct {
+	Actor               VerifyWorkflowRes_Actor             `json:"actor" tfsdk:"actor"`
+	CancelledAt         string                              `json:"cancelled_at" tfsdk:"cancelled_at"`
+	CancelledBy         VerifyWorkflowRes_CancelledBy       `json:"cancelled_by" tfsdk:"cancelled_by"`
+	CompletedAt         string                              `json:"completed_at" tfsdk:"completed_at"`
+	CompletedBy         VerifyWorkflowRes_CompletedBy       `json:"completed_by" tfsdk:"completed_by"`
+	CreatedAt           string                              `json:"created_at" tfsdk:"created_at"`
+	CutoverAt           string                              `json:"cutover_at" tfsdk:"cutover_at"`
+	CutoverBy           VerifyWorkflowRes_CutoverBy         `json:"cutover_by" tfsdk:"cutover_by"`
+	DataCopyCompletedAt string                              `json:"data_copy_completed_at" tfsdk:"data_copy_completed_at"`
+	DatabaseBranch      VerifyWorkflowRes_DatabaseBranch    `json:"database_branch" tfsdk:"database_branch"`
+	DeferSecondaryKeys  bool                                `json:"defer_secondary_keys" tfsdk:"defer_secondary_keys"`
+	GlobalKeyspace      VerifyWorkflowRes_GlobalKeyspace    `json:"global_keyspace" tfsdk:"global_keyspace"`
+	Id                  string                              `json:"id" tfsdk:"id"`
+	MayRetry            bool                                `json:"may_retry" tfsdk:"may_retry"`
+	Name                string                              `json:"name" tfsdk:"name"`
+	Number              float64                             `json:"number" tfsdk:"number"`
+	OnDdl               string                              `json:"on_ddl" tfsdk:"on_ddl"`
+	PrimariesSwitched   bool                                `json:"primaries_switched" tfsdk:"primaries_switched"`
+	ReplicasSwitched    bool                                `json:"replicas_switched" tfsdk:"replicas_switched"`
+	RetriedAt           string                              `json:"retried_at" tfsdk:"retried_at"`
+	RetriedBy           VerifyWorkflowRes_RetriedBy         `json:"retried_by" tfsdk:"retried_by"`
+	ReversedAt          string                              `json:"reversed_at" tfsdk:"reversed_at"`
+	ReversedBy          VerifyWorkflowRes_ReversedBy        `json:"reversed_by" tfsdk:"reversed_by"`
+	ReversedCutoverBy   VerifyWorkflowRes_ReversedCutoverBy `json:"reversed_cutover_by" tfsdk:"reversed_cutover_by"`
+	SourceKeyspace      VerifyWorkflowRes_SourceKeyspace    `json:"source_keyspace" tfsdk:"source_keyspace"`
+	StartedAt           string                              `json:"started_at" tfsdk:"started_at"`
+	State               string                              `json:"state" tfsdk:"state"`
+	SwitchPrimariesAt   string                              `json:"switch_primaries_at" tfsdk:"switch_primaries_at"`
+	SwitchPrimariesBy   VerifyWorkflowRes_SwitchPrimariesBy `json:"switch_primaries_by" tfsdk:"switch_primaries_by"`
+	SwitchReplicasAt    string                              `json:"switch_replicas_at" tfsdk:"switch_replicas_at"`
+	SwitchReplicasBy    VerifyWorkflowRes_SwitchReplicasBy  `json:"switch_replicas_by" tfsdk:"switch_replicas_by"`
+	TargetKeyspace      VerifyWorkflowRes_TargetKeyspace    `json:"target_keyspace" tfsdk:"target_keyspace"`
+	UpdatedAt           string                              `json:"updated_at" tfsdk:"updated_at"`
+	VerifiedDataStale   bool                                `json:"verified_data_stale" tfsdk:"verified_data_stale"`
+	VerifyDataAt        string                              `json:"verify_data_at" tfsdk:"verify_data_at"`
+	VerifyDataBy        VerifyWorkflowRes_VerifyDataBy      `json:"verify_data_by" tfsdk:"verify_data_by"`
+	WorkflowSubtype     string                              `json:"workflow_subtype" tfsdk:"workflow_subtype"`
+	WorkflowType        string                              `json:"workflow_type" tfsdk:"workflow_type"`
+}
+type VerifyWorkflowRes401 struct {
+	*ErrorResponse
+}
+type VerifyWorkflowRes403 struct {
+	*ErrorResponse
+}
+type VerifyWorkflowRes404 struct {
+	*ErrorResponse
+}
+type VerifyWorkflowRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) VerifyWorkflow(ctx context.Context, organization string, database string, number string) (res200 *VerifyWorkflowRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/databases/" + database + "/workflows/" + number + "/verify-data"})
+	r, err := http.NewRequestWithContext(ctx, "PATCH", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(VerifyWorkflowRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(VerifyWorkflowRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(VerifyWorkflowRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(VerifyWorkflowRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(VerifyWorkflowRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
 type GetDatabaseRes struct {
 	Database
 }
@@ -5385,6 +8122,101 @@ func (cl *Client) GetInvoiceLineItems(ctx context.Context, organization string, 
 		}
 	case 500:
 		res500 := new(GetInvoiceLineItemsRes500)
+		err = json.NewDecoder(res.Body).Decode(&res500)
+		if err == nil {
+			err = res500
+		}
+	default:
+		var errBody *ErrorResponse
+		_ = json.NewDecoder(res.Body).Decode(&errBody)
+		if errBody != nil {
+			err = errBody
+		} else {
+			err = fmt.Errorf("unexpected status code %d", res.StatusCode)
+		}
+	}
+	if errors.Is(err, io.EOF) {
+		err = nil
+	}
+	return res200, err
+}
+
+type ListOrganizationMembersRes_DataItem_User struct {
+	AvatarUrl               string `json:"avatar_url" tfsdk:"avatar_url"`
+	DisplayName             string `json:"display_name" tfsdk:"display_name"`
+	Email                   string `json:"email" tfsdk:"email"`
+	Id                      string `json:"id" tfsdk:"id"`
+	Organization            string `json:"organization" tfsdk:"organization"`
+	TwoFactorAuthConfigured bool   `json:"two_factor_auth_configured" tfsdk:"two_factor_auth_configured"`
+}
+type ListOrganizationMembersRes_DataItem struct {
+	CreatedAt string                                   `json:"created_at" tfsdk:"created_at"`
+	Id        string                                   `json:"id" tfsdk:"id"`
+	Role      string                                   `json:"role" tfsdk:"role"`
+	UpdatedAt string                                   `json:"updated_at" tfsdk:"updated_at"`
+	User      ListOrganizationMembersRes_DataItem_User `json:"user" tfsdk:"user"`
+}
+type ListOrganizationMembersRes struct {
+	Data []ListOrganizationMembersRes_DataItem `json:"data" tfsdk:"data"`
+}
+type ListOrganizationMembersRes401 struct {
+	*ErrorResponse
+}
+type ListOrganizationMembersRes403 struct {
+	*ErrorResponse
+}
+type ListOrganizationMembersRes404 struct {
+	*ErrorResponse
+}
+type ListOrganizationMembersRes500 struct {
+	*ErrorResponse
+}
+
+func (cl *Client) ListOrganizationMembers(ctx context.Context, organization string, page *int, perPage *int) (res200 *ListOrganizationMembersRes, err error) {
+	u := cl.baseURL.ResolveReference(&url.URL{Path: "organizations/" + organization + "/members"})
+	q := u.Query()
+	if page != nil {
+		q.Set("page", strconv.Itoa(*page))
+	}
+	if perPage != nil {
+		q.Set("per_page", strconv.Itoa(*perPage))
+	}
+	u.RawQuery = q.Encode()
+	r, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
+	if err != nil {
+		return res200, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Accept", "application/json")
+	res, err := cl.httpCl.Do(r)
+	if err != nil {
+		return res200, err
+	}
+	defer res.Body.Close()
+	switch res.StatusCode {
+	case 200:
+		res200 = new(ListOrganizationMembersRes)
+		err = json.NewDecoder(res.Body).Decode(&res200)
+	case 401:
+		res401 := new(ListOrganizationMembersRes401)
+		err = json.NewDecoder(res.Body).Decode(&res401)
+		if err == nil {
+			err = res401
+		}
+	case 403:
+		res403 := new(ListOrganizationMembersRes403)
+		err = json.NewDecoder(res.Body).Decode(&res403)
+		if err == nil {
+			err = res403
+		}
+	case 404:
+		res404 := new(ListOrganizationMembersRes404)
+		err = json.NewDecoder(res.Body).Decode(&res404)
+		if err == nil {
+			err = res404
+		}
+	case 500:
+		res500 := new(ListOrganizationMembersRes500)
 		err = json.NewDecoder(res.Body).Decode(&res500)
 		if err == nil {
 			err = res500

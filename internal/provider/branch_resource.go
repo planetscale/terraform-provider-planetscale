@@ -80,7 +80,6 @@ func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, o
 		RestoredFromBranch:          restoredFromBranch,
 		Name:                        types.StringValue(branch.Name),
 		ParentBranch:                types.StringPointerValue(branch.ParentBranch),
-		ClusterRateName:             types.StringValue(branch.ClusterRateName),
 		CreatedAt:                   types.StringValue(branch.CreatedAt),
 		HtmlUrl:                     types.StringValue(branch.HtmlUrl),
 		Id:                          types.StringValue(branch.Id),
