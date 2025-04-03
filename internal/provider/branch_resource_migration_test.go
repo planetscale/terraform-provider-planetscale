@@ -15,11 +15,8 @@ func TestUpgradeBranchStateV0toCurrent(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
 
-	v0Type, diags := schemaToObjectTFType(ctx, branchSchemaV0())
-	require.False(t, diags.HasError(), "Failed to convert V0 schema to tftype")
-
-	v1Type, diags := schemaToObjectTFType(ctx, branchSchemaV1())
-	require.False(t, diags.HasError(), "Failed to convert V1 schema to tftype")
+	v0Type := schemaToObjectTFType(ctx, branchSchemaV0())
+	v1Type := schemaToObjectTFType(ctx, branchSchemaV1())
 
 	req := resource.UpgradeStateRequest{
 		State: &tfsdk.State{
