@@ -13,6 +13,8 @@ import (
 // This file contains the state migration logic and historical models/schemas
 // for the planetscale_branch resource.
 
+// --- Version 0 ---
+
 // branchResourceModelV1 represents the state data for schema version 1.
 // v1 differs from v0 in the following ways:
 //  1. ClusterRateName (cluster_rate_name) removed in v1.
@@ -273,7 +275,7 @@ func branchSchemaV0() *schema.Schema {
 	}
 }
 
-// upgradeBranchStateV0toCurrent implements the logic for upgrading state from version 0 to the current version (1).
+// upgradeBranchStateV0toCurrent implements the logic for upgrading state from version 0 to the current version.
 func upgradeBranchStateV0toCurrent(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
 	var priorStateData branchResourceModelV0
 	resp.Diagnostics.Append(req.State.Get(ctx, &priorStateData)...)
@@ -312,14 +314,13 @@ func (r *branchResource) UpgradeState(ctx context.Context) map[int64]resource.St
 	return map[int64]resource.StateUpgrader{
 		// Upgrade v0 state to current version
 		0: {
-			// PriorSchema and StateUpgrader defined in branch_resource_migration.go
 			PriorSchema:   branchSchemaV0(),
 			StateUpgrader: upgradeBranchStateV0toCurrent,
 		},
 		// IMPORTANT!
 		// Terraform does not iterate through each stateu upgrade function. It only runs
-		// one upgrader. Thus, when a new version is introduced, the new function
-		// and each existing upgrade function must be modified to upgrade to the
+		// one upgrader func. Thus, when a new version is introduced, the new function
+		// and each existing upgrade functions must be modified to upgrade to the new
 		// current version.
 	}
 }
