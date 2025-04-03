@@ -1,4 +1,4 @@
-default: testacc
+default: lint test
 
 .PHONY: build
 build:
@@ -8,7 +8,13 @@ build:
 lint:
 	golangci-lint run -v ./...
 
-# Run acceptance tests
+# Run unit tests
+.PHONY: test
+test:
+	@echo "Running unit tests only ..."
+	go test -v -cover ./...
+
+# Run acceptance tests. These create real resources.
 .PHONY: testacc
 testacc:
 	TF_ACC=1 go test -parallel=2 ./... -v $(TESTARGS) -timeout 120m
