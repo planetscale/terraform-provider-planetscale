@@ -38,7 +38,6 @@ resource "planetscale_branch" "example" {
 ### Read-Only
 
 - `actor` (Attributes) The actor who created this branch. (see [below for nested schema](#nestedatt--actor))
-- `cluster_rate_name` (String) The SKU representing the branch's cluster size.
 - `created_at` (String) When the branch was created.
 - `html_url` (String) Planetscale app URL for the branch.
 - `id` (String) The ID of the branch.
