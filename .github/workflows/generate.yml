@@ -8,11 +8,6 @@ on:
   # Allow manual triggering
   workflow_dispatch:
 
-  pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'renovate.json5'
-
 permissions:
   contents: read
 
