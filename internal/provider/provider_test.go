@@ -11,6 +11,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
@@ -110,6 +111,17 @@ func checkExpectRecreate(resourceName string) resource.ConfigPlanChecks { //noli
 			plancheck.ExpectResourceAction(resourceName, plancheck.ResourceActionReplace),
 		},
 	}
+}
+
+// schemaToObjectTFType converts a schema to a Terraform type, intended to be
+// used in testing.
+func schemaToObjectTFType(ctx context.Context, s *schema.Schema) tftypes.Object {
+	attrTypes := make(map[string]tftypes.Type, len(s.Attributes))
+	for name, attr := range s.Attributes {
+		tfType := attr.GetType().TerraformType(ctx)
+		attrTypes[name] = tfType
+	}
+	return tftypes.Object{AttributeTypes: attrTypes}
 }
 
 func TestProviderConfigure(t *testing.T) {

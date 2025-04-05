@@ -12,9 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -24,8 +21,9 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var (
-	_ resource.Resource                = &branchResource{}
-	_ resource.ResourceWithImportState = &branchResource{}
+	_ resource.Resource                 = &branchResource{}
+	_ resource.ResourceWithImportState  = &branchResource{}
+	_ resource.ResourceWithUpgradeState = &branchResource{}
 )
 
 func newBranchResource() resource.Resource {
@@ -37,31 +35,9 @@ type branchResource struct {
 	client *planetscale.Client
 }
 
-type branchResourceModel struct {
-	Organization types.String `tfsdk:"organization"`
-	Database     types.String `tfsdk:"database"`
+// branchResourceModelV* and branchSchemaV* are defined in branch_resource_migration.go
 
-	Name                        types.String  `tfsdk:"name"`
-	ParentBranch                types.String  `tfsdk:"parent_branch"`
-	Actor                       types.Object  `tfsdk:"actor"`
-	ClusterRateName             types.String  `tfsdk:"cluster_rate_name"`
-	CreatedAt                   types.String  `tfsdk:"created_at"`
-	HtmlUrl                     types.String  `tfsdk:"html_url"`
-	Id                          types.String  `tfsdk:"id"`
-	MysqlAddress                types.String  `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            types.String  `tfsdk:"mysql_edge_address"`
-	Region                      types.Object  `tfsdk:"region"`
-	Production                  types.Bool    `tfsdk:"production"`
-	Ready                       types.Bool    `tfsdk:"ready"`
-	RestoreChecklistCompletedAt types.String  `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          types.Object  `tfsdk:"restored_from_branch"`
-	SchemaLastUpdatedAt         types.String  `tfsdk:"schema_last_updated_at"`
-	ShardCount                  types.Float64 `tfsdk:"shard_count"`
-	Sharded                     types.Bool    `tfsdk:"sharded"`
-	UpdatedAt                   types.String  `tfsdk:"updated_at"`
-}
-
-func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, organization, database types.String, diags diag.Diagnostics) *branchResourceModel {
+func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, organization, database types.String, diags diag.Diagnostics) *branchResourceModelV1 {
 	if branch == nil {
 		return nil
 	}
@@ -71,7 +47,7 @@ func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, o
 	diags.Append(diags...)
 	restoredFromBranch, diags := types.ObjectValueFrom(ctx, restoredFromBranchResourceAttrTypes, branch.RestoredFromBranch)
 	diags.Append(diags...)
-	return &branchResourceModel{
+	return &branchResourceModelV1{
 		Organization: organization,
 		Database:     database,
 
@@ -80,7 +56,6 @@ func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, o
 		RestoredFromBranch:          restoredFromBranch,
 		Name:                        types.StringValue(branch.Name),
 		ParentBranch:                types.StringPointerValue(branch.ParentBranch),
-		ClusterRateName:             types.StringValue(branch.ClusterRateName),
 		CreatedAt:                   types.StringValue(branch.CreatedAt),
 		HtmlUrl:                     types.StringValue(branch.HtmlUrl),
 		Id:                          types.StringValue(branch.Id),
@@ -101,111 +76,8 @@ func (r *branchResource) Metadata(ctx context.Context, req resource.MetadataRequ
 }
 
 func (r *branchResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
-	resp.Schema = schema.Schema{
-		Description:         "A PlanetScale branch.",
-		MarkdownDescription: "A PlanetScale branch.",
-		Attributes: map[string]schema.Attribute{
-			"organization": schema.StringAttribute{
-				Description: "The organization this branch belongs to.",
-				Required:    true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"database": schema.StringAttribute{
-				Description: "The database this branch belongs to.",
-				Required:    true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"name": schema.StringAttribute{
-				Description: "The name of the branch.",
-				Required:    true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"parent_branch": schema.StringAttribute{
-				Description: "The name of the parent branch from which the branch was created.",
-				Required:    true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-
-			// updatable
-			"production": schema.BoolAttribute{
-				Description: "Whether or not the branch is a production branch.",
-				Computed:    true, Optional: true,
-			},
-
-			// read only
-			"id": schema.StringAttribute{
-				Description: "The ID of the branch.",
-				Computed:    true,
-			},
-			"actor": schema.SingleNestedAttribute{
-				Description: "The actor who created this branch.",
-				Computed:    true,
-				Attributes:  actorResourceSchemaAttribute,
-			},
-			"cluster_rate_name": schema.StringAttribute{
-				Description: "The SKU representing the branch's cluster size.",
-				Computed:    true,
-			},
-			"created_at": schema.StringAttribute{
-				Description: "When the branch was created.",
-				Computed:    true,
-			},
-			"html_url": schema.StringAttribute{
-				Description: "Planetscale app URL for the branch.",
-				Computed:    true,
-			},
-			"mysql_address": schema.StringAttribute{
-				Description: "The MySQL address for the branch.",
-				Computed:    true,
-			},
-			"mysql_edge_address": schema.StringAttribute{
-				Description: "The address of the MySQL provider for the branch.",
-				Computed:    true,
-			},
-			"region": schema.SingleNestedAttribute{
-				Description: "The region in which this branch lives.",
-				Computed:    true,
-				Attributes:  regionResourceSchemaAttribute,
-			},
-			"ready": schema.BoolAttribute{
-				Description: "Whether or not the branch is ready to serve queries.",
-				Computed:    true,
-			},
-			"restore_checklist_completed_at": schema.StringAttribute{
-				Description: "When a user last marked a backup restore checklist as completed.",
-				Computed:    true,
-			},
-			"restored_from_branch": schema.SingleNestedAttribute{
-				Description: "todo",
-				Computed:    true,
-				Attributes:  restoredFromBranchSchemaAttribute,
-			},
-			"schema_last_updated_at": schema.StringAttribute{
-				Description: "When the schema for the branch was last updated.",
-				Computed:    true,
-			},
-			"shard_count": schema.Float64Attribute{
-				Description: "The number of shards in the branch.",
-				Computed:    true,
-			},
-			"sharded": schema.BoolAttribute{
-				Description: "Whether or not the branch is sharded.",
-				Computed:    true,
-			},
-			"updated_at": schema.StringAttribute{
-				Description: "When the branch was last updated.",
-				Computed:    true,
-			},
-		},
-	}
+	// Schema definition is sourced from the migration file
+	resp.Schema = *branchSchemaV1()
 }
 
 func (r *branchResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
@@ -226,7 +98,7 @@ func (r *branchResource) Configure(ctx context.Context, req resource.ConfigureRe
 }
 
 func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *branchResourceModel
+	var data *branchResourceModelV1
 	tflog.Info(ctx, "getting current branch resource from plan")
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
@@ -335,7 +207,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 }
 
 func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *branchResourceModel
+	var data *branchResourceModelV1
 
 	tflog.Info(ctx, "getting current branch resource from state")
 	// Read Terraform prior state data into the model
@@ -381,8 +253,8 @@ func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 func (r *branchResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var (
-		old  *branchResourceModel
-		data *branchResourceModel
+		old  *branchResourceModelV1
+		data *branchResourceModelV1
 	)
 	resp.Diagnostics.Append(req.State.Get(ctx, &old)...)
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
@@ -439,7 +311,7 @@ func (r *branchResource) Update(ctx context.Context, req resource.UpdateRequest,
 }
 
 func (r *branchResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *branchResourceModel
+	var data *branchResourceModelV1
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
