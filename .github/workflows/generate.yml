@@ -15,7 +15,6 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   generate:
@@ -35,6 +34,9 @@ jobs:
   notify:
     name: open issue on failed workflow
     needs: generate
+    permissions:
+      contents: read
+      issues: write
     if: failure() && github.event.pull_request == null
     runs-on: ubuntu-latest
     steps:
@@ -47,11 +49,16 @@ jobs:
   close:
     name: close issues on successful workflow
     needs: generate
+    permissions:
+      contents: read
+      issues: write
     if: success()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - name: Close issue
         run: |
           set -eou pipefail
