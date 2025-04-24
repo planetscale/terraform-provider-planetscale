@@ -664,6 +664,13 @@
                 "parent_branch": {
                   "description": "Parent branch",
                   "type": "string"
+                },
+                "seed_data": {
+                  "description": "If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.",
+                  "type": "string",
+                  "enum": [
+                    "last_successful_backup"
+                  ]
                 }
               },
               "additionalProperties": false
