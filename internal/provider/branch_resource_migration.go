@@ -38,6 +38,7 @@ type branchResourceModelV1 struct {
 	SchemaLastUpdatedAt         types.String  `tfsdk:"schema_last_updated_at"`
 	ShardCount                  types.Float64 `tfsdk:"shard_count"`
 	Sharded                     types.Bool    `tfsdk:"sharded"`
+	SeedData                    types.String  `tfsdk:"seed_data"`
 	UpdatedAt                   types.String  `tfsdk:"updated_at"`
 }
 
@@ -140,6 +141,13 @@ func branchSchemaV1() *schema.Schema {
 			"updated_at": schema.StringAttribute{
 				Description: "When the branch was last updated.",
 				Computed:    true,
+			},
+			"seed_data": schema.StringAttribute{
+				Description: "Seed data using the Data Branching® feature. Valid value is `last_successful_backup`",
+				Optional:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
 			},
 		},
 	}
