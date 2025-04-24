@@ -34,6 +34,7 @@ resource "planetscale_branch" "example" {
 ### Optional
 
 - `production` (Boolean) Whether or not the branch is a production branch.
+- `seed_data` (String) Seed data using the Data Branching® feature. Valid value is `last_successful_backup`
 
 ### Read-Only
 
