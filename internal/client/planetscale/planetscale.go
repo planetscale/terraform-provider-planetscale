@@ -1114,6 +1114,7 @@ type CreateBranchReq struct {
 	ClusterSize  *string `json:"cluster_size,omitempty" tfsdk:"cluster_size"`
 	Name         string  `json:"name" tfsdk:"name"`
 	ParentBranch string  `json:"parent_branch" tfsdk:"parent_branch"`
+	SeedData     string  `json:"seed_data,omitempty"`
 }
 type CreateBranchRes struct {
 	Branch
