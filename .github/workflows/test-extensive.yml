@@ -51,7 +51,6 @@ jobs:
     name: integration-terraform
     needs: build
     runs-on: ubuntu-latest
-    if: '!github.event.pull_request.head.repo.fork'
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -82,7 +81,6 @@ jobs:
     name: integration-tofu
     needs: build
     runs-on: ubuntu-latest
-    if: '!github.event.pull_request.head.repo.fork'
     timeout-minutes: 30
     strategy:
       max-parallel: 1
