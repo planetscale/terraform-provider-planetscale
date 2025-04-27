@@ -38,6 +38,7 @@ type branchResourceModelV1 struct {
 	SchemaLastUpdatedAt         types.String  `tfsdk:"schema_last_updated_at"`
 	ShardCount                  types.Float64 `tfsdk:"shard_count"`
 	Sharded                     types.Bool    `tfsdk:"sharded"`
+	SeedData                    types.String  `tfsdk:"seed_data"`
 	UpdatedAt                   types.String  `tfsdk:"updated_at"`
 }
 
@@ -141,6 +142,13 @@ func branchSchemaV1() *schema.Schema {
 				Description: "When the branch was last updated.",
 				Computed:    true,
 			},
+			"seed_data": schema.StringAttribute{
+				Description: "Seed data using the Data Branching® feature. Valid value is `last_successful_backup`",
+				Optional:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
 		},
 	}
 }
@@ -170,6 +178,7 @@ type branchResourceModelV0 struct {
 	ShardCount                  types.Float64 `tfsdk:"shard_count"`
 	Sharded                     types.Bool    `tfsdk:"sharded"`
 	UpdatedAt                   types.String  `tfsdk:"updated_at"`
+	SeedData                    types.String  `tfsdk:"seed_data"`
 }
 
 // branchSchemaV0 defines the schema for version 0.
@@ -271,6 +280,13 @@ func branchSchemaV0() *schema.Schema {
 				Description: "When the branch was last updated.",
 				Computed:    true,
 			},
+			"seed_data": schema.StringAttribute{
+				Description: "Seed data using the Data Branching® feature. Valid value is `last_successful_backup`",
+				Optional:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
 		},
 	}
 }
@@ -304,6 +320,7 @@ func upgradeBranchStateV0toCurrent(ctx context.Context, req resource.UpgradeStat
 		ShardCount:                  priorStateData.ShardCount,
 		Sharded:                     priorStateData.Sharded,
 		UpdatedAt:                   priorStateData.UpdatedAt,
+		SeedData:                    priorStateData.SeedData,
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, upgradedStateData)...)

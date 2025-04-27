@@ -37,7 +37,7 @@ type branchResource struct {
 
 // branchResourceModelV* and branchSchemaV* are defined in branch_resource_migration.go
 
-func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, organization, database types.String, diags diag.Diagnostics) *branchResourceModelV1 {
+func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, organization, database types.String, seedData types.String, diags diag.Diagnostics) *branchResourceModelV1 {
 	if branch == nil {
 		return nil
 	}
@@ -50,6 +50,7 @@ func branchResourceFromClient(ctx context.Context, branch *planetscale.Branch, o
 	return &branchResourceModelV1{
 		Organization: organization,
 		Database:     database,
+		SeedData:     seedData,
 
 		Actor:                       actor,
 		Region:                      region,
@@ -108,6 +109,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 	org := data.Organization
 	database := data.Database
 	name := data.Name
+	seedData := data.SeedData
 
 	if org.IsNull() || org.IsUnknown() || org.ValueString() == "" {
 		resp.Diagnostics.AddAttributeError(path.Root("organization"), "organization is required", "an organization must be provided and cannot be empty")
@@ -131,6 +133,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 	createReq := planetscale.CreateBranchReq{
 		Name:         name.ValueString(),
 		ParentBranch: *parentBranch,
+		SeedData:     seedData.ValueStringPointer(),
 	}
 	if !data.RestoredFromBranch.IsNull() && !data.RestoredFromBranch.IsUnknown() {
 		var rfb restoredFromBranchResource
@@ -199,7 +202,7 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		branch = res.Branch
 	}
 
-	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, resp.Diagnostics)
+	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, data.SeedData, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -244,7 +247,7 @@ func (r *branchResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	data = branchResourceFromClient(ctx, &res.Branch, data.Organization, data.Database, resp.Diagnostics)
+	data = branchResourceFromClient(ctx, &res.Branch, data.Organization, data.Database, data.SeedData, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -303,7 +306,7 @@ func (r *branchResource) Update(ctx context.Context, req resource.UpdateRequest,
 			branch = res.Branch
 		}
 	}
-	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, resp.Diagnostics)
+	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, data.SeedData, resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
