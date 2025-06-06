@@ -199,7 +199,7 @@ resource "planetscale_branch" "test" {
     name          = "{{.name}}"
     parent_branch = "{{.parent_branch}}"
     {{if .production}}production = {{.production}}{{end}}
-    {{if .seed_data}}seed_data = {{.seed_data}}{{end}}
+    {{if .seed_data}}seed_data = "{{.seed_data}}"{{end}}
 }
 `
 	t := template.Must(template.New("config").Parse(tmpl))
