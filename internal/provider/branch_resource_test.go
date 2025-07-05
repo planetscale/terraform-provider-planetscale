@@ -59,7 +59,7 @@ func TestAccBranchResource(t *testing.T) {
 	})
 }
 
-// TestAccBranchResource_WithSeedData tests the creation of a branch with the seed data
+// TestAccBranchResource_WithSeedData tests the creation of a branch with the seed data.
 func TestAccBranchResource_SeedData(t *testing.T) {
 	dbName := acctest.RandomWithPrefix("testacc-branch-db")
 	branchName := acctest.RandomWithPrefix("branch")
