@@ -1,0 +1,15 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    PlanetScale API:
+        inputs:
+            - location: schemas/openapi.yaml
+        overlays:
+            - location: schemas/overlay-terraform.yaml
+        output: schemas/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/speakeasy-onboarding/onboarding/planet-scale-api
+targets:
+    planetscale:
+        target: terraform
+        source: PlanetScale API

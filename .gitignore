@@ -1,0 +1,8 @@
+.terraform
+.terraform*
+*.tfstate*
+.DS_Store
+**/.speakeasy/temp/
+**/.speakeasy/logs/
+.env
+.env.local

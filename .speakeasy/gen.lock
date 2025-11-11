@@ -1,0 +1,1404 @@
+lockVersion: 2.0.0
+id: 156e2223-c8d0-4591-922d-3e4c474de609
+management:
+  docChecksum: e43f6148fe1716e9f865c54bb9315a90
+  docVersion: v1
+  speakeasyVersion: 1.653.1
+  generationVersion: 2.748.0
+  releaseVersion: 0.0.1
+  configChecksum: fb40f6597bac108f3a2566216b568d1f
+features:
+  terraform:
+    additionalDependencies: 0.1.0
+    constsAndDefaults: 0.3.0
+    core: 3.46.8
+    globalSecurity: 2.82.1
+    globalServerURLs: 2.83.0
+generatedFiles:
+  - .gitattributes
+  - USAGE.md
+  - examples/provider/provider.tf
+  - go.mod
+  - go.sum
+  - internal/planmodifiers/boolplanmodifier/suppress_diff.go
+  - internal/planmodifiers/float32planmodifier/suppress_diff.go
+  - internal/planmodifiers/float64planmodifier/suppress_diff.go
+  - internal/planmodifiers/int32planmodifier/suppress_diff.go
+  - internal/planmodifiers/int64planmodifier/suppress_diff.go
+  - internal/planmodifiers/listplanmodifier/suppress_diff.go
+  - internal/planmodifiers/mapplanmodifier/suppress_diff.go
+  - internal/planmodifiers/numberplanmodifier/suppress_diff.go
+  - internal/planmodifiers/objectplanmodifier/suppress_diff.go
+  - internal/planmodifiers/setplanmodifier/suppress_diff.go
+  - internal/planmodifiers/stringplanmodifier/suppress_diff.go
+  - internal/planmodifiers/utils/state_check.go
+  - internal/provider/provider.go
+  - internal/provider/reflect/diags.go
+  - internal/provider/reflect/doc.go
+  - internal/provider/reflect/generic_attr_value.go
+  - internal/provider/reflect/helpers.go
+  - internal/provider/reflect/interfaces.go
+  - internal/provider/reflect/into.go
+  - internal/provider/reflect/map.go
+  - internal/provider/reflect/number.go
+  - internal/provider/reflect/options.go
+  - internal/provider/reflect/outof.go
+  - internal/provider/reflect/pointer.go
+  - internal/provider/reflect/primitive.go
+  - internal/provider/reflect/slice.go
+  - internal/provider/reflect/struct.go
+  - internal/provider/typeconvert/date.go
+  - internal/provider/typeconvert/datetime.go
+  - internal/provider/typeconvert/int.go
+  - internal/provider/utils.go
+  - internal/sdk/.gitattributes
+  - internal/sdk/apibranchbouncerresizes.go
+  - internal/sdk/backups.go
+  - internal/sdk/bouncerresizes.go
+  - internal/sdk/bouncers.go
+  - internal/sdk/branchchanges.go
+  - internal/sdk/clusterextensions.go
+  - internal/sdk/clusterparameters.go
+  - internal/sdk/databasebranches.go
+  - internal/sdk/databasebranchkeyspaces.go
+  - internal/sdk/databasebranchpasswords.go
+  - internal/sdk/databases.go
+  - internal/sdk/deployrequests.go
+  - internal/sdk/internal/config/sdkconfiguration.go
+  - internal/sdk/internal/hooks/hooks.go
+  - internal/sdk/internal/utils/contenttype.go
+  - internal/sdk/internal/utils/env.go
+  - internal/sdk/internal/utils/form.go
+  - internal/sdk/internal/utils/headers.go
+  - internal/sdk/internal/utils/json.go
+  - internal/sdk/internal/utils/pathparams.go
+  - internal/sdk/internal/utils/queryparams.go
+  - internal/sdk/internal/utils/requestbody.go
+  - internal/sdk/internal/utils/retries.go
+  - internal/sdk/internal/utils/security.go
+  - internal/sdk/internal/utils/utils.go
+  - internal/sdk/invoices.go
+  - internal/sdk/keyspacevschemas.go
+  - internal/sdk/models/errors/apierror.go
+  - internal/sdk/models/operations/cancelbouncerresizerequest.go
+  - internal/sdk/models/operations/cancelbranchchangerequest.go
+  - internal/sdk/models/operations/canceldeployrequest.go
+  - internal/sdk/models/operations/closedeployrequest.go
+  - internal/sdk/models/operations/completeerroreddeploy.go
+  - internal/sdk/models/operations/completegateddeployrequest.go
+  - internal/sdk/models/operations/completerevert.go
+  - internal/sdk/models/operations/createbackup.go
+  - internal/sdk/models/operations/createbouncer.go
+  - internal/sdk/models/operations/createbranch.go
+  - internal/sdk/models/operations/createdatabase.go
+  - internal/sdk/models/operations/createdeployrequest.go
+  - internal/sdk/models/operations/createkeyspace.go
+  - internal/sdk/models/operations/createoauthtoken.go
+  - internal/sdk/models/operations/createpassword.go
+  - internal/sdk/models/operations/createquerypatternsreport.go
+  - internal/sdk/models/operations/createrole.go
+  - internal/sdk/models/operations/createwebhook.go
+  - internal/sdk/models/operations/createworkflow.go
+  - internal/sdk/models/operations/deletebackup.go
+  - internal/sdk/models/operations/deletebouncer.go
+  - internal/sdk/models/operations/deletebranch.go
+  - internal/sdk/models/operations/deletedatabase.go
+  - internal/sdk/models/operations/deletekeyspace.go
+  - internal/sdk/models/operations/deleteoauthtoken.go
+  - internal/sdk/models/operations/deletepassword.go
+  - internal/sdk/models/operations/deletequerypatternsreport.go
+  - internal/sdk/models/operations/deleterole.go
+  - internal/sdk/models/operations/deletewebhook.go
+  - internal/sdk/models/operations/demotebranch.go
+  - internal/sdk/models/operations/disablesafemigrations.go
+  - internal/sdk/models/operations/enablesafemigrations.go
+  - internal/sdk/models/operations/getbackup.go
+  - internal/sdk/models/operations/getbouncer.go
+  - internal/sdk/models/operations/getbranch.go
+  - internal/sdk/models/operations/getbranchschema.go
+  - internal/sdk/models/operations/getcurrentuser.go
+  - internal/sdk/models/operations/getdatabase.go
+  - internal/sdk/models/operations/getdatabasethrottler.go
+  - internal/sdk/models/operations/getdeployment.go
+  - internal/sdk/models/operations/getdeployqueue.go
+  - internal/sdk/models/operations/getdeployrequest.go
+  - internal/sdk/models/operations/getdeployrequestthrottler.go
+  - internal/sdk/models/operations/getinvoice.go
+  - internal/sdk/models/operations/getinvoicelineitems.go
+  - internal/sdk/models/operations/getkeyspace.go
+  - internal/sdk/models/operations/getkeyspacerolloutstatus.go
+  - internal/sdk/models/operations/getkeyspacevschema.go
+  - internal/sdk/models/operations/getoauthapplication.go
+  - internal/sdk/models/operations/getoauthtoken.go
+  - internal/sdk/models/operations/getorganization.go
+  - internal/sdk/models/operations/getpassword.go
+  - internal/sdk/models/operations/getquerypatternsreport.go
+  - internal/sdk/models/operations/getquerypatternsreportstatus.go
+  - internal/sdk/models/operations/getrole.go
+  - internal/sdk/models/operations/getwebhook.go
+  - internal/sdk/models/operations/getworkflow.go
+  - internal/sdk/models/operations/lintbranchschema.go
+  - internal/sdk/models/operations/listauditlogs.go
+  - internal/sdk/models/operations/listbackups.go
+  - internal/sdk/models/operations/listbouncerresizerequests.go
+  - internal/sdk/models/operations/listbouncers.go
+  - internal/sdk/models/operations/listbranchbouncerresizerequests.go
+  - internal/sdk/models/operations/listbranchchangerequests.go
+  - internal/sdk/models/operations/listbranches.go
+  - internal/sdk/models/operations/listdatabaseregions.go
+  - internal/sdk/models/operations/listdatabases.go
+  - internal/sdk/models/operations/listdeployoperations.go
+  - internal/sdk/models/operations/listdeployrequestreviews.go
+  - internal/sdk/models/operations/listdeployrequests.go
+  - internal/sdk/models/operations/listextensions.go
+  - internal/sdk/models/operations/listgeneratedquerypatternsreports.go
+  - internal/sdk/models/operations/listinvoices.go
+  - internal/sdk/models/operations/listkeyspaces.go
+  - internal/sdk/models/operations/listoauthapplications.go
+  - internal/sdk/models/operations/listoauthtokens.go
+  - internal/sdk/models/operations/listorganizationmembers.go
+  - internal/sdk/models/operations/listorganizations.go
+  - internal/sdk/models/operations/listparameters.go
+  - internal/sdk/models/operations/listpasswords.go
+  - internal/sdk/models/operations/listpublicregions.go
+  - internal/sdk/models/operations/listreadonlyregions.go
+  - internal/sdk/models/operations/listregionsfororganization.go
+  - internal/sdk/models/operations/listroles.go
+  - internal/sdk/models/operations/listwebhooks.go
+  - internal/sdk/models/operations/listworkflows.go
+  - internal/sdk/models/operations/options.go
+  - internal/sdk/models/operations/promotebranch.go
+  - internal/sdk/models/operations/queuedeployrequest.go
+  - internal/sdk/models/operations/renewpassword.go
+  - internal/sdk/models/operations/renewrole.go
+  - internal/sdk/models/operations/reviewdeployrequest.go
+  - internal/sdk/models/operations/skiprevertperiod.go
+  - internal/sdk/models/operations/testwebhook.go
+  - internal/sdk/models/operations/updateautoapply.go
+  - internal/sdk/models/operations/updatebackup.go
+  - internal/sdk/models/operations/updatebouncerresizerequest.go
+  - internal/sdk/models/operations/updatebranchchangerequest.go
+  - internal/sdk/models/operations/updatebranchclusterconfig.go
+  - internal/sdk/models/operations/updatedatabasesettings.go
+  - internal/sdk/models/operations/updatedatabasethrottler.go
+  - internal/sdk/models/operations/updatedeployrequestthrottler.go
+  - internal/sdk/models/operations/updatekeyspace.go
+  - internal/sdk/models/operations/updatekeyspacevschema.go
+  - internal/sdk/models/operations/updateorganization.go
+  - internal/sdk/models/operations/updatepassword.go
+  - internal/sdk/models/operations/updaterole.go
+  - internal/sdk/models/operations/updatewebhook.go
+  - internal/sdk/models/operations/verifyworkflow.go
+  - internal/sdk/models/operations/workflowcancel.go
+  - internal/sdk/models/operations/workflowcomplete.go
+  - internal/sdk/models/operations/workflowcutover.go
+  - internal/sdk/models/operations/workflowretry.go
+  - internal/sdk/models/operations/workflowreversecutover.go
+  - internal/sdk/models/operations/workflowreversetraffic.go
+  - internal/sdk/models/operations/workflowswitchprimaries.go
+  - internal/sdk/models/operations/workflowswitchreplicas.go
+  - internal/sdk/models/shared/security.go
+  - internal/sdk/oauthapplications.go
+  - internal/sdk/oauthtokens.go
+  - internal/sdk/optionalnullable/optionalnullable.go
+  - internal/sdk/optionalnullable/optionalnullable_test.go
+  - internal/sdk/organizationmembers.go
+  - internal/sdk/organizations.go
+  - internal/sdk/planetscale.go
+  - internal/sdk/queryinsightsreports.go
+  - internal/sdk/regions.go
+  - internal/sdk/retry/config.go
+  - internal/sdk/roles.go
+  - internal/sdk/types/bigint.go
+  - internal/sdk/types/date.go
+  - internal/sdk/types/datetime.go
+  - internal/sdk/types/pointers.go
+  - internal/sdk/users.go
+  - internal/sdk/webhooks.go
+  - internal/sdk/workflows.go
+  - internal/validators/DateValidator.go
+  - internal/validators/ExactlyOneChild.go
+  - internal/validators/JSONParseValidator.go
+  - internal/validators/RFC3339Validator.go
+  - internal/validators/boolvalidators/not_null.go
+  - internal/validators/float32validators/not_null.go
+  - internal/validators/float64validators/not_null.go
+  - internal/validators/int32validators/not_null.go
+  - internal/validators/int64validators/not_null.go
+  - internal/validators/listvalidators/not_null.go
+  - internal/validators/mapvalidators/not_null.go
+  - internal/validators/numbervalidators/not_null.go
+  - internal/validators/objectvalidators/not_null.go
+  - internal/validators/setvalidators/not_null.go
+  - internal/validators/stringvalidators/not_null.go
+  - main.go
+  - terraform-registry-manifest.json
+  - tools/tools.go
+examples:
+  list_organizations:
+    speakeasy-default-list-organizations:
+      parameters:
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 9917.69, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": 8943.61, "keyspace_shard_limit": 8271.3, "has_card": false, "payment_info_required": false}]}
+  get_organization:
+    speakeasy-default-get-organization:
+      parameters:
+        path:
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": false, "database_count": 1578.34, "sso_portal_url": "https://defenseless-circumference.name/", "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": 9516.88, "keyspace_shard_limit": 6999.24, "has_card": false, "payment_info_required": true}
+  update_organization:
+    speakeasy-default-update-organization:
+      parameters:
+        path:
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1715854812366", "updated_at": "1735605927440", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": true, "single_tenancy": true, "managed_tenancy": false, "has_past_due_invoices": false, "database_count": 8650.2, "sso_portal_url": "https://mammoth-digit.info", "features": {"key": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": 2635.48, "keyspace_shard_limit": 1726.16, "has_card": true, "payment_info_required": true}
+  list_audit_logs:
+    speakeasy-default-list-audit-logs:
+      parameters:
+        path:
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"has_next": false, "has_prev": true, "cursor_start": "<value>", "cursor_end": "<value>", "data": []}
+  list_regions_for_organization:
+    speakeasy-default-list-regions-for-organization:
+      parameters:
+        path:
+          name: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 5442.23, "next_page": 1897.04, "next_page_url": "https://noxious-moment.biz/", "prev_page": 1877.29, "prev_page_url": "https://definitive-diversity.com", "data": []}
+  list_databases:
+    speakeasy-default-list-databases:
+      parameters:
+        path:
+          organization: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 5232.67, "next_page": 4264.25, "next_page_url": "https://separate-bonnet.net/", "prev_page": 1088.11, "prev_page_url": "https://enchanted-freezing.biz", "data": [{"id": "<id>", "url": "https://puny-wilderness.biz/", "branches_url": "https://glorious-typewriter.net/", "branches_count": 8369.88, "open_schema_recommendations_count": 5261.3, "development_branches_count": 4828.45, "production_branches_count": 1863.74, "issues_count": 8325.8, "multiple_admins_required_for_deletion": true, "ready": true, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": true, "data_import": {"state": "Washington", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "reflecting-creature.com", "port": 4418.33, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Lauryn_Powlowski50", "location": "<value>", "slug": "<value>", "current_default": false}, "html_url": "https://functional-forage.biz", "name": "<value>", "state": "importing", "sharded": false, "default_branch_shard_count": 2798.89, "default_branch_read_only_regions_count": 2029.15, "default_branch_table_count": 3322.17, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": true, "allow_data_branching": false, "foreign_keys_enabled": true, "automatic_migrations": false, "restrict_branch_region": false, "insights_raw_queries": true, "plan": "<value>", "insights_enabled": true, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1714679661835", "updated_at": "1735618664278", "schema_last_updated_at": "<value>", "kind": "postgresql"}]}
+  create_database:
+    speakeasy-default-create-database:
+      parameters:
+        path:
+          organization: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "url": "https://sophisticated-cheese.com/", "branches_url": "https://broken-sushi.name", "branches_count": 789.03, "open_schema_recommendations_count": 7170.16, "development_branches_count": 5438.22, "production_branches_count": 6449.39, "issues_count": 8493.92, "multiple_admins_required_for_deletion": false, "ready": true, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": true, "data_import": {"state": "Oklahoma", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "unwieldy-unit.net", "port": 3558.15, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Richie.Lockman36", "location": "<value>", "slug": "<value>", "current_default": true}, "html_url": "https://graceful-statue.net", "name": "<value>", "state": "awakening", "sharded": true, "default_branch_shard_count": 9021.79, "default_branch_read_only_regions_count": 4272.89, "default_branch_table_count": 1904.31, "default_branch": "<value>", "require_approval_for_deploy": false, "resizing": false, "resize_queued": false, "allow_data_branching": true, "foreign_keys_enabled": false, "automatic_migrations": true, "restrict_branch_region": true, "insights_raw_queries": false, "plan": "<value>", "insights_enabled": false, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1735525760573", "updated_at": "1735683797878", "schema_last_updated_at": "<value>", "kind": "mysql"}
+  get_database_throttler:
+    speakeasy-default-get-database-throttler:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"keyspaces": ["<value 1>", "<value 2>"], "configurable": {"id": "<id>", "name": "<value>", "created_at": "1709313724937", "updated_at": "1735642661249", "deleted_at": "<value>"}, "configurations": [{"keyspace_name": "<value>", "ratio": 4855.88}]}
+  update_database_throttler:
+    speakeasy-default-update-database-throttler:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"keyspaces": ["<value 1>", "<value 2>"], "configurable": {"id": "<id>", "name": "<value>", "created_at": "1729906811727", "updated_at": "1735686263656", "deleted_at": "<value>"}, "configurations": []}
+  get_database:
+    speakeasy-default-get-database:
+      parameters:
+        path:
+          organization: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "url": "https://sizzling-couch.name/", "branches_url": "https://snappy-almighty.biz/", "branches_count": 7605.76, "open_schema_recommendations_count": 7984.6, "development_branches_count": 9196.79, "production_branches_count": 4340.2, "issues_count": 2589.55, "multiple_admins_required_for_deletion": false, "ready": true, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": false, "data_import": {"state": "New Hampshire", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "known-season.name", "port": 4667.72, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": [], "display_name": "Carolanne_Lemke13", "location": "<value>", "slug": "<value>", "current_default": false}, "html_url": "https://official-spring.info/", "name": "<value>", "state": "sleep_in_progress", "sharded": false, "default_branch_shard_count": 2831.16, "default_branch_read_only_regions_count": 8563.05, "default_branch_table_count": 9012.17, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": false, "allow_data_branching": false, "foreign_keys_enabled": false, "automatic_migrations": true, "restrict_branch_region": false, "insights_raw_queries": true, "plan": "<value>", "insights_enabled": true, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1734227205033", "updated_at": "1735660507635", "schema_last_updated_at": "<value>", "kind": "mysql"}
+  update_database_settings:
+    speakeasy-default-update-database-settings:
+      parameters:
+        path:
+          organization: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "url": "https://lovely-hundred.com/", "branches_url": "https://wavy-recovery.net/", "branches_count": 9415.85, "open_schema_recommendations_count": 328.1, "development_branches_count": 6761.7, "production_branches_count": 4950.43, "issues_count": 9228.06, "multiple_admins_required_for_deletion": false, "ready": false, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": true, "data_import": {"state": "Missouri", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "partial-ceramic.org", "port": 1101.05, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Van64", "location": "<value>", "slug": "<value>", "current_default": true}, "html_url": "https://super-molasses.com", "name": "<value>", "state": "awakening", "sharded": true, "default_branch_shard_count": 6748.92, "default_branch_read_only_regions_count": 8375.21, "default_branch_table_count": 9693.2, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": false, "allow_data_branching": true, "foreign_keys_enabled": true, "automatic_migrations": false, "restrict_branch_region": false, "insights_raw_queries": false, "plan": "<value>", "insights_enabled": false, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1712421880683", "updated_at": "1735652844760", "schema_last_updated_at": "<value>", "kind": "postgresql"}
+  delete_database:
+    speakeasy-default-delete-database:
+      parameters:
+        path:
+          organization: "<value>"
+          name: "<value>"
+  list_read_only_regions:
+    speakeasy-default-list-read-only-regions:
+      parameters:
+        path:
+          organization: "<value>"
+          name: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 2440.84, "next_page": 9431.29, "next_page_url": "https://trusting-unique.net", "prev_page": 7198.93, "prev_page_url": "https://glorious-minister.net", "data": [{"id": "<id>", "display_name": "Clemmie.Lueilwitz", "created_at": "1718975883752", "updated_at": "1735636488696", "ready_at": "<value>", "ready": true, "actor": {"id": "<id>", "display_name": "Juston_Dicki", "avatar_url": "https://impeccable-sanity.biz"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Ines_Gerlach", "location": "<value>", "slug": "<value>", "current_default": false}}]}
+  list_database_regions:
+    speakeasy-default-list-database-regions:
+      parameters:
+        path:
+          organization: "<value>"
+          name: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 709.62, "next_page": 410.7, "next_page_url": "https://lasting-collectivization.biz/", "prev_page": 1009.45, "prev_page_url": "https://striking-grandpa.org", "data": []}
+  list_branches:
+    speakeasy-default-list-branches:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 2897.12, "next_page": 824.31, "next_page_url": "https://improbable-essence.info", "prev_page": 4374.39, "prev_page_url": "https://vivid-summer.com", "data": [{"id": "<id>", "name": "<value>", "created_at": "1720086156097", "updated_at": "1735677144814", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": true, "vtgate_size": "<value>", "vtgate_count": 2782.55, "cluster_name": "<value>", "cluster_iops": 2305.77, "ready": false, "schema_ready": false, "metal": true, "production": false, "safe_migrations": true, "sharded": false, "shard_count": 4518.41, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Russell_Windler", "avatar_url": "https://devoted-costume.biz"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1712784003545", "updated_at": "1735605541574", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": true, "html_url": "https://lined-necklace.net", "url": "https://tall-typewriter.info/", "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": [], "display_name": "Isabelle18", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}]}
+  create_branch:
+    speakeasy-default-create-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1713139389551", "updated_at": "1735646684936", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "postgresql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "ready", "direct_vtgate": true, "vtgate_size": "<value>", "vtgate_count": 2246.59, "cluster_name": "<value>", "cluster_iops": 878.54, "ready": false, "schema_ready": false, "metal": true, "production": true, "safe_migrations": true, "sharded": false, "shard_count": 7119.02, "stale_schema": true, "actor": {"id": "<id>", "display_name": "Karley_Marvin", "avatar_url": "https://round-casket.org/"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1719138276651", "updated_at": "1735678659955", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": true, "has_read_only_replicas": false, "html_url": "https://somber-corral.name", "url": "https://stale-premium.com", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Bud.Funk89", "location": "<value>", "slug": "<value>", "current_default": true}, "parent_branch": "<value>"}
+  get_branch:
+    speakeasy-default-get-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1722496141884", "updated_at": "1735603601312", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "awakening", "direct_vtgate": false, "vtgate_size": "<value>", "vtgate_count": 3098.11, "cluster_name": "<value>", "cluster_iops": 6597.38, "ready": false, "schema_ready": true, "metal": true, "production": true, "safe_migrations": false, "sharded": true, "shard_count": 4396.88, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Carolina.Legros50", "avatar_url": "https://fortunate-acquaintance.biz"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1735150042281", "updated_at": "1735633568981", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": false, "html_url": "https://helpless-scholarship.net", "url": "https://heavy-poppy.net", "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": [], "display_name": "Zoe_Boyle63", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
+  delete_branch:
+    speakeasy-default-delete-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+  update_branch_cluster_config:
+    speakeasy-default-update-branch-cluster-config:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+  demote_branch:
+    speakeasy-default-demote-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1733641519805", "updated_at": "1735636903830", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "postgresql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": true, "vtgate_size": "<value>", "vtgate_count": 2096.16, "cluster_name": "<value>", "cluster_iops": 2116.77, "ready": false, "schema_ready": false, "metal": false, "production": true, "safe_migrations": false, "sharded": true, "shard_count": 2489.58, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Sophia14", "avatar_url": "https://jaunty-rosemary.net/"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1707030848007", "updated_at": "1735679934611", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": false, "html_url": "https://decisive-scorpion.com/", "url": "https://intelligent-freezing.info/", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": [], "display_name": "Gonzalo_Prohaska", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
+  promote_branch:
+    speakeasy-default-promote-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1718439447650", "updated_at": "1735621185389", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": false, "vtgate_size": "<value>", "vtgate_count": 3235.92, "cluster_name": "<value>", "cluster_iops": 9694.7, "ready": false, "schema_ready": false, "metal": false, "production": false, "safe_migrations": true, "sharded": false, "shard_count": 9945.18, "stale_schema": true, "actor": {"id": "<id>", "display_name": "Catalina_Cummings", "avatar_url": "https://flimsy-overload.org"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1714902446461", "updated_at": "1735639380833", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": true, "has_read_only_replicas": true, "html_url": "https://content-subsidy.biz/", "url": "https://haunting-boulevard.name/", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Jackie41", "location": "<value>", "slug": "<value>", "current_default": true}, "parent_branch": "<value>"}
+  enable_safe_migrations:
+    speakeasy-default-enable-safe-migrations:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1721496463109", "updated_at": "1735682572778", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": true, "vtgate_size": "<value>", "vtgate_count": 4818.34, "cluster_name": "<value>", "cluster_iops": 1681.77, "ready": false, "schema_ready": true, "metal": true, "production": true, "safe_migrations": true, "sharded": true, "shard_count": 2339.07, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Rosanna_Labadie51", "avatar_url": "https://exalted-bonnet.net"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1713776774679", "updated_at": "1735664674533", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": true, "html_url": "https://marvelous-porter.org", "url": "https://stable-popularity.name", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Danial53", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
+  disable_safe_migrations:
+    speakeasy-default-disable-safe-migrations:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1731009855432", "updated_at": "1735663225281", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": false, "vtgate_size": "<value>", "vtgate_count": 5796.81, "cluster_name": "<value>", "cluster_iops": 5003.95, "ready": true, "schema_ready": true, "metal": false, "production": true, "safe_migrations": false, "sharded": false, "shard_count": 1324.47, "stale_schema": true, "actor": {"id": "<id>", "display_name": "Estrella_Klein", "avatar_url": "https://amazing-sweatshop.name/"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1725113816782", "updated_at": "1735610532068", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": true, "html_url": "https://far-flung-impact.net/", "url": "https://blaring-elver.info", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Marcellus_Hickle43", "location": "<value>", "slug": "<value>", "current_default": true}, "parent_branch": "<value>"}
+  get_branch_schema:
+    speakeasy-default-get-branch-schema:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"data": []}
+  lint_branch_schema:
+    speakeasy-default-lint-branch-schema:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          name: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 6832.04, "next_page": 4391.62, "next_page_url": "https://hidden-pepper.net/", "prev_page": 4615.5, "prev_page_url": "https://ordinary-freight.info/", "data": []}
+  list_backups:
+    speakeasy-default-list-backups:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 6331.36, "next_page": 6770.44, "next_page_url": "https://rich-secret.biz", "prev_page": 487.45, "prev_page_url": "https://unique-bin.name/", "data": []}
+  create_backup:
+    speakeasy-default-create-backup:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "state": "failed", "size": 7501.96, "estimated_storage_cost": 3733.03, "created_at": "1714966750835", "updated_at": "1735668967475", "started_at": "<value>", "expires_at": "1762434411145", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 4594.91, "protected": false, "required": true, "restored_branches": [{"id": "<id>", "name": "<value>", "created_at": "1728629976370", "updated_at": "1735621121133", "deleted_at": "<value>"}], "actor": {"id": "<id>", "display_name": "Boris.Lang", "avatar_url": "https://sudden-fun.com/"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 3776.9, "retention_unit": "<value>", "frequency_value": 3195.21, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": "0", "schedule_week": "3", "created_at": "1704594791736", "updated_at": "1735653105488", "last_ran_at": "<value>", "next_run_at": "<value>", "required": true}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1719066981672", "updated_at": "1735674614358", "linted_at": "<value>", "url": "https://speedy-barge.biz"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1711016309353", "updated_at": "1735686405050", "deleted_at": "<value>"}}
+  get_backup:
+    speakeasy-default-get-backup:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "success", "size": 2122.37, "estimated_storage_cost": 1135.61, "created_at": "1733814539101", "updated_at": "1735637142904", "started_at": "<value>", "expires_at": "1762112311749", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 4531.58, "protected": true, "required": false, "restored_branches": [{"id": "<id>", "name": "<value>", "created_at": "1716448491718", "updated_at": "1735667658504", "deleted_at": "<value>"}], "actor": {"id": "<id>", "display_name": "Cielo51", "avatar_url": "https://concrete-bourgeoisie.name/"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 3670.74, "retention_unit": "<value>", "frequency_value": 7017.01, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": "2", "schedule_week": "3", "created_at": "1718832973607", "updated_at": "1735651813114", "last_ran_at": "<value>", "next_run_at": "<value>", "required": false}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1708346877642", "updated_at": "1735651168399", "linted_at": "<value>", "url": "https://scornful-popularity.biz/"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1734615633708", "updated_at": "1735672983263", "deleted_at": "<value>"}}
+  update_backup:
+    speakeasy-default-update-backup:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "running", "size": 6105.58, "estimated_storage_cost": 1570.82, "created_at": "1711505965547", "updated_at": "1735674587542", "started_at": "<value>", "expires_at": "1752790410783", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 392.18, "protected": true, "required": true, "restored_branches": [], "actor": {"id": "<id>", "display_name": "Giovanny63", "avatar_url": "https://stable-shadowbox.org"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 7007.79, "retention_unit": "<value>", "frequency_value": 4357.6, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": "3", "schedule_week": "3", "created_at": "1729835406731", "updated_at": "1735612949203", "last_ran_at": "<value>", "next_run_at": "<value>", "required": true}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1708513005560", "updated_at": "1735614322265", "linted_at": "<value>", "url": "https://definitive-pacemaker.com"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1709044442370", "updated_at": "1735679494611", "deleted_at": "<value>"}}
+  delete_backup:
+    speakeasy-default-delete-backup:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+  list_branch_bouncer_resize_requests:
+    speakeasy-default-list-branch-bouncer-resize-requests:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 9294.31, "next_page": 4917.86, "next_page_url": "https://sticky-overcoat.name/", "prev_page": 1114.42, "prev_page_url": "https://ragged-vanadyl.org", "data": []}
+  list_bouncers:
+    speakeasy-default-list-bouncers:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "created_at": "1706219570004", "updated_at": "1735655284202", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Avery63", "avatar_url": "https://vain-manner.info/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1711805497882", "updated_at": "1735621515422", "deleted_at": "<value>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}]}]}
+  create_bouncer:
+    speakeasy-default-create-bouncer:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "created_at": "1704189068160", "updated_at": "1735635313028", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Gussie_Conroy12", "avatar_url": "https://which-chairperson.com"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1722810842786", "updated_at": "1735680154313", "deleted_at": "<value>"}, "parameters": []}
+  get_bouncer:
+    speakeasy-default-get-bouncer:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 2494.03, "created_at": "1727413063201", "updated_at": "1735627959135", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Santos.Botsford-Hackett", "avatar_url": "https://rectangular-chap.org"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1735541622830", "updated_at": "1735620048194", "deleted_at": "<value>"}, "parameters": []}
+  delete_bouncer:
+    speakeasy-default-delete-bouncer:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+  list_bouncer_resize_requests:
+    speakeasy-default-list-bouncer-resize-requests:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 8474.77, "next_page": 9232.98, "next_page_url": "https://scornful-guide.biz", "prev_page": 4999.09, "prev_page_url": "https://ideal-morning.name/", "data": []}
+  update_bouncer_resize_request:
+    speakeasy-default-update-bouncer-resize-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "pending", "replicas_per_cell": 5194.03, "parameters": {}, "previous_replicas_per_cell": 5400.16, "previous_parameters": {"key": "<value>"}, "started_at": "<value>", "completed_at": "<value>", "created_at": "1734464753464", "updated_at": "1735623817689", "actor": {"id": "<id>", "display_name": "Oran_Jones", "avatar_url": "https://excellent-department.org"}, "bouncer": {"id": "<id>", "name": "<value>", "created_at": "1735113029020", "updated_at": "1735627295645", "deleted_at": "<value>"}, "sku": {"name": "<value>", "display_name": "Ralph_Jones71", "cpu": "<value>", "ram": 428.02, "sort_order": 9852}, "previous_sku": {"name": "<value>", "display_name": "Julianne63", "cpu": "<value>", "ram": 7060.83, "sort_order": 707.33}}
+  cancel_bouncer_resize_request:
+    speakeasy-default-cancel-bouncer-resize-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+  list_branch_change_requests:
+    speakeasy-default-list-branch-change-requests:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 6857.84, "next_page": 9459.51, "next_page_url": "https://white-airman.info/", "prev_page": 3487.51, "prev_page_url": "https://immense-confusion.com", "data": []}
+  update_branch_change_request:
+    speakeasy-default-update-branch-change-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "restart": [947.74, 8792.74, 2800.5], "state": "completed", "started_at": "<value>", "completed_at": "<value>", "created_at": "1704607400058", "updated_at": "1735610803625", "actor": {"id": "<id>", "display_name": "Herbert.Kutch", "avatar_url": "https://close-numeracy.biz"}, "cluster_name": "<value>", "cluster_display_name": "<value>", "cluster_metal": true, "replicas": 5728.58, "parameters": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "previous_cluster_name": "<value>", "previous_cluster_display_name": "<value>", "previous_cluster_metal": false, "previous_replicas": 6866.18, "previous_parameters": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "minimum_storage_bytes": 2284.9, "maximum_storage_bytes": 9769.02, "storage_autoscaling": true, "storage_shrinking": false, "storage_type": "pd_ssd", "storage_iops": 1729.99, "storage_throughput_mibs": 5728.39, "previous_minimum_storage_bytes": 1018.44, "previous_maximum_storage_bytes": 4749.46, "previous_storage_autoscaling": true, "previous_storage_shrinking": true, "previous_storage_type": "<value>", "previous_storage_iops": 3810.83, "previous_storage_throughput_mibs": 5900.25}
+  cancel_branch_change_request:
+    speakeasy-default-cancel-branch-change-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+  list_extensions:
+    speakeasy-default-list-extensions:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: [{"id": "<id>", "name": "<value>", "description": "oddball supposing fondly other machine annually confound barge lest", "internal": false, "url": "https://candid-bonnet.com", "parameters": [{"id": "<id>", "name": "<value>", "display_name": "Gregg.Metz", "namespace": "pgconf", "category": "<value>", "description": "since tighten rationale what", "extension": true, "internal": true, "parameter_type": "float", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733823770394", "updated_at": "1735668206700", "restart": false, "max": 8675.81, "min": 2768.82, "step": 2592.75, "url": "https://those-printer.biz", "options": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Ara.Bailey67", "avatar_url": "https://digital-drug.info"}}]}]
+  list_keyspaces:
+    speakeasy-default-list-keyspaces:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 1511.55, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}}]}
+  create_keyspace:
+    speakeasy-default-create-keyspace:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "replication_durability_constraints": {"strategy": "lag"}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}}
+  get_keyspace:
+    speakeasy-default-get-keyspace:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "replication_durability_constraints": {"strategy": "available"}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}}
+  update_keyspace:
+    speakeasy-default-update-keyspace:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "shards": 7015.41, "sharded": true, "replicas": 8056.82, "extra_replicas": 7588.19, "created_at": "1720160939319", "updated_at": "1735610401855", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "ready": false, "metal": false, "default": false, "imported": true, "vector_pool_allocation": 2373.64, "replication_durability_constraints": {"strategy": "lag"}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}}
+  delete_keyspace:
+    speakeasy-default-delete-keyspace:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+  get_keyspace_rollout_status:
+    speakeasy-default-get-keyspace-rollout-status:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"name": "<value>", "state": "South Carolina", "shards": []}
+  get_keyspace_vschema:
+    speakeasy-default-get-keyspace-vschema:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          keyspace: "<value>"
+      responses:
+        "200":
+          application/json: {"raw": "<value>"}
+  update_keyspace_vschema:
+    speakeasy-default-update-keyspace-vschema:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          keyspace: "<value>"
+      responses:
+        "200":
+          application/json: {"raw": "<value>"}
+  list_parameters:
+    speakeasy-default-list-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: [{"id": "<id>", "name": "<value>", "display_name": "Rosalia_Schinner", "namespace": "pgbouncer", "category": "<value>", "description": "who whereas sparse supposing bravely continually since stock scarcely beside", "extension": true, "internal": true, "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": false, "created_at": "1717248109310", "updated_at": "1735643862994", "restart": true, "max": 1478.24, "min": 8887.88, "step": 5946.36, "url": "https://better-traditionalism.name", "options": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Orrin_Collier88", "avatar_url": "https://trained-lady.info"}}]
+  list_passwords:
+    speakeasy-default-list-passwords:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 2580.97, "next_page": 4641.64, "next_page_url": "https://dismal-brief.name", "prev_page": 9208.93, "prev_page_url": "https://known-pillbox.name", "data": [{"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>"], "created_at": "1705263069408", "deleted_at": "<value>", "expires_at": "1747391773298", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "ttl_seconds": 8467, "access_host_url": "https://humble-tackle.com", "access_host_regional_url": "https://judicious-metabolite.info/", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Alison76", "avatar_url": "https://last-decryption.name/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Jackeline.Kessler2", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Sabryna_Mosciski", "plain_text": "<value>", "replica": true, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}]}
+  create_password:
+    speakeasy-default-create-password:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "role": "writer", "cidrs": [], "created_at": "1715649282377", "deleted_at": "<value>", "expires_at": "1747828158844", "last_used_at": "<value>", "expired": true, "direct_vtgate": false, "ttl_seconds": 8810.11, "access_host_url": "https://busy-stock.org", "access_host_regional_url": "https://crafty-middle.net", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Evan17", "avatar_url": "https://stingy-joy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Paige.Gislason71", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Jaquelin51", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+  get_password:
+    speakeasy-default-get-password:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>"], "created_at": "1720525255008", "deleted_at": "<value>", "expires_at": "1748232802119", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "ttl_seconds": 8963.89, "access_host_url": "https://athletic-cemetery.name", "access_host_regional_url": "https://young-tributary.com", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Mae.Murray61", "avatar_url": "https://thick-case.com"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Lafayette.Rogahn76", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Burley.Johnston", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+  update_password:
+    speakeasy-default-update-password:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1712619362352", "deleted_at": "<value>", "expires_at": "1756121263349", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "ttl_seconds": 5524.13, "access_host_url": "https://pessimistic-intervention.org", "access_host_regional_url": "https://dark-citizen.info", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Lee_Spinka21", "avatar_url": "https://miserable-analogy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Madilyn58", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Maryam42", "plain_text": "<value>", "replica": false, "renewable": false, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+  delete_password:
+    speakeasy-default-delete-password:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+  renew_password:
+    speakeasy-default-renew-password:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>", "<value 2>", "<value 3>"], "created_at": "1735128960719", "deleted_at": "<value>", "expires_at": "1745431813484", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "ttl_seconds": 2692.29, "access_host_url": "https://amused-farm.com/", "access_host_regional_url": "https://sandy-lotion.org", "access_host_regional_urls": ["<value 1>", "<value 2>", "<value 3>"], "actor": {"id": "<id>", "display_name": "Linwood88", "avatar_url": "https://fat-overheard.org/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>"], "display_name": "Antonio41", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Gus.Dare", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+  list_generated_query_patterns_reports:
+    speakeasy-default-list-generated-query-patterns-reports:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"has_next": false, "has_prev": false, "cursor_start": "<value>", "cursor_end": "<value>", "data": []}
+  create_query_patterns_report:
+    speakeasy-default-create-query-patterns-report:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "state": "failed", "created_at": "1732089104496", "finished_at": "<value>", "url": "https://hefty-ownership.name/", "download_url": "https://parallel-decision.net", "actor": {"id": "<id>", "display_name": "Ransom.Becker", "avatar_url": "https://neighboring-jump.net"}}
+  get_query_patterns_report_status:
+    speakeasy-default-get-query-patterns-report-status:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "failed", "created_at": "1720715287801", "finished_at": "<value>", "url": "https://majestic-majority.biz", "download_url": "https://fruitful-pile.org", "actor": {"id": "<id>", "display_name": "Nicholaus_Bode90", "avatar_url": "https://confused-extension.info"}}
+  delete_query_patterns_report:
+    speakeasy-default-delete-query-patterns-report:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+  get_query_patterns_report:
+    speakeasy-default-get-query-patterns-report:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "302":
+          application/json: {"id": "<id>", "state": "failed", "created_at": "1724224195542", "finished_at": "<value>", "url": "https://prickly-tuxedo.name", "download_url": "https://favorable-procurement.name/", "actor": {"id": "<id>", "display_name": "Ardith.Kirlin", "avatar_url": "https://ornate-lace.info"}}
+  list_roles:
+    speakeasy-default-list-roles:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 273.09, "next_page": 6627.09, "next_page_url": "https://gummy-milestone.com/", "prev_page": 3992.96, "prev_page_url": "https://frail-swath.com", "data": []}
+  create_role:
+    speakeasy-default-create-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://lighthearted-mobility.info/", "private_access_host_url": "https://stylish-masterpiece.org/", "private_connection_service_name": "<value>", "username": "Izaiah_Kemmer86", "password": "qhbyNvp9E6V9SgI", "database_name": "<value>", "created_at": "1723010655179", "updated_at": "1735675605529", "deleted_at": "<value>", "expires_at": "1736013133918", "dropped_at": "<value>", "drop_failed": "<value>", "expired": true, "default": false, "ttl": 1992.79, "inherited_roles": ["pg_read_all_stats"], "branch": {"id": "<id>", "name": "<value>", "created_at": "1730333069720", "updated_at": "1735620715836", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Kali64", "avatar_url": "https://stupendous-vista.info"}}
+  get_role:
+    speakeasy-default-get-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://slimy-circumference.name", "private_access_host_url": "https://pink-fencing.name/", "private_connection_service_name": "<value>", "username": "Erica_Nienow37", "password": "wNRss08zDLDGmmO", "database_name": "<value>", "created_at": "1730844402329", "updated_at": "1735674804099", "deleted_at": "<value>", "expires_at": "1750847327118", "dropped_at": "<value>", "drop_failed": "<value>", "expired": false, "default": true, "ttl": 8139.26, "inherited_roles": [], "branch": {"id": "<id>", "name": "<value>", "created_at": "1733134521088", "updated_at": "1735675665492", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Adrien.Satterfield", "avatar_url": "https://grandiose-account.biz/"}}
+  update_role:
+    speakeasy-default-update-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://reflecting-icebreaker.biz/", "private_access_host_url": "https://exotic-fax.com/", "private_connection_service_name": "<value>", "username": "Conrad18", "password": "ESuJ79QHfBzmbc_", "database_name": "<value>", "created_at": "1711685701257", "updated_at": "1735667364076", "deleted_at": "<value>", "expires_at": "1736152677000", "dropped_at": "<value>", "drop_failed": "<value>", "expired": false, "default": false, "ttl": 6787.72, "inherited_roles": [], "branch": {"id": "<id>", "name": "<value>", "created_at": "1724740543867", "updated_at": "1735622979457", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Lottie_Prohaska26", "avatar_url": "https://zany-archaeology.biz/"}}
+  delete_role:
+    speakeasy-default-delete-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+  renew_role:
+    speakeasy-default-renew-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://frank-horde.net", "private_access_host_url": "https://ultimate-tray.info", "private_connection_service_name": "<value>", "username": "Marcelle_McGlynn", "password": "gCsLirVlOYy5kj7", "database_name": "<value>", "created_at": "1717574408784", "updated_at": "1735631088499", "deleted_at": "<value>", "expires_at": "1740341626774", "dropped_at": "<value>", "drop_failed": "<value>", "expired": false, "default": false, "ttl": 430.01, "inherited_roles": ["pg_stat_scan_tables"], "branch": {"id": "<id>", "name": "<value>", "created_at": "1731948341455", "updated_at": "1735670091442", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Brandon43", "avatar_url": "https://spanish-chasuble.net"}}
+  get_deploy_queue:
+    speakeasy-default-get-deploy-queue:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"current_page": 9167.62, "next_page": 9336.46, "next_page_url": "https://unwilling-kit.biz/", "prev_page": 4452.6, "prev_page_url": "https://unruly-section.org/", "data": [{"id": "<id>", "auto_cutover": true, "auto_delete_branch": true, "created_at": "1705651089366", "cutover_at": "<value>", "cutover_expiring": true, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "submitting", "submitted_at": "<value>", "updated_at": "1735683841830", "into_branch": "<value>", "deploy_request_number": 5639.13, "deployable": true, "preceding_deployments": [], "deploy_operations": [], "deploy_operation_summaries": [], "lint_errors": [{"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>"}], "sequential_diff_dependencies": [{"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "lookup_vindex_operations": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "throttler_configurations": [{}], "deployment_revert_request": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "actor": {"id": "<id>", "display_name": "Lela32", "avatar_url": "https://immaculate-fort.info"}, "cutover_actor": {"id": "<id>", "display_name": "Adele_OReilly8", "avatar_url": "https://unfit-necklace.com"}, "cancelled_actor": {"id": "<id>", "display_name": "Raul.Koch", "avatar_url": "https://low-avalanche.biz"}, "schema_last_updated_at": "<value>", "table_locked": false, "locked_table_name": "<value>", "instant_ddl": false, "instant_ddl_eligible": false}]}
+  list_deploy_requests:
+    speakeasy-default-list-deploy-requests:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 8492.17, "next_page": 1331.21, "next_page_url": "https://grounded-typewriter.com/", "prev_page": 2716.07, "prev_page_url": "https://deserted-fedora.biz/", "data": []}
+  create_deploy_request:
+    speakeasy-default-create-deploy-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "number": 1225.88, "actor": {"id": "<id>", "display_name": "Ruth_Borer", "avatar_url": "https://other-bell.info"}, "closed_by": {"id": "<id>", "display_name": "Cleve60", "avatar_url": "https://aged-squid.net/"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": true, "branch_deleted_by": {"id": "<id>", "display_name": "Regan.Stanton", "avatar_url": "https://agitated-detective.biz/"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": false, "into_branch_shard_count": 9185.39, "approved": false, "state": "open", "deployment_state": "in_progress", "deployment": {"id": "<id>", "auto_cutover": true, "auto_delete_branch": false, "created_at": "1704275002954", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "in_progress", "submitted_at": "<value>", "updated_at": "1735623806078", "into_branch": "<value>", "deploy_request_number": 9819.97, "deployable": false, "preceding_deployments": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}], "deploy_operations": [{"id": "<id>", "state": "complete", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 7252.86, "progress_percentage": 1671.79, "deploy_error_docs_url": "https://second-opera.com", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1733507924761", "updated_at": "1735639411048", "throttled_at": "<value>", "can_drop_data": false, "table_locked": true, "table_recently_used": false, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [{"id": "<id>", "created_at": "1717029520457", "deploy_errors": "<value>", "ddl_statement": "<value>", "eta_seconds": 4522.55, "keyspace_name": "<value>", "operation_name": "<value>", "progress_percentage": 5898.61, "state": "in_progress", "syntax_highlighted_ddl": "<value>", "table_name": "<value>", "table_recently_used_at": "<value>", "throttled_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>", "<value 3>"], "shard_count": 7828.82, "shard_names": [], "can_drop_data": false, "table_recently_used": false, "sharded": true, "operations": []}], "lint_errors": [], "sequential_diff_dependencies": [{"key": "<value>"}, {"key": "<value>", "key1": "<value>"}], "lookup_vindex_operations": [{"key": "<value>"}, {"key": "<value>", "key1": "<value>"}], "throttler_configurations": [{"key": "<value>", "key1": "<value>"}, {}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "deployment_revert_request": {"key": "<value>", "key1": "<value>"}, "actor": {"id": "<id>", "display_name": "Rupert.Bode94", "avatar_url": "https://baggy-diagram.com/"}, "cutover_actor": {"id": "<id>", "display_name": "Alaina82", "avatar_url": "https://reflecting-legislature.name/"}, "cancelled_actor": {"id": "<id>", "display_name": "Nicole.Ryan", "avatar_url": "https://true-heartbeat.info/"}, "schema_last_updated_at": "<value>", "table_locked": false, "locked_table_name": "<value>", "instant_ddl": true, "instant_ddl_eligible": false}, "num_comments": 6380.5, "html_url": "https://known-precedent.biz/", "notes": "<value>", "html_body": "<value>", "created_at": "1711105716876", "updated_at": "1735660950809", "closed_at": "<value>", "deployed_at": "<value>"}
+  get_deploy_request:
+    speakeasy-default-get-deploy-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 7554.79, "actor": {"id": "<id>", "display_name": "Aliyah_Hudson", "avatar_url": "https://noteworthy-bathrobe.info/"}, "closed_by": {"id": "<id>", "display_name": "Ariane.Daniel79", "avatar_url": "https://made-up-transparency.biz/"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": false, "branch_deleted_by": {"id": "<id>", "display_name": "Kyle.Tillman40", "avatar_url": "https://vivid-hello.net/"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": true, "into_branch_shard_count": 9245.51, "approved": false, "state": "closed", "deployment_state": "error", "deployment": {"id": "<id>", "auto_cutover": true, "auto_delete_branch": false, "created_at": "1704378356309", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "in_progress_revert_vschema", "submitted_at": "<value>", "updated_at": "1735612050154", "into_branch": "<value>", "deploy_request_number": 5699.05, "deployable": true, "preceding_deployments": [{"key": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "deploy_operations": [{"id": "<id>", "state": "error", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 7977.88, "progress_percentage": 3883.76, "deploy_error_docs_url": "https://whispered-silk.net/", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1706824933601", "updated_at": "1735619373549", "throttled_at": "<value>", "can_drop_data": false, "table_locked": false, "table_recently_used": true, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>", "<value 3>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [], "lint_errors": [{"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>"}], "sequential_diff_dependencies": [{}, {"key": "<value>"}], "lookup_vindex_operations": [{"key": "<value>", "key1": "<value>"}], "throttler_configurations": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "deployment_revert_request": {}, "actor": {"id": "<id>", "display_name": "Quinton.Bernhard34", "avatar_url": "https://cute-halt.info/"}, "cutover_actor": {"id": "<id>", "display_name": "Rafael3", "avatar_url": "https://key-permafrost.info"}, "cancelled_actor": {"id": "<id>", "display_name": "Kamron_Hoppe", "avatar_url": "https://raw-lift.org/"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": false, "instant_ddl_eligible": false}, "num_comments": 9368.6, "html_url": "https://wobbly-pension.info", "notes": "<value>", "html_body": "<value>", "created_at": "1712208706959", "updated_at": "1735671293013", "closed_at": "<value>", "deployed_at": "<value>"}
+  close_deploy_request:
+    speakeasy-default-close-deploy-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 9096.67, "actor": {"id": "<id>", "display_name": "Lon.Haag", "avatar_url": "https://pessimistic-hovercraft.com/"}, "closed_by": {"id": "<id>", "display_name": "Angela_Gulgowski", "avatar_url": "https://superb-casement.info/"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": true, "branch_deleted_by": {"id": "<id>", "display_name": "Hardy29", "avatar_url": "https://taut-unit.biz"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": true, "into_branch_shard_count": 4294.26, "approved": false, "state": "open", "deployment_state": "complete_revert_error", "deployment": {"id": "<id>", "auto_cutover": true, "auto_delete_branch": false, "created_at": "1729533642427", "cutover_at": "<value>", "cutover_expiring": true, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "error", "submitted_at": "<value>", "updated_at": "1735621631346", "into_branch": "<value>", "deploy_request_number": 295.81, "deployable": false, "preceding_deployments": [{"key": "<value>", "key1": "<value>"}], "deploy_operations": [], "deploy_operation_summaries": [], "lint_errors": [{}, {}, {"key": "<value>", "key1": "<value>"}], "sequential_diff_dependencies": [{}, {"key": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "lookup_vindex_operations": [{}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "throttler_configurations": [{"key": "<value>", "key1": "<value>"}], "deployment_revert_request": {}, "actor": {"id": "<id>", "display_name": "Tina_Koepp", "avatar_url": "https://pastel-step.net"}, "cutover_actor": {"id": "<id>", "display_name": "Clement.Nicolas30", "avatar_url": "https://distinct-longboat.info"}, "cancelled_actor": {"id": "<id>", "display_name": "Thalia38", "avatar_url": "https://inborn-massage.biz/"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": false, "instant_ddl_eligible": true}, "num_comments": 4584.84, "html_url": "https://monstrous-outlaw.org/", "notes": "<value>", "html_body": "<value>", "created_at": "1706177056173", "updated_at": "1735628451504", "closed_at": "<value>", "deployed_at": "<value>"}
+  complete_gated_deploy_request:
+    speakeasy-default-complete-gated-deploy-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 4213.5, "actor": {"id": "<id>", "display_name": "Annie94", "avatar_url": "https://jittery-intellect.org"}, "closed_by": {"id": "<id>", "display_name": "Thelma_Jenkins", "avatar_url": "https://colorless-discourse.biz"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": true, "branch_deleted_by": {"id": "<id>", "display_name": "Uriah30", "avatar_url": "https://webbed-adrenalin.biz/"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": false, "into_branch_shard_count": 3901.21, "approved": false, "state": "closed", "deployment_state": "in_progress_cutover", "deployment": {"id": "<id>", "auto_cutover": true, "auto_delete_branch": false, "created_at": "1731899141087", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "complete_revert", "submitted_at": "<value>", "updated_at": "1735603562503", "into_branch": "<value>", "deploy_request_number": 3155.02, "deployable": true, "preceding_deployments": [{"key": "<value>", "key1": "<value>"}], "deploy_operations": [{"id": "<id>", "state": "complete", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 2123.16, "progress_percentage": 1254.96, "deploy_error_docs_url": "https://dependent-colon.name", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1727430355124", "updated_at": "1735646562415", "throttled_at": "<value>", "can_drop_data": false, "table_locked": false, "table_recently_used": true, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>", "<value 3>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [], "lint_errors": [], "sequential_diff_dependencies": [], "lookup_vindex_operations": [], "throttler_configurations": [{}, {"key": "<value>"}], "deployment_revert_request": {}, "actor": {"id": "<id>", "display_name": "Eric_Bruen7", "avatar_url": "https://unsung-safe.net/"}, "cutover_actor": {"id": "<id>", "display_name": "Anais.West", "avatar_url": "https://beloved-trick.name/"}, "cancelled_actor": {"id": "<id>", "display_name": "Waylon.Barrows54", "avatar_url": "https://robust-milestone.org"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": false, "instant_ddl_eligible": true}, "num_comments": 7306.74, "html_url": "https://jumbo-heroine.name", "notes": "<value>", "html_body": "<value>", "created_at": "1704205214393", "updated_at": "1735656893535", "closed_at": "<value>", "deployed_at": "<value>"}
+  update_auto_apply:
+    speakeasy-default-update-auto-apply:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 2489.52, "actor": {"id": "<id>", "display_name": "Anahi81", "avatar_url": "https://tepid-orchid.name"}, "closed_by": {"id": "<id>", "display_name": "Susie.Gusikowski6", "avatar_url": "https://gracious-pneumonia.org"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": true, "branch_deleted_by": {"id": "<id>", "display_name": "Kathlyn96", "avatar_url": "https://darling-marksman.net/"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": true, "into_branch_shard_count": 5662.22, "approved": false, "state": "open", "deployment_state": "complete_error", "deployment": {"id": "<id>", "auto_cutover": true, "auto_delete_branch": true, "created_at": "1724971661651", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "error", "submitted_at": "<value>", "updated_at": "1735656271138", "into_branch": "<value>", "deploy_request_number": 8930.71, "deployable": false, "preceding_deployments": [{"key": "<value>", "key1": "<value>"}], "deploy_operations": [{"id": "<id>", "state": "error", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 4225.66, "progress_percentage": 3704.52, "deploy_error_docs_url": "https://unkempt-scrap.name", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1709723047138", "updated_at": "1735608240459", "throttled_at": "<value>", "can_drop_data": false, "table_locked": true, "table_recently_used": true, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [], "lint_errors": [{"key": "<value>"}], "sequential_diff_dependencies": [{"key": "<value>", "key1": "<value>"}], "lookup_vindex_operations": [{"key": "<value>", "key1": "<value>"}, {"key": "<value>"}, {}], "throttler_configurations": [{"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>"}], "deployment_revert_request": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "actor": {"id": "<id>", "display_name": "Rachelle.Prosacco35", "avatar_url": "https://weird-provision.biz"}, "cutover_actor": {"id": "<id>", "display_name": "Lenna5", "avatar_url": "https://unusual-draw.name/"}, "cancelled_actor": {"id": "<id>", "display_name": "Llewellyn18", "avatar_url": "https://milky-mom.info"}, "schema_last_updated_at": "<value>", "table_locked": false, "locked_table_name": "<value>", "instant_ddl": true, "instant_ddl_eligible": true}, "num_comments": 5504.36, "html_url": "https://witty-catalyst.info/", "notes": "<value>", "html_body": "<value>", "created_at": "1733088603539", "updated_at": "1735632506837", "closed_at": "<value>", "deployed_at": "<value>"}
+  cancel_deploy_request:
+    speakeasy-default-cancel-deploy-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 6880.8, "actor": {"id": "<id>", "display_name": "Jalen_Rutherford97", "avatar_url": "https://mediocre-role.net/"}, "closed_by": {"id": "<id>", "display_name": "Esteban_Tillman32", "avatar_url": "https://snappy-cappelletti.com"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": false, "branch_deleted_by": {"id": "<id>", "display_name": "Quincy.Renner87", "avatar_url": "https://outgoing-ad.name"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": false, "into_branch_shard_count": 4822.27, "approved": true, "state": "closed", "deployment_state": "no_changes", "deployment": {"id": "<id>", "auto_cutover": false, "auto_delete_branch": true, "created_at": "1712462770736", "cutover_at": "<value>", "cutover_expiring": true, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "in_progress_cutover", "submitted_at": "<value>", "updated_at": "1735610216628", "into_branch": "<value>", "deploy_request_number": 8782.7, "deployable": true, "preceding_deployments": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}, {}], "deploy_operations": [{"id": "<id>", "state": "queued", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 1966.1, "progress_percentage": 603.99, "deploy_error_docs_url": "https://rosy-forage.info", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1723745567776", "updated_at": "1735657393653", "throttled_at": "<value>", "can_drop_data": false, "table_locked": true, "table_recently_used": false, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>", "<value 3>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [{"id": "<id>", "created_at": "1727653051429", "deploy_errors": "<value>", "ddl_statement": "<value>", "eta_seconds": 5677.89, "keyspace_name": "<value>", "operation_name": "<value>", "progress_percentage": 3584.05, "state": "complete", "syntax_highlighted_ddl": "<value>", "table_name": "<value>", "table_recently_used_at": "<value>", "throttled_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>"], "shard_count": 6970.05, "shard_names": ["<value 1>"], "can_drop_data": true, "table_recently_used": true, "sharded": false, "operations": []}], "lint_errors": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>", "key1": "<value>"}, {"key": "<value>"}], "sequential_diff_dependencies": [{"key": "<value>"}, {"key": "<value>", "key1": "<value>"}, {}], "lookup_vindex_operations": [], "throttler_configurations": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>", "key1": "<value>"}], "deployment_revert_request": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "actor": {"id": "<id>", "display_name": "Elise74", "avatar_url": "https://humble-numeric.net/"}, "cutover_actor": {"id": "<id>", "display_name": "Giovanny_Fadel", "avatar_url": "https://royal-makeover.org"}, "cancelled_actor": {"id": "<id>", "display_name": "Thad.Hahn96", "avatar_url": "https://windy-nougat.org"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": true, "instant_ddl_eligible": false}, "num_comments": 4677.77, "html_url": "https://sunny-sauerkraut.com", "notes": "<value>", "html_body": "<value>", "created_at": "1726084263673", "updated_at": "1735625531424", "closed_at": "<value>", "deployed_at": "<value>"}
+  complete_errored_deploy:
+    speakeasy-default-complete-errored-deploy:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 6334.12, "actor": {"id": "<id>", "display_name": "Alfreda52", "avatar_url": "https://powerful-juggernaut.net"}, "closed_by": {"id": "<id>", "display_name": "Earlene_Gleichner89", "avatar_url": "https://unwieldy-jazz.net"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": false, "branch_deleted_by": {"id": "<id>", "display_name": "Newell.Cartwright", "avatar_url": "https://buzzing-taro.org"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": true, "into_branch_shard_count": 695.7, "approved": false, "state": "closed", "deployment_state": "pending_cutover", "deployment": {"id": "<id>", "auto_cutover": false, "auto_delete_branch": true, "created_at": "1713967237350", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "complete_error", "submitted_at": "<value>", "updated_at": "1735673800376", "into_branch": "<value>", "deploy_request_number": 5085.18, "deployable": false, "preceding_deployments": [{"key": "<value>"}], "deploy_operations": [], "deploy_operation_summaries": [{"id": "<id>", "created_at": "1723358720110", "deploy_errors": "<value>", "ddl_statement": "<value>", "eta_seconds": 4444.33, "keyspace_name": "<value>", "operation_name": "<value>", "progress_percentage": 2451.78, "state": "complete", "syntax_highlighted_ddl": "<value>", "table_name": "<value>", "table_recently_used_at": "<value>", "throttled_at": "<value>", "removed_foreign_key_names": [], "shard_count": 2946.03, "shard_names": ["<value 1>"], "can_drop_data": true, "table_recently_used": true, "sharded": true, "operations": []}], "lint_errors": [], "sequential_diff_dependencies": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}], "lookup_vindex_operations": [{"key": "<value>"}], "throttler_configurations": [{}, {"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "deployment_revert_request": {"key": "<value>", "key1": "<value>"}, "actor": {"id": "<id>", "display_name": "Jacky_Daugherty", "avatar_url": "https://pointed-petticoat.com/"}, "cutover_actor": {"id": "<id>", "display_name": "Clair86", "avatar_url": "https://joyous-teammate.name/"}, "cancelled_actor": {"id": "<id>", "display_name": "Marisol8", "avatar_url": "https://petty-printer.biz"}, "schema_last_updated_at": "<value>", "table_locked": false, "locked_table_name": "<value>", "instant_ddl": true, "instant_ddl_eligible": false}, "num_comments": 1141.34, "html_url": "https://reflecting-plain.biz/", "notes": "<value>", "html_body": "<value>", "created_at": "1720985456509", "updated_at": "1735627525263", "closed_at": "<value>", "deployed_at": "<value>"}
+  queue_deploy_request:
+    speakeasy-default-queue-deploy-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 7103.03, "actor": {"id": "<id>", "display_name": "Diana_Ernser", "avatar_url": "https://avaricious-casement.org/"}, "closed_by": {"id": "<id>", "display_name": "Luz.Effertz47", "avatar_url": "https://wicked-hundred.info/"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": true, "branch_deleted_by": {"id": "<id>", "display_name": "Leo_Yundt45", "avatar_url": "https://showy-birth.info"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": false, "into_branch_shard_count": 5027.88, "approved": false, "state": "open", "deployment_state": "in_progress_cancel", "deployment": {"id": "<id>", "auto_cutover": true, "auto_delete_branch": true, "created_at": "1733847007348", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "pending", "submitted_at": "<value>", "updated_at": "1735636878812", "into_branch": "<value>", "deploy_request_number": 4190.52, "deployable": true, "preceding_deployments": [{"key": "<value>"}, {}], "deploy_operations": [{"id": "<id>", "state": "in_progress", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 760.22, "progress_percentage": 9670.4, "deploy_error_docs_url": "https://sick-lender.net", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1734616198323", "updated_at": "1735683989272", "throttled_at": "<value>", "can_drop_data": true, "table_locked": false, "table_recently_used": false, "table_recently_used_at": "<value>", "removed_foreign_key_names": [], "deploy_errors": "<value>"}], "deploy_operation_summaries": [], "lint_errors": [{}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>"}], "sequential_diff_dependencies": [], "lookup_vindex_operations": [{}, {"key": "<value>"}], "throttler_configurations": [{}, {"key": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "deployment_revert_request": {"key": "<value>", "key1": "<value>"}, "actor": {"id": "<id>", "display_name": "Maud_MacGyver8", "avatar_url": "https://inexperienced-substitution.org/"}, "cutover_actor": {"id": "<id>", "display_name": "Hans.Lindgren12", "avatar_url": "https://close-flat.biz"}, "cancelled_actor": {"id": "<id>", "display_name": "Kadin_Kreiger55", "avatar_url": "https://yellow-heartache.net"}, "schema_last_updated_at": "<value>", "table_locked": false, "locked_table_name": "<value>", "instant_ddl": false, "instant_ddl_eligible": false}, "num_comments": 3423.82, "html_url": "https://firm-fun.biz/", "notes": "<value>", "html_body": "<value>", "created_at": "1704197397851", "updated_at": "1735608206554", "closed_at": "<value>", "deployed_at": "<value>"}
+  get_deployment:
+    speakeasy-default-get-deployment:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "auto_cutover": false, "auto_delete_branch": true, "created_at": "1705988082494", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "cancelled", "submitted_at": "<value>", "updated_at": "1735623064789", "into_branch": "<value>", "deploy_request_number": 4838.83, "deployable": false, "preceding_deployments": [{}], "deploy_operations": [], "deploy_operation_summaries": [{"id": "<id>", "created_at": "1732024018725", "deploy_errors": "<value>", "ddl_statement": "<value>", "eta_seconds": 807.08, "keyspace_name": "<value>", "operation_name": "<value>", "progress_percentage": 6040.34, "state": "error", "syntax_highlighted_ddl": "<value>", "table_name": "<value>", "table_recently_used_at": "<value>", "throttled_at": "<value>", "removed_foreign_key_names": ["<value 1>"], "shard_count": 4478.34, "shard_names": ["<value 1>"], "can_drop_data": true, "table_recently_used": true, "sharded": false, "operations": [{"id": "<id>", "shard": "<value>", "state": "complete", "progress_percentage": 1948.41, "eta_seconds": 7920.03}]}], "lint_errors": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>"}], "sequential_diff_dependencies": [{"key": "<value>"}], "lookup_vindex_operations": [{"key": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "throttler_configurations": [{}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>"}], "deployment_revert_request": {}, "actor": {"id": "<id>", "display_name": "Devin.Rutherford", "avatar_url": "https://busy-zen.biz/"}, "cutover_actor": {"id": "<id>", "display_name": "Nikko_Heidenreich", "avatar_url": "https://humble-tomb.org/"}, "cancelled_actor": {"id": "<id>", "display_name": "Coleman_Kuhic12", "avatar_url": "https://immense-quinoa.net"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": true, "instant_ddl_eligible": false}
+  list_deploy_operations:
+    speakeasy-default-list-deploy-operations:
+      parameters:
+        path:
+          number: "<value>"
+          organization: "<value>"
+          database: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 7587, "next_page": 9498.58, "next_page_url": "https://intelligent-flood.net/", "prev_page": 5602.33, "prev_page_url": "https://monstrous-luck.biz", "data": [{"id": "<id>", "state": "pending", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 8976.38, "progress_percentage": 2610.69, "deploy_error_docs_url": "https://bustling-bowling.name", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1734342455902", "updated_at": "1735624288760", "throttled_at": "<value>", "can_drop_data": false, "table_locked": true, "table_recently_used": true, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>"], "deploy_errors": "<value>"}]}
+  complete_revert:
+    speakeasy-default-complete-revert:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 4402.27, "actor": {"id": "<id>", "display_name": "Tod_Spencer12", "avatar_url": "https://self-reliant-crest.com/"}, "closed_by": {"id": "<id>", "display_name": "Lolita_Carter41", "avatar_url": "https://sturdy-knight.info/"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": true, "branch_deleted_by": {"id": "<id>", "display_name": "Wendy.Funk", "avatar_url": "https://bad-relative.info"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": false, "into_branch_shard_count": 6656.95, "approved": true, "state": "open", "deployment_state": "in_progress_cutover", "deployment": {"id": "<id>", "auto_cutover": false, "auto_delete_branch": true, "created_at": "1707443607189", "cutover_at": "<value>", "cutover_expiring": true, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "complete_error", "submitted_at": "<value>", "updated_at": "1735607528544", "into_branch": "<value>", "deploy_request_number": 4079.68, "deployable": false, "preceding_deployments": [{"key": "<value>"}, {"key": "<value>"}, {"key": "<value>", "key1": "<value>"}], "deploy_operations": [{"id": "<id>", "state": "cancelled", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 9377.46, "progress_percentage": 4617.98, "deploy_error_docs_url": "https://bruised-tabletop.net", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1733905971410", "updated_at": "1735628947469", "throttled_at": "<value>", "can_drop_data": false, "table_locked": true, "table_recently_used": false, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [{"id": "<id>", "created_at": "1710585986924", "deploy_errors": "<value>", "ddl_statement": "<value>", "eta_seconds": 6809.53, "keyspace_name": "<value>", "operation_name": "<value>", "progress_percentage": 4547.82, "state": "pending", "syntax_highlighted_ddl": "<value>", "table_name": "<value>", "table_recently_used_at": "<value>", "throttled_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>", "<value 3>"], "shard_count": 6790.07, "shard_names": [], "can_drop_data": true, "table_recently_used": true, "sharded": true, "operations": [{"id": "<id>", "shard": "<value>", "state": "pending", "progress_percentage": 1662.29, "eta_seconds": 3614.71}]}], "lint_errors": [{}], "sequential_diff_dependencies": [], "lookup_vindex_operations": [{"key": "<value>"}, {"key": "<value>", "key1": "<value>"}], "throttler_configurations": [], "deployment_revert_request": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "actor": {"id": "<id>", "display_name": "Shaniya.Boyle76", "avatar_url": "https://wiggly-sarong.info"}, "cutover_actor": {"id": "<id>", "display_name": "Chaya_Roberts4", "avatar_url": "https://bulky-fun.org"}, "cancelled_actor": {"id": "<id>", "display_name": "Victor_Osinski13", "avatar_url": "https://imaginary-swath.biz"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": false, "instant_ddl_eligible": false}, "num_comments": 3585.95, "html_url": "https://frivolous-season.biz", "notes": "<value>", "html_body": "<value>", "created_at": "1716659303856", "updated_at": "1735647643361", "closed_at": "<value>", "deployed_at": "<value>"}
+  list_deploy_request_reviews:
+    speakeasy-default-list-deploy-request-reviews:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"current_page": 3109.29, "next_page": 2687.95, "next_page_url": "https://jumbo-lace.org/", "prev_page": 8124.28, "prev_page_url": "https://stingy-manner.name", "data": []}
+  review_deploy_request:
+    speakeasy-default-review-deploy-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "body": "<value>", "html_body": "<value>", "state": "approved", "created_at": "1724561762477", "updated_at": "1735635018146", "actor": {"id": "<id>", "display_name": "Josianne.Satterfield58", "avatar_url": "https://favorable-atrium.biz"}}
+  skip_revert_period:
+    speakeasy-default-skip-revert-period:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 3714.46, "actor": {"id": "<id>", "display_name": "Kennith.Witting", "avatar_url": "https://joyous-mainstream.info/"}, "closed_by": {"id": "<id>", "display_name": "Titus.Prohaska68", "avatar_url": "https://lanky-legging.name/"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": false, "branch_deleted_by": {"id": "<id>", "display_name": "Melisa_Walter", "avatar_url": "https://pale-cannon.org/"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": false, "into_branch_shard_count": 5965.84, "approved": false, "state": "closed", "deployment_state": "in_progress_vschema", "deployment": {"id": "<id>", "auto_cutover": false, "auto_delete_branch": true, "created_at": "1707847810654", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "complete_error", "submitted_at": "<value>", "updated_at": "1735675803880", "into_branch": "<value>", "deploy_request_number": 1472.69, "deployable": true, "preceding_deployments": [{}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>"}], "deploy_operations": [{"id": "<id>", "state": "queued", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 1688.21, "progress_percentage": 6766.95, "deploy_error_docs_url": "https://terrible-supplier.info/", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1714309620932", "updated_at": "1735610842774", "throttled_at": "<value>", "can_drop_data": false, "table_locked": true, "table_recently_used": false, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [{"id": "<id>", "created_at": "1733370909387", "deploy_errors": "<value>", "ddl_statement": "<value>", "eta_seconds": 5999.17, "keyspace_name": "<value>", "operation_name": "<value>", "progress_percentage": 5660.74, "state": "pending", "syntax_highlighted_ddl": "<value>", "table_name": "<value>", "table_recently_used_at": "<value>", "throttled_at": "<value>", "removed_foreign_key_names": ["<value 1>"], "shard_count": 3090.12, "shard_names": ["<value 1>", "<value 2>"], "can_drop_data": false, "table_recently_used": false, "sharded": false, "operations": []}], "lint_errors": [{"key": "<value>", "key1": "<value>"}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}, {"key": "<value>"}], "sequential_diff_dependencies": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}, {}, {"key": "<value>", "key1": "<value>", "key2": "<value>"}], "lookup_vindex_operations": [{}, {"key": "<value>"}, {"key": "<value>"}], "throttler_configurations": [], "deployment_revert_request": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "actor": {"id": "<id>", "display_name": "Kacie_Daniel32", "avatar_url": "https://competent-thunderbolt.biz/"}, "cutover_actor": {"id": "<id>", "display_name": "Mariam75", "avatar_url": "https://powerless-discourse.name/"}, "cancelled_actor": {"id": "<id>", "display_name": "Dina.Schulist63", "avatar_url": "https://normal-smog.com"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": true, "instant_ddl_eligible": true}, "num_comments": 1442.14, "html_url": "https://tragic-finding.biz/", "notes": "<value>", "html_body": "<value>", "created_at": "1715508445159", "updated_at": "1735685991411", "closed_at": "<value>", "deployed_at": "<value>"}
+  get_deploy_request_throttler:
+    speakeasy-default-get-deploy-request-throttler:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"keyspaces": ["<value 1>", "<value 2>", "<value 3>"], "configurable": {"id": "<id>", "name": "<value>", "created_at": "1727483674038", "updated_at": "1735672895854", "deleted_at": "<value>"}, "configurations": []}
+  update_deploy_request_throttler:
+    speakeasy-default-update-deploy-request-throttler:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"keyspaces": ["<value 1>"], "configurable": {"id": "<id>", "name": "<value>", "created_at": "1711341222702", "updated_at": "1735626552759", "deleted_at": "<value>"}, "configurations": [{"keyspace_name": "<value>", "ratio": 8423.5}]}
+  list_webhooks:
+    speakeasy-default-list-webhooks:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 9353.86, "next_page": 5909.86, "next_page_url": "https://zealous-stranger.net", "prev_page": 1402.22, "prev_page_url": "https://inborn-farmer.name/", "data": []}
+  create_webhook:
+    speakeasy-default-create-webhook:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "url": "https://helpful-cafe.biz", "secret": "<value>", "enabled": true, "last_sent_result": "<value>", "last_sent_success": false, "last_sent_at": "<value>", "created_at": "1718253999748", "updated_at": "1735608680619", "events": []}
+  get_webhook:
+    speakeasy-default-get-webhook:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "url": "https://monumental-mainstream.org", "secret": "<value>", "enabled": false, "last_sent_result": "<value>", "last_sent_success": false, "last_sent_at": "<value>", "created_at": "1715029645677", "updated_at": "1735622657857", "events": ["deploy_request.schema_applied"]}
+  update_webhook:
+    speakeasy-default-update-webhook:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "url": "https://haunting-nougat.biz/", "secret": "<value>", "enabled": true, "last_sent_result": "<value>", "last_sent_success": false, "last_sent_at": "<value>", "created_at": "1711037304850", "updated_at": "1735631675667", "events": ["deploy_request.opened"]}
+  delete_webhook:
+    speakeasy-default-delete-webhook:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          id: "<id>"
+  test_webhook:
+    speakeasy-default-test-webhook:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          id: "<id>"
+  list_workflows:
+    speakeasy-default-list-workflows:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 6220.24, "next_page": 2227.93, "next_page_url": "https://blue-tray.biz/", "prev_page": 7985.95, "prev_page_url": "https://earnest-scout.org/", "data": []}
+  create_workflow:
+    speakeasy-default-create-workflow:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "number": 2801.26, "state": "pending", "created_at": "1707449038798", "updated_at": "1735646775587", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": false, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "EXEC_IGNORE", "workflow_errors": "<value>", "may_retry": true, "may_restart": true, "verified_data_stale": false, "sequence_tables_applied": true, "actor": {"id": "<id>", "display_name": "Ambrose_Murphy", "avatar_url": "https://fantastic-pupil.biz/"}, "verify_data_by": {"id": "<id>", "display_name": "Lessie.Nikolaus", "avatar_url": "https://moral-adaptation.net"}, "reversed_by": {"id": "<id>", "display_name": "Dandre.Koss", "avatar_url": "https://meaty-trash.net/"}, "switch_replicas_by": {"id": "<id>", "display_name": "Aleen.Metz55", "avatar_url": "https://busy-slipper.info/"}, "switch_primaries_by": {"id": "<id>", "display_name": "Hassie_Block52", "avatar_url": "https://sturdy-bowling.org/"}, "cancelled_by": {"id": "<id>", "display_name": "Sofia_Mayer", "avatar_url": "https://failing-jump.org"}, "completed_by": {"id": "<id>", "display_name": "Elijah.Veum-Howe0", "avatar_url": "https://wee-contrail.name/"}, "retried_by": {"id": "<id>", "display_name": "Vilma57", "avatar_url": "https://feline-brush.net/"}, "cutover_by": {"id": "<id>", "display_name": "Magdalen91", "avatar_url": "https://little-fund.org/"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Amaya_Stroman21", "avatar_url": "https://everlasting-caption.com/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1725357891411", "updated_at": "1735612379583", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1728144558886", "updated_at": "1735672809830", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1717832528097", "updated_at": "1735673454309", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1704798345259", "updated_at": "1735651956763", "deleted_at": "<value>"}}
+  get_workflow:
+    speakeasy-default-get-workflow:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 8169.83, "state": "pending", "created_at": "1710916596892", "updated_at": "1735611523984", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": false, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "STOP", "workflow_errors": "<value>", "may_retry": true, "may_restart": false, "verified_data_stale": false, "sequence_tables_applied": true, "actor": {"id": "<id>", "display_name": "Loy80", "avatar_url": "https://monumental-horde.name"}, "verify_data_by": {"id": "<id>", "display_name": "Sasha24", "avatar_url": "https://incomparable-subsidy.info/"}, "reversed_by": {"id": "<id>", "display_name": "Guiseppe65", "avatar_url": "https://wordy-blossom.net"}, "switch_replicas_by": {"id": "<id>", "display_name": "Myra_Weber93", "avatar_url": "https://essential-whack.com"}, "switch_primaries_by": {"id": "<id>", "display_name": "Grace_Douglas", "avatar_url": "https://sorrowful-cake.com"}, "cancelled_by": {"id": "<id>", "display_name": "Simone0", "avatar_url": "https://deserted-restaurant.biz/"}, "completed_by": {"id": "<id>", "display_name": "Zelda_Anderson57", "avatar_url": "https://imaginary-maintainer.name"}, "retried_by": {"id": "<id>", "display_name": "Cathrine93", "avatar_url": "https://upset-transparency.net"}, "cutover_by": {"id": "<id>", "display_name": "Dariana_Harvey19", "avatar_url": "https://unlawful-statue.biz"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Jay_Waelchi", "avatar_url": "https://hefty-casket.info"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1716033865402", "updated_at": "1735657936918", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1721236233199", "updated_at": "1735672255822", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1732485467254", "updated_at": "1735624038737", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1724581018711", "updated_at": "1735637241691", "deleted_at": "<value>"}}
+  workflow_cancel:
+    speakeasy-default-workflow-cancel:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 686.24, "state": "switching_replicas", "created_at": "1706420148867", "updated_at": "1735628508889", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "STOP", "workflow_errors": "<value>", "may_retry": true, "may_restart": false, "verified_data_stale": false, "sequence_tables_applied": false, "actor": {"id": "<id>", "display_name": "Elvie.Nader97", "avatar_url": "https://rich-laughter.name"}, "verify_data_by": {"id": "<id>", "display_name": "Felton41", "avatar_url": "https://polite-volleyball.net/"}, "reversed_by": {"id": "<id>", "display_name": "Winston_Farrell49", "avatar_url": "https://vengeful-opera.biz/"}, "switch_replicas_by": {"id": "<id>", "display_name": "Nickolas.Pollich", "avatar_url": "https://arid-cop-out.name"}, "switch_primaries_by": {"id": "<id>", "display_name": "Chanel_Ratke", "avatar_url": "https://sizzling-wombat.com/"}, "cancelled_by": {"id": "<id>", "display_name": "Cordell.Rosenbaum", "avatar_url": "https://every-yeast.com"}, "completed_by": {"id": "<id>", "display_name": "Troy33", "avatar_url": "https://good-natured-comestible.biz/"}, "retried_by": {"id": "<id>", "display_name": "Bell_Luettgen", "avatar_url": "https://shabby-hydrocarbon.info/"}, "cutover_by": {"id": "<id>", "display_name": "Ross.Marvin61", "avatar_url": "https://linear-moment.biz/"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Gabe.Turcotte2", "avatar_url": "https://long-term-petal.com/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1735362110531", "updated_at": "1735653800766", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1719186498894", "updated_at": "1735653919307", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1713023152537", "updated_at": "1735609618987", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1704885959127", "updated_at": "1735673705230", "deleted_at": "<value>"}}
+  workflow_complete:
+    speakeasy-default-workflow-complete:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 6160.12, "state": "switching_primaries", "created_at": "1714925847419", "updated_at": "1735656355846", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": true, "on_ddl": "IGNORE", "workflow_errors": "<value>", "may_retry": true, "may_restart": false, "verified_data_stale": true, "sequence_tables_applied": true, "actor": {"id": "<id>", "display_name": "Caroline_Murazik15", "avatar_url": "https://all-backbone.com"}, "verify_data_by": {"id": "<id>", "display_name": "Justen_Hegmann76", "avatar_url": "https://feline-elevator.org/"}, "reversed_by": {"id": "<id>", "display_name": "Valentine_Thompson65", "avatar_url": "https://stupendous-graffiti.name/"}, "switch_replicas_by": {"id": "<id>", "display_name": "Ferne.Stokes", "avatar_url": "https://altruistic-scratch.name"}, "switch_primaries_by": {"id": "<id>", "display_name": "Olin25", "avatar_url": "https://incomplete-commercial.org/"}, "cancelled_by": {"id": "<id>", "display_name": "Cicero_Bergnaum99", "avatar_url": "https://grimy-collectivization.info/"}, "completed_by": {"id": "<id>", "display_name": "Malinda.Watsica", "avatar_url": "https://overcooked-tooth.biz"}, "retried_by": {"id": "<id>", "display_name": "Erling_Reynolds32", "avatar_url": "https://hasty-stranger.biz"}, "cutover_by": {"id": "<id>", "display_name": "Verda39", "avatar_url": "https://dim-invite.net"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Layne_Purdy", "avatar_url": "https://forceful-granny.com"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1724512438087", "updated_at": "1735686205575", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1704441607537", "updated_at": "1735646197350", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1705711029303", "updated_at": "1735659824102", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1720358021492", "updated_at": "1735608482486", "deleted_at": "<value>"}}
+  workflow_cutover:
+    speakeasy-default-workflow-cutover:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 5779.5, "state": "reversed_cutover", "created_at": "1728346552122", "updated_at": "1735628033076", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": false, "primaries_switched": false, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "IGNORE", "workflow_errors": "<value>", "may_retry": true, "may_restart": true, "verified_data_stale": true, "sequence_tables_applied": true, "actor": {"id": "<id>", "display_name": "Cassandra_Oberbrunner11", "avatar_url": "https://early-following.net/"}, "verify_data_by": {"id": "<id>", "display_name": "Warren.Thiel", "avatar_url": "https://proper-populist.name"}, "reversed_by": {"id": "<id>", "display_name": "Audie1", "avatar_url": "https://light-sarong.info/"}, "switch_replicas_by": {"id": "<id>", "display_name": "Bonita93", "avatar_url": "https://gleaming-goat.net"}, "switch_primaries_by": {"id": "<id>", "display_name": "Nelson53", "avatar_url": "https://far-off-character.com/"}, "cancelled_by": {"id": "<id>", "display_name": "Adaline.Gislason45", "avatar_url": "https://darling-airport.net/"}, "completed_by": {"id": "<id>", "display_name": "Oda8", "avatar_url": "https://wretched-gastropod.net/"}, "retried_by": {"id": "<id>", "display_name": "Stanley.Price", "avatar_url": "https://serene-lady.info/"}, "cutover_by": {"id": "<id>", "display_name": "Danika_Wisozk21", "avatar_url": "https://tricky-stitcher.info"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Jayne_Gislason83", "avatar_url": "https://outrageous-merit.com/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1713949188916", "updated_at": "1735687405637", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1730718666188", "updated_at": "1735623408920", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1704814712144", "updated_at": "1735669933621", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1723025791494", "updated_at": "1735607327775", "deleted_at": "<value>"}}
+  workflow_retry:
+    speakeasy-default-workflow-retry:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 5768.71, "state": "cancelled", "created_at": "1710170823361", "updated_at": "1735614169594", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "EXEC", "workflow_errors": "<value>", "may_retry": true, "may_restart": true, "verified_data_stale": true, "sequence_tables_applied": false, "actor": {"id": "<id>", "display_name": "Joe44", "avatar_url": "https://liquid-puppet.info/"}, "verify_data_by": {"id": "<id>", "display_name": "Eugenia.Borer", "avatar_url": "https://white-object.name/"}, "reversed_by": {"id": "<id>", "display_name": "Dylan_Kuhic", "avatar_url": "https://quintessential-help.biz/"}, "switch_replicas_by": {"id": "<id>", "display_name": "Marcus_Grimes", "avatar_url": "https://unsung-adult.info"}, "switch_primaries_by": {"id": "<id>", "display_name": "Iva.Windler", "avatar_url": "https://understated-entry.biz"}, "cancelled_by": {"id": "<id>", "display_name": "Jacinthe16", "avatar_url": "https://mammoth-quart.biz/"}, "completed_by": {"id": "<id>", "display_name": "Jayden.Fadel", "avatar_url": "https://spiffy-widow.biz"}, "retried_by": {"id": "<id>", "display_name": "Edgardo62", "avatar_url": "https://polite-grandson.name/"}, "cutover_by": {"id": "<id>", "display_name": "Lourdes.OHara6", "avatar_url": "https://international-extension.net"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Kasey_Bradtke", "avatar_url": "https://proud-comestible.biz/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1708625542749", "updated_at": "1735668797279", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1735014000303", "updated_at": "1735633862592", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1704671832289", "updated_at": "1735653665331", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1726863814669", "updated_at": "1735649074968", "deleted_at": "<value>"}}
+  workflow_reverse_cutover:
+    speakeasy-default-workflow-reverse-cutover:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 7387.09, "state": "cutover", "created_at": "1725651462358", "updated_at": "1735650821962", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "EXEC", "workflow_errors": "<value>", "may_retry": false, "may_restart": false, "verified_data_stale": true, "sequence_tables_applied": true, "actor": {"id": "<id>", "display_name": "Ariel_Anderson", "avatar_url": "https://unfortunate-reservation.net"}, "verify_data_by": {"id": "<id>", "display_name": "Adrien.Hammes", "avatar_url": "https://stained-stock.com"}, "reversed_by": {"id": "<id>", "display_name": "Madge_Borer58", "avatar_url": "https://fine-boulevard.biz"}, "switch_replicas_by": {"id": "<id>", "display_name": "Dora.Schamberger", "avatar_url": "https://soulful-nun.org/"}, "switch_primaries_by": {"id": "<id>", "display_name": "Serenity.Emard", "avatar_url": "https://vibrant-rust.info"}, "cancelled_by": {"id": "<id>", "display_name": "Bruce.Russel50", "avatar_url": "https://wrong-seagull.biz"}, "completed_by": {"id": "<id>", "display_name": "Antwon18", "avatar_url": "https://affectionate-outlaw.info"}, "retried_by": {"id": "<id>", "display_name": "Meaghan.Champlin", "avatar_url": "https://nippy-flood.info/"}, "cutover_by": {"id": "<id>", "display_name": "Destiny34", "avatar_url": "https://taut-euphonium.name"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Heaven.Schimmel13", "avatar_url": "https://spiffy-descent.biz"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1722770377847", "updated_at": "1735611499136", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1710349223954", "updated_at": "1735655638721", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1720894907962", "updated_at": "1735671981710", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1718614241802", "updated_at": "1735664857596", "deleted_at": "<value>"}}
+  workflow_reverse_traffic:
+    speakeasy-default-workflow-reverse-traffic:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 6181.51, "state": "reversing_traffic", "created_at": "1718188529638", "updated_at": "1735665842292", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": false, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": true, "on_ddl": "IGNORE", "workflow_errors": "<value>", "may_retry": true, "may_restart": true, "verified_data_stale": true, "sequence_tables_applied": false, "actor": {"id": "<id>", "display_name": "Chase5", "avatar_url": "https://jumbo-scholarship.name"}, "verify_data_by": {"id": "<id>", "display_name": "Reinhold.Schroeder25", "avatar_url": "https://purple-haircut.name/"}, "reversed_by": {"id": "<id>", "display_name": "Makenna67", "avatar_url": "https://stiff-adrenalin.org"}, "switch_replicas_by": {"id": "<id>", "display_name": "Gerhard8", "avatar_url": "https://unhappy-masterpiece.name/"}, "switch_primaries_by": {"id": "<id>", "display_name": "Taryn_Ortiz-Cronin33", "avatar_url": "https://medium-responsibility.net"}, "cancelled_by": {"id": "<id>", "display_name": "Quinn.Jones47", "avatar_url": "https://all-alb.org"}, "completed_by": {"id": "<id>", "display_name": "Madonna_Bogisich", "avatar_url": "https://growing-abacus.biz"}, "retried_by": {"id": "<id>", "display_name": "Horace_Yost-Batz86", "avatar_url": "https://moral-hutch.name/"}, "cutover_by": {"id": "<id>", "display_name": "Elena17", "avatar_url": "https://impossible-issue.com/"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Jay50", "avatar_url": "https://these-negotiation.info/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1708610819649", "updated_at": "1735639292417", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1727784996679", "updated_at": "1735657292374", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1716534264583", "updated_at": "1735676251689", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1724635635108", "updated_at": "1735620422212", "deleted_at": "<value>"}}
+  workflow_switch_primaries:
+    speakeasy-default-workflow-switch-primaries:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 450.35, "state": "running", "created_at": "1730812174713", "updated_at": "1735661555788", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": false, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "EXEC", "workflow_errors": "<value>", "may_retry": false, "may_restart": true, "verified_data_stale": true, "sequence_tables_applied": false, "actor": {"id": "<id>", "display_name": "Madelynn_Deckow98", "avatar_url": "https://ragged-freckle.org"}, "verify_data_by": {"id": "<id>", "display_name": "Marty_West", "avatar_url": "https://glossy-knight.net/"}, "reversed_by": {"id": "<id>", "display_name": "Grayce_Osinski-Dicki", "avatar_url": "https://twin-cross-contamination.com/"}, "switch_replicas_by": {"id": "<id>", "display_name": "Orie.Hahn36", "avatar_url": "https://dirty-guide.biz/"}, "switch_primaries_by": {"id": "<id>", "display_name": "Sasha.Dibbert", "avatar_url": "https://linear-chapel.biz/"}, "cancelled_by": {"id": "<id>", "display_name": "Allie.Leffler29", "avatar_url": "https://sardonic-bandwidth.name"}, "completed_by": {"id": "<id>", "display_name": "Rossie40", "avatar_url": "https://extra-large-venom.biz/"}, "retried_by": {"id": "<id>", "display_name": "Alessandra4", "avatar_url": "https://insecure-mallard.net"}, "cutover_by": {"id": "<id>", "display_name": "Marie.Johnson", "avatar_url": "https://grimy-king.net/"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Gloria.Hills", "avatar_url": "https://adolescent-squid.name/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1733981562589", "updated_at": "1735655862327", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1729570027688", "updated_at": "1735617838182", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1732982197477", "updated_at": "1735666606417", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1731963142641", "updated_at": "1735666163242", "deleted_at": "<value>"}}
+  workflow_switch_replicas:
+    speakeasy-default-workflow-switch-replicas:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 2967.54, "state": "cancelled", "created_at": "1721228755351", "updated_at": "1735630802927", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": true, "on_ddl": "IGNORE", "workflow_errors": "<value>", "may_retry": true, "may_restart": false, "verified_data_stale": false, "sequence_tables_applied": false, "actor": {"id": "<id>", "display_name": "Lola_Harvey", "avatar_url": "https://precious-cosset.name"}, "verify_data_by": {"id": "<id>", "display_name": "Krystal.Wunsch", "avatar_url": "https://physical-poppy.info"}, "reversed_by": {"id": "<id>", "display_name": "Justus32", "avatar_url": "https://criminal-affiliate.info"}, "switch_replicas_by": {"id": "<id>", "display_name": "Aliya_Graham", "avatar_url": "https://awful-jacket.info"}, "switch_primaries_by": {"id": "<id>", "display_name": "Gaston46", "avatar_url": "https://well-groomed-overheard.biz"}, "cancelled_by": {"id": "<id>", "display_name": "Annamarie85", "avatar_url": "https://gullible-pasta.com"}, "completed_by": {"id": "<id>", "display_name": "Claire.Wiegand", "avatar_url": "https://lost-battle.info"}, "retried_by": {"id": "<id>", "display_name": "Kory32", "avatar_url": "https://understated-haircut.org"}, "cutover_by": {"id": "<id>", "display_name": "Abdul_Legros", "avatar_url": "https://trustworthy-video.org"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Jovani_Ullrich", "avatar_url": "https://charming-scout.name/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1720429209120", "updated_at": "1735611103849", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1735041268757", "updated_at": "1735654744364", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1709386337906", "updated_at": "1735676860850", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1721472169225", "updated_at": "1735633453795", "deleted_at": "<value>"}}
+  verify_workflow:
+    speakeasy-default-verify-workflow:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "number": 7758.61, "state": "reversing_traffic_for_cancel", "created_at": "1713635250920", "updated_at": "1735640949548", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": false, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": true, "on_ddl": "IGNORE", "workflow_errors": "<value>", "may_retry": false, "may_restart": false, "verified_data_stale": false, "sequence_tables_applied": true, "actor": {"id": "<id>", "display_name": "Velda_Bechtelar72", "avatar_url": "https://clueless-bandwidth.biz"}, "verify_data_by": {"id": "<id>", "display_name": "Carson_Hansen", "avatar_url": "https://gracious-descent.info"}, "reversed_by": {"id": "<id>", "display_name": "Nyah62", "avatar_url": "https://lonely-charm.com"}, "switch_replicas_by": {"id": "<id>", "display_name": "Zita_Kiehn86", "avatar_url": "https://lively-bonfire.info/"}, "switch_primaries_by": {"id": "<id>", "display_name": "Leda_Goyette70", "avatar_url": "https://first-stay.biz/"}, "cancelled_by": {"id": "<id>", "display_name": "Nikki_Ruecker44", "avatar_url": "https://functional-venom.com/"}, "completed_by": {"id": "<id>", "display_name": "Jamel.Turcotte", "avatar_url": "https://gruesome-milestone.org/"}, "retried_by": {"id": "<id>", "display_name": "Dion_Feeney26", "avatar_url": "https://twin-hose.biz/"}, "cutover_by": {"id": "<id>", "display_name": "Madonna.West", "avatar_url": "https://far-flung-inspection.biz"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Erika73", "avatar_url": "https://sophisticated-cauliflower.org/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1713797506681", "updated_at": "1735680145540", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1733993369870", "updated_at": "1735688251407", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1705200415793", "updated_at": "1735667291657", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1710444519677", "updated_at": "1735635021575", "deleted_at": "<value>"}}
+  list_invoices:
+    speakeasy-default-list-invoices:
+      parameters:
+        path:
+          organization: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 4656.18, "next_page": 9451.07, "next_page_url": "https://orderly-schedule.name/", "prev_page": 3067.34, "prev_page_url": "https://glum-e-mail.info/", "data": []}
+  get_invoice:
+    speakeasy-default-get-invoice:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "total": 7187.69, "billing_period_start": "<value>", "billing_period_end": "<value>"}
+  get_invoice_line_items:
+    speakeasy-default-get-invoice-line-items:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 2073.1, "next_page": 1112.33, "next_page_url": "https://flawless-exhaust.com", "prev_page": 6440.78, "prev_page_url": "https://cuddly-meal.com", "data": [{"id": "<id>", "subtotal": 8701.82, "description": "garrote deliberately hunger", "metric_name": "<value>", "database_id": "<id>", "database_name": "<value>", "resource": {"id": "<id>", "name": "<value>", "created_at": "1730915771012", "updated_at": "1735645908302", "deleted_at": "<value>"}}]}
+  list_organization_members:
+    speakeasy-default-list-organization-members:
+      parameters:
+        path:
+          organization: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 3515.16, "next_page": 1113.32, "next_page_url": "https://upbeat-rawhide.info", "prev_page": 2813.87, "prev_page_url": "https://imaginative-pinstripe.com", "data": [{"id": "<id>", "user": {"id": "<id>", "display_name": "Kenton_Effertz38", "name": "<value>", "email": "Ryan.Muller@hotmail.com", "avatar_url": "https://awesome-colon.org", "created_at": "1711759524919", "updated_at": "1735612762648", "two_factor_auth_configured": true, "default_organization": {"id": "<id>", "name": "<value>", "created_at": "1735315427131", "updated_at": "1735632818534", "deleted_at": "<value>"}, "sso": true, "managed": true, "directory_managed": false, "email_verified": true}, "role": "admin", "created_at": "1724563918948", "updated_at": "1735662526096"}]}
+  list_oauth_applications:
+    speakeasy-default-list-oauth-applications:
+      parameters:
+        path:
+          organization: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 7753.49, "next_page": 5010.02, "next_page_url": "https://grubby-archaeology.org/", "prev_page": 5983.31, "prev_page_url": "https://staid-cow.org", "data": [{"id": "<id>", "name": "<value>", "redirect_uri": "https://rosy-heartbeat.info/", "domain": "vague-violin.info", "created_at": "1708000558584", "updated_at": "1735670171897", "scopes": ["<value 1>"], "avatar": "https://picsum.photos/seed/lXjYm/2553/3104", "client_id": "<id>", "tokens": 6308.6}]}
+  get_oauth_application:
+    speakeasy-default-get-oauth-application:
+      parameters:
+        path:
+          organization: "<value>"
+          application_id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "redirect_uri": "https://gruesome-hovercraft.name", "domain": "unruly-scale.biz", "created_at": "1733979262803", "updated_at": "1735684643052", "scopes": [], "avatar": "https://picsum.photos/seed/QRUF56mx2/1849/703", "client_id": "<id>", "tokens": 3770.64}
+  list_oauth_tokens:
+    speakeasy-default-list-oauth-tokens:
+      parameters:
+        path:
+          organization: "<value>"
+          application_id: "<id>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 9056.7, "next_page": 7303.92, "next_page_url": "https://rapid-best-seller.info/", "prev_page": 5391.3, "prev_page_url": "https://cloudy-cardboard.com", "data": []}
+  get_oauth_token:
+    speakeasy-default-get-oauth-token:
+      parameters:
+        path:
+          organization: "<value>"
+          application_id: "<id>"
+          token_id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "display_name": "Adaline_Bernier94", "token": "<value>", "plain_text_refresh_token": "<value>", "avatar_url": "https://agitated-custody.info", "created_at": "1721737251361", "updated_at": "1735632965857", "expires_at": "1748550912615", "last_used_at": "<value>", "actor_id": "<id>", "actor_display_name": "<value>", "actor_type": "<value>", "service_token_accesses": [{"id": "<id>", "access": "<value>", "description": "huff instead thick despite as because rare fortunate apud yippee", "resource_name": "<value>", "resource_id": "<id>", "resource_type": "<value>", "resource": {"id": "<id>", "name": "<value>", "created_at": "1728747114559", "updated_at": "1735628537702", "deleted_at": "<value>"}}], "oauth_accesses_by_resource": {"database": {"databases": [{"name": "<value>", "id": "<id>", "organization": "<value>", "url": "https://salty-quart.biz"}], "accesses": []}, "organization": {"organizations": [{"name": "<value>", "id": "<id>", "url": "https://sunny-allocation.net"}], "accesses": []}, "branch": {"branches": [{"name": "<value>", "id": "<id>", "database": "<value>", "organization": "<value>", "url": "https://quintessential-apparatus.org/"}], "accesses": [{"name": "<value>", "description": "until gadzooks weep psst premier or"}]}, "user": {"users": [], "accesses": []}}}
+  delete_oauth_token:
+    speakeasy-default-delete-oauth-token:
+      parameters:
+        path:
+          organization: "<value>"
+          application_id: "<id>"
+          token_id: "<id>"
+  create_oauth_token:
+    speakeasy-default-create-oauth-token:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "display_name": "Rachel_Bartoletti99", "token": "<value>", "plain_text_refresh_token": "<value>", "avatar_url": "https://genuine-scorpion.name/", "created_at": "1728142847048", "updated_at": "1735656904806", "expires_at": "1749063646045", "last_used_at": "<value>", "actor_id": "<id>", "actor_display_name": "<value>", "actor_type": "<value>", "service_token_accesses": [], "oauth_accesses_by_resource": {"database": {"databases": [{"name": "<value>", "id": "<id>", "organization": "<value>", "url": "https://measly-derby.name/"}], "accesses": []}, "organization": {"organizations": [], "accesses": []}, "branch": {"branches": [], "accesses": [{"name": "<value>", "description": "fondly outside oily who around"}]}, "user": {"users": [{"name": "<value>", "id": "<id>"}], "accesses": []}}}
+  list_public_regions:
+    speakeasy-default-list-public-regions:
+      parameters:
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 1041.03, "next_page": 3301.26, "next_page_url": "https://jagged-cappelletti.org/", "prev_page": 1684.21, "prev_page_url": "https://monstrous-guard.net", "data": [{"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Carlee_Farrell32", "location": "<value>", "slug": "<value>"}]}
+  get_current_user:
+    speakeasy-default-get-current-user:
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Lizzie69", "name": "<value>", "email": "Coleman_Frami45@hotmail.com", "avatar_url": "https://oily-attraction.info/", "created_at": "1720815152103", "updated_at": "1735651999933", "two_factor_auth_configured": false, "default_organization": {"id": "<id>", "name": "<value>", "created_at": "1712421724110", "updated_at": "1735664277518", "deleted_at": "<value>"}, "sso": true, "managed": true, "directory_managed": true, "email_verified": false}
+examplesVersion: 1.0.2
