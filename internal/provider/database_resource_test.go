@@ -1,0 +1,150 @@
+package provider
+
+import (
+	"encoding/json"
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/hashicorp/terraform-plugin-testing/config"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
+	"github.com/hashicorp/terraform-plugin-testing/statecheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
+)
+
+func TestAccDatabaseResource_Lifecycle(t *testing.T) {
+	t.Parallel()
+
+	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	resourceAddress := "planetscale_database.test"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProviders(),
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"name": config.StringVariable(name),
+				},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("branches_url"),
+						knownvalue.NotNull(),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("default_branch"),
+						knownvalue.StringExact("main"),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("html_url"),
+						knownvalue.NotNull(),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("kind"),
+						knownvalue.StringExact("mysql"),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("id"),
+						knownvalue.NotNull(),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("url"),
+						knownvalue.NotNull(),
+					),
+				},
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"name": config.StringVariable(name),
+				},
+				ResourceName: resourceAddress,
+				ImportState:  true,
+				ImportStateIdFunc: func(s *terraform.State) (string, error) {
+					rs := s.RootModule().Resources[resourceAddress]
+					jsonBytes, err := json.Marshal(map[string]string{
+						"organization": rs.Primary.Attributes["organization"],
+						"name":         rs.Primary.Attributes["name"],
+					})
+					return string(jsonBytes), err
+				},
+				ImportStateVerify: true,
+				// Not returned by API, therefore cannot be imported correctly.
+				ImportStateVerifyIgnore: []string{"cluster_size"},
+			},
+		},
+	})
+}
+
+func TestAccDatabaseResource_ClusterSize(t *testing.T) {
+	t.Parallel()
+
+	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	clusterSizeOriginal := "PS_10"
+	clusterSizeUpdated := "PS_20"
+	resourceAddress := "planetscale_database.test"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProviders(),
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"cluster_size": config.StringVariable(clusterSizeOriginal),
+					"name":         config.StringVariable(name),
+				},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("name"),
+						knownvalue.StringExact(name),
+					),
+				},
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"cluster_size": config.StringVariable(clusterSizeOriginal),
+					"name":         config.StringVariable(name),
+				},
+				ResourceName: resourceAddress,
+				ImportState:  true,
+				ImportStateIdFunc: func(s *terraform.State) (string, error) {
+					rs := s.RootModule().Resources[resourceAddress]
+					jsonBytes, err := json.Marshal(map[string]string{
+						"organization": rs.Primary.Attributes["organization"],
+						"name":         rs.Primary.Attributes["name"],
+					})
+					return string(jsonBytes), err
+				},
+				ImportStateVerify: true,
+				// Not returned by API, therefore cannot be imported correctly.
+				ImportStateVerifyIgnore: []string{"cluster_size"},
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"cluster_size": config.StringVariable(clusterSizeUpdated),
+					"name":         config.StringVariable(name),
+				},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("cluster_size"),
+						knownvalue.StringExact(clusterSizeUpdated),
+					),
+				},
+			},
+		},
+	})
+}
