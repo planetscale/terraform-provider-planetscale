@@ -1,0 +1,46 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_database managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: Database#create
+      x-speakeasy-entity-description: Manage a PlanetScale database.
+  - target: $.paths["/organizations/{organization}/databases/{name}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: Database#delete
+  - target: $.paths["/organizations/{organization}/databases/{name}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation:
+        - Database#read
+        - entityOperation: Database#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale database.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+  - target: $.paths["/organizations/{organization}/databases/{name}"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation: Database#update
+
+  - target: $.paths["/organizations/{organization}/databases"].post.responses["201"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data
+    update:
+      region:
+        x-speakeasy-name-override: region_data
+  - target: $.paths["/organizations/{organization}/databases/{name}"].patch.requestBody.content["application/json"].schema.properties
+    description: Prevent duplicate attribute for name
+    update:
+      new_name:
+        x-speakeasy-name-override: name

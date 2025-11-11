@@ -288,6 +288,8 @@ type ListOrganizationsResponse struct {
 	RawResponse *http.Response
 	// Gets the organizations for the current user
 	Object *ListOrganizationsResponseBody
+
+	Next func() (*ListOrganizationsResponse, error)
 }
 
 func (l ListOrganizationsResponse) MarshalJSON() ([]byte, error) {

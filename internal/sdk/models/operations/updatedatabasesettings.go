@@ -11,7 +11,7 @@ import (
 
 type UpdateDatabaseSettingsRequestBody struct {
 	// The name to update the database to
-	NewName *string `json:"new_name,omitzero"`
+	Name *string `json:"new_name,omitzero"`
 	// Whether or not to copy migration data to new branches and in deploy requests. (Vitess only)
 	AutomaticMigrations *bool `json:"automatic_migrations,omitzero"`
 	// A migration framework to use on the database. (Vitess only)
@@ -34,11 +34,11 @@ type UpdateDatabaseSettingsRequestBody struct {
 	DefaultBranch *string `json:"default_branch,omitzero"`
 }
 
-func (u *UpdateDatabaseSettingsRequestBody) GetNewName() *string {
+func (u *UpdateDatabaseSettingsRequestBody) GetName() *string {
 	if u == nil {
 		return nil
 	}
-	return u.NewName
+	return u.Name
 }
 
 func (u *UpdateDatabaseSettingsRequestBody) GetAutomaticMigrations() *bool {
@@ -228,7 +228,7 @@ func (u *UpdateDatabaseSettingsDataImport) GetDataSource() UpdateDatabaseSetting
 	return u.DataSource
 }
 
-type UpdateDatabaseSettingsRegion struct {
+type UpdateDatabaseSettingsRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -247,56 +247,56 @@ type UpdateDatabaseSettingsRegion struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetID() string {
+func (u *UpdateDatabaseSettingsRegionData) GetID() string {
 	if u == nil {
 		return ""
 	}
 	return u.ID
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetProvider() string {
+func (u *UpdateDatabaseSettingsRegionData) GetProvider() string {
 	if u == nil {
 		return ""
 	}
 	return u.Provider
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetEnabled() bool {
+func (u *UpdateDatabaseSettingsRegionData) GetEnabled() bool {
 	if u == nil {
 		return false
 	}
 	return u.Enabled
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetPublicIPAddresses() []string {
+func (u *UpdateDatabaseSettingsRegionData) GetPublicIPAddresses() []string {
 	if u == nil {
 		return []string{}
 	}
 	return u.PublicIPAddresses
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetDisplayName() string {
+func (u *UpdateDatabaseSettingsRegionData) GetDisplayName() string {
 	if u == nil {
 		return ""
 	}
 	return u.DisplayName
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetLocation() string {
+func (u *UpdateDatabaseSettingsRegionData) GetLocation() string {
 	if u == nil {
 		return ""
 	}
 	return u.Location
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetSlug() string {
+func (u *UpdateDatabaseSettingsRegionData) GetSlug() string {
 	if u == nil {
 		return ""
 	}
 	return u.Slug
 }
 
-func (u *UpdateDatabaseSettingsRegion) GetCurrentDefault() bool {
+func (u *UpdateDatabaseSettingsRegionData) GetCurrentDefault() bool {
 	if u == nil {
 		return false
 	}
@@ -399,7 +399,7 @@ type UpdateDatabaseSettingsResponseBody struct {
 	// If the database has reached its development branch limit
 	AtDevelopmentBranchUsageLimit bool                             `json:"at_development_branch_usage_limit"`
 	DataImport                    UpdateDatabaseSettingsDataImport `json:"data_import"`
-	Region                        UpdateDatabaseSettingsRegion     `json:"region"`
+	RegionData                    UpdateDatabaseSettingsRegionData `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -543,11 +543,11 @@ func (u *UpdateDatabaseSettingsResponseBody) GetDataImport() UpdateDatabaseSetti
 	return u.DataImport
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetRegion() UpdateDatabaseSettingsRegion {
+func (u *UpdateDatabaseSettingsResponseBody) GetRegionData() UpdateDatabaseSettingsRegionData {
 	if u == nil {
-		return UpdateDatabaseSettingsRegion{}
+		return UpdateDatabaseSettingsRegionData{}
 	}
-	return u.Region
+	return u.RegionData
 }
 
 func (u *UpdateDatabaseSettingsResponseBody) GetHTMLURL() string {

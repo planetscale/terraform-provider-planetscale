@@ -5,6 +5,7 @@ package operations
 import (
 	"errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
+	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/polling"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/retry"
 	"time"
 )
@@ -12,6 +13,7 @@ import (
 var ErrUnsupportedOption = errors.New("unsupported option")
 
 const (
+	SupportedOptionPolling              = "polling"
 	SupportedOptionRetries              = "retries"
 	SupportedOptionTimeout              = "timeout"
 	SupportedOptionAcceptHeaderOverride = "acceptHeaderOverride"
@@ -31,6 +33,7 @@ func (e AcceptHeaderEnum) ToPointer() *AcceptHeaderEnum {
 
 type Options struct {
 	ServerURL            *string
+	Polling              *polling.Config
 	Retries              *retry.Config
 	Timeout              *time.Duration
 	AcceptHeaderOverride *AcceptHeaderEnum
@@ -56,6 +59,25 @@ func WithTemplatedServerURL(serverURL string, params map[string]string) Option {
 		}
 
 		opts.ServerURL = &serverURL
+		return nil
+	}
+}
+
+// WithPolling enables a polling configuration for an operation.
+func WithPolling(configFunc polling.ConfigFunc, pollingOptions ...polling.Option) Option {
+	return func(opts *Options, supportedOptions ...string) error {
+		if !utils.Contains(supportedOptions, SupportedOptionPolling) {
+			return ErrUnsupportedOption
+		}
+
+		pollingConfig, err := configFunc(pollingOptions...)
+
+		if err != nil {
+			return err
+		}
+
+		opts.Polling = pollingConfig
+
 		return nil
 	}
 }

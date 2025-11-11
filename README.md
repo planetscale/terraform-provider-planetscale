@@ -61,7 +61,13 @@ Available configuration:
 
 ### Resources
 
+* [planetscale_database](docs/resources/database.md)
 ### Data Sources
+
+* [planetscale_database](docs/data-sources/database.md)
+* [planetscale_databases](docs/data-sources/databases.md)
+* [planetscale_organization](docs/data-sources/organization.md)
+* [planetscale_organizations](docs/data-sources/organizations.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

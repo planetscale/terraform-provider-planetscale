@@ -1,0 +1,11 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_organization data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{name}"].get
+    description: API operation for data resource read.
+    update:
+      x-speakeasy-entity-operation: Organization#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale organization.

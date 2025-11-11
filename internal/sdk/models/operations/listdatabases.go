@@ -698,6 +698,8 @@ type ListDatabasesResponse struct {
 	RawResponse *http.Response
 	// Retrieves the databases for an organization
 	Object *ListDatabasesResponseBody
+
+	Next func() (*ListDatabasesResponse, error)
 }
 
 func (l ListDatabasesResponse) MarshalJSON() ([]byte, error) {

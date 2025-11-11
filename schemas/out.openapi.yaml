@@ -25,6 +25,7 @@ paths:
           schema:
             type: number
             default: 25
+          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Gets the organizations for the current user
@@ -37,18 +38,23 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
+                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
+                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
+                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
+                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -163,6 +169,16 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | User | `read_organizations` |
+      x-speakeasy-entity-operation: Organizations#read
+      x-speakeasy-entity-description: Returns information about accessible PlanetScale organizations.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
   /organizations/{name}:
     get:
       tags:
@@ -276,7 +292,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -289,6 +305,8 @@ paths:
         | :------- | :---------- |
         | User | `read_organizations` |
         | Organization | `read_organization` |
+      x-speakeasy-entity-operation: Organization#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale organization.
     patch:
       tags:
         - Organizations
@@ -332,7 +350,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
 
@@ -466,7 +484,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -579,7 +597,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -622,6 +640,7 @@ paths:
           schema:
             type: number
             default: 25
+          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Retrieves the databases for an organization
@@ -634,18 +653,23 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
+                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
+                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
+                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
+                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -908,7 +932,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -920,6 +944,16 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `read_databases` |
+      x-speakeasy-entity-operation: Databases#read
+      x-speakeasy-entity-description: Returns information about accessible PlanetScale databases.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
     post:
       tags:
         - Databases
@@ -1080,6 +1114,7 @@ paths:
                       - location
                       - slug
                       - current_default
+                    x-speakeasy-name-override: region_data
                   html_url:
                     type: string
                     description: The URL to see this database's branches in the web UI
@@ -1215,7 +1250,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -1227,6 +1262,8 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `create_databases` |
+      x-speakeasy-entity-operation: Database#create
+      x-speakeasy-entity-description: Manage a PlanetScale database.
   /organizations/{organization}/databases/{database}/branches:
     get:
       tags:
@@ -1541,7 +1578,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -1838,7 +1875,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2225,7 +2262,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2554,7 +2591,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2614,7 +2651,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2683,7 +2720,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2739,7 +2776,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2980,7 +3017,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3267,7 +3304,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3532,7 +3569,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3591,7 +3628,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3647,7 +3684,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3718,7 +3755,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3924,7 +3961,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3979,7 +4016,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4232,7 +4269,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4445,7 +4482,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4648,7 +4685,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4846,7 +4883,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
     post:
       tags:
         - Database branch keyspaces
@@ -5002,7 +5039,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vschema:
     get:
       tags:
@@ -5057,7 +5094,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -5131,7 +5168,7 @@ paths:
           description: Unprocessable Content
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -5184,7 +5221,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
     patch:
       tags:
         - Database branch keyspaces
@@ -5230,7 +5267,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
     delete:
       tags:
         - Database branch keyspaces
@@ -5273,7 +5310,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}/rollout-status:
     get:
       tags:
@@ -5356,7 +5393,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/branches/{branch}/parameters:
     get:
       tags:
@@ -5519,7 +5556,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -5787,7 +5824,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6043,7 +6080,7 @@ paths:
           description: Unprocessable Content
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6103,7 +6140,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6177,7 +6214,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6233,7 +6270,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6293,7 +6330,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6421,7 +6458,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6524,7 +6561,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6584,7 +6621,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6640,7 +6677,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6700,7 +6737,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6751,7 +6788,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6979,7 +7016,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7195,7 +7232,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7255,7 +7292,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7324,7 +7361,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7390,7 +7427,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7450,7 +7487,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7504,7 +7541,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7554,7 +7591,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7617,7 +7654,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7772,7 +7809,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
     delete:
       tags:
         - Database branches
@@ -7812,7 +7849,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/branches/{name}/schema:
     get:
       tags:
@@ -7887,7 +7924,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -8061,7 +8098,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -9925,7 +9962,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -9978,7 +10015,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10042,7 +10079,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10095,7 +10132,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10212,7 +10249,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10265,7 +10302,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10328,7 +10365,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11047,7 +11084,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11177,7 +11214,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11454,7 +11491,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11521,7 +11558,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11568,7 +11605,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11629,7 +11666,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11913,7 +11950,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11966,7 +12003,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -12036,7 +12073,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -12085,7 +12122,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -12651,7 +12688,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
     post:
       tags:
         - Workflows
@@ -13148,7 +13185,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}:
     get:
       tags:
@@ -13189,7 +13226,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
     delete:
       tags:
         - Workflows
@@ -13229,7 +13266,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/complete:
     patch:
       tags:
@@ -13270,7 +13307,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/cutover:
     patch:
       tags:
@@ -13311,7 +13348,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/retry:
     patch:
       tags:
@@ -13352,7 +13389,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/reverse-cutover:
     patch:
       tags:
@@ -13393,7 +13430,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/reverse-traffic:
     patch:
       tags:
@@ -13434,7 +13471,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/switch-primaries:
     patch:
       tags:
@@ -13475,7 +13512,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/switch-replicas:
     patch:
       tags:
@@ -13516,7 +13553,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{database}/workflows/{number}/verify-data:
     patch:
       tags:
@@ -13557,7 +13594,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: ""
   /organizations/{organization}/databases/{name}:
     get:
       tags:
@@ -13592,7 +13629,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -13605,6 +13642,19 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
+      x-speakeasy-entity-operation:
+        - Database#read
+        - entityOperation: Database#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale database.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
     patch:
       tags:
         - Databases
@@ -13632,6 +13682,7 @@ paths:
                 new_name:
                   type: string
                   description: The name to update the database to
+                  x-speakeasy-name-override: name
                 automatic_migrations:
                   type: boolean
                   description: Whether or not to copy migration data to new branches and in deploy requests. (Vitess only)
@@ -13678,7 +13729,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -13691,6 +13742,7 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Database#update
     delete:
       tags:
         - Databases
@@ -13721,7 +13773,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -13734,6 +13786,7 @@ paths:
         | :------- | :---------- |
         | Organization | `delete_databases` |
         | Database | `delete_database` |
+      x-speakeasy-entity-operation: Database#delete
   /organizations/{organization}/databases/{name}/read-only-regions:
     get:
       tags:
@@ -13954,7 +14007,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -14122,7 +14175,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2-
+      description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -14446,7 +14499,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -14567,7 +14620,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -14654,7 +14707,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -15375,7 +15428,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -15418,7 +15471,7 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |2+
+      description: |+
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 

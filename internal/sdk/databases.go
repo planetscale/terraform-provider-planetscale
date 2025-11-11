@@ -11,7 +11,10 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/polling"
+	"github.com/spyzhov/ajson"
 	"net/http"
+	"time"
 )
 
 // Databases -             Resources for managing databases within an organization.
@@ -139,6 +142,46 @@ func (s *Databases) ListDatabases(ctx context.Context, request operations.ListDa
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
+	}
+	res.Next = func() (*operations.ListDatabasesResponse, error) {
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+
+		b, err := ajson.Unmarshal(rawBody)
+		if err != nil {
+			return nil, err
+		}
+		var p float64 = 1
+		if request.Page != nil {
+			p = *request.Page
+		}
+		nP := float64(p + 1)
+		r, err := ajson.Eval(b, "$.data")
+		if err != nil {
+			return nil, err
+		}
+		if !r.IsArray() {
+			return nil, nil
+		}
+		arr, err := r.GetArray()
+		if err != nil {
+			return nil, err
+		}
+		if len(arr) == 0 {
+			return nil, nil
+		}
+
+		return s.ListDatabases(
+			ctx,
+			operations.ListDatabasesRequest{
+				Organization: request.Organization,
+				Q:            request.Q,
+				Page:         &nP,
+				PerPage:      request.PerPage,
+			},
+		)
 	}
 
 	switch {
@@ -659,6 +702,7 @@ func (s *Databases) UpdateDatabaseThrottler(ctx context.Context, request operati
 func (s *Databases) GetDatabase(ctx context.Context, request operations.GetDatabaseRequest, opts ...operations.Option) (*operations.GetDatabaseResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -714,6 +758,19 @@ func (s *Databases) GetDatabase(ctx context.Context, request operations.GetDatab
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
+
+	if o.Polling != nil {
+		switch o.Polling.Name {
+		case "WaitForReady":
+			return s.getDatabaseWaitForReady(ctx, hookCtx, req, o)
+		}
+	}
+
+	return s.getDatabase(ctx, hookCtx, req, o)
+}
+
+func (s *Databases) getDatabase(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetDatabaseResponse, error) {
+	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -788,6 +845,89 @@ func (s *Databases) GetDatabase(ctx context.Context, request operations.GetDatab
 
 	return res, nil
 
+}
+
+// Use with GetDatabase by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *Databases) GetDatabaseWaitForReady() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 1
+		defaultIntervalSeconds := 1
+		defaultLimitCount := 300
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForReady",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *Databases) getDatabaseWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetDatabaseResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getDatabase(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetDatabaseResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getDatabase(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 200
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = res.Object.State == "ready"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
 // UpdateDatabaseSettings - Update database settings

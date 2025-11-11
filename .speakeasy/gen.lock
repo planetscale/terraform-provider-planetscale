@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: e43f6148fe1716e9f865c54bb9315a90
+  docChecksum: d90afd60d9c740a1d0caea87868a1384
   docVersion: v1
   speakeasyVersion: 1.653.1
   generationVersion: 2.748.0
@@ -14,10 +14,20 @@ features:
     core: 3.46.8
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
+    nameOverrides: 2.81.3
+    operationPolling: 0.1.0
+    pagination: 2.83.4
 generatedFiles:
   - .gitattributes
   - USAGE.md
+  - examples/data-sources/planetscale_database/data-source.tf
+  - examples/data-sources/planetscale_databases/data-source.tf
+  - examples/data-sources/planetscale_organization/data-source.tf
+  - examples/data-sources/planetscale_organizations/data-source.tf
   - examples/provider/provider.tf
+  - examples/resources/planetscale_database/import-by-string-id.tf
+  - examples/resources/planetscale_database/import.sh
+  - examples/resources/planetscale_database/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -32,6 +42,16 @@ generatedFiles:
   - internal/planmodifiers/setplanmodifier/suppress_diff.go
   - internal/planmodifiers/stringplanmodifier/suppress_diff.go
   - internal/planmodifiers/utils/state_check.go
+  - internal/provider/database_data_source.go
+  - internal/provider/database_data_source_sdk.go
+  - internal/provider/database_resource.go
+  - internal/provider/database_resource_sdk.go
+  - internal/provider/databases_data_source.go
+  - internal/provider/databases_data_source_sdk.go
+  - internal/provider/organization_data_source.go
+  - internal/provider/organization_data_source_sdk.go
+  - internal/provider/organizations_data_source.go
+  - internal/provider/organizations_data_source_sdk.go
   - internal/provider/provider.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go
@@ -50,6 +70,14 @@ generatedFiles:
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
+  - internal/provider/types/get_database_data_import.go
+  - internal/provider/types/get_database_data_source.go
+  - internal/provider/types/get_database_region_data.go
+  - internal/provider/types/list_databases_data.go
+  - internal/provider/types/list_databases_data_import.go
+  - internal/provider/types/list_databases_data_source.go
+  - internal/provider/types/list_databases_region.go
+  - internal/provider/types/list_organizations_data.go
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
   - internal/sdk/apibranchbouncerresizes.go
@@ -64,6 +92,7 @@ generatedFiles:
   - internal/sdk/databasebranchpasswords.go
   - internal/sdk/databases.go
   - internal/sdk/deployrequests.go
+  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/hooks/hooks.go
   - internal/sdk/internal/utils/contenttype.go
@@ -205,6 +234,9 @@ generatedFiles:
   - internal/sdk/organizationmembers.go
   - internal/sdk/organizations.go
   - internal/sdk/planetscale.go
+  - internal/sdk/polling/config.go
+  - internal/sdk/polling/errors.go
+  - internal/sdk/polling/option.go
   - internal/sdk/queryinsightsreports.go
   - internal/sdk/regions.go
   - internal/sdk/retry/config.go

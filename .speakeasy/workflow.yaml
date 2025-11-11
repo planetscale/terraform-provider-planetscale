@@ -6,6 +6,10 @@ sources:
             - location: schemas/openapi.yaml
         overlays:
             - location: schemas/overlay-terraform.yaml
+            - location: schemas/overlay-terraform-database.yaml
+            - location: schemas/overlay-terraform-databases.yaml
+            - location: schemas/overlay-terraform-organization.yaml
+            - location: schemas/overlay-terraform-organizations.yaml
         output: schemas/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/speakeasy-onboarding/onboarding/planet-scale-api
