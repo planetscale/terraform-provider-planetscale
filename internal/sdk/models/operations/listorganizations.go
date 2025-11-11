@@ -73,7 +73,7 @@ type ListOrganizationsData struct {
 	// Whether or not the IdP provider is be responsible for managing roles in PlanetScale
 	IdpManagedRoles bool `json:"idp_managed_roles"`
 	// The expected monthly budget for the organization
-	InvoiceBudgetAmount float64 `json:"invoice_budget_amount"`
+	InvoiceBudgetAmount string `json:"invoice_budget_amount"`
 	// The keyspace shard limit for the organization
 	KeyspaceShardLimit float64 `json:"keyspace_shard_limit"`
 	// Whether or not the organization has a payment method on file
@@ -194,9 +194,9 @@ func (l *ListOrganizationsData) GetIdpManagedRoles() bool {
 	return l.IdpManagedRoles
 }
 
-func (l *ListOrganizationsData) GetInvoiceBudgetAmount() float64 {
+func (l *ListOrganizationsData) GetInvoiceBudgetAmount() string {
 	if l == nil {
-		return 0.0
+		return ""
 	}
 	return l.InvoiceBudgetAmount
 }

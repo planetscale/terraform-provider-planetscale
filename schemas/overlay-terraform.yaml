@@ -9,3 +9,30 @@ actions:
     update:
       description: Manage your PlanetScale resources with Terraform
       title: Terraform Provider for PlanetScale
+  - target: $.components.securitySchemes
+    description: Add custom security scheme for Terraform Provider.
+    update:
+      ServiceToken:
+        type: http
+        scheme: custom
+        x-speakeasy-custom-security-scheme:
+          schema:
+            type: object
+            properties:
+              service_token:
+                type: string
+                description: PlanetScale Service Token
+              service_token_id:
+                type: string
+                description: PlanetScale Service Token ID
+            required:
+              - service_token
+              - service_token_id
+  - target: $.security
+    description: Replace ApiKeyHeader security scheme with custom security.
+    remove: true
+  - target: $
+    description: Use custom security scheme for Terraform Provider.
+    update:
+      security:
+        - ServiceToken: []

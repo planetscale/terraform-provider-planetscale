@@ -37,7 +37,7 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 			data.HasPastDueInvoices = types.BoolValue(dataItem.HasPastDueInvoices)
 			data.ID = types.StringValue(dataItem.ID)
 			data.IdpManagedRoles = types.BoolValue(dataItem.IdpManagedRoles)
-			data.InvoiceBudgetAmount = types.Float64Value(dataItem.InvoiceBudgetAmount)
+			data.InvoiceBudgetAmount = types.StringValue(dataItem.InvoiceBudgetAmount)
 			data.KeyspaceShardLimit = types.Float64Value(dataItem.KeyspaceShardLimit)
 			data.ManagedTenancy = types.BoolValue(dataItem.ManagedTenancy)
 			data.Name = types.StringValue(dataItem.Name)

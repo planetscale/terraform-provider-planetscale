@@ -29,7 +29,8 @@ generation:
 terraform:
   version: 0.0.1
   additionalDataSources: []
-  additionalDependencies: {}
+  additionalDependencies:
+    github.com/hashicorp/terraform-plugin-testing: v1.13.3
   additionalEphemeralResources: []
   additionalProviderAttributes:
     httpHeaders: ""
@@ -41,7 +42,12 @@ terraform:
   enableOperationSecurity: false
   enableOperationServers: false
   enableTypeDeduplication: false
-  environmentVariables: []
+  environmentVariables:
+    - env: PLANETSCALE_SERVICE_TOKEN
+      providerAttribute: service_token
+    - env: PLANETSCALE_SERVICE_TOKEN_ID
+      providerAttribute: service_token_id
+  excludeEmptyObjectSchemas: false
   includeEmptyObjects: true
   packageName: planetscale
   unionDeserializationStrategy: populated-fields

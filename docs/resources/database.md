@@ -72,7 +72,7 @@ resource "planetscale_database" "my_database" {
 - `restrict_branch_region` (Boolean) Whether to restrict branch creation to one region
 - `schema_last_updated_at` (String) When the default branch schema was last changed.
 - `sharded` (Boolean) If the database is sharded
-- `state` (String) State of the database. must be one of ["pending", "importing", "sleep_in_progress", "sleeping", "awakening", "import_ready", "ready"]
+- `state` (String) State of the database
 - `updated_at` (String) When the database was last updated
 - `url` (String) The URL to the database API endpoint
 

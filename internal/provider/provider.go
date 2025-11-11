@@ -13,6 +13,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/shared"
 	"net/http"
+	"os"
 )
 
 var _ provider.Provider = (*PlanetscaleProvider)(nil)
@@ -27,8 +28,9 @@ type PlanetscaleProvider struct {
 
 // PlanetscaleProviderModel describes the provider data model.
 type PlanetscaleProviderModel struct {
-	APIKeyHeader types.String `tfsdk:"api_key_header"`
-	ServerURL    types.String `tfsdk:"server_url"`
+	ServerURL      types.String `tfsdk:"server_url"`
+	ServiceToken   types.String `tfsdk:"service_token"`
+	ServiceTokenID types.String `tfsdk:"service_token_id"`
 }
 
 func (p *PlanetscaleProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -39,14 +41,19 @@ func (p *PlanetscaleProvider) Metadata(ctx context.Context, req provider.Metadat
 func (p *PlanetscaleProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
-			"api_key_header": schema.StringAttribute{
-				MarkdownDescription: `API Key.`,
-				Required:            true,
-				Sensitive:           true,
-			},
 			"server_url": schema.StringAttribute{
 				Description: `Server URL (defaults to https://api.planetscale.com/v1)`,
 				Optional:    true,
+			},
+			"service_token": schema.StringAttribute{
+				MarkdownDescription: `PlanetScale Service Token. Configurable via environment variable ` + "`" + `PLANETSCALE_SERVICE_TOKEN` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"service_token_id": schema.StringAttribute{
+				MarkdownDescription: `PlanetScale Service Token ID. Configurable via environment variable ` + "`" + `PLANETSCALE_SERVICE_TOKEN_ID` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 		},
 		MarkdownDescription: `Terraform Provider for PlanetScale: Manage your PlanetScale resources with Terraform`,
@@ -70,14 +77,33 @@ func (p *PlanetscaleProvider) Configure(ctx context.Context, req provider.Config
 
 	security := shared.Security{}
 
-	if !data.APIKeyHeader.IsUnknown() {
-		security.APIKeyHeader = data.APIKeyHeader.ValueString()
+	if !data.ServiceToken.IsUnknown() {
+		security.ServiceToken = data.ServiceToken.ValueString()
 	}
 
-	if security.APIKeyHeader == "" {
+	if serviceTokenEnvVar := os.Getenv("PLANETSCALE_SERVICE_TOKEN"); security.ServiceToken == "" && serviceTokenEnvVar != "" {
+		security.ServiceToken = serviceTokenEnvVar
+	}
+
+	if security.ServiceToken == "" {
 		resp.Diagnostics.AddError(
 			"Missing Provider Security Configuration",
-			"Provider configuration api_key_header attribute must be configured.",
+			"Either the environment variable PLANETSCALE_SERVICE_TOKEN or provider configuration service_token attribute must be configured.",
+		)
+	}
+
+	if !data.ServiceTokenID.IsUnknown() {
+		security.ServiceTokenID = data.ServiceTokenID.ValueString()
+	}
+
+	if serviceTokenIDEnvVar := os.Getenv("PLANETSCALE_SERVICE_TOKEN_ID"); security.ServiceTokenID == "" && serviceTokenIDEnvVar != "" {
+		security.ServiceTokenID = serviceTokenIDEnvVar
+	}
+
+	if security.ServiceTokenID == "" {
+		resp.Diagnostics.AddError(
+			"Missing Provider Security Configuration",
+			"Either the environment variable PLANETSCALE_SERVICE_TOKEN_ID or provider configuration service_token_id attribute must be configured.",
 		)
 	}
 

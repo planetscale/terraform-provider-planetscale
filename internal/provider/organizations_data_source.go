@@ -81,7 +81,7 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 							Computed:    true,
 							Description: `Whether or not the IdP provider is be responsible for managing roles in PlanetScale`,
 						},
-						"invoice_budget_amount": schema.Float64Attribute{
+						"invoice_budget_amount": schema.StringAttribute{
 							Computed:    true,
 							Description: `The expected monthly budget for the organization`,
 						},

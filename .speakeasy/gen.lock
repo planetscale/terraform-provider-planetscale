@@ -1,17 +1,18 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: d90afd60d9c740a1d0caea87868a1384
+  docChecksum: 2e75b8fe8bc96902a7d8ff005933d3fa
   docVersion: v1
-  speakeasyVersion: 1.653.1
-  generationVersion: 2.748.0
+  speakeasyVersion: 1.653.2
+  generationVersion: 2.748.4
   releaseVersion: 0.0.1
-  configChecksum: fb40f6597bac108f3a2566216b568d1f
+  configChecksum: e94caef6d0eb48811ff3e11cf43762e0
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.8
+    core: 3.46.10
+    customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     nameOverrides: 2.81.3
@@ -275,7 +276,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"current_page": 9917.69, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": 8943.61, "keyspace_shard_limit": 8271.3, "has_card": false, "payment_info_required": false}]}
+          application/json: {"current_page": 9917.69, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "has_card": false, "payment_info_required": false}]}
   get_organization:
     speakeasy-default-get-organization:
       parameters:

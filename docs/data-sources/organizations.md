@@ -37,7 +37,7 @@ Read-Only:
 - `has_past_due_invoices` (Boolean) Whether or not the organization has past due billing invoices
 - `id` (String) The ID for the organization
 - `idp_managed_roles` (Boolean) Whether or not the IdP provider is be responsible for managing roles in PlanetScale
-- `invoice_budget_amount` (Number) The expected monthly budget for the organization
+- `invoice_budget_amount` (String) The expected monthly budget for the organization
 - `keyspace_shard_limit` (Number) The keyspace shard limit for the organization
 - `managed_tenancy` (Boolean) Whether or not the organization has managed tenancy enabled
 - `name` (String) The name of the organization

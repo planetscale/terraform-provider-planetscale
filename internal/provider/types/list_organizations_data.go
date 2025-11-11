@@ -16,7 +16,7 @@ type ListOrganizationsData struct {
 	HasPastDueInvoices  types.Bool                      `tfsdk:"has_past_due_invoices"`
 	ID                  types.String                    `tfsdk:"id"`
 	IdpManagedRoles     types.Bool                      `tfsdk:"idp_managed_roles"`
-	InvoiceBudgetAmount types.Float64                   `tfsdk:"invoice_budget_amount"`
+	InvoiceBudgetAmount types.String                    `tfsdk:"invoice_budget_amount"`
 	KeyspaceShardLimit  types.Float64                   `tfsdk:"keyspace_shard_limit"`
 	ManagedTenancy      types.Bool                      `tfsdk:"managed_tenancy"`
 	Name                types.String                    `tfsdk:"name"`

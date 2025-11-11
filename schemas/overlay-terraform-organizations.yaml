@@ -23,10 +23,17 @@ actions:
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.paths["/organizations"].get.responses["200"].content["application/json"].schema.properties
-    description: Ignore extraneous response properties in Terraform schema.
+    description: |-
+      Ignore extraneous response properties in Terraform schema and fix API
+      response type mismatches.
     update:
       current_page:
         x-speakeasy-terraform-ignore: true
+      data:
+        items:
+          properties:
+            invoice_budget_amount:
+              type: string
       next_page:
         x-speakeasy-terraform-ignore: true
       next_page_url:

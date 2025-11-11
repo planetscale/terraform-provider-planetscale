@@ -3,12 +3,22 @@
 package shared
 
 type Security struct {
-	APIKeyHeader string `security:"scheme,type=apiKey,subtype=header,name=Authorization"`
+	// PlanetScale Service Token
+	ServiceToken string `json:"service_token" security:"scheme,type=http,subtype=custom,name=service_token"`
+	// PlanetScale Service Token ID
+	ServiceTokenID string `json:"service_token_id" security:"scheme,type=http,subtype=custom,name=service_token_id"`
 }
 
-func (s *Security) GetAPIKeyHeader() string {
+func (s *Security) GetServiceToken() string {
 	if s == nil {
 		return ""
 	}
-	return s.APIKeyHeader
+	return s.ServiceToken
+}
+
+func (s *Security) GetServiceTokenID() string {
+	if s == nil {
+		return ""
+	}
+	return s.ServiceTokenID
 }

@@ -110,7 +110,7 @@ paths:
                           type: boolean
                           description: Whether or not the IdP provider is be responsible for managing roles in PlanetScale
                         invoice_budget_amount:
-                          type: number
+                          type: string
                           description: The expected monthly budget for the organization
                         keyspace_shard_limit:
                           type: number
@@ -15823,9 +15823,6 @@ tags:
   - name: Invoices
     description: |2
                   Resources for managing invoices.
-security:
-  - ApiKeyHeader:
-      - Authorization
 x-readme:
   explorer-enabled: false
 servers:
@@ -15836,6 +15833,22 @@ components:
       type: apiKey
       in: header
       name: Authorization
+    ServiceToken:
+      type: http
+      scheme: custom
+      x-speakeasy-custom-security-scheme:
+        schema:
+          type: object
+          properties:
+            service_token:
+              type: string
+              description: PlanetScale Service Token
+            service_token_id:
+              type: string
+              description: PlanetScale Service Token ID
+          required:
+            - service_token
+            - service_token_id
   schemas:
     PaginatedBackup: *a17
     Backup: *a2
@@ -15887,3 +15900,5 @@ components:
     PaginatedLineItem: *a48
     PaginatedInvoice: *a49
     Invoice: *a50
+security:
+  - ServiceToken: []

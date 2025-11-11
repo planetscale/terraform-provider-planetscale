@@ -47,13 +47,19 @@ provider "planetscale" {
 <!-- Start Authentication [security] -->
 ## Authentication
 
-This provider supports authentication configuration via provider configuration.
+This provider supports authentication configuration via environment variables and provider configuration.
+
+The configuration precedence is:
+
+- Provider configuration
+- Environment variables
 
 Available configuration:
 
 | Provider Attribute | Description |
 |---|---|
-| `api_key_header` | API Key. |
+| `service_token` | PlanetScale Service Token. Configurable via environment variable `PLANETSCALE_SERVICE_TOKEN`. |
+| `service_token_id` | PlanetScale Service Token ID. Configurable via environment variable `PLANETSCALE_SERVICE_TOKEN_ID`. |
 <!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->

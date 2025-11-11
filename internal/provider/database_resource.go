@@ -333,18 +333,7 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
-				Description: `State of the database. must be one of ["pending", "importing", "sleep_in_progress", "sleeping", "awakening", "import_ready", "ready"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"pending",
-						"importing",
-						"sleep_in_progress",
-						"sleeping",
-						"awakening",
-						"import_ready",
-						"ready",
-					),
-				},
+				Description: `State of the database`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
