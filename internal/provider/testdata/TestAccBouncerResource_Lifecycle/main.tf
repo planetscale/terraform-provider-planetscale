@@ -11,17 +11,10 @@ resource "planetscale_database" "test" {
   organization = data.planetscale_organizations.test.data[0].name
 }
 
-resource "planetscale_branch" "test" {
-  database      = planetscale_database.test.name
-  name          = "test"
-  organization  = planetscale_database.test.organization
-  parent_branch = planetscale_database.test.default_branch
-}
-
 resource "planetscale_bouncer" "test" {
-  branch       = planetscale_branch.test.name
-  database     = planetscale_branch.test.database
+  branch       = planetscale_database.test.default_branch
+  database     = planetscale_database.test.name
   name         = "test"
-  organization = planetscale_branch.test.organization
+  organization = planetscale_database.test.organization
   target       = "primary"
 }
