@@ -1829,6 +1829,7 @@ paths:
                       - location
                       - slug
                       - current_default
+                    x-speakeasy-name-override: region_data
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -1889,6 +1890,8 @@ paths:
         | Organization | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
         | Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
         | Branch | `restore_backups` |
+      x-speakeasy-entity-operation: Branch#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch.
   /organizations/{organization}/databases/{database}/branches/{branch}/backups:
     get:
       tags:
@@ -3436,6 +3439,7 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
+                    x-speakeasy-name-override: branch_data
                   parameters:
                     type: array
                     items:
@@ -3549,6 +3553,8 @@ paths:
                         - url
                         - options
                         - actor
+                  region:
+                    x-speakeasy-name-override: region_data
                 additionalProperties: false
                 required:
                   - id
@@ -3582,6 +3588,8 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Bouncer#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch bouncer.
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}:
     get:
       tags:
@@ -3642,6 +3650,8 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
+      x-speakeasy-entity-operation: Bouncer#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch bouncer.
     delete:
       tags:
         - Bouncers
@@ -3697,6 +3707,7 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Bouncer#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}/resizes:
     get:
       tags:
@@ -7555,6 +7566,19 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        - Branch#read
+        - entityOperation: Branch#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
     delete:
       tags:
         - Database branches
@@ -7605,6 +7629,7 @@ paths:
         | Organization | `delete_branches`, `delete_production_branches` |
         | Database | `delete_branches`, `delete_production_branches` |
         | Branch | `delete_branch` |
+      x-speakeasy-entity-operation: Branch#delete
   /organizations/{organization}/databases/{database}/branches/{name}/cluster:
     patch:
       tags:

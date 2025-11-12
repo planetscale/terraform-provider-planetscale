@@ -154,7 +154,7 @@ func (c *CreateBouncerActor) GetAvatarURL() string {
 	return c.AvatarURL
 }
 
-type CreateBouncerBranch struct {
+type CreateBouncerBranchData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -167,35 +167,35 @@ type CreateBouncerBranch struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (c *CreateBouncerBranch) GetID() string {
+func (c *CreateBouncerBranchData) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
 }
 
-func (c *CreateBouncerBranch) GetName() string {
+func (c *CreateBouncerBranchData) GetName() string {
 	if c == nil {
 		return ""
 	}
 	return c.Name
 }
 
-func (c *CreateBouncerBranch) GetCreatedAt() string {
+func (c *CreateBouncerBranchData) GetCreatedAt() string {
 	if c == nil {
 		return ""
 	}
 	return c.CreatedAt
 }
 
-func (c *CreateBouncerBranch) GetUpdatedAt() string {
+func (c *CreateBouncerBranchData) GetUpdatedAt() string {
 	if c == nil {
 		return ""
 	}
 	return c.UpdatedAt
 }
 
-func (c *CreateBouncerBranch) GetDeletedAt() string {
+func (c *CreateBouncerBranchData) GetDeletedAt() string {
 	if c == nil {
 		return ""
 	}
@@ -500,8 +500,9 @@ type CreateBouncerResponseBody struct {
 	// When the bouncer was deleted
 	DeletedAt  string                   `json:"deleted_at"`
 	Actor      CreateBouncerActor       `json:"actor"`
-	Branch     CreateBouncerBranch      `json:"branch"`
+	BranchData CreateBouncerBranchData  `json:"branch"`
 	Parameters []CreateBouncerParameter `json:"parameters"`
+	RegionData any                      `json:"region,omitzero"`
 }
 
 func (c *CreateBouncerResponseBody) GetID() string {
@@ -560,11 +561,11 @@ func (c *CreateBouncerResponseBody) GetActor() CreateBouncerActor {
 	return c.Actor
 }
 
-func (c *CreateBouncerResponseBody) GetBranch() CreateBouncerBranch {
+func (c *CreateBouncerResponseBody) GetBranchData() CreateBouncerBranchData {
 	if c == nil {
-		return CreateBouncerBranch{}
+		return CreateBouncerBranchData{}
 	}
-	return c.Branch
+	return c.BranchData
 }
 
 func (c *CreateBouncerResponseBody) GetParameters() []CreateBouncerParameter {
@@ -572,6 +573,13 @@ func (c *CreateBouncerResponseBody) GetParameters() []CreateBouncerParameter {
 		return []CreateBouncerParameter{}
 	}
 	return c.Parameters
+}
+
+func (c *CreateBouncerResponseBody) GetRegionData() any {
+	if c == nil {
+		return nil
+	}
+	return c.RegionData
 }
 
 type CreateBouncerResponse struct {

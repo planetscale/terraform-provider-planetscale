@@ -180,7 +180,7 @@ func (e *EnableSafeMigrationsRestoredFromBranch) GetDeletedAt() string {
 	return e.DeletedAt
 }
 
-type EnableSafeMigrationsRegion struct {
+type EnableSafeMigrationsRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -199,56 +199,56 @@ type EnableSafeMigrationsRegion struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (e *EnableSafeMigrationsRegion) GetID() string {
+func (e *EnableSafeMigrationsRegionData) GetID() string {
 	if e == nil {
 		return ""
 	}
 	return e.ID
 }
 
-func (e *EnableSafeMigrationsRegion) GetProvider() string {
+func (e *EnableSafeMigrationsRegionData) GetProvider() string {
 	if e == nil {
 		return ""
 	}
 	return e.Provider
 }
 
-func (e *EnableSafeMigrationsRegion) GetEnabled() bool {
+func (e *EnableSafeMigrationsRegionData) GetEnabled() bool {
 	if e == nil {
 		return false
 	}
 	return e.Enabled
 }
 
-func (e *EnableSafeMigrationsRegion) GetPublicIPAddresses() []string {
+func (e *EnableSafeMigrationsRegionData) GetPublicIPAddresses() []string {
 	if e == nil {
 		return []string{}
 	}
 	return e.PublicIPAddresses
 }
 
-func (e *EnableSafeMigrationsRegion) GetDisplayName() string {
+func (e *EnableSafeMigrationsRegionData) GetDisplayName() string {
 	if e == nil {
 		return ""
 	}
 	return e.DisplayName
 }
 
-func (e *EnableSafeMigrationsRegion) GetLocation() string {
+func (e *EnableSafeMigrationsRegionData) GetLocation() string {
 	if e == nil {
 		return ""
 	}
 	return e.Location
 }
 
-func (e *EnableSafeMigrationsRegion) GetSlug() string {
+func (e *EnableSafeMigrationsRegionData) GetSlug() string {
 	if e == nil {
 		return ""
 	}
 	return e.Slug
 }
 
-func (e *EnableSafeMigrationsRegion) GetCurrentDefault() bool {
+func (e *EnableSafeMigrationsRegionData) GetCurrentDefault() bool {
 	if e == nil {
 		return false
 	}
@@ -316,8 +316,8 @@ type EnableSafeMigrationsResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL    string                     `json:"url"`
-	Region EnableSafeMigrationsRegion `json:"region"`
+	URL        string                         `json:"url"`
+	RegionData EnableSafeMigrationsRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -539,11 +539,11 @@ func (e *EnableSafeMigrationsResponseBody) GetURL() string {
 	return e.URL
 }
 
-func (e *EnableSafeMigrationsResponseBody) GetRegion() EnableSafeMigrationsRegion {
+func (e *EnableSafeMigrationsResponseBody) GetRegionData() EnableSafeMigrationsRegionData {
 	if e == nil {
-		return EnableSafeMigrationsRegion{}
+		return EnableSafeMigrationsRegionData{}
 	}
-	return e.Region
+	return e.RegionData
 }
 
 func (e *EnableSafeMigrationsResponseBody) GetParentBranch() string {

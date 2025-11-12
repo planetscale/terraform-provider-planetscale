@@ -11,7 +11,9 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/polling"
 	"net/http"
+	"time"
 )
 
 type DatabaseBranches struct {
@@ -358,6 +360,7 @@ func (s *DatabaseBranches) CreateBranch(ctx context.Context, request operations.
 func (s *DatabaseBranches) GetBranch(ctx context.Context, request operations.GetBranchRequest, opts ...operations.Option) (*operations.GetBranchResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -413,6 +416,19 @@ func (s *DatabaseBranches) GetBranch(ctx context.Context, request operations.Get
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
+
+	if o.Polling != nil {
+		switch o.Polling.Name {
+		case "WaitForReady":
+			return s.getBranchWaitForReady(ctx, hookCtx, req, o)
+		}
+	}
+
+	return s.getBranch(ctx, hookCtx, req, o)
+}
+
+func (s *DatabaseBranches) getBranch(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchResponse, error) {
+	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -487,6 +503,89 @@ func (s *DatabaseBranches) GetBranch(ctx context.Context, request operations.Get
 
 	return res, nil
 
+}
+
+// Use with GetBranch by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *DatabaseBranches) GetBranchWaitForReady() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 1
+		defaultIntervalSeconds := 1
+		defaultLimitCount := 300
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForReady",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *DatabaseBranches) getBranchWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getBranch(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetBranchResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getBranch(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 200
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = res.Object.State == "ready"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
 // DeleteBranch - Delete a branch

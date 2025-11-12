@@ -180,7 +180,7 @@ func (d *DemoteBranchRestoredFromBranch) GetDeletedAt() string {
 	return d.DeletedAt
 }
 
-type DemoteBranchRegion struct {
+type DemoteBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -199,56 +199,56 @@ type DemoteBranchRegion struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (d *DemoteBranchRegion) GetID() string {
+func (d *DemoteBranchRegionData) GetID() string {
 	if d == nil {
 		return ""
 	}
 	return d.ID
 }
 
-func (d *DemoteBranchRegion) GetProvider() string {
+func (d *DemoteBranchRegionData) GetProvider() string {
 	if d == nil {
 		return ""
 	}
 	return d.Provider
 }
 
-func (d *DemoteBranchRegion) GetEnabled() bool {
+func (d *DemoteBranchRegionData) GetEnabled() bool {
 	if d == nil {
 		return false
 	}
 	return d.Enabled
 }
 
-func (d *DemoteBranchRegion) GetPublicIPAddresses() []string {
+func (d *DemoteBranchRegionData) GetPublicIPAddresses() []string {
 	if d == nil {
 		return []string{}
 	}
 	return d.PublicIPAddresses
 }
 
-func (d *DemoteBranchRegion) GetDisplayName() string {
+func (d *DemoteBranchRegionData) GetDisplayName() string {
 	if d == nil {
 		return ""
 	}
 	return d.DisplayName
 }
 
-func (d *DemoteBranchRegion) GetLocation() string {
+func (d *DemoteBranchRegionData) GetLocation() string {
 	if d == nil {
 		return ""
 	}
 	return d.Location
 }
 
-func (d *DemoteBranchRegion) GetSlug() string {
+func (d *DemoteBranchRegionData) GetSlug() string {
 	if d == nil {
 		return ""
 	}
 	return d.Slug
 }
 
-func (d *DemoteBranchRegion) GetCurrentDefault() bool {
+func (d *DemoteBranchRegionData) GetCurrentDefault() bool {
 	if d == nil {
 		return false
 	}
@@ -316,8 +316,8 @@ type DemoteBranchResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL    string             `json:"url"`
-	Region DemoteBranchRegion `json:"region"`
+	URL        string                 `json:"url"`
+	RegionData DemoteBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -539,11 +539,11 @@ func (d *DemoteBranchResponseBody) GetURL() string {
 	return d.URL
 }
 
-func (d *DemoteBranchResponseBody) GetRegion() DemoteBranchRegion {
+func (d *DemoteBranchResponseBody) GetRegionData() DemoteBranchRegionData {
 	if d == nil {
-		return DemoteBranchRegion{}
+		return DemoteBranchRegionData{}
 	}
-	return d.Region
+	return d.RegionData
 }
 
 func (d *DemoteBranchResponseBody) GetParentBranch() string {

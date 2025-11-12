@@ -1,0 +1,37 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_branch managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: Branch#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{name}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: Branch#delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{name}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation:
+        - Branch#read
+        - entityOperation: Branch#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches"].post.responses["201"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data
+    update:
+      region:
+        x-speakeasy-name-override: region_data

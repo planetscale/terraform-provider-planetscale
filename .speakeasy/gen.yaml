@@ -39,6 +39,7 @@ terraform:
   author: planetscale
   baseErrorName: PlanetscaleError
   defaultErrorName: APIError
+  enableCustomCodeRegions: false
   enableOperationSecurity: false
   enableOperationServers: false
   enableTypeDeduplication: false

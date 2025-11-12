@@ -1,0 +1,28 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_bouncer managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: Bouncer#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch bouncer.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: Bouncer#delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation: Bouncer#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch bouncer.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data
+    update:
+      branch:
+        x-speakeasy-name-override: branch_data
+      region:
+        x-speakeasy-name-override: region_data

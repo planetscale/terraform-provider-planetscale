@@ -67,9 +67,13 @@ Available configuration:
 
 ### Resources
 
+* [planetscale_bouncer](docs/resources/bouncer.md)
+* [planetscale_branch](docs/resources/branch.md)
 * [planetscale_database](docs/resources/database.md)
 ### Data Sources
 
+* [planetscale_bouncer](docs/data-sources/bouncer.md)
+* [planetscale_branch](docs/data-sources/branch.md)
 * [planetscale_database](docs/data-sources/database.md)
 * [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_organization](docs/data-sources/organization.md)

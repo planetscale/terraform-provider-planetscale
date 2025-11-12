@@ -180,7 +180,7 @@ func (g *GetBranchRestoredFromBranch) GetDeletedAt() string {
 	return g.DeletedAt
 }
 
-type GetBranchRegion struct {
+type GetBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -199,56 +199,56 @@ type GetBranchRegion struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (g *GetBranchRegion) GetID() string {
+func (g *GetBranchRegionData) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetBranchRegion) GetProvider() string {
+func (g *GetBranchRegionData) GetProvider() string {
 	if g == nil {
 		return ""
 	}
 	return g.Provider
 }
 
-func (g *GetBranchRegion) GetEnabled() bool {
+func (g *GetBranchRegionData) GetEnabled() bool {
 	if g == nil {
 		return false
 	}
 	return g.Enabled
 }
 
-func (g *GetBranchRegion) GetPublicIPAddresses() []string {
+func (g *GetBranchRegionData) GetPublicIPAddresses() []string {
 	if g == nil {
 		return []string{}
 	}
 	return g.PublicIPAddresses
 }
 
-func (g *GetBranchRegion) GetDisplayName() string {
+func (g *GetBranchRegionData) GetDisplayName() string {
 	if g == nil {
 		return ""
 	}
 	return g.DisplayName
 }
 
-func (g *GetBranchRegion) GetLocation() string {
+func (g *GetBranchRegionData) GetLocation() string {
 	if g == nil {
 		return ""
 	}
 	return g.Location
 }
 
-func (g *GetBranchRegion) GetSlug() string {
+func (g *GetBranchRegionData) GetSlug() string {
 	if g == nil {
 		return ""
 	}
 	return g.Slug
 }
 
-func (g *GetBranchRegion) GetCurrentDefault() bool {
+func (g *GetBranchRegionData) GetCurrentDefault() bool {
 	if g == nil {
 		return false
 	}
@@ -316,8 +316,8 @@ type GetBranchResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL    string          `json:"url"`
-	Region GetBranchRegion `json:"region"`
+	URL        string              `json:"url"`
+	RegionData GetBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -539,11 +539,11 @@ func (g *GetBranchResponseBody) GetURL() string {
 	return g.URL
 }
 
-func (g *GetBranchResponseBody) GetRegion() GetBranchRegion {
+func (g *GetBranchResponseBody) GetRegionData() GetBranchRegionData {
 	if g == nil {
-		return GetBranchRegion{}
+		return GetBranchRegionData{}
 	}
-	return g.Region
+	return g.RegionData
 }
 
 func (g *GetBranchResponseBody) GetParentBranch() string {
