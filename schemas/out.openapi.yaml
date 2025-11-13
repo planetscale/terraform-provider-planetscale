@@ -5051,6 +5051,8 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
+      x-speakeasy-entity-operation: Keyspace#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch keyspace.
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vschema:
     get:
       tags:
@@ -5233,6 +5235,8 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
+      x-speakeasy-entity-operation: Keyspace#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch keyspace.
     patch:
       tags:
         - Database branch keyspaces
@@ -5279,6 +5283,9 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
+      x-speakeasy-entity-operation:
+        - Keyspace#create#2
+        - Keyspace#update
     delete:
       tags:
         - Database branch keyspaces
@@ -5322,6 +5329,7 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
+      x-speakeasy-entity-operation: Keyspace#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}/rollout-status:
     get:
       tags:

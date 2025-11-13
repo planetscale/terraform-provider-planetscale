@@ -132,6 +132,7 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 		NewBouncerResource,
 		NewBranchResource,
 		NewDatabaseResource,
+		NewKeyspaceResource,
 	}
 }
 
@@ -141,6 +142,7 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewBranchDataSource,
 		NewDatabaseDataSource,
 		NewDatabasesDataSource,
+		NewKeyspaceDataSource,
 		NewOrganizationDataSource,
 		NewOrganizationsDataSource,
 	}

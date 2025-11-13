@@ -1,0 +1,26 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_keyspace managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: Keyspace#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch keyspace.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: Keyspace#delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation: Keyspace#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch keyspace.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation:
+        - Keyspace#create#2
+        - Keyspace#update

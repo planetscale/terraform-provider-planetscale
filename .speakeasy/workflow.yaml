@@ -10,6 +10,7 @@ sources:
             - location: schemas/overlay-terraform-branch.yaml
             - location: schemas/overlay-terraform-database.yaml
             - location: schemas/overlay-terraform-databases.yaml
+            - location: schemas/overlay-terraform-keyspace.yaml
             - location: schemas/overlay-terraform-organization.yaml
             - location: schemas/overlay-terraform-organizations.yaml
         output: schemas/out.openapi.yaml

@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: cf78769f3661be3b12fdb27aff09a5bd
+  docChecksum: 4fc2f87a879019e456d9a3cbd3682e50
   docVersion: v1
-  speakeasyVersion: 1.656.0
-  generationVersion: 2.752.0
+  speakeasyVersion: 1.656.2
+  generationVersion: 2.753.6
   releaseVersion: 0.0.1
   configChecksum: 52cf44652f072426483a7575a20b4144
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.13
+    core: 3.46.15
     customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
@@ -25,6 +25,7 @@ generatedFiles:
   - examples/data-sources/planetscale_branch/data-source.tf
   - examples/data-sources/planetscale_database/data-source.tf
   - examples/data-sources/planetscale_databases/data-source.tf
+  - examples/data-sources/planetscale_keyspace/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
   - examples/data-sources/planetscale_organizations/data-source.tf
   - examples/provider/provider.tf
@@ -37,6 +38,9 @@ generatedFiles:
   - examples/resources/planetscale_database/import-by-string-id.tf
   - examples/resources/planetscale_database/import.sh
   - examples/resources/planetscale_database/resource.tf
+  - examples/resources/planetscale_keyspace/import-by-string-id.tf
+  - examples/resources/planetscale_keyspace/import.sh
+  - examples/resources/planetscale_keyspace/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -65,6 +69,10 @@ generatedFiles:
   - internal/provider/database_resource_sdk.go
   - internal/provider/databases_data_source.go
   - internal/provider/databases_data_source_sdk.go
+  - internal/provider/keyspace_data_source.go
+  - internal/provider/keyspace_data_source_sdk.go
+  - internal/provider/keyspace_resource.go
+  - internal/provider/keyspace_resource_sdk.go
   - internal/provider/organization_data_source.go
   - internal/provider/organization_data_source_sdk.go
   - internal/provider/organizations_data_source.go
@@ -97,6 +105,8 @@ generatedFiles:
   - internal/provider/types/get_database_data_import.go
   - internal/provider/types/get_database_data_source.go
   - internal/provider/types/get_database_region_data.go
+  - internal/provider/types/get_keyspace_replication_durability_constraints.go
+  - internal/provider/types/get_keyspace_vreplication_flags.go
   - internal/provider/types/list_databases_data.go
   - internal/provider/types/list_databases_data_import.go
   - internal/provider/types/list_databases_data_source.go
