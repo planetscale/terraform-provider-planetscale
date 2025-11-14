@@ -1328,6 +1328,46 @@ func (s *Databases) ListReadOnlyRegions(ctx context.Context, request operations.
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
 	}
+	res.Next = func() (*operations.ListReadOnlyRegionsResponse, error) {
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+
+		b, err := ajson.Unmarshal(rawBody)
+		if err != nil {
+			return nil, err
+		}
+		var p float64 = 1
+		if request.Page != nil {
+			p = *request.Page
+		}
+		nP := float64(p + 1)
+		r, err := ajson.Eval(b, "$.data")
+		if err != nil {
+			return nil, err
+		}
+		if !r.IsArray() {
+			return nil, nil
+		}
+		arr, err := r.GetArray()
+		if err != nil {
+			return nil, err
+		}
+		if len(arr) == 0 {
+			return nil, nil
+		}
+
+		return s.ListReadOnlyRegions(
+			ctx,
+			operations.ListReadOnlyRegionsRequest{
+				Organization: request.Organization,
+				Name:         request.Name,
+				Page:         &nP,
+				PerPage:      request.PerPage,
+			},
+		)
+	}
 
 	switch {
 	case httpRes.StatusCode == 200:

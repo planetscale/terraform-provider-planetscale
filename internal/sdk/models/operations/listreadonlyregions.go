@@ -301,6 +301,8 @@ type ListReadOnlyRegionsResponse struct {
 	RawResponse *http.Response
 	// List of the database's read-only regions
 	Object *ListReadOnlyRegionsResponseBody
+
+	Next func() (*ListReadOnlyRegionsResponse, error)
 }
 
 func (l ListReadOnlyRegionsResponse) MarshalJSON() ([]byte, error) {

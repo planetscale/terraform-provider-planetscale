@@ -87,6 +87,7 @@ Available configuration:
 * [planetscale_branch](docs/data-sources/branch.md)
 * [planetscale_cidrs](docs/data-sources/cidrs.md)
 * [planetscale_database](docs/data-sources/database.md)
+* [planetscale_database_read_only_regions](docs/data-sources/database_read_only_regions.md)
 * [planetscale_database_regions](docs/data-sources/database_regions.md)
 * [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_keyspace](docs/data-sources/keyspace.md)

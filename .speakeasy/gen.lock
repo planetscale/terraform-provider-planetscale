@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 5248b928ab3b5e09cc77ab1bfbce4f7b
+  docChecksum: 03895f9e9969271f25e9be7cb82143df
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -28,6 +28,7 @@ generatedFiles:
   - examples/data-sources/planetscale_branch/data-source.tf
   - examples/data-sources/planetscale_cidrs/data-source.tf
   - examples/data-sources/planetscale_database/data-source.tf
+  - examples/data-sources/planetscale_database_read_only_regions/data-source.tf
   - examples/data-sources/planetscale_database_regions/data-source.tf
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_keyspace/data-source.tf
@@ -116,6 +117,8 @@ generatedFiles:
   - internal/provider/database_data_source_sdk.go
   - internal/provider/database_resource.go
   - internal/provider/database_resource_sdk.go
+  - internal/provider/databasereadonlyregions_data_source.go
+  - internal/provider/databasereadonlyregions_data_source_sdk.go
   - internal/provider/databaseregions_data_source.go
   - internal/provider/databaseregions_data_source_sdk.go
   - internal/provider/databases_data_source.go
@@ -235,6 +238,9 @@ generatedFiles:
   - internal/provider/types/list_passwords_data.go
   - internal/provider/types/list_passwords_database_branch.go
   - internal/provider/types/list_passwords_region.go
+  - internal/provider/types/list_read_only_regions_actor.go
+  - internal/provider/types/list_read_only_regions_data.go
+  - internal/provider/types/list_read_only_regions_region.go
   - internal/provider/types/list_regions_for_organization_data.go
   - internal/provider/types/list_roles_actor.go
   - internal/provider/types/list_roles_branch.go
