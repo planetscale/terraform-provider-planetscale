@@ -522,7 +522,7 @@ func (w *WorkflowRetryBranch) GetDeletedAt() string {
 	return w.DeletedAt
 }
 
-type WorkflowRetrySourceKeyspace struct {
+type WorkflowRetrySourceKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -535,42 +535,42 @@ type WorkflowRetrySourceKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowRetrySourceKeyspace) GetID() string {
+func (w *WorkflowRetrySourceKeyspaceData) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowRetrySourceKeyspace) GetName() string {
+func (w *WorkflowRetrySourceKeyspaceData) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowRetrySourceKeyspace) GetCreatedAt() string {
+func (w *WorkflowRetrySourceKeyspaceData) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowRetrySourceKeyspace) GetUpdatedAt() string {
+func (w *WorkflowRetrySourceKeyspaceData) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowRetrySourceKeyspace) GetDeletedAt() string {
+func (w *WorkflowRetrySourceKeyspaceData) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowRetryTargetKeyspace struct {
+type WorkflowRetryTargetKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -583,42 +583,42 @@ type WorkflowRetryTargetKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowRetryTargetKeyspace) GetID() string {
+func (w *WorkflowRetryTargetKeyspaceData) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowRetryTargetKeyspace) GetName() string {
+func (w *WorkflowRetryTargetKeyspaceData) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowRetryTargetKeyspace) GetCreatedAt() string {
+func (w *WorkflowRetryTargetKeyspaceData) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowRetryTargetKeyspace) GetUpdatedAt() string {
+func (w *WorkflowRetryTargetKeyspaceData) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowRetryTargetKeyspace) GetDeletedAt() string {
+func (w *WorkflowRetryTargetKeyspaceData) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowRetryGlobalKeyspace struct {
+type WorkflowRetryGlobalKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -631,35 +631,35 @@ type WorkflowRetryGlobalKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowRetryGlobalKeyspace) GetID() string {
+func (w *WorkflowRetryGlobalKeyspaceData) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowRetryGlobalKeyspace) GetName() string {
+func (w *WorkflowRetryGlobalKeyspaceData) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowRetryGlobalKeyspace) GetCreatedAt() string {
+func (w *WorkflowRetryGlobalKeyspaceData) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowRetryGlobalKeyspace) GetUpdatedAt() string {
+func (w *WorkflowRetryGlobalKeyspaceData) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowRetryGlobalKeyspace) GetDeletedAt() string {
+func (w *WorkflowRetryGlobalKeyspaceData) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
@@ -721,21 +721,21 @@ type WorkflowRetryResponseBody struct {
 	// Whether or not the verified data is stale
 	VerifiedDataStale bool `json:"verified_data_stale"`
 	// Whether or not sequence tables have been created
-	SequenceTablesApplied bool                           `json:"sequence_tables_applied"`
-	Actor                 WorkflowRetryActor             `json:"actor"`
-	VerifyDataBy          WorkflowRetryVerifyDataBy      `json:"verify_data_by"`
-	ReversedBy            WorkflowRetryReversedBy        `json:"reversed_by"`
-	SwitchReplicasBy      WorkflowRetrySwitchReplicasBy  `json:"switch_replicas_by"`
-	SwitchPrimariesBy     WorkflowRetrySwitchPrimariesBy `json:"switch_primaries_by"`
-	CancelledBy           WorkflowRetryCancelledBy       `json:"cancelled_by"`
-	CompletedBy           WorkflowRetryCompletedBy       `json:"completed_by"`
-	RetriedBy             WorkflowRetryRetriedBy         `json:"retried_by"`
-	CutoverBy             WorkflowRetryCutoverBy         `json:"cutover_by"`
-	ReversedCutoverBy     WorkflowRetryReversedCutoverBy `json:"reversed_cutover_by"`
-	Branch                WorkflowRetryBranch            `json:"branch"`
-	SourceKeyspace        WorkflowRetrySourceKeyspace    `json:"source_keyspace"`
-	TargetKeyspace        WorkflowRetryTargetKeyspace    `json:"target_keyspace"`
-	GlobalKeyspace        WorkflowRetryGlobalKeyspace    `json:"global_keyspace"`
+	SequenceTablesApplied bool                            `json:"sequence_tables_applied"`
+	Actor                 WorkflowRetryActor              `json:"actor"`
+	VerifyDataBy          WorkflowRetryVerifyDataBy       `json:"verify_data_by"`
+	ReversedBy            WorkflowRetryReversedBy         `json:"reversed_by"`
+	SwitchReplicasBy      WorkflowRetrySwitchReplicasBy   `json:"switch_replicas_by"`
+	SwitchPrimariesBy     WorkflowRetrySwitchPrimariesBy  `json:"switch_primaries_by"`
+	CancelledBy           WorkflowRetryCancelledBy        `json:"cancelled_by"`
+	CompletedBy           WorkflowRetryCompletedBy        `json:"completed_by"`
+	RetriedBy             WorkflowRetryRetriedBy          `json:"retried_by"`
+	CutoverBy             WorkflowRetryCutoverBy          `json:"cutover_by"`
+	ReversedCutoverBy     WorkflowRetryReversedCutoverBy  `json:"reversed_cutover_by"`
+	Branch                WorkflowRetryBranch             `json:"branch"`
+	SourceKeyspaceData    WorkflowRetrySourceKeyspaceData `json:"source_keyspace"`
+	TargetKeyspaceData    WorkflowRetryTargetKeyspaceData `json:"target_keyspace"`
+	GlobalKeyspaceData    WorkflowRetryGlobalKeyspaceData `json:"global_keyspace"`
 }
 
 func (w *WorkflowRetryResponseBody) GetID() string {
@@ -1004,25 +1004,25 @@ func (w *WorkflowRetryResponseBody) GetBranch() WorkflowRetryBranch {
 	return w.Branch
 }
 
-func (w *WorkflowRetryResponseBody) GetSourceKeyspace() WorkflowRetrySourceKeyspace {
+func (w *WorkflowRetryResponseBody) GetSourceKeyspaceData() WorkflowRetrySourceKeyspaceData {
 	if w == nil {
-		return WorkflowRetrySourceKeyspace{}
+		return WorkflowRetrySourceKeyspaceData{}
 	}
-	return w.SourceKeyspace
+	return w.SourceKeyspaceData
 }
 
-func (w *WorkflowRetryResponseBody) GetTargetKeyspace() WorkflowRetryTargetKeyspace {
+func (w *WorkflowRetryResponseBody) GetTargetKeyspaceData() WorkflowRetryTargetKeyspaceData {
 	if w == nil {
-		return WorkflowRetryTargetKeyspace{}
+		return WorkflowRetryTargetKeyspaceData{}
 	}
-	return w.TargetKeyspace
+	return w.TargetKeyspaceData
 }
 
-func (w *WorkflowRetryResponseBody) GetGlobalKeyspace() WorkflowRetryGlobalKeyspace {
+func (w *WorkflowRetryResponseBody) GetGlobalKeyspaceData() WorkflowRetryGlobalKeyspaceData {
 	if w == nil {
-		return WorkflowRetryGlobalKeyspace{}
+		return WorkflowRetryGlobalKeyspaceData{}
 	}
-	return w.GlobalKeyspace
+	return w.GlobalKeyspaceData
 }
 
 type WorkflowRetryResponse struct {

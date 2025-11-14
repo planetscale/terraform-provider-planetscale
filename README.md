@@ -75,6 +75,7 @@ Available configuration:
 * [planetscale_query_pattern_report](docs/resources/query_pattern_report.md)
 * [planetscale_role](docs/resources/role.md)
 * [planetscale_webhook](docs/resources/webhook.md)
+* [planetscale_workflow](docs/resources/workflow.md)
 ### Data Sources
 
 * [planetscale_bouncer](docs/data-sources/bouncer.md)
@@ -88,6 +89,7 @@ Available configuration:
 * [planetscale_query_pattern_report](docs/data-sources/query_pattern_report.md)
 * [planetscale_role](docs/data-sources/role.md)
 * [planetscale_webhook](docs/data-sources/webhook.md)
+* [planetscale_workflow](docs/data-sources/workflow.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

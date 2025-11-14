@@ -14584,6 +14584,7 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
+                    x-speakeasy-name-override: source_keyspace_data
                   target_keyspace:
                     type: object
                     properties:
@@ -14609,6 +14610,7 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
+                    x-speakeasy-name-override: target_keyspace_data
                   global_keyspace:
                     type: object
                     properties:
@@ -14634,6 +14636,7 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
+                    x-speakeasy-name-override: global_keyspace_data
                 additionalProperties: false
                 required:
                   - id
@@ -14686,6 +14689,8 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
+      x-speakeasy-entity-operation: Workflow#create
+      x-speakeasy-entity-description: Manage a PlanetScale database workflow.
   /organizations/{organization}/databases/{database}/workflows/{number}:
     get:
       tags:
@@ -14710,7 +14715,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -14727,6 +14732,19 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
+      x-speakeasy-entity-operation:
+        - Workflow#read
+        - entityOperation: Workflow#create#2
+          options:
+            polling:
+              name: WaitForCompleted
+      x-speakeasy-entity-description: Returns information about a PlanetScale database workflow.
+      x-speakeasy-polling:
+        - name: WaitForCompleted
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "completed"
     delete:
       tags:
         - Workflows
@@ -14750,7 +14768,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -14767,6 +14785,7 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
+      x-speakeasy-entity-operation: Workflow#delete
   /organizations/{organization}/databases/{database}/workflows/{number}/complete:
     patch:
       tags:

@@ -522,7 +522,7 @@ func (w *WorkflowSwitchPrimariesBranch) GetDeletedAt() string {
 	return w.DeletedAt
 }
 
-type WorkflowSwitchPrimariesSourceKeyspace struct {
+type WorkflowSwitchPrimariesSourceKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -535,42 +535,42 @@ type WorkflowSwitchPrimariesSourceKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowSwitchPrimariesSourceKeyspace) GetID() string {
+func (w *WorkflowSwitchPrimariesSourceKeyspaceData) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowSwitchPrimariesSourceKeyspace) GetName() string {
+func (w *WorkflowSwitchPrimariesSourceKeyspaceData) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowSwitchPrimariesSourceKeyspace) GetCreatedAt() string {
+func (w *WorkflowSwitchPrimariesSourceKeyspaceData) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowSwitchPrimariesSourceKeyspace) GetUpdatedAt() string {
+func (w *WorkflowSwitchPrimariesSourceKeyspaceData) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowSwitchPrimariesSourceKeyspace) GetDeletedAt() string {
+func (w *WorkflowSwitchPrimariesSourceKeyspaceData) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowSwitchPrimariesTargetKeyspace struct {
+type WorkflowSwitchPrimariesTargetKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -583,42 +583,42 @@ type WorkflowSwitchPrimariesTargetKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowSwitchPrimariesTargetKeyspace) GetID() string {
+func (w *WorkflowSwitchPrimariesTargetKeyspaceData) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowSwitchPrimariesTargetKeyspace) GetName() string {
+func (w *WorkflowSwitchPrimariesTargetKeyspaceData) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowSwitchPrimariesTargetKeyspace) GetCreatedAt() string {
+func (w *WorkflowSwitchPrimariesTargetKeyspaceData) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowSwitchPrimariesTargetKeyspace) GetUpdatedAt() string {
+func (w *WorkflowSwitchPrimariesTargetKeyspaceData) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowSwitchPrimariesTargetKeyspace) GetDeletedAt() string {
+func (w *WorkflowSwitchPrimariesTargetKeyspaceData) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowSwitchPrimariesGlobalKeyspace struct {
+type WorkflowSwitchPrimariesGlobalKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -631,35 +631,35 @@ type WorkflowSwitchPrimariesGlobalKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowSwitchPrimariesGlobalKeyspace) GetID() string {
+func (w *WorkflowSwitchPrimariesGlobalKeyspaceData) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowSwitchPrimariesGlobalKeyspace) GetName() string {
+func (w *WorkflowSwitchPrimariesGlobalKeyspaceData) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowSwitchPrimariesGlobalKeyspace) GetCreatedAt() string {
+func (w *WorkflowSwitchPrimariesGlobalKeyspaceData) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowSwitchPrimariesGlobalKeyspace) GetUpdatedAt() string {
+func (w *WorkflowSwitchPrimariesGlobalKeyspaceData) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowSwitchPrimariesGlobalKeyspace) GetDeletedAt() string {
+func (w *WorkflowSwitchPrimariesGlobalKeyspaceData) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
@@ -721,21 +721,21 @@ type WorkflowSwitchPrimariesResponseBody struct {
 	// Whether or not the verified data is stale
 	VerifiedDataStale bool `json:"verified_data_stale"`
 	// Whether or not sequence tables have been created
-	SequenceTablesApplied bool                                     `json:"sequence_tables_applied"`
-	Actor                 WorkflowSwitchPrimariesActor             `json:"actor"`
-	VerifyDataBy          WorkflowSwitchPrimariesVerifyDataBy      `json:"verify_data_by"`
-	ReversedBy            WorkflowSwitchPrimariesReversedBy        `json:"reversed_by"`
-	SwitchReplicasBy      WorkflowSwitchPrimariesSwitchReplicasBy  `json:"switch_replicas_by"`
-	SwitchPrimariesBy     WorkflowSwitchPrimariesSwitchPrimariesBy `json:"switch_primaries_by"`
-	CancelledBy           WorkflowSwitchPrimariesCancelledBy       `json:"cancelled_by"`
-	CompletedBy           WorkflowSwitchPrimariesCompletedBy       `json:"completed_by"`
-	RetriedBy             WorkflowSwitchPrimariesRetriedBy         `json:"retried_by"`
-	CutoverBy             WorkflowSwitchPrimariesCutoverBy         `json:"cutover_by"`
-	ReversedCutoverBy     WorkflowSwitchPrimariesReversedCutoverBy `json:"reversed_cutover_by"`
-	Branch                WorkflowSwitchPrimariesBranch            `json:"branch"`
-	SourceKeyspace        WorkflowSwitchPrimariesSourceKeyspace    `json:"source_keyspace"`
-	TargetKeyspace        WorkflowSwitchPrimariesTargetKeyspace    `json:"target_keyspace"`
-	GlobalKeyspace        WorkflowSwitchPrimariesGlobalKeyspace    `json:"global_keyspace"`
+	SequenceTablesApplied bool                                      `json:"sequence_tables_applied"`
+	Actor                 WorkflowSwitchPrimariesActor              `json:"actor"`
+	VerifyDataBy          WorkflowSwitchPrimariesVerifyDataBy       `json:"verify_data_by"`
+	ReversedBy            WorkflowSwitchPrimariesReversedBy         `json:"reversed_by"`
+	SwitchReplicasBy      WorkflowSwitchPrimariesSwitchReplicasBy   `json:"switch_replicas_by"`
+	SwitchPrimariesBy     WorkflowSwitchPrimariesSwitchPrimariesBy  `json:"switch_primaries_by"`
+	CancelledBy           WorkflowSwitchPrimariesCancelledBy        `json:"cancelled_by"`
+	CompletedBy           WorkflowSwitchPrimariesCompletedBy        `json:"completed_by"`
+	RetriedBy             WorkflowSwitchPrimariesRetriedBy          `json:"retried_by"`
+	CutoverBy             WorkflowSwitchPrimariesCutoverBy          `json:"cutover_by"`
+	ReversedCutoverBy     WorkflowSwitchPrimariesReversedCutoverBy  `json:"reversed_cutover_by"`
+	Branch                WorkflowSwitchPrimariesBranch             `json:"branch"`
+	SourceKeyspaceData    WorkflowSwitchPrimariesSourceKeyspaceData `json:"source_keyspace"`
+	TargetKeyspaceData    WorkflowSwitchPrimariesTargetKeyspaceData `json:"target_keyspace"`
+	GlobalKeyspaceData    WorkflowSwitchPrimariesGlobalKeyspaceData `json:"global_keyspace"`
 }
 
 func (w *WorkflowSwitchPrimariesResponseBody) GetID() string {
@@ -1004,25 +1004,25 @@ func (w *WorkflowSwitchPrimariesResponseBody) GetBranch() WorkflowSwitchPrimarie
 	return w.Branch
 }
 
-func (w *WorkflowSwitchPrimariesResponseBody) GetSourceKeyspace() WorkflowSwitchPrimariesSourceKeyspace {
+func (w *WorkflowSwitchPrimariesResponseBody) GetSourceKeyspaceData() WorkflowSwitchPrimariesSourceKeyspaceData {
 	if w == nil {
-		return WorkflowSwitchPrimariesSourceKeyspace{}
+		return WorkflowSwitchPrimariesSourceKeyspaceData{}
 	}
-	return w.SourceKeyspace
+	return w.SourceKeyspaceData
 }
 
-func (w *WorkflowSwitchPrimariesResponseBody) GetTargetKeyspace() WorkflowSwitchPrimariesTargetKeyspace {
+func (w *WorkflowSwitchPrimariesResponseBody) GetTargetKeyspaceData() WorkflowSwitchPrimariesTargetKeyspaceData {
 	if w == nil {
-		return WorkflowSwitchPrimariesTargetKeyspace{}
+		return WorkflowSwitchPrimariesTargetKeyspaceData{}
 	}
-	return w.TargetKeyspace
+	return w.TargetKeyspaceData
 }
 
-func (w *WorkflowSwitchPrimariesResponseBody) GetGlobalKeyspace() WorkflowSwitchPrimariesGlobalKeyspace {
+func (w *WorkflowSwitchPrimariesResponseBody) GetGlobalKeyspaceData() WorkflowSwitchPrimariesGlobalKeyspaceData {
 	if w == nil {
-		return WorkflowSwitchPrimariesGlobalKeyspace{}
+		return WorkflowSwitchPrimariesGlobalKeyspaceData{}
 	}
-	return w.GlobalKeyspace
+	return w.GlobalKeyspaceData
 }
 
 type WorkflowSwitchPrimariesResponse struct {

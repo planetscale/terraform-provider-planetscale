@@ -551,7 +551,7 @@ func (l *ListWorkflowsBranch) GetDeletedAt() string {
 	return l.DeletedAt
 }
 
-type ListWorkflowsSourceKeyspace struct {
+type SourceKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -564,42 +564,42 @@ type ListWorkflowsSourceKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (l *ListWorkflowsSourceKeyspace) GetID() string {
-	if l == nil {
+func (s *SourceKeyspace) GetID() string {
+	if s == nil {
 		return ""
 	}
-	return l.ID
+	return s.ID
 }
 
-func (l *ListWorkflowsSourceKeyspace) GetName() string {
-	if l == nil {
+func (s *SourceKeyspace) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return l.Name
+	return s.Name
 }
 
-func (l *ListWorkflowsSourceKeyspace) GetCreatedAt() string {
-	if l == nil {
+func (s *SourceKeyspace) GetCreatedAt() string {
+	if s == nil {
 		return ""
 	}
-	return l.CreatedAt
+	return s.CreatedAt
 }
 
-func (l *ListWorkflowsSourceKeyspace) GetUpdatedAt() string {
-	if l == nil {
+func (s *SourceKeyspace) GetUpdatedAt() string {
+	if s == nil {
 		return ""
 	}
-	return l.UpdatedAt
+	return s.UpdatedAt
 }
 
-func (l *ListWorkflowsSourceKeyspace) GetDeletedAt() string {
-	if l == nil {
+func (s *SourceKeyspace) GetDeletedAt() string {
+	if s == nil {
 		return ""
 	}
-	return l.DeletedAt
+	return s.DeletedAt
 }
 
-type ListWorkflowsTargetKeyspace struct {
+type TargetKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -612,42 +612,42 @@ type ListWorkflowsTargetKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (l *ListWorkflowsTargetKeyspace) GetID() string {
-	if l == nil {
+func (t *TargetKeyspace) GetID() string {
+	if t == nil {
 		return ""
 	}
-	return l.ID
+	return t.ID
 }
 
-func (l *ListWorkflowsTargetKeyspace) GetName() string {
-	if l == nil {
+func (t *TargetKeyspace) GetName() string {
+	if t == nil {
 		return ""
 	}
-	return l.Name
+	return t.Name
 }
 
-func (l *ListWorkflowsTargetKeyspace) GetCreatedAt() string {
-	if l == nil {
+func (t *TargetKeyspace) GetCreatedAt() string {
+	if t == nil {
 		return ""
 	}
-	return l.CreatedAt
+	return t.CreatedAt
 }
 
-func (l *ListWorkflowsTargetKeyspace) GetUpdatedAt() string {
-	if l == nil {
+func (t *TargetKeyspace) GetUpdatedAt() string {
+	if t == nil {
 		return ""
 	}
-	return l.UpdatedAt
+	return t.UpdatedAt
 }
 
-func (l *ListWorkflowsTargetKeyspace) GetDeletedAt() string {
-	if l == nil {
+func (t *TargetKeyspace) GetDeletedAt() string {
+	if t == nil {
 		return ""
 	}
-	return l.DeletedAt
+	return t.DeletedAt
 }
 
-type ListWorkflowsGlobalKeyspace struct {
+type GlobalKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -660,39 +660,39 @@ type ListWorkflowsGlobalKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (l *ListWorkflowsGlobalKeyspace) GetID() string {
-	if l == nil {
+func (g *GlobalKeyspace) GetID() string {
+	if g == nil {
 		return ""
 	}
-	return l.ID
+	return g.ID
 }
 
-func (l *ListWorkflowsGlobalKeyspace) GetName() string {
-	if l == nil {
+func (g *GlobalKeyspace) GetName() string {
+	if g == nil {
 		return ""
 	}
-	return l.Name
+	return g.Name
 }
 
-func (l *ListWorkflowsGlobalKeyspace) GetCreatedAt() string {
-	if l == nil {
+func (g *GlobalKeyspace) GetCreatedAt() string {
+	if g == nil {
 		return ""
 	}
-	return l.CreatedAt
+	return g.CreatedAt
 }
 
-func (l *ListWorkflowsGlobalKeyspace) GetUpdatedAt() string {
-	if l == nil {
+func (g *GlobalKeyspace) GetUpdatedAt() string {
+	if g == nil {
 		return ""
 	}
-	return l.UpdatedAt
+	return g.UpdatedAt
 }
 
-func (l *ListWorkflowsGlobalKeyspace) GetDeletedAt() string {
-	if l == nil {
+func (g *GlobalKeyspace) GetDeletedAt() string {
+	if g == nil {
 		return ""
 	}
-	return l.DeletedAt
+	return g.DeletedAt
 }
 
 type ListWorkflowsData struct {
@@ -761,9 +761,9 @@ type ListWorkflowsData struct {
 	CutoverBy             ListWorkflowsCutoverBy         `json:"cutover_by"`
 	ReversedCutoverBy     ListWorkflowsReversedCutoverBy `json:"reversed_cutover_by"`
 	Branch                ListWorkflowsBranch            `json:"branch"`
-	SourceKeyspace        ListWorkflowsSourceKeyspace    `json:"source_keyspace"`
-	TargetKeyspace        ListWorkflowsTargetKeyspace    `json:"target_keyspace"`
-	GlobalKeyspace        ListWorkflowsGlobalKeyspace    `json:"global_keyspace"`
+	SourceKeyspace        SourceKeyspace                 `json:"source_keyspace"`
+	TargetKeyspace        TargetKeyspace                 `json:"target_keyspace"`
+	GlobalKeyspace        GlobalKeyspace                 `json:"global_keyspace"`
 }
 
 func (l *ListWorkflowsData) GetID() string {
@@ -1032,23 +1032,23 @@ func (l *ListWorkflowsData) GetBranch() ListWorkflowsBranch {
 	return l.Branch
 }
 
-func (l *ListWorkflowsData) GetSourceKeyspace() ListWorkflowsSourceKeyspace {
+func (l *ListWorkflowsData) GetSourceKeyspace() SourceKeyspace {
 	if l == nil {
-		return ListWorkflowsSourceKeyspace{}
+		return SourceKeyspace{}
 	}
 	return l.SourceKeyspace
 }
 
-func (l *ListWorkflowsData) GetTargetKeyspace() ListWorkflowsTargetKeyspace {
+func (l *ListWorkflowsData) GetTargetKeyspace() TargetKeyspace {
 	if l == nil {
-		return ListWorkflowsTargetKeyspace{}
+		return TargetKeyspace{}
 	}
 	return l.TargetKeyspace
 }
 
-func (l *ListWorkflowsData) GetGlobalKeyspace() ListWorkflowsGlobalKeyspace {
+func (l *ListWorkflowsData) GetGlobalKeyspace() GlobalKeyspace {
 	if l == nil {
-		return ListWorkflowsGlobalKeyspace{}
+		return GlobalKeyspace{}
 	}
 	return l.GlobalKeyspace
 }

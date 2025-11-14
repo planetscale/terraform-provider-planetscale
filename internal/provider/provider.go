@@ -137,6 +137,7 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 		NewQueryPatternReportResource,
 		NewRoleResource,
 		NewWebhookResource,
+		NewWorkflowResource,
 	}
 }
 
@@ -153,6 +154,7 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewQueryPatternReportDataSource,
 		NewRoleDataSource,
 		NewWebhookDataSource,
+		NewWorkflowDataSource,
 	}
 }
 

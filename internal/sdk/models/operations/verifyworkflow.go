@@ -522,7 +522,7 @@ func (v *VerifyWorkflowBranch) GetDeletedAt() string {
 	return v.DeletedAt
 }
 
-type VerifyWorkflowSourceKeyspace struct {
+type VerifyWorkflowSourceKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -535,42 +535,42 @@ type VerifyWorkflowSourceKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (v *VerifyWorkflowSourceKeyspace) GetID() string {
+func (v *VerifyWorkflowSourceKeyspaceData) GetID() string {
 	if v == nil {
 		return ""
 	}
 	return v.ID
 }
 
-func (v *VerifyWorkflowSourceKeyspace) GetName() string {
+func (v *VerifyWorkflowSourceKeyspaceData) GetName() string {
 	if v == nil {
 		return ""
 	}
 	return v.Name
 }
 
-func (v *VerifyWorkflowSourceKeyspace) GetCreatedAt() string {
+func (v *VerifyWorkflowSourceKeyspaceData) GetCreatedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.CreatedAt
 }
 
-func (v *VerifyWorkflowSourceKeyspace) GetUpdatedAt() string {
+func (v *VerifyWorkflowSourceKeyspaceData) GetUpdatedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.UpdatedAt
 }
 
-func (v *VerifyWorkflowSourceKeyspace) GetDeletedAt() string {
+func (v *VerifyWorkflowSourceKeyspaceData) GetDeletedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.DeletedAt
 }
 
-type VerifyWorkflowTargetKeyspace struct {
+type VerifyWorkflowTargetKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -583,42 +583,42 @@ type VerifyWorkflowTargetKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (v *VerifyWorkflowTargetKeyspace) GetID() string {
+func (v *VerifyWorkflowTargetKeyspaceData) GetID() string {
 	if v == nil {
 		return ""
 	}
 	return v.ID
 }
 
-func (v *VerifyWorkflowTargetKeyspace) GetName() string {
+func (v *VerifyWorkflowTargetKeyspaceData) GetName() string {
 	if v == nil {
 		return ""
 	}
 	return v.Name
 }
 
-func (v *VerifyWorkflowTargetKeyspace) GetCreatedAt() string {
+func (v *VerifyWorkflowTargetKeyspaceData) GetCreatedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.CreatedAt
 }
 
-func (v *VerifyWorkflowTargetKeyspace) GetUpdatedAt() string {
+func (v *VerifyWorkflowTargetKeyspaceData) GetUpdatedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.UpdatedAt
 }
 
-func (v *VerifyWorkflowTargetKeyspace) GetDeletedAt() string {
+func (v *VerifyWorkflowTargetKeyspaceData) GetDeletedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.DeletedAt
 }
 
-type VerifyWorkflowGlobalKeyspace struct {
+type VerifyWorkflowGlobalKeyspaceData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -631,35 +631,35 @@ type VerifyWorkflowGlobalKeyspace struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (v *VerifyWorkflowGlobalKeyspace) GetID() string {
+func (v *VerifyWorkflowGlobalKeyspaceData) GetID() string {
 	if v == nil {
 		return ""
 	}
 	return v.ID
 }
 
-func (v *VerifyWorkflowGlobalKeyspace) GetName() string {
+func (v *VerifyWorkflowGlobalKeyspaceData) GetName() string {
 	if v == nil {
 		return ""
 	}
 	return v.Name
 }
 
-func (v *VerifyWorkflowGlobalKeyspace) GetCreatedAt() string {
+func (v *VerifyWorkflowGlobalKeyspaceData) GetCreatedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.CreatedAt
 }
 
-func (v *VerifyWorkflowGlobalKeyspace) GetUpdatedAt() string {
+func (v *VerifyWorkflowGlobalKeyspaceData) GetUpdatedAt() string {
 	if v == nil {
 		return ""
 	}
 	return v.UpdatedAt
 }
 
-func (v *VerifyWorkflowGlobalKeyspace) GetDeletedAt() string {
+func (v *VerifyWorkflowGlobalKeyspaceData) GetDeletedAt() string {
 	if v == nil {
 		return ""
 	}
@@ -721,21 +721,21 @@ type VerifyWorkflowResponseBody struct {
 	// Whether or not the verified data is stale
 	VerifiedDataStale bool `json:"verified_data_stale"`
 	// Whether or not sequence tables have been created
-	SequenceTablesApplied bool                            `json:"sequence_tables_applied"`
-	Actor                 VerifyWorkflowActor             `json:"actor"`
-	VerifyDataBy          VerifyWorkflowVerifyDataBy      `json:"verify_data_by"`
-	ReversedBy            VerifyWorkflowReversedBy        `json:"reversed_by"`
-	SwitchReplicasBy      VerifyWorkflowSwitchReplicasBy  `json:"switch_replicas_by"`
-	SwitchPrimariesBy     VerifyWorkflowSwitchPrimariesBy `json:"switch_primaries_by"`
-	CancelledBy           VerifyWorkflowCancelledBy       `json:"cancelled_by"`
-	CompletedBy           VerifyWorkflowCompletedBy       `json:"completed_by"`
-	RetriedBy             VerifyWorkflowRetriedBy         `json:"retried_by"`
-	CutoverBy             VerifyWorkflowCutoverBy         `json:"cutover_by"`
-	ReversedCutoverBy     VerifyWorkflowReversedCutoverBy `json:"reversed_cutover_by"`
-	Branch                VerifyWorkflowBranch            `json:"branch"`
-	SourceKeyspace        VerifyWorkflowSourceKeyspace    `json:"source_keyspace"`
-	TargetKeyspace        VerifyWorkflowTargetKeyspace    `json:"target_keyspace"`
-	GlobalKeyspace        VerifyWorkflowGlobalKeyspace    `json:"global_keyspace"`
+	SequenceTablesApplied bool                             `json:"sequence_tables_applied"`
+	Actor                 VerifyWorkflowActor              `json:"actor"`
+	VerifyDataBy          VerifyWorkflowVerifyDataBy       `json:"verify_data_by"`
+	ReversedBy            VerifyWorkflowReversedBy         `json:"reversed_by"`
+	SwitchReplicasBy      VerifyWorkflowSwitchReplicasBy   `json:"switch_replicas_by"`
+	SwitchPrimariesBy     VerifyWorkflowSwitchPrimariesBy  `json:"switch_primaries_by"`
+	CancelledBy           VerifyWorkflowCancelledBy        `json:"cancelled_by"`
+	CompletedBy           VerifyWorkflowCompletedBy        `json:"completed_by"`
+	RetriedBy             VerifyWorkflowRetriedBy          `json:"retried_by"`
+	CutoverBy             VerifyWorkflowCutoverBy          `json:"cutover_by"`
+	ReversedCutoverBy     VerifyWorkflowReversedCutoverBy  `json:"reversed_cutover_by"`
+	Branch                VerifyWorkflowBranch             `json:"branch"`
+	SourceKeyspaceData    VerifyWorkflowSourceKeyspaceData `json:"source_keyspace"`
+	TargetKeyspaceData    VerifyWorkflowTargetKeyspaceData `json:"target_keyspace"`
+	GlobalKeyspaceData    VerifyWorkflowGlobalKeyspaceData `json:"global_keyspace"`
 }
 
 func (v *VerifyWorkflowResponseBody) GetID() string {
@@ -1004,25 +1004,25 @@ func (v *VerifyWorkflowResponseBody) GetBranch() VerifyWorkflowBranch {
 	return v.Branch
 }
 
-func (v *VerifyWorkflowResponseBody) GetSourceKeyspace() VerifyWorkflowSourceKeyspace {
+func (v *VerifyWorkflowResponseBody) GetSourceKeyspaceData() VerifyWorkflowSourceKeyspaceData {
 	if v == nil {
-		return VerifyWorkflowSourceKeyspace{}
+		return VerifyWorkflowSourceKeyspaceData{}
 	}
-	return v.SourceKeyspace
+	return v.SourceKeyspaceData
 }
 
-func (v *VerifyWorkflowResponseBody) GetTargetKeyspace() VerifyWorkflowTargetKeyspace {
+func (v *VerifyWorkflowResponseBody) GetTargetKeyspaceData() VerifyWorkflowTargetKeyspaceData {
 	if v == nil {
-		return VerifyWorkflowTargetKeyspace{}
+		return VerifyWorkflowTargetKeyspaceData{}
 	}
-	return v.TargetKeyspace
+	return v.TargetKeyspaceData
 }
 
-func (v *VerifyWorkflowResponseBody) GetGlobalKeyspace() VerifyWorkflowGlobalKeyspace {
+func (v *VerifyWorkflowResponseBody) GetGlobalKeyspaceData() VerifyWorkflowGlobalKeyspaceData {
 	if v == nil {
-		return VerifyWorkflowGlobalKeyspace{}
+		return VerifyWorkflowGlobalKeyspaceData{}
 	}
-	return v.GlobalKeyspace
+	return v.GlobalKeyspaceData
 }
 
 type VerifyWorkflowResponse struct {
