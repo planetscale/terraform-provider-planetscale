@@ -518,6 +518,8 @@ type ListPasswordsResponse struct {
 	RawResponse *http.Response
 	// Returns passwords for the branch
 	Object *ListPasswordsResponseBody
+
+	Next func() (*ListPasswordsResponse, error)
 }
 
 func (l ListPasswordsResponse) MarshalJSON() ([]byte, error) {

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 657c022303b9422c4443a6e061c6ac6e
+  docChecksum: 6c7d34e9c501fffdc07cc44d68de841f
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -35,6 +35,7 @@ generatedFiles:
   - examples/data-sources/planetscale_organization_regions/data-source.tf
   - examples/data-sources/planetscale_organizations/data-source.tf
   - examples/data-sources/planetscale_password/data-source.tf
+  - examples/data-sources/planetscale_passwords/data-source.tf
   - examples/data-sources/planetscale_query_pattern_report/data-source.tf
   - examples/data-sources/planetscale_role/data-source.tf
   - examples/data-sources/planetscale_team/data-source.tf
@@ -132,6 +133,8 @@ generatedFiles:
   - internal/provider/password_data_source_sdk.go
   - internal/provider/password_resource.go
   - internal/provider/password_resource_sdk.go
+  - internal/provider/passwords_data_source.go
+  - internal/provider/passwords_data_source_sdk.go
   - internal/provider/provider.go
   - internal/provider/querypatternreport_data_source.go
   - internal/provider/querypatternreport_data_source_sdk.go
@@ -225,6 +228,10 @@ generatedFiles:
   - internal/provider/types/list_organization_teams_default_organization.go
   - internal/provider/types/list_organization_teams_member.go
   - internal/provider/types/list_organizations_data.go
+  - internal/provider/types/list_passwords_actor.go
+  - internal/provider/types/list_passwords_data.go
+  - internal/provider/types/list_passwords_database_branch.go
+  - internal/provider/types/list_passwords_region.go
   - internal/provider/types/list_regions_for_organization_data.go
   - internal/provider/utils.go
   - internal/provider/webhook_data_source.go

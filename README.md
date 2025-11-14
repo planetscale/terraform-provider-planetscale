@@ -94,6 +94,7 @@ Available configuration:
 * [planetscale_organization_regions](docs/data-sources/organization_regions.md)
 * [planetscale_organizations](docs/data-sources/organizations.md)
 * [planetscale_password](docs/data-sources/password.md)
+* [planetscale_passwords](docs/data-sources/passwords.md)
 * [planetscale_query_pattern_report](docs/data-sources/query_pattern_report.md)
 * [planetscale_role](docs/data-sources/role.md)
 * [planetscale_team](docs/data-sources/team.md)
