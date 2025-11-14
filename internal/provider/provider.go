@@ -162,6 +162,7 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewPasswordsDataSource,
 		NewQueryPatternReportDataSource,
 		NewRoleDataSource,
+		NewRolesDataSource,
 		NewTeamDataSource,
 		NewTeamsDataSource,
 		NewWebhookDataSource,

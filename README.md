@@ -97,6 +97,7 @@ Available configuration:
 * [planetscale_passwords](docs/data-sources/passwords.md)
 * [planetscale_query_pattern_report](docs/data-sources/query_pattern_report.md)
 * [planetscale_role](docs/data-sources/role.md)
+* [planetscale_roles](docs/data-sources/roles.md)
 * [planetscale_team](docs/data-sources/team.md)
 * [planetscale_teams](docs/data-sources/teams.md)
 * [planetscale_webhook](docs/data-sources/webhook.md)

@@ -22,6 +22,7 @@ sources:
             - location: schemas/overlay-terraform-passwords.yaml
             - location: schemas/overlay-terraform-query_pattern_report.yaml
             - location: schemas/overlay-terraform-role.yaml
+            - location: schemas/overlay-terraform-roles.yaml
             - location: schemas/overlay-terraform-team.yaml
             - location: schemas/overlay-terraform-teams.yaml
             - location: schemas/overlay-terraform-webhook.yaml

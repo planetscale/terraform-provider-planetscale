@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 6c7d34e9c501fffdc07cc44d68de841f
+  docChecksum: 5248b928ab3b5e09cc77ab1bfbce4f7b
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -38,6 +38,7 @@ generatedFiles:
   - examples/data-sources/planetscale_passwords/data-source.tf
   - examples/data-sources/planetscale_query_pattern_report/data-source.tf
   - examples/data-sources/planetscale_role/data-source.tf
+  - examples/data-sources/planetscale_roles/data-source.tf
   - examples/data-sources/planetscale_team/data-source.tf
   - examples/data-sources/planetscale_teams/data-source.tf
   - examples/data-sources/planetscale_webhook/data-source.tf
@@ -158,6 +159,8 @@ generatedFiles:
   - internal/provider/role_data_source_sdk.go
   - internal/provider/role_resource.go
   - internal/provider/role_resource_sdk.go
+  - internal/provider/roles_data_source.go
+  - internal/provider/roles_data_source_sdk.go
   - internal/provider/team_data_source.go
   - internal/provider/team_data_source_sdk.go
   - internal/provider/team_resource.go
@@ -233,6 +236,9 @@ generatedFiles:
   - internal/provider/types/list_passwords_database_branch.go
   - internal/provider/types/list_passwords_region.go
   - internal/provider/types/list_regions_for_organization_data.go
+  - internal/provider/types/list_roles_actor.go
+  - internal/provider/types/list_roles_branch.go
+  - internal/provider/types/list_roles_data.go
   - internal/provider/utils.go
   - internal/provider/webhook_data_source.go
   - internal/provider/webhook_data_source_sdk.go

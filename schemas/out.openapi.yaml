@@ -8396,6 +8396,7 @@ paths:
           schema:
             type: number
             default: 25
+          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns roles
@@ -8408,18 +8409,23 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
+                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
+                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
+                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
+                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -8588,6 +8594,16 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Roles#read
+      x-speakeasy-entity-description: Returns information about PlanetScale database branch roles.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
     post:
       tags:
         - Roles

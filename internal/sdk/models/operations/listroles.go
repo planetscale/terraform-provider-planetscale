@@ -449,6 +449,8 @@ type ListRolesResponse struct {
 	RawResponse *http.Response
 	// Returns roles
 	Object *ListRolesResponseBody
+
+	Next func() (*ListRolesResponse, error)
 }
 
 func (l ListRolesResponse) MarshalJSON() ([]byte, error) {
