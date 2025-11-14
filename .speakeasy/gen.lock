@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 729a112e901dcd0375ce81f51606ce78
+  docChecksum: 1e416b73be5340a0094494702df87714
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -32,6 +32,7 @@ generatedFiles:
   - examples/data-sources/planetscale_password/data-source.tf
   - examples/data-sources/planetscale_query_pattern_report/data-source.tf
   - examples/data-sources/planetscale_role/data-source.tf
+  - examples/data-sources/planetscale_team/data-source.tf
   - examples/data-sources/planetscale_webhook/data-source.tf
   - examples/data-sources/planetscale_workflow/data-source.tf
   - examples/provider/provider.tf
@@ -56,6 +57,9 @@ generatedFiles:
   - examples/resources/planetscale_role/import-by-string-id.tf
   - examples/resources/planetscale_role/import.sh
   - examples/resources/planetscale_role/resource.tf
+  - examples/resources/planetscale_team/import-by-string-id.tf
+  - examples/resources/planetscale_team/import.sh
+  - examples/resources/planetscale_team/resource.tf
   - examples/resources/planetscale_webhook/import-by-string-id.tf
   - examples/resources/planetscale_webhook/import.sh
   - examples/resources/planetscale_webhook/resource.tf
@@ -125,6 +129,10 @@ generatedFiles:
   - internal/provider/role_data_source_sdk.go
   - internal/provider/role_resource.go
   - internal/provider/role_resource_sdk.go
+  - internal/provider/team_data_source.go
+  - internal/provider/team_data_source_sdk.go
+  - internal/provider/team_resource.go
+  - internal/provider/team_resource_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
@@ -142,6 +150,10 @@ generatedFiles:
   - internal/provider/types/get_database_region_data.go
   - internal/provider/types/get_keyspace_replication_durability_constraints.go
   - internal/provider/types/get_keyspace_vreplication_flags.go
+  - internal/provider/types/get_organization_team_creator.go
+  - internal/provider/types/get_organization_team_database.go
+  - internal/provider/types/get_organization_team_default_organization.go
+  - internal/provider/types/get_organization_team_member.go
   - internal/provider/types/get_password_actor.go
   - internal/provider/types/get_password_database_branch.go
   - internal/provider/types/get_password_region.go
@@ -1337,7 +1349,7 @@ examples:
         path:
           organization: "<value>"
           database: "<value>"
-          number: null
+          number: 8169.83
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "number": 8169.83, "state": "pending", "created_at": "1710916596892", "updated_at": "1735611523984", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": false, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "STOP", "workflow_errors": "<value>", "may_retry": true, "may_restart": false, "verified_data_stale": false, "sequence_tables_applied": true, "actor": {"id": "<id>", "display_name": "Loy80", "avatar_url": "https://monumental-horde.name"}, "verify_data_by": {"id": "<id>", "display_name": "Sasha24", "avatar_url": "https://incomparable-subsidy.info/"}, "reversed_by": {"id": "<id>", "display_name": "Guiseppe65", "avatar_url": "https://wordy-blossom.net"}, "switch_replicas_by": {"id": "<id>", "display_name": "Myra_Weber93", "avatar_url": "https://essential-whack.com"}, "switch_primaries_by": {"id": "<id>", "display_name": "Grace_Douglas", "avatar_url": "https://sorrowful-cake.com"}, "cancelled_by": {"id": "<id>", "display_name": "Simone0", "avatar_url": "https://deserted-restaurant.biz/"}, "completed_by": {"id": "<id>", "display_name": "Zelda_Anderson57", "avatar_url": "https://imaginary-maintainer.name"}, "retried_by": {"id": "<id>", "display_name": "Cathrine93", "avatar_url": "https://upset-transparency.net"}, "cutover_by": {"id": "<id>", "display_name": "Dariana_Harvey19", "avatar_url": "https://unlawful-statue.biz"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Jay_Waelchi", "avatar_url": "https://hefty-casket.info"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1716033865402", "updated_at": "1735657936918", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1721236233199", "updated_at": "1735672255822", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1732485467254", "updated_at": "1735624038737", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1724581018711", "updated_at": "1735637241691", "deleted_at": "<value>"}}
@@ -1347,7 +1359,7 @@ examples:
         path:
           organization: "<value>"
           database: "<value>"
-          number: null
+          number: 686.24
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "number": 686.24, "state": "switching_replicas", "created_at": "1706420148867", "updated_at": "1735628508889", "started_at": "<value>", "completed_at": "<value>", "cancelled_at": "<value>", "reversed_at": "<value>", "retried_at": "<value>", "data_copy_completed_at": "<value>", "cutover_at": "<value>", "replicas_switched": true, "primaries_switched": true, "switch_replicas_at": "<value>", "switch_primaries_at": "<value>", "verify_data_at": "<value>", "workflow_type": "move_tables", "workflow_subtype": "<value>", "defer_secondary_keys": false, "on_ddl": "STOP", "workflow_errors": "<value>", "may_retry": true, "may_restart": false, "verified_data_stale": false, "sequence_tables_applied": false, "actor": {"id": "<id>", "display_name": "Elvie.Nader97", "avatar_url": "https://rich-laughter.name"}, "verify_data_by": {"id": "<id>", "display_name": "Felton41", "avatar_url": "https://polite-volleyball.net/"}, "reversed_by": {"id": "<id>", "display_name": "Winston_Farrell49", "avatar_url": "https://vengeful-opera.biz/"}, "switch_replicas_by": {"id": "<id>", "display_name": "Nickolas.Pollich", "avatar_url": "https://arid-cop-out.name"}, "switch_primaries_by": {"id": "<id>", "display_name": "Chanel_Ratke", "avatar_url": "https://sizzling-wombat.com/"}, "cancelled_by": {"id": "<id>", "display_name": "Cordell.Rosenbaum", "avatar_url": "https://every-yeast.com"}, "completed_by": {"id": "<id>", "display_name": "Troy33", "avatar_url": "https://good-natured-comestible.biz/"}, "retried_by": {"id": "<id>", "display_name": "Bell_Luettgen", "avatar_url": "https://shabby-hydrocarbon.info/"}, "cutover_by": {"id": "<id>", "display_name": "Ross.Marvin61", "avatar_url": "https://linear-moment.biz/"}, "reversed_cutover_by": {"id": "<id>", "display_name": "Gabe.Turcotte2", "avatar_url": "https://long-term-petal.com/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1735362110531", "updated_at": "1735653800766", "deleted_at": "<value>"}, "source_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1719186498894", "updated_at": "1735653919307", "deleted_at": "<value>"}, "target_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1713023152537", "updated_at": "1735609618987", "deleted_at": "<value>"}, "global_keyspace": {"id": "<id>", "name": "<value>", "created_at": "1704885959127", "updated_at": "1735673705230", "deleted_at": "<value>"}}

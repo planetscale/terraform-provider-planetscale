@@ -74,6 +74,7 @@ Available configuration:
 * [planetscale_password](docs/resources/password.md)
 * [planetscale_query_pattern_report](docs/resources/query_pattern_report.md)
 * [planetscale_role](docs/resources/role.md)
+* [planetscale_team](docs/resources/team.md)
 * [planetscale_webhook](docs/resources/webhook.md)
 * [planetscale_workflow](docs/resources/workflow.md)
 ### Data Sources
@@ -88,6 +89,7 @@ Available configuration:
 * [planetscale_password](docs/data-sources/password.md)
 * [planetscale_query_pattern_report](docs/data-sources/query_pattern_report.md)
 * [planetscale_role](docs/data-sources/role.md)
+* [planetscale_team](docs/data-sources/team.md)
 * [planetscale_webhook](docs/data-sources/webhook.md)
 * [planetscale_workflow](docs/data-sources/workflow.md)
 <!-- End Available Resources and Data Sources [operations] -->

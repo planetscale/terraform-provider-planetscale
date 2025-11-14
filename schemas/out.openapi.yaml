@@ -1193,6 +1193,8 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `write_organization` |
+      x-speakeasy-entity-operation: Team#create
+      x-speakeasy-entity-description: Manage a PlanetScale organization team.
   /organizations/{organization_name}/teams/{team_slug}:
     get:
       tags:
@@ -1212,6 +1214,7 @@ paths:
           description: The slug of the team
           schema:
             type: string
+          x-speakeasy-match: slug
       responses:
         "200":
           description: Returns the team details including members and databases
@@ -1243,6 +1246,8 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `read_organization` |
+      x-speakeasy-entity-operation: Team#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale organization team.
     patch:
       tags:
         - Organization teams
@@ -1261,6 +1266,7 @@ paths:
           description: The slug of the team
           schema:
             type: string
+          x-speakeasy-match: slug
       requestBody:
         content:
           application/json:
@@ -1305,6 +1311,7 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `write_organization` |
+      x-speakeasy-entity-operation: Team#update
     delete:
       tags:
         - Organization teams
@@ -1323,6 +1330,7 @@ paths:
           description: The slug of the team
           schema:
             type: string
+          x-speakeasy-match: slug
       responses:
         "204":
           description: "Team deleted successfully. Note: SSO-managed teams cannot be deleted."
@@ -1351,6 +1359,7 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `write_organization` |
+      x-speakeasy-entity-operation: Team#delete
   /organizations/{organization}/databases:
     get:
       tags:
