@@ -13,6 +13,7 @@ sources:
             - location: schemas/overlay-terraform-databases.yaml
             - location: schemas/overlay-terraform-keyspace.yaml
             - location: schemas/overlay-terraform-organization.yaml
+            - location: schemas/overlay-terraform-organization_regions.yaml
             - location: schemas/overlay-terraform-organizations.yaml
             - location: schemas/overlay-terraform-password.yaml
             - location: schemas/overlay-terraform-query_pattern_report.yaml

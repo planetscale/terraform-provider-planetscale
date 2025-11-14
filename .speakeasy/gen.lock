@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: f35e3ef33182b186e2cac3c74b97e508
+  docChecksum: 7a7922ea92dbdaeaecd43887dbe8f9f9
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -29,6 +29,7 @@ generatedFiles:
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_keyspace/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
+  - examples/data-sources/planetscale_organization_regions/data-source.tf
   - examples/data-sources/planetscale_organizations/data-source.tf
   - examples/data-sources/planetscale_password/data-source.tf
   - examples/data-sources/planetscale_query_pattern_report/data-source.tf
@@ -109,6 +110,8 @@ generatedFiles:
   - internal/provider/keyspace_resource_sdk.go
   - internal/provider/organization_data_source.go
   - internal/provider/organization_data_source_sdk.go
+  - internal/provider/organizationregions_data_source.go
+  - internal/provider/organizationregions_data_source_sdk.go
   - internal/provider/organizations_data_source.go
   - internal/provider/organizations_data_source_sdk.go
   - internal/provider/password_data_source.go
@@ -196,6 +199,7 @@ generatedFiles:
   - internal/provider/types/list_organization_teams_default_organization.go
   - internal/provider/types/list_organization_teams_member.go
   - internal/provider/types/list_organizations_data.go
+  - internal/provider/types/list_regions_for_organization_data.go
   - internal/provider/utils.go
   - internal/provider/webhook_data_source.go
   - internal/provider/webhook_data_source_sdk.go
