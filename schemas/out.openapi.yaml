@@ -15582,6 +15582,7 @@ paths:
           schema:
             type: number
             default: 25
+          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns the available regions for a database
@@ -15610,6 +15611,16 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
+      x-speakeasy-entity-operation: DatabaseRegions#read
+      x-speakeasy-entity-description: Returns information about PlanetScale database regions.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
   /organizations/{organization}/invoices:
     get:
       tags:

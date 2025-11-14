@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 11ad64217d843fefc32744035d4c36fc
+  docChecksum: 657c022303b9422c4443a6e061c6ac6e
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -28,6 +28,7 @@ generatedFiles:
   - examples/data-sources/planetscale_branch/data-source.tf
   - examples/data-sources/planetscale_cidrs/data-source.tf
   - examples/data-sources/planetscale_database/data-source.tf
+  - examples/data-sources/planetscale_database_regions/data-source.tf
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_keyspace/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
@@ -113,6 +114,8 @@ generatedFiles:
   - internal/provider/database_data_source_sdk.go
   - internal/provider/database_resource.go
   - internal/provider/database_resource_sdk.go
+  - internal/provider/databaseregions_data_source.go
+  - internal/provider/databaseregions_data_source_sdk.go
   - internal/provider/databases_data_source.go
   - internal/provider/databases_data_source_sdk.go
   - internal/provider/keyspace_data_source.go
@@ -211,6 +214,7 @@ generatedFiles:
   - internal/provider/types/list_backups_database_branch.go
   - internal/provider/types/list_backups_restored_branch.go
   - internal/provider/types/list_backups_schema_snapshot.go
+  - internal/provider/types/list_database_regions_data.go
   - internal/provider/types/list_databases_data.go
   - internal/provider/types/list_databases_data_import.go
   - internal/provider/types/list_databases_data_source.go
