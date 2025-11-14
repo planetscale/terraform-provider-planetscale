@@ -134,8 +134,12 @@ func (r *KeyspaceResourceModel) ToOperationsCreateKeyspaceRequestBody(ctx contex
 	var name string
 	name = r.Name.ValueString()
 
+	var clusterSize string
+	clusterSize = r.ClusterSize.ValueString()
+
 	out := operations.CreateKeyspaceRequestBody{
-		Name: name,
+		Name:        name,
+		ClusterSize: clusterSize,
 	}
 
 	return &out, diags

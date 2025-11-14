@@ -41,6 +41,7 @@ data "planetscale_bouncer" "my_bouncer" {
 - `parameters` (Attributes List) (see [below for nested schema](#nestedatt--parameters))
 - `region_data` (String) Parsed as JSON.
 - `replicas_per_cell` (Number) The count of replicas in each cell
+- `sku` (Attributes) (see [below for nested schema](#nestedatt--sku))
 - `target` (String) The instance type the bouncer targets
 - `updated_at` (String) When the bouncer was updated
 
@@ -99,3 +100,16 @@ Read-Only:
 - `avatar_url` (String) The URL of the actor's avatar
 - `display_name` (String) The name of the actor
 - `id` (String) The ID of the actor
+
+
+
+<a id="nestedatt--sku"></a>
+### Nested Schema for `sku`
+
+Read-Only:
+
+- `cpu` (String) The CPU allocation
+- `display_name` (String) The display name
+- `name` (String) The name of the Postgres bouncer SKU
+- `ram` (Number) The amount of memory in bytes
+- `sort_order` (Number) The sort order of the Postgres bouncer SKU

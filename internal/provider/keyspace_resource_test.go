@@ -16,7 +16,6 @@ import (
 
 func TestAccKeyspaceResource_Lifecycle(t *testing.T) {
 	t.Parallel()
-	t.Skip("Requires special permissions to run")
 
 	databaseName := fmt.Sprintf("terraform-testing-%d", rand.Intn(1000000))
 	resourceAddress := "planetscale_keyspace.test"

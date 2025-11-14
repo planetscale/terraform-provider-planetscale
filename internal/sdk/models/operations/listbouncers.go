@@ -68,12 +68,61 @@ func (l *ListBouncersRequest) GetPerPage() *float64 {
 	return l.PerPage
 }
 
+type ListBouncersSku struct {
+	// The name of the Postgres bouncer SKU
+	Name string `json:"name"`
+	// The display name
+	DisplayName string `json:"display_name"`
+	// The CPU allocation
+	CPU string `json:"cpu"`
+	// The amount of memory in bytes
+	RAM float64 `json:"ram"`
+	// The sort order of the Postgres bouncer SKU
+	SortOrder float64 `json:"sort_order"`
+}
+
+func (l *ListBouncersSku) GetName() string {
+	if l == nil {
+		return ""
+	}
+	return l.Name
+}
+
+func (l *ListBouncersSku) GetDisplayName() string {
+	if l == nil {
+		return ""
+	}
+	return l.DisplayName
+}
+
+func (l *ListBouncersSku) GetCPU() string {
+	if l == nil {
+		return ""
+	}
+	return l.CPU
+}
+
+func (l *ListBouncersSku) GetRAM() float64 {
+	if l == nil {
+		return 0.0
+	}
+	return l.RAM
+}
+
+func (l *ListBouncersSku) GetSortOrder() float64 {
+	if l == nil {
+		return 0.0
+	}
+	return l.SortOrder
+}
+
 // ListBouncersTarget - The instance type the bouncer targets
 type ListBouncersTarget string
 
 const (
-	ListBouncersTargetPrimary ListBouncersTarget = "primary"
-	ListBouncersTargetReplica ListBouncersTarget = "replica"
+	ListBouncersTargetPrimary           ListBouncersTarget = "primary"
+	ListBouncersTargetReplica           ListBouncersTarget = "replica"
+	ListBouncersTargetReplicaAzAffinity ListBouncersTarget = "replica_az_affinity"
 )
 
 func (e ListBouncersTarget) ToPointer() *ListBouncersTarget {
@@ -88,6 +137,8 @@ func (e *ListBouncersTarget) UnmarshalJSON(data []byte) error {
 	case "primary":
 		fallthrough
 	case "replica":
+		fallthrough
+	case "replica_az_affinity":
 		*e = ListBouncersTarget(v)
 		return nil
 	default:
@@ -458,7 +509,8 @@ type ListBouncersData struct {
 	// The ID of the bouncer
 	ID string `json:"id"`
 	// The name of the bouncer
-	Name string `json:"name"`
+	Name string          `json:"name"`
+	Sku  ListBouncersSku `json:"sku"`
 	// The instance type the bouncer targets
 	Target ListBouncersTarget `json:"target"`
 	// The count of replicas in each cell
@@ -486,6 +538,13 @@ func (l *ListBouncersData) GetName() string {
 		return ""
 	}
 	return l.Name
+}
+
+func (l *ListBouncersData) GetSku() ListBouncersSku {
+	if l == nil {
+		return ListBouncersSku{}
+	}
+	return l.Sku
 }
 
 func (l *ListBouncersData) GetTarget() ListBouncersTarget {

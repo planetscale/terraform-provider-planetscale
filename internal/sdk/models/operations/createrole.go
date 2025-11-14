@@ -202,7 +202,7 @@ func (e *CreateRoleInheritedRoleResponse) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type CreateRoleBranch struct {
+type CreateRoleBranchData struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -215,42 +215,42 @@ type CreateRoleBranch struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (c *CreateRoleBranch) GetID() string {
+func (c *CreateRoleBranchData) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
 }
 
-func (c *CreateRoleBranch) GetName() string {
+func (c *CreateRoleBranchData) GetName() string {
 	if c == nil {
 		return ""
 	}
 	return c.Name
 }
 
-func (c *CreateRoleBranch) GetCreatedAt() string {
+func (c *CreateRoleBranchData) GetCreatedAt() string {
 	if c == nil {
 		return ""
 	}
 	return c.CreatedAt
 }
 
-func (c *CreateRoleBranch) GetUpdatedAt() string {
+func (c *CreateRoleBranchData) GetUpdatedAt() string {
 	if c == nil {
 		return ""
 	}
 	return c.UpdatedAt
 }
 
-func (c *CreateRoleBranch) GetDeletedAt() string {
+func (c *CreateRoleBranchData) GetDeletedAt() string {
 	if c == nil {
 		return ""
 	}
 	return c.DeletedAt
 }
 
-type CreateRoleActor struct {
+type CreateRoleActorData struct {
 	// The ID of the actor
 	ID string `json:"id"`
 	// The name of the actor
@@ -259,21 +259,21 @@ type CreateRoleActor struct {
 	AvatarURL string `json:"avatar_url"`
 }
 
-func (c *CreateRoleActor) GetID() string {
+func (c *CreateRoleActorData) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
 }
 
-func (c *CreateRoleActor) GetDisplayName() string {
+func (c *CreateRoleActorData) GetDisplayName() string {
 	if c == nil {
 		return ""
 	}
 	return c.DisplayName
 }
 
-func (c *CreateRoleActor) GetAvatarURL() string {
+func (c *CreateRoleActorData) GetAvatarURL() string {
 	if c == nil {
 		return ""
 	}
@@ -318,8 +318,8 @@ type CreateRoleResponseBody struct {
 	TTL float64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []CreateRoleInheritedRoleResponse `json:"inherited_roles"`
-	Branch         CreateRoleBranch                  `json:"branch"`
-	Actor          CreateRoleActor                   `json:"actor"`
+	BranchData     CreateRoleBranchData              `json:"branch"`
+	ActorData      CreateRoleActorData               `json:"actor"`
 }
 
 func (c *CreateRoleResponseBody) GetID() string {
@@ -448,18 +448,18 @@ func (c *CreateRoleResponseBody) GetInheritedRoles() []CreateRoleInheritedRoleRe
 	return c.InheritedRoles
 }
 
-func (c *CreateRoleResponseBody) GetBranch() CreateRoleBranch {
+func (c *CreateRoleResponseBody) GetBranchData() CreateRoleBranchData {
 	if c == nil {
-		return CreateRoleBranch{}
+		return CreateRoleBranchData{}
 	}
-	return c.Branch
+	return c.BranchData
 }
 
-func (c *CreateRoleResponseBody) GetActor() CreateRoleActor {
+func (c *CreateRoleResponseBody) GetActorData() CreateRoleActorData {
 	if c == nil {
-		return CreateRoleActor{}
+		return CreateRoleActorData{}
 	}
-	return c.Actor
+	return c.ActorData
 }
 
 type CreateRoleResponse struct {

@@ -67,6 +67,11 @@ func (r *BouncerDataSourceModel) RefreshFromOperationsGetBouncerResponseBody(ctx
 			r.RegionData = jsontypes.NewNormalizedValue(string(regionDataResult))
 		}
 		r.ReplicasPerCell = types.Float64Value(resp.ReplicasPerCell)
+		r.Sku.CPU = types.StringValue(resp.Sku.CPU)
+		r.Sku.DisplayName = types.StringValue(resp.Sku.DisplayName)
+		r.Sku.Name = types.StringValue(resp.Sku.Name)
+		r.Sku.RAM = types.Float64Value(resp.Sku.RAM)
+		r.Sku.SortOrder = types.Float64Value(resp.Sku.SortOrder)
 		r.Target = types.StringValue(string(resp.Target))
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 	}

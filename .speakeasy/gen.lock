@@ -1,20 +1,21 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 4fc2f87a879019e456d9a3cbd3682e50
+  docChecksum: 867684446022d48380d6ba2934addfb6
   docVersion: v1
-  speakeasyVersion: 1.656.2
-  generationVersion: 2.753.6
+  speakeasyVersion: 1.657.0
+  generationVersion: 2.755.0
   releaseVersion: 0.0.1
   configChecksum: 52cf44652f072426483a7575a20b4144
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.15
+    core: 3.46.16
     customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
+    ignores: 2.81.1
     nameOverrides: 2.81.3
     operationPolling: 0.1.0
     pagination: 2.83.4
@@ -28,6 +29,10 @@ generatedFiles:
   - examples/data-sources/planetscale_keyspace/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
   - examples/data-sources/planetscale_organizations/data-source.tf
+  - examples/data-sources/planetscale_password/data-source.tf
+  - examples/data-sources/planetscale_query_pattern_report/data-source.tf
+  - examples/data-sources/planetscale_role/data-source.tf
+  - examples/data-sources/planetscale_webhook/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/planetscale_bouncer/import-by-string-id.tf
   - examples/resources/planetscale_bouncer/import.sh
@@ -41,6 +46,18 @@ generatedFiles:
   - examples/resources/planetscale_keyspace/import-by-string-id.tf
   - examples/resources/planetscale_keyspace/import.sh
   - examples/resources/planetscale_keyspace/resource.tf
+  - examples/resources/planetscale_password/import-by-string-id.tf
+  - examples/resources/planetscale_password/import.sh
+  - examples/resources/planetscale_password/resource.tf
+  - examples/resources/planetscale_query_pattern_report/import-by-string-id.tf
+  - examples/resources/planetscale_query_pattern_report/import.sh
+  - examples/resources/planetscale_query_pattern_report/resource.tf
+  - examples/resources/planetscale_role/import-by-string-id.tf
+  - examples/resources/planetscale_role/import.sh
+  - examples/resources/planetscale_role/resource.tf
+  - examples/resources/planetscale_webhook/import-by-string-id.tf
+  - examples/resources/planetscale_webhook/import.sh
+  - examples/resources/planetscale_webhook/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -77,7 +94,15 @@ generatedFiles:
   - internal/provider/organization_data_source_sdk.go
   - internal/provider/organizations_data_source.go
   - internal/provider/organizations_data_source_sdk.go
+  - internal/provider/password_data_source.go
+  - internal/provider/password_data_source_sdk.go
+  - internal/provider/password_resource.go
+  - internal/provider/password_resource_sdk.go
   - internal/provider/provider.go
+  - internal/provider/querypatternreport_data_source.go
+  - internal/provider/querypatternreport_data_source_sdk.go
+  - internal/provider/querypatternreport_resource.go
+  - internal/provider/querypatternreport_resource_sdk.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go
   - internal/provider/reflect/generic_attr_value.go
@@ -92,13 +117,19 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/role_data_source.go
+  - internal/provider/role_data_source_sdk.go
+  - internal/provider/role_resource.go
+  - internal/provider/role_resource_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
+  - internal/provider/types/create_query_patterns_report_actor.go
   - internal/provider/types/get_bouncer_actor.go
   - internal/provider/types/get_bouncer_actor_pgbouncer.go
   - internal/provider/types/get_bouncer_branch_data.go
   - internal/provider/types/get_bouncer_parameter.go
+  - internal/provider/types/get_bouncer_sku.go
   - internal/provider/types/get_branch_actor.go
   - internal/provider/types/get_branch_region_data.go
   - internal/provider/types/get_branch_restored_from_branch.go
@@ -107,12 +138,22 @@ generatedFiles:
   - internal/provider/types/get_database_region_data.go
   - internal/provider/types/get_keyspace_replication_durability_constraints.go
   - internal/provider/types/get_keyspace_vreplication_flags.go
+  - internal/provider/types/get_password_actor.go
+  - internal/provider/types/get_password_database_branch.go
+  - internal/provider/types/get_password_region.go
+  - internal/provider/types/get_query_patterns_report_status_actor.go
+  - internal/provider/types/get_role_actor_data.go
+  - internal/provider/types/get_role_branch_data.go
   - internal/provider/types/list_databases_data.go
   - internal/provider/types/list_databases_data_import.go
   - internal/provider/types/list_databases_data_source.go
   - internal/provider/types/list_databases_region.go
   - internal/provider/types/list_organizations_data.go
   - internal/provider/utils.go
+  - internal/provider/webhook_data_source.go
+  - internal/provider/webhook_data_source_sdk.go
+  - internal/provider/webhook_resource.go
+  - internal/provider/webhook_resource_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/apibranchbouncerresizes.go
   - internal/sdk/backups.go
@@ -124,6 +165,7 @@ generatedFiles:
   - internal/sdk/databasebranches.go
   - internal/sdk/databasebranchkeyspaces.go
   - internal/sdk/databasebranchpasswords.go
+  - internal/sdk/databasepostgresiprestrictions.go
   - internal/sdk/databases.go
   - internal/sdk/deployrequests.go
   - internal/sdk/docs/models/operations/option.md
@@ -154,9 +196,11 @@ generatedFiles:
   - internal/sdk/models/operations/createbouncer.go
   - internal/sdk/models/operations/createbranch.go
   - internal/sdk/models/operations/createdatabase.go
+  - internal/sdk/models/operations/createdatabasepostgrescidr.go
   - internal/sdk/models/operations/createdeployrequest.go
   - internal/sdk/models/operations/createkeyspace.go
   - internal/sdk/models/operations/createoauthtoken.go
+  - internal/sdk/models/operations/createorganizationteam.go
   - internal/sdk/models/operations/createpassword.go
   - internal/sdk/models/operations/createquerypatternsreport.go
   - internal/sdk/models/operations/createrole.go
@@ -166,8 +210,10 @@ generatedFiles:
   - internal/sdk/models/operations/deletebouncer.go
   - internal/sdk/models/operations/deletebranch.go
   - internal/sdk/models/operations/deletedatabase.go
+  - internal/sdk/models/operations/deletedatabasepostgrescidr.go
   - internal/sdk/models/operations/deletekeyspace.go
   - internal/sdk/models/operations/deleteoauthtoken.go
+  - internal/sdk/models/operations/deleteorganizationteam.go
   - internal/sdk/models/operations/deletepassword.go
   - internal/sdk/models/operations/deletequerypatternsreport.go
   - internal/sdk/models/operations/deleterole.go
@@ -181,6 +227,7 @@ generatedFiles:
   - internal/sdk/models/operations/getbranchschema.go
   - internal/sdk/models/operations/getcurrentuser.go
   - internal/sdk/models/operations/getdatabase.go
+  - internal/sdk/models/operations/getdatabasepostgrescidr.go
   - internal/sdk/models/operations/getdatabasethrottler.go
   - internal/sdk/models/operations/getdeployment.go
   - internal/sdk/models/operations/getdeployqueue.go
@@ -194,6 +241,8 @@ generatedFiles:
   - internal/sdk/models/operations/getoauthapplication.go
   - internal/sdk/models/operations/getoauthtoken.go
   - internal/sdk/models/operations/getorganization.go
+  - internal/sdk/models/operations/getorganizationmembership.go
+  - internal/sdk/models/operations/getorganizationteam.go
   - internal/sdk/models/operations/getpassword.go
   - internal/sdk/models/operations/getquerypatternsreport.go
   - internal/sdk/models/operations/getquerypatternsreportstatus.go
@@ -208,6 +257,8 @@ generatedFiles:
   - internal/sdk/models/operations/listbranchbouncerresizerequests.go
   - internal/sdk/models/operations/listbranchchangerequests.go
   - internal/sdk/models/operations/listbranches.go
+  - internal/sdk/models/operations/listclustersizeskus.go
+  - internal/sdk/models/operations/listdatabasepostgrescidrs.go
   - internal/sdk/models/operations/listdatabaseregions.go
   - internal/sdk/models/operations/listdatabases.go
   - internal/sdk/models/operations/listdeployoperations.go
@@ -221,6 +272,7 @@ generatedFiles:
   - internal/sdk/models/operations/listoauthtokens.go
   - internal/sdk/models/operations/listorganizationmembers.go
   - internal/sdk/models/operations/listorganizations.go
+  - internal/sdk/models/operations/listorganizationteams.go
   - internal/sdk/models/operations/listparameters.go
   - internal/sdk/models/operations/listpasswords.go
   - internal/sdk/models/operations/listpublicregions.go
@@ -232,6 +284,7 @@ generatedFiles:
   - internal/sdk/models/operations/options.go
   - internal/sdk/models/operations/promotebranch.go
   - internal/sdk/models/operations/queuedeployrequest.go
+  - internal/sdk/models/operations/removeorganizationmember.go
   - internal/sdk/models/operations/renewpassword.go
   - internal/sdk/models/operations/renewrole.go
   - internal/sdk/models/operations/reviewdeployrequest.go
@@ -242,12 +295,15 @@ generatedFiles:
   - internal/sdk/models/operations/updatebouncerresizerequest.go
   - internal/sdk/models/operations/updatebranchchangerequest.go
   - internal/sdk/models/operations/updatebranchclusterconfig.go
+  - internal/sdk/models/operations/updatedatabasepostgrescidr.go
   - internal/sdk/models/operations/updatedatabasesettings.go
   - internal/sdk/models/operations/updatedatabasethrottler.go
   - internal/sdk/models/operations/updatedeployrequestthrottler.go
   - internal/sdk/models/operations/updatekeyspace.go
   - internal/sdk/models/operations/updatekeyspacevschema.go
   - internal/sdk/models/operations/updateorganization.go
+  - internal/sdk/models/operations/updateorganizationmembership.go
+  - internal/sdk/models/operations/updateorganizationteam.go
   - internal/sdk/models/operations/updatepassword.go
   - internal/sdk/models/operations/updaterole.go
   - internal/sdk/models/operations/updatewebhook.go
@@ -267,6 +323,7 @@ generatedFiles:
   - internal/sdk/optionalnullable/optionalnullable_test.go
   - internal/sdk/organizationmembers.go
   - internal/sdk/organizations.go
+  - internal/sdk/organizationteams.go
   - internal/sdk/planetscale.go
   - internal/sdk/polling/config.go
   - internal/sdk/polling/errors.go
@@ -616,7 +673,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "created_at": "1706219570004", "updated_at": "1735655284202", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Avery63", "avatar_url": "https://vain-manner.info/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1711805497882", "updated_at": "1735621515422", "deleted_at": "<value>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}]}]}
+          application/json: {"current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "sku": {"name": "<value>", "display_name": "Tabitha61", "cpu": "<value>", "ram": 9626.4, "sort_order": 7224.95}, "target": "primary", "replicas_per_cell": 3448.58, "created_at": "1706219570004", "updated_at": "1735655284202", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Avery63", "avatar_url": "https://vain-manner.info/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1711805497882", "updated_at": "1735621515422", "deleted_at": "<value>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}]}]}
   create_bouncer:
     speakeasy-default-create-bouncer:
       parameters:
@@ -626,7 +683,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "created_at": "1704189068160", "updated_at": "1735635313028", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Gussie_Conroy12", "avatar_url": "https://which-chairperson.com"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1722810842786", "updated_at": "1735680154313", "deleted_at": "<value>"}, "parameters": []}
+          application/json: {"id": "<id>", "name": "<value>", "sku": {"name": "<value>", "display_name": "Abbey.Abbott", "cpu": "<value>", "ram": 1427.67, "sort_order": 8031.84}, "target": "primary", "replicas_per_cell": 5260.28, "created_at": "1704189068160", "updated_at": "1735635313028", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Gussie_Conroy12", "avatar_url": "https://which-chairperson.com"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1722810842786", "updated_at": "1735680154313", "deleted_at": "<value>"}, "parameters": []}
   get_bouncer:
     speakeasy-default-get-bouncer:
       parameters:
@@ -637,7 +694,7 @@ examples:
           name: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 2494.03, "created_at": "1727413063201", "updated_at": "1735627959135", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Santos.Botsford-Hackett", "avatar_url": "https://rectangular-chap.org"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1735541622830", "updated_at": "1735620048194", "deleted_at": "<value>"}, "parameters": []}
+          application/json: {"id": "<id>", "name": "<value>", "sku": {"name": "<value>", "display_name": "Hilbert86", "cpu": "<value>", "ram": 939.27, "sort_order": 3084.29}, "target": "primary", "replicas_per_cell": 2494.03, "created_at": "1727413063201", "updated_at": "1735627959135", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Santos.Botsford-Hackett", "avatar_url": "https://rectangular-chap.org"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1735541622830", "updated_at": "1735620048194", "deleted_at": "<value>"}, "parameters": []}
   delete_bouncer:
     speakeasy-default-delete-bouncer:
       parameters:
@@ -848,7 +905,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>"], "created_at": "1720525255008", "deleted_at": "<value>", "expires_at": "1748232802119", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "ttl_seconds": 8963.89, "access_host_url": "https://athletic-cemetery.name", "access_host_regional_url": "https://young-tributary.com", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Mae.Murray61", "avatar_url": "https://thick-case.com"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Lafayette.Rogahn76", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Burley.Johnston", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>"], "created_at": "1720525255008", "deleted_at": "<value>", "expires_at": "1748232802119", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "ttl_seconds": 8963.89, "access_host_url": "https://athletic-cemetery.name", "access_host_regional_url": "https://young-tributary.com", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Mae.Murray61", "avatar_url": "https://thick-case.com"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Lafayette.Rogahn76", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Burley.Johnston", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
   update_password:
     speakeasy-default-update-password:
       parameters:
@@ -1467,4 +1524,124 @@ examples:
       responses:
         "200":
           application/json: {"id": "<id>", "display_name": "Lizzie69", "name": "<value>", "email": "Coleman_Frami45@hotmail.com", "avatar_url": "https://oily-attraction.info/", "created_at": "1720815152103", "updated_at": "1735651999933", "two_factor_auth_configured": false, "default_organization": {"id": "<id>", "name": "<value>", "created_at": "1712421724110", "updated_at": "1735664277518", "deleted_at": "<value>"}, "sso": true, "managed": true, "directory_managed": true, "email_verified": false}
+  list_cluster_size_skus:
+    speakeasy-default-list-cluster-size-skus:
+      parameters:
+        path:
+          name: "<value>"
+      responses:
+        "200":
+          application/json: {"current_page": 5175.72, "next_page": 2524.42, "next_page_url": "https://brisk-parsnip.org/", "prev_page": 653.6, "prev_page_url": "https://urban-grass.biz/", "data": []}
+  list_organization_teams:
+    speakeasy-default-list-organization-teams:
+      parameters:
+        path:
+          organization_name: "<value>"
+      responses:
+        "200":
+          application/json: {"current_page": 4117.13, "next_page": 8145.38, "next_page_url": "https://noteworthy-hawk.org/", "prev_page": 3097.14, "prev_page_url": "https://impeccable-airline.com/", "data": []}
+  create_organization_team:
+    speakeasy-default-create-organization-team:
+      parameters:
+        path:
+          organization_name: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Antonetta23", "creator": {"id": "<id>", "display_name": "Shania.Shields93", "avatar_url": "https://evil-cassava.info"}, "members": [], "databases": [], "name": "<value>", "slug": "<value>", "created_at": "1729882123383", "updated_at": "1735673019633", "description": "enraged equally mount alert", "managed": false}
+  get_organization_team:
+    speakeasy-default-get-organization-team:
+      parameters:
+        path:
+          organization_name: "<value>"
+          team_slug: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Randi_Hickle", "creator": {"id": "<id>", "display_name": "Norene.Halvorson13", "avatar_url": "https://basic-mortise.net"}, "members": [{"id": "<id>", "display_name": "Cedrick6", "name": "<value>", "email": "Nick23@hotmail.com", "avatar_url": "https://putrid-hornet.name", "created_at": "1719828314965", "updated_at": "1735668646457", "two_factor_auth_configured": true, "default_organization": {"id": "<id>", "name": "<value>", "created_at": "1720220297293", "updated_at": "1735613154609", "deleted_at": "<value>"}, "sso": false, "managed": false, "directory_managed": false, "email_verified": false}], "databases": [{"id": "<id>", "name": "<value>", "url": "https://thorough-fedora.com/", "branches_url": "https://tired-lox.net/"}], "name": "<value>", "slug": "<value>", "created_at": "1726260825391", "updated_at": "1735685062581", "description": "factorise split despite bliss", "managed": true}
+  update_organization_team:
+    speakeasy-default-update-organization-team:
+      parameters:
+        path:
+          organization_name: "<value>"
+          team_slug: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Chadd_Schaden", "creator": {"id": "<id>", "display_name": "Magnus_Reichert30", "avatar_url": "https://secondary-other.name"}, "members": [], "databases": [{"id": "<id>", "name": "<value>", "url": "https://accomplished-earth.name/", "branches_url": "https://elementary-supplier.biz/"}], "name": "<value>", "slug": "<value>", "created_at": "1712997623627", "updated_at": "1735682805483", "description": "aw eek swathe over reprove", "managed": true}
+  delete_organization_team:
+    speakeasy-default-delete-organization-team:
+      parameters:
+        path:
+          organization_name: "<value>"
+          team_slug: "<value>"
+  list_database_postgres_cidrs:
+    speakeasy-default-list-database-postgres-cidrs:
+      parameters:
+        path:
+          organization: "<value>"
+          database_name: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 4774.22, "next_page": 3396.64, "next_page_url": "https://tasty-affect.org", "prev_page": 4866.83, "prev_page_url": "https://mixed-vibraphone.name/", "data": [{"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": ["<value 1>"], "created_at": "1719417695596", "updated_at": "1735682302995", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Sadye73", "avatar_url": "https://simplistic-hygienic.org"}}]}
+  create_database_postgres_cidr:
+    speakeasy-default-create-database-postgres-cidr:
+      parameters:
+        path:
+          organization: "<value>"
+          database_name: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "created_at": "1729618456817", "updated_at": "1735657061783", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Nico_Ryan", "avatar_url": "https://unfortunate-knickers.net"}}
+  get_database_postgres_cidr:
+    speakeasy-default-get-database-postgres-cidr:
+      parameters:
+        path:
+          organization: "<value>"
+          database_name: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1725946727260", "updated_at": "1735658492313", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "William.Haley", "avatar_url": "https://regular-agreement.org/"}}
+  update_database_postgres_cidr:
+    speakeasy-default-update-database-postgres-cidr:
+      parameters:
+        path:
+          organization: "<value>"
+          database_name: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "created_at": "1709625983230", "updated_at": "1735665403648", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Juanita_Cassin89", "avatar_url": "https://insecure-interchange.name/"}}
+  delete_database_postgres_cidr:
+    speakeasy-default-delete-database-postgres-cidr:
+      parameters:
+        path:
+          organization: "<value>"
+          database_name: "<value>"
+          id: "<id>"
+  get_organization_membership:
+    speakeasy-default-get-organization-membership:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "user": {"id": "<id>", "display_name": "Tanner82", "name": "<value>", "email": "Clement_Witting6@hotmail.com", "avatar_url": "https://extra-large-platypus.net", "created_at": "1724224150015", "updated_at": "1735611649362", "two_factor_auth_configured": true, "default_organization": {"id": "<id>", "name": "<value>", "created_at": "1729001170416", "updated_at": "1735689118381", "deleted_at": "<value>"}, "sso": true, "managed": true, "directory_managed": true, "email_verified": true}, "role": "admin", "created_at": "1725328445828", "updated_at": "1735684990803"}
+  update_organization_membership:
+    speakeasy-default-update-organization-membership:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "user": {"id": "<id>", "display_name": "Marcelino.Koepp", "name": "<value>", "email": "Cleta81@hotmail.com", "avatar_url": "https://mushy-championship.name", "created_at": "1734838567225", "updated_at": "1735634931805", "two_factor_auth_configured": false, "default_organization": {"id": "<id>", "name": "<value>", "created_at": "1715265227536", "updated_at": "1735656825096", "deleted_at": "<value>"}, "sso": true, "managed": false, "directory_managed": false, "email_verified": true}, "role": "admin", "created_at": "1729631895914", "updated_at": "1735680423530"}
+  remove_organization_member:
+    speakeasy-default-remove-organization-member:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
 examplesVersion: 1.0.2

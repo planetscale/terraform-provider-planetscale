@@ -42,6 +42,7 @@ type BouncerDataSourceModel struct {
 	Parameters      []tfTypes.GetBouncerParameter `tfsdk:"parameters"`
 	RegionData      jsontypes.Normalized          `tfsdk:"region_data"`
 	ReplicasPerCell types.Float64                 `tfsdk:"replicas_per_cell"`
+	Sku             tfTypes.GetBouncerSku         `tfsdk:"sku"`
 	Target          types.String                  `tfsdk:"target"`
 	UpdatedAt       types.String                  `tfsdk:"updated_at"`
 }
@@ -232,6 +233,31 @@ func (r *BouncerDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			"replicas_per_cell": schema.Float64Attribute{
 				Computed:    true,
 				Description: `The count of replicas in each cell`,
+			},
+			"sku": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"cpu": schema.StringAttribute{
+						Computed:    true,
+						Description: `The CPU allocation`,
+					},
+					"display_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `The display name`,
+					},
+					"name": schema.StringAttribute{
+						Computed:    true,
+						Description: `The name of the Postgres bouncer SKU`,
+					},
+					"ram": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The amount of memory in bytes`,
+					},
+					"sort_order": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The sort order of the Postgres bouncer SKU`,
+					},
+				},
 			},
 			"target": schema.StringAttribute{
 				Computed:    true,

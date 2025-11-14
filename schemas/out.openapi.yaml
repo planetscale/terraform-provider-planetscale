@@ -32,7 +32,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a32
+              schema: &a36
                 type: object
                 properties:
                   current_page:
@@ -378,7 +378,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a33
+              schema: &a38
                 type: object
                 properties:
                   has_next:
@@ -491,6 +491,134 @@ paths:
         **Service Token Accesses**
          `read_audit_logs`
 
+  /organizations/{name}/cluster-size-skus:
+    get:
+      tags:
+        - Organizations
+      operationId: list_cluster_size_skus
+      summary: List available cluster sizes
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: engine
+          in: query
+          description: The database engine to filter by. Defaults to 'mysql'.
+          schema:
+            type: string
+            enum:
+              - mysql
+              - postgresql
+        - name: rates
+          in: query
+          description: Whether to include pricing rates in the response. Defaults to false.
+          schema:
+            type: boolean
+        - name: region
+          in: query
+          description: The region slug to get rates for. If not specified, uses the organization's default region.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns available cluster sizes with optional pricing rates
+          headers: {}
+          content:
+            application/json:
+              schema: &a37
+                type: object
+                properties:
+                  current_page:
+                    type: number
+                    description: The current page number
+                  next_page:
+                    type: number
+                    description: The next page number
+                  next_page_url:
+                    type: string
+                    description: The next page of results
+                  prev_page:
+                    type: number
+                    description: The previous page number
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the cluster SKU
+                        display_name:
+                          type: string
+                          description: The display name
+                        cpu:
+                          type: number
+                          description: The number of CPUs
+                        storage:
+                          type: number
+                          description: The amount of storage in bytes
+                        ram:
+                          type: number
+                          description: The amount of memory in bytes
+                        metal:
+                          type: boolean
+                          description: Whether or not the cluster SKU is Metal
+                        enabled:
+                          type: boolean
+                          description: Whether or not the cluster SKU is enabled for the organization
+                        provider:
+                          type: string
+                          description: The provider of the cluster SKU (nil, AWS or GCP)
+                        sort_order:
+                          type: number
+                          description: The sort order of the cluster SKU
+                      additionalProperties: false
+                      required:
+                        - name
+                        - display_name
+                        - cpu
+                        - storage
+                        - ram
+                        - metal
+                        - enabled
+                        - provider
+                        - sort_order
+                additionalProperties: false
+                required:
+                  - current_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        List available cluster sizes for an organization
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | User | `read_organizations` |
+        | Organization | `read_organization` |
   /organizations/{name}/regions:
     get:
       tags:
@@ -522,7 +650,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a15
+              schema: &a17
                 type: object
                 properties:
                   current_page:
@@ -610,6 +738,619 @@ paths:
         | :------- | :---------- |
         | User | `read_organizations` |
         | Organization | `read_organization` |
+  /organizations/{organization_name}/teams:
+    get:
+      tags:
+        - Organization teams
+      operationId: list_organization_teams
+      summary: List teams in an organization
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Search term to filter teams by name
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns teams in the organization
+          headers: {}
+          content:
+            application/json:
+              schema: &a56
+                type: object
+                properties:
+                  current_page:
+                    type: number
+                    description: The current page number
+                  next_page:
+                    type: number
+                    description: The next page number
+                  next_page_url:
+                    type: string
+                    description: The next page of results
+                  prev_page:
+                    type: number
+                    description: The previous page number
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the team
+                        display_name:
+                          type: string
+                          description: The display name of the team
+                        creator:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the actor
+                            display_name:
+                              type: string
+                              description: The name of the actor
+                            avatar_url:
+                              type: string
+                              description: The URL of the actor's avatar
+                          additionalProperties: false
+                          required:
+                            - id
+                            - display_name
+                            - avatar_url
+                        members:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                description: The ID of the user
+                              display_name:
+                                type: string
+                                description: The display name of the user
+                              name:
+                                type: string
+                                description: The name of the user
+                              email:
+                                type: string
+                                description: The email of the user
+                              avatar_url:
+                                type: string
+                                description: The URL source of the user's avatar
+                              created_at:
+                                type: string
+                                description: When the user was created
+                              updated_at:
+                                type: string
+                                description: When the user was last updated
+                              two_factor_auth_configured:
+                                type: boolean
+                                description: Whether or not the user has configured two factor authentication
+                              default_organization:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                    description: The ID for the resource
+                                  name:
+                                    type: string
+                                    description: The name for the resource
+                                  created_at:
+                                    type: string
+                                    description: When the resource was created
+                                  updated_at:
+                                    type: string
+                                    description: When the resource was last updated
+                                  deleted_at:
+                                    type: string
+                                    description: When the resource was deleted, if deleted
+                                additionalProperties: false
+                                required:
+                                  - id
+                                  - name
+                                  - created_at
+                                  - updated_at
+                                  - deleted_at
+                              sso:
+                                type: boolean
+                                description: Whether or not the user is managed by SSO
+                              managed:
+                                type: boolean
+                                description: Whether or not the user is managed by an authentication provider
+                              directory_managed:
+                                type: boolean
+                                description: Whether or not the user is managed by a SSO directory
+                              email_verified:
+                                type: boolean
+                                description: Whether or not the user is verified by email
+                            additionalProperties: false
+                            required:
+                              - id
+                              - display_name
+                              - name
+                              - email
+                              - avatar_url
+                              - created_at
+                              - updated_at
+                              - two_factor_auth_configured
+                              - default_organization
+                              - sso
+                              - managed
+                              - directory_managed
+                              - email_verified
+                        databases:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                description: The ID of the database
+                              name:
+                                type: string
+                                description: The name of the database
+                              url:
+                                type: string
+                                description: The URL to the database API endpoint
+                              branches_url:
+                                type: string
+                                description: The URL to retrieve this database's branches via the API
+                            additionalProperties: false
+                            required:
+                              - id
+                              - name
+                              - url
+                              - branches_url
+                        name:
+                          type: string
+                          description: The name of the team
+                        slug:
+                          type: string
+                          description: The slug of the team
+                        created_at:
+                          type: string
+                          description: When the team was created
+                        updated_at:
+                          type: string
+                          description: When the team was last updated
+                        description:
+                          type: string
+                          description: The description of the team
+                        managed:
+                          type: boolean
+                          description: Whether the team is managed through SSO/directory services
+                      additionalProperties: false
+                      required:
+                        - id
+                        - display_name
+                        - creator
+                        - members
+                        - databases
+                        - name
+                        - slug
+                        - created_at
+                        - updated_at
+                        - description
+                        - managed
+                additionalProperties: false
+                required:
+                  - current_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+        "400":
+          description: Bad Request - Invalid operation or parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Validation errors or SSO-managed teams
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_organization` |
+    post:
+      tags:
+        - Organization teams
+      operationId: create_organization_team
+      summary: Create an organization team
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the team
+                description:
+                  type: string
+                  description: A description of the team's purpose
+              additionalProperties: false
+              required:
+                - name
+      responses:
+        "200":
+          description: Returns the created team
+          headers: {}
+          content:
+            application/json:
+              schema: &a2
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the team
+                  display_name:
+                    type: string
+                    description: The display name of the team
+                  creator:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    additionalProperties: false
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                  members:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the user
+                        display_name:
+                          type: string
+                          description: The display name of the user
+                        name:
+                          type: string
+                          description: The name of the user
+                        email:
+                          type: string
+                          description: The email of the user
+                        avatar_url:
+                          type: string
+                          description: The URL source of the user's avatar
+                        created_at:
+                          type: string
+                          description: When the user was created
+                        updated_at:
+                          type: string
+                          description: When the user was last updated
+                        two_factor_auth_configured:
+                          type: boolean
+                          description: Whether or not the user has configured two factor authentication
+                        default_organization:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID for the resource
+                            name:
+                              type: string
+                              description: The name for the resource
+                            created_at:
+                              type: string
+                              description: When the resource was created
+                            updated_at:
+                              type: string
+                              description: When the resource was last updated
+                            deleted_at:
+                              type: string
+                              description: When the resource was deleted, if deleted
+                          additionalProperties: false
+                          required:
+                            - id
+                            - name
+                            - created_at
+                            - updated_at
+                            - deleted_at
+                        sso:
+                          type: boolean
+                          description: Whether or not the user is managed by SSO
+                        managed:
+                          type: boolean
+                          description: Whether or not the user is managed by an authentication provider
+                        directory_managed:
+                          type: boolean
+                          description: Whether or not the user is managed by a SSO directory
+                        email_verified:
+                          type: boolean
+                          description: Whether or not the user is verified by email
+                      additionalProperties: false
+                      required:
+                        - id
+                        - display_name
+                        - name
+                        - email
+                        - avatar_url
+                        - created_at
+                        - updated_at
+                        - two_factor_auth_configured
+                        - default_organization
+                        - sso
+                        - managed
+                        - directory_managed
+                        - email_verified
+                  databases:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the database
+                        name:
+                          type: string
+                          description: The name of the database
+                        url:
+                          type: string
+                          description: The URL to the database API endpoint
+                        branches_url:
+                          type: string
+                          description: The URL to retrieve this database's branches via the API
+                      additionalProperties: false
+                      required:
+                        - id
+                        - name
+                        - url
+                        - branches_url
+                  name:
+                    type: string
+                    description: The name of the team
+                  slug:
+                    type: string
+                    description: The slug of the team
+                  created_at:
+                    type: string
+                    description: When the team was created
+                  updated_at:
+                    type: string
+                    description: When the team was last updated
+                  description:
+                    type: string
+                    description: The description of the team
+                  managed:
+                    type: boolean
+                    description: Whether the team is managed through SSO/directory services
+                additionalProperties: false
+                required:
+                  - id
+                  - display_name
+                  - creator
+                  - members
+                  - databases
+                  - name
+                  - slug
+                  - created_at
+                  - updated_at
+                  - description
+                  - managed
+        "400":
+          description: Bad Request - Invalid operation or parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Validation errors or SSO-managed teams
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_organization` |
+  /organizations/{organization_name}/teams/{team_slug}:
+    get:
+      tags:
+        - Organization teams
+      operationId: get_organization_team
+      summary: Get an organization team
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: team_slug
+          in: path
+          required: true
+          description: The slug of the team
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns the team details including members and databases
+          headers: {}
+          content:
+            application/json:
+              schema: *a2
+        "400":
+          description: Bad Request - Invalid operation or parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Validation errors or SSO-managed teams
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_organization` |
+    patch:
+      tags:
+        - Organization teams
+      operationId: update_organization_team
+      summary: Update an organization team
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: team_slug
+          in: path
+          required: true
+          description: The slug of the team
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name for the team
+                description:
+                  type: string
+                  description: The new description for the team
+              additionalProperties: false
+      responses:
+        "200":
+          description: "Returns the updated team. Note: SSO-managed teams cannot be updated."
+          headers: {}
+          content:
+            application/json:
+              schema: *a2
+        "400":
+          description: Bad Request - Invalid operation or parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Validation errors or SSO-managed teams
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_organization` |
+    delete:
+      tags:
+        - Organization teams
+      operationId: delete_organization_team
+      summary: Delete an organization team
+      parameters:
+        - name: organization_name
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: team_slug
+          in: path
+          required: true
+          description: The slug of the team
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Team deleted successfully. Note: SSO-managed teams cannot be deleted."
+          headers: {}
+        "400":
+          description: Bad Request - Invalid operation or parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Validation errors or SSO-managed teams
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_organization` |
   /organizations/{organization}/databases:
     get:
       tags:
@@ -647,7 +1388,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a26
+              schema: &a30
                 type: object
                 properties:
                   current_page:
@@ -980,7 +1721,7 @@ paths:
                   description: The region the database will be deployed in. If left blank, defaults to the organization's default region.
                 cluster_size:
                   type: string
-                  description: "The database cluster size. Options: PS_10, PS_20, PS_40, PS_80, PS_160, PS_320, PS_400, PS_640, PS_700, PS_900, PS_1280, PS_1400, PS_1800, PS_2100, PS_2560, PS_2700, PS_2800."
+                  description: The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus
                 kind:
                   type: string
                   enum:
@@ -997,7 +1738,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a14
+              schema: &a16
                 type: object
                 properties:
                   id:
@@ -1264,6 +2005,430 @@ paths:
         | Organization | `create_databases` |
       x-speakeasy-entity-operation: Database#create
       x-speakeasy-entity-description: Manage a PlanetScale database.
+  /organizations/{organization}/databases/{database_name}/cidrs:
+    get:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: list_database_postgres_cidrs
+      summary: List IP restriction entries
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database_name
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: If provided, specifies the page offset of returned results
+          schema:
+            type: number
+            default: 1
+        - name: per_page
+          in: query
+          description: If provided, specifies the number of returned results
+          schema:
+            type: number
+            default: 25
+      responses:
+        "200":
+          description: Returns IP restriction entries for the database
+          headers: {}
+          content:
+            application/json:
+              schema: &a29
+                type: object
+                properties:
+                  current_page:
+                    type: number
+                    description: The current page number
+                  next_page:
+                    type: number
+                    description: The next page number
+                  next_page_url:
+                    type: string
+                    description: The next page of results
+                  prev_page:
+                    type: number
+                    description: The previous page number
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the IP allowlist entry
+                        schema:
+                          type: string
+                          description: The schema name to restrict access to (optional)
+                        role:
+                          type: string
+                          description: The role to restrict access to (optional)
+                        cidrs:
+                          items:
+                            type: string
+                          type: array
+                          description: List of CIDR ranges
+                        created_at:
+                          type: string
+                          description: When the entry was created
+                        updated_at:
+                          type: string
+                          description: When the entry was updated
+                        deleted_at:
+                          type: string
+                          description: When the entry was deleted
+                        actor:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the actor
+                            display_name:
+                              type: string
+                              description: The name of the actor
+                            avatar_url:
+                              type: string
+                              description: The URL of the actor's avatar
+                          additionalProperties: false
+                          required:
+                            - id
+                            - display_name
+                            - avatar_url
+                      additionalProperties: false
+                      required:
+                        - id
+                        - schema
+                        - role
+                        - cidrs
+                        - created_at
+                        - updated_at
+                        - deleted_at
+                        - actor
+                additionalProperties: false
+                required:
+                  - current_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Invalid parameters or validation errors
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_databases` |
+        | Database | `read_database` |
+    post:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: create_database_postgres_cidr
+      summary: Create an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database_name
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schema:
+                  type: string
+                  description: The PostgreSQL schema to restrict access to. Leave empty or omit to allow access to all schemas.
+                role:
+                  type: string
+                  description: The PostgreSQL role to restrict access to. Leave empty or omit to allow access for all roles.
+                cidrs:
+                  type: array
+                  items:
+                    type: string
+                  description: List of IPv4 CIDR ranges (e.g., ['192.168.1.0/24', '192.168.1.1/32']). Must contain at least one valid IPv4 address or range.
+              additionalProperties: false
+              required:
+                - cidrs
+      responses:
+        "201":
+          description: Returns the created IP restriction entry
+          headers: {}
+          content:
+            application/json:
+              schema: &a3
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the IP allowlist entry
+                  schema:
+                    type: string
+                    description: The schema name to restrict access to (optional)
+                  role:
+                    type: string
+                    description: The role to restrict access to (optional)
+                  cidrs:
+                    items:
+                      type: string
+                    type: array
+                    description: List of CIDR ranges
+                  created_at:
+                    type: string
+                    description: When the entry was created
+                  updated_at:
+                    type: string
+                    description: When the entry was updated
+                  deleted_at:
+                    type: string
+                    description: When the entry was deleted
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    additionalProperties: false
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                additionalProperties: false
+                required:
+                  - id
+                  - schema
+                  - role
+                  - cidrs
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Invalid parameters or validation errors
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+  /organizations/{organization}/databases/{database_name}/cidrs/{id}:
+    get:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: get_database_postgres_cidr
+      summary: Get an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database_name
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the IP restriction entry
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns an IP restriction entry
+          headers: {}
+          content:
+            application/json:
+              schema: *a3
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Invalid parameters or validation errors
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_databases` |
+        | Database | `read_database` |
+    put:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: update_database_postgres_cidr
+      summary: Update an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database_name
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the IP restriction entry
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schema:
+                  type: string
+                  description: The PostgreSQL schema to restrict access to. Leave empty to allow access to all schemas.
+                role:
+                  type: string
+                  description: The PostgreSQL role to restrict access to. Leave empty to allow access for all roles.
+                cidrs:
+                  type: array
+                  items:
+                    type: string
+                  description: List of IPv4 CIDR ranges (e.g., ['192.168.1.0/24', '192.168.1.1/32']). Only provided fields will be updated.
+              additionalProperties: false
+      responses:
+        "200":
+          description: Returns the updated IP restriction entry
+          headers: {}
+          content:
+            application/json:
+              schema: *a3
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Invalid parameters or validation errors
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+    delete:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: delete_database_postgres_cidr
+      summary: Delete an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database_name
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the IP restriction entry
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "IP restriction entry deleted successfully. Note: This will also remove the restriction from all database branches."
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity - Invalid parameters or validation errors
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
   /organizations/{organization}/databases/{database}/branches:
     get:
       tags:
@@ -1324,7 +2489,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a20
+              schema: &a23
                 type: object
                 properties:
                   current_page:
@@ -1649,7 +2814,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a9
+              schema: &a11
                 type: object
                 properties:
                   id:
@@ -1977,7 +3142,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a17
+              schema: &a20
                 type: object
                 properties:
                   current_page:
@@ -2334,7 +3499,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a2
+              schema: &a4
                 type: object
                 properties:
                   id:
@@ -2645,7 +3810,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a2
+              schema: *a4
         "401":
           description: Unauthorized
         "403":
@@ -2714,7 +3879,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a2
+              schema: *a4
         "401":
           description: Unauthorized
         "403":
@@ -2836,7 +4001,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a4
+              schema: &a6
                 type: object
                 properties:
                   current_page:
@@ -3077,7 +4242,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a35
+              schema: &a40
                 type: object
                 properties:
                   current_page:
@@ -3106,11 +4271,37 @@ paths:
                         name:
                           type: string
                           description: The name of the bouncer
+                        sku:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: The name of the Postgres bouncer SKU
+                            display_name:
+                              type: string
+                              description: The display name
+                            cpu:
+                              type: string
+                              description: The CPU allocation
+                            ram:
+                              type: number
+                              description: The amount of memory in bytes
+                            sort_order:
+                              type: number
+                              description: The sort order of the Postgres bouncer SKU
+                          additionalProperties: false
+                          required:
+                            - name
+                            - display_name
+                            - cpu
+                            - ram
+                            - sort_order
                         target:
                           type: string
                           enum:
                             - primary
                             - replica
+                            - replica_az_affinity
                           description: The instance type the bouncer targets
                         replicas_per_cell:
                           type: number
@@ -3283,6 +4474,7 @@ paths:
                       required:
                         - id
                         - name
+                        - sku
                         - target
                         - replicas_per_cell
                         - created_at
@@ -3370,7 +4562,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a3
+              schema: &a5
                 type: object
                 properties:
                   id:
@@ -3379,11 +4571,37 @@ paths:
                   name:
                     type: string
                     description: The name of the bouncer
+                  sku:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: The name of the Postgres bouncer SKU
+                      display_name:
+                        type: string
+                        description: The display name
+                      cpu:
+                        type: string
+                        description: The CPU allocation
+                      ram:
+                        type: number
+                        description: The amount of memory in bytes
+                      sort_order:
+                        type: number
+                        description: The sort order of the Postgres bouncer SKU
+                    additionalProperties: false
+                    required:
+                      - name
+                      - display_name
+                      - cpu
+                      - ram
+                      - sort_order
                   target:
                     type: string
                     enum:
                       - primary
                       - replica
+                      - replica_az_affinity
                     description: The instance type the bouncer targets
                   replicas_per_cell:
                     type: number
@@ -3559,6 +4777,7 @@ paths:
                 required:
                   - id
                   - name
+                  - sku
                   - target
                   - replicas_per_cell
                   - created_at
@@ -3627,7 +4846,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a3
+              schema: *a5
         "401":
           description: Unauthorized
         "403":
@@ -3757,7 +4976,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a4
+              schema: *a6
         "401":
           description: Unauthorized
         "403":
@@ -3810,13 +5029,30 @@ paths:
           description: The name of the bouncer
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bouncer_size:
+                  type: string
+                  description: The bouncer size SKU name (e.g., 'PGB_5', 'PGB_10', 'PGB_20', 'PGB_40', 'PGB_80', 'PGB_160'). Defaults to 'PGB_5'.
+                replicas_per_cell:
+                  type: number
+                  description: The number of PgBouncers per availability zone. Defaults to 1.
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: "Bouncer configuration parameters nested by namespace (e.g., {\"pgbouncer\": {\"default_pool_size\": \"100\"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Only parameters with namespace 'pgbouncer' can be updated."
+              additionalProperties: false
       responses:
         "200":
           description: Returns bouncer resize request
           headers: {}
           content:
             application/json:
-              schema: &a34
+              schema: &a39
                 type: object
                 properties:
                   id:
@@ -4083,7 +5319,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a18
+              schema: &a21
                 type: object
                 properties:
                   current_page:
@@ -4318,13 +5554,30 @@ paths:
           description: The name of the branch that owns this resource
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cluster_size:
+                  type: string
+                  description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+                replicas:
+                  type: number
+                  description: The total number of replicas
+                parameters:
+                  type: object
+                  additionalProperties: true
+                  description: "Cluster configuration parameters nested by namespace (e.g., {\"pgconf\": {\"max_connections\": \"200\"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Supported namespaces include 'patroni', 'pgconf', and 'pgbouncer'."
+              additionalProperties: false
       responses:
         "200":
           description: Returns the branch change request
           headers: {}
           content:
             application/json:
-              schema: &a19
+              schema: &a22
                 type: object
                 properties:
                   id:
@@ -4539,7 +5792,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &a22
+                items: &a25
                   type: object
                   properties:
                     id:
@@ -4753,7 +6006,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a24
+              schema: &a27
                 type: object
                 properties:
                   current_page:
@@ -4928,16 +6181,19 @@ paths:
                 name:
                   type: string
                   description: The name of the keyspace
+                cluster_size:
+                  type: string
               additionalProperties: false
               required:
                 - name
+                - cluster_size
       responses:
         "200":
           description: Returns a created keyspace
           headers: {}
           content:
             application/json:
-              schema: &a5
+              schema: &a7
                 type: object
                 properties:
                   id:
@@ -5225,7 +6481,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a5
+              schema: *a7
         "401":
           description: Unauthorized
         "403":
@@ -5273,7 +6529,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a5
+              schema: *a7
         "401":
           description: Unauthorized
         "403":
@@ -5446,7 +6702,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &a23
+                items: &a26
                   type: object
                   properties:
                     id:
@@ -5575,7 +6831,9 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |-
+      description: |2-
+                Returns the parameters for a branch. To update the parameters, use the "Upsert a change request" endpoint.
+
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -5637,7 +6895,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a25
+              schema: &a28
                 type: object
                 properties:
                   current_page:
@@ -5919,7 +7177,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a6
+              schema: &a8
                 type: object
                 properties:
                   id:
@@ -6035,6 +7293,7 @@ paths:
                   plain_text:
                     type: string
                     description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
                   replica:
                     type: boolean
                     description: Whether or not the password is for a read replica
@@ -6113,6 +7372,8 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Password#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch password.
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}:
     get:
       tags:
@@ -6150,7 +7411,178 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a6
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID for the password
+                  name:
+                    type: string
+                    description: The display name for the password
+                  role:
+                    type: string
+                    enum:
+                      - reader
+                      - writer
+                      - admin
+                      - readwriter
+                    description: The role for the password
+                  cidrs:
+                    items:
+                      type: string
+                    type: array
+                    description: List of IP addresses or CIDR ranges that can use this password
+                  created_at:
+                    type: string
+                    description: When the password was created
+                  deleted_at:
+                    type: string
+                    description: When the password was deleted
+                  expires_at:
+                    type: string
+                    description: When the password will expire
+                  last_used_at:
+                    type: string
+                    description: When the password was last used to execute a query
+                  expired:
+                    type: boolean
+                    description: True if the credentials are expired
+                  direct_vtgate:
+                    type: boolean
+                    description: True if the credentials connect directly to a vtgate, bypassing load balancers
+                  ttl_seconds:
+                    type: number
+                    description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
+                  access_host_url:
+                    type: string
+                    description: The host URL for the password
+                  access_host_regional_url:
+                    type: string
+                    description: The regional host URL
+                  access_host_regional_urls:
+                    items:
+                      type: string
+                    type: array
+                    description: The read-only replica host URLs
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    additionalProperties: false
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                  region:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the region
+                      provider:
+                        type: string
+                        description: Provider for the region (ex. AWS)
+                      enabled:
+                        type: boolean
+                        description: Whether or not the region is currently active
+                      public_ip_addresses:
+                        items:
+                          type: string
+                        type: array
+                        description: Public IP addresses for the region
+                      display_name:
+                        type: string
+                        description: Name of the region
+                      location:
+                        type: string
+                        description: Location of the region
+                      slug:
+                        type: string
+                        description: The slug of the region
+                      current_default:
+                        type: boolean
+                        description: True if the region is the default for new branch creation
+                    additionalProperties: false
+                    required:
+                      - id
+                      - provider
+                      - enabled
+                      - public_ip_addresses
+                      - display_name
+                      - location
+                      - slug
+                      - current_default
+                  username:
+                    type: string
+                    description: The username for the password
+                  plain_text:
+                    type: string
+                    description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
+                    x-speakeasy-ignore: true
+                  replica:
+                    type: boolean
+                    description: Whether or not the password is for a read replica
+                  renewable:
+                    type: boolean
+                    description: Whether or not the password can be renewed
+                  database_branch:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: The name for the branch
+                      id:
+                        type: string
+                        description: The ID for the branch
+                      production:
+                        type: boolean
+                        description: Whether or not the branch is a production branch
+                      mysql_edge_address:
+                        type: string
+                        description: The address of the MySQL provider for the branch
+                      private_edge_connectivity:
+                        type: boolean
+                        description: True if private connectivity is enabled
+                    additionalProperties: false
+                    required:
+                      - name
+                      - id
+                      - production
+                      - mysql_edge_address
+                      - private_edge_connectivity
+                additionalProperties: false
+                required:
+                  - id
+                  - name
+                  - role
+                  - cidrs
+                  - created_at
+                  - deleted_at
+                  - expires_at
+                  - last_used_at
+                  - expired
+                  - direct_vtgate
+                  - ttl_seconds
+                  - access_host_url
+                  - access_host_regional_url
+                  - access_host_regional_urls
+                  - actor
+                  - region
+                  - username
+                  - plain_text
+                  - replica
+                  - renewable
+                  - database_branch
         "401":
           description: Unauthorized
         "403":
@@ -6173,6 +7605,8 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Password#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch password.
     patch:
       tags:
         - Database branch passwords
@@ -6224,7 +7658,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a6
+              schema: *a8
         "401":
           description: Unauthorized
         "403":
@@ -6247,6 +7681,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Password#update
     delete:
       tags:
         - Database branch passwords
@@ -6303,6 +7738,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Password#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew:
     post:
       tags:
@@ -6340,7 +7776,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a6
+              schema: *a8
         "401":
           description: Unauthorized
         "403":
@@ -6394,7 +7830,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a37
+              schema: &a42
                 type: object
                 properties:
                   has_next:
@@ -6521,7 +7957,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a7
+              schema: &a9
                 type: object
                 properties:
                   id:
@@ -6594,6 +8030,8 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
+      x-speakeasy-entity-operation: QueryPatternReport#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch query pattern report.
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}:
     get:
       tags:
@@ -6631,7 +8069,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a7
+              schema: *a9
         "401":
           description: Unauthorized
         "403":
@@ -6654,6 +8092,19 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        - QueryPatternReport#read
+        - entityOperation: QueryPatternReport#create#2
+          options:
+            polling:
+              name: WaitForCompleted
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch query pattern report.
+      x-speakeasy-polling:
+        - name: WaitForCompleted
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "completed"
     delete:
       tags:
         - Query Insights reports
@@ -6710,6 +8161,7 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
+      x-speakeasy-entity-operation: QueryPatternReport#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}/download:
     get:
       tags:
@@ -6747,7 +8199,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a7
+              schema: *a9
         "401":
           description: Unauthorized
         "403":
@@ -6863,7 +8315,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a36
+              schema: &a41
                 type: object
                 properties:
                   current_page:
@@ -7107,7 +8559,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a8
+              schema: &a10
                 type: object
                 properties:
                   id:
@@ -7131,6 +8583,7 @@ paths:
                   password:
                     type: string
                     description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
                   database_name:
                     type: string
                     description: The database name
@@ -7204,6 +8657,7 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
+                    x-speakeasy-name-override: branch_data
                   actor:
                     type: object
                     properties:
@@ -7221,6 +8675,7 @@ paths:
                       - id
                       - display_name
                       - avatar_url
+                    x-speakeasy-name-override: actor_data
                 additionalProperties: false
                 required:
                   - id
@@ -7265,6 +8720,8 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Role#create
+      x-speakeasy-entity-description: Manage a PlanetScale database role.
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}:
     get:
       tags:
@@ -7302,7 +8759,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a8
+              schema: *a10
         "401":
           description: Unauthorized
         "403":
@@ -7325,6 +8782,8 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Role#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database role.
     patch:
       tags:
         - Roles
@@ -7371,7 +8830,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a8
+              schema: *a10
         "401":
           description: Unauthorized
         "403":
@@ -7394,6 +8853,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Role#update
     delete:
       tags:
         - Roles
@@ -7460,6 +8920,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
+      x-speakeasy-entity-operation: Role#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}/renew:
     post:
       tags:
@@ -7497,7 +8958,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a8
+              schema: *a10
         "401":
           description: Unauthorized
         "403":
@@ -7551,7 +9012,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a9
+              schema: *a11
         "401":
           description: Unauthorized
         "403":
@@ -7725,7 +9186,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a9
+              schema: *a11
         "401":
           description: Unauthorized
         "403":
@@ -7779,7 +9240,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a9
+              schema: *a11
         "401":
           description: Unauthorized
         "403":
@@ -7833,7 +9294,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a9
+              schema: *a11
         "401":
           description: Unauthorized
         "403":
@@ -7873,7 +9334,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a9
+              schema: *a11
         "401":
           description: Unauthorized
         "403":
@@ -8014,7 +9475,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a21
+              schema: &a24
                 type: object
                 properties:
                   current_page:
@@ -8170,7 +9631,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a46
+              schema: &a51
                 type: object
                 properties:
                   current_page:
@@ -8700,7 +10161,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a43
+              schema: &a48
                 type: object
                 properties:
                   current_page:
@@ -9393,7 +10854,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a10
+              schema: &a12
                 type: object
                 properties:
                   id:
@@ -10039,7 +11500,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -10103,7 +11564,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -10156,7 +11617,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -10219,7 +11680,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -10273,7 +11734,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -10326,7 +11787,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -10389,7 +11850,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -10442,7 +11903,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a44
+              schema: &a49
                 type: object
                 properties:
                   id:
@@ -10937,7 +12398,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a45
+              schema: &a50
                 type: object
                 properties:
                   current_page:
@@ -11108,7 +12569,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -11161,7 +12622,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a41
+              schema: &a46
                 type: object
                 properties:
                   current_page:
@@ -11306,7 +12767,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a42
+              schema: &a47
                 type: object
                 properties:
                   id:
@@ -11409,7 +12870,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a10
+              schema: *a12
         "401":
           description: Unauthorized
         "403":
@@ -11463,7 +12924,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a11
+              schema: &a13
                 type: object
                 properties:
                   keyspaces:
@@ -11582,7 +13043,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a11
+              schema: *a13
         "401":
           description: Unauthorized
         "403":
@@ -11629,7 +13090,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a11
+              schema: *a13
         "401":
           description: Unauthorized
         "403":
@@ -11690,7 +13151,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a11
+              schema: *a13
         "401":
           description: Unauthorized
         "403":
@@ -11749,7 +13210,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a47
+              schema: &a52
                 type: object
                 properties:
                   current_page:
@@ -11909,7 +13370,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a12
+              schema: &a14
                 type: object
                 properties:
                   id:
@@ -11996,6 +13457,8 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Webhook#create
+      x-speakeasy-entity-description: Manage a PlanetScale database webhook.
   /organizations/{organization}/databases/{database}/webhooks/{id}:
     get:
       tags:
@@ -12027,7 +13490,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a12
+              schema: *a14
         "401":
           description: Unauthorized
         "403":
@@ -12049,6 +13512,8 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
+      x-speakeasy-entity-operation: Webhook#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database webhook.
     patch:
       tags:
         - Webhooks
@@ -12097,7 +13562,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a12
+              schema: *a14
         "401":
           description: Unauthorized
         "403":
@@ -12119,6 +13584,7 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Webhook#update
     delete:
       tags:
         - Webhooks
@@ -12168,6 +13634,7 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Webhook#delete
   /organizations/{organization}/databases/{database}/webhooks/{id}/test:
     post:
       tags:
@@ -12261,7 +13728,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a40
+              schema: &a45
                 type: object
                 properties:
                   current_page:
@@ -12786,7 +14253,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a13
+              schema: &a15
                 type: object
                 properties:
                   id:
@@ -13250,7 +14717,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13290,7 +14757,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13331,7 +14798,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13372,7 +14839,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13413,7 +14880,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13454,7 +14921,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13495,7 +14962,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13536,7 +15003,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13577,7 +15044,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13618,7 +15085,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a13
+              schema: *a15
         "401":
           description: Unauthorized
         "403":
@@ -13653,7 +15120,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a14
+              schema: *a16
         "401":
           description: Unauthorized
         "403":
@@ -13753,7 +15220,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a14
+              schema: *a16
         "401":
           description: Unauthorized
         "403":
@@ -13857,7 +15324,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a27
+              schema: &a31
                 type: object
                 properties:
                   current_page:
@@ -14031,7 +15498,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a15
+              schema: *a17
         "401":
           description: Unauthorized
         "403":
@@ -14084,7 +15551,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a49
+              schema: &a54
                 type: object
                 properties:
                   current_page:
@@ -14179,7 +15646,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a50
+              schema: &a55
                 type: object
                 properties:
                   id:
@@ -14257,7 +15724,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a48
+              schema: &a53
                 type: object
                 properties:
                   current_page:
@@ -14374,6 +15841,11 @@ paths:
           description: The name of the organization
           schema:
             type: string
+        - name: q
+          in: query
+          description: Search term to filter members by name or email
+          schema:
+            type: string
         - name: page
           in: query
           description: If provided, specifies the page offset of returned results
@@ -14392,7 +15864,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a31
+              schema: &a35
                 type: object
                 properties:
                   current_page:
@@ -14532,13 +16004,279 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: |+
+      description: |-
         ### Authorization
-        A service token   must have at least one of the following access   in order to use this API endpoint:
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
          `read_organization`
 
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_organization` |
+  /organizations/{organization}/members/{id}:
+    get:
+      tags:
+        - Organization members
+      operationId: get_organization_membership
+      summary: Get an organization member
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns the membership of the user in the organization
+          headers: {}
+          content:
+            application/json:
+              schema: &a18
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the membership
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the user
+                      display_name:
+                        type: string
+                        description: The display name of the user
+                      name:
+                        type: string
+                        description: The name of the user
+                      email:
+                        type: string
+                        description: The email of the user
+                      avatar_url:
+                        type: string
+                        description: The URL source of the user's avatar
+                      created_at:
+                        type: string
+                        description: When the user was created
+                      updated_at:
+                        type: string
+                        description: When the user was last updated
+                      two_factor_auth_configured:
+                        type: boolean
+                        description: Whether or not the user has configured two factor authentication
+                      default_organization:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The ID for the resource
+                          name:
+                            type: string
+                            description: The name for the resource
+                          created_at:
+                            type: string
+                            description: When the resource was created
+                          updated_at:
+                            type: string
+                            description: When the resource was last updated
+                          deleted_at:
+                            type: string
+                            description: When the resource was deleted, if deleted
+                        additionalProperties: false
+                        required:
+                          - id
+                          - name
+                          - created_at
+                          - updated_at
+                          - deleted_at
+                      sso:
+                        type: boolean
+                        description: Whether or not the user is managed by SSO
+                      managed:
+                        type: boolean
+                        description: Whether or not the user is managed by an authentication provider
+                      directory_managed:
+                        type: boolean
+                        description: Whether or not the user is managed by a SSO directory
+                      email_verified:
+                        type: boolean
+                        description: Whether or not the user is verified by email
+                    additionalProperties: false
+                    required:
+                      - id
+                      - display_name
+                      - name
+                      - email
+                      - avatar_url
+                      - created_at
+                      - updated_at
+                      - two_factor_auth_configured
+                      - default_organization
+                      - sso
+                      - managed
+                      - directory_managed
+                      - email_verified
+                  role:
+                    type: string
+                    enum:
+                      - member
+                      - admin
+                    description: The role of the user in the organization
+                  created_at:
+                    type: string
+                    description: When the membership was created
+                  updated_at:
+                    type: string
+                    description: When the membership was last updated
+                additionalProperties: false
+                required:
+                  - id
+                  - user
+                  - role
+                  - created_at
+                  - updated_at
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_organization` |
+    patch:
+      tags:
+        - Organization members
+      operationId: update_organization_membership
+      summary: Update organization member role
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  description: "The role to assign to the member (e.g., 'admin', 'member'). Note: Cannot update your own role. Roles managed by IdP cannot be updated via API."
+              additionalProperties: false
+              required:
+                - role
+      responses:
+        "200":
+          description: Returns the updated membership
+          headers: {}
+          content:
+            application/json:
+              schema: *a18
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_organization` |
+    delete:
+      tags:
+        - Organization members
+      operationId: remove_organization_member
+      summary: Remove a member from an organization
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                delete_passwords:
+                  type: boolean
+                  description: Whether to delete all passwords associated with the member. Only available when removing other members (not yourself).
+                delete_service_tokens:
+                  type: boolean
+                  description: Whether to delete all service tokens associated with the member. Only available when removing other members (not yourself).
+              additionalProperties: false
+      responses:
+        "204":
+          description: "Member removed successfully. Note: Cannot remove the last admin or leave your only organization."
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_organization`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_organization` |
   /organizations/{organization}/oauth-applications:
     get:
       tags:
@@ -14570,7 +16308,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a28
+              schema: &a32
                 type: object
                 properties:
                   current_page:
@@ -14685,7 +16423,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a29
+              schema: &a33
                 type: object
                 properties:
                   id:
@@ -14784,7 +16522,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a30
+              schema: &a34
                 type: object
                 properties:
                   current_page:
@@ -15156,7 +16894,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a16
+              schema: &a19
                 type: object
                 properties:
                   id:
@@ -15568,7 +17306,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: *a16
+              schema: *a19
         "403":
           description: Forbidden
         "404":
@@ -15610,7 +17348,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a38
+              schema: &a43
                 type: object
                 properties:
                   current_page:
@@ -15695,7 +17433,7 @@ paths:
           headers: {}
           content:
             application/json:
-              schema: &a39
+              schema: &a44
                 type: object
                 properties:
                   id:
@@ -15811,9 +17549,11 @@ tags:
   - name: Database branch passwords
     description: |2
                 Resources for managing database branch passwords.
-  - name: Database Postgres CIDRs
+  - name: Database Postgres IP restrictions
     description: |2
-                Resources for managing Postgres IP allowlist entries for databases.
+                Resources for managing Postgres IP restriction entries for databases.
+
+                Note: This endpoint is only available for PostgreSQL databases. For MySQL databases, use the Database Branch Passwords endpoint.
   - name: Databases
     description: |2
                   Resources for managing databases within an organization.
@@ -15826,6 +17566,9 @@ tags:
   - name: OAuth tokens
     description: |2
                 Resources for managing OAuth tokens.
+  - name: Organization members
+    description: |2
+                Resources for managing organization members and their roles.
   - name: Organizations
     description: |2
                   Resources for managing organizations.
@@ -15856,6 +17599,11 @@ tags:
   - name: Invoices
     description: |2
                   Resources for managing invoices.
+  - name: Organization teams
+    description: |2
+                  Resources for managing teams within an organization. Teams allow you to group members and grant them access to specific databases.
+
+                  Note: Teams managed through SSO/directory services cannot be modified via API.
 x-readme:
   explorer-enabled: false
 servers:
@@ -15883,55 +17631,61 @@ components:
             - service_token
             - service_token_id
   schemas:
-    PaginatedBackup: *a17
-    Backup: *a2
-    PaginatedPostgresBouncerResizeRequest: *a4
-    PaginatedPostgresClusterResizeRequest: *a18
-    PostgresClusterResizeRequest: *a19
-    PaginatedDatabaseBranch: *a20
-    DatabaseBranch: *a9
-    PaginatedSchemaLintError: *a21
-    PostgresClusterExtension: *a22
-    PostgresClusterParameter: *a23
-    PaginatedDatabaseBranchKeyspace: *a24
-    DatabaseBranchKeyspace: *a5
-    PaginatedDatabaseBranchPassword: *a25
-    DatabaseBranchPassword: *a6
-    PaginatedDatabase: *a26
-    Database: *a14
-    PaginatedPlanetscaleRegion: *a15
-    PaginatedDatabaseBranchReadOnlyRegion: *a27
-    ThrottlerConfigurations: *a11
-    PaginatedOauthApplication: *a28
-    OauthApplication: *a29
-    PaginatedServiceToken: *a30
-    ServiceToken: *a16
-    PaginatedOrganizationMembership: *a31
-    PaginatedOrganization: *a32
+    PaginatedBackup: *a20
+    Backup: *a4
+    PaginatedPostgresBouncerResizeRequest: *a6
+    PaginatedPostgresClusterResizeRequest: *a21
+    PostgresClusterResizeRequest: *a22
+    PaginatedDatabaseBranch: *a23
+    DatabaseBranch: *a11
+    PaginatedSchemaLintError: *a24
+    PostgresClusterExtension: *a25
+    PostgresClusterParameter: *a26
+    PaginatedDatabaseBranchKeyspace: *a27
+    DatabaseBranchKeyspace: *a7
+    PaginatedDatabaseBranchPassword: *a28
+    DatabaseBranchPassword: *a8
+    PaginatedPostgresClusterCidr: *a29
+    PostgresClusterCidr: *a3
+    PaginatedDatabase: *a30
+    Database: *a16
+    PaginatedPlanetscaleRegion: *a17
+    PaginatedDatabaseBranchReadOnlyRegion: *a31
+    ThrottlerConfigurations: *a13
+    PaginatedOauthApplication: *a32
+    OauthApplication: *a33
+    PaginatedServiceToken: *a34
+    ServiceToken: *a19
+    PaginatedOrganizationMembership: *a35
+    OrganizationMembership: *a18
+    PaginatedOrganization: *a36
     Organization: *a1
-    PaginatedAuditLogEvent: *a33
-    PostgresBouncerResizeRequest: *a34
-    PaginatedPostgresBouncer: *a35
-    PostgresBouncer: *a3
-    PaginatedPostgresRole: *a36
-    PostgresRole: *a8
-    PaginatedQueryPatternsDownload: *a37
-    QueryPatternsDownload: *a7
-    PaginatedPublicPlanetscaleRegionSerializer: *a38
-    User: *a39
-    PaginatedWorkflow: *a40
-    Workflow: *a13
-    PaginatedDeployRequestReview: *a41
-    DeployRequestReview: *a42
-    PaginatedDatabaseDeployRequest: *a43
-    DatabaseDeployRequest: *a10
-    Deployment: *a44
-    PaginatedDeployOperation: *a45
-    PaginatedDeployment: *a46
-    PaginatedDatabaseWebhook: *a47
-    DatabaseWebhook: *a12
-    PaginatedLineItem: *a48
-    PaginatedInvoice: *a49
-    Invoice: *a50
+    PaginatedClusterSizeSku: *a37
+    PaginatedAuditLogEvent: *a38
+    PostgresBouncerResizeRequest: *a39
+    PaginatedPostgresBouncer: *a40
+    PostgresBouncer: *a5
+    PaginatedPostgresRole: *a41
+    PostgresRole: *a10
+    PaginatedQueryPatternsDownload: *a42
+    QueryPatternsDownload: *a9
+    PaginatedPublicPlanetscaleRegionSerializer: *a43
+    User: *a44
+    PaginatedWorkflow: *a45
+    Workflow: *a15
+    PaginatedDeployRequestReview: *a46
+    DeployRequestReview: *a47
+    PaginatedDatabaseDeployRequest: *a48
+    DatabaseDeployRequest: *a12
+    Deployment: *a49
+    PaginatedDeployOperation: *a50
+    PaginatedDeployment: *a51
+    PaginatedDatabaseWebhook: *a52
+    DatabaseWebhook: *a14
+    PaginatedLineItem: *a53
+    PaginatedInvoice: *a54
+    Invoice: *a55
+    PaginatedOrganizationTeam: *a56
+    OrganizationTeam: *a2
 security:
   - ServiceToken: []

@@ -51,6 +51,7 @@ type BouncerResourceModel struct {
 	Parameters      []tfTypes.GetBouncerParameter `tfsdk:"parameters"`
 	RegionData      jsontypes.Normalized          `tfsdk:"region_data"`
 	ReplicasPerCell types.Float64                 `tfsdk:"replicas_per_cell"`
+	Sku             tfTypes.GetBouncerSku         `tfsdk:"sku"`
 	Target          types.String                  `tfsdk:"target"`
 	UpdatedAt       types.String                  `tfsdk:"updated_at"`
 }
@@ -264,6 +265,31 @@ func (r *BouncerResource) Schema(ctx context.Context, req resource.SchemaRequest
 					speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
 				},
 				Description: `The number of replica servers per cell. Requires replacement if changed.`,
+			},
+			"sku": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"cpu": schema.StringAttribute{
+						Computed:    true,
+						Description: `The CPU allocation`,
+					},
+					"display_name": schema.StringAttribute{
+						Computed:    true,
+						Description: `The display name`,
+					},
+					"name": schema.StringAttribute{
+						Computed:    true,
+						Description: `The name of the Postgres bouncer SKU`,
+					},
+					"ram": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The amount of memory in bytes`,
+					},
+					"sort_order": schema.Float64Attribute{
+						Computed:    true,
+						Description: `The sort order of the Postgres bouncer SKU`,
+					},
+				},
 			},
 			"target": schema.StringAttribute{
 				Computed: true,

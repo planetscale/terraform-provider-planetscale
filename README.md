@@ -71,6 +71,10 @@ Available configuration:
 * [planetscale_branch](docs/resources/branch.md)
 * [planetscale_database](docs/resources/database.md)
 * [planetscale_keyspace](docs/resources/keyspace.md)
+* [planetscale_password](docs/resources/password.md)
+* [planetscale_query_pattern_report](docs/resources/query_pattern_report.md)
+* [planetscale_role](docs/resources/role.md)
+* [planetscale_webhook](docs/resources/webhook.md)
 ### Data Sources
 
 * [planetscale_bouncer](docs/data-sources/bouncer.md)
@@ -80,6 +84,10 @@ Available configuration:
 * [planetscale_keyspace](docs/data-sources/keyspace.md)
 * [planetscale_organization](docs/data-sources/organization.md)
 * [planetscale_organizations](docs/data-sources/organizations.md)
+* [planetscale_password](docs/data-sources/password.md)
+* [planetscale_query_pattern_report](docs/data-sources/query_pattern_report.md)
+* [planetscale_role](docs/data-sources/role.md)
+* [planetscale_webhook](docs/data-sources/webhook.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

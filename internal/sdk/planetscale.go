@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version v1 and generator version 2.753.6
+// Generated from OpenAPI doc version v1 and generator version 2.755.0
 
 import (
 	"context"
@@ -53,10 +53,20 @@ type Planetscale struct {
 	//             Resources for managing organizations.
 	//
 	Organizations *Organizations
+	//             Resources for managing teams within an organization. Teams allow you to group members and grant them access to specific databases.
+	//
+	//             Note: Teams managed through SSO/directory services cannot be modified via API.
+	//
+	OrganizationTeams *OrganizationTeams
 	//             Resources for managing databases within an organization.
 	//
-	Databases        *Databases
-	DatabaseBranches *DatabaseBranches
+	Databases *Databases
+	//           Resources for managing Postgres IP restriction entries for databases.
+	//
+	//           Note: This endpoint is only available for PostgreSQL databases. For MySQL databases, use the Database Branch Passwords endpoint.
+	//
+	DatabasePostgresIPRestrictions *DatabasePostgresIPRestrictions
+	DatabaseBranches               *DatabaseBranches
 	//           Resources for managing database branch backups.
 	//
 	Backups                 *Backups
@@ -102,7 +112,9 @@ type Planetscale struct {
 	Workflows *Workflows
 	//             Resources for managing invoices.
 	//
-	Invoices            *Invoices
+	Invoices *Invoices
+	//           Resources for managing organization members and their roles.
+	//
 	OrganizationMembers *OrganizationMembers
 	//           Resources for managing OAuth applications.
 	//
@@ -191,7 +203,7 @@ func New(opts ...SDKOption) *Planetscale {
 	sdk := &Planetscale{
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.0.1 2.753.6 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.0.1 2.755.0 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -213,7 +225,9 @@ func New(opts ...SDKOption) *Planetscale {
 	}
 
 	sdk.Organizations = newOrganizations(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.OrganizationTeams = newOrganizationTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.DatabasePostgresIPRestrictions = newDatabasePostgresIPRestrictions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIBranchBouncerResizes = newAPIBranchBouncerResizes(sdk, sdk.sdkConfiguration, sdk.hooks)

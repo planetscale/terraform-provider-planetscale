@@ -48,12 +48,61 @@ func (g *GetBouncerRequest) GetName() string {
 	return g.Name
 }
 
+type GetBouncerSku struct {
+	// The name of the Postgres bouncer SKU
+	Name string `json:"name"`
+	// The display name
+	DisplayName string `json:"display_name"`
+	// The CPU allocation
+	CPU string `json:"cpu"`
+	// The amount of memory in bytes
+	RAM float64 `json:"ram"`
+	// The sort order of the Postgres bouncer SKU
+	SortOrder float64 `json:"sort_order"`
+}
+
+func (g *GetBouncerSku) GetName() string {
+	if g == nil {
+		return ""
+	}
+	return g.Name
+}
+
+func (g *GetBouncerSku) GetDisplayName() string {
+	if g == nil {
+		return ""
+	}
+	return g.DisplayName
+}
+
+func (g *GetBouncerSku) GetCPU() string {
+	if g == nil {
+		return ""
+	}
+	return g.CPU
+}
+
+func (g *GetBouncerSku) GetRAM() float64 {
+	if g == nil {
+		return 0.0
+	}
+	return g.RAM
+}
+
+func (g *GetBouncerSku) GetSortOrder() float64 {
+	if g == nil {
+		return 0.0
+	}
+	return g.SortOrder
+}
+
 // GetBouncerTarget - The instance type the bouncer targets
 type GetBouncerTarget string
 
 const (
-	GetBouncerTargetPrimary GetBouncerTarget = "primary"
-	GetBouncerTargetReplica GetBouncerTarget = "replica"
+	GetBouncerTargetPrimary           GetBouncerTarget = "primary"
+	GetBouncerTargetReplica           GetBouncerTarget = "replica"
+	GetBouncerTargetReplicaAzAffinity GetBouncerTarget = "replica_az_affinity"
 )
 
 func (e GetBouncerTarget) ToPointer() *GetBouncerTarget {
@@ -68,6 +117,8 @@ func (e *GetBouncerTarget) UnmarshalJSON(data []byte) error {
 	case "primary":
 		fallthrough
 	case "replica":
+		fallthrough
+	case "replica_az_affinity":
 		*e = GetBouncerTarget(v)
 		return nil
 	default:
@@ -439,7 +490,8 @@ type GetBouncerResponseBody struct {
 	// The ID of the bouncer
 	ID string `json:"id"`
 	// The name of the bouncer
-	Name string `json:"name"`
+	Name string        `json:"name"`
+	Sku  GetBouncerSku `json:"sku"`
 	// The instance type the bouncer targets
 	Target GetBouncerTarget `json:"target"`
 	// The count of replicas in each cell
@@ -468,6 +520,13 @@ func (g *GetBouncerResponseBody) GetName() string {
 		return ""
 	}
 	return g.Name
+}
+
+func (g *GetBouncerResponseBody) GetSku() GetBouncerSku {
+	if g == nil {
+		return GetBouncerSku{}
+	}
+	return g.Sku
 }
 
 func (g *GetBouncerResponseBody) GetTarget() GetBouncerTarget {

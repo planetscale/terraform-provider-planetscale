@@ -10,6 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
@@ -35,6 +37,7 @@ type KeyspaceResourceModel struct {
 	Branch                           types.String                                        `tfsdk:"branch"`
 	ClusterDisplayName               types.String                                        `tfsdk:"cluster_display_name"`
 	ClusterName                      types.String                                        `tfsdk:"cluster_name"`
+	ClusterSize                      types.String                                        `tfsdk:"cluster_size"`
 	CreatedAt                        types.String                                        `tfsdk:"created_at"`
 	Database                         types.String                                        `tfsdk:"database"`
 	Default                          types.Bool                                          `tfsdk:"default"`
@@ -75,6 +78,13 @@ func (r *KeyspaceResource) Schema(ctx context.Context, req resource.SchemaReques
 			"cluster_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The SKU representing the keyspace cluster size`,
+			},
+			"cluster_size": schema.StringAttribute{
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -276,6 +286,43 @@ func (r *KeyspaceResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateKeyspaceResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request2, request2Diags := data.ToOperationsGetKeyspaceRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.DatabaseBranchKeyspaces.GetKeyspace(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+	if !(res2.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetKeyspaceResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -41,7 +41,7 @@ type CreateDatabaseRequestBody struct {
 	Name string `json:"name"`
 	// The region the database will be deployed in. If left blank, defaults to the organization's default region.
 	Region *string `json:"region,omitzero"`
-	// The database cluster size. Options: PS_10, PS_20, PS_40, PS_80, PS_160, PS_320, PS_400, PS_640, PS_700, PS_900, PS_1280, PS_1400, PS_1800, PS_2100, PS_2560, PS_2700, PS_2800.
+	// The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus
 	ClusterSize string `json:"cluster_size"`
 	// The kind of database to create.
 	Kind *KindRequest `json:"kind,omitzero"`

@@ -1,0 +1,34 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_role managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: Role#create
+      x-speakeasy-entity-description: Manage a PlanetScale database role.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: Role#delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation: Role#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database role.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation: Role#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    update:
+      actor:
+        x-speakeasy-name-override: actor_data
+      branch:
+        x-speakeasy-name-override: branch_data
+      password:
+        x-speakeasy-param-sensitive: true

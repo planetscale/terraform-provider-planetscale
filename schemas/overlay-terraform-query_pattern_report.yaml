@@ -1,0 +1,31 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_query_pattern_report managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/query-patterns"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: QueryPatternReport#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch query pattern report.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: QueryPatternReport#delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation:
+        - QueryPatternReport#read
+        - entityOperation: QueryPatternReport#create#2
+          options:
+            polling:
+              name: WaitForCompleted
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch query pattern report.
+      x-speakeasy-polling:
+        - name: WaitForCompleted
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "completed"

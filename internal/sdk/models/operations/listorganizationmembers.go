@@ -12,6 +12,8 @@ import (
 type ListOrganizationMembersRequest struct {
 	// The name of the organization
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
+	// Search term to filter members by name or email
+	Q *string `queryParam:"style=form,explode=true,name=q"`
 	// If provided, specifies the page offset of returned results
 	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -34,6 +36,13 @@ func (l *ListOrganizationMembersRequest) GetOrganization() string {
 		return ""
 	}
 	return l.Organization
+}
+
+func (l *ListOrganizationMembersRequest) GetQ() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Q
 }
 
 func (l *ListOrganizationMembersRequest) GetPage() *float64 {

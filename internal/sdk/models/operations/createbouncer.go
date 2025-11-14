@@ -97,12 +97,61 @@ func (c *CreateBouncerRequest) GetBody() *CreateBouncerRequestBody {
 	return c.Body
 }
 
+type CreateBouncerSku struct {
+	// The name of the Postgres bouncer SKU
+	Name string `json:"name"`
+	// The display name
+	DisplayName string `json:"display_name"`
+	// The CPU allocation
+	CPU string `json:"cpu"`
+	// The amount of memory in bytes
+	RAM float64 `json:"ram"`
+	// The sort order of the Postgres bouncer SKU
+	SortOrder float64 `json:"sort_order"`
+}
+
+func (c *CreateBouncerSku) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *CreateBouncerSku) GetDisplayName() string {
+	if c == nil {
+		return ""
+	}
+	return c.DisplayName
+}
+
+func (c *CreateBouncerSku) GetCPU() string {
+	if c == nil {
+		return ""
+	}
+	return c.CPU
+}
+
+func (c *CreateBouncerSku) GetRAM() float64 {
+	if c == nil {
+		return 0.0
+	}
+	return c.RAM
+}
+
+func (c *CreateBouncerSku) GetSortOrder() float64 {
+	if c == nil {
+		return 0.0
+	}
+	return c.SortOrder
+}
+
 // CreateBouncerTarget - The instance type the bouncer targets
 type CreateBouncerTarget string
 
 const (
-	CreateBouncerTargetPrimary CreateBouncerTarget = "primary"
-	CreateBouncerTargetReplica CreateBouncerTarget = "replica"
+	CreateBouncerTargetPrimary           CreateBouncerTarget = "primary"
+	CreateBouncerTargetReplica           CreateBouncerTarget = "replica"
+	CreateBouncerTargetReplicaAzAffinity CreateBouncerTarget = "replica_az_affinity"
 )
 
 func (e CreateBouncerTarget) ToPointer() *CreateBouncerTarget {
@@ -117,6 +166,8 @@ func (e *CreateBouncerTarget) UnmarshalJSON(data []byte) error {
 	case "primary":
 		fallthrough
 	case "replica":
+		fallthrough
+	case "replica_az_affinity":
 		*e = CreateBouncerTarget(v)
 		return nil
 	default:
@@ -488,7 +539,8 @@ type CreateBouncerResponseBody struct {
 	// The ID of the bouncer
 	ID string `json:"id"`
 	// The name of the bouncer
-	Name string `json:"name"`
+	Name string           `json:"name"`
+	Sku  CreateBouncerSku `json:"sku"`
 	// The instance type the bouncer targets
 	Target CreateBouncerTarget `json:"target"`
 	// The count of replicas in each cell
@@ -517,6 +569,13 @@ func (c *CreateBouncerResponseBody) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateBouncerResponseBody) GetSku() CreateBouncerSku {
+	if c == nil {
+		return CreateBouncerSku{}
+	}
+	return c.Sku
 }
 
 func (c *CreateBouncerResponseBody) GetTarget() CreateBouncerTarget {

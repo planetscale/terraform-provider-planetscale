@@ -9,6 +9,47 @@ import (
 	"net/http"
 )
 
+type UpdateBouncerResizeRequestRequestBody struct {
+	// The bouncer size SKU name (e.g., 'PGB_5', 'PGB_10', 'PGB_20', 'PGB_40', 'PGB_80', 'PGB_160'). Defaults to 'PGB_5'.
+	BouncerSize *string `json:"bouncer_size,omitzero"`
+	// The number of PgBouncers per availability zone. Defaults to 1.
+	ReplicasPerCell *float64 `json:"replicas_per_cell,omitzero"`
+	// Bouncer configuration parameters nested by namespace (e.g., {"pgbouncer": {"default_pool_size": "100"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Only parameters with namespace 'pgbouncer' can be updated.
+	Parameters map[string]any `json:"parameters,omitzero"`
+}
+
+func (u UpdateBouncerResizeRequestRequestBody) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UpdateBouncerResizeRequestRequestBody) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *UpdateBouncerResizeRequestRequestBody) GetBouncerSize() *string {
+	if u == nil {
+		return nil
+	}
+	return u.BouncerSize
+}
+
+func (u *UpdateBouncerResizeRequestRequestBody) GetReplicasPerCell() *float64 {
+	if u == nil {
+		return nil
+	}
+	return u.ReplicasPerCell
+}
+
+func (u *UpdateBouncerResizeRequestRequestBody) GetParameters() map[string]any {
+	if u == nil {
+		return nil
+	}
+	return u.Parameters
+}
+
 type UpdateBouncerResizeRequestRequest struct {
 	// The name of the organization that owns this resource
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
@@ -17,7 +58,19 @@ type UpdateBouncerResizeRequestRequest struct {
 	// The name of the branch that owns this resource
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the bouncer
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Name string                                 `pathParam:"style=simple,explode=false,name=name"`
+	Body *UpdateBouncerResizeRequestRequestBody `request:"mediaType=application/json"`
+}
+
+func (u UpdateBouncerResizeRequestRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UpdateBouncerResizeRequestRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch", "name"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *UpdateBouncerResizeRequestRequest) GetOrganization() string {
@@ -46,6 +99,13 @@ func (u *UpdateBouncerResizeRequestRequest) GetName() string {
 		return ""
 	}
 	return u.Name
+}
+
+func (u *UpdateBouncerResizeRequestRequest) GetBody() *UpdateBouncerResizeRequestRequestBody {
+	if u == nil {
+		return nil
+	}
+	return u.Body
 }
 
 // UpdateBouncerResizeRequestState - The state of the bouncer resize

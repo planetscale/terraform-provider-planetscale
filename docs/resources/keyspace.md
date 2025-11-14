@@ -15,6 +15,7 @@ Keyspace Resource
 ```terraform
 resource "planetscale_keyspace" "my_keyspace" {
   branch       = "...my_branch..."
+  cluster_size = "...my_cluster_size..."
   database     = "...my_database..."
   name         = "...my_name..."
   organization = "...my_organization..."
@@ -27,6 +28,7 @@ resource "planetscale_keyspace" "my_keyspace" {
 ### Required
 
 - `branch` (String) The name of the branch
+- `cluster_size` (String) Requires replacement if changed.
 - `database` (String) The name of the database the branch belongs to
 - `name` (String) The name of the keyspace
 - `organization` (String) The name of the organization the branch belongs to

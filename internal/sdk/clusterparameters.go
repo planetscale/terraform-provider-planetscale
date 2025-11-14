@@ -30,6 +30,9 @@ func newClusterParameters(rootSDK *Planetscale, sdkConfig config.SDKConfiguratio
 }
 
 // ListParameters - List cluster parameters
+//
+//	Returns the parameters for a branch. To update the parameters, use the "Upsert a change request" endpoint.
+//
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //

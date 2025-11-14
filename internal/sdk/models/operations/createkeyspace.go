@@ -11,7 +11,8 @@ import (
 
 type CreateKeyspaceRequestBody struct {
 	// The name of the keyspace
-	Name string `json:"name"`
+	Name        string `json:"name"`
+	ClusterSize string `json:"cluster_size"`
 }
 
 func (c *CreateKeyspaceRequestBody) GetName() string {
@@ -19,6 +20,13 @@ func (c *CreateKeyspaceRequestBody) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateKeyspaceRequestBody) GetClusterSize() string {
+	if c == nil {
+		return ""
+	}
+	return c.ClusterSize
 }
 
 type CreateKeyspaceRequest struct {

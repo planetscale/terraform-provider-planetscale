@@ -9,13 +9,66 @@ import (
 	"net/http"
 )
 
+type UpdateBranchChangeRequestRequestBody struct {
+	// The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+	ClusterSize *string `json:"cluster_size,omitzero"`
+	// The total number of replicas
+	Replicas *float64 `json:"replicas,omitzero"`
+	// Cluster configuration parameters nested by namespace (e.g., {"pgconf": {"max_connections": "200"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Supported namespaces include 'patroni', 'pgconf', and 'pgbouncer'.
+	Parameters map[string]any `json:"parameters,omitzero"`
+}
+
+func (u UpdateBranchChangeRequestRequestBody) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UpdateBranchChangeRequestRequestBody) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *UpdateBranchChangeRequestRequestBody) GetClusterSize() *string {
+	if u == nil {
+		return nil
+	}
+	return u.ClusterSize
+}
+
+func (u *UpdateBranchChangeRequestRequestBody) GetReplicas() *float64 {
+	if u == nil {
+		return nil
+	}
+	return u.Replicas
+}
+
+func (u *UpdateBranchChangeRequestRequestBody) GetParameters() map[string]any {
+	if u == nil {
+		return nil
+	}
+	return u.Parameters
+}
+
 type UpdateBranchChangeRequestRequest struct {
 	// The name of the organization that owns this resource
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database that owns this resource
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch that owns this resource
-	Branch string `pathParam:"style=simple,explode=false,name=branch"`
+	Branch string                                `pathParam:"style=simple,explode=false,name=branch"`
+	Body   *UpdateBranchChangeRequestRequestBody `request:"mediaType=application/json"`
+}
+
+func (u UpdateBranchChangeRequestRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UpdateBranchChangeRequestRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *UpdateBranchChangeRequestRequest) GetOrganization() string {
@@ -37,6 +90,13 @@ func (u *UpdateBranchChangeRequestRequest) GetBranch() string {
 		return ""
 	}
 	return u.Branch
+}
+
+func (u *UpdateBranchChangeRequestRequest) GetBody() *UpdateBranchChangeRequestRequestBody {
+	if u == nil {
+		return nil
+	}
+	return u.Body
 }
 
 // UpdateBranchChangeRequestState - The state of the branch change request
