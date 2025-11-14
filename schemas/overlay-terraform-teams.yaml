@@ -1,0 +1,25 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_teams data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization_name}/teams"].get
+    description: API operation for read.
+    update:
+      x-speakeasy-entity-operation: Teams#read
+      x-speakeasy-entity-description: Returns information about PlanetScale organization teams.
+
+  - target: $.paths["/organizations/{organization_name}/teams"].get.responses["200"].content["application/json"].schema.properties
+    description: Ignore extraneous response properties in Terraform schema.
+    update:
+      current_page:
+        x-speakeasy-terraform-ignore: true
+      next_page:
+        x-speakeasy-terraform-ignore: true
+      next_page_url:
+        x-speakeasy-terraform-ignore: true
+      prev_page:
+        x-speakeasy-terraform-ignore: true
+      prev_page_url:
+        x-speakeasy-terraform-ignore: true

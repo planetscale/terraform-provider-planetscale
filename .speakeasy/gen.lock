@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 1e416b73be5340a0094494702df87714
+  docChecksum: 2ec56b381b13e2929ffe23bc367a24d8
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -33,6 +33,7 @@ generatedFiles:
   - examples/data-sources/planetscale_query_pattern_report/data-source.tf
   - examples/data-sources/planetscale_role/data-source.tf
   - examples/data-sources/planetscale_team/data-source.tf
+  - examples/data-sources/planetscale_teams/data-source.tf
   - examples/data-sources/planetscale_webhook/data-source.tf
   - examples/data-sources/planetscale_workflow/data-source.tf
   - examples/provider/provider.tf
@@ -133,6 +134,8 @@ generatedFiles:
   - internal/provider/team_data_source_sdk.go
   - internal/provider/team_resource.go
   - internal/provider/team_resource_sdk.go
+  - internal/provider/teams_data_source.go
+  - internal/provider/teams_data_source_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
@@ -178,6 +181,11 @@ generatedFiles:
   - internal/provider/types/list_databases_data_import.go
   - internal/provider/types/list_databases_data_source.go
   - internal/provider/types/list_databases_region.go
+  - internal/provider/types/list_organization_teams_creator.go
+  - internal/provider/types/list_organization_teams_data.go
+  - internal/provider/types/list_organization_teams_database.go
+  - internal/provider/types/list_organization_teams_default_organization.go
+  - internal/provider/types/list_organization_teams_member.go
   - internal/provider/types/list_organizations_data.go
   - internal/provider/utils.go
   - internal/provider/webhook_data_source.go
