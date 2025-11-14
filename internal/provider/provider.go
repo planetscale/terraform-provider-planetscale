@@ -129,6 +129,7 @@ func (p *PlanetscaleProvider) Configure(ctx context.Context, req provider.Config
 
 func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewBackupResource,
 		NewBouncerResource,
 		NewBranchResource,
 		NewCidrsResource,
@@ -145,6 +146,8 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 
 func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewBackupDataSource,
+		NewBackupsDataSource,
 		NewBouncerDataSource,
 		NewBranchDataSource,
 		NewCidrsDataSource,

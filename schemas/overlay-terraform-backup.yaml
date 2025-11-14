@@ -1,0 +1,35 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_backup managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/backups"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: Backup#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch backup.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: Backup#delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation:
+        - Backup#read
+        - entityOperation: Backup#create#2
+          options:
+            polling:
+              name: WaitForSuccess
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch backup.
+      x-speakeasy-polling:
+        - name: WaitForSuccess
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "success"
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation: Backup#update

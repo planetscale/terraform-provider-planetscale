@@ -67,6 +67,7 @@ Available configuration:
 
 ### Resources
 
+* [planetscale_backup](docs/resources/backup.md)
 * [planetscale_bouncer](docs/resources/bouncer.md)
 * [planetscale_branch](docs/resources/branch.md)
 * [planetscale_cidrs](docs/resources/cidrs.md)
@@ -80,6 +81,8 @@ Available configuration:
 * [planetscale_workflow](docs/resources/workflow.md)
 ### Data Sources
 
+* [planetscale_backup](docs/data-sources/backup.md)
+* [planetscale_backups](docs/data-sources/backups.md)
 * [planetscale_bouncer](docs/data-sources/bouncer.md)
 * [planetscale_branch](docs/data-sources/branch.md)
 * [planetscale_cidrs](docs/data-sources/cidrs.md)

@@ -3174,6 +3174,7 @@ paths:
           schema:
             type: number
             default: 25
+          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns database branch backups
@@ -3186,18 +3187,23 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
+                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
+                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
+                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
+                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -3482,6 +3488,16 @@ paths:
         | Organization | `read_backups` |
         | Database | `read_backups` |
         | Branch | `read_backups` |
+      x-speakeasy-entity-operation: Backups#read
+      x-speakeasy-entity-description: Returns information about PlanetScale database branch backups.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
     post:
       tags:
         - Backups
@@ -3811,6 +3827,8 @@ paths:
         | Organization | `write_backups` |
         | Database | `write_backups` |
         | Branch | `write_backups` |
+      x-speakeasy-entity-operation: Backup#create
+      x-speakeasy-entity-description: Manage a PlanetScale database branch backup.
   /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}:
     get:
       tags:
@@ -3871,6 +3889,19 @@ paths:
         | Organization | `read_backups` |
         | Database | `read_backups` |
         | Branch | `read_backups` |
+      x-speakeasy-entity-operation:
+        - Backup#read
+        - entityOperation: Backup#create#2
+          options:
+            polling:
+              name: WaitForSuccess
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch backup.
+      x-speakeasy-polling:
+        - name: WaitForSuccess
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "success"
     patch:
       tags:
         - Backups
@@ -3940,6 +3971,7 @@ paths:
         | Organization | `write_backups` |
         | Database | `write_backups` |
         | Branch | `write_backups` |
+      x-speakeasy-entity-operation: Backup#update
     delete:
       tags:
         - Backups
@@ -3996,6 +4028,7 @@ paths:
         | Organization | `delete_backups`, `delete_production_branch_backups` |
         | Database | `delete_backups`, `delete_production_branch_backups` |
         | Branch | `delete_backups` |
+      x-speakeasy-entity-operation: Backup#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncer-resizes:
     get:
       tags:

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 7a7922ea92dbdaeaecd43887dbe8f9f9
+  docChecksum: 11ad64217d843fefc32744035d4c36fc
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -22,6 +22,8 @@ features:
 generatedFiles:
   - .gitattributes
   - USAGE.md
+  - examples/data-sources/planetscale_backup/data-source.tf
+  - examples/data-sources/planetscale_backups/data-source.tf
   - examples/data-sources/planetscale_bouncer/data-source.tf
   - examples/data-sources/planetscale_branch/data-source.tf
   - examples/data-sources/planetscale_cidrs/data-source.tf
@@ -39,6 +41,9 @@ generatedFiles:
   - examples/data-sources/planetscale_webhook/data-source.tf
   - examples/data-sources/planetscale_workflow/data-source.tf
   - examples/provider/provider.tf
+  - examples/resources/planetscale_backup/import-by-string-id.tf
+  - examples/resources/planetscale_backup/import.sh
+  - examples/resources/planetscale_backup/resource.tf
   - examples/resources/planetscale_bouncer/import-by-string-id.tf
   - examples/resources/planetscale_bouncer/import.sh
   - examples/resources/planetscale_bouncer/resource.tf
@@ -86,6 +91,12 @@ generatedFiles:
   - internal/planmodifiers/setplanmodifier/suppress_diff.go
   - internal/planmodifiers/stringplanmodifier/suppress_diff.go
   - internal/planmodifiers/utils/state_check.go
+  - internal/provider/backup_data_source.go
+  - internal/provider/backup_data_source_sdk.go
+  - internal/provider/backup_resource.go
+  - internal/provider/backup_resource_sdk.go
+  - internal/provider/backups_data_source.go
+  - internal/provider/backups_data_source_sdk.go
   - internal/provider/bouncer_data_source.go
   - internal/provider/bouncer_data_source_sdk.go
   - internal/provider/bouncer_resource.go
@@ -151,6 +162,11 @@ generatedFiles:
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
   - internal/provider/types/create_query_patterns_report_actor.go
+  - internal/provider/types/get_backup_actor.go
+  - internal/provider/types/get_backup_backup_policy.go
+  - internal/provider/types/get_backup_database_branch.go
+  - internal/provider/types/get_backup_restored_branch.go
+  - internal/provider/types/get_backup_schema_snapshot.go
   - internal/provider/types/get_bouncer_actor.go
   - internal/provider/types/get_bouncer_actor_pgbouncer.go
   - internal/provider/types/get_bouncer_branch_data.go
@@ -189,6 +205,12 @@ generatedFiles:
   - internal/provider/types/get_workflow_switch_replicas_by.go
   - internal/provider/types/get_workflow_target_keyspace_data.go
   - internal/provider/types/get_workflow_verify_data_by.go
+  - internal/provider/types/list_backups_actor.go
+  - internal/provider/types/list_backups_backup_policy.go
+  - internal/provider/types/list_backups_data.go
+  - internal/provider/types/list_backups_database_branch.go
+  - internal/provider/types/list_backups_restored_branch.go
+  - internal/provider/types/list_backups_schema_snapshot.go
   - internal/provider/types/list_databases_data.go
   - internal/provider/types/list_databases_data_import.go
   - internal/provider/types/list_databases_data_source.go
