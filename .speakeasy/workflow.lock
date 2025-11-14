@@ -2,8 +2,8 @@ speakeasyVersion: 1.657.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:323691ff38f081f69cef9fe0eb9d9819986783de9a325d70ebea945d5e6b89a3
-        sourceBlobDigest: sha256:c7170d31bd9b27edbe6b5f508eaad164631fe3785bc06d95ee5f960d331b722f
+        sourceRevisionDigest: sha256:2bf294f8dbb6fd1dda4a194e96cbcc1a4a09f5e5c4ae899ddbddb4913c44f36c
+        sourceBlobDigest: sha256:9701d2f63501406c17e1f77e24765b812f0bc429ecc7e55f127ae9761b87ed01
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:323691ff38f081f69cef9fe0eb9d9819986783de9a325d70ebea945d5e6b89a3
-        sourceBlobDigest: sha256:c7170d31bd9b27edbe6b5f508eaad164631fe3785bc06d95ee5f960d331b722f
+        sourceRevisionDigest: sha256:2bf294f8dbb6fd1dda4a194e96cbcc1a4a09f5e5c4ae899ddbddb4913c44f36c
+        sourceBlobDigest: sha256:9701d2f63501406c17e1f77e24765b812f0bc429ecc7e55f127ae9761b87ed01
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -24,6 +24,7 @@ workflow:
                 - location: schemas/overlay-terraform.yaml
                 - location: schemas/overlay-terraform-bouncer.yaml
                 - location: schemas/overlay-terraform-branch.yaml
+                - location: schemas/overlay-terraform-cidrs.yaml
                 - location: schemas/overlay-terraform-database.yaml
                 - location: schemas/overlay-terraform-databases.yaml
                 - location: schemas/overlay-terraform-keyspace.yaml

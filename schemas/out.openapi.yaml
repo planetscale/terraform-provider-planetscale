@@ -981,7 +981,7 @@ paths:
         | :------- | :---------- |
         | Organization | `read_organization` |
       x-speakeasy-entity-operation: Teams#read
-      x-speakeasy-entity-description: Returns information about accessible PlanetScale organization teams.
+      x-speakeasy-entity-description: Returns information about PlanetScale organization teams.
     post:
       tags:
         - Organization teams
@@ -2276,6 +2276,8 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Cidrs#create
+      x-speakeasy-entity-description: Manage a PlanetScale database IP restriction entry.
   /organizations/{organization}/databases/{database_name}/cidrs/{id}:
     get:
       tags:
@@ -2328,6 +2330,8 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
+      x-speakeasy-entity-operation: Cidrs#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database IP restriction entry.
     put:
       tags:
         - Database Postgres IP restrictions
@@ -2397,6 +2401,7 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Cidrs#update
     delete:
       tags:
         - Database Postgres IP restrictions
@@ -2445,6 +2450,7 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: Cidrs#delete
   /organizations/{organization}/databases/{database}/branches:
     get:
       tags:

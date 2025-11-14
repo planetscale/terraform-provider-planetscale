@@ -131,6 +131,7 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 	return []func() resource.Resource{
 		NewBouncerResource,
 		NewBranchResource,
+		NewCidrsResource,
 		NewDatabaseResource,
 		NewKeyspaceResource,
 		NewPasswordResource,
@@ -146,6 +147,7 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 	return []func() datasource.DataSource{
 		NewBouncerDataSource,
 		NewBranchDataSource,
+		NewCidrsDataSource,
 		NewDatabaseDataSource,
 		NewDatabasesDataSource,
 		NewKeyspaceDataSource,

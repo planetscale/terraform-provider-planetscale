@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 2ec56b381b13e2929ffe23bc367a24d8
+  docChecksum: f35e3ef33182b186e2cac3c74b97e508
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -24,6 +24,7 @@ generatedFiles:
   - USAGE.md
   - examples/data-sources/planetscale_bouncer/data-source.tf
   - examples/data-sources/planetscale_branch/data-source.tf
+  - examples/data-sources/planetscale_cidrs/data-source.tf
   - examples/data-sources/planetscale_database/data-source.tf
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_keyspace/data-source.tf
@@ -43,6 +44,9 @@ generatedFiles:
   - examples/resources/planetscale_branch/import-by-string-id.tf
   - examples/resources/planetscale_branch/import.sh
   - examples/resources/planetscale_branch/resource.tf
+  - examples/resources/planetscale_cidrs/import-by-string-id.tf
+  - examples/resources/planetscale_cidrs/import.sh
+  - examples/resources/planetscale_cidrs/resource.tf
   - examples/resources/planetscale_database/import-by-string-id.tf
   - examples/resources/planetscale_database/import.sh
   - examples/resources/planetscale_database/resource.tf
@@ -89,6 +93,10 @@ generatedFiles:
   - internal/provider/branch_data_source_sdk.go
   - internal/provider/branch_resource.go
   - internal/provider/branch_resource_sdk.go
+  - internal/provider/cidrs_data_source.go
+  - internal/provider/cidrs_data_source_sdk.go
+  - internal/provider/cidrs_resource.go
+  - internal/provider/cidrs_resource_sdk.go
   - internal/provider/database_data_source.go
   - internal/provider/database_data_source_sdk.go
   - internal/provider/database_resource.go
@@ -150,6 +158,7 @@ generatedFiles:
   - internal/provider/types/get_branch_restored_from_branch.go
   - internal/provider/types/get_database_data_import.go
   - internal/provider/types/get_database_data_source.go
+  - internal/provider/types/get_database_postgres_cidr_actor.go
   - internal/provider/types/get_database_region_data.go
   - internal/provider/types/get_keyspace_replication_durability_constraints.go
   - internal/provider/types/get_keyspace_vreplication_flags.go

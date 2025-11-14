@@ -69,6 +69,7 @@ Available configuration:
 
 * [planetscale_bouncer](docs/resources/bouncer.md)
 * [planetscale_branch](docs/resources/branch.md)
+* [planetscale_cidrs](docs/resources/cidrs.md)
 * [planetscale_database](docs/resources/database.md)
 * [planetscale_keyspace](docs/resources/keyspace.md)
 * [planetscale_password](docs/resources/password.md)
@@ -81,6 +82,7 @@ Available configuration:
 
 * [planetscale_bouncer](docs/data-sources/bouncer.md)
 * [planetscale_branch](docs/data-sources/branch.md)
+* [planetscale_cidrs](docs/data-sources/cidrs.md)
 * [planetscale_database](docs/data-sources/database.md)
 * [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_keyspace](docs/data-sources/keyspace.md)
