@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 03895f9e9969271f25e9be7cb82143df
+  docChecksum: fb8dcac5d65546985f6432f0db1cd14b
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -26,6 +26,7 @@ generatedFiles:
   - examples/data-sources/planetscale_backups/data-source.tf
   - examples/data-sources/planetscale_bouncer/data-source.tf
   - examples/data-sources/planetscale_branch/data-source.tf
+  - examples/data-sources/planetscale_branch_schema/data-source.tf
   - examples/data-sources/planetscale_cidrs/data-source.tf
   - examples/data-sources/planetscale_database/data-source.tf
   - examples/data-sources/planetscale_database_read_only_regions/data-source.tf
@@ -109,6 +110,8 @@ generatedFiles:
   - internal/provider/branch_data_source_sdk.go
   - internal/provider/branch_resource.go
   - internal/provider/branch_resource_sdk.go
+  - internal/provider/branchschema_data_source.go
+  - internal/provider/branchschema_data_source_sdk.go
   - internal/provider/cidrs_data_source.go
   - internal/provider/cidrs_data_source_sdk.go
   - internal/provider/cidrs_resource.go
@@ -187,6 +190,7 @@ generatedFiles:
   - internal/provider/types/get_branch_actor.go
   - internal/provider/types/get_branch_region_data.go
   - internal/provider/types/get_branch_restored_from_branch.go
+  - internal/provider/types/get_branch_schema_data.go
   - internal/provider/types/get_database_data_import.go
   - internal/provider/types/get_database_data_source.go
   - internal/provider/types/get_database_postgres_cidr_actor.go

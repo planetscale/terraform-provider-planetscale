@@ -10,6 +10,7 @@ sources:
             - location: schemas/overlay-terraform-backups.yaml
             - location: schemas/overlay-terraform-bouncer.yaml
             - location: schemas/overlay-terraform-branch.yaml
+            - location: schemas/overlay-terraform-branch_schema.yaml
             - location: schemas/overlay-terraform-cidrs.yaml
             - location: schemas/overlay-terraform-database.yaml
             - location: schemas/overlay-terraform-database_regions.yaml

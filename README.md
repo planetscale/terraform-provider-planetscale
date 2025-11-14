@@ -85,6 +85,7 @@ Available configuration:
 * [planetscale_backups](docs/data-sources/backups.md)
 * [planetscale_bouncer](docs/data-sources/bouncer.md)
 * [planetscale_branch](docs/data-sources/branch.md)
+* [planetscale_branch_schema](docs/data-sources/branch_schema.md)
 * [planetscale_cidrs](docs/data-sources/cidrs.md)
 * [planetscale_database](docs/data-sources/database.md)
 * [planetscale_database_read_only_regions](docs/data-sources/database_read_only_regions.md)

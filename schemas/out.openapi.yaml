@@ -9535,6 +9535,8 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
+      x-speakeasy-entity-operation: BranchSchema#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database branch schema.
   /organizations/{organization}/databases/{database}/branches/{name}/schema/lint:
     get:
       tags:
