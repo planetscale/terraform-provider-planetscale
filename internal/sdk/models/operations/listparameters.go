@@ -73,17 +73,16 @@ func (e *ListParametersNamespace) UnmarshalJSON(data []byte) error {
 type ListParametersParameterType string
 
 const (
-	ListParametersParameterTypeArray        ListParametersParameterType = "array"
-	ListParametersParameterTypeBoolean      ListParametersParameterType = "boolean"
-	ListParametersParameterTypeBytes        ListParametersParameterType = "bytes"
-	ListParametersParameterTypeFloat        ListParametersParameterType = "float"
-	ListParametersParameterTypeInteger      ListParametersParameterType = "integer"
-	ListParametersParameterTypeInternal     ListParametersParameterType = "internal"
-	ListParametersParameterTypeMilliseconds ListParametersParameterType = "milliseconds"
-	ListParametersParameterTypeSeconds      ListParametersParameterType = "seconds"
-	ListParametersParameterTypeSelect       ListParametersParameterType = "select"
-	ListParametersParameterTypeString       ListParametersParameterType = "string"
-	ListParametersParameterTypeTime         ListParametersParameterType = "time"
+	ListParametersParameterTypeArray    ListParametersParameterType = "array"
+	ListParametersParameterTypeBoolean  ListParametersParameterType = "boolean"
+	ListParametersParameterTypeBytes    ListParametersParameterType = "bytes"
+	ListParametersParameterTypeFloat    ListParametersParameterType = "float"
+	ListParametersParameterTypeInteger  ListParametersParameterType = "integer"
+	ListParametersParameterTypeInternal ListParametersParameterType = "internal"
+	ListParametersParameterTypeSeconds  ListParametersParameterType = "seconds"
+	ListParametersParameterTypeSelect   ListParametersParameterType = "select"
+	ListParametersParameterTypeString   ListParametersParameterType = "string"
+	ListParametersParameterTypeTime     ListParametersParameterType = "time"
 )
 
 func (e ListParametersParameterType) ToPointer() *ListParametersParameterType {
@@ -106,8 +105,6 @@ func (e *ListParametersParameterType) UnmarshalJSON(data []byte) error {
 	case "integer":
 		fallthrough
 	case "internal":
-		fallthrough
-	case "milliseconds":
 		fallthrough
 	case "seconds":
 		fallthrough

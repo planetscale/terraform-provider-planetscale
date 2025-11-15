@@ -137,9 +137,23 @@ func (r *KeyspaceResourceModel) ToOperationsCreateKeyspaceRequestBody(ctx contex
 	var clusterSize string
 	clusterSize = r.ClusterSize.ValueString()
 
+	extraReplicas := new(float64)
+	if !r.ExtraReplicas.IsUnknown() && !r.ExtraReplicas.IsNull() {
+		*extraReplicas = r.ExtraReplicas.ValueFloat64()
+	} else {
+		extraReplicas = nil
+	}
+	shards := new(float64)
+	if !r.Shards.IsUnknown() && !r.Shards.IsNull() {
+		*shards = r.Shards.ValueFloat64()
+	} else {
+		shards = nil
+	}
 	out := operations.CreateKeyspaceRequestBody{
-		Name:        name,
-		ClusterSize: clusterSize,
+		Name:          name,
+		ClusterSize:   clusterSize,
+		ExtraReplicas: extraReplicas,
+		Shards:        shards,
 	}
 
 	return &out, diags

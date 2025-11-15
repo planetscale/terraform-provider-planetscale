@@ -10,10 +10,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_float64planmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/float64planmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 )
@@ -84,7 +86,7 @@ func (r *KeyspaceResource) Schema(ctx context.Context, req resource.SchemaReques
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus. Requires replacement if changed.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -99,8 +101,13 @@ func (r *KeyspaceResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Is this the default keyspace for the branch`,
 			},
 			"extra_replicas": schema.Float64Attribute{
-				Computed:    true,
-				Description: `Number of extra replicas in the keyspace`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Float64{
+					float64planmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+				},
+				Description: `The number of additional replicas beyond the included default. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -152,8 +159,13 @@ func (r *KeyspaceResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `If the keyspace is sharded`,
 			},
 			"shards": schema.Float64Attribute{
-				Computed:    true,
-				Description: `The number of keyspace shards`,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Float64{
+					float64planmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+				},
+				Description: `The number of shards. Default: 1. Requires replacement if changed.`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,

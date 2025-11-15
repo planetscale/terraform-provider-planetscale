@@ -252,17 +252,16 @@ func (e *ListBouncersNamespace) UnmarshalJSON(data []byte) error {
 type ListBouncersParameterType string
 
 const (
-	ListBouncersParameterTypeArray        ListBouncersParameterType = "array"
-	ListBouncersParameterTypeBoolean      ListBouncersParameterType = "boolean"
-	ListBouncersParameterTypeBytes        ListBouncersParameterType = "bytes"
-	ListBouncersParameterTypeFloat        ListBouncersParameterType = "float"
-	ListBouncersParameterTypeInteger      ListBouncersParameterType = "integer"
-	ListBouncersParameterTypeInternal     ListBouncersParameterType = "internal"
-	ListBouncersParameterTypeMilliseconds ListBouncersParameterType = "milliseconds"
-	ListBouncersParameterTypeSeconds      ListBouncersParameterType = "seconds"
-	ListBouncersParameterTypeSelect       ListBouncersParameterType = "select"
-	ListBouncersParameterTypeString       ListBouncersParameterType = "string"
-	ListBouncersParameterTypeTime         ListBouncersParameterType = "time"
+	ListBouncersParameterTypeArray    ListBouncersParameterType = "array"
+	ListBouncersParameterTypeBoolean  ListBouncersParameterType = "boolean"
+	ListBouncersParameterTypeBytes    ListBouncersParameterType = "bytes"
+	ListBouncersParameterTypeFloat    ListBouncersParameterType = "float"
+	ListBouncersParameterTypeInteger  ListBouncersParameterType = "integer"
+	ListBouncersParameterTypeInternal ListBouncersParameterType = "internal"
+	ListBouncersParameterTypeSeconds  ListBouncersParameterType = "seconds"
+	ListBouncersParameterTypeSelect   ListBouncersParameterType = "select"
+	ListBouncersParameterTypeString   ListBouncersParameterType = "string"
+	ListBouncersParameterTypeTime     ListBouncersParameterType = "time"
 )
 
 func (e ListBouncersParameterType) ToPointer() *ListBouncersParameterType {
@@ -285,8 +284,6 @@ func (e *ListBouncersParameterType) UnmarshalJSON(data []byte) error {
 	case "integer":
 		fallthrough
 	case "internal":
-		fallthrough
-	case "milliseconds":
 		fallthrough
 	case "seconds":
 		fallthrough

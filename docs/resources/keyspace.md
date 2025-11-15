@@ -14,11 +14,13 @@ Keyspace Resource
 
 ```terraform
 resource "planetscale_keyspace" "my_keyspace" {
-  branch       = "...my_branch..."
-  cluster_size = "...my_cluster_size..."
-  database     = "...my_database..."
-  name         = "...my_name..."
-  organization = "...my_organization..."
+  branch         = "...my_branch..."
+  cluster_size   = "...my_cluster_size..."
+  database       = "...my_database..."
+  extra_replicas = 2.01
+  name           = "...my_name..."
+  organization   = "...my_organization..."
+  shards         = 9.66
 }
 ```
 
@@ -28,10 +30,15 @@ resource "planetscale_keyspace" "my_keyspace" {
 ### Required
 
 - `branch` (String) The name of the branch
-- `cluster_size` (String) Requires replacement if changed.
+- `cluster_size` (String) The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus. Requires replacement if changed.
 - `database` (String) The name of the database the branch belongs to
 - `name` (String) The name of the keyspace
 - `organization` (String) The name of the organization the branch belongs to
+
+### Optional
+
+- `extra_replicas` (Number) The number of additional replicas beyond the included default. Requires replacement if changed.
+- `shards` (Number) The number of shards. Default: 1. Requires replacement if changed.
 
 ### Read-Only
 
@@ -39,7 +46,6 @@ resource "planetscale_keyspace" "my_keyspace" {
 - `cluster_name` (String) The SKU representing the keyspace cluster size
 - `created_at` (String) When the keyspace was created
 - `default` (Boolean) Is this the default keyspace for the branch
-- `extra_replicas` (Number) Number of extra replicas in the keyspace
 - `id` (String) The ID of the keyspace
 - `imported` (Boolean) Is this keyspace used in an import
 - `metal` (Boolean) Is the keyspace running on metal instances
@@ -49,7 +55,6 @@ resource "planetscale_keyspace" "my_keyspace" {
 - `resize_pending` (Boolean) Is the keyspace awaiting a resize
 - `resizing` (Boolean) Is the keyspace currently resizing
 - `sharded` (Boolean) If the keyspace is sharded
-- `shards` (Number) The number of keyspace shards
 - `updated_at` (String) When the keyspace was last updated
 - `vector_pool_allocation` (Number) Percentage of buffer pool memory allocated to vector indexes
 - `vreplication_flags` (Attributes) (see [below for nested schema](#nestedatt--vreplication_flags))

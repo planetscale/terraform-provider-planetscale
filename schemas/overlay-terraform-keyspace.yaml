@@ -24,12 +24,3 @@ actions:
       x-speakeasy-entity-operation:
         - Keyspace#create#2
         - Keyspace#update
-
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.requestBody.content["application/json"].schema
-    description: Add missing and required cluster_size property
-    update:
-      properties:
-        cluster_size:
-          type: string
-      required:
-        - cluster_size

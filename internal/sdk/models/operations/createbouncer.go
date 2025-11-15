@@ -281,17 +281,16 @@ func (e *CreateBouncerNamespace) UnmarshalJSON(data []byte) error {
 type CreateBouncerParameterType string
 
 const (
-	CreateBouncerParameterTypeArray        CreateBouncerParameterType = "array"
-	CreateBouncerParameterTypeBoolean      CreateBouncerParameterType = "boolean"
-	CreateBouncerParameterTypeBytes        CreateBouncerParameterType = "bytes"
-	CreateBouncerParameterTypeFloat        CreateBouncerParameterType = "float"
-	CreateBouncerParameterTypeInteger      CreateBouncerParameterType = "integer"
-	CreateBouncerParameterTypeInternal     CreateBouncerParameterType = "internal"
-	CreateBouncerParameterTypeMilliseconds CreateBouncerParameterType = "milliseconds"
-	CreateBouncerParameterTypeSeconds      CreateBouncerParameterType = "seconds"
-	CreateBouncerParameterTypeSelect       CreateBouncerParameterType = "select"
-	CreateBouncerParameterTypeString       CreateBouncerParameterType = "string"
-	CreateBouncerParameterTypeTime         CreateBouncerParameterType = "time"
+	CreateBouncerParameterTypeArray    CreateBouncerParameterType = "array"
+	CreateBouncerParameterTypeBoolean  CreateBouncerParameterType = "boolean"
+	CreateBouncerParameterTypeBytes    CreateBouncerParameterType = "bytes"
+	CreateBouncerParameterTypeFloat    CreateBouncerParameterType = "float"
+	CreateBouncerParameterTypeInteger  CreateBouncerParameterType = "integer"
+	CreateBouncerParameterTypeInternal CreateBouncerParameterType = "internal"
+	CreateBouncerParameterTypeSeconds  CreateBouncerParameterType = "seconds"
+	CreateBouncerParameterTypeSelect   CreateBouncerParameterType = "select"
+	CreateBouncerParameterTypeString   CreateBouncerParameterType = "string"
+	CreateBouncerParameterTypeTime     CreateBouncerParameterType = "time"
 )
 
 func (e CreateBouncerParameterType) ToPointer() *CreateBouncerParameterType {
@@ -314,8 +313,6 @@ func (e *CreateBouncerParameterType) UnmarshalJSON(data []byte) error {
 	case "integer":
 		fallthrough
 	case "internal":
-		fallthrough
-	case "milliseconds":
 		fallthrough
 	case "seconds":
 		fallthrough

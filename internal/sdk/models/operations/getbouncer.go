@@ -232,17 +232,16 @@ func (e *GetBouncerNamespace) UnmarshalJSON(data []byte) error {
 type GetBouncerParameterType string
 
 const (
-	GetBouncerParameterTypeArray        GetBouncerParameterType = "array"
-	GetBouncerParameterTypeBoolean      GetBouncerParameterType = "boolean"
-	GetBouncerParameterTypeBytes        GetBouncerParameterType = "bytes"
-	GetBouncerParameterTypeFloat        GetBouncerParameterType = "float"
-	GetBouncerParameterTypeInteger      GetBouncerParameterType = "integer"
-	GetBouncerParameterTypeInternal     GetBouncerParameterType = "internal"
-	GetBouncerParameterTypeMilliseconds GetBouncerParameterType = "milliseconds"
-	GetBouncerParameterTypeSeconds      GetBouncerParameterType = "seconds"
-	GetBouncerParameterTypeSelect       GetBouncerParameterType = "select"
-	GetBouncerParameterTypeString       GetBouncerParameterType = "string"
-	GetBouncerParameterTypeTime         GetBouncerParameterType = "time"
+	GetBouncerParameterTypeArray    GetBouncerParameterType = "array"
+	GetBouncerParameterTypeBoolean  GetBouncerParameterType = "boolean"
+	GetBouncerParameterTypeBytes    GetBouncerParameterType = "bytes"
+	GetBouncerParameterTypeFloat    GetBouncerParameterType = "float"
+	GetBouncerParameterTypeInteger  GetBouncerParameterType = "integer"
+	GetBouncerParameterTypeInternal GetBouncerParameterType = "internal"
+	GetBouncerParameterTypeSeconds  GetBouncerParameterType = "seconds"
+	GetBouncerParameterTypeSelect   GetBouncerParameterType = "select"
+	GetBouncerParameterTypeString   GetBouncerParameterType = "string"
+	GetBouncerParameterTypeTime     GetBouncerParameterType = "time"
 )
 
 func (e GetBouncerParameterType) ToPointer() *GetBouncerParameterType {
@@ -265,8 +264,6 @@ func (e *GetBouncerParameterType) UnmarshalJSON(data []byte) error {
 	case "integer":
 		fallthrough
 	case "internal":
-		fallthrough
-	case "milliseconds":
 		fallthrough
 	case "seconds":
 		fallthrough
