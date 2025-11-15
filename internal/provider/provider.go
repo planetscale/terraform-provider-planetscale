@@ -150,6 +150,7 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewBackupsDataSource,
 		NewBouncerDataSource,
 		NewBranchDataSource,
+		NewBranchesDataSource,
 		NewBranchSchemaDataSource,
 		NewCidrsDataSource,
 		NewDatabaseDataSource,

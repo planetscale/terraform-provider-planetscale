@@ -701,6 +701,8 @@ type ListBranchesResponse struct {
 	RawResponse *http.Response
 	// Returns database branches
 	Object *ListBranchesResponseBody
+
+	Next func() (*ListBranchesResponse, error)
 }
 
 func (l ListBranchesResponse) MarshalJSON() ([]byte, error) {

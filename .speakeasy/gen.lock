@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: fb8dcac5d65546985f6432f0db1cd14b
+  docChecksum: 051b8f8345104393ecbed2cd10749b60
   docVersion: v1
   speakeasyVersion: 1.657.0
   generationVersion: 2.755.0
@@ -27,6 +27,7 @@ generatedFiles:
   - examples/data-sources/planetscale_bouncer/data-source.tf
   - examples/data-sources/planetscale_branch/data-source.tf
   - examples/data-sources/planetscale_branch_schema/data-source.tf
+  - examples/data-sources/planetscale_branches/data-source.tf
   - examples/data-sources/planetscale_cidrs/data-source.tf
   - examples/data-sources/planetscale_database/data-source.tf
   - examples/data-sources/planetscale_database_read_only_regions/data-source.tf
@@ -110,6 +111,8 @@ generatedFiles:
   - internal/provider/branch_data_source_sdk.go
   - internal/provider/branch_resource.go
   - internal/provider/branch_resource_sdk.go
+  - internal/provider/branches_data_source.go
+  - internal/provider/branches_data_source_sdk.go
   - internal/provider/branchschema_data_source.go
   - internal/provider/branchschema_data_source_sdk.go
   - internal/provider/cidrs_data_source.go
@@ -227,6 +230,10 @@ generatedFiles:
   - internal/provider/types/list_backups_database_branch.go
   - internal/provider/types/list_backups_restored_branch.go
   - internal/provider/types/list_backups_schema_snapshot.go
+  - internal/provider/types/list_branches_actor.go
+  - internal/provider/types/list_branches_data.go
+  - internal/provider/types/list_branches_region.go
+  - internal/provider/types/list_branches_restored_from_branch.go
   - internal/provider/types/list_database_regions_data.go
   - internal/provider/types/list_databases_data.go
   - internal/provider/types/list_databases_data_import.go

@@ -12,6 +12,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/polling"
+	"github.com/spyzhov/ajson"
 	"net/http"
 	"time"
 )
@@ -142,6 +143,50 @@ func (s *DatabaseBranches) ListBranches(ctx context.Context, request operations.
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
+	}
+	res.Next = func() (*operations.ListBranchesResponse, error) {
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+
+		b, err := ajson.Unmarshal(rawBody)
+		if err != nil {
+			return nil, err
+		}
+		var p float64 = 1
+		if request.Page != nil {
+			p = *request.Page
+		}
+		nP := float64(p + 1)
+		r, err := ajson.Eval(b, "$.data")
+		if err != nil {
+			return nil, err
+		}
+		if !r.IsArray() {
+			return nil, nil
+		}
+		arr, err := r.GetArray()
+		if err != nil {
+			return nil, err
+		}
+		if len(arr) == 0 {
+			return nil, nil
+		}
+
+		return s.ListBranches(
+			ctx,
+			operations.ListBranchesRequest{
+				Organization:   request.Organization,
+				Database:       request.Database,
+				Q:              request.Q,
+				Production:     request.Production,
+				SafeMigrations: request.SafeMigrations,
+				Order:          request.Order,
+				Page:           &nP,
+				PerPage:        request.PerPage,
+			},
+		)
 	}
 
 	switch {
