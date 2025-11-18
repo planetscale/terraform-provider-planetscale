@@ -1,0 +1,68 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_organization_cluster_size_skus data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{name}/cluster-size-skus"].get
+    description: API operation for read.
+    update:
+      x-speakeasy-entity-operation: OrganizationClusterSizeSkus#read
+      x-speakeasy-entity-description: Returns information about PlanetScale organization cluster size SKUs.
+
+  - target: $.paths["/organizations/{name}/cluster-size-skus"].get.responses["200"].content["application/json"].schema
+    description: Incorrect definition for API response (only array data is returned).
+    remove: true
+  - target: $.paths["/organizations/{name}/cluster-size-skus"].get.responses["200"].content["application/json"]
+    description: |-
+      Correct definition for API response:
+        - Only array data is returned
+        - cpu returns as string (e.g. "1/4") not number
+
+      NOTE: OpenAPI Overlay 1.1.0 (unreleased) will support copy operation,
+      however for now we must duplicate the original schema definition since
+      its not in a shared component.
+    update:
+      schema: &a37
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the cluster SKU
+            display_name:
+              type: string
+              description: The display name
+            cpu:
+              type: string
+              description: The number of CPUs
+            storage:
+              type: number
+              description: The amount of storage in bytes
+            ram:
+              type: number
+              description: The amount of memory in bytes
+            metal:
+              type: boolean
+              description: Whether or not the cluster SKU is Metal
+            enabled:
+              type: boolean
+              description: Whether or not the cluster SKU is enabled for the organization
+            provider:
+              type: string
+              description: The provider of the cluster SKU (nil, AWS or GCP)
+            sort_order:
+              type: number
+              description: The sort order of the cluster SKU
+          additionalProperties: false
+          required:
+            - name
+            - display_name
+            - cpu
+            - storage
+            - ram
+            - metal
+            - enabled
+            - provider
+            - sort_order

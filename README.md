@@ -94,6 +94,7 @@ Available configuration:
 * [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_keyspace](docs/data-sources/keyspace.md)
 * [planetscale_organization](docs/data-sources/organization.md)
+* [planetscale_organization_cluster_size_skus](docs/data-sources/organization_cluster_size_skus.md)
 * [planetscale_organization_regions](docs/data-sources/organization_regions.md)
 * [planetscale_organizations](docs/data-sources/organizations.md)
 * [planetscale_password](docs/data-sources/password.md)

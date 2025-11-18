@@ -75,13 +75,13 @@ func (l *ListClusterSizeSkusRequest) GetRegion() *string {
 	return l.Region
 }
 
-type ListClusterSizeSkusData struct {
+type ListClusterSizeSkusResponseBody struct {
 	// The name of the cluster SKU
 	Name string `json:"name"`
 	// The display name
 	DisplayName string `json:"display_name"`
 	// The number of CPUs
-	CPU float64 `json:"cpu"`
+	CPU string `json:"cpu"`
 	// The amount of storage in bytes
 	Storage float64 `json:"storage"`
 	// The amount of memory in bytes
@@ -96,124 +96,67 @@ type ListClusterSizeSkusData struct {
 	SortOrder float64 `json:"sort_order"`
 }
 
-func (l *ListClusterSizeSkusData) GetName() string {
+func (l *ListClusterSizeSkusResponseBody) GetName() string {
 	if l == nil {
 		return ""
 	}
 	return l.Name
 }
 
-func (l *ListClusterSizeSkusData) GetDisplayName() string {
+func (l *ListClusterSizeSkusResponseBody) GetDisplayName() string {
 	if l == nil {
 		return ""
 	}
 	return l.DisplayName
 }
 
-func (l *ListClusterSizeSkusData) GetCPU() float64 {
+func (l *ListClusterSizeSkusResponseBody) GetCPU() string {
 	if l == nil {
-		return 0.0
+		return ""
 	}
 	return l.CPU
 }
 
-func (l *ListClusterSizeSkusData) GetStorage() float64 {
+func (l *ListClusterSizeSkusResponseBody) GetStorage() float64 {
 	if l == nil {
 		return 0.0
 	}
 	return l.Storage
 }
 
-func (l *ListClusterSizeSkusData) GetRAM() float64 {
+func (l *ListClusterSizeSkusResponseBody) GetRAM() float64 {
 	if l == nil {
 		return 0.0
 	}
 	return l.RAM
 }
 
-func (l *ListClusterSizeSkusData) GetMetal() bool {
+func (l *ListClusterSizeSkusResponseBody) GetMetal() bool {
 	if l == nil {
 		return false
 	}
 	return l.Metal
 }
 
-func (l *ListClusterSizeSkusData) GetEnabled() bool {
+func (l *ListClusterSizeSkusResponseBody) GetEnabled() bool {
 	if l == nil {
 		return false
 	}
 	return l.Enabled
 }
 
-func (l *ListClusterSizeSkusData) GetProvider() string {
+func (l *ListClusterSizeSkusResponseBody) GetProvider() string {
 	if l == nil {
 		return ""
 	}
 	return l.Provider
 }
 
-func (l *ListClusterSizeSkusData) GetSortOrder() float64 {
+func (l *ListClusterSizeSkusResponseBody) GetSortOrder() float64 {
 	if l == nil {
 		return 0.0
 	}
 	return l.SortOrder
-}
-
-// ListClusterSizeSkusResponseBody - Returns available cluster sizes with optional pricing rates
-type ListClusterSizeSkusResponseBody struct {
-	// The current page number
-	CurrentPage float64 `json:"current_page"`
-	// The next page number
-	NextPage float64 `json:"next_page"`
-	// The next page of results
-	NextPageURL string `json:"next_page_url"`
-	// The previous page number
-	PrevPage float64 `json:"prev_page"`
-	// The previous page of results
-	PrevPageURL string                    `json:"prev_page_url"`
-	Data        []ListClusterSizeSkusData `json:"data"`
-}
-
-func (l *ListClusterSizeSkusResponseBody) GetCurrentPage() float64 {
-	if l == nil {
-		return 0.0
-	}
-	return l.CurrentPage
-}
-
-func (l *ListClusterSizeSkusResponseBody) GetNextPage() float64 {
-	if l == nil {
-		return 0.0
-	}
-	return l.NextPage
-}
-
-func (l *ListClusterSizeSkusResponseBody) GetNextPageURL() string {
-	if l == nil {
-		return ""
-	}
-	return l.NextPageURL
-}
-
-func (l *ListClusterSizeSkusResponseBody) GetPrevPage() float64 {
-	if l == nil {
-		return 0.0
-	}
-	return l.PrevPage
-}
-
-func (l *ListClusterSizeSkusResponseBody) GetPrevPageURL() string {
-	if l == nil {
-		return ""
-	}
-	return l.PrevPageURL
-}
-
-func (l *ListClusterSizeSkusResponseBody) GetData() []ListClusterSizeSkusData {
-	if l == nil {
-		return []ListClusterSizeSkusData{}
-	}
-	return l.Data
 }
 
 type ListClusterSizeSkusResponse struct {
@@ -224,7 +167,7 @@ type ListClusterSizeSkusResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Returns available cluster sizes with optional pricing rates
-	Object *ListClusterSizeSkusResponseBody
+	ResponseBodies []ListClusterSizeSkusResponseBody
 }
 
 func (l ListClusterSizeSkusResponse) MarshalJSON() ([]byte, error) {
@@ -259,9 +202,9 @@ func (l *ListClusterSizeSkusResponse) GetRawResponse() *http.Response {
 	return l.RawResponse
 }
 
-func (l *ListClusterSizeSkusResponse) GetObject() *ListClusterSizeSkusResponseBody {
+func (l *ListClusterSizeSkusResponse) GetResponseBodies() []ListClusterSizeSkusResponseBody {
 	if l == nil {
 		return nil
 	}
-	return l.Object
+	return l.ResponseBodies
 }

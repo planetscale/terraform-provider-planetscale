@@ -529,74 +529,48 @@ paths:
           content:
             application/json:
               schema: &a37
-                type: object
-                properties:
-                  current_page:
-                    type: number
-                    description: The current page number
-                  next_page:
-                    type: number
-                    description: The next page number
-                  next_page_url:
-                    type: string
-                    description: The next page of results
-                  prev_page:
-                    type: number
-                    description: The previous page number
-                  prev_page_url:
-                    type: string
-                    description: The previous page of results
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          description: The name of the cluster SKU
-                        display_name:
-                          type: string
-                          description: The display name
-                        cpu:
-                          type: number
-                          description: The number of CPUs
-                        storage:
-                          type: number
-                          description: The amount of storage in bytes
-                        ram:
-                          type: number
-                          description: The amount of memory in bytes
-                        metal:
-                          type: boolean
-                          description: Whether or not the cluster SKU is Metal
-                        enabled:
-                          type: boolean
-                          description: Whether or not the cluster SKU is enabled for the organization
-                        provider:
-                          type: string
-                          description: The provider of the cluster SKU (nil, AWS or GCP)
-                        sort_order:
-                          type: number
-                          description: The sort order of the cluster SKU
-                      additionalProperties: false
-                      required:
-                        - name
-                        - display_name
-                        - cpu
-                        - storage
-                        - ram
-                        - metal
-                        - enabled
-                        - provider
-                        - sort_order
-                additionalProperties: false
-                required:
-                  - current_page
-                  - next_page
-                  - next_page_url
-                  - prev_page
-                  - prev_page_url
-                  - data
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: The name of the cluster SKU
+                    display_name:
+                      type: string
+                      description: The display name
+                    cpu:
+                      type: string
+                      description: The number of CPUs
+                    storage:
+                      type: number
+                      description: The amount of storage in bytes
+                    ram:
+                      type: number
+                      description: The amount of memory in bytes
+                    metal:
+                      type: boolean
+                      description: Whether or not the cluster SKU is Metal
+                    enabled:
+                      type: boolean
+                      description: Whether or not the cluster SKU is enabled for the organization
+                    provider:
+                      type: string
+                      description: The provider of the cluster SKU (nil, AWS or GCP)
+                    sort_order:
+                      type: number
+                      description: The sort order of the cluster SKU
+                  additionalProperties: false
+                  required:
+                    - name
+                    - display_name
+                    - cpu
+                    - storage
+                    - ram
+                    - metal
+                    - enabled
+                    - provider
+                    - sort_order
         "401":
           description: Unauthorized
         "403":
@@ -619,6 +593,8 @@ paths:
         | :------- | :---------- |
         | User | `read_organizations` |
         | Organization | `read_organization` |
+      x-speakeasy-entity-operation: OrganizationClusterSizeSkus#read
+      x-speakeasy-entity-description: Returns information about PlanetScale organization cluster size SKUs.
   /organizations/{name}/regions:
     get:
       tags:

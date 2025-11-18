@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: c7c7ee41b3de598994b188bda8b3c6ce
+  docChecksum: fa9befbb6b087ca37a28da97e77cde03
   docVersion: v1
-  speakeasyVersion: 1.657.0
-  generationVersion: 2.755.0
+  speakeasyVersion: 1.658.2
+  generationVersion: 2.755.9
   releaseVersion: 0.0.1
   configChecksum: 52cf44652f072426483a7575a20b4144
 features:
@@ -35,6 +35,7 @@ generatedFiles:
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_keyspace/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
+  - examples/data-sources/planetscale_organization_cluster_size_skus/data-source.tf
   - examples/data-sources/planetscale_organization_regions/data-source.tf
   - examples/data-sources/planetscale_organizations/data-source.tf
   - examples/data-sources/planetscale_password/data-source.tf
@@ -135,6 +136,8 @@ generatedFiles:
   - internal/provider/keyspace_resource_sdk.go
   - internal/provider/organization_data_source.go
   - internal/provider/organization_data_source_sdk.go
+  - internal/provider/organizationclustersizeskus_data_source.go
+  - internal/provider/organizationclustersizeskus_data_source_sdk.go
   - internal/provider/organizationregions_data_source.go
   - internal/provider/organizationregions_data_source_sdk.go
   - internal/provider/organizations_data_source.go
@@ -234,6 +237,7 @@ generatedFiles:
   - internal/provider/types/list_branches_data.go
   - internal/provider/types/list_branches_region.go
   - internal/provider/types/list_branches_restored_from_branch.go
+  - internal/provider/types/list_cluster_size_skus_response_body.go
   - internal/provider/types/list_database_regions_data.go
   - internal/provider/types/list_databases_data.go
   - internal/provider/types/list_databases_data_import.go
@@ -1642,7 +1646,7 @@ examples:
           name: "<value>"
       responses:
         "200":
-          application/json: {"current_page": 5175.72, "next_page": 2524.42, "next_page_url": "https://brisk-parsnip.org/", "prev_page": 653.6, "prev_page_url": "https://urban-grass.biz/", "data": []}
+          application/json: [{"name": "<value>", "display_name": "Josephine64", "cpu": "653.6", "storage": 3150.77, "ram": 9182.99, "metal": true, "enabled": true, "provider": "<value>", "sort_order": 3929.37}]
   list_organization_teams:
     speakeasy-default-list-organization-teams:
       parameters:

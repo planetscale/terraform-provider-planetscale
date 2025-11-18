@@ -782,12 +782,12 @@ func (s *Organizations) ListClusterSizeSkus(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out operations.ListClusterSizeSkusResponseBody
+			var out []operations.ListClusterSizeSkusResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.Object = &out
+			res.ResponseBodies = out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
