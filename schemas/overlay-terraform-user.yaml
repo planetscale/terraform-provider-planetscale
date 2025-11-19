@@ -1,0 +1,11 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_user data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/user"].get
+    description: API operation for read.
+    update:
+      x-speakeasy-entity-operation: User#read
+      x-speakeasy-entity-description: Returns information about current PlanetScale user.

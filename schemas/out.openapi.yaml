@@ -17701,6 +17701,8 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | User | `read_user` |
+      x-speakeasy-entity-operation: User#read
+      x-speakeasy-entity-description: Returns information about current PlanetScale user.
   /organizations/{organization}/databases/{database}#default-branch:
     get:
       tags:

@@ -107,6 +107,7 @@ Available configuration:
 * [planetscale_roles](docs/data-sources/roles.md)
 * [planetscale_team](docs/data-sources/team.md)
 * [planetscale_teams](docs/data-sources/teams.md)
+* [planetscale_user](docs/data-sources/user.md)
 * [planetscale_webhook](docs/data-sources/webhook.md)
 * [planetscale_workflow](docs/data-sources/workflow.md)
 <!-- End Available Resources and Data Sources [operations] -->

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 3a6f4c3ede21c8b8f464e48b79efdfa6
+  docChecksum: 4433a0c6e45ae6989a7f1e6826ac7965
   docVersion: v1
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
@@ -47,6 +47,7 @@ generatedFiles:
   - examples/data-sources/planetscale_roles/data-source.tf
   - examples/data-sources/planetscale_team/data-source.tf
   - examples/data-sources/planetscale_teams/data-source.tf
+  - examples/data-sources/planetscale_user/data-source.tf
   - examples/data-sources/planetscale_webhook/data-source.tf
   - examples/data-sources/planetscale_workflow/data-source.tf
   - examples/provider/provider.tf
@@ -208,6 +209,7 @@ generatedFiles:
   - internal/provider/types/get_branch_region_data.go
   - internal/provider/types/get_branch_restored_from_branch.go
   - internal/provider/types/get_branch_schema_data.go
+  - internal/provider/types/get_current_user_default_organization.go
   - internal/provider/types/get_database_data_import.go
   - internal/provider/types/get_database_data_source.go
   - internal/provider/types/get_database_postgres_cidr_actor.go
@@ -272,6 +274,8 @@ generatedFiles:
   - internal/provider/types/list_roles_actor.go
   - internal/provider/types/list_roles_branch.go
   - internal/provider/types/list_roles_data.go
+  - internal/provider/user_data_source.go
+  - internal/provider/user_data_source_sdk.go
   - internal/provider/utils.go
   - internal/provider/webhook_data_source.go
   - internal/provider/webhook_data_source_sdk.go

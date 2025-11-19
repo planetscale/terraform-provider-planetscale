@@ -31,6 +31,7 @@ sources:
             - location: schemas/overlay-terraform-roles.yaml
             - location: schemas/overlay-terraform-team.yaml
             - location: schemas/overlay-terraform-teams.yaml
+            - location: schemas/overlay-terraform-user.yaml
             - location: schemas/overlay-terraform-webhook.yaml
             - location: schemas/overlay-terraform-workflow.yaml
         output: schemas/out.openapi.yaml
