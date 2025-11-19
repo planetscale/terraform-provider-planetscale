@@ -19,6 +19,7 @@ sources:
             - location: schemas/overlay-terraform-database_read_only_regions.yaml
             - location: schemas/overlay-terraform-databases.yaml
             - location: schemas/overlay-terraform-keyspace.yaml
+            - location: schemas/overlay-terraform-oauth_applications.yaml
             - location: schemas/overlay-terraform-organization.yaml
             - location: schemas/overlay-terraform-organization_cluster_size_skus.yaml
             - location: schemas/overlay-terraform-organization_regions.yaml

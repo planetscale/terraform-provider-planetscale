@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 8c5f60158094aa82c33b620da2bec825
+  docChecksum: 3a6f4c3ede21c8b8f464e48b79efdfa6
   docVersion: v1
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
@@ -35,6 +35,7 @@ generatedFiles:
   - examples/data-sources/planetscale_database_regions/data-source.tf
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_keyspace/data-source.tf
+  - examples/data-sources/planetscale_oauth_applications/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
   - examples/data-sources/planetscale_organization_cluster_size_skus/data-source.tf
   - examples/data-sources/planetscale_organization_regions/data-source.tf
@@ -142,6 +143,8 @@ generatedFiles:
   - internal/provider/keyspace_data_source_sdk.go
   - internal/provider/keyspace_resource.go
   - internal/provider/keyspace_resource_sdk.go
+  - internal/provider/oauthapplications_data_source.go
+  - internal/provider/oauthapplications_data_source_sdk.go
   - internal/provider/organization_data_source.go
   - internal/provider/organization_data_source_sdk.go
   - internal/provider/organizationclustersizeskus_data_source.go
@@ -251,6 +254,7 @@ generatedFiles:
   - internal/provider/types/list_databases_data_import.go
   - internal/provider/types/list_databases_data_source.go
   - internal/provider/types/list_databases_region.go
+  - internal/provider/types/list_oauth_applications_data.go
   - internal/provider/types/list_organization_teams_creator.go
   - internal/provider/types/list_organization_teams_data.go
   - internal/provider/types/list_organization_teams_database.go

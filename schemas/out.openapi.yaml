@@ -1761,18 +1761,23 @@ paths:
                   branches_count:
                     type: number
                     description: The total number of database branches
+                    x-speakeasy-terraform-ignore: true
                   open_schema_recommendations_count:
                     type: number
                     description: The total number of schema recommendations
+                    x-speakeasy-terraform-ignore: true
                   development_branches_count:
                     type: number
                     description: The total number of database development branches
+                    x-speakeasy-terraform-ignore: true
                   production_branches_count:
                     type: number
                     description: The total number of database production branches
+                    x-speakeasy-terraform-ignore: true
                   issues_count:
                     type: number
                     description: The total number of ongoing issues within a database
+                    x-speakeasy-terraform-ignore: true
                   multiple_admins_required_for_deletion:
                     type: boolean
                     description: If the database requires multiple admins for deletion
@@ -1887,12 +1892,15 @@ paths:
                   default_branch_shard_count:
                     type: number
                     description: Number of shards in the default branch
+                    x-speakeasy-terraform-ignore: true
                   default_branch_read_only_regions_count:
                     type: number
                     description: Number of read only regions in the default branch
+                    x-speakeasy-terraform-ignore: true
                   default_branch_table_count:
                     type: number
                     description: Number of tables in the default branch schema
+                    x-speakeasy-terraform-ignore: true
                   default_branch:
                     type: string
                     description: The default branch for the database
@@ -16449,6 +16457,7 @@ paths:
           schema:
             type: number
             default: 25
+          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns a list of the organization's oauth applications
@@ -16461,18 +16470,23 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
+                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
+                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
+                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
+                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -16545,6 +16559,16 @@ paths:
         **Service Token Accesses**
          `read_oauth_applications`
 
+      x-speakeasy-entity-operation: OauthApplications#read
+      x-speakeasy-entity-description: Returns information about accessible PlanetScale OAuth applications.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
   /organizations/{organization}/oauth-applications/{application_id}:
     get:
       tags:

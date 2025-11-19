@@ -207,6 +207,8 @@ type ListOauthApplicationsResponse struct {
 	RawResponse *http.Response
 	// Returns a list of the organization's oauth applications
 	Object *ListOauthApplicationsResponseBody
+
+	Next func() (*ListOauthApplicationsResponse, error)
 }
 
 func (l ListOauthApplicationsResponse) MarshalJSON() ([]byte, error) {

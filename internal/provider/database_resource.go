@@ -42,30 +42,22 @@ type DatabaseResourceModel struct {
 	AtBackupRestoreBranchesLimit      types.Bool                    `tfsdk:"at_backup_restore_branches_limit"`
 	AtDevelopmentBranchUsageLimit     types.Bool                    `tfsdk:"at_development_branch_usage_limit"`
 	AutomaticMigrations               types.Bool                    `tfsdk:"automatic_migrations"`
-	BranchesCount                     types.Float64                 `tfsdk:"branches_count"`
 	BranchesURL                       types.String                  `tfsdk:"branches_url"`
 	ClusterSize                       types.String                  `tfsdk:"cluster_size"`
 	CreatedAt                         types.String                  `tfsdk:"created_at"`
 	DataImport                        tfTypes.GetDatabaseDataImport `tfsdk:"data_import"`
-	DefaultBranchReadOnlyRegionsCount types.Float64                 `tfsdk:"default_branch_read_only_regions_count"`
-	DefaultBranchShardCount           types.Float64                 `tfsdk:"default_branch_shard_count"`
-	DefaultBranchTableCount           types.Float64                 `tfsdk:"default_branch_table_count"`
-	DevelopmentBranchesCount          types.Float64                 `tfsdk:"development_branches_count"`
 	ForeignKeysEnabled                types.Bool                    `tfsdk:"foreign_keys_enabled"`
 	HTMLURL                           types.String                  `tfsdk:"html_url"`
 	ID                                types.String                  `tfsdk:"id"`
 	InsightsEnabled                   types.Bool                    `tfsdk:"insights_enabled"`
 	InsightsRawQueries                types.Bool                    `tfsdk:"insights_raw_queries"`
-	IssuesCount                       types.Float64                 `tfsdk:"issues_count"`
 	Kind                              types.String                  `tfsdk:"kind"`
 	MigrationFramework                types.String                  `tfsdk:"migration_framework"`
 	MigrationTableName                types.String                  `tfsdk:"migration_table_name"`
 	MultipleAdminsRequiredForDeletion types.Bool                    `tfsdk:"multiple_admins_required_for_deletion"`
 	Name                              types.String                  `tfsdk:"name"`
-	OpenSchemaRecommendationsCount    types.Float64                 `tfsdk:"open_schema_recommendations_count"`
 	Organization                      types.String                  `tfsdk:"organization"`
 	Plan                              types.String                  `tfsdk:"plan"`
-	ProductionBranchesCount           types.Float64                 `tfsdk:"production_branches_count"`
 	ProductionBranchWebConsole        types.Bool                    `tfsdk:"production_branch_web_console"`
 	Ready                             types.Bool                    `tfsdk:"ready"`
 	Region                            types.String                  `tfsdk:"region"`
@@ -104,10 +96,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"automatic_migrations": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether to automatically manage Rails migrations during deploy requests`,
-			},
-			"branches_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `The total number of database branches`,
 			},
 			"branches_url": schema.StringAttribute{
 				Computed:    true,
@@ -162,22 +150,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 					},
 				},
 			},
-			"default_branch_read_only_regions_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `Number of read only regions in the default branch`,
-			},
-			"default_branch_shard_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `Number of shards in the default branch`,
-			},
-			"default_branch_table_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `Number of tables in the default branch schema`,
-			},
-			"development_branches_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `The total number of database development branches`,
-			},
 			"foreign_keys_enabled": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether foreign key constraints are enabled`,
@@ -197,10 +169,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"insights_raw_queries": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether raw SQL queries are collected`,
-			},
-			"issues_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `The total number of ongoing issues within a database`,
 			},
 			"kind": schema.StringAttribute{
 				Computed: true,
@@ -233,10 +201,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 				Required:    true,
 				Description: `Name of the database`,
 			},
-			"open_schema_recommendations_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `The total number of schema recommendations`,
-			},
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the database belongs to`,
@@ -248,10 +212,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"production_branch_web_console": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether web console is enabled for production branches`,
-			},
-			"production_branches_count": schema.Float64Attribute{
-				Computed:    true,
-				Description: `The total number of database production branches`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,

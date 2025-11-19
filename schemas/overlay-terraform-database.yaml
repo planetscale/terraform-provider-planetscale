@@ -36,12 +36,31 @@ actions:
 
   - target: $.paths["/organizations/{organization}/databases"].post.responses["201"].content["application/json"].schema.properties
     description: |-
-      Prevent type mismatch between request and response data. Ignore
-      default_branch to prevent confusing behavior for consumers by requiring
-      the use of planetscale_database_default_branch resource to read/manage the
-      default branch of the database.
+      - default_branch: Ignore to prevent confusing behavior for consumers by
+        requiring the use of planetscale_database_default_branch resource to
+        read/manage the default branch of the database.
+      - region: Prevent type mismatch between request and response data.
+      - *count: Prevent regular drift detection that can occur when normally
+        using other resources in the same module or should otherwise be fetched
+        via other data resources to ensure accuracy during apply.
     update:
+      branches_count:
+        x-speakeasy-terraform-ignore: true
       default_branch:
+        x-speakeasy-terraform-ignore: true
+      default_branch_shard_count:
+        x-speakeasy-terraform-ignore: true
+      default_branch_read_only_regions_count:
+        x-speakeasy-terraform-ignore: true
+      default_branch_table_count:
+        x-speakeasy-terraform-ignore: true
+      development_branches_count:
+        x-speakeasy-terraform-ignore: true
+      issues_count:
+        x-speakeasy-terraform-ignore: true
+      open_schema_recommendations_count:
+        x-speakeasy-terraform-ignore: true
+      production_branches_count:
         x-speakeasy-terraform-ignore: true
       region:
         x-speakeasy-name-override: region_data
