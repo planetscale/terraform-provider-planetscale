@@ -11,7 +11,7 @@ resource "planetscale_database" "test" {
 }
 
 resource "planetscale_keyspace" "source" {
-  branch       = planetscale_database.test.default_branch
+  branch       = "main"
   cluster_size = "PS_10"
   database     = planetscale_database.test.name
   name         = "source"
@@ -19,7 +19,7 @@ resource "planetscale_keyspace" "source" {
 }
 
 resource "planetscale_keyspace" "target" {
-  branch       = planetscale_database.test.default_branch
+  branch       = "main"
   cluster_size = "PS_10"
   database     = planetscale_database.test.name
   name         = "target"
@@ -27,10 +27,10 @@ resource "planetscale_keyspace" "target" {
 }
 
 resource "planetscale_workflow" "test" {
-  database         = planetscale_database.test.name
-  name             = "test-workflow"
-  organization     = planetscale_database.test.organization
-  source_keyspace  = planetscale_keyspace.source.name
-  target_keyspace  = planetscale_keyspace.target.name
-  tables           = ["table1"]
+  database        = planetscale_database.test.name
+  name            = "test-workflow"
+  organization    = planetscale_database.test.organization
+  source_keyspace = planetscale_keyspace.source.name
+  target_keyspace = planetscale_keyspace.target.name
+  tables          = ["table1"]
 }

@@ -46,7 +46,6 @@ resource "planetscale_database" "my_database" {
 - `branches_url` (String) The URL to retrieve this database's branches via the API
 - `created_at` (String) When the database was created
 - `data_import` (Attributes) (see [below for nested schema](#nestedatt--data_import))
-- `default_branch` (String) The default branch for the database
 - `default_branch_read_only_regions_count` (Number) Number of read only regions in the default branch
 - `default_branch_shard_count` (Number) Number of shards in the default branch
 - `default_branch_table_count` (Number) Number of tables in the default branch schema

@@ -11,7 +11,7 @@ resource "planetscale_database" "test" {
 }
 
 resource "planetscale_query_pattern_report" "test" {
-  branch       = planetscale_database.test.default_branch
+  branch       = "main"
   database     = planetscale_database.test.name
   organization = planetscale_database.test.organization
 }

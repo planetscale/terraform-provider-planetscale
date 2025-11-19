@@ -27,7 +27,6 @@ func (r *DatabaseResourceModel) RefreshFromOperationsCreateDatabaseResponseBody(
 		r.DataImport.ImportCheckErrors = types.StringValue(resp.DataImport.ImportCheckErrors)
 		r.DataImport.StartedAt = types.StringValue(resp.DataImport.StartedAt)
 		r.DataImport.State = types.StringValue(resp.DataImport.State)
-		r.DefaultBranch = types.StringValue(resp.DefaultBranch)
 		r.DefaultBranchReadOnlyRegionsCount = types.Float64Value(resp.DefaultBranchReadOnlyRegionsCount)
 		r.DefaultBranchShardCount = types.Float64Value(resp.DefaultBranchShardCount)
 		r.DefaultBranchTableCount = types.Float64Value(resp.DefaultBranchTableCount)
@@ -91,7 +90,6 @@ func (r *DatabaseResourceModel) RefreshFromOperationsGetDatabaseResponseBody(ctx
 		r.DataImport.ImportCheckErrors = types.StringValue(resp.DataImport.ImportCheckErrors)
 		r.DataImport.StartedAt = types.StringValue(resp.DataImport.StartedAt)
 		r.DataImport.State = types.StringValue(resp.DataImport.State)
-		r.DefaultBranch = types.StringValue(resp.DefaultBranch)
 		r.DefaultBranchReadOnlyRegionsCount = types.Float64Value(resp.DefaultBranchReadOnlyRegionsCount)
 		r.DefaultBranchShardCount = types.Float64Value(resp.DefaultBranchShardCount)
 		r.DefaultBranchTableCount = types.Float64Value(resp.DefaultBranchTableCount)
@@ -155,7 +153,6 @@ func (r *DatabaseResourceModel) RefreshFromOperationsUpdateDatabaseSettingsRespo
 		r.DataImport.ImportCheckErrors = types.StringValue(resp.DataImport.ImportCheckErrors)
 		r.DataImport.StartedAt = types.StringValue(resp.DataImport.StartedAt)
 		r.DataImport.State = types.StringValue(resp.DataImport.State)
-		r.DefaultBranch = types.StringValue(resp.DefaultBranch)
 		r.DefaultBranchReadOnlyRegionsCount = types.Float64Value(resp.DefaultBranchReadOnlyRegionsCount)
 		r.DefaultBranchShardCount = types.Float64Value(resp.DefaultBranchShardCount)
 		r.DefaultBranchTableCount = types.Float64Value(resp.DefaultBranchTableCount)
@@ -369,12 +366,6 @@ func (r *DatabaseResourceModel) ToOperationsUpdateDatabaseSettingsRequestBody(ct
 	} else {
 		productionBranchWebConsole = nil
 	}
-	defaultBranch := new(string)
-	if !r.DefaultBranch.IsUnknown() && !r.DefaultBranch.IsNull() {
-		*defaultBranch = r.DefaultBranch.ValueString()
-	} else {
-		defaultBranch = nil
-	}
 	out := operations.UpdateDatabaseSettingsRequestBody{
 		Name:                       name,
 		AutomaticMigrations:        automaticMigrations,
@@ -385,7 +376,6 @@ func (r *DatabaseResourceModel) ToOperationsUpdateDatabaseSettingsRequestBody(ct
 		AllowDataBranching:         allowDataBranching,
 		InsightsRawQueries:         insightsRawQueries,
 		ProductionBranchWebConsole: productionBranchWebConsole,
-		DefaultBranch:              defaultBranch,
 	}
 
 	return &out, diags

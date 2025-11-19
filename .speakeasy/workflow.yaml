@@ -14,6 +14,7 @@ sources:
             - location: schemas/overlay-terraform-branches.yaml
             - location: schemas/overlay-terraform-cidrs.yaml
             - location: schemas/overlay-terraform-database.yaml
+            - location: schemas/overlay-terraform-database_default_branch.yaml
             - location: schemas/overlay-terraform-database_regions.yaml
             - location: schemas/overlay-terraform-database_read_only_regions.yaml
             - location: schemas/overlay-terraform-databases.yaml

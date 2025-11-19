@@ -11,7 +11,7 @@ resource "planetscale_database" "test" {
 }
 
 resource "planetscale_password" "test" {
-  branch       = planetscale_database.test.default_branch
+  branch       = "main"
   database     = planetscale_database.test.name
   name         = "test"
   organization = planetscale_database.test.organization
@@ -19,9 +19,7 @@ resource "planetscale_password" "test" {
 }
 
 data "planetscale_passwords" "test" {
-  branch       = planetscale_database.test.default_branch
-  database     = planetscale_database.test.name
-  organization = planetscale_database.test.organization
-
-  depends_on = [planetscale_password.test]
+  branch       = planetscale_password.test.branch
+  database     = planetscale_password.test.database
+  organization = planetscale_password.test.organization
 }

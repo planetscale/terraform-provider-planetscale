@@ -35,8 +35,14 @@ actions:
       x-speakeasy-entity-operation: Database#update
 
   - target: $.paths["/organizations/{organization}/databases"].post.responses["201"].content["application/json"].schema.properties
-    description: Prevent type mismatch between request and response data
+    description: |-
+      Prevent type mismatch between request and response data. Ignore
+      default_branch to prevent confusing behavior for consumers by requiring
+      the use of planetscale_database_default_branch resource to read/manage the
+      default branch of the database.
     update:
+      default_branch:
+        x-speakeasy-terraform-ignore: true
       region:
         x-speakeasy-name-override: region_data
   - target: $.paths["/organizations/{organization}/databases/{name}"].patch.requestBody.content["application/json"].schema.properties

@@ -37,7 +37,6 @@ type DatabaseDataSourceModel struct {
 	BranchesURL                       types.String                  `tfsdk:"branches_url"`
 	CreatedAt                         types.String                  `tfsdk:"created_at"`
 	DataImport                        tfTypes.GetDatabaseDataImport `tfsdk:"data_import"`
-	DefaultBranch                     types.String                  `tfsdk:"default_branch"`
 	DefaultBranchReadOnlyRegionsCount types.Float64                 `tfsdk:"default_branch_read_only_regions_count"`
 	DefaultBranchShardCount           types.Float64                 `tfsdk:"default_branch_shard_count"`
 	DefaultBranchTableCount           types.Float64                 `tfsdk:"default_branch_table_count"`
@@ -147,10 +146,6 @@ func (r *DatabaseDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						Description: `State of the data import`,
 					},
 				},
-			},
-			"default_branch": schema.StringAttribute{
-				Computed:    true,
-				Description: `The default branch for the database`,
 			},
 			"default_branch_read_only_regions_count": schema.Float64Attribute{
 				Computed:    true,

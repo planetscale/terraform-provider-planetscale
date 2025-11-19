@@ -12,6 +12,6 @@ resource "planetscale_database" "test" {
 
 data "planetscale_branch_schema" "test" {
   database     = planetscale_database.test.name
-  name         = planetscale_database.test.default_branch
+  name         = "main"
   organization = planetscale_database.test.organization
 }

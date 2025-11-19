@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: fa9befbb6b087ca37a28da97e77cde03
+  docChecksum: 8c5f60158094aa82c33b620da2bec825
   docVersion: v1
   speakeasyVersion: 1.658.2
   generationVersion: 2.755.9
@@ -30,6 +30,7 @@ generatedFiles:
   - examples/data-sources/planetscale_branches/data-source.tf
   - examples/data-sources/planetscale_cidrs/data-source.tf
   - examples/data-sources/planetscale_database/data-source.tf
+  - examples/data-sources/planetscale_database_default_branch/data-source.tf
   - examples/data-sources/planetscale_database_read_only_regions/data-source.tf
   - examples/data-sources/planetscale_database_regions/data-source.tf
   - examples/data-sources/planetscale_databases/data-source.tf
@@ -63,6 +64,9 @@ generatedFiles:
   - examples/resources/planetscale_database/import-by-string-id.tf
   - examples/resources/planetscale_database/import.sh
   - examples/resources/planetscale_database/resource.tf
+  - examples/resources/planetscale_database_default_branch/import-by-string-id.tf
+  - examples/resources/planetscale_database_default_branch/import.sh
+  - examples/resources/planetscale_database_default_branch/resource.tf
   - examples/resources/planetscale_keyspace/import-by-string-id.tf
   - examples/resources/planetscale_keyspace/import.sh
   - examples/resources/planetscale_keyspace/resource.tf
@@ -124,6 +128,10 @@ generatedFiles:
   - internal/provider/database_data_source_sdk.go
   - internal/provider/database_resource.go
   - internal/provider/database_resource_sdk.go
+  - internal/provider/databasedefaultbranch_data_source.go
+  - internal/provider/databasedefaultbranch_data_source_sdk.go
+  - internal/provider/databasedefaultbranch_resource.go
+  - internal/provider/databasedefaultbranch_resource_sdk.go
   - internal/provider/databasereadonlyregions_data_source.go
   - internal/provider/databasereadonlyregions_data_source_sdk.go
   - internal/provider/databaseregions_data_source.go
@@ -342,6 +350,7 @@ generatedFiles:
   - internal/sdk/models/operations/getbranchschema.go
   - internal/sdk/models/operations/getcurrentuser.go
   - internal/sdk/models/operations/getdatabase.go
+  - internal/sdk/models/operations/getdatabasedefaultbranch.go
   - internal/sdk/models/operations/getdatabasepostgrescidr.go
   - internal/sdk/models/operations/getdatabasethrottler.go
   - internal/sdk/models/operations/getdeployment.go
@@ -402,6 +411,7 @@ generatedFiles:
   - internal/sdk/models/operations/removeorganizationmember.go
   - internal/sdk/models/operations/renewpassword.go
   - internal/sdk/models/operations/renewrole.go
+  - internal/sdk/models/operations/resetdatabasedefaultbranch.go
   - internal/sdk/models/operations/reviewdeployrequest.go
   - internal/sdk/models/operations/skiprevertperiod.go
   - internal/sdk/models/operations/testwebhook.go
@@ -410,6 +420,7 @@ generatedFiles:
   - internal/sdk/models/operations/updatebouncerresizerequest.go
   - internal/sdk/models/operations/updatebranchchangerequest.go
   - internal/sdk/models/operations/updatebranchclusterconfig.go
+  - internal/sdk/models/operations/updatedatabasedefaultbranch.go
   - internal/sdk/models/operations/updatedatabasepostgrescidr.go
   - internal/sdk/models/operations/updatedatabasesettings.go
   - internal/sdk/models/operations/updatedatabasethrottler.go
@@ -1759,4 +1770,28 @@ examples:
         path:
           organization: "<value>"
           id: "<id>"
+  get_database_default_branch:
+    speakeasy-default-get-database-default-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {}
+  update_database_default_branch:
+    speakeasy-default-update-database-default-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {}
+  reset_database_default_branch:
+    speakeasy-default-reset-database-default-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
 examplesVersion: 1.0.2

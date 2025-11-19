@@ -12,7 +12,7 @@ resource "planetscale_database" "test" {
 }
 
 resource "planetscale_backup" "test" {
-  branch          = planetscale_database.test.default_branch
+  branch          = "main"
   database        = planetscale_database.test.name
   name            = "test"
   organization    = planetscale_database.test.organization

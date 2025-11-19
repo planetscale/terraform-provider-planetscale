@@ -12,15 +12,13 @@ resource "planetscale_database" "test" {
 }
 
 resource "planetscale_role" "test" {
-  branch       = planetscale_database.test.default_branch
+  branch       = "main"
   database     = planetscale_database.test.name
   organization = planetscale_database.test.organization
 }
 
 data "planetscale_roles" "test" {
-  branch       = planetscale_database.test.default_branch
-  database     = planetscale_database.test.name
-  organization = planetscale_database.test.organization
-
-  depends_on = [planetscale_role.test]
+  branch       = planetscale_role.test.branch
+  database     = planetscale_role.test.database
+  organization = planetscale_role.test.organization
 }

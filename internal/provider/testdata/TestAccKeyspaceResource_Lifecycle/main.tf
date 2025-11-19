@@ -11,7 +11,7 @@ resource "planetscale_database" "test" {
 }
 
 resource "planetscale_keyspace" "test" {
-  branch       = planetscale_database.test.default_branch
+  branch       = "main"
   cluster_size = "PS_10"
   database     = planetscale_database.test.name
   name         = "test"

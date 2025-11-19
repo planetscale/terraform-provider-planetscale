@@ -27,7 +27,6 @@ func (r *DatabaseDataSourceModel) RefreshFromOperationsGetDatabaseResponseBody(c
 		r.DataImport.ImportCheckErrors = types.StringValue(resp.DataImport.ImportCheckErrors)
 		r.DataImport.StartedAt = types.StringValue(resp.DataImport.StartedAt)
 		r.DataImport.State = types.StringValue(resp.DataImport.State)
-		r.DefaultBranch = types.StringValue(resp.DefaultBranch)
 		r.DefaultBranchReadOnlyRegionsCount = types.Float64Value(resp.DefaultBranchReadOnlyRegionsCount)
 		r.DefaultBranchShardCount = types.Float64Value(resp.DefaultBranchShardCount)
 		r.DefaultBranchTableCount = types.Float64Value(resp.DefaultBranchTableCount)
