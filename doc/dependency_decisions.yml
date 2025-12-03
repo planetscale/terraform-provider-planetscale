@@ -1,0 +1,85 @@
+---
+- - :permit
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:54:03.091597000 Z
+- - :permit
+  - New BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:54:05.834639000 Z
+- - :permit
+  - Apache 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:54:18.270178000 Z
+- - :permit
+  - Simplified BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:54:35.110124000 Z
+- - :permit
+  - Mozilla Public License 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:54:43.394929000 Z
+- - :approve
+  - github.com/hashicorp/go-plugin
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:55:23.893162000 Z
+- - :approve
+  - github.com/hashicorp/go-uuid
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:55:32.748891000 Z
+- - :approve
+  - github.com/hashicorp/terraform-plugin-framework
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:55:56.398305000 Z
+- - :approve
+  - github.com/hashicorp/terraform-plugin-go
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:56:02.831960000 Z
+- - :approve
+  - github.com/hashicorp/terraform-plugin-log
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:56:11.501510000 Z
+- - :approve
+  - github.com/hashicorp/terraform-registry-address
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:56:21.325793000 Z
+- - :approve
+  - github.com/hashicorp/terraform-svchost
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-09-25 21:56:32.197702000 Z
+- - :approve
+  - github.com/hashicorp/terraform-plugin-framework-validators
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2023-10-11 21:59:00.000000000 Z
+- - :approve
+  - github.com/hashicorp/terraform-plugin-sdk/v2
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2024-09-08 00:50:30.334698638 Z
