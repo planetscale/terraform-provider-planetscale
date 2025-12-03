@@ -15,7 +15,7 @@ targets:
         sourceBlobDigest: sha256:820b793ab102a60f26c22adf57f3320e3215c85eab05466b704a2647ae9c68e3
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: latest
+    speakeasyVersion: 1.667.0
     sources:
         PlanetScale API:
             inputs:
