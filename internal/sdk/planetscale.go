@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version v1 and generator version 2.755.9
+// Generated from OpenAPI doc version v1 and generator version 2.769.1
 
 import (
 	"context"
@@ -201,9 +201,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Planetscale {
 	sdk := &Planetscale{
-		SDKVersion: "0.0.1",
+		SDKVersion: "0.1.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.0.1 2.755.9 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.1.0 2.769.1 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

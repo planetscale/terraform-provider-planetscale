@@ -27,7 +27,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.0.1
+  version: 0.1.0
   additionalDataSources: []
   additionalDependencies:
     github.com/hashicorp/terraform-plugin-testing: v1.13.3
@@ -50,5 +50,6 @@ terraform:
       providerAttribute: service_token_id
   excludeEmptyObjectSchemas: false
   includeEmptyObjects: true
+  inferUnionDiscriminators: false
   packageName: planetscale
-  unionDeserializationStrategy: populated-fields
+  unionStrategy: populated-fields

@@ -3,22 +3,22 @@ id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
   docChecksum: 4433a0c6e45ae6989a7f1e6826ac7965
   docVersion: v1
-  speakeasyVersion: 1.658.2
-  generationVersion: 2.755.9
-  releaseVersion: 0.0.1
-  configChecksum: 52cf44652f072426483a7575a20b4144
+  speakeasyVersion: 1.667.0
+  generationVersion: 2.769.1
+  releaseVersion: 0.1.0
+  configChecksum: 6fe50c0d7eb391604c1263d1d65ba04e
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.16
+    core: 3.46.18
     customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     ignores: 2.81.1
     nameOverrides: 2.81.3
-    operationPolling: 0.1.0
-    pagination: 2.83.4
+    operationPolling: 0.2.0
+    pagination: 2.83.5
 generatedFiles:
   - .gitattributes
   - USAGE.md
