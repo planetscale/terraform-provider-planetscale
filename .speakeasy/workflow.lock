@@ -1,4 +1,4 @@
-speakeasyVersion: 1.658.2
+speakeasyVersion: 1.667.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
