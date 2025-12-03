@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>planetscale/renovate-config",
+    "github>planetscale/renovate-config:weeklyBatchMinorPatchDigest"
+  ],
+  "prConcurrentLimit": 1,
+  "minimumReleaseAge": "14 days",
+  "packageRules": [
+    // Disable go dependency updates. These are best handled by speakeasy.
+    {
+      "matchManagers": ["gomod"],
+      "enabled": false
+    }
+  ]
+}

@@ -27,3 +27,8 @@ testacc:
 .PHONY: sweep
 sweep:
 	bash ./script/sweep
+
+## misc helpers
+.PHONY: run-renovate-dry
+run-renovate-dry:
+	docker run --rm -e LOG_LEVEL=debug -e "GITHUB_COM_TOKEN=$$(gh auth token)" -v $$(pwd -P):/usr/src/app --pull always renovate/renovate --platform=local --include-paths '$(INCLUDE_PATHS)'
