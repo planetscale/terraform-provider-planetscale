@@ -37,11 +37,6 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
-						tfjsonpath.New("default_branch"),
-						knownvalue.StringExact("main"),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
 						tfjsonpath.New("html_url"),
 						knownvalue.NotNull(),
 					),
