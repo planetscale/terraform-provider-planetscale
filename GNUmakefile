@@ -4,6 +4,10 @@ default: lint test
 build:
 	CGO_ENABLED=0 go build -v -trimpath .
 
+.PHONY: generate
+generate:
+	speakeasy run --skip-versioning
+
 .PHONY: lint
 lint:
 	golangci-lint run -v ./...

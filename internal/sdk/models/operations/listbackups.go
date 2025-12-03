@@ -867,8 +867,6 @@ type ListBackupsResponse struct {
 	RawResponse *http.Response
 	// Returns database branch backups
 	Object *ListBackupsResponseBody
-
-	Next func() (*ListBackupsResponse, error)
 }
 
 func (l ListBackupsResponse) MarshalJSON() ([]byte, error) {

@@ -129,52 +129,33 @@ func (p *PlanetscaleProvider) Configure(ctx context.Context, req provider.Config
 
 func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewBackupResource,
-		NewBouncerResource,
 		NewBranchResource,
-		NewCidrsResource,
 		NewDatabaseResource,
 		NewDatabaseDefaultBranchResource,
-		NewKeyspaceResource,
 		NewPasswordResource,
-		NewQueryPatternReportResource,
 		NewRoleResource,
-		NewTeamResource,
-		NewWebhookResource,
-		NewWorkflowResource,
 	}
 }
 
 func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		NewBackupDataSource,
-		NewBackupsDataSource,
-		NewBouncerDataSource,
 		NewBranchDataSource,
 		NewBranchesDataSource,
 		NewBranchSchemaDataSource,
-		NewCidrsDataSource,
 		NewDatabaseDataSource,
 		NewDatabaseDefaultBranchDataSource,
 		NewDatabaseReadOnlyRegionsDataSource,
 		NewDatabaseRegionsDataSource,
 		NewDatabasesDataSource,
-		NewKeyspaceDataSource,
-		NewOauthApplicationsDataSource,
 		NewOrganizationDataSource,
 		NewOrganizationClusterSizeSkusDataSource,
 		NewOrganizationRegionsDataSource,
 		NewOrganizationsDataSource,
 		NewPasswordDataSource,
 		NewPasswordsDataSource,
-		NewQueryPatternReportDataSource,
 		NewRoleDataSource,
 		NewRolesDataSource,
-		NewTeamDataSource,
-		NewTeamsDataSource,
 		NewUserDataSource,
-		NewWebhookDataSource,
-		NewWorkflowDataSource,
 	}
 }
 

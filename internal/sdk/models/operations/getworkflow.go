@@ -15,7 +15,7 @@ type GetWorkflowRequest struct {
 	// The name of the database the workflow belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The sequence number of the workflow
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number string `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (g *GetWorkflowRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (g *GetWorkflowRequest) GetDatabase() string {
 	return g.Database
 }
 
-func (g *GetWorkflowRequest) GetNumber() float64 {
+func (g *GetWorkflowRequest) GetNumber() string {
 	if g == nil {
-		return 0.0
+		return ""
 	}
 	return g.Number
 }
@@ -522,7 +522,7 @@ func (g *GetWorkflowBranch) GetDeletedAt() string {
 	return g.DeletedAt
 }
 
-type GetWorkflowSourceKeyspaceData struct {
+type GetWorkflowSourceKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -535,42 +535,42 @@ type GetWorkflowSourceKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (g *GetWorkflowSourceKeyspaceData) GetID() string {
+func (g *GetWorkflowSourceKeyspace) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetWorkflowSourceKeyspaceData) GetName() string {
+func (g *GetWorkflowSourceKeyspace) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetWorkflowSourceKeyspaceData) GetCreatedAt() string {
+func (g *GetWorkflowSourceKeyspace) GetCreatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetWorkflowSourceKeyspaceData) GetUpdatedAt() string {
+func (g *GetWorkflowSourceKeyspace) GetUpdatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetWorkflowSourceKeyspaceData) GetDeletedAt() string {
+func (g *GetWorkflowSourceKeyspace) GetDeletedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.DeletedAt
 }
 
-type GetWorkflowTargetKeyspaceData struct {
+type GetWorkflowTargetKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -583,42 +583,42 @@ type GetWorkflowTargetKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (g *GetWorkflowTargetKeyspaceData) GetID() string {
+func (g *GetWorkflowTargetKeyspace) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetWorkflowTargetKeyspaceData) GetName() string {
+func (g *GetWorkflowTargetKeyspace) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetWorkflowTargetKeyspaceData) GetCreatedAt() string {
+func (g *GetWorkflowTargetKeyspace) GetCreatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetWorkflowTargetKeyspaceData) GetUpdatedAt() string {
+func (g *GetWorkflowTargetKeyspace) GetUpdatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetWorkflowTargetKeyspaceData) GetDeletedAt() string {
+func (g *GetWorkflowTargetKeyspace) GetDeletedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.DeletedAt
 }
 
-type GetWorkflowGlobalKeyspaceData struct {
+type GetWorkflowGlobalKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -631,35 +631,35 @@ type GetWorkflowGlobalKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (g *GetWorkflowGlobalKeyspaceData) GetID() string {
+func (g *GetWorkflowGlobalKeyspace) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetWorkflowGlobalKeyspaceData) GetName() string {
+func (g *GetWorkflowGlobalKeyspace) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetWorkflowGlobalKeyspaceData) GetCreatedAt() string {
+func (g *GetWorkflowGlobalKeyspace) GetCreatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetWorkflowGlobalKeyspaceData) GetUpdatedAt() string {
+func (g *GetWorkflowGlobalKeyspace) GetUpdatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetWorkflowGlobalKeyspaceData) GetDeletedAt() string {
+func (g *GetWorkflowGlobalKeyspace) GetDeletedAt() string {
 	if g == nil {
 		return ""
 	}
@@ -721,21 +721,21 @@ type GetWorkflowResponseBody struct {
 	// Whether or not the verified data is stale
 	VerifiedDataStale bool `json:"verified_data_stale"`
 	// Whether or not sequence tables have been created
-	SequenceTablesApplied bool                          `json:"sequence_tables_applied"`
-	Actor                 GetWorkflowActor              `json:"actor"`
-	VerifyDataBy          GetWorkflowVerifyDataBy       `json:"verify_data_by"`
-	ReversedBy            GetWorkflowReversedBy         `json:"reversed_by"`
-	SwitchReplicasBy      GetWorkflowSwitchReplicasBy   `json:"switch_replicas_by"`
-	SwitchPrimariesBy     GetWorkflowSwitchPrimariesBy  `json:"switch_primaries_by"`
-	CancelledBy           GetWorkflowCancelledBy        `json:"cancelled_by"`
-	CompletedBy           GetWorkflowCompletedBy        `json:"completed_by"`
-	RetriedBy             GetWorkflowRetriedBy          `json:"retried_by"`
-	CutoverBy             GetWorkflowCutoverBy          `json:"cutover_by"`
-	ReversedCutoverBy     GetWorkflowReversedCutoverBy  `json:"reversed_cutover_by"`
-	Branch                GetWorkflowBranch             `json:"branch"`
-	SourceKeyspaceData    GetWorkflowSourceKeyspaceData `json:"source_keyspace"`
-	TargetKeyspaceData    GetWorkflowTargetKeyspaceData `json:"target_keyspace"`
-	GlobalKeyspaceData    GetWorkflowGlobalKeyspaceData `json:"global_keyspace"`
+	SequenceTablesApplied bool                         `json:"sequence_tables_applied"`
+	Actor                 GetWorkflowActor             `json:"actor"`
+	VerifyDataBy          GetWorkflowVerifyDataBy      `json:"verify_data_by"`
+	ReversedBy            GetWorkflowReversedBy        `json:"reversed_by"`
+	SwitchReplicasBy      GetWorkflowSwitchReplicasBy  `json:"switch_replicas_by"`
+	SwitchPrimariesBy     GetWorkflowSwitchPrimariesBy `json:"switch_primaries_by"`
+	CancelledBy           GetWorkflowCancelledBy       `json:"cancelled_by"`
+	CompletedBy           GetWorkflowCompletedBy       `json:"completed_by"`
+	RetriedBy             GetWorkflowRetriedBy         `json:"retried_by"`
+	CutoverBy             GetWorkflowCutoverBy         `json:"cutover_by"`
+	ReversedCutoverBy     GetWorkflowReversedCutoverBy `json:"reversed_cutover_by"`
+	Branch                GetWorkflowBranch            `json:"branch"`
+	SourceKeyspace        GetWorkflowSourceKeyspace    `json:"source_keyspace"`
+	TargetKeyspace        GetWorkflowTargetKeyspace    `json:"target_keyspace"`
+	GlobalKeyspace        GetWorkflowGlobalKeyspace    `json:"global_keyspace"`
 }
 
 func (g *GetWorkflowResponseBody) GetID() string {
@@ -1004,25 +1004,25 @@ func (g *GetWorkflowResponseBody) GetBranch() GetWorkflowBranch {
 	return g.Branch
 }
 
-func (g *GetWorkflowResponseBody) GetSourceKeyspaceData() GetWorkflowSourceKeyspaceData {
+func (g *GetWorkflowResponseBody) GetSourceKeyspace() GetWorkflowSourceKeyspace {
 	if g == nil {
-		return GetWorkflowSourceKeyspaceData{}
+		return GetWorkflowSourceKeyspace{}
 	}
-	return g.SourceKeyspaceData
+	return g.SourceKeyspace
 }
 
-func (g *GetWorkflowResponseBody) GetTargetKeyspaceData() GetWorkflowTargetKeyspaceData {
+func (g *GetWorkflowResponseBody) GetTargetKeyspace() GetWorkflowTargetKeyspace {
 	if g == nil {
-		return GetWorkflowTargetKeyspaceData{}
+		return GetWorkflowTargetKeyspace{}
 	}
-	return g.TargetKeyspaceData
+	return g.TargetKeyspace
 }
 
-func (g *GetWorkflowResponseBody) GetGlobalKeyspaceData() GetWorkflowGlobalKeyspaceData {
+func (g *GetWorkflowResponseBody) GetGlobalKeyspace() GetWorkflowGlobalKeyspace {
 	if g == nil {
-		return GetWorkflowGlobalKeyspaceData{}
+		return GetWorkflowGlobalKeyspace{}
 	}
-	return g.GlobalKeyspaceData
+	return g.GlobalKeyspace
 }
 
 type GetWorkflowResponse struct {

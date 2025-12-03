@@ -522,7 +522,7 @@ func (w *WorkflowReverseCutoverBranch) GetDeletedAt() string {
 	return w.DeletedAt
 }
 
-type WorkflowReverseCutoverSourceKeyspaceData struct {
+type WorkflowReverseCutoverSourceKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -535,42 +535,42 @@ type WorkflowReverseCutoverSourceKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowReverseCutoverSourceKeyspaceData) GetID() string {
+func (w *WorkflowReverseCutoverSourceKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowReverseCutoverSourceKeyspaceData) GetName() string {
+func (w *WorkflowReverseCutoverSourceKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowReverseCutoverSourceKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowReverseCutoverSourceKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowReverseCutoverSourceKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowReverseCutoverSourceKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowReverseCutoverSourceKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowReverseCutoverSourceKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowReverseCutoverTargetKeyspaceData struct {
+type WorkflowReverseCutoverTargetKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -583,42 +583,42 @@ type WorkflowReverseCutoverTargetKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowReverseCutoverTargetKeyspaceData) GetID() string {
+func (w *WorkflowReverseCutoverTargetKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowReverseCutoverTargetKeyspaceData) GetName() string {
+func (w *WorkflowReverseCutoverTargetKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowReverseCutoverTargetKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowReverseCutoverTargetKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowReverseCutoverTargetKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowReverseCutoverTargetKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowReverseCutoverTargetKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowReverseCutoverTargetKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowReverseCutoverGlobalKeyspaceData struct {
+type WorkflowReverseCutoverGlobalKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -631,35 +631,35 @@ type WorkflowReverseCutoverGlobalKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowReverseCutoverGlobalKeyspaceData) GetID() string {
+func (w *WorkflowReverseCutoverGlobalKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowReverseCutoverGlobalKeyspaceData) GetName() string {
+func (w *WorkflowReverseCutoverGlobalKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowReverseCutoverGlobalKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowReverseCutoverGlobalKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowReverseCutoverGlobalKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowReverseCutoverGlobalKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowReverseCutoverGlobalKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowReverseCutoverGlobalKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
@@ -721,21 +721,21 @@ type WorkflowReverseCutoverResponseBody struct {
 	// Whether or not the verified data is stale
 	VerifiedDataStale bool `json:"verified_data_stale"`
 	// Whether or not sequence tables have been created
-	SequenceTablesApplied bool                                     `json:"sequence_tables_applied"`
-	Actor                 WorkflowReverseCutoverActor              `json:"actor"`
-	VerifyDataBy          WorkflowReverseCutoverVerifyDataBy       `json:"verify_data_by"`
-	ReversedBy            WorkflowReverseCutoverReversedBy         `json:"reversed_by"`
-	SwitchReplicasBy      WorkflowReverseCutoverSwitchReplicasBy   `json:"switch_replicas_by"`
-	SwitchPrimariesBy     WorkflowReverseCutoverSwitchPrimariesBy  `json:"switch_primaries_by"`
-	CancelledBy           WorkflowReverseCutoverCancelledBy        `json:"cancelled_by"`
-	CompletedBy           WorkflowReverseCutoverCompletedBy        `json:"completed_by"`
-	RetriedBy             WorkflowReverseCutoverRetriedBy          `json:"retried_by"`
-	CutoverBy             WorkflowReverseCutoverCutoverBy          `json:"cutover_by"`
-	ReversedCutoverBy     WorkflowReverseCutoverReversedCutoverBy  `json:"reversed_cutover_by"`
-	Branch                WorkflowReverseCutoverBranch             `json:"branch"`
-	SourceKeyspaceData    WorkflowReverseCutoverSourceKeyspaceData `json:"source_keyspace"`
-	TargetKeyspaceData    WorkflowReverseCutoverTargetKeyspaceData `json:"target_keyspace"`
-	GlobalKeyspaceData    WorkflowReverseCutoverGlobalKeyspaceData `json:"global_keyspace"`
+	SequenceTablesApplied bool                                    `json:"sequence_tables_applied"`
+	Actor                 WorkflowReverseCutoverActor             `json:"actor"`
+	VerifyDataBy          WorkflowReverseCutoverVerifyDataBy      `json:"verify_data_by"`
+	ReversedBy            WorkflowReverseCutoverReversedBy        `json:"reversed_by"`
+	SwitchReplicasBy      WorkflowReverseCutoverSwitchReplicasBy  `json:"switch_replicas_by"`
+	SwitchPrimariesBy     WorkflowReverseCutoverSwitchPrimariesBy `json:"switch_primaries_by"`
+	CancelledBy           WorkflowReverseCutoverCancelledBy       `json:"cancelled_by"`
+	CompletedBy           WorkflowReverseCutoverCompletedBy       `json:"completed_by"`
+	RetriedBy             WorkflowReverseCutoverRetriedBy         `json:"retried_by"`
+	CutoverBy             WorkflowReverseCutoverCutoverBy         `json:"cutover_by"`
+	ReversedCutoverBy     WorkflowReverseCutoverReversedCutoverBy `json:"reversed_cutover_by"`
+	Branch                WorkflowReverseCutoverBranch            `json:"branch"`
+	SourceKeyspace        WorkflowReverseCutoverSourceKeyspace    `json:"source_keyspace"`
+	TargetKeyspace        WorkflowReverseCutoverTargetKeyspace    `json:"target_keyspace"`
+	GlobalKeyspace        WorkflowReverseCutoverGlobalKeyspace    `json:"global_keyspace"`
 }
 
 func (w *WorkflowReverseCutoverResponseBody) GetID() string {
@@ -1004,25 +1004,25 @@ func (w *WorkflowReverseCutoverResponseBody) GetBranch() WorkflowReverseCutoverB
 	return w.Branch
 }
 
-func (w *WorkflowReverseCutoverResponseBody) GetSourceKeyspaceData() WorkflowReverseCutoverSourceKeyspaceData {
+func (w *WorkflowReverseCutoverResponseBody) GetSourceKeyspace() WorkflowReverseCutoverSourceKeyspace {
 	if w == nil {
-		return WorkflowReverseCutoverSourceKeyspaceData{}
+		return WorkflowReverseCutoverSourceKeyspace{}
 	}
-	return w.SourceKeyspaceData
+	return w.SourceKeyspace
 }
 
-func (w *WorkflowReverseCutoverResponseBody) GetTargetKeyspaceData() WorkflowReverseCutoverTargetKeyspaceData {
+func (w *WorkflowReverseCutoverResponseBody) GetTargetKeyspace() WorkflowReverseCutoverTargetKeyspace {
 	if w == nil {
-		return WorkflowReverseCutoverTargetKeyspaceData{}
+		return WorkflowReverseCutoverTargetKeyspace{}
 	}
-	return w.TargetKeyspaceData
+	return w.TargetKeyspace
 }
 
-func (w *WorkflowReverseCutoverResponseBody) GetGlobalKeyspaceData() WorkflowReverseCutoverGlobalKeyspaceData {
+func (w *WorkflowReverseCutoverResponseBody) GetGlobalKeyspace() WorkflowReverseCutoverGlobalKeyspace {
 	if w == nil {
-		return WorkflowReverseCutoverGlobalKeyspaceData{}
+		return WorkflowReverseCutoverGlobalKeyspace{}
 	}
-	return w.GlobalKeyspaceData
+	return w.GlobalKeyspace
 }
 
 type WorkflowReverseCutoverResponse struct {
