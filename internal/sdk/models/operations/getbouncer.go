@@ -156,7 +156,7 @@ func (g *GetBouncerActor) GetAvatarURL() string {
 	return g.AvatarURL
 }
 
-type GetBouncerBranchData struct {
+type GetBouncerBranch struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -169,35 +169,35 @@ type GetBouncerBranchData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (g *GetBouncerBranchData) GetID() string {
+func (g *GetBouncerBranch) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetBouncerBranchData) GetName() string {
+func (g *GetBouncerBranch) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetBouncerBranchData) GetCreatedAt() string {
+func (g *GetBouncerBranch) GetCreatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetBouncerBranchData) GetUpdatedAt() string {
+func (g *GetBouncerBranch) GetUpdatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetBouncerBranchData) GetDeletedAt() string {
+func (g *GetBouncerBranch) GetDeletedAt() string {
 	if g == nil {
 		return ""
 	}
@@ -500,9 +500,8 @@ type GetBouncerResponseBody struct {
 	// When the bouncer was deleted
 	DeletedAt  string                `json:"deleted_at"`
 	Actor      GetBouncerActor       `json:"actor"`
-	BranchData GetBouncerBranchData  `json:"branch"`
+	Branch     GetBouncerBranch      `json:"branch"`
 	Parameters []GetBouncerParameter `json:"parameters"`
-	RegionData any                   `json:"region,omitzero"`
 }
 
 func (g *GetBouncerResponseBody) GetID() string {
@@ -568,11 +567,11 @@ func (g *GetBouncerResponseBody) GetActor() GetBouncerActor {
 	return g.Actor
 }
 
-func (g *GetBouncerResponseBody) GetBranchData() GetBouncerBranchData {
+func (g *GetBouncerResponseBody) GetBranch() GetBouncerBranch {
 	if g == nil {
-		return GetBouncerBranchData{}
+		return GetBouncerBranch{}
 	}
-	return g.BranchData
+	return g.Branch
 }
 
 func (g *GetBouncerResponseBody) GetParameters() []GetBouncerParameter {
@@ -580,13 +579,6 @@ func (g *GetBouncerResponseBody) GetParameters() []GetBouncerParameter {
 		return []GetBouncerParameter{}
 	}
 	return g.Parameters
-}
-
-func (g *GetBouncerResponseBody) GetRegionData() any {
-	if g == nil {
-		return nil
-	}
-	return g.RegionData
 }
 
 type GetBouncerResponse struct {

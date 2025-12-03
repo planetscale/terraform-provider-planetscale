@@ -15,7 +15,7 @@ type WorkflowCancelRequest struct {
 	// The name of the database the workflow belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The sequence number of the workflow
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number string `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (w *WorkflowCancelRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (w *WorkflowCancelRequest) GetDatabase() string {
 	return w.Database
 }
 
-func (w *WorkflowCancelRequest) GetNumber() float64 {
+func (w *WorkflowCancelRequest) GetNumber() string {
 	if w == nil {
-		return 0.0
+		return ""
 	}
 	return w.Number
 }
@@ -522,7 +522,7 @@ func (w *WorkflowCancelBranch) GetDeletedAt() string {
 	return w.DeletedAt
 }
 
-type WorkflowCancelSourceKeyspaceData struct {
+type WorkflowCancelSourceKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -535,42 +535,42 @@ type WorkflowCancelSourceKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowCancelSourceKeyspaceData) GetID() string {
+func (w *WorkflowCancelSourceKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowCancelSourceKeyspaceData) GetName() string {
+func (w *WorkflowCancelSourceKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowCancelSourceKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowCancelSourceKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowCancelSourceKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowCancelSourceKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowCancelSourceKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowCancelSourceKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowCancelTargetKeyspaceData struct {
+type WorkflowCancelTargetKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -583,42 +583,42 @@ type WorkflowCancelTargetKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowCancelTargetKeyspaceData) GetID() string {
+func (w *WorkflowCancelTargetKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowCancelTargetKeyspaceData) GetName() string {
+func (w *WorkflowCancelTargetKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowCancelTargetKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowCancelTargetKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowCancelTargetKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowCancelTargetKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowCancelTargetKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowCancelTargetKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowCancelGlobalKeyspaceData struct {
+type WorkflowCancelGlobalKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -631,35 +631,35 @@ type WorkflowCancelGlobalKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowCancelGlobalKeyspaceData) GetID() string {
+func (w *WorkflowCancelGlobalKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowCancelGlobalKeyspaceData) GetName() string {
+func (w *WorkflowCancelGlobalKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowCancelGlobalKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowCancelGlobalKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowCancelGlobalKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowCancelGlobalKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowCancelGlobalKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowCancelGlobalKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
@@ -721,21 +721,21 @@ type WorkflowCancelResponseBody struct {
 	// Whether or not the verified data is stale
 	VerifiedDataStale bool `json:"verified_data_stale"`
 	// Whether or not sequence tables have been created
-	SequenceTablesApplied bool                             `json:"sequence_tables_applied"`
-	Actor                 WorkflowCancelActor              `json:"actor"`
-	VerifyDataBy          WorkflowCancelVerifyDataBy       `json:"verify_data_by"`
-	ReversedBy            WorkflowCancelReversedBy         `json:"reversed_by"`
-	SwitchReplicasBy      WorkflowCancelSwitchReplicasBy   `json:"switch_replicas_by"`
-	SwitchPrimariesBy     WorkflowCancelSwitchPrimariesBy  `json:"switch_primaries_by"`
-	CancelledBy           WorkflowCancelCancelledBy        `json:"cancelled_by"`
-	CompletedBy           WorkflowCancelCompletedBy        `json:"completed_by"`
-	RetriedBy             WorkflowCancelRetriedBy          `json:"retried_by"`
-	CutoverBy             WorkflowCancelCutoverBy          `json:"cutover_by"`
-	ReversedCutoverBy     WorkflowCancelReversedCutoverBy  `json:"reversed_cutover_by"`
-	Branch                WorkflowCancelBranch             `json:"branch"`
-	SourceKeyspaceData    WorkflowCancelSourceKeyspaceData `json:"source_keyspace"`
-	TargetKeyspaceData    WorkflowCancelTargetKeyspaceData `json:"target_keyspace"`
-	GlobalKeyspaceData    WorkflowCancelGlobalKeyspaceData `json:"global_keyspace"`
+	SequenceTablesApplied bool                            `json:"sequence_tables_applied"`
+	Actor                 WorkflowCancelActor             `json:"actor"`
+	VerifyDataBy          WorkflowCancelVerifyDataBy      `json:"verify_data_by"`
+	ReversedBy            WorkflowCancelReversedBy        `json:"reversed_by"`
+	SwitchReplicasBy      WorkflowCancelSwitchReplicasBy  `json:"switch_replicas_by"`
+	SwitchPrimariesBy     WorkflowCancelSwitchPrimariesBy `json:"switch_primaries_by"`
+	CancelledBy           WorkflowCancelCancelledBy       `json:"cancelled_by"`
+	CompletedBy           WorkflowCancelCompletedBy       `json:"completed_by"`
+	RetriedBy             WorkflowCancelRetriedBy         `json:"retried_by"`
+	CutoverBy             WorkflowCancelCutoverBy         `json:"cutover_by"`
+	ReversedCutoverBy     WorkflowCancelReversedCutoverBy `json:"reversed_cutover_by"`
+	Branch                WorkflowCancelBranch            `json:"branch"`
+	SourceKeyspace        WorkflowCancelSourceKeyspace    `json:"source_keyspace"`
+	TargetKeyspace        WorkflowCancelTargetKeyspace    `json:"target_keyspace"`
+	GlobalKeyspace        WorkflowCancelGlobalKeyspace    `json:"global_keyspace"`
 }
 
 func (w *WorkflowCancelResponseBody) GetID() string {
@@ -1004,25 +1004,25 @@ func (w *WorkflowCancelResponseBody) GetBranch() WorkflowCancelBranch {
 	return w.Branch
 }
 
-func (w *WorkflowCancelResponseBody) GetSourceKeyspaceData() WorkflowCancelSourceKeyspaceData {
+func (w *WorkflowCancelResponseBody) GetSourceKeyspace() WorkflowCancelSourceKeyspace {
 	if w == nil {
-		return WorkflowCancelSourceKeyspaceData{}
+		return WorkflowCancelSourceKeyspace{}
 	}
-	return w.SourceKeyspaceData
+	return w.SourceKeyspace
 }
 
-func (w *WorkflowCancelResponseBody) GetTargetKeyspaceData() WorkflowCancelTargetKeyspaceData {
+func (w *WorkflowCancelResponseBody) GetTargetKeyspace() WorkflowCancelTargetKeyspace {
 	if w == nil {
-		return WorkflowCancelTargetKeyspaceData{}
+		return WorkflowCancelTargetKeyspace{}
 	}
-	return w.TargetKeyspaceData
+	return w.TargetKeyspace
 }
 
-func (w *WorkflowCancelResponseBody) GetGlobalKeyspaceData() WorkflowCancelGlobalKeyspaceData {
+func (w *WorkflowCancelResponseBody) GetGlobalKeyspace() WorkflowCancelGlobalKeyspace {
 	if w == nil {
-		return WorkflowCancelGlobalKeyspaceData{}
+		return WorkflowCancelGlobalKeyspace{}
 	}
-	return w.GlobalKeyspaceData
+	return w.GlobalKeyspace
 }
 
 type WorkflowCancelResponse struct {

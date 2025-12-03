@@ -760,23 +760,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -972,8 +967,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `read_organization` |
-      x-speakeasy-entity-operation: Teams#read
-      x-speakeasy-entity-description: Returns information about PlanetScale organization teams.
     post:
       tags:
         - Organization teams
@@ -1192,8 +1185,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `write_organization` |
-      x-speakeasy-entity-operation: Team#create
-      x-speakeasy-entity-description: Manage a PlanetScale organization team.
   /organizations/{organization_name}/teams/{team_slug}:
     get:
       tags:
@@ -1213,7 +1204,6 @@ paths:
           description: The slug of the team
           schema:
             type: string
-          x-speakeasy-match: slug
       responses:
         "200":
           description: Returns the team details including members and databases
@@ -1245,8 +1235,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `read_organization` |
-      x-speakeasy-entity-operation: Team#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale organization team.
     patch:
       tags:
         - Organization teams
@@ -1265,7 +1253,6 @@ paths:
           description: The slug of the team
           schema:
             type: string
-          x-speakeasy-match: slug
       requestBody:
         content:
           application/json:
@@ -1310,7 +1297,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `write_organization` |
-      x-speakeasy-entity-operation: Team#update
     delete:
       tags:
         - Organization teams
@@ -1329,7 +1315,6 @@ paths:
           description: The slug of the team
           schema:
             type: string
-          x-speakeasy-match: slug
       responses:
         "204":
           description: "Team deleted successfully. Note: SSO-managed teams cannot be deleted."
@@ -1358,7 +1343,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `write_organization` |
-      x-speakeasy-entity-operation: Team#delete
   /organizations/{organization}/databases:
     get:
       tags:
@@ -2277,8 +2261,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Cidrs#create
-      x-speakeasy-entity-description: Manage a PlanetScale database IP restriction entry.
   /organizations/{organization}/databases/{database_name}/cidrs/{id}:
     get:
       tags:
@@ -2331,8 +2313,6 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
-      x-speakeasy-entity-operation: Cidrs#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database IP restriction entry.
     put:
       tags:
         - Database Postgres IP restrictions
@@ -2402,7 +2382,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Cidrs#update
     delete:
       tags:
         - Database Postgres IP restrictions
@@ -2451,7 +2430,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Cidrs#delete
   /organizations/{organization}/databases/{database}/branches:
     get:
       tags:
@@ -3175,7 +3153,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns database branch backups
@@ -3188,23 +3165,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -3489,16 +3461,6 @@ paths:
         | Organization | `read_backups` |
         | Database | `read_backups` |
         | Branch | `read_backups` |
-      x-speakeasy-entity-operation: Backups#read
-      x-speakeasy-entity-description: Returns information about PlanetScale database branch backups.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
     post:
       tags:
         - Backups
@@ -3828,8 +3790,6 @@ paths:
         | Organization | `write_backups` |
         | Database | `write_backups` |
         | Branch | `write_backups` |
-      x-speakeasy-entity-operation: Backup#create
-      x-speakeasy-entity-description: Manage a PlanetScale database branch backup.
   /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}:
     get:
       tags:
@@ -3890,19 +3850,6 @@ paths:
         | Organization | `read_backups` |
         | Database | `read_backups` |
         | Branch | `read_backups` |
-      x-speakeasy-entity-operation:
-        - Backup#read
-        - entityOperation: Backup#create#2
-          options:
-            polling:
-              name: WaitForSuccess
-      x-speakeasy-entity-description: Returns information about a PlanetScale database branch backup.
-      x-speakeasy-polling:
-        - name: WaitForSuccess
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "success"
     patch:
       tags:
         - Backups
@@ -3972,7 +3919,6 @@ paths:
         | Organization | `write_backups` |
         | Database | `write_backups` |
         | Branch | `write_backups` |
-      x-speakeasy-entity-operation: Backup#update
     delete:
       tags:
         - Backups
@@ -4029,7 +3975,6 @@ paths:
         | Organization | `delete_backups`, `delete_production_branch_backups` |
         | Database | `delete_backups`, `delete_production_branch_backups` |
         | Branch | `delete_backups` |
-      x-speakeasy-entity-operation: Backup#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncer-resizes:
     get:
       tags:
@@ -4728,7 +4673,6 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
-                    x-speakeasy-name-override: branch_data
                   parameters:
                     type: array
                     items:
@@ -4841,8 +4785,6 @@ paths:
                         - url
                         - options
                         - actor
-                  region:
-                    x-speakeasy-name-override: region_data
                 additionalProperties: false
                 required:
                   - id
@@ -4877,8 +4819,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Bouncer#create
-      x-speakeasy-entity-description: Manage a PlanetScale database branch bouncer.
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}:
     get:
       tags:
@@ -4939,8 +4879,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-      x-speakeasy-entity-operation: Bouncer#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database branch bouncer.
     delete:
       tags:
         - Bouncers
@@ -4996,7 +4934,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Bouncer#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}/resizes:
     get:
       tags:
@@ -6383,8 +6320,6 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
-      x-speakeasy-entity-operation: Keyspace#create
-      x-speakeasy-entity-description: Manage a PlanetScale database branch keyspace.
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vschema:
     get:
       tags:
@@ -6567,8 +6502,6 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
-      x-speakeasy-entity-operation: Keyspace#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database branch keyspace.
     patch:
       tags:
         - Database branch keyspaces
@@ -6615,9 +6548,6 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
-      x-speakeasy-entity-operation:
-        - Keyspace#create#2
-        - Keyspace#update
     delete:
       tags:
         - Database branch keyspaces
@@ -6661,7 +6591,6 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
-      x-speakeasy-entity-operation: Keyspace#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}/rollout-status:
     get:
       tags:
@@ -8121,8 +8050,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-      x-speakeasy-entity-operation: QueryPatternReport#create
-      x-speakeasy-entity-description: Manage a PlanetScale database branch query pattern report.
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}:
     get:
       tags:
@@ -8183,19 +8110,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-      x-speakeasy-entity-operation:
-        - QueryPatternReport#read
-        - entityOperation: QueryPatternReport#create#2
-          options:
-            polling:
-              name: WaitForCompleted
-      x-speakeasy-entity-description: Returns information about a PlanetScale database branch query pattern report.
-      x-speakeasy-polling:
-        - name: WaitForCompleted
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "completed"
     delete:
       tags:
         - Query Insights reports
@@ -8252,7 +8166,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-      x-speakeasy-entity-operation: QueryPatternReport#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}/download:
     get:
       tags:
@@ -13566,8 +13479,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Webhook#create
-      x-speakeasy-entity-description: Manage a PlanetScale database webhook.
   /organizations/{organization}/databases/{database}/webhooks/{id}:
     get:
       tags:
@@ -13621,8 +13532,6 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
-      x-speakeasy-entity-operation: Webhook#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database webhook.
     patch:
       tags:
         - Webhooks
@@ -13693,7 +13602,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Webhook#update
     delete:
       tags:
         - Webhooks
@@ -13743,7 +13651,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Webhook#delete
   /organizations/{organization}/databases/{database}/webhooks/{id}/test:
     post:
       tags:
@@ -14693,7 +14600,6 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
-                    x-speakeasy-name-override: source_keyspace_data
                   target_keyspace:
                     type: object
                     properties:
@@ -14719,7 +14625,6 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
-                    x-speakeasy-name-override: target_keyspace_data
                   global_keyspace:
                     type: object
                     properties:
@@ -14745,7 +14650,6 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
-                    x-speakeasy-name-override: global_keyspace_data
                 additionalProperties: false
                 required:
                   - id
@@ -14798,8 +14702,6 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
-      x-speakeasy-entity-operation: Workflow#create
-      x-speakeasy-entity-description: Manage a PlanetScale database workflow.
   /organizations/{organization}/databases/{database}/workflows/{number}:
     get:
       tags:
@@ -14824,7 +14726,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: number
+            type: string
       responses:
         "200":
           description: Returns a workflow
@@ -14841,19 +14743,6 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
-      x-speakeasy-entity-operation:
-        - Workflow#read
-        - entityOperation: Workflow#create#2
-          options:
-            polling:
-              name: WaitForCompleted
-      x-speakeasy-entity-description: Returns information about a PlanetScale database workflow.
-      x-speakeasy-polling:
-        - name: WaitForCompleted
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "completed"
     delete:
       tags:
         - Workflows
@@ -14877,7 +14766,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: number
+            type: string
       responses:
         "200":
           description: Returns a workflow
@@ -14894,7 +14783,6 @@ paths:
         "500":
           description: Internal Server Error
       description: ""
-      x-speakeasy-entity-operation: Workflow#delete
   /organizations/{organization}/databases/{database}/workflows/{number}/complete:
     patch:
       tags:
@@ -16457,7 +16345,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns a list of the organization's oauth applications
@@ -16470,23 +16357,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -16559,16 +16441,6 @@ paths:
         **Service Token Accesses**
          `read_oauth_applications`
 
-      x-speakeasy-entity-operation: OauthApplications#read
-      x-speakeasy-entity-description: Returns information about accessible PlanetScale OAuth applications.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
   /organizations/{organization}/oauth-applications/{application_id}:
     get:
       tags:

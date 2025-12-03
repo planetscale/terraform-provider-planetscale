@@ -522,7 +522,7 @@ func (w *WorkflowReverseTrafficBranch) GetDeletedAt() string {
 	return w.DeletedAt
 }
 
-type WorkflowReverseTrafficSourceKeyspaceData struct {
+type WorkflowReverseTrafficSourceKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -535,42 +535,42 @@ type WorkflowReverseTrafficSourceKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowReverseTrafficSourceKeyspaceData) GetID() string {
+func (w *WorkflowReverseTrafficSourceKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowReverseTrafficSourceKeyspaceData) GetName() string {
+func (w *WorkflowReverseTrafficSourceKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowReverseTrafficSourceKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowReverseTrafficSourceKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowReverseTrafficSourceKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowReverseTrafficSourceKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowReverseTrafficSourceKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowReverseTrafficSourceKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowReverseTrafficTargetKeyspaceData struct {
+type WorkflowReverseTrafficTargetKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -583,42 +583,42 @@ type WorkflowReverseTrafficTargetKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowReverseTrafficTargetKeyspaceData) GetID() string {
+func (w *WorkflowReverseTrafficTargetKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowReverseTrafficTargetKeyspaceData) GetName() string {
+func (w *WorkflowReverseTrafficTargetKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowReverseTrafficTargetKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowReverseTrafficTargetKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowReverseTrafficTargetKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowReverseTrafficTargetKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowReverseTrafficTargetKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowReverseTrafficTargetKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.DeletedAt
 }
 
-type WorkflowReverseTrafficGlobalKeyspaceData struct {
+type WorkflowReverseTrafficGlobalKeyspace struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -631,35 +631,35 @@ type WorkflowReverseTrafficGlobalKeyspaceData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (w *WorkflowReverseTrafficGlobalKeyspaceData) GetID() string {
+func (w *WorkflowReverseTrafficGlobalKeyspace) GetID() string {
 	if w == nil {
 		return ""
 	}
 	return w.ID
 }
 
-func (w *WorkflowReverseTrafficGlobalKeyspaceData) GetName() string {
+func (w *WorkflowReverseTrafficGlobalKeyspace) GetName() string {
 	if w == nil {
 		return ""
 	}
 	return w.Name
 }
 
-func (w *WorkflowReverseTrafficGlobalKeyspaceData) GetCreatedAt() string {
+func (w *WorkflowReverseTrafficGlobalKeyspace) GetCreatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.CreatedAt
 }
 
-func (w *WorkflowReverseTrafficGlobalKeyspaceData) GetUpdatedAt() string {
+func (w *WorkflowReverseTrafficGlobalKeyspace) GetUpdatedAt() string {
 	if w == nil {
 		return ""
 	}
 	return w.UpdatedAt
 }
 
-func (w *WorkflowReverseTrafficGlobalKeyspaceData) GetDeletedAt() string {
+func (w *WorkflowReverseTrafficGlobalKeyspace) GetDeletedAt() string {
 	if w == nil {
 		return ""
 	}
@@ -721,21 +721,21 @@ type WorkflowReverseTrafficResponseBody struct {
 	// Whether or not the verified data is stale
 	VerifiedDataStale bool `json:"verified_data_stale"`
 	// Whether or not sequence tables have been created
-	SequenceTablesApplied bool                                     `json:"sequence_tables_applied"`
-	Actor                 WorkflowReverseTrafficActor              `json:"actor"`
-	VerifyDataBy          WorkflowReverseTrafficVerifyDataBy       `json:"verify_data_by"`
-	ReversedBy            WorkflowReverseTrafficReversedBy         `json:"reversed_by"`
-	SwitchReplicasBy      WorkflowReverseTrafficSwitchReplicasBy   `json:"switch_replicas_by"`
-	SwitchPrimariesBy     WorkflowReverseTrafficSwitchPrimariesBy  `json:"switch_primaries_by"`
-	CancelledBy           WorkflowReverseTrafficCancelledBy        `json:"cancelled_by"`
-	CompletedBy           WorkflowReverseTrafficCompletedBy        `json:"completed_by"`
-	RetriedBy             WorkflowReverseTrafficRetriedBy          `json:"retried_by"`
-	CutoverBy             WorkflowReverseTrafficCutoverBy          `json:"cutover_by"`
-	ReversedCutoverBy     WorkflowReverseTrafficReversedCutoverBy  `json:"reversed_cutover_by"`
-	Branch                WorkflowReverseTrafficBranch             `json:"branch"`
-	SourceKeyspaceData    WorkflowReverseTrafficSourceKeyspaceData `json:"source_keyspace"`
-	TargetKeyspaceData    WorkflowReverseTrafficTargetKeyspaceData `json:"target_keyspace"`
-	GlobalKeyspaceData    WorkflowReverseTrafficGlobalKeyspaceData `json:"global_keyspace"`
+	SequenceTablesApplied bool                                    `json:"sequence_tables_applied"`
+	Actor                 WorkflowReverseTrafficActor             `json:"actor"`
+	VerifyDataBy          WorkflowReverseTrafficVerifyDataBy      `json:"verify_data_by"`
+	ReversedBy            WorkflowReverseTrafficReversedBy        `json:"reversed_by"`
+	SwitchReplicasBy      WorkflowReverseTrafficSwitchReplicasBy  `json:"switch_replicas_by"`
+	SwitchPrimariesBy     WorkflowReverseTrafficSwitchPrimariesBy `json:"switch_primaries_by"`
+	CancelledBy           WorkflowReverseTrafficCancelledBy       `json:"cancelled_by"`
+	CompletedBy           WorkflowReverseTrafficCompletedBy       `json:"completed_by"`
+	RetriedBy             WorkflowReverseTrafficRetriedBy         `json:"retried_by"`
+	CutoverBy             WorkflowReverseTrafficCutoverBy         `json:"cutover_by"`
+	ReversedCutoverBy     WorkflowReverseTrafficReversedCutoverBy `json:"reversed_cutover_by"`
+	Branch                WorkflowReverseTrafficBranch            `json:"branch"`
+	SourceKeyspace        WorkflowReverseTrafficSourceKeyspace    `json:"source_keyspace"`
+	TargetKeyspace        WorkflowReverseTrafficTargetKeyspace    `json:"target_keyspace"`
+	GlobalKeyspace        WorkflowReverseTrafficGlobalKeyspace    `json:"global_keyspace"`
 }
 
 func (w *WorkflowReverseTrafficResponseBody) GetID() string {
@@ -1004,25 +1004,25 @@ func (w *WorkflowReverseTrafficResponseBody) GetBranch() WorkflowReverseTrafficB
 	return w.Branch
 }
 
-func (w *WorkflowReverseTrafficResponseBody) GetSourceKeyspaceData() WorkflowReverseTrafficSourceKeyspaceData {
+func (w *WorkflowReverseTrafficResponseBody) GetSourceKeyspace() WorkflowReverseTrafficSourceKeyspace {
 	if w == nil {
-		return WorkflowReverseTrafficSourceKeyspaceData{}
+		return WorkflowReverseTrafficSourceKeyspace{}
 	}
-	return w.SourceKeyspaceData
+	return w.SourceKeyspace
 }
 
-func (w *WorkflowReverseTrafficResponseBody) GetTargetKeyspaceData() WorkflowReverseTrafficTargetKeyspaceData {
+func (w *WorkflowReverseTrafficResponseBody) GetTargetKeyspace() WorkflowReverseTrafficTargetKeyspace {
 	if w == nil {
-		return WorkflowReverseTrafficTargetKeyspaceData{}
+		return WorkflowReverseTrafficTargetKeyspace{}
 	}
-	return w.TargetKeyspaceData
+	return w.TargetKeyspace
 }
 
-func (w *WorkflowReverseTrafficResponseBody) GetGlobalKeyspaceData() WorkflowReverseTrafficGlobalKeyspaceData {
+func (w *WorkflowReverseTrafficResponseBody) GetGlobalKeyspace() WorkflowReverseTrafficGlobalKeyspace {
 	if w == nil {
-		return WorkflowReverseTrafficGlobalKeyspaceData{}
+		return WorkflowReverseTrafficGlobalKeyspace{}
 	}
-	return w.GlobalKeyspaceData
+	return w.GlobalKeyspace
 }
 
 type WorkflowReverseTrafficResponse struct {
