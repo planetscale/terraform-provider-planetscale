@@ -2,9 +2,7 @@ package provider
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -17,7 +15,7 @@ import (
 func TestAccDatabaseDefaultBranchResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
-	databaseName := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	databaseName := randomWithPrefix("testacc")
 	resourceAddress := "planetscale_database_default_branch.test"
 
 	resource.Test(t, resource.TestCase{

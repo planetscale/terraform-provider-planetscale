@@ -1,9 +1,7 @@
 package provider
 
 import (
-	"fmt"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -16,7 +14,7 @@ func TestAccBranchSchemaDataSource(t *testing.T) {
 	t.Parallel()
 	t.Skipf("TODO: 404")
 
-	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	name := randomWithPrefix("testacc")
 	resourceAddress := "data.planetscale_branch_schema.test"
 
 	resource.Test(t, resource.TestCase{

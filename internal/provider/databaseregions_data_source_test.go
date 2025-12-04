@@ -1,9 +1,7 @@
 package provider
 
 import (
-	"fmt"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -15,7 +13,7 @@ import (
 func TestAccDatabaseRegionsDataSource(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	name := randomWithPrefix("testacc")
 	resourceAddress := "data.planetscale_database_regions.test"
 
 	resource.Test(t, resource.TestCase{

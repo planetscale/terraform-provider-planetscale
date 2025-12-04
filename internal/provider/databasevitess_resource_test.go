@@ -2,9 +2,7 @@ package provider
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -17,7 +15,7 @@ import (
 func TestAccDatabaseVitessResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	name := randomWithPrefix("testacc")
 	resourceAddress := "planetscale_database_vitess.test"
 
 	resource.Test(t, resource.TestCase{
@@ -80,7 +78,7 @@ func TestAccDatabaseVitessResource_Lifecycle(t *testing.T) {
 func TestAccDatabaseVitessResource_ClusterSize(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	name := randomWithPrefix("testacc")
 	clusterSizeOriginal := "PS_10"
 	clusterSizeUpdated := "PS_20"
 	resourceAddress := "planetscale_database_vitess.test"

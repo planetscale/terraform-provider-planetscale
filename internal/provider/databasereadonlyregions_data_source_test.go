@@ -1,9 +1,7 @@
 package provider
 
 import (
-	"fmt"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -16,7 +14,7 @@ func TestAccDatabaseReadOnlyRegionsDataSource(t *testing.T) {
 	t.Parallel()
 	t.Skip("TODO: Data is empty from API -- potentially needs updated Terraform configuration")
 
-	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	name := randomWithPrefix("testacc")
 	resourceAddress := "data.planetscale_database_read_only_regions.test"
 
 	resource.Test(t, resource.TestCase{

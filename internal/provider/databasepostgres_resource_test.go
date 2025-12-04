@@ -2,9 +2,7 @@ package provider
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -17,7 +15,7 @@ import (
 func TestAccDatabasePostgresResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	name := randomWithPrefix("testacc")
 	resourceAddress := "planetscale_database_postgres.test"
 
 	resource.Test(t, resource.TestCase{
@@ -80,7 +78,7 @@ func TestAccDatabasePostgresResource_Lifecycle(t *testing.T) {
 func TestAccDatabasePostgresResource_ClusterSize(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
+	name := randomWithPrefix("testacc")
 	clusterSizeOriginal := "PS_5_AWS_X86"
 	clusterSizeUpdated := "PS_10_AWS_X86"
 	resourceAddress := "planetscale_database_postgres.test"
