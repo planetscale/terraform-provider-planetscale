@@ -153,8 +153,8 @@ func (r *BranchResourceModel) ToOperationsCreateBranchRequest(ctx context.Contex
 func (r *BranchResourceModel) ToOperationsCreateBranchRequestBody(ctx context.Context) (*operations.CreateBranchRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var branch string
-	branch = r.Branch.ValueString()
+	var name string
+	name = r.Name.ValueString()
 
 	var parentBranch string
 	parentBranch = r.ParentBranch.ValueString()
@@ -196,7 +196,7 @@ func (r *BranchResourceModel) ToOperationsCreateBranchRequestBody(ctx context.Co
 		majorVersion = nil
 	}
 	out := operations.CreateBranchRequestBody{
-		Branch:       branch,
+		Name:         name,
 		ParentBranch: parentBranch,
 		BackupID:     backupID,
 		Region:       region,

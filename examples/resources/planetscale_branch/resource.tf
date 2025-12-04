@@ -4,6 +4,7 @@ resource "planetscale_branch" "my_branch" {
   cluster_size  = "...my_cluster_size..."
   database      = "...my_database..."
   major_version = "...my_major_version..."
+  name          = "...my_name..."
   organization  = "...my_organization..."
   parent_branch = "...my_parent_branch..."
   region        = "...my_region..."

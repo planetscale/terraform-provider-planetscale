@@ -2396,9 +2396,9 @@ paths:
             schema:
               type: object
               properties:
-                branch:
+                name:
                   type: string
-                  description: The name of the branch
+                  description: The name of the branch to create
                 parent_branch:
                   type: string
                   description: Parent branch
@@ -2424,7 +2424,7 @@ paths:
                   description: For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
               additionalProperties: false
               required:
-                - branch
+                - name
                 - parent_branch
       responses:
         "201":
@@ -2675,6 +2675,8 @@ paths:
         | Branch | `restore_backups` |
       x-speakeasy-entity-operation: Branch#create
       x-speakeasy-entity-description: Manage a PlanetScale database branch.
+      name:
+        x-speakeasy-name-override: branch
   /organizations/{organization}/databases/{database}/branches/{branch}:
     get:
       tags:

@@ -195,8 +195,12 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `The address of the MySQL provider for the branch`,
 			},
 			"name": schema.StringAttribute{
-				Computed:    true,
-				Description: `The name of the branch`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `The name of the branch to create. Requires replacement if changed.`,
 			},
 			"organization": schema.StringAttribute{
 				Required: true,
