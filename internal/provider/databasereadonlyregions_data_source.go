@@ -30,7 +30,7 @@ type DatabaseReadOnlyRegionsDataSource struct {
 // DatabaseReadOnlyRegionsDataSourceModel describes the data model.
 type DatabaseReadOnlyRegionsDataSourceModel struct {
 	Data         []tfTypes.ListReadOnlyRegionsData `tfsdk:"data"`
-	Name         types.String                      `tfsdk:"name"`
+	Database     types.String                      `tfsdk:"database"`
 	Organization types.String                      `tfsdk:"organization"`
 }
 
@@ -131,7 +131,7 @@ func (r *DatabaseReadOnlyRegionsDataSource) Schema(ctx context.Context, req data
 					},
 				},
 			},
-			"name": schema.StringAttribute{
+			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the database`,
 			},

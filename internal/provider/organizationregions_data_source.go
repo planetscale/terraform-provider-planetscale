@@ -29,8 +29,8 @@ type OrganizationRegionsDataSource struct {
 
 // OrganizationRegionsDataSourceModel describes the data model.
 type OrganizationRegionsDataSourceModel struct {
-	Data []tfTypes.ListRegionsForOrganizationData `tfsdk:"data"`
-	Name types.String                             `tfsdk:"name"`
+	Data         []tfTypes.ListRegionsForOrganizationData `tfsdk:"data"`
+	Organization types.String                             `tfsdk:"organization"`
 }
 
 // Metadata returns the data source type name.
@@ -84,7 +84,7 @@ func (r *OrganizationRegionsDataSource) Schema(ctx context.Context, req datasour
 					},
 				},
 			},
-			"name": schema.StringAttribute{
+			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization`,
 			},

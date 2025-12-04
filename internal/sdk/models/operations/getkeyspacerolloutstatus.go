@@ -15,7 +15,7 @@ type GetKeyspaceRolloutStatusRequest struct {
 	// The name of the branch
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the keyspace
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Keyspace string `pathParam:"style=simple,explode=false,name=keyspace"`
 }
 
 func (g *GetKeyspaceRolloutStatusRequest) GetOrganization() string {
@@ -39,11 +39,11 @@ func (g *GetKeyspaceRolloutStatusRequest) GetBranch() string {
 	return g.Branch
 }
 
-func (g *GetKeyspaceRolloutStatusRequest) GetName() string {
+func (g *GetKeyspaceRolloutStatusRequest) GetKeyspace() string {
 	if g == nil {
 		return ""
 	}
-	return g.Name
+	return g.Keyspace
 }
 
 type Shard struct {

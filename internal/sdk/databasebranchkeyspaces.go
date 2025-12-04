@@ -30,6 +30,12 @@ func newDatabaseBranchKeyspaces(rootSDK *Planetscale, sdkConfig config.SDKConfig
 }
 
 // ListKeyspaces - Get keyspaces
+// ### Authorization
+// A service token   must have at least one of the following access   in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`read_branch`
 func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request operations.ListKeyspacesRequest, opts ...operations.Option) (*operations.ListKeyspacesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -169,6 +175,12 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 }
 
 // CreateKeyspace - Create a keyspace
+// ### Authorization
+// A service token   must have at least one of the following access   in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`create_branch`
 func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request operations.CreateKeyspaceRequest, opts ...operations.Option) (*operations.CreateKeyspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -311,6 +323,12 @@ func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request op
 }
 
 // GetKeyspace - Get a keyspace
+// ### Authorization
+// A service token   must have at least one of the following access   in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`read_branch`
 func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request operations.GetKeyspaceRequest, opts ...operations.Option) (*operations.GetKeyspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -329,7 +347,7 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -446,6 +464,12 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 }
 
 // UpdateKeyspace - Configure keyspace settings
+// ### Authorization
+// A service token   must have at least one of the following access   in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`create_branch`
 func (s *DatabaseBranchKeyspaces) UpdateKeyspace(ctx context.Context, request operations.UpdateKeyspaceRequest, opts ...operations.Option) (*operations.UpdateKeyspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -464,7 +488,7 @@ func (s *DatabaseBranchKeyspaces) UpdateKeyspace(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -581,6 +605,12 @@ func (s *DatabaseBranchKeyspaces) UpdateKeyspace(ctx context.Context, request op
 }
 
 // DeleteKeyspace - Delete a keyspace
+// ### Authorization
+// A service token   must have at least one of the following access   in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`delete_branch`, `delete_production_branch`
 func (s *DatabaseBranchKeyspaces) DeleteKeyspace(ctx context.Context, request operations.DeleteKeyspaceRequest, opts ...operations.Option) (*operations.DeleteKeyspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -599,7 +629,7 @@ func (s *DatabaseBranchKeyspaces) DeleteKeyspace(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -696,6 +726,12 @@ func (s *DatabaseBranchKeyspaces) DeleteKeyspace(ctx context.Context, request op
 }
 
 // GetKeyspaceRolloutStatus - Get keyspace rollout status
+// ### Authorization
+// A service token   must have at least one of the following access   in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`read_branch`
 func (s *DatabaseBranchKeyspaces) GetKeyspaceRolloutStatus(ctx context.Context, request operations.GetKeyspaceRolloutStatusRequest, opts ...operations.Option) (*operations.GetKeyspaceRolloutStatusResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -714,7 +750,7 @@ func (s *DatabaseBranchKeyspaces) GetKeyspaceRolloutStatus(ctx context.Context, 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{name}/rollout-status", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/rollout-status", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

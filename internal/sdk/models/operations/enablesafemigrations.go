@@ -15,7 +15,7 @@ type EnableSafeMigrationsRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 }
 
 func (e *EnableSafeMigrationsRequest) GetOrganization() string {
@@ -32,11 +32,11 @@ func (e *EnableSafeMigrationsRequest) GetDatabase() string {
 	return e.Database
 }
 
-func (e *EnableSafeMigrationsRequest) GetName() string {
+func (e *EnableSafeMigrationsRequest) GetBranch() string {
 	if e == nil {
 		return ""
 	}
-	return e.Name
+	return e.Branch
 }
 
 // EnableSafeMigrationsKind - The kind of branch

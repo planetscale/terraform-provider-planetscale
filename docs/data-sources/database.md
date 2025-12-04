@@ -14,7 +14,7 @@ Database DataSource
 
 ```terraform
 data "planetscale_database" "my_database" {
-  name         = "...my_name..."
+  database     = "...my_database..."
   organization = "...my_organization..."
 }
 ```
@@ -24,7 +24,7 @@ data "planetscale_database" "my_database" {
 
 ### Required
 
-- `name` (String) The name of the database
+- `database` (String) The name of the database
 - `organization` (String) The name of the organization the database belongs to
 
 ### Read-Only
@@ -45,6 +45,7 @@ data "planetscale_database" "my_database" {
 - `migration_framework` (String) Framework used for applying migrations
 - `migration_table_name` (String) Table name to use for copying schema migration data
 - `multiple_admins_required_for_deletion` (Boolean) If the database requires multiple admins for deletion
+- `name` (String) Name of the database
 - `plan` (String) The database plan
 - `production_branch_web_console` (Boolean) Whether web console is enabled for production branches
 - `ready` (Boolean) If the database is ready to be used

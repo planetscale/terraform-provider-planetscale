@@ -13,7 +13,7 @@ type GetBranchSchemaRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// Return the schema for a single Vitess keyspace
 	Keyspace *string `queryParam:"style=form,explode=true,name=keyspace"`
 	// Return the schema for a PostgreSQL catalog namespace in `<database>.<schema>` format (e.g. public.schema1)
@@ -34,11 +34,11 @@ func (g *GetBranchSchemaRequest) GetDatabase() string {
 	return g.Database
 }
 
-func (g *GetBranchSchemaRequest) GetName() string {
+func (g *GetBranchSchemaRequest) GetBranch() string {
 	if g == nil {
 		return ""
 	}
-	return g.Name
+	return g.Branch
 }
 
 func (g *GetBranchSchemaRequest) GetKeyspace() *string {

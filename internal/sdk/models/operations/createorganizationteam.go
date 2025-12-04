@@ -30,8 +30,8 @@ func (c *CreateOrganizationTeamRequestBody) GetDescription() *string {
 
 type CreateOrganizationTeamRequest struct {
 	// The name of the organization
-	OrganizationName string                             `pathParam:"style=simple,explode=false,name=organization_name"`
-	Body             *CreateOrganizationTeamRequestBody `request:"mediaType=application/json"`
+	Organization string                             `pathParam:"style=simple,explode=false,name=organization"`
+	Body         *CreateOrganizationTeamRequestBody `request:"mediaType=application/json"`
 }
 
 func (c CreateOrganizationTeamRequest) MarshalJSON() ([]byte, error) {
@@ -39,17 +39,17 @@ func (c CreateOrganizationTeamRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrganizationTeamRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization_name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *CreateOrganizationTeamRequest) GetOrganizationName() string {
+func (c *CreateOrganizationTeamRequest) GetOrganization() string {
 	if c == nil {
 		return ""
 	}
-	return c.OrganizationName
+	return c.Organization
 }
 
 func (c *CreateOrganizationTeamRequest) GetBody() *CreateOrganizationTeamRequestBody {

@@ -51,6 +51,7 @@ type PasswordResourceModel struct {
 	DatabaseBranch         tfTypes.GetPasswordDatabaseBranch `tfsdk:"database_branch"`
 	DeletedAt              types.String                      `tfsdk:"deleted_at"`
 	DirectVtgate           types.Bool                        `tfsdk:"direct_vtgate"`
+	DirectVtgateAddresses  []types.String                    `tfsdk:"direct_vtgate_addresses"`
 	Expired                types.Bool                        `tfsdk:"expired"`
 	ExpiresAt              types.String                      `tfsdk:"expires_at"`
 	ID                     types.String                      `tfsdk:"id"`
@@ -160,6 +161,11 @@ func (r *PasswordResource) Schema(ctx context.Context, req resource.SchemaReques
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
 				Description: `Whether the password connects directly to a VTGate. Requires replacement if changed.`,
+			},
+			"direct_vtgate_addresses": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `The list of hosts in each availability zone providing direct access to a vtgate`,
 			},
 			"expired": schema.BoolAttribute{
 				Computed:    true,

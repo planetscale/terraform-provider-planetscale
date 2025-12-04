@@ -17,7 +17,7 @@ type UpdateKeyspaceRequest struct {
 	// The name of the branch
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the keyspace
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Keyspace string `pathParam:"style=simple,explode=false,name=keyspace"`
 }
 
 func (u *UpdateKeyspaceRequest) GetOrganization() string {
@@ -41,11 +41,11 @@ func (u *UpdateKeyspaceRequest) GetBranch() string {
 	return u.Branch
 }
 
-func (u *UpdateKeyspaceRequest) GetName() string {
+func (u *UpdateKeyspaceRequest) GetKeyspace() string {
 	if u == nil {
 		return ""
 	}
-	return u.Name
+	return u.Keyspace
 }
 
 // UpdateKeyspaceStrategy - The replication durability strategy

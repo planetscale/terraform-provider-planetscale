@@ -277,81 +277,6 @@ func (e *CreateBackupTarget) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// CreateBackupScheduleDay - Day of the week that the backup is scheduled
-type CreateBackupScheduleDay string
-
-const (
-	CreateBackupScheduleDayZero  CreateBackupScheduleDay = "0"
-	CreateBackupScheduleDayOne   CreateBackupScheduleDay = "1"
-	CreateBackupScheduleDayTwo   CreateBackupScheduleDay = "2"
-	CreateBackupScheduleDayThree CreateBackupScheduleDay = "3"
-	CreateBackupScheduleDayFour  CreateBackupScheduleDay = "4"
-	CreateBackupScheduleDayFive  CreateBackupScheduleDay = "5"
-	CreateBackupScheduleDaySix   CreateBackupScheduleDay = "6"
-)
-
-func (e CreateBackupScheduleDay) ToPointer() *CreateBackupScheduleDay {
-	return &e
-}
-func (e *CreateBackupScheduleDay) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "0":
-		fallthrough
-	case "1":
-		fallthrough
-	case "2":
-		fallthrough
-	case "3":
-		fallthrough
-	case "4":
-		fallthrough
-	case "5":
-		fallthrough
-	case "6":
-		*e = CreateBackupScheduleDay(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateBackupScheduleDay: %v", v)
-	}
-}
-
-// CreateBackupScheduleWeek - Week of the month that the backup is scheduled
-type CreateBackupScheduleWeek string
-
-const (
-	CreateBackupScheduleWeekZero  CreateBackupScheduleWeek = "0"
-	CreateBackupScheduleWeekOne   CreateBackupScheduleWeek = "1"
-	CreateBackupScheduleWeekTwo   CreateBackupScheduleWeek = "2"
-	CreateBackupScheduleWeekThree CreateBackupScheduleWeek = "3"
-)
-
-func (e CreateBackupScheduleWeek) ToPointer() *CreateBackupScheduleWeek {
-	return &e
-}
-func (e *CreateBackupScheduleWeek) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "0":
-		fallthrough
-	case "1":
-		fallthrough
-	case "2":
-		fallthrough
-	case "3":
-		*e = CreateBackupScheduleWeek(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateBackupScheduleWeek: %v", v)
-	}
-}
-
 type CreateBackupBackupPolicy struct {
 	// The ID of the backup policy
 	ID string `json:"id"`
@@ -369,10 +294,10 @@ type CreateBackupBackupPolicy struct {
 	FrequencyUnit string `json:"frequency_unit"`
 	// The time of day that the backup is scheduled, in HH:MM format
 	ScheduleTime string `json:"schedule_time"`
-	// Day of the week that the backup is scheduled
-	ScheduleDay CreateBackupScheduleDay `json:"schedule_day"`
-	// Week of the month that the backup is scheduled
-	ScheduleWeek CreateBackupScheduleWeek `json:"schedule_week"`
+	// Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+	ScheduleDay float64 `json:"schedule_day"`
+	// Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+	ScheduleWeek float64 `json:"schedule_week"`
 	// When the backup policy was created
 	CreatedAt string `json:"created_at"`
 	// When the backup policy was last updated
@@ -441,16 +366,16 @@ func (c *CreateBackupBackupPolicy) GetScheduleTime() string {
 	return c.ScheduleTime
 }
 
-func (c *CreateBackupBackupPolicy) GetScheduleDay() CreateBackupScheduleDay {
+func (c *CreateBackupBackupPolicy) GetScheduleDay() float64 {
 	if c == nil {
-		return CreateBackupScheduleDay("")
+		return 0.0
 	}
 	return c.ScheduleDay
 }
 
-func (c *CreateBackupBackupPolicy) GetScheduleWeek() CreateBackupScheduleWeek {
+func (c *CreateBackupBackupPolicy) GetScheduleWeek() float64 {
 	if c == nil {
-		return CreateBackupScheduleWeek("")
+		return 0.0
 	}
 	return c.ScheduleWeek
 }

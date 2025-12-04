@@ -14,8 +14,8 @@ Branch DataSource
 
 ```terraform
 data "planetscale_branch" "my_branch" {
+  branch       = "...my_branch..."
   database     = "...my_database..."
-  name         = "...my_name..."
   organization = "...my_organization..."
 }
 ```
@@ -25,8 +25,8 @@ data "planetscale_branch" "my_branch" {
 
 ### Required
 
+- `branch` (String) The name of the branch
 - `database` (String) The name of the database the branch belongs to
-- `name` (String) The name of the branch
 - `organization` (String) The name of the organization the branch belongs to
 
 ### Read-Only
@@ -45,6 +45,7 @@ data "planetscale_branch" "my_branch" {
 - `metal` (Boolean) Whether or not this is a metal database
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
+- `name` (String) The name of the branch
 - `parent_branch` (String) The name of the parent branch from which the branch was created
 - `private_edge_connectivity` (Boolean) True if private connections are enabled
 - `production` (Boolean) Whether or not the branch is a production branch

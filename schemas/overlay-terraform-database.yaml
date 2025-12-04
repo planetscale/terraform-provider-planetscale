@@ -9,11 +9,11 @@ actions:
     update:
       x-speakeasy-entity-operation: Database#create
       x-speakeasy-entity-description: Manage a PlanetScale database.
-  - target: $.paths["/organizations/{organization}/databases/{name}"].delete
+  - target: $.paths["/organizations/{organization}/databases/{database}"].delete
     description: API operation for managed resource delete.
     update:
       x-speakeasy-entity-operation: Database#delete
-  - target: $.paths["/organizations/{organization}/databases/{name}"].get
+  - target: $.paths["/organizations/{organization}/databases/{database}"].get
     description: API operation for data and managed resource read.
     update:
       x-speakeasy-entity-operation:
@@ -29,7 +29,7 @@ actions:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
-  - target: $.paths["/organizations/{organization}/databases/{name}"].patch
+  - target: $.paths["/organizations/{organization}/databases/{database}"].patch
     description: API operation for managed resource update.
     update:
       x-speakeasy-entity-operation: Database#update
@@ -64,7 +64,7 @@ actions:
         x-speakeasy-terraform-ignore: true
       region:
         x-speakeasy-name-override: region_data
-  - target: $.paths["/organizations/{organization}/databases/{name}"].patch.requestBody.content["application/json"].schema.properties
+  - target: $.paths["/organizations/{organization}/databases/{database}"].patch.requestBody.content["application/json"].schema.properties
     description: Prevent duplicate attribute for name
     update:
       new_name:

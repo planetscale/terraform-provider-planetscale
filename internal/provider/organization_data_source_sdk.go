@@ -49,11 +49,11 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 func (r *OrganizationDataSourceModel) ToOperationsGetOrganizationRequest(ctx context.Context) (*operations.GetOrganizationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
+	var organization string
+	organization = r.Organization.ValueString()
 
 	out := operations.GetOrganizationRequest{
-		Name: name,
+		Organization: organization,
 	}
 
 	return &out, diags

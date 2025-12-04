@@ -29,10 +29,10 @@ type BranchSchemaDataSource struct {
 
 // BranchSchemaDataSourceModel describes the data model.
 type BranchSchemaDataSourceModel struct {
+	Branch       types.String                  `tfsdk:"branch"`
 	Data         []tfTypes.GetBranchSchemaData `tfsdk:"data"`
 	Database     types.String                  `tfsdk:"database"`
 	Keyspace     types.String                  `queryParam:"style=form,explode=true,name=keyspace" tfsdk:"keyspace"`
-	Name         types.String                  `tfsdk:"name"`
 	Namespace    types.String                  `queryParam:"style=form,explode=true,name=namespace" tfsdk:"namespace"`
 	Organization types.String                  `tfsdk:"organization"`
 }
@@ -48,6 +48,10 @@ func (r *BranchSchemaDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "BranchSchema DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"branch": schema.StringAttribute{
+				Required:    true,
+				Description: `The name of the branch`,
+			},
 			"data": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
@@ -74,10 +78,6 @@ func (r *BranchSchemaDataSource) Schema(ctx context.Context, req datasource.Sche
 			"keyspace": schema.StringAttribute{
 				Optional:    true,
 				Description: `Return the schema for a single Vitess keyspace`,
-			},
-			"name": schema.StringAttribute{
-				Required:    true,
-				Description: `The name of the branch`,
 			},
 			"namespace": schema.StringAttribute{
 				Optional:    true,

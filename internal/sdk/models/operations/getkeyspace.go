@@ -17,7 +17,7 @@ type GetKeyspaceRequest struct {
 	// The name of the branch
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the keyspace
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Keyspace string `pathParam:"style=simple,explode=false,name=keyspace"`
 }
 
 func (g *GetKeyspaceRequest) GetOrganization() string {
@@ -41,11 +41,11 @@ func (g *GetKeyspaceRequest) GetBranch() string {
 	return g.Branch
 }
 
-func (g *GetKeyspaceRequest) GetName() string {
+func (g *GetKeyspaceRequest) GetKeyspace() string {
 	if g == nil {
 		return ""
 	}
-	return g.Name
+	return g.Keyspace
 }
 
 // GetKeyspaceStrategy - The replication durability strategy

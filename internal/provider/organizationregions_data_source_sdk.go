@@ -45,11 +45,11 @@ func (r *OrganizationRegionsDataSourceModel) RefreshFromOperationsListRegionsFor
 func (r *OrganizationRegionsDataSourceModel) ToOperationsListRegionsForOrganizationRequest(ctx context.Context) (*operations.ListRegionsForOrganizationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
+	var organization string
+	organization = r.Organization.ValueString()
 
 	out := operations.ListRegionsForOrganizationRequest{
-		Name: name,
+		Organization: organization,
 	}
 
 	return &out, diags

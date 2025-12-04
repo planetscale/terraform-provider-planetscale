@@ -251,7 +251,7 @@ func (s *Organizations) GetOrganization(ctx context.Context, request operations.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{name}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -395,7 +395,7 @@ func (s *Organizations) UpdateOrganization(ctx context.Context, request operatio
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{name}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -543,7 +543,7 @@ func (s *Organizations) ListAuditLogs(ctx context.Context, request operations.Li
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{name}/audit-log", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/audit-log", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -693,7 +693,7 @@ func (s *Organizations) ListClusterSizeSkus(ctx context.Context, request operati
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{name}/cluster-size-skus", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/cluster-size-skus", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -846,7 +846,7 @@ func (s *Organizations) ListRegionsForOrganization(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{name}/regions", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/regions", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -958,9 +958,9 @@ func (s *Organizations) ListRegionsForOrganization(ctx context.Context, request 
 		return s.ListRegionsForOrganization(
 			ctx,
 			operations.ListRegionsForOrganizationRequest{
-				Name:    request.Name,
-				Page:    &nP,
-				PerPage: request.PerPage,
+				Organization: request.Organization,
+				Page:         &nP,
+				PerPage:      request.PerPage,
 			},
 		)
 	}

@@ -153,8 +153,8 @@ func (r *BranchResourceModel) ToOperationsCreateBranchRequest(ctx context.Contex
 func (r *BranchResourceModel) ToOperationsCreateBranchRequestBody(ctx context.Context) (*operations.CreateBranchRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
+	var branch string
+	branch = r.Branch.ValueString()
 
 	var parentBranch string
 	parentBranch = r.ParentBranch.ValueString()
@@ -189,14 +189,21 @@ func (r *BranchResourceModel) ToOperationsCreateBranchRequestBody(ctx context.Co
 	} else {
 		clusterSize = nil
 	}
+	majorVersion := new(string)
+	if !r.MajorVersion.IsUnknown() && !r.MajorVersion.IsNull() {
+		*majorVersion = r.MajorVersion.ValueString()
+	} else {
+		majorVersion = nil
+	}
 	out := operations.CreateBranchRequestBody{
-		Name:         name,
+		Branch:       branch,
 		ParentBranch: parentBranch,
 		BackupID:     backupID,
 		Region:       region,
 		RestorePoint: restorePoint,
 		SeedData:     seedData,
 		ClusterSize:  clusterSize,
+		MajorVersion: majorVersion,
 	}
 
 	return &out, diags
@@ -211,13 +218,13 @@ func (r *BranchResourceModel) ToOperationsDeleteBranchRequest(ctx context.Contex
 	var database string
 	database = r.Database.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var branch string
+	branch = r.Branch.ValueString()
 
 	out := operations.DeleteBranchRequest{
 		Organization: organization,
 		Database:     database,
-		Name:         name,
+		Branch:       branch,
 	}
 
 	return &out, diags
@@ -232,13 +239,13 @@ func (r *BranchResourceModel) ToOperationsGetBranchRequest(ctx context.Context) 
 	var database string
 	database = r.Database.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var branch string
+	branch = r.Branch.ValueString()
 
 	out := operations.GetBranchRequest{
 		Organization: organization,
 		Database:     database,
-		Name:         name,
+		Branch:       branch,
 	}
 
 	return &out, diags

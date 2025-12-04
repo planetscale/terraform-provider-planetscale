@@ -11,7 +11,7 @@ type ListDatabaseRegionsRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// If provided, specifies the page offset of returned results
 	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -23,7 +23,7 @@ func (l ListDatabaseRegionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDatabaseRegionsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database"}); err != nil {
 		return err
 	}
 	return nil
@@ -36,11 +36,11 @@ func (l *ListDatabaseRegionsRequest) GetOrganization() string {
 	return l.Organization
 }
 
-func (l *ListDatabaseRegionsRequest) GetName() string {
+func (l *ListDatabaseRegionsRequest) GetDatabase() string {
 	if l == nil {
 		return ""
 	}
-	return l.Name
+	return l.Database
 }
 
 func (l *ListDatabaseRegionsRequest) GetPage() *float64 {

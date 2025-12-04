@@ -63,7 +63,7 @@ func (s *OrganizationTeams) ListOrganizationTeams(ctx context.Context, request o
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization_name}/teams", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/teams", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -193,7 +193,7 @@ func (s *OrganizationTeams) ListOrganizationTeams(ctx context.Context, request o
 //
 // **Service Token Accesses**
 //
-//	`write_organization`
+//	`write_teams`
 //
 // **OAuth Scopes**
 //
@@ -219,7 +219,7 @@ func (s *OrganizationTeams) CreateOrganizationTeam(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization_name}/teams", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/teams", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -378,7 +378,7 @@ func (s *OrganizationTeams) GetOrganizationTeam(ctx context.Context, request ope
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization_name}/teams/{team_slug}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/teams/{team}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -504,7 +504,7 @@ func (s *OrganizationTeams) GetOrganizationTeam(ctx context.Context, request ope
 //
 // **Service Token Accesses**
 //
-//	`write_organization`
+//	`write_teams`
 //
 // **OAuth Scopes**
 //
@@ -530,7 +530,7 @@ func (s *OrganizationTeams) UpdateOrganizationTeam(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization_name}/teams/{team_slug}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/teams/{team}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -663,7 +663,7 @@ func (s *OrganizationTeams) UpdateOrganizationTeam(ctx context.Context, request 
 //
 // **Service Token Accesses**
 //
-//	`write_organization`
+//	`write_teams`
 //
 // **OAuth Scopes**
 //
@@ -689,7 +689,7 @@ func (s *OrganizationTeams) DeleteOrganizationTeam(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization_name}/teams/{team_slug}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/teams/{team}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

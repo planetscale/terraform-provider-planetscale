@@ -63,7 +63,7 @@ func (s *BouncerResizes) ListBouncerResizeRequests(ctx context.Context, request 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}/resizes", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/resizes", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -216,7 +216,7 @@ func (s *BouncerResizes) UpdateBouncerResizeRequest(ctx context.Context, request
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}/resizes", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/resizes", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -372,7 +372,7 @@ func (s *BouncerResizes) CancelBouncerResizeRequest(ctx context.Context, request
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{name}/resizes", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/resizes", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

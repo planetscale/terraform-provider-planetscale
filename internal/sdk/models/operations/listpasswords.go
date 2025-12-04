@@ -284,6 +284,8 @@ type ListPasswordsData struct {
 	Expired bool `json:"expired"`
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
 	DirectVtgate bool `json:"direct_vtgate"`
+	// The list of hosts in each availability zone providing direct access to a vtgate
+	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
 	TTLSeconds float64 `json:"ttl_seconds"`
 	// The host URL for the password
@@ -373,6 +375,13 @@ func (l *ListPasswordsData) GetDirectVtgate() bool {
 		return false
 	}
 	return l.DirectVtgate
+}
+
+func (l *ListPasswordsData) GetDirectVtgateAddresses() []string {
+	if l == nil {
+		return []string{}
+	}
+	return l.DirectVtgateAddresses
 }
 
 func (l *ListPasswordsData) GetTTLSeconds() float64 {

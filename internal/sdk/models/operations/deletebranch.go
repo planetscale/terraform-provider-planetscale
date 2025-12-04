@@ -12,7 +12,7 @@ type DeleteBranchRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 }
 
 func (d *DeleteBranchRequest) GetOrganization() string {
@@ -29,11 +29,11 @@ func (d *DeleteBranchRequest) GetDatabase() string {
 	return d.Database
 }
 
-func (d *DeleteBranchRequest) GetName() string {
+func (d *DeleteBranchRequest) GetBranch() string {
 	if d == nil {
 		return ""
 	}
-	return d.Name
+	return d.Branch
 }
 
 type DeleteBranchResponse struct {

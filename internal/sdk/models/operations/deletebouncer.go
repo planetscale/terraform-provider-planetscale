@@ -14,7 +14,7 @@ type DeleteBouncerRequest struct {
 	// The name of the branch that owns this resource
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the bouncer
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Bouncer string `pathParam:"style=simple,explode=false,name=bouncer"`
 }
 
 func (d *DeleteBouncerRequest) GetOrganization() string {
@@ -38,11 +38,11 @@ func (d *DeleteBouncerRequest) GetBranch() string {
 	return d.Branch
 }
 
-func (d *DeleteBouncerRequest) GetName() string {
+func (d *DeleteBouncerRequest) GetBouncer() string {
 	if d == nil {
 		return ""
 	}
-	return d.Name
+	return d.Bouncer
 }
 
 type DeleteBouncerResponse struct {

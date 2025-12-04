@@ -210,17 +210,31 @@ func (r *DatabaseResourceModel) ToOperationsCreateDatabaseRequestBody(ctx contex
 	var clusterSize string
 	clusterSize = r.ClusterSize.ValueString()
 
+	replicas := new(float64)
+	if !r.Replicas.IsUnknown() && !r.Replicas.IsNull() {
+		*replicas = r.Replicas.ValueFloat64()
+	} else {
+		replicas = nil
+	}
 	kind := new(operations.KindRequest)
 	if !r.Kind.IsUnknown() && !r.Kind.IsNull() {
 		*kind = operations.KindRequest(r.Kind.ValueString())
 	} else {
 		kind = nil
 	}
+	majorVersion := new(string)
+	if !r.MajorVersion.IsUnknown() && !r.MajorVersion.IsNull() {
+		*majorVersion = r.MajorVersion.ValueString()
+	} else {
+		majorVersion = nil
+	}
 	out := operations.CreateDatabaseRequestBody{
-		Name:        name,
-		Region:      region,
-		ClusterSize: clusterSize,
-		Kind:        kind,
+		Name:         name,
+		Region:       region,
+		ClusterSize:  clusterSize,
+		Replicas:     replicas,
+		Kind:         kind,
+		MajorVersion: majorVersion,
 	}
 
 	return &out, diags
@@ -232,12 +246,12 @@ func (r *DatabaseResourceModel) ToOperationsDeleteDatabaseRequest(ctx context.Co
 	var organization string
 	organization = r.Organization.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var database string
+	database = r.Database.ValueString()
 
 	out := operations.DeleteDatabaseRequest{
 		Organization: organization,
-		Name:         name,
+		Database:     database,
 	}
 
 	return &out, diags
@@ -249,12 +263,12 @@ func (r *DatabaseResourceModel) ToOperationsGetDatabaseRequest(ctx context.Conte
 	var organization string
 	organization = r.Organization.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var database string
+	database = r.Database.ValueString()
 
 	out := operations.GetDatabaseRequest{
 		Organization: organization,
-		Name:         name,
+		Database:     database,
 	}
 
 	return &out, diags
@@ -266,8 +280,8 @@ func (r *DatabaseResourceModel) ToOperationsUpdateDatabaseSettingsRequest(ctx co
 	var organization string
 	organization = r.Organization.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var database string
+	database = r.Database.ValueString()
 
 	body, bodyDiags := r.ToOperationsUpdateDatabaseSettingsRequestBody(ctx)
 	diags.Append(bodyDiags...)
@@ -278,7 +292,7 @@ func (r *DatabaseResourceModel) ToOperationsUpdateDatabaseSettingsRequest(ctx co
 
 	out := operations.UpdateDatabaseSettingsRequest{
 		Organization: organization,
-		Name:         name,
+		Database:     database,
 		Body:         body,
 	}
 

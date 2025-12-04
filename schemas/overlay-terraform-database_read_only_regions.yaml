@@ -4,7 +4,7 @@ info:
   title: Terraform generation overlay for planetscale_database_read_only_regions data resource.
   version: 0.0.1
 actions:
-  - target: $.paths["/organizations/{organization}/databases/{name}/read-only-regions"].get
+  - target: $.paths["/organizations/{organization}/databases/{database}/read-only-regions"].get
     description: API operation for read and enable pagination.
     update:
       x-speakeasy-entity-operation: DatabaseReadOnlyRegions#read
@@ -18,11 +18,11 @@ actions:
         outputs:
           results: $.data
 
-  - target: $.paths["/organizations/{organization}/databases/{name}/read-only-regions"].get.parameters[?@.name == 'per_page']
+  - target: $.paths["/organizations/{organization}/databases/{database}/read-only-regions"].get.parameters[?@.name == 'per_page']
     description: Ignore extraneous parameter in Terraform schema.
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.paths["/organizations/{organization}/databases/{name}/read-only-regions"].get.responses["200"].content["application/json"].schema.properties
+  - target: $.paths["/organizations/{organization}/databases/{database}/read-only-regions"].get.responses["200"].content["application/json"].schema.properties
     description: Ignore extraneous response properties in Terraform schema.
     update:
       current_page:

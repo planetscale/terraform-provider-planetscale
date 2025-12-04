@@ -510,9 +510,9 @@ type ListOauthTokensData struct {
 	Name string `json:"name"`
 	// The display name of the service token
 	DisplayName string `json:"display_name"`
-	// The plain text token. Available only after create.
+	// The plaintext token. Available only after create.
 	Token string `json:"token"`
-	// The plain text refresh token. Available only after create.
+	// The plaintext refresh token. Available only after create.
 	PlainTextRefreshToken string `json:"plain_text_refresh_token"`
 	// The image source for the avatar of the service token
 	AvatarURL string `json:"avatar_url"`

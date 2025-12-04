@@ -30,10 +30,10 @@ func (u *UpdateOrganizationTeamRequestBody) GetDescription() *string {
 
 type UpdateOrganizationTeamRequest struct {
 	// The name of the organization
-	OrganizationName string `pathParam:"style=simple,explode=false,name=organization_name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The slug of the team
-	TeamSlug string                             `pathParam:"style=simple,explode=false,name=team_slug"`
-	Body     *UpdateOrganizationTeamRequestBody `request:"mediaType=application/json"`
+	Team string                             `pathParam:"style=simple,explode=false,name=team"`
+	Body *UpdateOrganizationTeamRequestBody `request:"mediaType=application/json"`
 }
 
 func (u UpdateOrganizationTeamRequest) MarshalJSON() ([]byte, error) {
@@ -41,24 +41,24 @@ func (u UpdateOrganizationTeamRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateOrganizationTeamRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization_name", "team_slug"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "team"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (u *UpdateOrganizationTeamRequest) GetOrganizationName() string {
+func (u *UpdateOrganizationTeamRequest) GetOrganization() string {
 	if u == nil {
 		return ""
 	}
-	return u.OrganizationName
+	return u.Organization
 }
 
-func (u *UpdateOrganizationTeamRequest) GetTeamSlug() string {
+func (u *UpdateOrganizationTeamRequest) GetTeam() string {
 	if u == nil {
 		return ""
 	}
-	return u.TeamSlug
+	return u.Team
 }
 
 func (u *UpdateOrganizationTeamRequest) GetBody() *UpdateOrganizationTeamRequestBody {

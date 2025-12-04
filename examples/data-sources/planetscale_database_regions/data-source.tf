@@ -1,4 +1,4 @@
 data "planetscale_database_regions" "my_databaseregions" {
-  name         = "...my_name..."
+  database     = "...my_database..."
   organization = "...my_organization..."
 }

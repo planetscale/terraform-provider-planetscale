@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -45,6 +46,7 @@ type DatabaseResourceModel struct {
 	BranchesURL                       types.String                  `tfsdk:"branches_url"`
 	ClusterSize                       types.String                  `tfsdk:"cluster_size"`
 	CreatedAt                         types.String                  `tfsdk:"created_at"`
+	Database                          types.String                  `tfsdk:"database"`
 	DataImport                        tfTypes.GetDatabaseDataImport `tfsdk:"data_import"`
 	ForeignKeysEnabled                types.Bool                    `tfsdk:"foreign_keys_enabled"`
 	HTMLURL                           types.String                  `tfsdk:"html_url"`
@@ -52,6 +54,7 @@ type DatabaseResourceModel struct {
 	InsightsEnabled                   types.Bool                    `tfsdk:"insights_enabled"`
 	InsightsRawQueries                types.Bool                    `tfsdk:"insights_raw_queries"`
 	Kind                              types.String                  `tfsdk:"kind"`
+	MajorVersion                      types.String                  `tfsdk:"major_version"`
 	MigrationFramework                types.String                  `tfsdk:"migration_framework"`
 	MigrationTableName                types.String                  `tfsdk:"migration_table_name"`
 	MultipleAdminsRequiredForDeletion types.Bool                    `tfsdk:"multiple_admins_required_for_deletion"`
@@ -62,6 +65,7 @@ type DatabaseResourceModel struct {
 	Ready                             types.Bool                    `tfsdk:"ready"`
 	Region                            types.String                  `tfsdk:"region"`
 	RegionData                        tfTypes.GetDatabaseRegionData `tfsdk:"region_data"`
+	Replicas                          types.Float64                 `tfsdk:"replicas"`
 	RequireApprovalForDeploy          types.Bool                    `tfsdk:"require_approval_for_deploy"`
 	ResizeQueued                      types.Bool                    `tfsdk:"resize_queued"`
 	Resizing                          types.Bool                    `tfsdk:"resizing"`
@@ -150,6 +154,10 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 					},
 				},
 			},
+			"database": schema.StringAttribute{
+				Required:    true,
+				Description: `The name of the database`,
+			},
 			"foreign_keys_enabled": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether foreign key constraints are enabled`,
@@ -184,6 +192,13 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 						"postgresql",
 					),
 				},
+			},
+			"major_version": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `For PostgreSQL databases, the PostgreSQL major version to use for the database. Defaults to the latest available major version. Requires replacement if changed.`,
 			},
 			"migration_framework": schema.StringAttribute{
 				Computed:    true,
@@ -261,6 +276,13 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 						Description: `The slug of the region`,
 					},
 				},
+			},
+			"replicas": schema.Float64Attribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Float64{
+					float64planmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The number of replicas for the database. 0 for non-HA, 2+ for HA. Requires replacement if changed.`,
 			},
 			"require_approval_for_deploy": schema.BoolAttribute{
 				Computed:    true,
@@ -662,20 +684,20 @@ func (r *DatabaseResource) ImportState(ctx context.Context, req resource.ImportS
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		Name         string `json:"name"`
+		Database     string `json:"database"`
 		Organization string `json:"organization"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"name": "...", "organization": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"database": "...", "organization": "..."}': `+err.Error())
 		return
 	}
 
-	if len(data.Name) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field name is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+	if len(data.Database) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field database is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), data.Name)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("database"), data.Database)...)
 	if len(data.Organization) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field organization is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return

@@ -60,7 +60,7 @@ func (s *DatabasePostgresIPRestrictions) ListDatabasePostgresCidrs(ctx context.C
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database_name}/cidrs", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/cidrs", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -211,7 +211,7 @@ func (s *DatabasePostgresIPRestrictions) CreateDatabasePostgresCidr(ctx context.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database_name}/cidrs", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/cidrs", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -365,7 +365,7 @@ func (s *DatabasePostgresIPRestrictions) GetDatabasePostgresCidr(ctx context.Con
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database_name}/cidrs/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/cidrs/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -512,7 +512,7 @@ func (s *DatabasePostgresIPRestrictions) UpdateDatabasePostgresCidr(ctx context.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database_name}/cidrs/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/cidrs/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -666,7 +666,7 @@ func (s *DatabasePostgresIPRestrictions) DeleteDatabasePostgresCidr(ctx context.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database_name}/cidrs/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/cidrs/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

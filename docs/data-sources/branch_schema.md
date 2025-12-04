@@ -14,9 +14,9 @@ BranchSchema DataSource
 
 ```terraform
 data "planetscale_branch_schema" "my_branchschema" {
+  branch       = "...my_branch..."
   database     = "...my_database..."
   keyspace     = "...my_keyspace..."
-  name         = "...my_name..."
   namespace    = "...my_namespace..."
   organization = "...my_organization..."
 }
@@ -27,8 +27,8 @@ data "planetscale_branch_schema" "my_branchschema" {
 
 ### Required
 
+- `branch` (String) The name of the branch
 - `database` (String) The name of the database the branch belongs to
-- `name` (String) The name of the branch
 - `organization` (String) The name of the organization the branch belongs to
 
 ### Optional

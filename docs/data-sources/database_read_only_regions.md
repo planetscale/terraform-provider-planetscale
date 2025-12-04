@@ -14,7 +14,7 @@ DatabaseReadOnlyRegions DataSource
 
 ```terraform
 data "planetscale_database_read_only_regions" "my_databasereadonlyregions" {
-  name         = "...my_name..."
+  database     = "...my_database..."
   organization = "...my_organization..."
 }
 ```
@@ -24,7 +24,7 @@ data "planetscale_database_read_only_regions" "my_databasereadonlyregions" {
 
 ### Required
 
-- `name` (String) The name of the database
+- `database` (String) The name of the database
 - `organization` (String) The name of the organization the database belongs to
 
 ### Read-Only

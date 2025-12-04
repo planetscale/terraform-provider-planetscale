@@ -18,13 +18,20 @@ func (r *OrganizationClusterSizeSkusDataSourceModel) RefreshFromListClusterSizeS
 	for _, dataItem := range resp {
 		var data tfTypes.ListClusterSizeSkusResponseBody
 
+		data.Architecture = types.StringValue(dataItem.Architecture)
 		data.CPU = types.StringValue(dataItem.CPU)
+		data.DefaultVtgate = types.StringValue(dataItem.DefaultVtgate)
+		data.DefaultVtgateRate = types.Float64Value(dataItem.DefaultVtgateRate)
+		data.Development = types.BoolValue(dataItem.Development)
 		data.DisplayName = types.StringValue(dataItem.DisplayName)
 		data.Enabled = types.BoolValue(dataItem.Enabled)
 		data.Metal = types.BoolValue(dataItem.Metal)
 		data.Name = types.StringValue(dataItem.Name)
+		data.Production = types.BoolValue(dataItem.Production)
 		data.Provider = types.StringValue(dataItem.Provider)
 		data.RAM = types.Float64Value(dataItem.RAM)
+		data.Rate = types.Float64PointerValue(dataItem.Rate)
+		data.ReplicaRate = types.Float64PointerValue(dataItem.ReplicaRate)
 		data.SortOrder = types.Float64Value(dataItem.SortOrder)
 		data.Storage = types.Float64Value(dataItem.Storage)
 
@@ -37,8 +44,8 @@ func (r *OrganizationClusterSizeSkusDataSourceModel) RefreshFromListClusterSizeS
 func (r *OrganizationClusterSizeSkusDataSourceModel) ToOperationsListClusterSizeSkusRequest(ctx context.Context) (*operations.ListClusterSizeSkusRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
+	var organization string
+	organization = r.Organization.ValueString()
 
 	engine := new(operations.Engine)
 	if !r.Engine.IsUnknown() && !r.Engine.IsNull() {
@@ -59,10 +66,10 @@ func (r *OrganizationClusterSizeSkusDataSourceModel) ToOperationsListClusterSize
 		region = nil
 	}
 	out := operations.ListClusterSizeSkusRequest{
-		Name:   name,
-		Engine: engine,
-		Rates:  rates,
-		Region: region,
+		Organization: organization,
+		Engine:       engine,
+		Rates:        rates,
+		Region:       region,
 	}
 
 	return &out, diags

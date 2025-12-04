@@ -14,10 +14,10 @@ OrganizationClusterSizeSkus DataSource
 
 ```terraform
 data "planetscale_organization_cluster_size_skus" "my_organizationclustersizeskus" {
-  engine = "mysql"
-  name   = "...my_name..."
-  rates  = true
-  region = "...my_region..."
+  engine       = "mysql"
+  organization = "...my_organization..."
+  rates        = true
+  region       = "...my_region..."
 }
 ```
 
@@ -26,7 +26,7 @@ data "planetscale_organization_cluster_size_skus" "my_organizationclustersizesku
 
 ### Required
 
-- `name` (String) The name of the organization
+- `organization` (String) The name of the organization
 
 ### Optional
 
@@ -43,12 +43,19 @@ data "planetscale_organization_cluster_size_skus" "my_organizationclustersizesku
 
 Read-Only:
 
+- `architecture` (String) The architecture of the cluster SKU (null, x86_64 or arm64)
 - `cpu` (String) The number of CPUs
+- `default_vtgate` (String) The default vtgate size for the cluster SKU
+- `default_vtgate_rate` (Number) The default vtgate rate for the cluster SKU
+- `development` (Boolean) Whether or not the cluster SKU is a development SKU
 - `display_name` (String) The display name
 - `enabled` (Boolean) Whether or not the cluster SKU is enabled for the organization
 - `metal` (Boolean) Whether or not the cluster SKU is Metal
 - `name` (String) The name of the cluster SKU
+- `production` (Boolean) Whether or not the cluster SKU is a production SKU
 - `provider` (String) The provider of the cluster SKU (nil, AWS or GCP)
 - `ram` (Number) The amount of memory in bytes
+- `rate` (Number) The rate for the cluster SKU
+- `replica_rate` (Number) The replica rate for the cluster SKU
 - `sort_order` (Number) The sort order of the cluster SKU
 - `storage` (Number) The amount of storage in bytes

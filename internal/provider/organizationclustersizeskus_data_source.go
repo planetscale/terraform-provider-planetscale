@@ -31,11 +31,11 @@ type OrganizationClusterSizeSkusDataSource struct {
 
 // OrganizationClusterSizeSkusDataSourceModel describes the data model.
 type OrganizationClusterSizeSkusDataSourceModel struct {
-	Data   []tfTypes.ListClusterSizeSkusResponseBody `tfsdk:"data"`
-	Engine types.String                              `queryParam:"style=form,explode=true,name=engine" tfsdk:"engine"`
-	Name   types.String                              `tfsdk:"name"`
-	Rates  types.Bool                                `queryParam:"style=form,explode=true,name=rates" tfsdk:"rates"`
-	Region types.String                              `queryParam:"style=form,explode=true,name=region" tfsdk:"region"`
+	Data         []tfTypes.ListClusterSizeSkusResponseBody `tfsdk:"data"`
+	Engine       types.String                              `queryParam:"style=form,explode=true,name=engine" tfsdk:"engine"`
+	Organization types.String                              `tfsdk:"organization"`
+	Rates        types.Bool                                `queryParam:"style=form,explode=true,name=rates" tfsdk:"rates"`
+	Region       types.String                              `queryParam:"style=form,explode=true,name=region" tfsdk:"region"`
 }
 
 // Metadata returns the data source type name.
@@ -53,9 +53,25 @@ func (r *OrganizationClusterSizeSkusDataSource) Schema(ctx context.Context, req 
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"architecture": schema.StringAttribute{
+							Computed:    true,
+							Description: `The architecture of the cluster SKU (null, x86_64 or arm64)`,
+						},
 						"cpu": schema.StringAttribute{
 							Computed:    true,
 							Description: `The number of CPUs`,
+						},
+						"default_vtgate": schema.StringAttribute{
+							Computed:    true,
+							Description: `The default vtgate size for the cluster SKU`,
+						},
+						"default_vtgate_rate": schema.Float64Attribute{
+							Computed:    true,
+							Description: `The default vtgate rate for the cluster SKU`,
+						},
+						"development": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether or not the cluster SKU is a development SKU`,
 						},
 						"display_name": schema.StringAttribute{
 							Computed:    true,
@@ -73,6 +89,10 @@ func (r *OrganizationClusterSizeSkusDataSource) Schema(ctx context.Context, req 
 							Computed:    true,
 							Description: `The name of the cluster SKU`,
 						},
+						"production": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether or not the cluster SKU is a production SKU`,
+						},
 						"provider": schema.StringAttribute{
 							Computed:    true,
 							Description: `The provider of the cluster SKU (nil, AWS or GCP)`,
@@ -80,6 +100,14 @@ func (r *OrganizationClusterSizeSkusDataSource) Schema(ctx context.Context, req 
 						"ram": schema.Float64Attribute{
 							Computed:    true,
 							Description: `The amount of memory in bytes`,
+						},
+						"rate": schema.Float64Attribute{
+							Computed:    true,
+							Description: `The rate for the cluster SKU`,
+						},
+						"replica_rate": schema.Float64Attribute{
+							Computed:    true,
+							Description: `The replica rate for the cluster SKU`,
 						},
 						"sort_order": schema.Float64Attribute{
 							Computed:    true,
@@ -103,7 +131,7 @@ func (r *OrganizationClusterSizeSkusDataSource) Schema(ctx context.Context, req 
 					),
 				},
 			},
-			"name": schema.StringAttribute{
+			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization`,
 			},

@@ -8,23 +8,23 @@ import (
 
 type DeleteOrganizationTeamRequest struct {
 	// The name of the organization
-	OrganizationName string `pathParam:"style=simple,explode=false,name=organization_name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The slug of the team
-	TeamSlug string `pathParam:"style=simple,explode=false,name=team_slug"`
+	Team string `pathParam:"style=simple,explode=false,name=team"`
 }
 
-func (d *DeleteOrganizationTeamRequest) GetOrganizationName() string {
+func (d *DeleteOrganizationTeamRequest) GetOrganization() string {
 	if d == nil {
 		return ""
 	}
-	return d.OrganizationName
+	return d.Organization
 }
 
-func (d *DeleteOrganizationTeamRequest) GetTeamSlug() string {
+func (d *DeleteOrganizationTeamRequest) GetTeam() string {
 	if d == nil {
 		return ""
 	}
-	return d.TeamSlug
+	return d.Team
 }
 
 type DeleteOrganizationTeamResponse struct {

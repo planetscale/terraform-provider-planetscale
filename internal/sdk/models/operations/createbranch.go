@@ -35,7 +35,7 @@ func (e *SeedData) UnmarshalJSON(data []byte) error {
 
 type CreateBranchRequestBody struct {
 	// The name of the branch
-	Name string `json:"name"`
+	Branch string `json:"branch"`
 	// Parent branch
 	ParentBranch string `json:"parent_branch"`
 	// If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
@@ -48,13 +48,15 @@ type CreateBranchRequestBody struct {
 	SeedData *SeedData `json:"seed_data,omitzero"`
 	// The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800
 	ClusterSize *string `json:"cluster_size,omitzero"`
+	// For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
+	MajorVersion *string `json:"major_version,omitzero"`
 }
 
-func (c *CreateBranchRequestBody) GetName() string {
+func (c *CreateBranchRequestBody) GetBranch() string {
 	if c == nil {
 		return ""
 	}
-	return c.Name
+	return c.Branch
 }
 
 func (c *CreateBranchRequestBody) GetParentBranch() string {
@@ -97,6 +99,13 @@ func (c *CreateBranchRequestBody) GetClusterSize() *string {
 		return nil
 	}
 	return c.ClusterSize
+}
+
+func (c *CreateBranchRequestBody) GetMajorVersion() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MajorVersion
 }
 
 type CreateBranchRequest struct {

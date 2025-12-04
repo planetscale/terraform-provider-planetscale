@@ -17,7 +17,7 @@ type ListBouncerResizeRequestsRequest struct {
 	// The name of the branch that owns this resource
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the bouncer
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Bouncer string `pathParam:"style=simple,explode=false,name=bouncer"`
 	// If provided, specifies the page offset of returned results
 	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -29,7 +29,7 @@ func (l ListBouncerResizeRequestsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListBouncerResizeRequestsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch", "name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch", "bouncer"}); err != nil {
 		return err
 	}
 	return nil
@@ -56,11 +56,11 @@ func (l *ListBouncerResizeRequestsRequest) GetBranch() string {
 	return l.Branch
 }
 
-func (l *ListBouncerResizeRequestsRequest) GetName() string {
+func (l *ListBouncerResizeRequestsRequest) GetBouncer() string {
 	if l == nil {
 		return ""
 	}
-	return l.Name
+	return l.Bouncer
 }
 
 func (l *ListBouncerResizeRequestsRequest) GetPage() *float64 {

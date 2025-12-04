@@ -10,7 +10,7 @@ type DeleteDatabaseRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Database string `pathParam:"style=simple,explode=false,name=database"`
 }
 
 func (d *DeleteDatabaseRequest) GetOrganization() string {
@@ -20,11 +20,11 @@ func (d *DeleteDatabaseRequest) GetOrganization() string {
 	return d.Organization
 }
 
-func (d *DeleteDatabaseRequest) GetName() string {
+func (d *DeleteDatabaseRequest) GetDatabase() string {
 	if d == nil {
 		return ""
 	}
-	return d.Name
+	return d.Database
 }
 
 type DeleteDatabaseResponse struct {

@@ -15,7 +15,7 @@ type LintBranchSchemaRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// If provided, specifies the page offset of returned results
 	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -27,7 +27,7 @@ func (l LintBranchSchemaRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LintBranchSchemaRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch"}); err != nil {
 		return err
 	}
 	return nil
@@ -47,11 +47,11 @@ func (l *LintBranchSchemaRequest) GetDatabase() string {
 	return l.Database
 }
 
-func (l *LintBranchSchemaRequest) GetName() string {
+func (l *LintBranchSchemaRequest) GetBranch() string {
 	if l == nil {
 		return ""
 	}
-	return l.Name
+	return l.Branch
 }
 
 func (l *LintBranchSchemaRequest) GetPage() *float64 {

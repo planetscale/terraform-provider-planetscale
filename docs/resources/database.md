@@ -14,11 +14,14 @@ Database Resource
 
 ```terraform
 resource "planetscale_database" "my_database" {
-  cluster_size = "...my_cluster_size..."
-  kind         = "mysql"
-  name         = "...my_name..."
-  organization = "...my_organization..."
-  region       = "...my_region..."
+  cluster_size  = "...my_cluster_size..."
+  database      = "...my_database..."
+  kind          = "mysql"
+  major_version = "...my_major_version..."
+  name          = "...my_name..."
+  organization  = "...my_organization..."
+  region        = "...my_region..."
+  replicas      = 3.39
 }
 ```
 
@@ -28,13 +31,16 @@ resource "planetscale_database" "my_database" {
 ### Required
 
 - `cluster_size` (String) The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus. Requires replacement if changed.
+- `database` (String) The name of the database
 - `name` (String) Name of the database
 - `organization` (String) The name of the organization the database belongs to
 
 ### Optional
 
 - `kind` (String) The kind of database to create. must be one of ["mysql", "postgresql"]; Requires replacement if changed.
+- `major_version` (String) For PostgreSQL databases, the PostgreSQL major version to use for the database. Defaults to the latest available major version. Requires replacement if changed.
 - `region` (String) The region the database will be deployed in. If left blank, defaults to the organization's default region. Requires replacement if changed.
+- `replicas` (Number) The number of replicas for the database. 0 for non-HA, 2+ for HA. Requires replacement if changed.
 
 ### Read-Only
 
@@ -113,7 +119,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = planetscale_database.my_planetscale_database
   id = jsonencode({
-    name = "..."
+    database = "..."
     organization = "..."
   })
 }
@@ -122,5 +128,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import planetscale_database.my_planetscale_database '{"name": "...", "organization": "..."}'
+terraform import planetscale_database.my_planetscale_database '{"database": "...", "organization": "..."}'
 ```

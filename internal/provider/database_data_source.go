@@ -35,6 +35,7 @@ type DatabaseDataSourceModel struct {
 	AutomaticMigrations               types.Bool                    `tfsdk:"automatic_migrations"`
 	BranchesURL                       types.String                  `tfsdk:"branches_url"`
 	CreatedAt                         types.String                  `tfsdk:"created_at"`
+	Database                          types.String                  `tfsdk:"database"`
 	DataImport                        tfTypes.GetDatabaseDataImport `tfsdk:"data_import"`
 	ForeignKeysEnabled                types.Bool                    `tfsdk:"foreign_keys_enabled"`
 	HTMLURL                           types.String                  `tfsdk:"html_url"`
@@ -135,6 +136,10 @@ func (r *DatabaseDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 					},
 				},
 			},
+			"database": schema.StringAttribute{
+				Required:    true,
+				Description: `The name of the database`,
+			},
 			"foreign_keys_enabled": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether foreign key constraints are enabled`,
@@ -172,8 +177,8 @@ func (r *DatabaseDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Description: `If the database requires multiple admins for deletion`,
 			},
 			"name": schema.StringAttribute{
-				Required:    true,
-				Description: `The name of the database`,
+				Computed:    true,
+				Description: `Name of the database`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,

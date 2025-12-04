@@ -10,7 +10,7 @@ type DeleteDatabasePostgresCidrRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	DatabaseName string `pathParam:"style=simple,explode=false,name=database_name"`
+	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The ID of the IP restriction entry
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
@@ -22,11 +22,11 @@ func (d *DeleteDatabasePostgresCidrRequest) GetOrganization() string {
 	return d.Organization
 }
 
-func (d *DeleteDatabasePostgresCidrRequest) GetDatabaseName() string {
+func (d *DeleteDatabasePostgresCidrRequest) GetDatabase() string {
 	if d == nil {
 		return ""
 	}
-	return d.DatabaseName
+	return d.Database
 }
 
 func (d *DeleteDatabasePostgresCidrRequest) GetID() string {
