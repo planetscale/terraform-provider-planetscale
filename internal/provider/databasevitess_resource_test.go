@@ -76,6 +76,7 @@ func TestAccDatabaseVitessResource_Lifecycle(t *testing.T) {
 }
 
 func TestAccDatabaseVitessResource_ClusterSize(t *testing.T) {
+	t.Skip("TODO: This test is long, ~250-300s. Revisit this when we decide how to support resizes, or when we implement a deletion_protection attribute")
 	t.Parallel()
 
 	name := randomWithPrefix("testacc")
@@ -141,4 +142,3 @@ func TestAccDatabaseVitessResource_ClusterSize(t *testing.T) {
 		},
 	})
 }
-
