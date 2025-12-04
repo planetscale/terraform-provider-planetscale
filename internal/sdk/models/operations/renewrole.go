@@ -104,7 +104,7 @@ func (e *RenewRoleInheritedRole) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type RenewRoleBranchData struct {
+type RenewRoleBranch struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -117,42 +117,42 @@ type RenewRoleBranchData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (r *RenewRoleBranchData) GetID() string {
+func (r *RenewRoleBranch) GetID() string {
 	if r == nil {
 		return ""
 	}
 	return r.ID
 }
 
-func (r *RenewRoleBranchData) GetName() string {
+func (r *RenewRoleBranch) GetName() string {
 	if r == nil {
 		return ""
 	}
 	return r.Name
 }
 
-func (r *RenewRoleBranchData) GetCreatedAt() string {
+func (r *RenewRoleBranch) GetCreatedAt() string {
 	if r == nil {
 		return ""
 	}
 	return r.CreatedAt
 }
 
-func (r *RenewRoleBranchData) GetUpdatedAt() string {
+func (r *RenewRoleBranch) GetUpdatedAt() string {
 	if r == nil {
 		return ""
 	}
 	return r.UpdatedAt
 }
 
-func (r *RenewRoleBranchData) GetDeletedAt() string {
+func (r *RenewRoleBranch) GetDeletedAt() string {
 	if r == nil {
 		return ""
 	}
 	return r.DeletedAt
 }
 
-type RenewRoleActorData struct {
+type RenewRoleActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
 	// The name of the actor
@@ -161,21 +161,21 @@ type RenewRoleActorData struct {
 	AvatarURL string `json:"avatar_url"`
 }
 
-func (r *RenewRoleActorData) GetID() string {
+func (r *RenewRoleActor) GetID() string {
 	if r == nil {
 		return ""
 	}
 	return r.ID
 }
 
-func (r *RenewRoleActorData) GetDisplayName() string {
+func (r *RenewRoleActor) GetDisplayName() string {
 	if r == nil {
 		return ""
 	}
 	return r.DisplayName
 }
 
-func (r *RenewRoleActorData) GetAvatarURL() string {
+func (r *RenewRoleActor) GetAvatarURL() string {
 	if r == nil {
 		return ""
 	}
@@ -220,8 +220,8 @@ type RenewRoleResponseBody struct {
 	TTL float64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []RenewRoleInheritedRole `json:"inherited_roles"`
-	BranchData     RenewRoleBranchData      `json:"branch"`
-	ActorData      RenewRoleActorData       `json:"actor"`
+	Branch         RenewRoleBranch          `json:"branch"`
+	Actor          RenewRoleActor           `json:"actor"`
 }
 
 func (r *RenewRoleResponseBody) GetID() string {
@@ -350,18 +350,18 @@ func (r *RenewRoleResponseBody) GetInheritedRoles() []RenewRoleInheritedRole {
 	return r.InheritedRoles
 }
 
-func (r *RenewRoleResponseBody) GetBranchData() RenewRoleBranchData {
+func (r *RenewRoleResponseBody) GetBranch() RenewRoleBranch {
 	if r == nil {
-		return RenewRoleBranchData{}
+		return RenewRoleBranch{}
 	}
-	return r.BranchData
+	return r.Branch
 }
 
-func (r *RenewRoleResponseBody) GetActorData() RenewRoleActorData {
+func (r *RenewRoleResponseBody) GetActor() RenewRoleActor {
 	if r == nil {
-		return RenewRoleActorData{}
+		return RenewRoleActor{}
 	}
-	return r.ActorData
+	return r.Actor
 }
 
 type RenewRoleResponse struct {

@@ -180,7 +180,7 @@ func (p *PromoteBranchRestoredFromBranch) GetDeletedAt() string {
 	return p.DeletedAt
 }
 
-type PromoteBranchRegionData struct {
+type PromoteBranchRegion struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -199,56 +199,56 @@ type PromoteBranchRegionData struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (p *PromoteBranchRegionData) GetID() string {
+func (p *PromoteBranchRegion) GetID() string {
 	if p == nil {
 		return ""
 	}
 	return p.ID
 }
 
-func (p *PromoteBranchRegionData) GetProvider() string {
+func (p *PromoteBranchRegion) GetProvider() string {
 	if p == nil {
 		return ""
 	}
 	return p.Provider
 }
 
-func (p *PromoteBranchRegionData) GetEnabled() bool {
+func (p *PromoteBranchRegion) GetEnabled() bool {
 	if p == nil {
 		return false
 	}
 	return p.Enabled
 }
 
-func (p *PromoteBranchRegionData) GetPublicIPAddresses() []string {
+func (p *PromoteBranchRegion) GetPublicIPAddresses() []string {
 	if p == nil {
 		return []string{}
 	}
 	return p.PublicIPAddresses
 }
 
-func (p *PromoteBranchRegionData) GetDisplayName() string {
+func (p *PromoteBranchRegion) GetDisplayName() string {
 	if p == nil {
 		return ""
 	}
 	return p.DisplayName
 }
 
-func (p *PromoteBranchRegionData) GetLocation() string {
+func (p *PromoteBranchRegion) GetLocation() string {
 	if p == nil {
 		return ""
 	}
 	return p.Location
 }
 
-func (p *PromoteBranchRegionData) GetSlug() string {
+func (p *PromoteBranchRegion) GetSlug() string {
 	if p == nil {
 		return ""
 	}
 	return p.Slug
 }
 
-func (p *PromoteBranchRegionData) GetCurrentDefault() bool {
+func (p *PromoteBranchRegion) GetCurrentDefault() bool {
 	if p == nil {
 		return false
 	}
@@ -316,8 +316,8 @@ type PromoteBranchResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL        string                  `json:"url"`
-	RegionData PromoteBranchRegionData `json:"region"`
+	URL    string              `json:"url"`
+	Region PromoteBranchRegion `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -539,11 +539,11 @@ func (p *PromoteBranchResponseBody) GetURL() string {
 	return p.URL
 }
 
-func (p *PromoteBranchResponseBody) GetRegionData() PromoteBranchRegionData {
+func (p *PromoteBranchResponseBody) GetRegion() PromoteBranchRegion {
 	if p == nil {
-		return PromoteBranchRegionData{}
+		return PromoteBranchRegion{}
 	}
-	return p.RegionData
+	return p.Region
 }
 
 func (p *PromoteBranchResponseBody) GetParentBranch() string {

@@ -30,6 +30,12 @@ actions:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}"].get.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data
+    update:
+      region:
+        x-speakeasy-name-override: region_data
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches"].post.responses["201"].content["application/json"].schema.properties
     description: Prevent type mismatch between request and response data
     update:
