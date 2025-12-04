@@ -104,7 +104,7 @@ func (e *ResetRoleInheritedRole) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type ResetRoleBranchData struct {
+type ResetRoleBranch struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -117,42 +117,42 @@ type ResetRoleBranchData struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (r *ResetRoleBranchData) GetID() string {
+func (r *ResetRoleBranch) GetID() string {
 	if r == nil {
 		return ""
 	}
 	return r.ID
 }
 
-func (r *ResetRoleBranchData) GetName() string {
+func (r *ResetRoleBranch) GetName() string {
 	if r == nil {
 		return ""
 	}
 	return r.Name
 }
 
-func (r *ResetRoleBranchData) GetCreatedAt() string {
+func (r *ResetRoleBranch) GetCreatedAt() string {
 	if r == nil {
 		return ""
 	}
 	return r.CreatedAt
 }
 
-func (r *ResetRoleBranchData) GetUpdatedAt() string {
+func (r *ResetRoleBranch) GetUpdatedAt() string {
 	if r == nil {
 		return ""
 	}
 	return r.UpdatedAt
 }
 
-func (r *ResetRoleBranchData) GetDeletedAt() string {
+func (r *ResetRoleBranch) GetDeletedAt() string {
 	if r == nil {
 		return ""
 	}
 	return r.DeletedAt
 }
 
-type ResetRoleActorData struct {
+type ResetRoleActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
 	// The name of the actor
@@ -161,21 +161,21 @@ type ResetRoleActorData struct {
 	AvatarURL string `json:"avatar_url"`
 }
 
-func (r *ResetRoleActorData) GetID() string {
+func (r *ResetRoleActor) GetID() string {
 	if r == nil {
 		return ""
 	}
 	return r.ID
 }
 
-func (r *ResetRoleActorData) GetDisplayName() string {
+func (r *ResetRoleActor) GetDisplayName() string {
 	if r == nil {
 		return ""
 	}
 	return r.DisplayName
 }
 
-func (r *ResetRoleActorData) GetAvatarURL() string {
+func (r *ResetRoleActor) GetAvatarURL() string {
 	if r == nil {
 		return ""
 	}
@@ -220,8 +220,8 @@ type ResetRoleResponseBody struct {
 	TTL float64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []ResetRoleInheritedRole `json:"inherited_roles"`
-	BranchData     ResetRoleBranchData      `json:"branch"`
-	ActorData      ResetRoleActorData       `json:"actor"`
+	Branch         ResetRoleBranch          `json:"branch"`
+	Actor          ResetRoleActor           `json:"actor"`
 }
 
 func (r *ResetRoleResponseBody) GetID() string {
@@ -350,18 +350,18 @@ func (r *ResetRoleResponseBody) GetInheritedRoles() []ResetRoleInheritedRole {
 	return r.InheritedRoles
 }
 
-func (r *ResetRoleResponseBody) GetBranchData() ResetRoleBranchData {
+func (r *ResetRoleResponseBody) GetBranch() ResetRoleBranch {
 	if r == nil {
-		return ResetRoleBranchData{}
+		return ResetRoleBranch{}
 	}
-	return r.BranchData
+	return r.Branch
 }
 
-func (r *ResetRoleResponseBody) GetActorData() ResetRoleActorData {
+func (r *ResetRoleResponseBody) GetActor() ResetRoleActor {
 	if r == nil {
-		return ResetRoleActorData{}
+		return ResetRoleActor{}
 	}
-	return r.ActorData
+	return r.Actor
 }
 
 type ResetRoleResponse struct {

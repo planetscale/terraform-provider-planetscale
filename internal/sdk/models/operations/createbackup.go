@@ -50,7 +50,7 @@ type CreateBackupRequestBody struct {
 	Name *string `json:"name,omitzero"`
 	// Unit for the retention period of the backup
 	RetentionUnit *RetentionUnit `json:"retention_unit,omitzero"`
-	// Value between `1`` and `1000`` for the retention period of the backup (i.e retention_value `6`` and retention_unit `hour` means 6 hours)
+	// Value between `1` and `1000` for the retention period of the backup (i.e retention_value `6` and retention_unit `hour` means 6 hours)
 	RetentionValue *float64 `json:"retention_value,omitzero"`
 	// Whether the backup is an immediate backup that may affect database performance. Emergency backups are only supported for PostgreSQL databases.
 	Emergency *bool `json:"emergency,omitzero"`

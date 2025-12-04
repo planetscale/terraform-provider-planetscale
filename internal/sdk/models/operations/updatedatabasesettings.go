@@ -228,7 +228,7 @@ func (u *UpdateDatabaseSettingsDataImport) GetDataSource() UpdateDatabaseSetting
 	return u.DataSource
 }
 
-type UpdateDatabaseSettingsRegionData struct {
+type UpdateDatabaseSettingsRegion struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -247,56 +247,56 @@ type UpdateDatabaseSettingsRegionData struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetID() string {
+func (u *UpdateDatabaseSettingsRegion) GetID() string {
 	if u == nil {
 		return ""
 	}
 	return u.ID
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetProvider() string {
+func (u *UpdateDatabaseSettingsRegion) GetProvider() string {
 	if u == nil {
 		return ""
 	}
 	return u.Provider
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetEnabled() bool {
+func (u *UpdateDatabaseSettingsRegion) GetEnabled() bool {
 	if u == nil {
 		return false
 	}
 	return u.Enabled
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetPublicIPAddresses() []string {
+func (u *UpdateDatabaseSettingsRegion) GetPublicIPAddresses() []string {
 	if u == nil {
 		return []string{}
 	}
 	return u.PublicIPAddresses
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetDisplayName() string {
+func (u *UpdateDatabaseSettingsRegion) GetDisplayName() string {
 	if u == nil {
 		return ""
 	}
 	return u.DisplayName
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetLocation() string {
+func (u *UpdateDatabaseSettingsRegion) GetLocation() string {
 	if u == nil {
 		return ""
 	}
 	return u.Location
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetSlug() string {
+func (u *UpdateDatabaseSettingsRegion) GetSlug() string {
 	if u == nil {
 		return ""
 	}
 	return u.Slug
 }
 
-func (u *UpdateDatabaseSettingsRegionData) GetCurrentDefault() bool {
+func (u *UpdateDatabaseSettingsRegion) GetCurrentDefault() bool {
 	if u == nil {
 		return false
 	}
@@ -399,7 +399,7 @@ type UpdateDatabaseSettingsResponseBody struct {
 	// If the database has reached its development branch limit
 	AtDevelopmentBranchUsageLimit bool                             `json:"at_development_branch_usage_limit"`
 	DataImport                    UpdateDatabaseSettingsDataImport `json:"data_import"`
-	RegionData                    UpdateDatabaseSettingsRegionData `json:"region"`
+	Region                        UpdateDatabaseSettingsRegion     `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -543,11 +543,11 @@ func (u *UpdateDatabaseSettingsResponseBody) GetDataImport() UpdateDatabaseSetti
 	return u.DataImport
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetRegionData() UpdateDatabaseSettingsRegionData {
+func (u *UpdateDatabaseSettingsResponseBody) GetRegion() UpdateDatabaseSettingsRegion {
 	if u == nil {
-		return UpdateDatabaseSettingsRegionData{}
+		return UpdateDatabaseSettingsRegion{}
 	}
-	return u.RegionData
+	return u.Region
 }
 
 func (u *UpdateDatabaseSettingsResponseBody) GetHTMLURL() string {

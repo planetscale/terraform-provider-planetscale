@@ -149,17 +149,6 @@ func (r *DatabaseResourceModel) RefreshFromOperationsUpdateDatabaseSettingsRespo
 		r.Plan = types.StringValue(resp.Plan)
 		r.ProductionBranchWebConsole = types.BoolValue(resp.ProductionBranchWebConsole)
 		r.Ready = types.BoolValue(resp.Ready)
-		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
-		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
-		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
-		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
-		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
-		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
-		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-		for _, v := range resp.RegionData.PublicIPAddresses {
-			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-		}
-		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
 		r.RequireApprovalForDeploy = types.BoolValue(resp.RequireApprovalForDeploy)
 		r.ResizeQueued = types.BoolValue(resp.ResizeQueued)
 		r.Resizing = types.BoolValue(resp.Resizing)

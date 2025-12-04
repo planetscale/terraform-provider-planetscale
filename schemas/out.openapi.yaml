@@ -1517,6 +1517,7 @@ paths:
                       - location
                       - slug
                       - current_default
+                    x-speakeasy-name-override: region_data
                   html_url:
                     type: string
                     description: The URL to see this database's branches in the web UI
@@ -2911,6 +2912,7 @@ paths:
                       - location
                       - slug
                       - current_default
+                    x-speakeasy-name-override: region_data
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -10912,6 +10914,7 @@ paths:
                   password:
                     type: string
                     description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
                   database_name:
                     type: string
                     description: The database name
@@ -10985,6 +10988,7 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
+                    x-speakeasy-name-override: branch_data
                   actor:
                     type: object
                     properties:
@@ -11002,6 +11006,7 @@ paths:
                       - id
                       - display_name
                       - avatar_url
+                    x-speakeasy-name-override: actor_data
                 additionalProperties: false
                 required:
                   - id
@@ -11118,6 +11123,7 @@ paths:
                   password:
                     type: string
                     description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
                   database_name:
                     type: string
                     description: The database name
@@ -11191,6 +11197,7 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
+                    x-speakeasy-name-override: branch_data
                   actor:
                     type: object
                     properties:
@@ -11208,6 +11215,7 @@ paths:
                       - id
                       - display_name
                       - avatar_url
+                    x-speakeasy-name-override: actor_data
                 additionalProperties: false
                 required:
                   - id
