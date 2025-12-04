@@ -3,7 +3,7 @@ speakeasyVersion: 1.667.0
 sources:
     PlanetScale API:
         inputs:
-            - location: schemas/openapi.yaml
+            - location: https://planetscale.com/docs/openapi.yaml
         overlays:
             - location: schemas/overlay-terraform.yaml
             - location: schemas/overlay-terraform-branch.yaml
@@ -24,8 +24,6 @@ sources:
             - location: schemas/overlay-terraform-roles.yaml
             - location: schemas/overlay-terraform-user.yaml
         output: schemas/out.openapi.yaml
-        registry:
-            location: registry.speakeasyapi.dev/speakeasy-onboarding/onboarding/planet-scale-api
 targets:
     planetscale:
         target: terraform
