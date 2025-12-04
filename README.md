@@ -2,7 +2,7 @@
     <img width="200px" src="https://avatars.githubusercontent.com/u/35612527?s=200&v=4">
     <h1>Terraform Provider</h1>
     <p>Terraform Provider for the *PlanetScale API*.</p>
-    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" /></a>
+    <a href="https://opensource.org/license/apache-2-0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge" /></a>
 </div>
 
 <!-- Start Summary [summary] -->
