@@ -1,8 +1,10 @@
 openapi: 3.0.1
 info:
-  title: Terraform Provider for PlanetScale
+  title: PlanetScale API
   description: |-
-    Manage your PlanetScale resources with Terraform
+    
+    <p>PlanetScale API</p>
+    &copy; 2025 PlanetScale, Inc.
   version: v1
   x-copyright: "&copy; 2025 PlanetScale, Inc."
 paths:
@@ -25,7 +27,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Gets the organizations for the current user
@@ -38,23 +39,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -110,7 +106,7 @@ paths:
                           type: boolean
                           description: Whether or not the IdP provider is be responsible for managing roles in PlanetScale
                         invoice_budget_amount:
-                          type: string
+                          type: number
                           description: The expected monthly budget for the organization
                         keyspace_shard_limit:
                           type: number
@@ -169,16 +165,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | User | `read_organizations` |
-      x-speakeasy-entity-operation: Organizations#read
-      x-speakeasy-entity-description: Returns information about accessible PlanetScale organizations.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
   /organizations/{organization}:
     get:
       tags:
@@ -293,6 +279,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -305,8 +292,6 @@ paths:
         | :------- | :---------- |
         | User | `read_organizations` |
         | Organization | `read_organization` |
-      x-speakeasy-entity-operation: Organization#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale organization.
     patch:
       tags:
         - Organizations
@@ -436,6 +421,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
 
@@ -570,6 +556,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -704,8 +691,6 @@ paths:
         | :------- | :---------- |
         | User | `read_organizations` |
         | Organization | `read_organization` |
-      x-speakeasy-entity-operation: OrganizationClusterSizeSkus#read
-      x-speakeasy-entity-description: Returns information about PlanetScale organization cluster size SKUs.
   /organizations/{organization}/databases:
     get:
       tags:
@@ -736,7 +721,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Retrieves the databases for an organization
@@ -749,23 +733,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -1029,6 +1008,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -1040,16 +1020,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `read_databases` |
-      x-speakeasy-entity-operation: Databases#read
-      x-speakeasy-entity-description: Returns information about accessible PlanetScale databases.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
     post:
       tags:
         - Databases
@@ -1114,23 +1084,18 @@ paths:
                   branches_count:
                     type: number
                     description: The total number of database branches
-                    x-speakeasy-terraform-ignore: true
                   open_schema_recommendations_count:
                     type: number
                     description: The total number of schema recommendations
-                    x-speakeasy-terraform-ignore: true
                   development_branches_count:
                     type: number
                     description: The total number of database development branches
-                    x-speakeasy-terraform-ignore: true
                   production_branches_count:
                     type: number
                     description: The total number of database production branches
-                    x-speakeasy-terraform-ignore: true
                   issues_count:
                     type: number
                     description: The total number of ongoing issues within a database
-                    x-speakeasy-terraform-ignore: true
                   multiple_admins_required_for_deletion:
                     type: boolean
                     description: If the database requires multiple admins for deletion
@@ -1221,7 +1186,6 @@ paths:
                       - location
                       - slug
                       - current_default
-                    x-speakeasy-name-override: region_data
                   html_url:
                     type: string
                     description: The URL to see this database's branches in the web UI
@@ -1245,19 +1209,15 @@ paths:
                   default_branch_shard_count:
                     type: number
                     description: Number of shards in the default branch
-                    x-speakeasy-terraform-ignore: true
                   default_branch_read_only_regions_count:
                     type: number
                     description: Number of read only regions in the default branch
-                    x-speakeasy-terraform-ignore: true
                   default_branch_table_count:
                     type: number
                     description: Number of tables in the default branch schema
-                    x-speakeasy-terraform-ignore: true
                   default_branch:
                     type: string
                     description: The default branch for the database
-                    x-speakeasy-terraform-ignore: true
                   require_approval_for_deploy:
                     type: boolean
                     description: Whether an approval is required to deploy schema changes to this database
@@ -1362,6 +1322,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -1373,8 +1334,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | Organization | `create_databases` |
-      x-speakeasy-entity-operation: Database#create
-      x-speakeasy-entity-description: Manage a PlanetScale database.
   /organizations/{organization}/databases/{database}:
     get:
       tags:
@@ -1653,6 +1612,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -1665,19 +1625,6 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
-      x-speakeasy-entity-operation:
-        - Database#read
-        - entityOperation: Database#create#2
-          options:
-            polling:
-              name: WaitForReady
-      x-speakeasy-entity-description: Returns information about a PlanetScale database.
-      x-speakeasy-polling:
-        - name: WaitForReady
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "ready"
     patch:
       tags:
         - Databases
@@ -1705,7 +1652,6 @@ paths:
                 new_name:
                   type: string
                   description: The name to update the database to
-                  x-speakeasy-name-override: name
                 automatic_migrations:
                   type: boolean
                   description: Whether or not to copy migration data to new branches and in deploy requests. (Vitess only)
@@ -1996,6 +1942,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2008,7 +1955,6 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: Database#update
     delete:
       tags:
         - Databases
@@ -2040,6 +1986,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2052,7 +1999,6 @@ paths:
         | :------- | :---------- |
         | Organization | `delete_databases` |
         | Database | `delete_database` |
-      x-speakeasy-entity-operation: Database#delete
   /organizations/{organization}/databases/{database}/branches:
     get:
       tags:
@@ -2107,7 +2053,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns database branches
@@ -2120,23 +2065,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -2374,6 +2314,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2387,16 +2328,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-      x-speakeasy-entity-operation: Branches#read
-      x-speakeasy-entity-description: Returns information about PlanetScale database branches.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
     post:
       tags:
         - Database branches
@@ -2637,7 +2568,6 @@ paths:
                       - location
                       - slug
                       - current_default
-                    x-speakeasy-name-override: region_data
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -2685,6 +2615,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2698,8 +2629,6 @@ paths:
         | Organization | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
         | Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
         | Branch | `restore_backups` |
-      x-speakeasy-entity-operation: Branch#create
-      x-speakeasy-entity-description: Manage a PlanetScale database branch.
   /organizations/{organization}/databases/{database}/branches/{branch}:
     get:
       tags:
@@ -2958,6 +2887,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -2971,19 +2901,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-      x-speakeasy-entity-operation:
-        - Branch#read
-        - entityOperation: Branch#create#2
-          options:
-            polling:
-              name: WaitForReady
-      x-speakeasy-entity-description: Returns information about a PlanetScale database branch.
-      x-speakeasy-polling:
-        - name: WaitForReady
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "ready"
     delete:
       tags:
         - Database branches
@@ -3021,6 +2938,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3034,7 +2952,6 @@ paths:
         | Organization | `delete_branches`, `delete_production_branches` |
         | Database | `delete_branches`, `delete_production_branches` |
         | Branch | `delete_branch` |
-      x-speakeasy-entity-operation: Branch#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/backups:
     get:
       tags:
@@ -3396,6 +3313,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -3712,6 +3630,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4010,6 +3929,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4317,6 +4237,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4373,6 +4294,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4614,6 +4536,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -4927,6 +4850,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -5218,6 +5142,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -5496,6 +5421,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -5552,6 +5478,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -5798,6 +5725,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6021,6 +5949,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6076,6 +6005,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6329,6 +6259,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6559,6 +6490,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -6621,6 +6553,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7088,6 +7021,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -7286,6 +7220,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7458,6 +7393,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7615,6 +7551,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7771,6 +7708,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7820,6 +7758,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7909,6 +7848,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -7970,6 +7910,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -8044,6 +7985,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -8269,7 +8211,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns passwords for the branch
@@ -8282,23 +8223,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -8494,6 +8430,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -8507,16 +8444,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Passwords#read
-      x-speakeasy-entity-description: Returns information about PlanetScale database branch passwords.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
     post:
       tags:
         - Database branch passwords
@@ -8700,7 +8627,6 @@ paths:
                   plain_text:
                     type: string
                     description: The plain text password, available only after create
-                    x-speakeasy-param-sensitive: true
                   replica:
                     type: boolean
                     description: Whether or not the password is for a read replica
@@ -8767,6 +8693,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -8780,8 +8707,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#create
-      x-speakeasy-entity-description: Manage a PlanetScale database branch password.
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}:
     get:
       tags:
@@ -8859,6 +8784,11 @@ paths:
                   direct_vtgate:
                     type: boolean
                     description: True if the credentials connect directly to a vtgate, bypassing load balancers
+                  direct_vtgate_addresses:
+                    items:
+                      type: string
+                    type: array
+                    description: The list of hosts in each availability zone providing direct access to a vtgate
                   ttl_seconds:
                     type: number
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -8935,8 +8865,6 @@ paths:
                   plain_text:
                     type: string
                     description: The plain text password, available only after create
-                    x-speakeasy-param-sensitive: true
-                    x-speakeasy-ignore: true
                   replica:
                     type: boolean
                     description: Whether or not the password is for a read replica
@@ -8980,6 +8908,7 @@ paths:
                   - last_used_at
                   - expired
                   - direct_vtgate
+                  - direct_vtgate_addresses
                   - ttl_seconds
                   - access_host_url
                   - access_host_regional_url
@@ -9000,6 +8929,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -9013,8 +8943,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database branch password.
     patch:
       tags:
         - Database branch passwords
@@ -9251,6 +9179,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -9264,7 +9193,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#update
     delete:
       tags:
         - Database branch passwords
@@ -9308,6 +9236,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -9321,7 +9250,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew:
     post:
       tags:
@@ -9544,6 +9472,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -9943,6 +9872,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10046,6 +9976,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10156,6 +10087,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10212,6 +10144,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10322,6 +10255,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10373,6 +10307,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10422,7 +10357,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns roles
@@ -10435,23 +10369,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -10607,6 +10536,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10620,16 +10550,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Roles#read
-      x-speakeasy-entity-description: Returns information about PlanetScale database branch roles.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
     post:
       tags:
         - Roles
@@ -10712,7 +10632,6 @@ paths:
                   password:
                     type: string
                     description: The plain text password, available only after create
-                    x-speakeasy-param-sensitive: true
                   database_name:
                     type: string
                     description: The database name
@@ -10786,7 +10705,6 @@ paths:
                       - created_at
                       - updated_at
                       - deleted_at
-                    x-speakeasy-name-override: branch_data
                   actor:
                     type: object
                     properties:
@@ -10804,7 +10722,6 @@ paths:
                       - id
                       - display_name
                       - avatar_url
-                    x-speakeasy-name-override: actor_data
                 additionalProperties: false
                 required:
                   - id
@@ -10836,6 +10753,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -10849,8 +10767,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#create
-      x-speakeasy-entity-description: Manage a PlanetScale database role.
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}:
     get:
       tags:
@@ -11033,6 +10949,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11046,8 +10963,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database role.
     patch:
       tags:
         - Roles
@@ -11239,6 +11154,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11252,7 +11168,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#update
     delete:
       tags:
         - Roles
@@ -11306,6 +11221,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11319,7 +11235,6 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}/reassign:
     post:
       tags:
@@ -11376,6 +11291,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11571,6 +11487,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -11766,6 +11683,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -12036,7 +11954,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
     delete:
       tags:
         - Database branches
@@ -12293,7 +12212,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/branches/{branch}/schema:
     get:
       tags:
@@ -12369,6 +12289,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -12382,8 +12303,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-      x-speakeasy-entity-operation: BranchSchema#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database branch schema.
   /organizations/{organization}/databases/{database}/branches/{branch}/schema/lint:
     get:
       tags:
@@ -12545,6 +12464,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -12687,6 +12607,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
 
@@ -12804,6 +12725,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
 
@@ -12908,6 +12830,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
 
@@ -13029,6 +12952,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
 
@@ -13077,6 +13001,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A   OAuth token must have at least one of the following   scopes in order to use this API endpoint:
 
@@ -14937,6 +14862,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -15583,6 +15509,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -16240,6 +16167,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -16886,6 +16814,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -18846,6 +18775,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -19492,6 +19422,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -20148,6 +20079,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -21460,6 +21392,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -21590,6 +21523,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -22460,6 +22394,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -22579,6 +22514,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -22622,7 +22558,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: List of the database's read-only regions
@@ -22635,23 +22570,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -22771,16 +22701,6 @@ paths:
         | :------- | :---------- |
         | Organization | `read_branches` |
         | Database | `read_branches` |
-      x-speakeasy-entity-operation: DatabaseReadOnlyRegions#read
-      x-speakeasy-entity-description: Returns information about PlanetScale database read-only regions.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
   /organizations/{organization}/databases/{database}/regions:
     get:
       tags:
@@ -22812,7 +22732,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns the available regions for a database
@@ -22825,23 +22744,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -22900,6 +22814,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -22912,16 +22827,6 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
-      x-speakeasy-entity-operation: DatabaseRegions#read
-      x-speakeasy-entity-description: Returns information about PlanetScale database regions.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
   /organizations/{organization}/databases/{database}/throttler:
     get:
       tags:
@@ -23009,6 +22914,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -23122,6 +23028,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -23406,6 +23313,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -23524,6 +23432,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -23659,6 +23568,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -23708,6 +23618,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -24273,7 +24184,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
     post:
       tags:
         - Workflows
@@ -24770,7 +24682,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}:
     get:
       tags:
@@ -25234,7 +25147,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
     delete:
       tags:
         - Workflows
@@ -25697,7 +25611,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/complete:
     patch:
       tags:
@@ -26161,7 +26076,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/cutover:
     patch:
       tags:
@@ -26625,7 +26541,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/retry:
     patch:
       tags:
@@ -27089,7 +27006,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/reverse-cutover:
     patch:
       tags:
@@ -27553,7 +27471,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/reverse-traffic:
     patch:
       tags:
@@ -28017,7 +27936,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/switch-primaries:
     patch:
       tags:
@@ -28481,7 +28401,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/switch-replicas:
     patch:
       tags:
@@ -28945,7 +28866,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/databases/{database}/workflows/{number}/verify-data:
     patch:
       tags:
@@ -29409,7 +29331,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
+      description: |+
+        
   /organizations/{organization}/invoices:
     get:
       tags:
@@ -29566,6 +29489,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -29895,6 +29819,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -30044,6 +29969,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -30204,6 +30130,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -30259,6 +30186,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -30385,6 +30313,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -30472,6 +30401,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -31193,6 +31123,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -31236,6 +31167,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |+
+        
         ### Authorization
         A service token   must have at least one of the following access   in order to use this API endpoint:
 
@@ -31637,7 +31569,6 @@ paths:
           schema:
             type: number
             default: 25
-          x-speakeasy-terraform-ignore: true
       responses:
         "200":
           description: Returns the organization's regions
@@ -31650,23 +31581,18 @@ paths:
                   current_page:
                     type: number
                     description: The current page number
-                    x-speakeasy-terraform-ignore: true
                   next_page:
                     type: number
                     description: The next page number
-                    x-speakeasy-terraform-ignore: true
                   next_page_url:
                     type: string
                     description: The next page of results
-                    x-speakeasy-terraform-ignore: true
                   prev_page:
                     type: number
                     description: The previous page number
-                    x-speakeasy-terraform-ignore: true
                   prev_page_url:
                     type: string
                     description: The previous page of results
-                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -31725,6 +31651,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -31737,16 +31664,6 @@ paths:
         | :------- | :---------- |
         | User | `read_organizations` |
         | Organization | `read_organization` |
-      x-speakeasy-entity-operation: OrganizationRegions#read
-      x-speakeasy-entity-description: Returns information about PlanetScale organization regions.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
   /organizations/{organization}/service-tokens:
     get:
       tags:
@@ -33062,6 +32979,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -33280,6 +33198,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -33490,6 +33409,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -33712,6 +33632,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -33758,6 +33679,7 @@ paths:
         "500":
           description: Internal Server Error
       description: |-
+        
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -33976,181 +33898,6 @@ paths:
          | Resource | Scopes |
         | :------- | :---------- |
         | User | `read_user` |
-      x-speakeasy-entity-operation: User#read
-      x-speakeasy-entity-description: Returns information about current PlanetScale user.
-  /organizations/{organization}/databases/{database}#default-branch:
-    get:
-      tags:
-        - Databases
-      operationId: get_database_default_branch
-      summary: Get database default branch
-      parameters:
-        - name: organization
-          in: path
-          required: true
-          description: The name of the organization the database belongs to
-          schema:
-            type: string
-        - name: database
-          in: path
-          required: true
-          description: The name of the database
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Returns a database
-          headers: {}
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  default_branch:
-                    type: string
-                    description: The default branch of the database
-                    x-speakeasy-name-override: branch
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "500":
-          description: Internal Server Error
-      description: |-
-        ### Authorization
-        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
-
-        **Service Token Accesses**
-        `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `create_production_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
-
-        **OAuth Scopes**
-
-        | Resource | Scopes |
-        | :------- | :---------- |
-        | Organization | `read_databases` |
-        | Database | `read_database` |
-      x-speakeasy-entity-operation: DatabaseDefaultBranch#read
-    patch:
-      tags:
-        - Databases
-      operationId: update_database_default_branch
-      summary: Update database default branch
-      parameters:
-        - name: organization
-          in: path
-          required: true
-          description: The name of the organization the database belongs to
-          schema:
-            type: string
-        - name: database
-          in: path
-          required: true
-          description: The name of the database
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                default_branch:
-                  type: string
-                  description: The default branch of the database
-                  x-speakeasy-name-override: branch
-                  default: main
-      responses:
-        "200":
-          description: Returns the updated database
-          headers: {}
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  default_branch:
-                    type: string
-                    description: The default branch for the database
-                    x-speakeasy-name-override: branch
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "500":
-          description: Internal Server Error
-      description: |-
-        ### Authorization
-        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
-
-        **Service Token Accesses**
-        `write_database`
-
-        **OAuth Scopes**
-
-        | Resource | Scopes |
-        | :------- | :---------- |
-        | Organization | `write_databases` |
-        | Database | `write_database` |
-      x-speakeasy-entity-operation: DatabaseDefaultBranch#create,update
-  /organizations/{organization}/databases/{database}#reset-default-branch:
-    patch:
-      tags:
-        - Databases
-      operationId: reset_database_default_branch
-      summary: Reset database default branch
-      parameters:
-        - name: organization
-          in: path
-          required: true
-          description: The name of the organization the database belongs to
-          schema:
-            type: string
-        - name: database
-          in: path
-          required: true
-          description: The name of the database
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                default_branch:
-                  type: string
-                  description: The default branch of the database
-                  x-speakeasy-name-override: branch
-                  const: main
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "500":
-          description: Internal Server Error
-      description: |-
-        ### Authorization
-        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
-
-        **Service Token Accesses**
-        `write_database`
-
-        **OAuth Scopes**
-
-        | Resource | Scopes |
-        | :------- | :---------- |
-        | Organization | `write_databases` |
-        | Database | `write_database` |
-      x-speakeasy-entity-operation: DatabaseDefaultBranch#delete
 tags:
   - name: Backups
     description: |2
@@ -34228,6 +33975,9 @@ tags:
                   Resources for managing teams within an organization. Teams allow you to group members and grant them access to specific databases.
 
                   Note: Teams managed through SSO/directory services cannot be modified via API.
+security:
+  - ApiKeyHeader:
+      - Authorization
 x-readme:
   explorer-enabled: false
 servers:
@@ -34238,22 +33988,6 @@ components:
       type: apiKey
       in: header
       name: Authorization
-    ServiceToken:
-      type: http
-      scheme: custom
-      x-speakeasy-custom-security-scheme:
-        schema:
-          type: object
-          properties:
-            service_token:
-              type: string
-              description: PlanetScale Service Token
-            service_token_id:
-              type: string
-              description: PlanetScale Service Token ID
-          required:
-            - service_token
-            - service_token_id
   schemas:
     PaginatedBackup:
       type: object
@@ -44049,5 +43783,3 @@ components:
         - updated_at
         - description
         - managed
-security:
-  - ServiceToken: []

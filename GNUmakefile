@@ -4,6 +4,10 @@ default: lint test
 build:
 	CGO_ENABLED=0 go build -v -trimpath .
 
+.PHONY: download-openapi
+download-openapi:
+	curl -sSL https://planetscale.com/docs/openapi.yaml -o schemas/openapi.yaml
+
 .PHONY: generate
 generate:
 	speakeasy run --skip-versioning
