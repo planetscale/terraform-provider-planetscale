@@ -107,7 +107,7 @@ func (g *GetDatabaseDataImport) GetDataSource() GetDatabaseDataSource {
 	return g.DataSource
 }
 
-type GetDatabaseRegionData struct {
+type GetDatabaseRegion struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -126,56 +126,56 @@ type GetDatabaseRegionData struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (g *GetDatabaseRegionData) GetID() string {
+func (g *GetDatabaseRegion) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetDatabaseRegionData) GetProvider() string {
+func (g *GetDatabaseRegion) GetProvider() string {
 	if g == nil {
 		return ""
 	}
 	return g.Provider
 }
 
-func (g *GetDatabaseRegionData) GetEnabled() bool {
+func (g *GetDatabaseRegion) GetEnabled() bool {
 	if g == nil {
 		return false
 	}
 	return g.Enabled
 }
 
-func (g *GetDatabaseRegionData) GetPublicIPAddresses() []string {
+func (g *GetDatabaseRegion) GetPublicIPAddresses() []string {
 	if g == nil {
 		return []string{}
 	}
 	return g.PublicIPAddresses
 }
 
-func (g *GetDatabaseRegionData) GetDisplayName() string {
+func (g *GetDatabaseRegion) GetDisplayName() string {
 	if g == nil {
 		return ""
 	}
 	return g.DisplayName
 }
 
-func (g *GetDatabaseRegionData) GetLocation() string {
+func (g *GetDatabaseRegion) GetLocation() string {
 	if g == nil {
 		return ""
 	}
 	return g.Location
 }
 
-func (g *GetDatabaseRegionData) GetSlug() string {
+func (g *GetDatabaseRegion) GetSlug() string {
 	if g == nil {
 		return ""
 	}
 	return g.Slug
 }
 
-func (g *GetDatabaseRegionData) GetCurrentDefault() bool {
+func (g *GetDatabaseRegion) GetCurrentDefault() bool {
 	if g == nil {
 		return false
 	}
@@ -278,7 +278,7 @@ type GetDatabaseResponseBody struct {
 	// If the database has reached its development branch limit
 	AtDevelopmentBranchUsageLimit bool                  `json:"at_development_branch_usage_limit"`
 	DataImport                    GetDatabaseDataImport `json:"data_import"`
-	RegionData                    GetDatabaseRegionData `json:"region"`
+	Region                        GetDatabaseRegion     `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -422,11 +422,11 @@ func (g *GetDatabaseResponseBody) GetDataImport() GetDatabaseDataImport {
 	return g.DataImport
 }
 
-func (g *GetDatabaseResponseBody) GetRegionData() GetDatabaseRegionData {
+func (g *GetDatabaseResponseBody) GetRegion() GetDatabaseRegion {
 	if g == nil {
-		return GetDatabaseRegionData{}
+		return GetDatabaseRegion{}
 	}
-	return g.RegionData
+	return g.Region
 }
 
 func (g *GetDatabaseResponseBody) GetHTMLURL() string {
