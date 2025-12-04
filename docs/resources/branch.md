@@ -19,6 +19,7 @@ resource "planetscale_branch" "my_branch" {
   cluster_size  = "...my_cluster_size..."
   database      = "...my_database..."
   major_version = "...my_major_version..."
+  name          = "...my_name..."
   organization  = "...my_organization..."
   parent_branch = "...my_parent_branch..."
   region        = "...my_region..."
@@ -34,6 +35,7 @@ resource "planetscale_branch" "my_branch" {
 
 - `branch` (String) The name of the branch. Requires replacement if changed.
 - `database` (String) The name of the database the branch belongs to. Requires replacement if changed.
+- `name` (String) The name of the branch to create. Requires replacement if changed.
 - `organization` (String) The name of the organization the branch belongs to. Requires replacement if changed.
 - `parent_branch` (String) Parent branch. Requires replacement if changed.
 
@@ -62,7 +64,6 @@ resource "planetscale_branch" "my_branch" {
 - `metal` (Boolean) Whether or not this is a metal database
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
-- `name` (String) The name of the branch
 - `private_edge_connectivity` (Boolean) True if private connections are enabled
 - `production` (Boolean) Whether or not the branch is a production branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries

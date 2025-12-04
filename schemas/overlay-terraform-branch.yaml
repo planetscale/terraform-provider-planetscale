@@ -9,6 +9,8 @@ actions:
     update:
       x-speakeasy-entity-operation: Branch#create
       x-speakeasy-entity-description: Manage a PlanetScale database branch.
+      name:
+        x-speakeasy-name-override: branch
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}"].delete
     description: API operation for managed resource delete.
     update:

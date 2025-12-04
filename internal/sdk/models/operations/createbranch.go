@@ -34,8 +34,8 @@ func (e *SeedData) UnmarshalJSON(data []byte) error {
 }
 
 type CreateBranchRequestBody struct {
-	// The name of the branch
-	Branch string `json:"branch"`
+	// The name of the branch to create
+	Name string `json:"name"`
 	// Parent branch
 	ParentBranch string `json:"parent_branch"`
 	// If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
@@ -52,11 +52,11 @@ type CreateBranchRequestBody struct {
 	MajorVersion *string `json:"major_version,omitzero"`
 }
 
-func (c *CreateBranchRequestBody) GetBranch() string {
+func (c *CreateBranchRequestBody) GetName() string {
 	if c == nil {
 		return ""
 	}
-	return c.Branch
+	return c.Name
 }
 
 func (c *CreateBranchRequestBody) GetParentBranch() string {
