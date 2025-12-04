@@ -7,88 +7,74 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &DatabaseResource{}
-var _ resource.ResourceWithImportState = &DatabaseResource{}
+var _ resource.Resource = &DatabasePostgresResource{}
+var _ resource.ResourceWithImportState = &DatabasePostgresResource{}
 
-func NewDatabaseResource() resource.Resource {
-	return &DatabaseResource{}
+func NewDatabasePostgresResource() resource.Resource {
+	return &DatabasePostgresResource{}
 }
 
-// DatabaseResource defines the resource implementation.
-type DatabaseResource struct {
+// DatabasePostgresResource defines the resource implementation.
+type DatabasePostgresResource struct {
 	// Provider configured SDK client.
 	client *sdk.Planetscale
 }
 
-// DatabaseResourceModel describes the resource data model.
-type DatabaseResourceModel struct {
-	AllowDataBranching                types.Bool                    `tfsdk:"allow_data_branching"`
-	AtBackupRestoreBranchesLimit      types.Bool                    `tfsdk:"at_backup_restore_branches_limit"`
-	AtDevelopmentBranchUsageLimit     types.Bool                    `tfsdk:"at_development_branch_usage_limit"`
-	AutomaticMigrations               types.Bool                    `tfsdk:"automatic_migrations"`
-	BranchesURL                       types.String                  `tfsdk:"branches_url"`
-	ClusterSize                       types.String                  `tfsdk:"cluster_size"`
-	CreatedAt                         types.String                  `tfsdk:"created_at"`
-	Database                          types.String                  `tfsdk:"database"`
-	DataImport                        tfTypes.GetDatabaseDataImport `tfsdk:"data_import"`
-	ForeignKeysEnabled                types.Bool                    `tfsdk:"foreign_keys_enabled"`
-	HTMLURL                           types.String                  `tfsdk:"html_url"`
-	ID                                types.String                  `tfsdk:"id"`
-	InsightsEnabled                   types.Bool                    `tfsdk:"insights_enabled"`
-	InsightsRawQueries                types.Bool                    `tfsdk:"insights_raw_queries"`
-	Kind                              types.String                  `tfsdk:"kind"`
-	MajorVersion                      types.String                  `tfsdk:"major_version"`
-	MigrationFramework                types.String                  `tfsdk:"migration_framework"`
-	MigrationTableName                types.String                  `tfsdk:"migration_table_name"`
-	MultipleAdminsRequiredForDeletion types.Bool                    `tfsdk:"multiple_admins_required_for_deletion"`
-	Name                              types.String                  `tfsdk:"name"`
-	Organization                      types.String                  `tfsdk:"organization"`
-	Plan                              types.String                  `tfsdk:"plan"`
-	ProductionBranchWebConsole        types.Bool                    `tfsdk:"production_branch_web_console"`
-	Ready                             types.Bool                    `tfsdk:"ready"`
-	Region                            types.String                  `tfsdk:"region"`
-	RegionData                        tfTypes.GetDatabaseRegionData `tfsdk:"region_data"`
-	Replicas                          types.Float64                 `tfsdk:"replicas"`
-	RequireApprovalForDeploy          types.Bool                    `tfsdk:"require_approval_for_deploy"`
-	ResizeQueued                      types.Bool                    `tfsdk:"resize_queued"`
-	Resizing                          types.Bool                    `tfsdk:"resizing"`
-	RestrictBranchRegion              types.Bool                    `tfsdk:"restrict_branch_region"`
-	SchemaLastUpdatedAt               types.String                  `tfsdk:"schema_last_updated_at"`
-	Sharded                           types.Bool                    `tfsdk:"sharded"`
-	State                             types.String                  `tfsdk:"state"`
-	UpdatedAt                         types.String                  `tfsdk:"updated_at"`
-	URL                               types.String                  `tfsdk:"url"`
+// DatabasePostgresResourceModel describes the resource data model.
+type DatabasePostgresResourceModel struct {
+	AtBackupRestoreBranchesLimit      types.Bool                             `tfsdk:"at_backup_restore_branches_limit"`
+	AtDevelopmentBranchUsageLimit     types.Bool                             `tfsdk:"at_development_branch_usage_limit"`
+	BranchesURL                       types.String                           `tfsdk:"branches_url"`
+	ClusterSize                       types.String                           `tfsdk:"cluster_size"`
+	CreatedAt                         types.String                           `tfsdk:"created_at"`
+	Database                          types.String                           `tfsdk:"database"`
+	DataImport                        *tfTypes.GetPostgresDatabaseDataImport `tfsdk:"data_import"`
+	HTMLURL                           types.String                           `tfsdk:"html_url"`
+	ID                                types.String                           `tfsdk:"id"`
+	InsightsEnabled                   types.Bool                             `tfsdk:"insights_enabled"`
+	InsightsRawQueries                types.Bool                             `tfsdk:"insights_raw_queries"`
+	MajorVersion                      types.String                           `tfsdk:"major_version"`
+	MultipleAdminsRequiredForDeletion types.Bool                             `tfsdk:"multiple_admins_required_for_deletion"`
+	Name                              types.String                           `tfsdk:"name"`
+	Organization                      types.String                           `tfsdk:"organization"`
+	Plan                              types.String                           `tfsdk:"plan"`
+	ProductionBranchWebConsole        types.Bool                             `tfsdk:"production_branch_web_console"`
+	Ready                             types.Bool                             `tfsdk:"ready"`
+	Region                            types.String                           `tfsdk:"region"`
+	RegionData                        *tfTypes.GetPostgresDatabaseRegionData `tfsdk:"region_data"`
+	Replicas                          types.Float64                          `tfsdk:"replicas"`
+	RequireApprovalForDeploy          types.Bool                             `tfsdk:"require_approval_for_deploy"`
+	ResizeQueued                      types.Bool                             `tfsdk:"resize_queued"`
+	Resizing                          types.Bool                             `tfsdk:"resizing"`
+	RestrictBranchRegion              types.Bool                             `tfsdk:"restrict_branch_region"`
+	SchemaLastUpdatedAt               types.String                           `tfsdk:"schema_last_updated_at"`
+	State                             types.String                           `tfsdk:"state"`
+	UpdatedAt                         types.String                           `tfsdk:"updated_at"`
+	URL                               types.String                           `tfsdk:"url"`
 }
 
-func (r *DatabaseResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_database"
+func (r *DatabasePostgresResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_database_postgres"
 }
 
-func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *DatabasePostgresResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Database Resource",
+		MarkdownDescription: "DatabasePostgres Resource",
 		Attributes: map[string]schema.Attribute{
-			"allow_data_branching": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether seeding branches with data is enabled for all branches`,
-			},
 			"at_backup_restore_branches_limit": schema.BoolAttribute{
 				Computed:    true,
 				Description: `If the database has reached its backup restored branch limit`,
@@ -96,10 +82,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 			"at_development_branch_usage_limit": schema.BoolAttribute{
 				Computed:    true,
 				Description: `If the database has reached its development branch limit`,
-			},
-			"automatic_migrations": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether to automatically manage Rails migrations during deploy requests`,
 			},
 			"branches_url": schema.StringAttribute{
 				Computed:    true,
@@ -110,7 +92,7 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus. Requires replacement if changed.`,
+				Description: `The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. Requires replacement if changed.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -158,10 +140,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 				Required:    true,
 				Description: `The name of the database`,
 			},
-			"foreign_keys_enabled": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether foreign key constraints are enabled`,
-			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
 				Description: `The URL to see this database's branches in the web UI`,
@@ -178,35 +156,12 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:    true,
 				Description: `Whether raw SQL queries are collected`,
 			},
-			"kind": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `The kind of database to create. must be one of ["mysql", "postgresql"]; Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"mysql",
-						"postgresql",
-					),
-				},
-			},
 			"major_version": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `For PostgreSQL databases, the PostgreSQL major version to use for the database. Defaults to the latest available major version. Requires replacement if changed.`,
-			},
-			"migration_framework": schema.StringAttribute{
-				Computed:    true,
-				Description: `Framework used for applying migrations`,
-			},
-			"migration_table_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `Table name to use for copying schema migration data`,
+				Description: `The PostgreSQL major version to use for the database. Defaults to the latest available major version. Requires replacement if changed.`,
 			},
 			"multiple_admins_required_for_deletion": schema.BoolAttribute{
 				Computed:    true,
@@ -304,10 +259,6 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:    true,
 				Description: `When the default branch schema was last changed.`,
 			},
-			"sharded": schema.BoolAttribute{
-				Computed:    true,
-				Description: `If the database is sharded`,
-			},
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `State of the database`,
@@ -324,7 +275,7 @@ func (r *DatabaseResource) Schema(ctx context.Context, req resource.SchemaReques
 	}
 }
 
-func (r *DatabaseResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *DatabasePostgresResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -344,8 +295,8 @@ func (r *DatabaseResource) Configure(ctx context.Context, req resource.Configure
 	r.client = client
 }
 
-func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *DatabaseResourceModel
+func (r *DatabasePostgresResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *DatabasePostgresResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -362,13 +313,13 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateDatabaseRequest(ctx)
+	request, requestDiags := data.ToOperationsCreatePostgresDatabaseRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Databases.CreateDatabase(ctx, *request)
+	res, err := r.client.Databases.CreatePostgresDatabase(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -388,7 +339,7 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateDatabaseResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreatePostgresDatabaseResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -399,18 +350,18 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetDatabaseRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetPostgresDatabaseRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	getDatabaseOptions := make([]operations.Option, 0, 1)
-	getDatabaseOptions = append(getDatabaseOptions, operations.WithPolling(
-		r.client.Databases.GetDatabaseWaitForReady(),
+	getPostgresDatabaseOptions := make([]operations.Option, 0, 1)
+	getPostgresDatabaseOptions = append(getPostgresDatabaseOptions, operations.WithPolling(
+		r.client.Databases.GetPostgresDatabaseWaitForReady(),
 	))
-	res1, err := r.client.Databases.GetDatabase(ctx, *request1, getDatabaseOptions...)
+	res1, err := r.client.Databases.GetPostgresDatabase(ctx, *request1, getPostgresDatabaseOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -430,7 +381,7 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresDatabaseResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -441,13 +392,13 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request2, request2Diags := data.ToOperationsGetDatabaseRequest(ctx)
+	request2, request2Diags := data.ToOperationsGetPostgresDatabaseRequest(ctx)
 	resp.Diagnostics.Append(request2Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res2, err := r.client.Databases.GetDatabase(ctx, *request2)
+	res2, err := r.client.Databases.GetPostgresDatabase(ctx, *request2)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res2 != nil && res2.RawResponse != nil {
@@ -467,7 +418,7 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseResponseBody(ctx, res2.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresDatabaseResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -483,8 +434,8 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *DatabaseResourceModel
+func (r *DatabasePostgresResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *DatabasePostgresResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -501,13 +452,13 @@ func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetDatabaseRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPostgresDatabaseRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Databases.GetDatabase(ctx, *request)
+	res, err := r.client.Databases.GetPostgresDatabase(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -531,7 +482,7 @@ func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresDatabaseResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -541,8 +492,8 @@ func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *DatabaseResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *DatabaseResourceModel
+func (r *DatabasePostgresResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *DatabasePostgresResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -555,13 +506,13 @@ func (r *DatabaseResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateDatabaseSettingsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdatePostgresDatabaseRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Databases.UpdateDatabaseSettings(ctx, *request)
+	res, err := r.client.Databases.UpdatePostgresDatabase(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -581,44 +532,7 @@ func (r *DatabaseResource) Update(ctx context.Context, req resource.UpdateReques
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateDatabaseSettingsResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetDatabaseRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Databases.GetDatabase(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetDatabaseResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePostgresDatabaseResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -634,8 +548,8 @@ func (r *DatabaseResource) Update(ctx context.Context, req resource.UpdateReques
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *DatabaseResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *DatabaseResourceModel
+func (r *DatabasePostgresResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *DatabasePostgresResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -652,13 +566,13 @@ func (r *DatabaseResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteDatabaseRequest(ctx)
+	request, requestDiags := data.ToOperationsDeletePostgresDatabaseRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Databases.DeleteDatabase(ctx, *request)
+	res, err := r.client.Databases.DeletePostgresDatabase(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -680,7 +594,7 @@ func (r *DatabaseResource) Delete(ctx context.Context, req resource.DeleteReques
 
 }
 
-func (r *DatabaseResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *DatabasePostgresResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {

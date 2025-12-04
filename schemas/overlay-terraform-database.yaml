@@ -1,76 +1,17 @@
 overlay: 1.0.0
 x-speakeasy-jsonpath: rfc9535
 info:
-  title: Terraform generation overlay for planetscale_database managed and data resources.
+  title: Terraform generation overlay for planetscale_database data resource.
   version: 0.0.1
 actions:
-  - target: $.paths["/organizations/{organization}/databases"].post
-    description: API operation for managed resource create.
-    update:
-      x-speakeasy-entity-operation: Database#create
-      x-speakeasy-entity-description: Manage a PlanetScale database.
-  - target: $.paths["/organizations/{organization}/databases/{database}"].delete
-    description: API operation for managed resource delete.
-    update:
-      x-speakeasy-entity-operation: Database#delete
   - target: $.paths["/organizations/{organization}/databases/{database}"].get
-    description: API operation for data and managed resource read.
+    description: API operation for data resource read.
     update:
-      x-speakeasy-entity-operation:
-        - Database#read
-        - entityOperation: Database#create#2
-          options:
-            polling:
-              name: WaitForReady
+      x-speakeasy-entity-operation: Database#read
       x-speakeasy-entity-description: Returns information about a PlanetScale database.
-      x-speakeasy-polling:
-        - name: WaitForReady
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "ready"
-  - target: $.paths["/organizations/{organization}/databases/{database}"].patch
-    description: API operation for managed resource update.
-    update:
-      x-speakeasy-entity-operation: Database#update
 
   - target: $.paths["/organizations/{organization}/databases/{database}"].get.responses["200"].content["application/json"].schema.properties
     description: Prevent type mismatch between request and response data
     update:
       region:
         x-speakeasy-name-override: region_data
-  - target: $.paths["/organizations/{organization}/databases"].post.responses["201"].content["application/json"].schema.properties
-    description: |-
-      - default_branch: Ignore to prevent confusing behavior for consumers by
-        requiring the use of planetscale_database_default_branch resource to
-        read/manage the default branch of the database.
-      - region: Prevent type mismatch between request and response data.
-      - *count: Prevent regular drift detection that can occur when normally
-        using other resources in the same module or should otherwise be fetched
-        via other data resources to ensure accuracy during apply.
-    update:
-      branches_count:
-        x-speakeasy-terraform-ignore: true
-      default_branch:
-        x-speakeasy-terraform-ignore: true
-      default_branch_shard_count:
-        x-speakeasy-terraform-ignore: true
-      default_branch_read_only_regions_count:
-        x-speakeasy-terraform-ignore: true
-      default_branch_table_count:
-        x-speakeasy-terraform-ignore: true
-      development_branches_count:
-        x-speakeasy-terraform-ignore: true
-      issues_count:
-        x-speakeasy-terraform-ignore: true
-      open_schema_recommendations_count:
-        x-speakeasy-terraform-ignore: true
-      production_branches_count:
-        x-speakeasy-terraform-ignore: true
-      region:
-        x-speakeasy-name-override: region_data
-  - target: $.paths["/organizations/{organization}/databases/{database}"].patch.requestBody.content["application/json"].schema.properties
-    description: Prevent duplicate attribute for name
-    update:
-      new_name:
-        x-speakeasy-name-override: name

@@ -10,6 +10,8 @@ sources:
             - location: schemas/overlay-terraform-branch_schema.yaml
             - location: schemas/overlay-terraform-branches.yaml
             - location: schemas/overlay-terraform-database.yaml
+            - location: schemas/overlay-terraform-database_vitess.yaml
+            - location: schemas/overlay-terraform-database_postgres.yaml
             - location: schemas/overlay-terraform-database_default_branch.yaml
             - location: schemas/overlay-terraform-database_regions.yaml
             - location: schemas/overlay-terraform-database_read_only_regions.yaml
