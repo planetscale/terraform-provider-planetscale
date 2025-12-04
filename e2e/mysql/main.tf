@@ -10,7 +10,7 @@
 
 data "planetscale_organizations" "example" {}
 
-resource "planetscale_database" "example" {
+resource "planetscale_database_vitess" "example" {
   cluster_size = "PS_10"
   name         = "e2e-mysql-example"
   organization = data.planetscale_organizations.example.data[0].name
@@ -18,21 +18,21 @@ resource "planetscale_database" "example" {
 
 resource "planetscale_database_default_branch" "example" {
   branch       = planetscale_branch.release.name
-  database     = planetscale_database.example.name
-  organization = planetscale_database.example.organization
+  database     = planetscale_database_vitess.example.name
+  organization = planetscale_database_vitess.example.organization
 }
 
 resource "planetscale_branch" "release" {
-  database      = planetscale_database.example.name
+  database      = planetscale_database_vitess.example.name
   name          = "release"
-  organization  = planetscale_database.example.organization
+  organization  = planetscale_database_vitess.example.organization
   parent_branch = "main"
 }
 
 resource "planetscale_branch" "staging" {
-  database      = planetscale_database.example.name
+  database      = planetscale_database_vitess.example.name
   name          = "staging"
-  organization  = planetscale_database.example.organization
+  organization  = planetscale_database_vitess.example.organization
   parent_branch = "main"
 }
 

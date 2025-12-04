@@ -201,7 +201,7 @@ func (c *CreateDatabaseDataImport) GetDataSource() CreateDatabaseDataSource {
 	return c.DataSource
 }
 
-type CreateDatabaseRegionData struct {
+type CreateDatabaseRegion struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
@@ -220,56 +220,56 @@ type CreateDatabaseRegionData struct {
 	CurrentDefault bool `json:"current_default"`
 }
 
-func (c *CreateDatabaseRegionData) GetID() string {
+func (c *CreateDatabaseRegion) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
 }
 
-func (c *CreateDatabaseRegionData) GetProvider() string {
+func (c *CreateDatabaseRegion) GetProvider() string {
 	if c == nil {
 		return ""
 	}
 	return c.Provider
 }
 
-func (c *CreateDatabaseRegionData) GetEnabled() bool {
+func (c *CreateDatabaseRegion) GetEnabled() bool {
 	if c == nil {
 		return false
 	}
 	return c.Enabled
 }
 
-func (c *CreateDatabaseRegionData) GetPublicIPAddresses() []string {
+func (c *CreateDatabaseRegion) GetPublicIPAddresses() []string {
 	if c == nil {
 		return []string{}
 	}
 	return c.PublicIPAddresses
 }
 
-func (c *CreateDatabaseRegionData) GetDisplayName() string {
+func (c *CreateDatabaseRegion) GetDisplayName() string {
 	if c == nil {
 		return ""
 	}
 	return c.DisplayName
 }
 
-func (c *CreateDatabaseRegionData) GetLocation() string {
+func (c *CreateDatabaseRegion) GetLocation() string {
 	if c == nil {
 		return ""
 	}
 	return c.Location
 }
 
-func (c *CreateDatabaseRegionData) GetSlug() string {
+func (c *CreateDatabaseRegion) GetSlug() string {
 	if c == nil {
 		return ""
 	}
 	return c.Slug
 }
 
-func (c *CreateDatabaseRegionData) GetCurrentDefault() bool {
+func (c *CreateDatabaseRegion) GetCurrentDefault() bool {
 	if c == nil {
 		return false
 	}
@@ -372,7 +372,7 @@ type CreateDatabaseResponseBody struct {
 	// If the database has reached its development branch limit
 	AtDevelopmentBranchUsageLimit bool                     `json:"at_development_branch_usage_limit"`
 	DataImport                    CreateDatabaseDataImport `json:"data_import"`
-	RegionData                    CreateDatabaseRegionData `json:"region"`
+	Region                        CreateDatabaseRegion     `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -516,11 +516,11 @@ func (c *CreateDatabaseResponseBody) GetDataImport() CreateDatabaseDataImport {
 	return c.DataImport
 }
 
-func (c *CreateDatabaseResponseBody) GetRegionData() CreateDatabaseRegionData {
+func (c *CreateDatabaseResponseBody) GetRegion() CreateDatabaseRegion {
 	if c == nil {
-		return CreateDatabaseRegionData{}
+		return CreateDatabaseRegion{}
 	}
-	return c.RegionData
+	return c.Region
 }
 
 func (c *CreateDatabaseResponseBody) GetHTMLURL() string {

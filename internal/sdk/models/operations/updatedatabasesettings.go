@@ -11,7 +11,7 @@ import (
 
 type UpdateDatabaseSettingsRequestBody struct {
 	// The name to update the database to
-	Name *string `json:"new_name,omitzero"`
+	NewName *string `json:"new_name,omitzero"`
 	// Whether or not to copy migration data to new branches and in deploy requests. (Vitess only)
 	AutomaticMigrations *bool `json:"automatic_migrations,omitzero"`
 	// A migration framework to use on the database. (Vitess only)
@@ -34,11 +34,11 @@ type UpdateDatabaseSettingsRequestBody struct {
 	DefaultBranch *string `json:"default_branch,omitzero"`
 }
 
-func (u *UpdateDatabaseSettingsRequestBody) GetName() *string {
+func (u *UpdateDatabaseSettingsRequestBody) GetNewName() *string {
 	if u == nil {
 		return nil
 	}
-	return u.Name
+	return u.NewName
 }
 
 func (u *UpdateDatabaseSettingsRequestBody) GetAutomaticMigrations() *bool {
