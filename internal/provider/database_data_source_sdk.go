@@ -70,12 +70,12 @@ func (r *DatabaseDataSourceModel) ToOperationsGetDatabaseRequest(ctx context.Con
 	var organization string
 	organization = r.Organization.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var database string
+	database = r.Database.ValueString()
 
 	out := operations.GetDatabaseRequest{
 		Organization: organization,
-		Name:         name,
+		Database:     database,
 	}
 
 	return &out, diags

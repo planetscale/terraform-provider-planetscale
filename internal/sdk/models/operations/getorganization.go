@@ -9,14 +9,14 @@ import (
 
 type GetOrganizationRequest struct {
 	// The name of the organization
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 }
 
-func (g *GetOrganizationRequest) GetName() string {
+func (g *GetOrganizationRequest) GetOrganization() string {
 	if g == nil {
 		return ""
 	}
-	return g.Name
+	return g.Organization
 }
 
 // GetOrganizationResponseBody - Returns an organization

@@ -9,14 +9,14 @@ import (
 
 type ListAuditLogsRequest struct {
 	// The name of the organization
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 }
 
-func (l *ListAuditLogsRequest) GetName() string {
+func (l *ListAuditLogsRequest) GetOrganization() string {
 	if l == nil {
 		return ""
 	}
-	return l.Name
+	return l.Organization
 }
 
 type ListAuditLogsData struct {

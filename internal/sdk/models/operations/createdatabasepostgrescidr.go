@@ -41,8 +41,8 @@ type CreateDatabasePostgresCidrRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	DatabaseName string                                 `pathParam:"style=simple,explode=false,name=database_name"`
-	Body         *CreateDatabasePostgresCidrRequestBody `request:"mediaType=application/json"`
+	Database string                                 `pathParam:"style=simple,explode=false,name=database"`
+	Body     *CreateDatabasePostgresCidrRequestBody `request:"mediaType=application/json"`
 }
 
 func (c CreateDatabasePostgresCidrRequest) MarshalJSON() ([]byte, error) {
@@ -50,7 +50,7 @@ func (c CreateDatabasePostgresCidrRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDatabasePostgresCidrRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database_name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database"}); err != nil {
 		return err
 	}
 	return nil
@@ -63,11 +63,11 @@ func (c *CreateDatabasePostgresCidrRequest) GetOrganization() string {
 	return c.Organization
 }
 
-func (c *CreateDatabasePostgresCidrRequest) GetDatabaseName() string {
+func (c *CreateDatabasePostgresCidrRequest) GetDatabase() string {
 	if c == nil {
 		return ""
 	}
-	return c.DatabaseName
+	return c.Database
 }
 
 func (c *CreateDatabasePostgresCidrRequest) GetBody() *CreateDatabasePostgresCidrRequestBody {

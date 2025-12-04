@@ -58,8 +58,8 @@ type UpdateBouncerResizeRequestRequest struct {
 	// The name of the branch that owns this resource
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the bouncer
-	Name string                                 `pathParam:"style=simple,explode=false,name=name"`
-	Body *UpdateBouncerResizeRequestRequestBody `request:"mediaType=application/json"`
+	Bouncer string                                 `pathParam:"style=simple,explode=false,name=bouncer"`
+	Body    *UpdateBouncerResizeRequestRequestBody `request:"mediaType=application/json"`
 }
 
 func (u UpdateBouncerResizeRequestRequest) MarshalJSON() ([]byte, error) {
@@ -67,7 +67,7 @@ func (u UpdateBouncerResizeRequestRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateBouncerResizeRequestRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch", "name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch", "bouncer"}); err != nil {
 		return err
 	}
 	return nil
@@ -94,11 +94,11 @@ func (u *UpdateBouncerResizeRequestRequest) GetBranch() string {
 	return u.Branch
 }
 
-func (u *UpdateBouncerResizeRequestRequest) GetName() string {
+func (u *UpdateBouncerResizeRequestRequest) GetBouncer() string {
 	if u == nil {
 		return ""
 	}
-	return u.Name
+	return u.Bouncer
 }
 
 func (u *UpdateBouncerResizeRequestRequest) GetBody() *UpdateBouncerResizeRequestRequestBody {

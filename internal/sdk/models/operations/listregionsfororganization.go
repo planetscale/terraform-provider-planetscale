@@ -9,7 +9,7 @@ import (
 
 type ListRegionsForOrganizationRequest struct {
 	// The name of the organization
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// If provided, specifies the page offset of returned results
 	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -21,17 +21,17 @@ func (l ListRegionsForOrganizationRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListRegionsForOrganizationRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (l *ListRegionsForOrganizationRequest) GetName() string {
+func (l *ListRegionsForOrganizationRequest) GetOrganization() string {
 	if l == nil {
 		return ""
 	}
-	return l.Name
+	return l.Organization
 }
 
 func (l *ListRegionsForOrganizationRequest) GetPage() *float64 {

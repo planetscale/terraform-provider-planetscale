@@ -1,1 +1,1 @@
-terraform import planetscale_database.my_planetscale_database '{"name": "...", "organization": "..."}'
+terraform import planetscale_database.my_planetscale_database '{"database": "...", "organization": "..."}'

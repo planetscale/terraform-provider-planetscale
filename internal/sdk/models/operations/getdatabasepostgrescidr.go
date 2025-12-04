@@ -11,7 +11,7 @@ type GetDatabasePostgresCidrRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	DatabaseName string `pathParam:"style=simple,explode=false,name=database_name"`
+	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The ID of the IP restriction entry
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
@@ -23,11 +23,11 @@ func (g *GetDatabasePostgresCidrRequest) GetOrganization() string {
 	return g.Organization
 }
 
-func (g *GetDatabasePostgresCidrRequest) GetDatabaseName() string {
+func (g *GetDatabasePostgresCidrRequest) GetDatabase() string {
 	if g == nil {
 		return ""
 	}
-	return g.DatabaseName
+	return g.Database
 }
 
 func (g *GetDatabasePostgresCidrRequest) GetID() string {

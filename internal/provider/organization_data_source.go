@@ -41,6 +41,7 @@ type OrganizationDataSourceModel struct {
 	KeyspaceShardLimit  types.Float64                   `tfsdk:"keyspace_shard_limit"`
 	ManagedTenancy      types.Bool                      `tfsdk:"managed_tenancy"`
 	Name                types.String                    `tfsdk:"name"`
+	Organization        types.String                    `tfsdk:"organization"`
 	PaymentInfoRequired types.Bool                      `tfsdk:"payment_info_required"`
 	Plan                types.String                    `tfsdk:"plan"`
 	SingleTenancy       types.Bool                      `tfsdk:"single_tenancy"`
@@ -108,6 +109,10 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 				Description: `Whether or not the organization has managed tenancy enabled`,
 			},
 			"name": schema.StringAttribute{
+				Computed:    true,
+				Description: `The name of the organization`,
+			},
+			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization`,
 			},

@@ -115,8 +115,8 @@ type UpdateDatabaseSettingsRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	Name string                             `pathParam:"style=simple,explode=false,name=name"`
-	Body *UpdateDatabaseSettingsRequestBody `request:"mediaType=application/json"`
+	Database string                             `pathParam:"style=simple,explode=false,name=database"`
+	Body     *UpdateDatabaseSettingsRequestBody `request:"mediaType=application/json"`
 }
 
 func (u UpdateDatabaseSettingsRequest) MarshalJSON() ([]byte, error) {
@@ -124,7 +124,7 @@ func (u UpdateDatabaseSettingsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateDatabaseSettingsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database"}); err != nil {
 		return err
 	}
 	return nil
@@ -137,11 +137,11 @@ func (u *UpdateDatabaseSettingsRequest) GetOrganization() string {
 	return u.Organization
 }
 
-func (u *UpdateDatabaseSettingsRequest) GetName() string {
+func (u *UpdateDatabaseSettingsRequest) GetDatabase() string {
 	if u == nil {
 		return ""
 	}
-	return u.Name
+	return u.Database
 }
 
 func (u *UpdateDatabaseSettingsRequest) GetBody() *UpdateDatabaseSettingsRequestBody {

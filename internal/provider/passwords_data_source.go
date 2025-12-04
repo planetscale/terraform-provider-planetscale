@@ -127,6 +127,11 @@ func (r *PasswordsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `True if the credentials connect directly to a vtgate, bypassing load balancers`,
 						},
+						"direct_vtgate_addresses": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+							Description: `The list of hosts in each availability zone providing direct access to a vtgate`,
+						},
 						"expired": schema.BoolAttribute{
 							Computed:    true,
 							Description: `True if the credentials are expired`,

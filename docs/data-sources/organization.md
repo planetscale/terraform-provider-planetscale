@@ -14,7 +14,7 @@ Organization DataSource
 
 ```terraform
 data "planetscale_organization" "my_organization" {
-  name = "...my_name..."
+  organization = "...my_organization..."
 }
 ```
 
@@ -23,7 +23,7 @@ data "planetscale_organization" "my_organization" {
 
 ### Required
 
-- `name` (String) The name of the organization
+- `organization` (String) The name of the organization
 
 ### Read-Only
 
@@ -38,6 +38,7 @@ data "planetscale_organization" "my_organization" {
 - `invoice_budget_amount` (Number) The expected monthly budget for the organization
 - `keyspace_shard_limit` (Number) The keyspace shard limit for the organization
 - `managed_tenancy` (Boolean) Whether or not the organization has managed tenancy enabled
+- `name` (String) The name of the organization
 - `payment_info_required` (Boolean) Whether or not the organization requires payment information
 - `plan` (String) The billing plan of the organization
 - `single_tenancy` (Boolean) Whether or not the organization has single tenancy enabled

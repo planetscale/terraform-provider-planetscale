@@ -6,28 +6,28 @@ import (
 	"net/http"
 )
 
-type DeleteDatabaseRequest struct {
-	// The name of the organization the database belongs to
+type DeleteServiceTokenRequest struct {
+	// The name of the organization
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database
-	Database string `pathParam:"style=simple,explode=false,name=database"`
+	// The ID of the service token
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (d *DeleteDatabaseRequest) GetOrganization() string {
+func (d *DeleteServiceTokenRequest) GetOrganization() string {
 	if d == nil {
 		return ""
 	}
 	return d.Organization
 }
 
-func (d *DeleteDatabaseRequest) GetDatabase() string {
+func (d *DeleteServiceTokenRequest) GetID() string {
 	if d == nil {
 		return ""
 	}
-	return d.Database
+	return d.ID
 }
 
-type DeleteDatabaseResponse struct {
+type DeleteServiceTokenResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,21 +36,21 @@ type DeleteDatabaseResponse struct {
 	RawResponse *http.Response
 }
 
-func (d *DeleteDatabaseResponse) GetContentType() string {
+func (d *DeleteServiceTokenResponse) GetContentType() string {
 	if d == nil {
 		return ""
 	}
 	return d.ContentType
 }
 
-func (d *DeleteDatabaseResponse) GetStatusCode() int {
+func (d *DeleteServiceTokenResponse) GetStatusCode() int {
 	if d == nil {
 		return 0
 	}
 	return d.StatusCode
 }
 
-func (d *DeleteDatabaseResponse) GetRawResponse() *http.Response {
+func (d *DeleteServiceTokenResponse) GetRawResponse() *http.Response {
 	if d == nil {
 		return nil
 	}

@@ -16,6 +16,7 @@ type ListPasswordsData struct {
 	DatabaseBranch         ListPasswordsDatabaseBranch `tfsdk:"database_branch"`
 	DeletedAt              types.String                `tfsdk:"deleted_at"`
 	DirectVtgate           types.Bool                  `tfsdk:"direct_vtgate"`
+	DirectVtgateAddresses  []types.String              `tfsdk:"direct_vtgate_addresses"`
 	Expired                types.Bool                  `tfsdk:"expired"`
 	ExpiresAt              types.String                `tfsdk:"expires_at"`
 	ID                     types.String                `tfsdk:"id"`

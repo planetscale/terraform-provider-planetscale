@@ -17,7 +17,7 @@ type GetBouncerRequest struct {
 	// The name of the branch that owns this resource
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the bouncer
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Bouncer string `pathParam:"style=simple,explode=false,name=bouncer"`
 }
 
 func (g *GetBouncerRequest) GetOrganization() string {
@@ -41,11 +41,11 @@ func (g *GetBouncerRequest) GetBranch() string {
 	return g.Branch
 }
 
-func (g *GetBouncerRequest) GetName() string {
+func (g *GetBouncerRequest) GetBouncer() string {
 	if g == nil {
 		return ""
 	}
-	return g.Name
+	return g.Bouncer
 }
 
 type GetBouncerSku struct {

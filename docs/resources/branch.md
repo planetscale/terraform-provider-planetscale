@@ -15,9 +15,10 @@ Branch Resource
 ```terraform
 resource "planetscale_branch" "my_branch" {
   backup_id     = "...my_backup_id..."
+  branch        = "...my_branch..."
   cluster_size  = "...my_cluster_size..."
   database      = "...my_database..."
-  name          = "...my_name..."
+  major_version = "...my_major_version..."
   organization  = "...my_organization..."
   parent_branch = "...my_parent_branch..."
   region        = "...my_region..."
@@ -31,8 +32,8 @@ resource "planetscale_branch" "my_branch" {
 
 ### Required
 
+- `branch` (String) The name of the branch. Requires replacement if changed.
 - `database` (String) The name of the database the branch belongs to. Requires replacement if changed.
-- `name` (String) The name of the branch. Requires replacement if changed.
 - `organization` (String) The name of the organization the branch belongs to. Requires replacement if changed.
 - `parent_branch` (String) Parent branch. Requires replacement if changed.
 
@@ -40,6 +41,7 @@ resource "planetscale_branch" "my_branch" {
 
 - `backup_id` (String) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
 - `cluster_size` (String) The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.
+- `major_version` (String) For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
 - `restore_point` (String) Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.
 - `seed_data` (String) If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch. must be "last_successful_backup"; Requires replacement if changed.
@@ -60,6 +62,7 @@ resource "planetscale_branch" "my_branch" {
 - `metal` (Boolean) Whether or not this is a metal database
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
+- `name` (String) The name of the branch
 - `private_edge_connectivity` (Boolean) True if private connections are enabled
 - `production` (Boolean) Whether or not the branch is a production branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
@@ -124,8 +127,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = planetscale_branch.my_planetscale_branch
   id = jsonencode({
+    branch = "..."
     database = "..."
-    name = "..."
     organization = "..."
   })
 }
@@ -134,5 +137,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import planetscale_branch.my_planetscale_branch '{"database": "...", "name": "...", "organization": "..."}'
+terraform import planetscale_branch.my_planetscale_branch '{"branch": "...", "database": "...", "organization": "..."}'
 ```

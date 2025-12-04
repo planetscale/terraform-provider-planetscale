@@ -46,6 +46,12 @@ func (r *PasswordsDataSourceModel) RefreshFromOperationsListPasswordsResponseBod
 			data.DatabaseBranch.Production = types.BoolValue(dataItem.DatabaseBranch.Production)
 			data.DeletedAt = types.StringValue(dataItem.DeletedAt)
 			data.DirectVtgate = types.BoolValue(dataItem.DirectVtgate)
+			if data.DirectVtgateAddresses == nil {
+				data.DirectVtgateAddresses = make([]types.String, 0, len(dataItem.DirectVtgateAddresses))
+			}
+			for _, v := range dataItem.DirectVtgateAddresses {
+				data.DirectVtgateAddresses = append(data.DirectVtgateAddresses, types.StringValue(v))
+			}
 			data.Expired = types.BoolValue(dataItem.Expired)
 			data.ExpiresAt = types.StringValue(dataItem.ExpiresAt)
 			data.ID = types.StringValue(dataItem.ID)

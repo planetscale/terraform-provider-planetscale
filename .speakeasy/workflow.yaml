@@ -24,6 +24,8 @@ sources:
             - location: schemas/overlay-terraform-roles.yaml
             - location: schemas/overlay-terraform-user.yaml
         output: schemas/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/planetscale/dev/planet-scale-api
 targets:
     planetscale:
         target: terraform

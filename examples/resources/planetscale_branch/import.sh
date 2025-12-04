@@ -1,1 +1,1 @@
-terraform import planetscale_branch.my_planetscale_branch '{"database": "...", "name": "...", "organization": "..."}'
+terraform import planetscale_branch.my_planetscale_branch '{"branch": "...", "database": "...", "organization": "..."}'

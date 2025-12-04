@@ -256,6 +256,8 @@ type RenewPasswordResponseBody struct {
 	Expired bool `json:"expired"`
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
 	DirectVtgate bool `json:"direct_vtgate"`
+	// The list of hosts in each availability zone providing direct access to a vtgate
+	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
 	TTLSeconds float64 `json:"ttl_seconds"`
 	// The host URL for the password
@@ -345,6 +347,13 @@ func (r *RenewPasswordResponseBody) GetDirectVtgate() bool {
 		return false
 	}
 	return r.DirectVtgate
+}
+
+func (r *RenewPasswordResponseBody) GetDirectVtgateAddresses() []string {
+	if r == nil {
+		return []string{}
+	}
+	return r.DirectVtgateAddresses
 }
 
 func (r *RenewPasswordResponseBody) GetTTLSeconds() float64 {

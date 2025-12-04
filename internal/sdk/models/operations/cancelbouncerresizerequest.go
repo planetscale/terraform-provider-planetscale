@@ -14,7 +14,7 @@ type CancelBouncerResizeRequestRequest struct {
 	// The name of the branch that owns this resource
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the bouncer
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Bouncer string `pathParam:"style=simple,explode=false,name=bouncer"`
 }
 
 func (c *CancelBouncerResizeRequestRequest) GetOrganization() string {
@@ -38,11 +38,11 @@ func (c *CancelBouncerResizeRequestRequest) GetBranch() string {
 	return c.Branch
 }
 
-func (c *CancelBouncerResizeRequestRequest) GetName() string {
+func (c *CancelBouncerResizeRequestRequest) GetBouncer() string {
 	if c == nil {
 		return ""
 	}
-	return c.Name
+	return c.Bouncer
 }
 
 type CancelBouncerResizeRequestResponse struct {

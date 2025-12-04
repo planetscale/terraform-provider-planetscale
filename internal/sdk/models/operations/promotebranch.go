@@ -15,7 +15,7 @@ type PromoteBranchRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 }
 
 func (p *PromoteBranchRequest) GetOrganization() string {
@@ -32,11 +32,11 @@ func (p *PromoteBranchRequest) GetDatabase() string {
 	return p.Database
 }
 
-func (p *PromoteBranchRequest) GetName() string {
+func (p *PromoteBranchRequest) GetBranch() string {
 	if p == nil {
 		return ""
 	}
-	return p.Name
+	return p.Branch
 }
 
 // PromoteBranchKind - The kind of branch

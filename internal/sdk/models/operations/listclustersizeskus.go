@@ -38,7 +38,7 @@ func (e *Engine) UnmarshalJSON(data []byte) error {
 
 type ListClusterSizeSkusRequest struct {
 	// The name of the organization
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The database engine to filter by. Defaults to 'mysql'.
 	Engine *Engine `queryParam:"style=form,explode=true,name=engine"`
 	// Whether to include pricing rates in the response. Defaults to false.
@@ -47,11 +47,11 @@ type ListClusterSizeSkusRequest struct {
 	Region *string `queryParam:"style=form,explode=true,name=region"`
 }
 
-func (l *ListClusterSizeSkusRequest) GetName() string {
+func (l *ListClusterSizeSkusRequest) GetOrganization() string {
 	if l == nil {
 		return ""
 	}
-	return l.Name
+	return l.Organization
 }
 
 func (l *ListClusterSizeSkusRequest) GetEngine() *Engine {
@@ -92,8 +92,22 @@ type ListClusterSizeSkusResponseBody struct {
 	Enabled bool `json:"enabled"`
 	// The provider of the cluster SKU (nil, AWS or GCP)
 	Provider string `json:"provider"`
+	// The default vtgate size for the cluster SKU
+	DefaultVtgate string `json:"default_vtgate"`
+	// The default vtgate rate for the cluster SKU
+	DefaultVtgateRate float64 `json:"default_vtgate_rate"`
+	// The replica rate for the cluster SKU
+	ReplicaRate *float64 `json:"replica_rate,omitzero"`
+	// The rate for the cluster SKU
+	Rate *float64 `json:"rate,omitzero"`
 	// The sort order of the cluster SKU
 	SortOrder float64 `json:"sort_order"`
+	// The architecture of the cluster SKU (null, x86_64 or arm64)
+	Architecture string `json:"architecture"`
+	// Whether or not the cluster SKU is a development SKU
+	Development bool `json:"development"`
+	// Whether or not the cluster SKU is a production SKU
+	Production bool `json:"production"`
 }
 
 func (l *ListClusterSizeSkusResponseBody) GetName() string {
@@ -152,11 +166,60 @@ func (l *ListClusterSizeSkusResponseBody) GetProvider() string {
 	return l.Provider
 }
 
+func (l *ListClusterSizeSkusResponseBody) GetDefaultVtgate() string {
+	if l == nil {
+		return ""
+	}
+	return l.DefaultVtgate
+}
+
+func (l *ListClusterSizeSkusResponseBody) GetDefaultVtgateRate() float64 {
+	if l == nil {
+		return 0.0
+	}
+	return l.DefaultVtgateRate
+}
+
+func (l *ListClusterSizeSkusResponseBody) GetReplicaRate() *float64 {
+	if l == nil {
+		return nil
+	}
+	return l.ReplicaRate
+}
+
+func (l *ListClusterSizeSkusResponseBody) GetRate() *float64 {
+	if l == nil {
+		return nil
+	}
+	return l.Rate
+}
+
 func (l *ListClusterSizeSkusResponseBody) GetSortOrder() float64 {
 	if l == nil {
 		return 0.0
 	}
 	return l.SortOrder
+}
+
+func (l *ListClusterSizeSkusResponseBody) GetArchitecture() string {
+	if l == nil {
+		return ""
+	}
+	return l.Architecture
+}
+
+func (l *ListClusterSizeSkusResponseBody) GetDevelopment() bool {
+	if l == nil {
+		return false
+	}
+	return l.Development
+}
+
+func (l *ListClusterSizeSkusResponseBody) GetProduction() bool {
+	if l == nil {
+		return false
+	}
+	return l.Production
 }
 
 type ListClusterSizeSkusResponse struct {

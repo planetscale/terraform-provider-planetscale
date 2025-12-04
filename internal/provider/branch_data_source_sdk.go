@@ -76,13 +76,13 @@ func (r *BranchDataSourceModel) ToOperationsGetBranchRequest(ctx context.Context
 	var database string
 	database = r.Database.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var branch string
+	branch = r.Branch.ValueString()
 
 	out := operations.GetBranchRequest{
 		Organization: organization,
 		Database:     database,
-		Name:         name,
+		Branch:       branch,
 	}
 
 	return &out, diags

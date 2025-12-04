@@ -9,23 +9,23 @@ import (
 
 type GetOrganizationTeamRequest struct {
 	// The name of the organization
-	OrganizationName string `pathParam:"style=simple,explode=false,name=organization_name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The slug of the team
-	TeamSlug string `pathParam:"style=simple,explode=false,name=team_slug"`
+	Team string `pathParam:"style=simple,explode=false,name=team"`
 }
 
-func (g *GetOrganizationTeamRequest) GetOrganizationName() string {
+func (g *GetOrganizationTeamRequest) GetOrganization() string {
 	if g == nil {
 		return ""
 	}
-	return g.OrganizationName
+	return g.Organization
 }
 
-func (g *GetOrganizationTeamRequest) GetTeamSlug() string {
+func (g *GetOrganizationTeamRequest) GetTeam() string {
 	if g == nil {
 		return ""
 	}
-	return g.TeamSlug
+	return g.Team
 }
 
 type GetOrganizationTeamCreator struct {

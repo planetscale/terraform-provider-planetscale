@@ -13,7 +13,7 @@ type GetDatabaseRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Database string `pathParam:"style=simple,explode=false,name=database"`
 }
 
 func (g *GetDatabaseRequest) GetOrganization() string {
@@ -23,11 +23,11 @@ func (g *GetDatabaseRequest) GetOrganization() string {
 	return g.Organization
 }
 
-func (g *GetDatabaseRequest) GetName() string {
+func (g *GetDatabaseRequest) GetDatabase() string {
 	if g == nil {
 		return ""
 	}
-	return g.Name
+	return g.Database
 }
 
 type GetDatabaseDataSource struct {

@@ -53,20 +53,10 @@ type Planetscale struct {
 	//             Resources for managing organizations.
 	//
 	Organizations *Organizations
-	//             Resources for managing teams within an organization. Teams allow you to group members and grant them access to specific databases.
-	//
-	//             Note: Teams managed through SSO/directory services cannot be modified via API.
-	//
-	OrganizationTeams *OrganizationTeams
 	//             Resources for managing databases within an organization.
 	//
-	Databases *Databases
-	//           Resources for managing Postgres IP restriction entries for databases.
-	//
-	//           Note: This endpoint is only available for PostgreSQL databases. For MySQL databases, use the Database Branch Passwords endpoint.
-	//
-	DatabasePostgresIPRestrictions *DatabasePostgresIPRestrictions
-	DatabaseBranches               *DatabaseBranches
+	Databases        *Databases
+	DatabaseBranches *DatabaseBranches
 	//           Resources for managing database branch backups.
 	//
 	Backups                 *Backups
@@ -101,6 +91,11 @@ type Planetscale struct {
 	//           Resources for managing role credentials.
 	//
 	Roles *Roles
+	//           Resources for managing Postgres IP restriction entries for databases.
+	//
+	//           Note: This endpoint is only available for PostgreSQL databases. For MySQL databases, use the Database Branch Passwords endpoint.
+	//
+	DatabasePostgresIPRestrictions *DatabasePostgresIPRestrictions
 	//             Resources for managing deploy requests.
 	//
 	DeployRequests *DeployRequests
@@ -122,7 +117,15 @@ type Planetscale struct {
 	//           Resources for managing OAuth tokens.
 	//
 	OAuthTokens *OAuthTokens
-	Regions     *Regions
+	//           API endpoints for managing service tokens within an organization.
+	//
+	ServiceTokens *ServiceTokens
+	//             Resources for managing teams within an organization. Teams allow you to group members and grant them access to specific databases.
+	//
+	//             Note: Teams managed through SSO/directory services cannot be modified via API.
+	//
+	OrganizationTeams *OrganizationTeams
+	Regions           *Regions
 	//           Resources for managing users.
 	//
 	Users *Users
@@ -225,9 +228,7 @@ func New(opts ...SDKOption) *Planetscale {
 	}
 
 	sdk.Organizations = newOrganizations(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.OrganizationTeams = newOrganizationTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.DatabasePostgresIPRestrictions = newDatabasePostgresIPRestrictions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIBranchBouncerResizes = newAPIBranchBouncerResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -241,6 +242,7 @@ func New(opts ...SDKOption) *Planetscale {
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.QueryInsightsReports = newQueryInsightsReports(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.DatabasePostgresIPRestrictions = newDatabasePostgresIPRestrictions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DeployRequests = newDeployRequests(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Webhooks = newWebhooks(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workflows = newWorkflows(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -248,6 +250,8 @@ func New(opts ...SDKOption) *Planetscale {
 	sdk.OrganizationMembers = newOrganizationMembers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.OAuthApplications = newOAuthApplications(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.OAuthTokens = newOAuthTokens(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ServiceTokens = newServiceTokens(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.OrganizationTeams = newOrganizationTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Regions = newRegions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
 

@@ -1,4 +1,4 @@
 data "planetscale_database" "my_database" {
-  name         = "...my_name..."
+  database     = "...my_database..."
   organization = "...my_organization..."
 }

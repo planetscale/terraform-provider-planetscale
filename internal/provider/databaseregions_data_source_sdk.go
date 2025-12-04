@@ -48,12 +48,12 @@ func (r *DatabaseRegionsDataSourceModel) ToOperationsListDatabaseRegionsRequest(
 	var organization string
 	organization = r.Organization.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var database string
+	database = r.Database.ValueString()
 
 	out := operations.ListDatabaseRegionsRequest{
 		Organization: organization,
-		Name:         name,
+		Database:     database,
 	}
 
 	return &out, diags

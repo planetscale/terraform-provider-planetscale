@@ -14,7 +14,7 @@ OrganizationRegions DataSource
 
 ```terraform
 data "planetscale_organization_regions" "my_organizationregions" {
-  name = "...my_name..."
+  organization = "...my_organization..."
 }
 ```
 
@@ -23,7 +23,7 @@ data "planetscale_organization_regions" "my_organizationregions" {
 
 ### Required
 
-- `name` (String) The name of the organization
+- `organization` (String) The name of the organization
 
 ### Read-Only
 

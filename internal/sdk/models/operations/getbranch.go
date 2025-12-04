@@ -15,7 +15,7 @@ type GetBranchRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 }
 
 func (g *GetBranchRequest) GetOrganization() string {
@@ -32,11 +32,11 @@ func (g *GetBranchRequest) GetDatabase() string {
 	return g.Database
 }
 
-func (g *GetBranchRequest) GetName() string {
+func (g *GetBranchRequest) GetBranch() string {
 	if g == nil {
 		return ""
 	}
-	return g.Name
+	return g.Branch
 }
 
 // GetBranchKind - The kind of branch

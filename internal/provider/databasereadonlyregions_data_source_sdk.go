@@ -57,12 +57,12 @@ func (r *DatabaseReadOnlyRegionsDataSourceModel) ToOperationsListReadOnlyRegions
 	var organization string
 	organization = r.Organization.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var database string
+	database = r.Database.ValueString()
 
 	out := operations.ListReadOnlyRegionsRequest{
 		Organization: organization,
-		Name:         name,
+		Database:     database,
 	}
 
 	return &out, diags

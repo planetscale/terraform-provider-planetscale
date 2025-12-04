@@ -30,6 +30,7 @@ type BranchDataSource struct {
 // BranchDataSourceModel describes the data model.
 type BranchDataSourceModel struct {
 	Actor                       tfTypes.GetBranchActor              `tfsdk:"actor"`
+	Branch                      types.String                        `tfsdk:"branch"`
 	ClusterIops                 types.Float64                       `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                        `tfsdk:"cluster_name"`
 	CreatedAt                   types.String                        `tfsdk:"created_at"`
@@ -94,6 +95,10 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
+			"branch": schema.StringAttribute{
+				Required:    true,
+				Description: `The name of the branch`,
+			},
 			"cluster_iops": schema.Float64Attribute{
 				Computed:    true,
 				Description: `IOPS for the cluster`,
@@ -151,7 +156,7 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Description: `The address of the MySQL provider for the branch`,
 			},
 			"name": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
 				Description: `The name of the branch`,
 			},
 			"organization": schema.StringAttribute{

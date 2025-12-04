@@ -39,8 +39,8 @@ func (u *UpdateOrganizationRequestBody) GetInvoiceBudgetAmount() *float64 {
 
 type UpdateOrganizationRequest struct {
 	// The name of the organization
-	Name string                         `pathParam:"style=simple,explode=false,name=name"`
-	Body *UpdateOrganizationRequestBody `request:"mediaType=application/json"`
+	Organization string                         `pathParam:"style=simple,explode=false,name=organization"`
+	Body         *UpdateOrganizationRequestBody `request:"mediaType=application/json"`
 }
 
 func (u UpdateOrganizationRequest) MarshalJSON() ([]byte, error) {
@@ -48,17 +48,17 @@ func (u UpdateOrganizationRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateOrganizationRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (u *UpdateOrganizationRequest) GetName() string {
+func (u *UpdateOrganizationRequest) GetOrganization() string {
 	if u == nil {
 		return ""
 	}
-	return u.Name
+	return u.Organization
 }
 
 func (u *UpdateOrganizationRequest) GetBody() *UpdateOrganizationRequestBody {

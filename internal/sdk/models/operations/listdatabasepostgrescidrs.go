@@ -11,7 +11,7 @@ type ListDatabasePostgresCidrsRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	DatabaseName string `pathParam:"style=simple,explode=false,name=database_name"`
+	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// If provided, specifies the page offset of returned results
 	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -23,7 +23,7 @@ func (l ListDatabasePostgresCidrsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDatabasePostgresCidrsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database_name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database"}); err != nil {
 		return err
 	}
 	return nil
@@ -36,11 +36,11 @@ func (l *ListDatabasePostgresCidrsRequest) GetOrganization() string {
 	return l.Organization
 }
 
-func (l *ListDatabasePostgresCidrsRequest) GetDatabaseName() string {
+func (l *ListDatabasePostgresCidrsRequest) GetDatabase() string {
 	if l == nil {
 		return ""
 	}
-	return l.DatabaseName
+	return l.Database
 }
 
 func (l *ListDatabasePostgresCidrsRequest) GetPage() *float64 {

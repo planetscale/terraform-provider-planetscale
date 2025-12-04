@@ -7,13 +7,20 @@ import (
 )
 
 type ListClusterSizeSkusResponseBody struct {
-	CPU         types.String  `tfsdk:"cpu"`
-	DisplayName types.String  `tfsdk:"display_name"`
-	Enabled     types.Bool    `tfsdk:"enabled"`
-	Metal       types.Bool    `tfsdk:"metal"`
-	Name        types.String  `tfsdk:"name"`
-	Provider    types.String  `tfsdk:"provider"`
-	RAM         types.Float64 `tfsdk:"ram"`
-	SortOrder   types.Float64 `tfsdk:"sort_order"`
-	Storage     types.Float64 `tfsdk:"storage"`
+	Architecture      types.String  `tfsdk:"architecture"`
+	CPU               types.String  `tfsdk:"cpu"`
+	DefaultVtgate     types.String  `tfsdk:"default_vtgate"`
+	DefaultVtgateRate types.Float64 `tfsdk:"default_vtgate_rate"`
+	Development       types.Bool    `tfsdk:"development"`
+	DisplayName       types.String  `tfsdk:"display_name"`
+	Enabled           types.Bool    `tfsdk:"enabled"`
+	Metal             types.Bool    `tfsdk:"metal"`
+	Name              types.String  `tfsdk:"name"`
+	Production        types.Bool    `tfsdk:"production"`
+	Provider          types.String  `tfsdk:"provider"`
+	RAM               types.Float64 `tfsdk:"ram"`
+	Rate              types.Float64 `tfsdk:"rate"`
+	ReplicaRate       types.Float64 `tfsdk:"replica_rate"`
+	SortOrder         types.Float64 `tfsdk:"sort_order"`
+	Storage           types.Float64 `tfsdk:"storage"`
 }

@@ -14,29 +14,30 @@ import (
 	"net/http"
 )
 
-// DatabaseBranchKeyspaces -           Resources for managing keyspaces.
-type DatabaseBranchKeyspaces struct {
+// ServiceTokens -           API endpoints for managing service tokens within an organization.
+type ServiceTokens struct {
 	rootSDK          *Planetscale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newDatabaseBranchKeyspaces(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *DatabaseBranchKeyspaces {
-	return &DatabaseBranchKeyspaces{
+func newServiceTokens(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *ServiceTokens {
+	return &ServiceTokens{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
 	}
 }
 
-// ListKeyspaces - Get keyspaces
+// ListServiceTokens - List service tokens
+// List service tokens for an organization.
 // ### Authorization
 // A service token   must have at least one of the following access   in order to use this API endpoint:
 //
 // **Service Token Accesses**
 //
-//	`read_branch`
-func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request operations.ListKeyspacesRequest, opts ...operations.Option) (*operations.ListKeyspacesResponse, error) {
+//	`read_service_tokens`
+func (s *ServiceTokens) ListServiceTokens(ctx context.Context, request operations.ListServiceTokensRequest, opts ...operations.Option) (*operations.ListServiceTokensResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -54,7 +55,7 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/service-tokens", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -64,7 +65,7 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "list_keyspaces",
+		OperationID:      "list_service_tokens",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -128,7 +129,7 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 		}
 	}
 
-	res := &operations.ListKeyspacesResponse{
+	res := &operations.ListServiceTokensResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -143,7 +144,7 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out operations.ListKeyspacesResponseBody
+			var out operations.ListServiceTokensResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -174,14 +175,15 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 
 }
 
-// CreateKeyspace - Create a keyspace
+// CreateServiceToken - Create a service token
+// Create a new service token for the organization.
 // ### Authorization
 // A service token   must have at least one of the following access   in order to use this API endpoint:
 //
 // **Service Token Accesses**
 //
-//	`create_branch`
-func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request operations.CreateKeyspaceRequest, opts ...operations.Option) (*operations.CreateKeyspaceResponse, error) {
+//	`write_service_tokens`
+func (s *ServiceTokens) CreateServiceToken(ctx context.Context, request operations.CreateServiceTokenRequest, opts ...operations.Option) (*operations.CreateServiceTokenResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -199,7 +201,7 @@ func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/service-tokens", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -209,7 +211,7 @@ func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "create_keyspace",
+		OperationID:      "create_service_token",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -276,7 +278,7 @@ func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.CreateKeyspaceResponse{
+	res := &operations.CreateServiceTokenResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -291,7 +293,7 @@ func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request op
 				return nil, err
 			}
 
-			var out operations.CreateKeyspaceResponseBody
+			var out operations.CreateServiceTokenResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -322,14 +324,15 @@ func (s *DatabaseBranchKeyspaces) CreateKeyspace(ctx context.Context, request op
 
 }
 
-// GetKeyspace - Get a keyspace
+// GetServiceToken - Get a service token
+// Get information about a service token.
 // ### Authorization
 // A service token   must have at least one of the following access   in order to use this API endpoint:
 //
 // **Service Token Accesses**
 //
-//	`read_branch`
-func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request operations.GetKeyspaceRequest, opts ...operations.Option) (*operations.GetKeyspaceResponse, error) {
+//	`read_service_tokens`
+func (s *ServiceTokens) GetServiceToken(ctx context.Context, request operations.GetServiceTokenRequest, opts ...operations.Option) (*operations.GetServiceTokenResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -347,7 +350,7 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/service-tokens/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -357,7 +360,7 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "get_keyspace",
+		OperationID:      "get_service_token",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -417,7 +420,7 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 		}
 	}
 
-	res := &operations.GetKeyspaceResponse{
+	res := &operations.GetServiceTokenResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -432,7 +435,7 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out operations.GetKeyspaceResponseBody
+			var out operations.GetServiceTokenResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -463,14 +466,15 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 
 }
 
-// UpdateKeyspace - Configure keyspace settings
+// DeleteServiceToken - Delete a service token
+// Delete a service token from the organization.
 // ### Authorization
 // A service token   must have at least one of the following access   in order to use this API endpoint:
 //
 // **Service Token Accesses**
 //
-//	`create_branch`
-func (s *DatabaseBranchKeyspaces) UpdateKeyspace(ctx context.Context, request operations.UpdateKeyspaceRequest, opts ...operations.Option) (*operations.UpdateKeyspaceResponse, error) {
+//	`delete_service_tokens`
+func (s *ServiceTokens) DeleteServiceToken(ctx context.Context, request operations.DeleteServiceTokenRequest, opts ...operations.Option) (*operations.DeleteServiceTokenResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -488,7 +492,7 @@ func (s *DatabaseBranchKeyspaces) UpdateKeyspace(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/service-tokens/{id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -498,148 +502,7 @@ func (s *DatabaseBranchKeyspaces) UpdateKeyspace(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "update_keyspace",
-		OAuth2Scopes:     nil,
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "PATCH", opURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
-	}
-
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
-
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-		if err != nil {
-			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
-		}
-	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	res := &operations.UpdateKeyspaceResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out operations.UpdateKeyspaceResponseBody
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Object = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	case httpRes.StatusCode == 401:
-		fallthrough
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-	case httpRes.StatusCode == 500:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// DeleteKeyspace - Delete a keyspace
-// ### Authorization
-// A service token   must have at least one of the following access   in order to use this API endpoint:
-//
-// **Service Token Accesses**
-//
-//	`delete_branch`, `delete_production_branch`
-func (s *DatabaseBranchKeyspaces) DeleteKeyspace(ctx context.Context, request operations.DeleteKeyspaceRequest, opts ...operations.Option) (*operations.DeleteKeyspaceResponse, error) {
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}", request, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "delete_keyspace",
+		OperationID:      "delete_service_token",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -699,7 +562,7 @@ func (s *DatabaseBranchKeyspaces) DeleteKeyspace(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.DeleteKeyspaceResponse{
+	res := &operations.DeleteServiceTokenResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -707,147 +570,6 @@ func (s *DatabaseBranchKeyspaces) DeleteKeyspace(ctx context.Context, request op
 
 	switch {
 	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 401:
-		fallthrough
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-	case httpRes.StatusCode == 500:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// GetKeyspaceRolloutStatus - Get keyspace rollout status
-// ### Authorization
-// A service token   must have at least one of the following access   in order to use this API endpoint:
-//
-// **Service Token Accesses**
-//
-//	`read_branch`
-func (s *DatabaseBranchKeyspaces) GetKeyspaceRolloutStatus(ctx context.Context, request operations.GetKeyspaceRolloutStatusRequest, opts ...operations.Option) (*operations.GetKeyspaceRolloutStatusResponse, error) {
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/rollout-status", request, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "get_keyspace_rollout_status",
-		OAuth2Scopes:     nil,
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
-	}
-
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
-
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-		if err != nil {
-			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
-		}
-	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	res := &operations.GetKeyspaceRolloutStatusResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out operations.GetKeyspaceRolloutStatusResponseBody
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Object = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:

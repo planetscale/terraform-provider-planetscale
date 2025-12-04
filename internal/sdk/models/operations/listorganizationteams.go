@@ -9,16 +9,16 @@ import (
 
 type ListOrganizationTeamsRequest struct {
 	// The name of the organization
-	OrganizationName string `pathParam:"style=simple,explode=false,name=organization_name"`
+	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// Search term to filter teams by name
 	Q *string `queryParam:"style=form,explode=true,name=q"`
 }
 
-func (l *ListOrganizationTeamsRequest) GetOrganizationName() string {
+func (l *ListOrganizationTeamsRequest) GetOrganization() string {
 	if l == nil {
 		return ""
 	}
-	return l.OrganizationName
+	return l.Organization
 }
 
 func (l *ListOrganizationTeamsRequest) GetQ() *string {

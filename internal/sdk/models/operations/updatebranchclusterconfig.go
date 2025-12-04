@@ -25,8 +25,8 @@ type UpdateBranchClusterConfigRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch to configure
-	Name string                                `pathParam:"style=simple,explode=false,name=name"`
-	Body *UpdateBranchClusterConfigRequestBody `request:"mediaType=application/json"`
+	Branch string                                `pathParam:"style=simple,explode=false,name=branch"`
+	Body   *UpdateBranchClusterConfigRequestBody `request:"mediaType=application/json"`
 }
 
 func (u UpdateBranchClusterConfigRequest) MarshalJSON() ([]byte, error) {
@@ -34,7 +34,7 @@ func (u UpdateBranchClusterConfigRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateBranchClusterConfigRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch"}); err != nil {
 		return err
 	}
 	return nil
@@ -54,11 +54,11 @@ func (u *UpdateBranchClusterConfigRequest) GetDatabase() string {
 	return u.Database
 }
 
-func (u *UpdateBranchClusterConfigRequest) GetName() string {
+func (u *UpdateBranchClusterConfigRequest) GetBranch() string {
 	if u == nil {
 		return ""
 	}
-	return u.Name
+	return u.Branch
 }
 
 func (u *UpdateBranchClusterConfigRequest) GetBody() *UpdateBranchClusterConfigRequestBody {

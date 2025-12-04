@@ -7,37 +7,28 @@ import (
 	"net/http"
 )
 
-type GetOauthTokenRequest struct {
-	// The name of the organization the OAuth application belongs to
+type GetServiceTokenRequest struct {
+	// The name of the organization
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The ID of the OAuth application
-	ApplicationID string `pathParam:"style=simple,explode=false,name=application_id"`
-	// The ID of the OAuth application token
-	TokenID string `pathParam:"style=simple,explode=false,name=token_id"`
+	// The ID of the service token
+	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (g *GetOauthTokenRequest) GetOrganization() string {
+func (g *GetServiceTokenRequest) GetOrganization() string {
 	if g == nil {
 		return ""
 	}
 	return g.Organization
 }
 
-func (g *GetOauthTokenRequest) GetApplicationID() string {
+func (g *GetServiceTokenRequest) GetID() string {
 	if g == nil {
 		return ""
 	}
-	return g.ApplicationID
+	return g.ID
 }
 
-func (g *GetOauthTokenRequest) GetTokenID() string {
-	if g == nil {
-		return ""
-	}
-	return g.TokenID
-}
-
-type GetOauthTokenResource struct {
+type GetServiceTokenResource struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -50,42 +41,42 @@ type GetOauthTokenResource struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (g *GetOauthTokenResource) GetID() string {
+func (g *GetServiceTokenResource) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetOauthTokenResource) GetName() string {
+func (g *GetServiceTokenResource) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenResource) GetCreatedAt() string {
+func (g *GetServiceTokenResource) GetCreatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetOauthTokenResource) GetUpdatedAt() string {
+func (g *GetServiceTokenResource) GetUpdatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetOauthTokenResource) GetDeletedAt() string {
+func (g *GetServiceTokenResource) GetDeletedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.DeletedAt
 }
 
-type GetOauthTokenServiceTokenAccess struct {
+type GetServiceTokenServiceTokenAccess struct {
 	// The ID of the service token access
 	ID string `json:"id"`
 	// The name of the service token access
@@ -97,60 +88,60 @@ type GetOauthTokenServiceTokenAccess struct {
 	// The ID of the resource the service token access gives access to
 	ResourceID string `json:"resource_id"`
 	// The type of the resource the service token access gives access to
-	ResourceType string                `json:"resource_type"`
-	Resource     GetOauthTokenResource `json:"resource"`
+	ResourceType string                  `json:"resource_type"`
+	Resource     GetServiceTokenResource `json:"resource"`
 }
 
-func (g *GetOauthTokenServiceTokenAccess) GetID() string {
+func (g *GetServiceTokenServiceTokenAccess) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetOauthTokenServiceTokenAccess) GetAccess() string {
+func (g *GetServiceTokenServiceTokenAccess) GetAccess() string {
 	if g == nil {
 		return ""
 	}
 	return g.Access
 }
 
-func (g *GetOauthTokenServiceTokenAccess) GetDescription() string {
+func (g *GetServiceTokenServiceTokenAccess) GetDescription() string {
 	if g == nil {
 		return ""
 	}
 	return g.Description
 }
 
-func (g *GetOauthTokenServiceTokenAccess) GetResourceName() string {
+func (g *GetServiceTokenServiceTokenAccess) GetResourceName() string {
 	if g == nil {
 		return ""
 	}
 	return g.ResourceName
 }
 
-func (g *GetOauthTokenServiceTokenAccess) GetResourceID() string {
+func (g *GetServiceTokenServiceTokenAccess) GetResourceID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ResourceID
 }
 
-func (g *GetOauthTokenServiceTokenAccess) GetResourceType() string {
+func (g *GetServiceTokenServiceTokenAccess) GetResourceType() string {
 	if g == nil {
 		return ""
 	}
 	return g.ResourceType
 }
 
-func (g *GetOauthTokenServiceTokenAccess) GetResource() GetOauthTokenResource {
+func (g *GetServiceTokenServiceTokenAccess) GetResource() GetServiceTokenResource {
 	if g == nil {
-		return GetOauthTokenResource{}
+		return GetServiceTokenResource{}
 	}
 	return g.Resource
 }
 
-type GetOauthTokenDatabase1 struct {
+type GetServiceTokenDatabase1 struct {
 	// the name of the database the token has access to
 	Name string `json:"name"`
 	// the id of the database the token has access to
@@ -161,75 +152,75 @@ type GetOauthTokenDatabase1 struct {
 	URL string `json:"url"`
 }
 
-func (g *GetOauthTokenDatabase1) GetName() string {
+func (g *GetServiceTokenDatabase1) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenDatabase1) GetID() string {
+func (g *GetServiceTokenDatabase1) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetOauthTokenDatabase1) GetOrganization() string {
+func (g *GetServiceTokenDatabase1) GetOrganization() string {
 	if g == nil {
 		return ""
 	}
 	return g.Organization
 }
 
-func (g *GetOauthTokenDatabase1) GetURL() string {
+func (g *GetServiceTokenDatabase1) GetURL() string {
 	if g == nil {
 		return ""
 	}
 	return g.URL
 }
 
-type GetOauthTokenDatabaseAccess struct {
+type GetServiceTokenDatabaseAccess struct {
 	// The name of the access scope
 	Name string `json:"name"`
 	// The scope description
 	Description string `json:"description"`
 }
 
-func (g *GetOauthTokenDatabaseAccess) GetName() string {
+func (g *GetServiceTokenDatabaseAccess) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenDatabaseAccess) GetDescription() string {
+func (g *GetServiceTokenDatabaseAccess) GetDescription() string {
 	if g == nil {
 		return ""
 	}
 	return g.Description
 }
 
-type GetOauthTokenDatabase2 struct {
-	Databases []GetOauthTokenDatabase1      `json:"databases"`
-	Accesses  []GetOauthTokenDatabaseAccess `json:"accesses"`
+type GetServiceTokenDatabase2 struct {
+	Databases []GetServiceTokenDatabase1      `json:"databases"`
+	Accesses  []GetServiceTokenDatabaseAccess `json:"accesses"`
 }
 
-func (g *GetOauthTokenDatabase2) GetDatabases() []GetOauthTokenDatabase1 {
+func (g *GetServiceTokenDatabase2) GetDatabases() []GetServiceTokenDatabase1 {
 	if g == nil {
-		return []GetOauthTokenDatabase1{}
+		return []GetServiceTokenDatabase1{}
 	}
 	return g.Databases
 }
 
-func (g *GetOauthTokenDatabase2) GetAccesses() []GetOauthTokenDatabaseAccess {
+func (g *GetServiceTokenDatabase2) GetAccesses() []GetServiceTokenDatabaseAccess {
 	if g == nil {
-		return []GetOauthTokenDatabaseAccess{}
+		return []GetServiceTokenDatabaseAccess{}
 	}
 	return g.Accesses
 }
 
-type GetOauthTokenOrganization1 struct {
+type GetServiceTokenOrganization1 struct {
 	// the name of the organization
 	Name string `json:"name"`
 	// the id of the organization
@@ -238,68 +229,68 @@ type GetOauthTokenOrganization1 struct {
 	URL string `json:"url"`
 }
 
-func (g *GetOauthTokenOrganization1) GetName() string {
+func (g *GetServiceTokenOrganization1) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenOrganization1) GetID() string {
+func (g *GetServiceTokenOrganization1) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetOauthTokenOrganization1) GetURL() string {
+func (g *GetServiceTokenOrganization1) GetURL() string {
 	if g == nil {
 		return ""
 	}
 	return g.URL
 }
 
-type GetOauthTokenOrganizationAccess struct {
+type GetServiceTokenOrganizationAccess struct {
 	// The name of the access scope
 	Name string `json:"name"`
 	// The scope description
 	Description string `json:"description"`
 }
 
-func (g *GetOauthTokenOrganizationAccess) GetName() string {
+func (g *GetServiceTokenOrganizationAccess) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenOrganizationAccess) GetDescription() string {
+func (g *GetServiceTokenOrganizationAccess) GetDescription() string {
 	if g == nil {
 		return ""
 	}
 	return g.Description
 }
 
-type GetOauthTokenOrganization2 struct {
-	Organizations []GetOauthTokenOrganization1      `json:"organizations"`
-	Accesses      []GetOauthTokenOrganizationAccess `json:"accesses"`
+type GetServiceTokenOrganization2 struct {
+	Organizations []GetServiceTokenOrganization1      `json:"organizations"`
+	Accesses      []GetServiceTokenOrganizationAccess `json:"accesses"`
 }
 
-func (g *GetOauthTokenOrganization2) GetOrganizations() []GetOauthTokenOrganization1 {
+func (g *GetServiceTokenOrganization2) GetOrganizations() []GetServiceTokenOrganization1 {
 	if g == nil {
-		return []GetOauthTokenOrganization1{}
+		return []GetServiceTokenOrganization1{}
 	}
 	return g.Organizations
 }
 
-func (g *GetOauthTokenOrganization2) GetAccesses() []GetOauthTokenOrganizationAccess {
+func (g *GetServiceTokenOrganization2) GetAccesses() []GetServiceTokenOrganizationAccess {
 	if g == nil {
-		return []GetOauthTokenOrganizationAccess{}
+		return []GetServiceTokenOrganizationAccess{}
 	}
 	return g.Accesses
 }
 
-type GetOauthTokenBranch1 struct {
+type GetServiceTokenBranch1 struct {
 	// the name of the branch
 	Name string `json:"name"`
 	// the id of the branch
@@ -312,179 +303,179 @@ type GetOauthTokenBranch1 struct {
 	URL string `json:"url"`
 }
 
-func (g *GetOauthTokenBranch1) GetName() string {
+func (g *GetServiceTokenBranch1) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenBranch1) GetID() string {
+func (g *GetServiceTokenBranch1) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetOauthTokenBranch1) GetDatabase() string {
+func (g *GetServiceTokenBranch1) GetDatabase() string {
 	if g == nil {
 		return ""
 	}
 	return g.Database
 }
 
-func (g *GetOauthTokenBranch1) GetOrganization() string {
+func (g *GetServiceTokenBranch1) GetOrganization() string {
 	if g == nil {
 		return ""
 	}
 	return g.Organization
 }
 
-func (g *GetOauthTokenBranch1) GetURL() string {
+func (g *GetServiceTokenBranch1) GetURL() string {
 	if g == nil {
 		return ""
 	}
 	return g.URL
 }
 
-type GetOauthTokenBranchAccess struct {
+type GetServiceTokenBranchAccess struct {
 	// The name of the access scope
 	Name string `json:"name"`
 	// The scope description
 	Description string `json:"description"`
 }
 
-func (g *GetOauthTokenBranchAccess) GetName() string {
+func (g *GetServiceTokenBranchAccess) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenBranchAccess) GetDescription() string {
+func (g *GetServiceTokenBranchAccess) GetDescription() string {
 	if g == nil {
 		return ""
 	}
 	return g.Description
 }
 
-type GetOauthTokenBranch2 struct {
-	Branches []GetOauthTokenBranch1      `json:"branches"`
-	Accesses []GetOauthTokenBranchAccess `json:"accesses"`
+type GetServiceTokenBranch2 struct {
+	Branches []GetServiceTokenBranch1      `json:"branches"`
+	Accesses []GetServiceTokenBranchAccess `json:"accesses"`
 }
 
-func (g *GetOauthTokenBranch2) GetBranches() []GetOauthTokenBranch1 {
+func (g *GetServiceTokenBranch2) GetBranches() []GetServiceTokenBranch1 {
 	if g == nil {
-		return []GetOauthTokenBranch1{}
+		return []GetServiceTokenBranch1{}
 	}
 	return g.Branches
 }
 
-func (g *GetOauthTokenBranch2) GetAccesses() []GetOauthTokenBranchAccess {
+func (g *GetServiceTokenBranch2) GetAccesses() []GetServiceTokenBranchAccess {
 	if g == nil {
-		return []GetOauthTokenBranchAccess{}
+		return []GetServiceTokenBranchAccess{}
 	}
 	return g.Accesses
 }
 
-type GetOauthTokenUser1 struct {
+type GetServiceTokenUser1 struct {
 	// the name of the user
 	Name string `json:"name"`
 	// the id of the user
 	ID string `json:"id"`
 }
 
-func (g *GetOauthTokenUser1) GetName() string {
+func (g *GetServiceTokenUser1) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenUser1) GetID() string {
+func (g *GetServiceTokenUser1) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-type GetOauthTokenUserAccess struct {
+type GetServiceTokenUserAccess struct {
 	// The name of the access scope
 	Name string `json:"name"`
 	// The scope description
 	Description string `json:"description"`
 }
 
-func (g *GetOauthTokenUserAccess) GetName() string {
+func (g *GetServiceTokenUserAccess) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenUserAccess) GetDescription() string {
+func (g *GetServiceTokenUserAccess) GetDescription() string {
 	if g == nil {
 		return ""
 	}
 	return g.Description
 }
 
-type GetOauthTokenUser2 struct {
-	Users    []GetOauthTokenUser1      `json:"users"`
-	Accesses []GetOauthTokenUserAccess `json:"accesses"`
+type GetServiceTokenUser2 struct {
+	Users    []GetServiceTokenUser1      `json:"users"`
+	Accesses []GetServiceTokenUserAccess `json:"accesses"`
 }
 
-func (g *GetOauthTokenUser2) GetUsers() []GetOauthTokenUser1 {
+func (g *GetServiceTokenUser2) GetUsers() []GetServiceTokenUser1 {
 	if g == nil {
-		return []GetOauthTokenUser1{}
+		return []GetServiceTokenUser1{}
 	}
 	return g.Users
 }
 
-func (g *GetOauthTokenUser2) GetAccesses() []GetOauthTokenUserAccess {
+func (g *GetServiceTokenUser2) GetAccesses() []GetServiceTokenUserAccess {
 	if g == nil {
-		return []GetOauthTokenUserAccess{}
+		return []GetServiceTokenUserAccess{}
 	}
 	return g.Accesses
 }
 
-type GetOauthTokenOauthAccessesByResource struct {
-	Database     GetOauthTokenDatabase2     `json:"database"`
-	Organization GetOauthTokenOrganization2 `json:"organization"`
-	Branch       GetOauthTokenBranch2       `json:"branch"`
-	User         GetOauthTokenUser2         `json:"user"`
+type GetServiceTokenOauthAccessesByResource struct {
+	Database     GetServiceTokenDatabase2     `json:"database"`
+	Organization GetServiceTokenOrganization2 `json:"organization"`
+	Branch       GetServiceTokenBranch2       `json:"branch"`
+	User         GetServiceTokenUser2         `json:"user"`
 }
 
-func (g *GetOauthTokenOauthAccessesByResource) GetDatabase() GetOauthTokenDatabase2 {
+func (g *GetServiceTokenOauthAccessesByResource) GetDatabase() GetServiceTokenDatabase2 {
 	if g == nil {
-		return GetOauthTokenDatabase2{}
+		return GetServiceTokenDatabase2{}
 	}
 	return g.Database
 }
 
-func (g *GetOauthTokenOauthAccessesByResource) GetOrganization() GetOauthTokenOrganization2 {
+func (g *GetServiceTokenOauthAccessesByResource) GetOrganization() GetServiceTokenOrganization2 {
 	if g == nil {
-		return GetOauthTokenOrganization2{}
+		return GetServiceTokenOrganization2{}
 	}
 	return g.Organization
 }
 
-func (g *GetOauthTokenOauthAccessesByResource) GetBranch() GetOauthTokenBranch2 {
+func (g *GetServiceTokenOauthAccessesByResource) GetBranch() GetServiceTokenBranch2 {
 	if g == nil {
-		return GetOauthTokenBranch2{}
+		return GetServiceTokenBranch2{}
 	}
 	return g.Branch
 }
 
-func (g *GetOauthTokenOauthAccessesByResource) GetUser() GetOauthTokenUser2 {
+func (g *GetServiceTokenOauthAccessesByResource) GetUser() GetServiceTokenUser2 {
 	if g == nil {
-		return GetOauthTokenUser2{}
+		return GetServiceTokenUser2{}
 	}
 	return g.User
 }
 
-// GetOauthTokenResponseBody - Returns an OAuth token that was issued on behalf of the OAuth application
-type GetOauthTokenResponseBody struct {
+// GetServiceTokenResponseBody - Returns the service token
+type GetServiceTokenResponseBody struct {
 	// The ID of the service token
 	ID string `json:"id"`
 	// The name of the service token
@@ -510,160 +501,160 @@ type GetOauthTokenResponseBody struct {
 	// The name of the actor on whose behalf the service token was created
 	ActorDisplayName string `json:"actor_display_name"`
 	// The type of the actor on whose behalf the service token was created
-	ActorType               string                               `json:"actor_type"`
-	ServiceTokenAccesses    []GetOauthTokenServiceTokenAccess    `json:"service_token_accesses"`
-	OauthAccessesByResource GetOauthTokenOauthAccessesByResource `json:"oauth_accesses_by_resource"`
+	ActorType               string                                 `json:"actor_type"`
+	ServiceTokenAccesses    []GetServiceTokenServiceTokenAccess    `json:"service_token_accesses"`
+	OauthAccessesByResource GetServiceTokenOauthAccessesByResource `json:"oauth_accesses_by_resource"`
 }
 
-func (g *GetOauthTokenResponseBody) GetID() string {
+func (g *GetServiceTokenResponseBody) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetOauthTokenResponseBody) GetName() string {
+func (g *GetServiceTokenResponseBody) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetOauthTokenResponseBody) GetDisplayName() string {
+func (g *GetServiceTokenResponseBody) GetDisplayName() string {
 	if g == nil {
 		return ""
 	}
 	return g.DisplayName
 }
 
-func (g *GetOauthTokenResponseBody) GetToken() string {
+func (g *GetServiceTokenResponseBody) GetToken() string {
 	if g == nil {
 		return ""
 	}
 	return g.Token
 }
 
-func (g *GetOauthTokenResponseBody) GetPlainTextRefreshToken() string {
+func (g *GetServiceTokenResponseBody) GetPlainTextRefreshToken() string {
 	if g == nil {
 		return ""
 	}
 	return g.PlainTextRefreshToken
 }
 
-func (g *GetOauthTokenResponseBody) GetAvatarURL() string {
+func (g *GetServiceTokenResponseBody) GetAvatarURL() string {
 	if g == nil {
 		return ""
 	}
 	return g.AvatarURL
 }
 
-func (g *GetOauthTokenResponseBody) GetCreatedAt() string {
+func (g *GetServiceTokenResponseBody) GetCreatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetOauthTokenResponseBody) GetUpdatedAt() string {
+func (g *GetServiceTokenResponseBody) GetUpdatedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetOauthTokenResponseBody) GetExpiresAt() string {
+func (g *GetServiceTokenResponseBody) GetExpiresAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.ExpiresAt
 }
 
-func (g *GetOauthTokenResponseBody) GetLastUsedAt() string {
+func (g *GetServiceTokenResponseBody) GetLastUsedAt() string {
 	if g == nil {
 		return ""
 	}
 	return g.LastUsedAt
 }
 
-func (g *GetOauthTokenResponseBody) GetActorID() string {
+func (g *GetServiceTokenResponseBody) GetActorID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ActorID
 }
 
-func (g *GetOauthTokenResponseBody) GetActorDisplayName() string {
+func (g *GetServiceTokenResponseBody) GetActorDisplayName() string {
 	if g == nil {
 		return ""
 	}
 	return g.ActorDisplayName
 }
 
-func (g *GetOauthTokenResponseBody) GetActorType() string {
+func (g *GetServiceTokenResponseBody) GetActorType() string {
 	if g == nil {
 		return ""
 	}
 	return g.ActorType
 }
 
-func (g *GetOauthTokenResponseBody) GetServiceTokenAccesses() []GetOauthTokenServiceTokenAccess {
+func (g *GetServiceTokenResponseBody) GetServiceTokenAccesses() []GetServiceTokenServiceTokenAccess {
 	if g == nil {
-		return []GetOauthTokenServiceTokenAccess{}
+		return []GetServiceTokenServiceTokenAccess{}
 	}
 	return g.ServiceTokenAccesses
 }
 
-func (g *GetOauthTokenResponseBody) GetOauthAccessesByResource() GetOauthTokenOauthAccessesByResource {
+func (g *GetServiceTokenResponseBody) GetOauthAccessesByResource() GetServiceTokenOauthAccessesByResource {
 	if g == nil {
-		return GetOauthTokenOauthAccessesByResource{}
+		return GetServiceTokenOauthAccessesByResource{}
 	}
 	return g.OauthAccessesByResource
 }
 
-type GetOauthTokenResponse struct {
+type GetServiceTokenResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Returns an OAuth token that was issued on behalf of the OAuth application
-	Object *GetOauthTokenResponseBody
+	// Returns the service token
+	Object *GetServiceTokenResponseBody
 }
 
-func (g GetOauthTokenResponse) MarshalJSON() ([]byte, error) {
+func (g GetServiceTokenResponse) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GetOauthTokenResponse) UnmarshalJSON(data []byte) error {
+func (g *GetServiceTokenResponse) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (g *GetOauthTokenResponse) GetContentType() string {
+func (g *GetServiceTokenResponse) GetContentType() string {
 	if g == nil {
 		return ""
 	}
 	return g.ContentType
 }
 
-func (g *GetOauthTokenResponse) GetStatusCode() int {
+func (g *GetServiceTokenResponse) GetStatusCode() int {
 	if g == nil {
 		return 0
 	}
 	return g.StatusCode
 }
 
-func (g *GetOauthTokenResponse) GetRawResponse() *http.Response {
+func (g *GetServiceTokenResponse) GetRawResponse() *http.Response {
 	if g == nil {
 		return nil
 	}
 	return g.RawResponse
 }
 
-func (g *GetOauthTokenResponse) GetObject() *GetOauthTokenResponseBody {
+func (g *GetServiceTokenResponse) GetObject() *GetServiceTokenResponseBody {
 	if g == nil {
 		return nil
 	}

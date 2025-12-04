@@ -39,8 +39,8 @@ func (r *BranchSchemaDataSourceModel) ToOperationsGetBranchSchemaRequest(ctx con
 	var database string
 	database = r.Database.ValueString()
 
-	var name string
-	name = r.Name.ValueString()
+	var branch string
+	branch = r.Branch.ValueString()
 
 	keyspace := new(string)
 	if !r.Keyspace.IsUnknown() && !r.Keyspace.IsNull() {
@@ -57,7 +57,7 @@ func (r *BranchSchemaDataSourceModel) ToOperationsGetBranchSchemaRequest(ctx con
 	out := operations.GetBranchSchemaRequest{
 		Organization: organization,
 		Database:     database,
-		Name:         name,
+		Branch:       branch,
 		Keyspace:     keyspace,
 		Namespace:    namespace,
 	}

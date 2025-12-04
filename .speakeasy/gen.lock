@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: ce79792c7d2dd74a63cb69f8864b2679
+  docChecksum: d5cfaee352b65abf3002f50453e80b27
   docVersion: v1
   speakeasyVersion: 1.667.0
   generationVersion: 2.769.1
@@ -217,6 +217,7 @@ generatedFiles:
   - internal/sdk/models/operations/createpassword.go
   - internal/sdk/models/operations/createquerypatternsreport.go
   - internal/sdk/models/operations/createrole.go
+  - internal/sdk/models/operations/createservicetoken.go
   - internal/sdk/models/operations/createwebhook.go
   - internal/sdk/models/operations/createworkflow.go
   - internal/sdk/models/operations/deletebackup.go
@@ -230,6 +231,7 @@ generatedFiles:
   - internal/sdk/models/operations/deletepassword.go
   - internal/sdk/models/operations/deletequerypatternsreport.go
   - internal/sdk/models/operations/deleterole.go
+  - internal/sdk/models/operations/deleteservicetoken.go
   - internal/sdk/models/operations/deletewebhook.go
   - internal/sdk/models/operations/demotebranch.go
   - internal/sdk/models/operations/disablesafemigrations.go
@@ -261,6 +263,7 @@ generatedFiles:
   - internal/sdk/models/operations/getquerypatternsreport.go
   - internal/sdk/models/operations/getquerypatternsreportstatus.go
   - internal/sdk/models/operations/getrole.go
+  - internal/sdk/models/operations/getservicetoken.go
   - internal/sdk/models/operations/getwebhook.go
   - internal/sdk/models/operations/getworkflow.go
   - internal/sdk/models/operations/lintbranchschema.go
@@ -293,19 +296,23 @@ generatedFiles:
   - internal/sdk/models/operations/listreadonlyregions.go
   - internal/sdk/models/operations/listregionsfororganization.go
   - internal/sdk/models/operations/listroles.go
+  - internal/sdk/models/operations/listservicetokens.go
   - internal/sdk/models/operations/listwebhooks.go
   - internal/sdk/models/operations/listworkflows.go
   - internal/sdk/models/operations/options.go
   - internal/sdk/models/operations/promotebranch.go
   - internal/sdk/models/operations/queuedeployrequest.go
+  - internal/sdk/models/operations/reassignroleobjects.go
   - internal/sdk/models/operations/removeorganizationmember.go
   - internal/sdk/models/operations/renewpassword.go
   - internal/sdk/models/operations/renewrole.go
   - internal/sdk/models/operations/resetdatabasedefaultbranch.go
+  - internal/sdk/models/operations/resetrole.go
   - internal/sdk/models/operations/reviewdeployrequest.go
   - internal/sdk/models/operations/skiprevertperiod.go
   - internal/sdk/models/operations/testwebhook.go
   - internal/sdk/models/operations/updateautoapply.go
+  - internal/sdk/models/operations/updateautodeletebranch.go
   - internal/sdk/models/operations/updatebackup.go
   - internal/sdk/models/operations/updatebouncerresizerequest.go
   - internal/sdk/models/operations/updatebranchchangerequest.go
@@ -348,6 +355,7 @@ generatedFiles:
   - internal/sdk/regions.go
   - internal/sdk/retry/config.go
   - internal/sdk/roles.go
+  - internal/sdk/servicetokens.go
   - internal/sdk/types/bigint.go
   - internal/sdk/types/date.go
   - internal/sdk/types/datetime.go
@@ -388,6 +396,7 @@ examples:
       parameters:
         path:
           name: "<value>"
+          organization: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": false, "database_count": 1578.34, "sso_portal_url": "https://defenseless-circumference.name/", "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": 9516.88, "keyspace_shard_limit": 6999.24, "has_card": false, "payment_info_required": true}
@@ -396,6 +405,7 @@ examples:
       parameters:
         path:
           name: "<value>"
+          organization: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1715854812366", "updated_at": "1735605927440", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": true, "single_tenancy": true, "managed_tenancy": false, "has_past_due_invoices": false, "database_count": 8650.2, "sso_portal_url": "https://mammoth-digit.info", "features": {"key": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": 2635.48, "keyspace_shard_limit": 1726.16, "has_card": true, "payment_info_required": true}
@@ -404,6 +414,7 @@ examples:
       parameters:
         path:
           name: "<value>"
+          organization: "<value>"
       responses:
         "200":
           application/json: {"has_next": false, "has_prev": true, "cursor_start": "<value>", "cursor_end": "<value>", "data": []}
@@ -412,6 +423,7 @@ examples:
       parameters:
         path:
           name: "<value>"
+          organization: "<value>"
         query:
           page: 1
           per_page: 25
@@ -461,6 +473,7 @@ examples:
         path:
           organization: "<value>"
           name: "<value>"
+          database: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "url": "https://sizzling-couch.name/", "branches_url": "https://snappy-almighty.biz/", "branches_count": 7605.76, "open_schema_recommendations_count": 7984.6, "development_branches_count": 9196.79, "production_branches_count": 4340.2, "issues_count": 2589.55, "multiple_admins_required_for_deletion": false, "ready": true, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": false, "data_import": {"state": "New Hampshire", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "known-season.name", "port": 4667.72, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": [], "display_name": "Carolanne_Lemke13", "location": "<value>", "slug": "<value>", "current_default": false}, "html_url": "https://official-spring.info/", "name": "<value>", "state": "sleep_in_progress", "sharded": false, "default_branch_shard_count": 2831.16, "default_branch_read_only_regions_count": 8563.05, "default_branch_table_count": 9012.17, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": false, "allow_data_branching": false, "foreign_keys_enabled": false, "automatic_migrations": true, "restrict_branch_region": false, "insights_raw_queries": true, "plan": "<value>", "insights_enabled": true, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1734227205033", "updated_at": "1735660507635", "schema_last_updated_at": "<value>", "kind": "mysql"}
@@ -470,6 +483,7 @@ examples:
         path:
           organization: "<value>"
           name: "<value>"
+          database: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "url": "https://lovely-hundred.com/", "branches_url": "https://wavy-recovery.net/", "branches_count": 9415.85, "open_schema_recommendations_count": 328.1, "development_branches_count": 6761.7, "production_branches_count": 4950.43, "issues_count": 9228.06, "multiple_admins_required_for_deletion": false, "ready": false, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": true, "data_import": {"state": "Missouri", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "partial-ceramic.org", "port": 1101.05, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Van64", "location": "<value>", "slug": "<value>", "current_default": true}, "html_url": "https://super-molasses.com", "name": "<value>", "state": "awakening", "sharded": true, "default_branch_shard_count": 6748.92, "default_branch_read_only_regions_count": 8375.21, "default_branch_table_count": 9693.2, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": false, "allow_data_branching": true, "foreign_keys_enabled": true, "automatic_migrations": false, "restrict_branch_region": false, "insights_raw_queries": false, "plan": "<value>", "insights_enabled": false, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1712421880683", "updated_at": "1735652844760", "schema_last_updated_at": "<value>", "kind": "postgresql"}
@@ -479,12 +493,14 @@ examples:
         path:
           organization: "<value>"
           name: "<value>"
+          database: "<value>"
   list_read_only_regions:
     speakeasy-default-list-read-only-regions:
       parameters:
         path:
           organization: "<value>"
           name: "<value>"
+          database: "<value>"
         query:
           page: 1
           per_page: 25
@@ -497,6 +513,7 @@ examples:
         path:
           organization: "<value>"
           name: "<value>"
+          database: "<value>"
         query:
           page: 1
           per_page: 25
@@ -531,6 +548,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "created_at": "1722496141884", "updated_at": "1735603601312", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "awakening", "direct_vtgate": false, "vtgate_size": "<value>", "vtgate_count": 3098.11, "cluster_name": "<value>", "cluster_iops": 6597.38, "ready": false, "schema_ready": true, "metal": true, "production": true, "safe_migrations": false, "sharded": true, "shard_count": 4396.88, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Carolina.Legros50", "avatar_url": "https://fortunate-acquaintance.biz"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1735150042281", "updated_at": "1735633568981", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": false, "html_url": "https://helpless-scholarship.net", "url": "https://heavy-poppy.net", "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": [], "display_name": "Zoe_Boyle63", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
@@ -541,6 +559,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
   update_branch_cluster_config:
     speakeasy-default-update-branch-cluster-config:
       parameters:
@@ -548,6 +567,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
   demote_branch:
     speakeasy-default-demote-branch:
       parameters:
@@ -555,6 +575,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "created_at": "1733641519805", "updated_at": "1735636903830", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "postgresql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": true, "vtgate_size": "<value>", "vtgate_count": 2096.16, "cluster_name": "<value>", "cluster_iops": 2116.77, "ready": false, "schema_ready": false, "metal": false, "production": true, "safe_migrations": false, "sharded": true, "shard_count": 2489.58, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Sophia14", "avatar_url": "https://jaunty-rosemary.net/"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1707030848007", "updated_at": "1735679934611", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": false, "html_url": "https://decisive-scorpion.com/", "url": "https://intelligent-freezing.info/", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": [], "display_name": "Gonzalo_Prohaska", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
@@ -565,6 +586,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "created_at": "1718439447650", "updated_at": "1735621185389", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": false, "vtgate_size": "<value>", "vtgate_count": 3235.92, "cluster_name": "<value>", "cluster_iops": 9694.7, "ready": false, "schema_ready": false, "metal": false, "production": false, "safe_migrations": true, "sharded": false, "shard_count": 9945.18, "stale_schema": true, "actor": {"id": "<id>", "display_name": "Catalina_Cummings", "avatar_url": "https://flimsy-overload.org"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1714902446461", "updated_at": "1735639380833", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": true, "has_read_only_replicas": true, "html_url": "https://content-subsidy.biz/", "url": "https://haunting-boulevard.name/", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Jackie41", "location": "<value>", "slug": "<value>", "current_default": true}, "parent_branch": "<value>"}
@@ -575,6 +597,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "created_at": "1721496463109", "updated_at": "1735682572778", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": true, "vtgate_size": "<value>", "vtgate_count": 4818.34, "cluster_name": "<value>", "cluster_iops": 1681.77, "ready": false, "schema_ready": true, "metal": true, "production": true, "safe_migrations": true, "sharded": true, "shard_count": 2339.07, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Rosanna_Labadie51", "avatar_url": "https://exalted-bonnet.net"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1713776774679", "updated_at": "1735664674533", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": true, "html_url": "https://marvelous-porter.org", "url": "https://stable-popularity.name", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Danial53", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
@@ -585,6 +608,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "created_at": "1731009855432", "updated_at": "1735663225281", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": false, "vtgate_size": "<value>", "vtgate_count": 5796.81, "cluster_name": "<value>", "cluster_iops": 5003.95, "ready": true, "schema_ready": true, "metal": false, "production": true, "safe_migrations": false, "sharded": false, "shard_count": 1324.47, "stale_schema": true, "actor": {"id": "<id>", "display_name": "Estrella_Klein", "avatar_url": "https://amazing-sweatshop.name/"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1725113816782", "updated_at": "1735610532068", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": false, "has_read_only_replicas": true, "html_url": "https://far-flung-impact.net/", "url": "https://blaring-elver.info", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Marcellus_Hickle43", "location": "<value>", "slug": "<value>", "current_default": true}, "parent_branch": "<value>"}
@@ -595,6 +619,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
       responses:
         "200":
           application/json: {"data": []}
@@ -605,6 +630,7 @@ examples:
           organization: "<value>"
           database: "<value>"
           name: "<value>"
+          branch: "<value>"
         query:
           page: 1
           per_page: 25
@@ -633,7 +659,7 @@ examples:
           branch: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "state": "failed", "size": 7501.96, "estimated_storage_cost": 3733.03, "created_at": "1714966750835", "updated_at": "1735668967475", "started_at": "<value>", "expires_at": "1762434411145", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 4594.91, "protected": false, "required": true, "restored_branches": [{"id": "<id>", "name": "<value>", "created_at": "1728629976370", "updated_at": "1735621121133", "deleted_at": "<value>"}], "actor": {"id": "<id>", "display_name": "Boris.Lang", "avatar_url": "https://sudden-fun.com/"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 3776.9, "retention_unit": "<value>", "frequency_value": 3195.21, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": "0", "schedule_week": "3", "created_at": "1704594791736", "updated_at": "1735653105488", "last_ran_at": "<value>", "next_run_at": "<value>", "required": true}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1719066981672", "updated_at": "1735674614358", "linted_at": "<value>", "url": "https://speedy-barge.biz"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1711016309353", "updated_at": "1735686405050", "deleted_at": "<value>"}}
+          application/json: {"id": "<id>", "name": "<value>", "state": "failed", "size": 7501.96, "estimated_storage_cost": 3733.03, "created_at": "1714966750835", "updated_at": "1735668967475", "started_at": "<value>", "expires_at": "1762434411145", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 4594.91, "protected": false, "required": true, "restored_branches": [{"id": "<id>", "name": "<value>", "created_at": "1728629976370", "updated_at": "1735621121133", "deleted_at": "<value>"}], "actor": {"id": "<id>", "display_name": "Boris.Lang", "avatar_url": "https://sudden-fun.com/"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 3776.9, "retention_unit": "<value>", "frequency_value": 3195.21, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 0, "schedule_week": 3, "created_at": "1704594791736", "updated_at": "1735653105488", "last_ran_at": "<value>", "next_run_at": "<value>", "required": true}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1719066981672", "updated_at": "1735674614358", "linted_at": "<value>", "url": "https://speedy-barge.biz"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1711016309353", "updated_at": "1735686405050", "deleted_at": "<value>"}}
   get_backup:
     speakeasy-default-get-backup:
       parameters:
@@ -644,7 +670,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "state": "success", "size": 2122.37, "estimated_storage_cost": 1135.61, "created_at": "1733814539101", "updated_at": "1735637142904", "started_at": "<value>", "expires_at": "1762112311749", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 4531.58, "protected": true, "required": false, "restored_branches": [{"id": "<id>", "name": "<value>", "created_at": "1716448491718", "updated_at": "1735667658504", "deleted_at": "<value>"}], "actor": {"id": "<id>", "display_name": "Cielo51", "avatar_url": "https://concrete-bourgeoisie.name/"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 3670.74, "retention_unit": "<value>", "frequency_value": 7017.01, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": "2", "schedule_week": "3", "created_at": "1718832973607", "updated_at": "1735651813114", "last_ran_at": "<value>", "next_run_at": "<value>", "required": false}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1708346877642", "updated_at": "1735651168399", "linted_at": "<value>", "url": "https://scornful-popularity.biz/"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1734615633708", "updated_at": "1735672983263", "deleted_at": "<value>"}}
+          application/json: {"id": "<id>", "name": "<value>", "state": "success", "size": 2122.37, "estimated_storage_cost": 1135.61, "created_at": "1733814539101", "updated_at": "1735637142904", "started_at": "<value>", "expires_at": "1762112311749", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 4531.58, "protected": true, "required": false, "restored_branches": [{"id": "<id>", "name": "<value>", "created_at": "1716448491718", "updated_at": "1735667658504", "deleted_at": "<value>"}], "actor": {"id": "<id>", "display_name": "Cielo51", "avatar_url": "https://concrete-bourgeoisie.name/"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 3670.74, "retention_unit": "<value>", "frequency_value": 7017.01, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 2, "schedule_week": 3, "created_at": "1718832973607", "updated_at": "1735651813114", "last_ran_at": "<value>", "next_run_at": "<value>", "required": false}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1708346877642", "updated_at": "1735651168399", "linted_at": "<value>", "url": "https://scornful-popularity.biz/"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1734615633708", "updated_at": "1735672983263", "deleted_at": "<value>"}}
   update_backup:
     speakeasy-default-update-backup:
       parameters:
@@ -655,7 +681,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "state": "running", "size": 6105.58, "estimated_storage_cost": 1570.82, "created_at": "1711505965547", "updated_at": "1735674587542", "started_at": "<value>", "expires_at": "1752790410783", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 392.18, "protected": true, "required": true, "restored_branches": [], "actor": {"id": "<id>", "display_name": "Giovanny63", "avatar_url": "https://stable-shadowbox.org"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 7007.79, "retention_unit": "<value>", "frequency_value": 4357.6, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": "3", "schedule_week": "3", "created_at": "1729835406731", "updated_at": "1735612949203", "last_ran_at": "<value>", "next_run_at": "<value>", "required": true}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1708513005560", "updated_at": "1735614322265", "linted_at": "<value>", "url": "https://definitive-pacemaker.com"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1709044442370", "updated_at": "1735679494611", "deleted_at": "<value>"}}
+          application/json: {"id": "<id>", "name": "<value>", "state": "running", "size": 6105.58, "estimated_storage_cost": 1570.82, "created_at": "1711505965547", "updated_at": "1735674587542", "started_at": "<value>", "expires_at": "1752790410783", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 392.18, "protected": true, "required": true, "restored_branches": [], "actor": {"id": "<id>", "display_name": "Giovanny63", "avatar_url": "https://stable-shadowbox.org"}, "backup_policy": {"id": "<id>", "name": "<value>", "target": "development", "retention_value": 7007.79, "retention_unit": "<value>", "frequency_value": 4357.6, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 3, "schedule_week": 3, "created_at": "1729835406731", "updated_at": "1735612949203", "last_ran_at": "<value>", "next_run_at": "<value>", "required": true}, "schema_snapshot": {"id": "<id>", "name": "<value>", "created_at": "1708513005560", "updated_at": "1735614322265", "linted_at": "<value>", "url": "https://definitive-pacemaker.com"}, "database_branch": {"id": "<id>", "name": "<value>", "created_at": "1709044442370", "updated_at": "1735679494611", "deleted_at": "<value>"}}
   delete_backup:
     speakeasy-default-delete-backup:
       parameters:
@@ -708,6 +734,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          bouncer: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "sku": {"name": "<value>", "display_name": "Hilbert86", "cpu": "<value>", "ram": 939.27, "sort_order": 3084.29}, "target": "primary", "replicas_per_cell": 2494.03, "created_at": "1727413063201", "updated_at": "1735627959135", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Santos.Botsford-Hackett", "avatar_url": "https://rectangular-chap.org"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1735541622830", "updated_at": "1735620048194", "deleted_at": "<value>"}, "parameters": []}
@@ -719,6 +746,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          bouncer: "<value>"
   list_bouncer_resize_requests:
     speakeasy-default-list-bouncer-resize-requests:
       parameters:
@@ -727,6 +755,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          bouncer: "<value>"
         query:
           page: 1
           per_page: 25
@@ -741,6 +770,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          bouncer: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "state": "pending", "replicas_per_cell": 5194.03, "parameters": {}, "previous_replicas_per_cell": 5400.16, "previous_parameters": {"key": "<value>"}, "started_at": "<value>", "completed_at": "<value>", "created_at": "1734464753464", "updated_at": "1735623817689", "actor": {"id": "<id>", "display_name": "Oran_Jones", "avatar_url": "https://excellent-department.org"}, "bouncer": {"id": "<id>", "name": "<value>", "created_at": "1735113029020", "updated_at": "1735627295645", "deleted_at": "<value>"}, "sku": {"name": "<value>", "display_name": "Ralph_Jones71", "cpu": "<value>", "ram": 428.02, "sort_order": 9852}, "previous_sku": {"name": "<value>", "display_name": "Julianne63", "cpu": "<value>", "ram": 7060.83, "sort_order": 707.33}}
@@ -752,6 +782,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          bouncer: "<value>"
   list_branch_change_requests:
     speakeasy-default-list-branch-change-requests:
       parameters:
@@ -823,6 +854,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          keyspace: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "replication_durability_constraints": {"strategy": "available"}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}}
@@ -834,6 +866,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          keyspace: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "name": "<value>", "shards": 7015.41, "sharded": true, "replicas": 8056.82, "extra_replicas": 7588.19, "created_at": "1720160939319", "updated_at": "1735610401855", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "ready": false, "metal": false, "default": false, "imported": true, "vector_pool_allocation": 2373.64, "replication_durability_constraints": {"strategy": "lag"}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}}
@@ -845,6 +878,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          keyspace: "<value>"
   get_keyspace_rollout_status:
     speakeasy-default-get-keyspace-rollout-status:
       parameters:
@@ -853,6 +887,7 @@ examples:
           database: "<value>"
           branch: "<value>"
           name: "<value>"
+          keyspace: "<value>"
       responses:
         "200":
           application/json: {"name": "<value>", "state": "South Carolina", "shards": []}
@@ -900,7 +935,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"current_page": 2580.97, "next_page": 4641.64, "next_page_url": "https://dismal-brief.name", "prev_page": 9208.93, "prev_page_url": "https://known-pillbox.name", "data": [{"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>"], "created_at": "1705263069408", "deleted_at": "<value>", "expires_at": "1747391773298", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "ttl_seconds": 8467, "access_host_url": "https://humble-tackle.com", "access_host_regional_url": "https://judicious-metabolite.info/", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Alison76", "avatar_url": "https://last-decryption.name/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Jackeline.Kessler2", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Sabryna_Mosciski", "plain_text": "<value>", "replica": true, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}]}
+          application/json: {"current_page": 2580.97, "next_page": 4641.64, "next_page_url": "https://dismal-brief.name", "prev_page": 9208.93, "prev_page_url": "https://known-pillbox.name", "data": [{"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>"], "created_at": "1705263069408", "deleted_at": "<value>", "expires_at": "1747391773298", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "direct_vtgate_addresses": ["<value 1>"], "ttl_seconds": 8467, "access_host_url": "https://humble-tackle.com", "access_host_regional_url": "https://judicious-metabolite.info/", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Alison76", "avatar_url": "https://last-decryption.name/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Jackeline.Kessler2", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Sabryna_Mosciski", "plain_text": "<value>", "replica": true, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}]}
   create_password:
     speakeasy-default-create-password:
       parameters:
@@ -910,7 +945,7 @@ examples:
           branch: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "role": "writer", "cidrs": [], "created_at": "1715649282377", "deleted_at": "<value>", "expires_at": "1747828158844", "last_used_at": "<value>", "expired": true, "direct_vtgate": false, "ttl_seconds": 8810.11, "access_host_url": "https://busy-stock.org", "access_host_regional_url": "https://crafty-middle.net", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Evan17", "avatar_url": "https://stingy-joy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Paige.Gislason71", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Jaquelin51", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+          application/json: {"id": "<id>", "name": "<value>", "role": "writer", "cidrs": [], "created_at": "1715649282377", "deleted_at": "<value>", "expires_at": "1747828158844", "last_used_at": "<value>", "expired": true, "direct_vtgate": false, "direct_vtgate_addresses": ["<value 1>"], "ttl_seconds": 8810.11, "access_host_url": "https://busy-stock.org", "access_host_regional_url": "https://crafty-middle.net", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Evan17", "avatar_url": "https://stingy-joy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Paige.Gislason71", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Jaquelin51", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
   get_password:
     speakeasy-default-get-password:
       parameters:
@@ -932,7 +967,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1712619362352", "deleted_at": "<value>", "expires_at": "1756121263349", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "ttl_seconds": 5524.13, "access_host_url": "https://pessimistic-intervention.org", "access_host_regional_url": "https://dark-citizen.info", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Lee_Spinka21", "avatar_url": "https://miserable-analogy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Madilyn58", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Maryam42", "plain_text": "<value>", "replica": false, "renewable": false, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+          application/json: {"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1712619362352", "deleted_at": "<value>", "expires_at": "1756121263349", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "direct_vtgate_addresses": [], "ttl_seconds": 5524.13, "access_host_url": "https://pessimistic-intervention.org", "access_host_regional_url": "https://dark-citizen.info", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Lee_Spinka21", "avatar_url": "https://miserable-analogy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Madilyn58", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Maryam42", "plain_text": "<value>", "replica": false, "renewable": false, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
   delete_password:
     speakeasy-default-delete-password:
       parameters:
@@ -951,7 +986,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>", "<value 2>", "<value 3>"], "created_at": "1735128960719", "deleted_at": "<value>", "expires_at": "1745431813484", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "ttl_seconds": 2692.29, "access_host_url": "https://amused-farm.com/", "access_host_regional_url": "https://sandy-lotion.org", "access_host_regional_urls": ["<value 1>", "<value 2>", "<value 3>"], "actor": {"id": "<id>", "display_name": "Linwood88", "avatar_url": "https://fat-overheard.org/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>"], "display_name": "Antonio41", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Gus.Dare", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>", "<value 2>", "<value 3>"], "created_at": "1735128960719", "deleted_at": "<value>", "expires_at": "1745431813484", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "direct_vtgate_addresses": ["<value 1>", "<value 2>", "<value 3>"], "ttl_seconds": 2692.29, "access_host_url": "https://amused-farm.com/", "access_host_regional_url": "https://sandy-lotion.org", "access_host_regional_urls": ["<value 1>", "<value 2>", "<value 3>"], "actor": {"id": "<id>", "display_name": "Linwood88", "avatar_url": "https://fat-overheard.org/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>"], "display_name": "Antonio41", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Gus.Dare", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
   list_generated_query_patterns_reports:
     speakeasy-default-list-generated-query-patterns-reports:
       parameters:
@@ -1545,14 +1580,16 @@ examples:
       parameters:
         path:
           name: "<value>"
+          organization: "<value>"
       responses:
         "200":
-          application/json: [{"name": "<value>", "display_name": "Josephine64", "cpu": "653.6", "storage": 3150.77, "ram": 9182.99, "metal": true, "enabled": true, "provider": "<value>", "sort_order": 3929.37}]
+          application/json: [{"name": "<value>", "display_name": "Josephine64", "cpu": "653.6", "storage": 3150.77, "ram": 9182.99, "metal": true, "enabled": true, "provider": "<value>", "default_vtgate": "<value>", "default_vtgate_rate": 5175.72, "sort_order": 3929.37, "architecture": "<value>", "development": true, "production": true}]
   list_organization_teams:
     speakeasy-default-list-organization-teams:
       parameters:
         path:
           organization_name: "<value>"
+          organization: "<value>"
       responses:
         "200":
           application/json: {"current_page": 4117.13, "next_page": 8145.38, "next_page_url": "https://noteworthy-hawk.org/", "prev_page": 3097.14, "prev_page_url": "https://impeccable-airline.com/", "data": []}
@@ -1561,6 +1598,7 @@ examples:
       parameters:
         path:
           organization_name: "<value>"
+          organization: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "display_name": "Antonetta23", "creator": {"id": "<id>", "display_name": "Shania.Shields93", "avatar_url": "https://evil-cassava.info"}, "members": [], "databases": [], "name": "<value>", "slug": "<value>", "created_at": "1729882123383", "updated_at": "1735673019633", "description": "enraged equally mount alert", "managed": false}
@@ -1570,6 +1608,8 @@ examples:
         path:
           organization_name: "<value>"
           team_slug: "<value>"
+          organization: "<value>"
+          team: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "display_name": "Randi_Hickle", "creator": {"id": "<id>", "display_name": "Norene.Halvorson13", "avatar_url": "https://basic-mortise.net"}, "members": [{"id": "<id>", "display_name": "Cedrick6", "name": "<value>", "email": "Nick23@hotmail.com", "avatar_url": "https://putrid-hornet.name", "created_at": "1719828314965", "updated_at": "1735668646457", "two_factor_auth_configured": true, "default_organization": {"id": "<id>", "name": "<value>", "created_at": "1720220297293", "updated_at": "1735613154609", "deleted_at": "<value>"}, "sso": false, "managed": false, "directory_managed": false, "email_verified": false}], "databases": [{"id": "<id>", "name": "<value>", "url": "https://thorough-fedora.com/", "branches_url": "https://tired-lox.net/"}], "name": "<value>", "slug": "<value>", "created_at": "1726260825391", "updated_at": "1735685062581", "description": "factorise split despite bliss", "managed": true}
@@ -1579,6 +1619,8 @@ examples:
         path:
           organization_name: "<value>"
           team_slug: "<value>"
+          organization: "<value>"
+          team: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "display_name": "Chadd_Schaden", "creator": {"id": "<id>", "display_name": "Magnus_Reichert30", "avatar_url": "https://secondary-other.name"}, "members": [], "databases": [{"id": "<id>", "name": "<value>", "url": "https://accomplished-earth.name/", "branches_url": "https://elementary-supplier.biz/"}], "name": "<value>", "slug": "<value>", "created_at": "1712997623627", "updated_at": "1735682805483", "description": "aw eek swathe over reprove", "managed": true}
@@ -1588,12 +1630,15 @@ examples:
         path:
           organization_name: "<value>"
           team_slug: "<value>"
+          organization: "<value>"
+          team: "<value>"
   list_database_postgres_cidrs:
     speakeasy-default-list-database-postgres-cidrs:
       parameters:
         path:
           organization: "<value>"
           database_name: "<value>"
+          database: "<value>"
         query:
           page: 1
           per_page: 25
@@ -1606,6 +1651,7 @@ examples:
         path:
           organization: "<value>"
           database_name: "<value>"
+          database: "<value>"
       responses:
         "201":
           application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "created_at": "1729618456817", "updated_at": "1735657061783", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Nico_Ryan", "avatar_url": "https://unfortunate-knickers.net"}}
@@ -1616,6 +1662,7 @@ examples:
           organization: "<value>"
           database_name: "<value>"
           id: "<id>"
+          database: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1725946727260", "updated_at": "1735658492313", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "William.Haley", "avatar_url": "https://regular-agreement.org/"}}
@@ -1626,6 +1673,7 @@ examples:
           organization: "<value>"
           database_name: "<value>"
           id: "<id>"
+          database: "<value>"
       responses:
         "200":
           application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "created_at": "1709625983230", "updated_at": "1735665403648", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Juanita_Cassin89", "avatar_url": "https://insecure-interchange.name/"}}
@@ -1636,6 +1684,7 @@ examples:
           organization: "<value>"
           database_name: "<value>"
           id: "<id>"
+          database: "<value>"
   get_organization_membership:
     speakeasy-default-get-organization-membership:
       parameters:
@@ -1684,4 +1733,67 @@ examples:
         path:
           organization: "<value>"
           database: "<value>"
+  reassign_role_objects:
+    speakeasy-default-reassign-role-objects:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+  reset_role:
+    speakeasy-default-reset-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://outstanding-marten.com", "private_access_host_url": "https://leading-safe.net", "private_connection_service_name": "<value>", "username": "Eugene.Johnston48", "password": "l5tvE8_N3C0Xt3M", "database_name": "<value>", "created_at": "1735586690928", "updated_at": "1735645544661", "deleted_at": "<value>", "expires_at": "1754326087392", "dropped_at": "<value>", "drop_failed": "<value>", "expired": false, "default": false, "ttl": 9294.05, "inherited_roles": ["pg_read_all_data"], "branch": {"id": "<id>", "name": "<value>", "created_at": "1711330051285", "updated_at": "1735688612532", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Barry_Jerde", "avatar_url": "https://well-lit-amendment.info"}}
+  update_auto_delete_branch:
+    speakeasy-default-update-auto-delete-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          number: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "number": 1642.57, "actor": {"id": "<id>", "display_name": "Claire.Rosenbaum", "avatar_url": "https://alarmed-cornet.net/"}, "closed_by": {"id": "<id>", "display_name": "Domingo_Will", "avatar_url": "https://bony-steak.biz"}, "branch": "<value>", "branch_id": "<id>", "branch_deleted": true, "branch_deleted_by": {"id": "<id>", "display_name": "Triston_Metz10", "avatar_url": "https://proper-swath.com"}, "branch_deleted_at": "<value>", "into_branch": "<value>", "into_branch_sharded": false, "into_branch_shard_count": 8102.04, "approved": true, "state": "closed", "deployment_state": "complete_pending_revert", "deployment": {"id": "<id>", "auto_cutover": true, "auto_delete_branch": true, "created_at": "1720379235735", "cutover_at": "<value>", "cutover_expiring": false, "deploy_check_errors": "<value>", "finished_at": "<value>", "queued_at": "<value>", "ready_to_cutover_at": "<value>", "started_at": "<value>", "state": "complete", "submitted_at": "<value>", "updated_at": "1735642841620", "into_branch": "<value>", "deploy_request_number": 7568.5, "deployable": true, "preceding_deployments": [{"key": "<value>"}, {"key": "<value>"}], "deploy_operations": [{"id": "<id>", "state": "cancelled", "keyspace_name": "<value>", "table_name": "<value>", "operation_name": "<value>", "eta_seconds": 8060.2, "progress_percentage": 2183.58, "deploy_error_docs_url": "https://infatuated-joy.org/", "ddl_statement": "<value>", "syntax_highlighted_ddl": "<value>", "created_at": "1733348250652", "updated_at": "1735663004491", "throttled_at": "<value>", "can_drop_data": false, "table_locked": false, "table_recently_used": false, "table_recently_used_at": "<value>", "removed_foreign_key_names": ["<value 1>", "<value 2>"], "deploy_errors": "<value>"}], "deploy_operation_summaries": [], "lint_errors": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}], "sequential_diff_dependencies": [], "lookup_vindex_operations": [{"key": "<value>", "key1": "<value>", "key2": "<value>"}], "throttler_configurations": [{}, {"key": "<value>"}], "deployment_revert_request": {"key": "<value>"}, "actor": {"id": "<id>", "display_name": "Elsa57", "avatar_url": "https://timely-bar.net"}, "cutover_actor": {"id": "<id>", "display_name": "Cale.Kreiger", "avatar_url": "https://stupendous-cellar.info"}, "cancelled_actor": {"id": "<id>", "display_name": "Asa.Schuster11", "avatar_url": "https://upbeat-affect.net/"}, "schema_last_updated_at": "<value>", "table_locked": true, "locked_table_name": "<value>", "instant_ddl": false, "instant_ddl_eligible": false}, "num_comments": 3513.98, "html_url": "https://uncomfortable-curl.com", "notes": "<value>", "html_body": "<value>", "created_at": "1725824671860", "updated_at": "1735684309237", "closed_at": "<value>", "deployed_at": "<value>"}
+  list_service_tokens:
+    speakeasy-default-list-service-tokens:
+      parameters:
+        path:
+          organization: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"current_page": 2115.35, "next_page": 6622.05, "next_page_url": "https://magnificent-label.name/", "prev_page": 9283.32, "prev_page_url": "https://handy-hepatitis.org", "data": []}
+  create_service_token:
+    speakeasy-default-create-service-token:
+      parameters:
+        path:
+          organization: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "display_name": "Anya_Kub", "token": "<value>", "plain_text_refresh_token": "<value>", "avatar_url": "https://mealy-daddy.com", "created_at": "1720722024463", "updated_at": "1735656680591", "expires_at": "1747003254048", "last_used_at": "<value>", "actor_id": "<id>", "actor_display_name": "<value>", "actor_type": "<value>", "service_token_accesses": [], "oauth_accesses_by_resource": {"database": {"databases": [{"name": "<value>", "id": "<id>", "organization": "<value>", "url": "https://poor-piglet.net"}], "accesses": [{"name": "<value>", "description": "now extension phew frequent fail whereas what"}]}, "organization": {"organizations": [{"name": "<value>", "id": "<id>", "url": "https://abandoned-warming.info"}], "accesses": []}, "branch": {"branches": [], "accesses": [{"name": "<value>", "description": "measly strict marketplace bah"}]}, "user": {"users": [{"name": "<value>", "id": "<id>"}], "accesses": []}}}
+  get_service_token:
+    speakeasy-default-get-service-token:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "display_name": "Jannie_Bauch45", "token": "<value>", "plain_text_refresh_token": "<value>", "avatar_url": "https://bulky-bidet.net", "created_at": "1733782942068", "updated_at": "1735653930130", "expires_at": "1748899125486", "last_used_at": "<value>", "actor_id": "<id>", "actor_display_name": "<value>", "actor_type": "<value>", "service_token_accesses": [], "oauth_accesses_by_resource": {"database": {"databases": [], "accesses": []}, "organization": {"organizations": [{"name": "<value>", "id": "<id>", "url": "https://strident-jungle.name"}], "accesses": [{"name": "<value>", "description": "marimba ugh pleasant knavishly wetly upliftingly mummify efface bandwidth soon"}]}, "branch": {"branches": [{"name": "<value>", "id": "<id>", "database": "<value>", "organization": "<value>", "url": "https://gorgeous-atrium.org/"}], "accesses": []}, "user": {"users": [], "accesses": []}}}
+  delete_service_token:
+    speakeasy-default-delete-service-token:
+      parameters:
+        path:
+          organization: "<value>"
+          id: "<id>"
 examplesVersion: 1.0.2

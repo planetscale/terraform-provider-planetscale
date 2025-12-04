@@ -223,81 +223,6 @@ func (e *UpdateBackupTarget) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// UpdateBackupScheduleDay - Day of the week that the backup is scheduled
-type UpdateBackupScheduleDay string
-
-const (
-	UpdateBackupScheduleDayZero  UpdateBackupScheduleDay = "0"
-	UpdateBackupScheduleDayOne   UpdateBackupScheduleDay = "1"
-	UpdateBackupScheduleDayTwo   UpdateBackupScheduleDay = "2"
-	UpdateBackupScheduleDayThree UpdateBackupScheduleDay = "3"
-	UpdateBackupScheduleDayFour  UpdateBackupScheduleDay = "4"
-	UpdateBackupScheduleDayFive  UpdateBackupScheduleDay = "5"
-	UpdateBackupScheduleDaySix   UpdateBackupScheduleDay = "6"
-)
-
-func (e UpdateBackupScheduleDay) ToPointer() *UpdateBackupScheduleDay {
-	return &e
-}
-func (e *UpdateBackupScheduleDay) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "0":
-		fallthrough
-	case "1":
-		fallthrough
-	case "2":
-		fallthrough
-	case "3":
-		fallthrough
-	case "4":
-		fallthrough
-	case "5":
-		fallthrough
-	case "6":
-		*e = UpdateBackupScheduleDay(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateBackupScheduleDay: %v", v)
-	}
-}
-
-// UpdateBackupScheduleWeek - Week of the month that the backup is scheduled
-type UpdateBackupScheduleWeek string
-
-const (
-	UpdateBackupScheduleWeekZero  UpdateBackupScheduleWeek = "0"
-	UpdateBackupScheduleWeekOne   UpdateBackupScheduleWeek = "1"
-	UpdateBackupScheduleWeekTwo   UpdateBackupScheduleWeek = "2"
-	UpdateBackupScheduleWeekThree UpdateBackupScheduleWeek = "3"
-)
-
-func (e UpdateBackupScheduleWeek) ToPointer() *UpdateBackupScheduleWeek {
-	return &e
-}
-func (e *UpdateBackupScheduleWeek) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "0":
-		fallthrough
-	case "1":
-		fallthrough
-	case "2":
-		fallthrough
-	case "3":
-		*e = UpdateBackupScheduleWeek(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateBackupScheduleWeek: %v", v)
-	}
-}
-
 type UpdateBackupBackupPolicy struct {
 	// The ID of the backup policy
 	ID string `json:"id"`
@@ -315,10 +240,10 @@ type UpdateBackupBackupPolicy struct {
 	FrequencyUnit string `json:"frequency_unit"`
 	// The time of day that the backup is scheduled, in HH:MM format
 	ScheduleTime string `json:"schedule_time"`
-	// Day of the week that the backup is scheduled
-	ScheduleDay UpdateBackupScheduleDay `json:"schedule_day"`
-	// Week of the month that the backup is scheduled
-	ScheduleWeek UpdateBackupScheduleWeek `json:"schedule_week"`
+	// Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+	ScheduleDay float64 `json:"schedule_day"`
+	// Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+	ScheduleWeek float64 `json:"schedule_week"`
 	// When the backup policy was created
 	CreatedAt string `json:"created_at"`
 	// When the backup policy was last updated
@@ -387,16 +312,16 @@ func (u *UpdateBackupBackupPolicy) GetScheduleTime() string {
 	return u.ScheduleTime
 }
 
-func (u *UpdateBackupBackupPolicy) GetScheduleDay() UpdateBackupScheduleDay {
+func (u *UpdateBackupBackupPolicy) GetScheduleDay() float64 {
 	if u == nil {
-		return UpdateBackupScheduleDay("")
+		return 0.0
 	}
 	return u.ScheduleDay
 }
 
-func (u *UpdateBackupBackupPolicy) GetScheduleWeek() UpdateBackupScheduleWeek {
+func (u *UpdateBackupBackupPolicy) GetScheduleWeek() float64 {
 	if u == nil {
-		return UpdateBackupScheduleWeek("")
+		return 0.0
 	}
 	return u.ScheduleWeek
 }

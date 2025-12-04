@@ -15,7 +15,7 @@ type DemoteBranchRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 }
 
 func (d *DemoteBranchRequest) GetOrganization() string {
@@ -32,11 +32,11 @@ func (d *DemoteBranchRequest) GetDatabase() string {
 	return d.Database
 }
 
-func (d *DemoteBranchRequest) GetName() string {
+func (d *DemoteBranchRequest) GetBranch() string {
 	if d == nil {
 		return ""
 	}
-	return d.Name
+	return d.Branch
 }
 
 // DemoteBranchKind - The kind of branch

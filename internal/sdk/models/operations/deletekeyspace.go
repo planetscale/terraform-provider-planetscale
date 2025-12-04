@@ -14,7 +14,7 @@ type DeleteKeyspaceRequest struct {
 	// The name of the branch
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The name of the keyspace
-	Name string `pathParam:"style=simple,explode=false,name=name"`
+	Keyspace string `pathParam:"style=simple,explode=false,name=keyspace"`
 }
 
 func (d *DeleteKeyspaceRequest) GetOrganization() string {
@@ -38,11 +38,11 @@ func (d *DeleteKeyspaceRequest) GetBranch() string {
 	return d.Branch
 }
 
-func (d *DeleteKeyspaceRequest) GetName() string {
+func (d *DeleteKeyspaceRequest) GetKeyspace() string {
 	if d == nil {
 		return ""
 	}
-	return d.Name
+	return d.Keyspace
 }
 
 type DeleteKeyspaceResponse struct {

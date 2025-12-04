@@ -314,81 +314,6 @@ func (e *ListBackupsTarget) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// ListBackupsScheduleDay - Day of the week that the backup is scheduled
-type ListBackupsScheduleDay string
-
-const (
-	ListBackupsScheduleDayZero  ListBackupsScheduleDay = "0"
-	ListBackupsScheduleDayOne   ListBackupsScheduleDay = "1"
-	ListBackupsScheduleDayTwo   ListBackupsScheduleDay = "2"
-	ListBackupsScheduleDayThree ListBackupsScheduleDay = "3"
-	ListBackupsScheduleDayFour  ListBackupsScheduleDay = "4"
-	ListBackupsScheduleDayFive  ListBackupsScheduleDay = "5"
-	ListBackupsScheduleDaySix   ListBackupsScheduleDay = "6"
-)
-
-func (e ListBackupsScheduleDay) ToPointer() *ListBackupsScheduleDay {
-	return &e
-}
-func (e *ListBackupsScheduleDay) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "0":
-		fallthrough
-	case "1":
-		fallthrough
-	case "2":
-		fallthrough
-	case "3":
-		fallthrough
-	case "4":
-		fallthrough
-	case "5":
-		fallthrough
-	case "6":
-		*e = ListBackupsScheduleDay(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListBackupsScheduleDay: %v", v)
-	}
-}
-
-// ListBackupsScheduleWeek - Week of the month that the backup is scheduled
-type ListBackupsScheduleWeek string
-
-const (
-	ListBackupsScheduleWeekZero  ListBackupsScheduleWeek = "0"
-	ListBackupsScheduleWeekOne   ListBackupsScheduleWeek = "1"
-	ListBackupsScheduleWeekTwo   ListBackupsScheduleWeek = "2"
-	ListBackupsScheduleWeekThree ListBackupsScheduleWeek = "3"
-)
-
-func (e ListBackupsScheduleWeek) ToPointer() *ListBackupsScheduleWeek {
-	return &e
-}
-func (e *ListBackupsScheduleWeek) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "0":
-		fallthrough
-	case "1":
-		fallthrough
-	case "2":
-		fallthrough
-	case "3":
-		*e = ListBackupsScheduleWeek(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListBackupsScheduleWeek: %v", v)
-	}
-}
-
 type ListBackupsBackupPolicy struct {
 	// The ID of the backup policy
 	ID string `json:"id"`
@@ -406,10 +331,10 @@ type ListBackupsBackupPolicy struct {
 	FrequencyUnit string `json:"frequency_unit"`
 	// The time of day that the backup is scheduled, in HH:MM format
 	ScheduleTime string `json:"schedule_time"`
-	// Day of the week that the backup is scheduled
-	ScheduleDay ListBackupsScheduleDay `json:"schedule_day"`
-	// Week of the month that the backup is scheduled
-	ScheduleWeek ListBackupsScheduleWeek `json:"schedule_week"`
+	// Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+	ScheduleDay float64 `json:"schedule_day"`
+	// Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+	ScheduleWeek float64 `json:"schedule_week"`
 	// When the backup policy was created
 	CreatedAt string `json:"created_at"`
 	// When the backup policy was last updated
@@ -478,16 +403,16 @@ func (l *ListBackupsBackupPolicy) GetScheduleTime() string {
 	return l.ScheduleTime
 }
 
-func (l *ListBackupsBackupPolicy) GetScheduleDay() ListBackupsScheduleDay {
+func (l *ListBackupsBackupPolicy) GetScheduleDay() float64 {
 	if l == nil {
-		return ListBackupsScheduleDay("")
+		return 0.0
 	}
 	return l.ScheduleDay
 }
 
-func (l *ListBackupsBackupPolicy) GetScheduleWeek() ListBackupsScheduleWeek {
+func (l *ListBackupsBackupPolicy) GetScheduleWeek() float64 {
 	if l == nil {
-		return ListBackupsScheduleWeek("")
+		return 0.0
 	}
 	return l.ScheduleWeek
 }

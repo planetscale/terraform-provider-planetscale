@@ -40,6 +40,7 @@ type BranchResource struct {
 type BranchResourceModel struct {
 	Actor                       tfTypes.GetBranchActor              `tfsdk:"actor"`
 	BackupID                    types.String                        `tfsdk:"backup_id"`
+	Branch                      types.String                        `tfsdk:"branch"`
 	ClusterIops                 types.Float64                       `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                        `tfsdk:"cluster_name"`
 	ClusterSize                 types.String                        `tfsdk:"cluster_size"`
@@ -52,6 +53,7 @@ type BranchResourceModel struct {
 	HTMLURL                     types.String                        `tfsdk:"html_url"`
 	ID                          types.String                        `tfsdk:"id"`
 	Kind                        types.String                        `tfsdk:"kind"`
+	MajorVersion                types.String                        `tfsdk:"major_version"`
 	Metal                       types.Bool                          `tfsdk:"metal"`
 	MysqlAddress                types.String                        `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                        `tfsdk:"mysql_edge_address"`
@@ -112,6 +114,13 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `If provided, restores the backup's schema and data to the new branch. Must have ` + "`" + `restore_production_branch_backup(s)` + "`" + ` or ` + "`" + `restore_backup(s)` + "`" + ` access to do this. Requires replacement if changed.`,
 			},
+			"branch": schema.StringAttribute{
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `The name of the branch. Requires replacement if changed.`,
+			},
 			"cluster_iops": schema.Float64Attribute{
 				Computed:    true,
 				Description: `IOPS for the cluster`,
@@ -166,6 +175,13 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `The kind of branch`,
 			},
+			"major_version": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.`,
+			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not this is a metal database`,
@@ -179,12 +195,8 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `The address of the MySQL provider for the branch`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `The name of the branch. Requires replacement if changed.`,
+				Computed:    true,
+				Description: `The name of the branch`,
 			},
 			"organization": schema.StringAttribute{
 				Required: true,
@@ -641,26 +653,26 @@ func (r *BranchResource) ImportState(ctx context.Context, req resource.ImportSta
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
+		Branch       string `json:"branch"`
 		Database     string `json:"database"`
-		Name         string `json:"name"`
 		Organization string `json:"organization"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"database": "...", "name": "...", "organization": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"branch": "...", "database": "...", "organization": "..."}': `+err.Error())
 		return
 	}
 
+	if len(data.Branch) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field branch is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("branch"), data.Branch)...)
 	if len(data.Database) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field database is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("database"), data.Database)...)
-	if len(data.Name) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field name is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), data.Name)...)
 	if len(data.Organization) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field organization is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return

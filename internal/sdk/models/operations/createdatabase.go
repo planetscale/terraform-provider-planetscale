@@ -43,8 +43,12 @@ type CreateDatabaseRequestBody struct {
 	Region *string `json:"region,omitzero"`
 	// The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus
 	ClusterSize string `json:"cluster_size"`
+	// The number of replicas for the database. 0 for non-HA, 2+ for HA.
+	Replicas *float64 `json:"replicas,omitzero"`
 	// The kind of database to create.
 	Kind *KindRequest `json:"kind,omitzero"`
+	// For PostgreSQL databases, the PostgreSQL major version to use for the database. Defaults to the latest available major version.
+	MajorVersion *string `json:"major_version,omitzero"`
 }
 
 func (c *CreateDatabaseRequestBody) GetName() string {
@@ -68,11 +72,25 @@ func (c *CreateDatabaseRequestBody) GetClusterSize() string {
 	return c.ClusterSize
 }
 
+func (c *CreateDatabaseRequestBody) GetReplicas() *float64 {
+	if c == nil {
+		return nil
+	}
+	return c.Replicas
+}
+
 func (c *CreateDatabaseRequestBody) GetKind() *KindRequest {
 	if c == nil {
 		return nil
 	}
 	return c.Kind
+}
+
+func (c *CreateDatabaseRequestBody) GetMajorVersion() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MajorVersion
 }
 
 type CreateDatabaseRequest struct {

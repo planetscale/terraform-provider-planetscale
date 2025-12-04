@@ -52,7 +52,7 @@ type UpdateDatabasePostgresCidrRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the database
-	DatabaseName string `pathParam:"style=simple,explode=false,name=database_name"`
+	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The ID of the IP restriction entry
 	ID   string                                 `pathParam:"style=simple,explode=false,name=id"`
 	Body *UpdateDatabasePostgresCidrRequestBody `request:"mediaType=application/json"`
@@ -63,7 +63,7 @@ func (u UpdateDatabasePostgresCidrRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateDatabasePostgresCidrRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database_name", "id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "id"}); err != nil {
 		return err
 	}
 	return nil
@@ -76,11 +76,11 @@ func (u *UpdateDatabasePostgresCidrRequest) GetOrganization() string {
 	return u.Organization
 }
 
-func (u *UpdateDatabasePostgresCidrRequest) GetDatabaseName() string {
+func (u *UpdateDatabasePostgresCidrRequest) GetDatabase() string {
 	if u == nil {
 		return ""
 	}
-	return u.DatabaseName
+	return u.Database
 }
 
 func (u *UpdateDatabasePostgresCidrRequest) GetID() string {
