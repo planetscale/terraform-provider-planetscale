@@ -4,7 +4,7 @@ info:
   title: Terraform generation overlay for planetscale_organization_regions data resource.
   version: 0.0.1
 actions:
-  - target: $.paths["/organizations/{name}/regions"].get
+  - target: $.paths["/organizations/{organization}/regions"].get
     description: API operation for read and enable pagination.
     update:
       x-speakeasy-entity-operation: OrganizationRegions#read
@@ -18,11 +18,11 @@ actions:
         outputs:
           results: $.data
 
-  - target: $.paths["/organizations/{name}/regions"].get.parameters[?@.name == 'per_page']
+  - target: $.paths["/organizations/{organization}/regions"].get.parameters[?@.name == 'per_page']
     description: Ignore extraneous parameter in Terraform schema.
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.paths["/organizations/{name}/regions"].get.responses["200"].content["application/json"].schema.properties
+  - target: $.paths["/organizations/{organization}/regions"].get.responses["200"].content["application/json"].schema.properties
     description: Ignore extraneous response properties in Terraform schema.
     update:
       current_page:

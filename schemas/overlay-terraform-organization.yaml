@@ -4,7 +4,7 @@ info:
   title: Terraform generation overlay for planetscale_organization data resource.
   version: 0.0.1
 actions:
-  - target: $.paths["/organizations/{name}"].get
+  - target: $.paths["/organizations/{organization}"].get
     description: API operation for data resource read.
     update:
       x-speakeasy-entity-operation: Organization#read
