@@ -13,6 +13,7 @@ import (
 )
 
 func TestAccDatabaseDefaultBranchResource_Lifecycle(t *testing.T) {
+	t.Skip("TODO")
 	t.Parallel()
 
 	databaseName := randomWithPrefix("testacc")

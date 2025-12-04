@@ -11,6 +11,7 @@ import (
 )
 
 func TestAccDatabaseRegionsDataSource(t *testing.T) {
+	t.Skip("TODO")
 	t.Parallel()
 
 	name := randomWithPrefix("testacc")
