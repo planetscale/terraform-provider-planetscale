@@ -23,6 +23,26 @@ actions:
     update:
       x-speakeasy-entity-operation: Role#update
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    update:
+      actor:
+        x-speakeasy-name-override: actor_data
+      branch:
+        x-speakeasy-name-override: branch_data
+      password:
+        x-speakeasy-param-sensitive: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    update:
+      actor:
+        x-speakeasy-name-override: actor_data
+      branch:
+        x-speakeasy-name-override: branch_data
+      password:
+        x-speakeasy-param-sensitive: true
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties
     description: Prevent type mismatch between request and response data. Mark sensitive property.
     update:
