@@ -1505,7 +1505,6 @@ paths:
                       - location
                       - slug
                       - current_default
-                    x-speakeasy-name-override: region_data
                   html_url:
                     type: string
                     description: The URL to see this database's branches in the web UI
@@ -1654,8 +1653,6 @@ paths:
         | :------- | :---------- |
         | Organization | `read_databases` |
         | Database | `read_database` |
-      x-speakeasy-entity-operation: Database#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database.
     patch:
       tags:
         - Databases

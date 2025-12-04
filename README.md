@@ -78,7 +78,6 @@ Available configuration:
 * [planetscale_branch](docs/data-sources/branch.md)
 * [planetscale_branches](docs/data-sources/branches.md)
 * [planetscale_branch_schema](docs/data-sources/branch_schema.md)
-* [planetscale_database](docs/data-sources/database.md)
 * [planetscale_database_default_branch](docs/data-sources/database_default_branch.md)
 * [planetscale_database_postgres](docs/data-sources/database_postgres.md)
 * [planetscale_database_read_only_regions](docs/data-sources/database_read_only_regions.md)

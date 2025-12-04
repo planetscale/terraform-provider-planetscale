@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 2023e1d6012b55b2797ee0e90e6ecbad
+  docChecksum: 6c299f7f5e64a060a3122e8fea4fc780
   docVersion: v1
   speakeasyVersion: 1.668.0
   generationVersion: 2.770.0
@@ -25,7 +25,6 @@ generatedFiles:
   - examples/data-sources/planetscale_branch/data-source.tf
   - examples/data-sources/planetscale_branch_schema/data-source.tf
   - examples/data-sources/planetscale_branches/data-source.tf
-  - examples/data-sources/planetscale_database/data-source.tf
   - examples/data-sources/planetscale_database_default_branch/data-source.tf
   - examples/data-sources/planetscale_database_postgres/data-source.tf
   - examples/data-sources/planetscale_database_read_only_regions/data-source.tf
@@ -82,8 +81,6 @@ generatedFiles:
   - internal/provider/branches_data_source_sdk.go
   - internal/provider/branchschema_data_source.go
   - internal/provider/branchschema_data_source_sdk.go
-  - internal/provider/database_data_source.go
-  - internal/provider/database_data_source_sdk.go
   - internal/provider/databasedefaultbranch_data_source.go
   - internal/provider/databasedefaultbranch_data_source_sdk.go
   - internal/provider/databasedefaultbranch_resource.go
@@ -145,9 +142,6 @@ generatedFiles:
   - internal/provider/types/get_branch_restored_from_branch.go
   - internal/provider/types/get_branch_schema_data.go
   - internal/provider/types/get_current_user_default_organization.go
-  - internal/provider/types/get_database_data_import.go
-  - internal/provider/types/get_database_data_source.go
-  - internal/provider/types/get_database_region_data.go
   - internal/provider/types/get_password_actor.go
   - internal/provider/types/get_password_database_branch.go
   - internal/provider/types/get_password_region.go
