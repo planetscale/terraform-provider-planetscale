@@ -14,11 +14,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 )
 
-func TestAccDatabaseResource_Lifecycle(t *testing.T) {
+func TestAccDatabaseVitessResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
 	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
-	resourceAddress := "planetscale_database.test"
+	resourceAddress := "planetscale_database_vitess.test"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -40,11 +40,6 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 						resourceAddress,
 						tfjsonpath.New("html_url"),
 						knownvalue.NotNull(),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("kind"),
-						knownvalue.StringExact("mysql"),
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
@@ -82,13 +77,13 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 	})
 }
 
-func TestAccDatabaseResource_ClusterSize(t *testing.T) {
+func TestAccDatabaseVitessResource_ClusterSize(t *testing.T) {
 	t.Parallel()
 
 	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
 	clusterSizeOriginal := "PS_10"
 	clusterSizeUpdated := "PS_20"
-	resourceAddress := "planetscale_database.test"
+	resourceAddress := "planetscale_database_vitess.test"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -148,3 +143,4 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 		},
 	})
 }
+

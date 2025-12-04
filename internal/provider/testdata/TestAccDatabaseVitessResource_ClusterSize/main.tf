@@ -10,9 +10,10 @@ variable "organization" {
   type = string
 }
 
-resource "planetscale_database" "test" {
+resource "planetscale_database_vitess" "test" {
   cluster_size = var.cluster_size
   database     = var.name
   name         = var.name
   organization = var.organization
 }
+
