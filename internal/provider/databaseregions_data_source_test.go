@@ -15,7 +15,7 @@ import (
 func TestAccDatabaseRegionsDataSource(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
 	resourceAddress := "data.planetscale_database_regions.test"
 
 	resource.Test(t, resource.TestCase{

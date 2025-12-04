@@ -17,7 +17,7 @@ import (
 func TestAccBranchResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
-	databaseName := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	databaseName := fmt.Sprintf("testacc-%d", time.Now().Unix())
 	resourceAddress := "planetscale_branch.test"
 
 	resource.Test(t, resource.TestCase{

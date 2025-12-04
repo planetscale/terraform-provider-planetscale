@@ -17,7 +17,7 @@ import (
 func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
 	resourceAddress := "planetscale_database.test"
 
 	resource.Test(t, resource.TestCase{
@@ -67,8 +67,8 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {
 					rs := s.RootModule().Resources[resourceAddress]
 					jsonBytes, err := json.Marshal(map[string]string{
+						"database":     rs.Primary.Attributes["name"],
 						"organization": rs.Primary.Attributes["organization"],
-						"name":         rs.Primary.Attributes["name"],
 					})
 					return string(jsonBytes), err
 				},
@@ -83,7 +83,7 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
 	clusterSizeOriginal := "PS_10"
 	clusterSizeUpdated := "PS_20"
 	resourceAddress := "planetscale_database.test"
@@ -117,8 +117,8 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {
 					rs := s.RootModule().Resources[resourceAddress]
 					jsonBytes, err := json.Marshal(map[string]string{
+						"database":     rs.Primary.Attributes["name"],
 						"organization": rs.Primary.Attributes["organization"],
-						"name":         rs.Primary.Attributes["name"],
 					})
 					return string(jsonBytes), err
 				},

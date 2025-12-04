@@ -15,7 +15,7 @@ import (
 func TestAccPasswordsDataSource(t *testing.T) {
 	t.Parallel()
 
-	databaseName := fmt.Sprintf("terraform-testing-%d", rand.Intn(1000000))
+	databaseName := fmt.Sprintf("testacc-%d", rand.Intn(1000000))
 	resourceAddress := "data.planetscale_passwords.test"
 
 	resource.Test(t, resource.TestCase{

@@ -16,7 +16,7 @@ func TestAccDatabaseReadOnlyRegionsDataSource(t *testing.T) {
 	t.Parallel()
 	t.Skip("TODO: Data is empty from API -- potentially needs updated Terraform configuration")
 
-	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
 	resourceAddress := "data.planetscale_database_read_only_regions.test"
 
 	resource.Test(t, resource.TestCase{

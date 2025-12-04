@@ -16,7 +16,7 @@ func TestAccBranchSchemaDataSource(t *testing.T) {
 	t.Parallel()
 	t.Skipf("TODO: 404")
 
-	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
+	name := fmt.Sprintf("testacc-%d", time.Now().Unix())
 	resourceAddress := "data.planetscale_branch_schema.test"
 
 	resource.Test(t, resource.TestCase{

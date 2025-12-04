@@ -6,6 +6,7 @@ data "planetscale_organizations" "test" {}
 
 resource "planetscale_database" "test" {
   cluster_size = "PS_10"
+  database     = var.name
   name         = var.name
   organization = data.planetscale_organizations.test.data[0].name
 }
