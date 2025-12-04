@@ -349,7 +349,7 @@ type CreatePostgresDatabaseResponseBody struct {
 	// If the database has reached its development branch limit
 	AtDevelopmentBranchUsageLimit *bool                             `json:"at_development_branch_usage_limit,omitzero"`
 	DataImport                    *CreatePostgresDatabaseDataImport `json:"data_import,omitzero"`
-	RegionData                    *CreatePostgresDatabaseRegionData `json:"region_data,omitzero"`
+	RegionData                    *CreatePostgresDatabaseRegionData `json:"region,omitzero"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL *string `json:"html_url,omitzero"`
 	// Name of the database

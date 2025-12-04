@@ -2672,8 +2672,6 @@ paths:
         | Branch | `restore_backups` |
       x-speakeasy-entity-operation: Branch#create
       x-speakeasy-entity-description: Manage a PlanetScale database branch.
-      name:
-        x-speakeasy-name-override: branch
   /organizations/{organization}/databases/{database}/branches/{branch}:
     get:
       tags:
@@ -34080,7 +34078,7 @@ paths:
                             description: Database name of the data source
                         additionalProperties: false
                     additionalProperties: false
-                  region_data:
+                  region:
                     x-speakeasy-name-override: region_data
                     type: object
                     properties:
@@ -34326,7 +34324,7 @@ paths:
                             description: Database name of the data source
                         additionalProperties: false
                     additionalProperties: false
-                  region_data:
+                  region:
                     x-speakeasy-name-override: region_data
                     type: object
                     properties:
@@ -34489,7 +34487,6 @@ paths:
               type: object
               properties:
                 name:
-                  x-speakeasy-name-override: name
                   type: string
                   description: The name to update the database to
                 automatic_migrations:
@@ -34726,7 +34723,7 @@ paths:
                             description: Database name of the data source
                         additionalProperties: false
                     additionalProperties: false
-                  region_data:
+                  region:
                     x-speakeasy-name-override: region_data
                     type: object
                     properties:
@@ -34954,7 +34951,7 @@ paths:
                             description: Database name of the data source
                         additionalProperties: false
                     additionalProperties: false
-                  region_data:
+                  region:
                     x-speakeasy-name-override: region_data
                     type: object
                     properties:
@@ -35099,7 +35096,6 @@ paths:
               type: object
               properties:
                 name:
-                  x-speakeasy-name-override: name
                   type: string
                   description: The name to update the database to
                 require_approval_for_deploy:

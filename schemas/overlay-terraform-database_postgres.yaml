@@ -131,7 +131,7 @@ actions:
                                 description: Database name of the data source
                             additionalProperties: false
                         additionalProperties: false
-                      region_data:
+                      region:
                         x-speakeasy-name-override: region_data
                         type: object
                         properties:
@@ -359,7 +359,7 @@ actions:
                                 description: Database name of the data source
                             additionalProperties: false
                         additionalProperties: false
-                      region_data:
+                      region:
                         x-speakeasy-name-override: region_data
                         type: object
                         properties:
@@ -504,7 +504,6 @@ actions:
                   type: object
                   properties:
                     name:
-                      x-speakeasy-name-override: name
                       type: string
                       description: The name to update the database to
                     require_approval_for_deploy:

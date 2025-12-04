@@ -340,7 +340,7 @@ type CreateVitessDatabaseResponseBody struct {
 	// If the database has reached its development branch limit
 	AtDevelopmentBranchUsageLimit *bool                           `json:"at_development_branch_usage_limit,omitzero"`
 	DataImport                    *CreateVitessDatabaseDataImport `json:"data_import,omitzero"`
-	RegionData                    *CreateVitessDatabaseRegionData `json:"region_data,omitzero"`
+	RegionData                    *CreateVitessDatabaseRegionData `json:"region,omitzero"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL *string `json:"html_url,omitzero"`
 	// Name of the database
