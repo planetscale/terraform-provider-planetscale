@@ -8,6 +8,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
+const testAccOrg = "planetscale-terraform-testing"
+
 // Returns a mapping of provider type names to provider server implementations,
 // suitable for acceptance testing via the
 // resource.TestCase.ProtoV6ProtocolFactories field.

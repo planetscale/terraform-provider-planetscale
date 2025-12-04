@@ -27,7 +27,8 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"name": config.StringVariable(name),
+					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -60,7 +61,8 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"name": config.StringVariable(name),
+					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
@@ -97,6 +99,7 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"cluster_size": config.StringVariable(clusterSizeOriginal),
 					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -111,6 +114,7 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"cluster_size": config.StringVariable(clusterSizeOriginal),
 					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
@@ -131,6 +135,7 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"cluster_size": config.StringVariable(clusterSizeUpdated),
 					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(

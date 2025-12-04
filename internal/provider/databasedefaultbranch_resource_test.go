@@ -26,9 +26,10 @@ func TestAccDatabaseDefaultBranchResource_Lifecycle(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-				},
+			ConfigVariables: config.Variables{
+				"database_name": config.StringVariable(databaseName),
+				"organization":  config.StringVariable(testAccOrg),
+			},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
@@ -39,9 +40,10 @@ func TestAccDatabaseDefaultBranchResource_Lifecycle(t *testing.T) {
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-				},
+			ConfigVariables: config.Variables{
+				"database_name": config.StringVariable(databaseName),
+				"organization":  config.StringVariable(testAccOrg),
+			},
 				ResourceName: resourceAddress,
 				ImportState:  true,
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {

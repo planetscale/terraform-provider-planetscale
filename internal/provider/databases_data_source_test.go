@@ -21,6 +21,9 @@ func TestAccDatabasesDataSource(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization": config.StringVariable(testAccOrg),
+				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,

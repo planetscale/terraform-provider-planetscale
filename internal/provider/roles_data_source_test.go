@@ -24,9 +24,10 @@ func TestAccRolesDataSource(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-				},
+			ConfigVariables: config.Variables{
+				"database_name": config.StringVariable(databaseName),
+				"organization":  config.StringVariable(testAccOrg),
+			},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
