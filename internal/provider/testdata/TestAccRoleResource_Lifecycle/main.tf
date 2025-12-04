@@ -2,13 +2,16 @@ variable "database_name" {
   type = string
 }
 
-data "planetscale_organizations" "test" {}
+variable "organization" {
+  type = string
+}
 
 resource "planetscale_database" "test" {
   cluster_size = "PS_10_AWS_ARM"
+  database     = var.database_name
   kind         = "postgresql"
   name         = var.database_name
-  organization = data.planetscale_organizations.test.data[0].name
+  organization = var.organization
 }
 
 resource "planetscale_role" "test" {

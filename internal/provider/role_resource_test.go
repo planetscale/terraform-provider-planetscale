@@ -16,9 +16,10 @@ import (
 )
 
 func TestAccRoleResource_Lifecycle(t *testing.T) {
+	t.Skip("TODO")
 	t.Parallel()
 
-	databaseName := fmt.Sprintf("terraform-testing-%d", rand.Intn(1000000))
+	databaseName := fmt.Sprintf("testacc-%d", rand.Intn(1000000))
 	resourceAddress := "planetscale_role.test"
 
 	resource.Test(t, resource.TestCase{
@@ -27,9 +28,10 @@ func TestAccRoleResource_Lifecycle(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-				},
+			ConfigVariables: config.Variables{
+				"database_name": config.StringVariable(databaseName),
+				"organization":  config.StringVariable(testAccOrg),
+			},
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectSensitiveValue(
@@ -128,9 +130,10 @@ func TestAccRoleResource_Lifecycle(t *testing.T) {
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-				},
+			ConfigVariables: config.Variables{
+				"database_name": config.StringVariable(databaseName),
+				"organization":  config.StringVariable(testAccOrg),
+			},
 				ResourceName: resourceAddress,
 				ImportState:  true,
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {

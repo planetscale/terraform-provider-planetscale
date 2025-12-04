@@ -2,9 +2,7 @@ package provider
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -14,11 +12,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 )
 
-func TestAccDatabaseResource_Lifecycle(t *testing.T) {
+func TestAccDatabasePostgresResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
-	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
-	resourceAddress := "planetscale_database.test"
+	name := randomWithPrefix("testacc")
+	resourceAddress := "planetscale_database_postgres.test"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -27,7 +25,8 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"name": config.StringVariable(name),
+					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -39,11 +38,6 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 						resourceAddress,
 						tfjsonpath.New("html_url"),
 						knownvalue.NotNull(),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("kind"),
-						knownvalue.StringExact("mysql"),
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
@@ -60,15 +54,16 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"name": config.StringVariable(name),
+					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {
 					rs := s.RootModule().Resources[resourceAddress]
 					jsonBytes, err := json.Marshal(map[string]string{
+						"database":     rs.Primary.Attributes["name"],
 						"organization": rs.Primary.Attributes["organization"],
-						"name":         rs.Primary.Attributes["name"],
 					})
 					return string(jsonBytes), err
 				},
@@ -80,13 +75,14 @@ func TestAccDatabaseResource_Lifecycle(t *testing.T) {
 	})
 }
 
-func TestAccDatabaseResource_ClusterSize(t *testing.T) {
+func TestAccDatabasePostgresResource_ClusterSize(t *testing.T) {
+	t.Skip("TODO: This test is long, ~250-300s. Revisit this when we decide how to support resizes, or when we implement a deletion_protection attribute")
 	t.Parallel()
 
-	name := fmt.Sprintf("terraform-testing-%d", time.Now().Unix())
-	clusterSizeOriginal := "PS_10"
-	clusterSizeUpdated := "PS_20"
-	resourceAddress := "planetscale_database.test"
+	name := randomWithPrefix("testacc")
+	clusterSizeOriginal := "PS_5_AWS_X86"
+	clusterSizeUpdated := "PS_10_AWS_X86"
+	resourceAddress := "planetscale_database_postgres.test"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -97,6 +93,7 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"cluster_size": config.StringVariable(clusterSizeOriginal),
 					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -111,14 +108,15 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"cluster_size": config.StringVariable(clusterSizeOriginal),
 					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {
 					rs := s.RootModule().Resources[resourceAddress]
 					jsonBytes, err := json.Marshal(map[string]string{
+						"database":     rs.Primary.Attributes["name"],
 						"organization": rs.Primary.Attributes["organization"],
-						"name":         rs.Primary.Attributes["name"],
 					})
 					return string(jsonBytes), err
 				},
@@ -131,6 +129,7 @@ func TestAccDatabaseResource_ClusterSize(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"cluster_size": config.StringVariable(clusterSizeUpdated),
 					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
