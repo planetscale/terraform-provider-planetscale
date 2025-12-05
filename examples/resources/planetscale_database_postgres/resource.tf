@@ -1,6 +1,5 @@
 resource "planetscale_database_postgres" "my_databasepostgres" {
   cluster_size  = "...my_cluster_size..."
-  database      = "...my_database..."
   major_version = "...my_major_version..."
   name          = "...my_name..."
   organization  = "...my_organization..."

@@ -204,9 +204,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Planetscale {
 	sdk := &Planetscale{
-		SDKVersion: "0.1.0",
+		SDKVersion: "0.1.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.1.0 2.770.0 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.1.1 2.770.0 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

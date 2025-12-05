@@ -99,7 +99,7 @@ func (r *DatabaseVitessDataSourceModel) ToOperationsGetVitessDatabaseRequest(ctx
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Database.ValueString()
+	database = r.Name.ValueString()
 
 	out := operations.GetVitessDatabaseRequest{
 		Organization: organization,

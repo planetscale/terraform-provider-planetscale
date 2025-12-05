@@ -15,7 +15,6 @@ DatabaseVitess Resource
 ```terraform
 resource "planetscale_database_vitess" "my_databasevitess" {
   cluster_size = "...my_cluster_size..."
-  database     = "...my_database..."
   name         = "...my_name..."
   organization = "...my_organization..."
   region       = "...my_region..."
@@ -29,7 +28,6 @@ resource "planetscale_database_vitess" "my_databasevitess" {
 ### Required
 
 - `cluster_size` (String) The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. Requires replacement if changed.
-- `database` (String) The name of the database
 - `name` (String) Name of the database
 - `organization` (String) The name of the organization the database belongs to
 
@@ -115,7 +113,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = planetscale_database_vitess.my_planetscale_database_vitess
   id = jsonencode({
-    database = "..."
+    name = "..."
     organization = "..."
   })
 }
@@ -124,5 +122,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import planetscale_database_vitess.my_planetscale_database_vitess '{"database": "...", "organization": "..."}'
+terraform import planetscale_database_vitess.my_planetscale_database_vitess '{"name": "...", "organization": "..."}'
 ```

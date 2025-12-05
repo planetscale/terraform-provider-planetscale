@@ -34248,6 +34248,7 @@ paths:
           in: path
           required: true
           description: The name of the database
+          x-speakeasy-match: name
           schema:
             type: string
       responses:
@@ -34478,6 +34479,7 @@ paths:
           in: path
           required: true
           description: The name of the database
+          x-speakeasy-match: name
           schema:
             type: string
       requestBody:
@@ -34572,6 +34574,7 @@ paths:
           in: path
           required: true
           description: The name of the database
+          x-speakeasy-match: name
           schema:
             type: string
       responses:
@@ -34875,6 +34878,7 @@ paths:
           in: path
           required: true
           description: The name of the database
+          x-speakeasy-match: name
           schema:
             type: string
       responses:
@@ -35087,6 +35091,7 @@ paths:
           in: path
           required: true
           description: The name of the database
+          x-speakeasy-match: name
           schema:
             type: string
       requestBody:
@@ -35166,6 +35171,7 @@ paths:
           in: path
           required: true
           description: The name of the database
+          x-speakeasy-match: name
           schema:
             type: string
       responses:

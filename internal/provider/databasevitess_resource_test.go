@@ -62,7 +62,7 @@ func TestAccDatabaseVitessResource_Lifecycle(t *testing.T) {
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {
 					rs := s.RootModule().Resources[resourceAddress]
 					jsonBytes, err := json.Marshal(map[string]string{
-						"database":     rs.Primary.Attributes["name"],
+						"name":         rs.Primary.Attributes["name"],
 						"organization": rs.Primary.Attributes["organization"],
 					})
 					return string(jsonBytes), err
@@ -115,7 +115,7 @@ func TestAccDatabaseVitessResource_ClusterSize(t *testing.T) {
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {
 					rs := s.RootModule().Resources[resourceAddress]
 					jsonBytes, err := json.Marshal(map[string]string{
-						"database":     rs.Primary.Attributes["name"],
+						"name":         rs.Primary.Attributes["name"],
 						"organization": rs.Primary.Attributes["organization"],
 					})
 					return string(jsonBytes), err

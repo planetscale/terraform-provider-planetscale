@@ -283,6 +283,7 @@ actions:
               in: path
               required: true
               description: The name of the database
+              x-speakeasy-match: name
               schema:
                 type: string
           responses:
@@ -495,6 +496,7 @@ actions:
               in: path
               required: true
               description: The name of the database
+              x-speakeasy-match: name
               schema:
                 type: string
           requestBody:
@@ -574,6 +576,7 @@ actions:
               in: path
               required: true
               description: The name of the database
+              x-speakeasy-match: name
               schema:
                 type: string
           responses:

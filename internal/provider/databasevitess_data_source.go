@@ -36,7 +36,6 @@ type DatabaseVitessDataSourceModel struct {
 	BranchesCount                     types.Float64                        `tfsdk:"branches_count"`
 	BranchesURL                       types.String                         `tfsdk:"branches_url"`
 	CreatedAt                         types.String                         `tfsdk:"created_at"`
-	Database                          types.String                         `tfsdk:"database"`
 	DataImport                        *tfTypes.GetVitessDatabaseDataImport `tfsdk:"data_import"`
 	DefaultBranch                     types.String                         `tfsdk:"default_branch"`
 	DefaultBranchReadOnlyRegionsCount types.Float64                        `tfsdk:"default_branch_read_only_regions_count"`
@@ -147,10 +146,6 @@ func (r *DatabaseVitessDataSource) Schema(ctx context.Context, req datasource.Sc
 						Description: `State of the data import`,
 					},
 				},
-			},
-			"database": schema.StringAttribute{
-				Required:    true,
-				Description: `The name of the database`,
 			},
 			"default_branch": schema.StringAttribute{
 				Computed:    true,
