@@ -23,10 +23,10 @@ func TestAccDatabaseReadOnlyRegionsDataSource(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-			ConfigVariables: config.Variables{
-				"name":         config.StringVariable(name),
-				"organization": config.StringVariable(testAccOrg),
-			},
+				ConfigVariables: config.Variables{
+					"name":         config.StringVariable(name),
+					"organization": config.StringVariable(testAccOrg),
+				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,

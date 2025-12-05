@@ -225,7 +225,7 @@ func (r *DatabaseVitessResourceModel) ToOperationsDeleteVitessDatabaseRequest(ct
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Database.ValueString()
+	database = r.Name.ValueString()
 
 	out := operations.DeleteVitessDatabaseRequest{
 		Organization: organization,
@@ -242,7 +242,7 @@ func (r *DatabaseVitessResourceModel) ToOperationsGetVitessDatabaseRequest(ctx c
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Database.ValueString()
+	database = r.Name.ValueString()
 
 	out := operations.GetVitessDatabaseRequest{
 		Organization: organization,
@@ -259,7 +259,7 @@ func (r *DatabaseVitessResourceModel) ToOperationsUpdateVitessDatabaseRequest(ct
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Database.ValueString()
+	database = r.Name.ValueString()
 
 	body, bodyDiags := r.ToOperationsUpdateVitessDatabaseRequestBody(ctx)
 	diags.Append(bodyDiags...)

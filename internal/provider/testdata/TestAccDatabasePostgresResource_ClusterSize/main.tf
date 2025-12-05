@@ -12,7 +12,6 @@ variable "organization" {
 
 resource "planetscale_database_postgres" "test" {
   cluster_size = var.cluster_size
-  database     = var.name
   name         = var.name
   organization = var.organization
 }

@@ -14,7 +14,6 @@ DatabasePostgres DataSource
 
 ```terraform
 data "planetscale_database_postgres" "my_databasepostgres" {
-  database     = "...my_database..."
   organization = "...my_organization..."
 }
 ```
@@ -24,7 +23,6 @@ data "planetscale_database_postgres" "my_databasepostgres" {
 
 ### Required
 
-- `database` (String) The name of the database
 - `organization` (String) The name of the organization the database belongs to
 
 ### Read-Only
