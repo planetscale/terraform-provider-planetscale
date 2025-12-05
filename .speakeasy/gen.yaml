@@ -27,7 +27,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.1.1
+  version: 1.0.0
   additionalDataSources: []
   additionalDependencies:
     github.com/hashicorp/terraform-plugin-testing: v1.13.3
