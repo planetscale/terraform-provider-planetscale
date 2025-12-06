@@ -31,14 +31,14 @@ type OrganizationDataSource struct {
 type OrganizationDataSourceModel struct {
 	BillingEmail        types.String                    `tfsdk:"billing_email"`
 	CreatedAt           types.String                    `tfsdk:"created_at"`
-	DatabaseCount       types.Float64                   `tfsdk:"database_count"`
+	DatabaseCount       types.Int64                     `tfsdk:"database_count"`
 	Features            map[string]jsontypes.Normalized `tfsdk:"features"`
 	HasCard             types.Bool                      `tfsdk:"has_card"`
 	HasPastDueInvoices  types.Bool                      `tfsdk:"has_past_due_invoices"`
 	ID                  types.String                    `tfsdk:"id"`
 	IdpManagedRoles     types.Bool                      `tfsdk:"idp_managed_roles"`
 	InvoiceBudgetAmount types.Float64                   `tfsdk:"invoice_budget_amount"`
-	KeyspaceShardLimit  types.Float64                   `tfsdk:"keyspace_shard_limit"`
+	KeyspaceShardLimit  types.Int64                     `tfsdk:"keyspace_shard_limit"`
 	ManagedTenancy      types.Bool                      `tfsdk:"managed_tenancy"`
 	Name                types.String                    `tfsdk:"name"`
 	Organization        types.String                    `tfsdk:"organization"`
@@ -71,7 +71,7 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:    true,
 				Description: `When the organization was created`,
 			},
-			"database_count": schema.Float64Attribute{
+			"database_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The number of databases in the organization`,
 			},
@@ -100,7 +100,7 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:    true,
 				Description: `The expected monthly budget for the organization`,
 			},
-			"keyspace_shard_limit": schema.Float64Attribute{
+			"keyspace_shard_limit": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The keyspace shard limit for the organization`,
 			},

@@ -11,7 +11,7 @@ import (
 
 type ListDeployOperationsRequest struct {
 	// The number of the deploy request
-	Number string `pathParam:"style=simple,explode=false,name=number"`
+	Number float64 `pathParam:"style=simple,explode=false,name=number"`
 	// The name of the deploy request's organization
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the deploy request's database
@@ -33,9 +33,9 @@ func (l *ListDeployOperationsRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (l *ListDeployOperationsRequest) GetNumber() string {
+func (l *ListDeployOperationsRequest) GetNumber() float64 {
 	if l == nil {
-		return ""
+		return 0.0
 	}
 	return l.Number
 }
@@ -284,28 +284,28 @@ func (l *ListDeployOperationsData) GetDeployErrors() string {
 // ListDeployOperationsResponseBody - Returns deploy operations for the deploy request
 type ListDeployOperationsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                     `json:"prev_page_url"`
 	Data        []ListDeployOperationsData `json:"data"`
 }
 
-func (l *ListDeployOperationsResponseBody) GetCurrentPage() float64 {
+func (l *ListDeployOperationsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListDeployOperationsResponseBody) GetNextPage() float64 {
+func (l *ListDeployOperationsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -317,9 +317,9 @@ func (l *ListDeployOperationsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListDeployOperationsResponseBody) GetPrevPage() float64 {
+func (l *ListDeployOperationsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

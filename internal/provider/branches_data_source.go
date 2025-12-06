@@ -72,7 +72,7 @@ func (r *BranchesDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 								},
 							},
 						},
-						"cluster_iops": schema.Float64Attribute{
+						"cluster_iops": schema.Int64Attribute{
 							Computed:    true,
 							Description: `IOPS for the cluster`,
 						},
@@ -223,7 +223,7 @@ func (r *BranchesDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 							Computed:    true,
 							Description: `Whether or not the schema is ready for queries`,
 						},
-						"shard_count": schema.Float64Attribute{
+						"shard_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The number of shards in the branch`,
 						},
@@ -247,7 +247,7 @@ func (r *BranchesDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 							Computed:    true,
 							Description: `Planetscale API URL for the branch`,
 						},
-						"vtgate_count": schema.Float64Attribute{
+						"vtgate_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The number of vtgate instances in the branch`,
 						},

@@ -108,28 +108,28 @@ func (l *ListPublicRegionsData) GetSlug() string {
 // ListPublicRegionsResponseBody - Returns the available public PlanetScale regions
 type ListPublicRegionsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                  `json:"prev_page_url"`
 	Data        []ListPublicRegionsData `json:"data"`
 }
 
-func (l *ListPublicRegionsResponseBody) GetCurrentPage() float64 {
+func (l *ListPublicRegionsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListPublicRegionsResponseBody) GetNextPage() float64 {
+func (l *ListPublicRegionsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -141,9 +141,9 @@ func (l *ListPublicRegionsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListPublicRegionsResponseBody) GetPrevPage() float64 {
+func (l *ListPublicRegionsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

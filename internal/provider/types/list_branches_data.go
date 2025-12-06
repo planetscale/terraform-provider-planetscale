@@ -8,7 +8,7 @@ import (
 
 type ListBranchesData struct {
 	Actor                       ListBranchesActor              `tfsdk:"actor"`
-	ClusterIops                 types.Float64                  `tfsdk:"cluster_iops"`
+	ClusterIops                 types.Int64                    `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                   `tfsdk:"cluster_name"`
 	CreatedAt                   types.String                   `tfsdk:"created_at"`
 	DeletedAt                   types.String                   `tfsdk:"deleted_at"`
@@ -32,12 +32,12 @@ type ListBranchesData struct {
 	SafeMigrations              types.Bool                     `tfsdk:"safe_migrations"`
 	SchemaLastUpdatedAt         types.String                   `tfsdk:"schema_last_updated_at"`
 	SchemaReady                 types.Bool                     `tfsdk:"schema_ready"`
-	ShardCount                  types.Float64                  `tfsdk:"shard_count"`
+	ShardCount                  types.Int64                    `tfsdk:"shard_count"`
 	Sharded                     types.Bool                     `tfsdk:"sharded"`
 	StaleSchema                 types.Bool                     `tfsdk:"stale_schema"`
 	State                       types.String                   `tfsdk:"state"`
 	UpdatedAt                   types.String                   `tfsdk:"updated_at"`
 	URL                         types.String                   `tfsdk:"url"`
-	VtgateCount                 types.Float64                  `tfsdk:"vtgate_count"`
+	VtgateCount                 types.Int64                    `tfsdk:"vtgate_count"`
 	VtgateSize                  types.String                   `tfsdk:"vtgate_size"`
 }

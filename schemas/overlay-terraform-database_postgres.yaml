@@ -38,7 +38,7 @@ actions:
                       type: string
                       description: The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization.
                     replicas:
-                      type: number
+                      type: integer
                       description: The number of replicas for the database. 0 for non-HA, 2+ for HA.
                     kind:
                       type: string
@@ -71,23 +71,23 @@ actions:
                         type: string
                         description: The URL to retrieve this database's branches via the API
                       branches_count:
-                        type: number
+                        type: integer
                         description: The total number of database branches
                         x-speakeasy-terraform-ignore: true
                       open_schema_recommendations_count:
-                        type: number
+                        type: integer
                         description: The total number of schema recommendations
                         x-speakeasy-terraform-ignore: true
                       development_branches_count:
-                        type: number
+                        type: integer
                         description: The total number of database development branches
                         x-speakeasy-terraform-ignore: true
                       production_branches_count:
-                        type: number
+                        type: integer
                         description: The total number of database production branches
                         x-speakeasy-terraform-ignore: true
                       issues_count:
-                        type: number
+                        type: integer
                         description: The total number of ongoing issues within a database
                         x-speakeasy-terraform-ignore: true
                       multiple_admins_required_for_deletion:
@@ -124,7 +124,7 @@ actions:
                                 type: string
                                 description: Hostname of the data source
                               port:
-                                type: number
+                                type: integer
                                 description: Port of the data source
                               database:
                                 type: string
@@ -180,15 +180,15 @@ actions:
                           - ready
                         description: State of the database
                       default_branch_shard_count:
-                        type: number
+                        type: integer
                         description: Number of shards in the default branch
                         x-speakeasy-terraform-ignore: true
                       default_branch_read_only_regions_count:
-                        type: number
+                        type: integer
                         description: Number of read only regions in the default branch
                         x-speakeasy-terraform-ignore: true
                       default_branch_table_count:
-                        type: number
+                        type: integer
                         description: Number of tables in the default branch schema
                         x-speakeasy-terraform-ignore: true
                       default_branch:
@@ -305,19 +305,19 @@ actions:
                         type: string
                         description: The URL to retrieve this database's branches via the API
                       branches_count:
-                        type: number
+                        type: integer
                         description: The total number of database branches
                       open_schema_recommendations_count:
-                        type: number
+                        type: integer
                         description: The total number of schema recommendations
                       development_branches_count:
-                        type: number
+                        type: integer
                         description: The total number of database development branches
                       production_branches_count:
-                        type: number
+                        type: integer
                         description: The total number of database production branches
                       issues_count:
-                        type: number
+                        type: integer
                         description: The total number of ongoing issues within a database
                       multiple_admins_required_for_deletion:
                         type: boolean
@@ -353,7 +353,7 @@ actions:
                                 type: string
                                 description: Hostname of the data source
                               port:
-                                type: number
+                                type: integer
                                 description: Port of the data source
                               database:
                                 type: string
@@ -409,13 +409,13 @@ actions:
                           - ready
                         description: State of the database
                       default_branch_shard_count:
-                        type: number
+                        type: integer
                         description: Number of shards in the default branch
                       default_branch_read_only_regions_count:
-                        type: number
+                        type: integer
                         description: Number of read only regions in the default branch
                       default_branch_table_count:
-                        type: number
+                        type: integer
                         description: Number of tables in the default branch schema
                       default_branch:
                         type: string

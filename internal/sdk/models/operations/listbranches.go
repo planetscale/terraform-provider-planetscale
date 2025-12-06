@@ -366,11 +366,11 @@ type ListBranchesData struct {
 	// The size of the vtgate cluster for the branch
 	VtgateSize string `json:"vtgate_size"`
 	// The number of vtgate instances in the branch
-	VtgateCount float64 `json:"vtgate_count"`
+	VtgateCount int64 `json:"vtgate_count"`
 	// The SKU representing the branch's cluster size
 	ClusterName string `json:"cluster_name"`
 	// IOPS for the cluster
-	ClusterIops float64 `json:"cluster_iops"`
+	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
 	// Whether or not the schema is ready for queries
@@ -384,7 +384,7 @@ type ListBranchesData struct {
 	// Whether or not the branch is sharded
 	Sharded bool `json:"sharded"`
 	// The number of shards in the branch
-	ShardCount float64 `json:"shard_count"`
+	ShardCount int64 `json:"shard_count"`
 	// Whether or not the branch has a stale schema
 	StaleSchema        bool                           `json:"stale_schema"`
 	Actor              ListBranchesActor              `json:"actor"`
@@ -495,9 +495,9 @@ func (l *ListBranchesData) GetVtgateSize() string {
 	return l.VtgateSize
 }
 
-func (l *ListBranchesData) GetVtgateCount() float64 {
+func (l *ListBranchesData) GetVtgateCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.VtgateCount
 }
@@ -509,9 +509,9 @@ func (l *ListBranchesData) GetClusterName() string {
 	return l.ClusterName
 }
 
-func (l *ListBranchesData) GetClusterIops() float64 {
+func (l *ListBranchesData) GetClusterIops() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ClusterIops
 }
@@ -558,9 +558,9 @@ func (l *ListBranchesData) GetSharded() bool {
 	return l.Sharded
 }
 
-func (l *ListBranchesData) GetShardCount() float64 {
+func (l *ListBranchesData) GetShardCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ShardCount
 }
@@ -638,28 +638,28 @@ func (l *ListBranchesData) GetParentBranch() string {
 // ListBranchesResponseBody - Returns database branches
 type ListBranchesResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string             `json:"prev_page_url"`
 	Data        []ListBranchesData `json:"data"`
 }
 
-func (l *ListBranchesResponseBody) GetCurrentPage() float64 {
+func (l *ListBranchesResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListBranchesResponseBody) GetNextPage() float64 {
+func (l *ListBranchesResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -671,9 +671,9 @@ func (l *ListBranchesResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListBranchesResponseBody) GetPrevPage() float64 {
+func (l *ListBranchesResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

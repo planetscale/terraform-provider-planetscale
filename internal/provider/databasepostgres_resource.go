@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -55,7 +55,7 @@ type DatabasePostgresResourceModel struct {
 	Ready                             types.Bool                             `tfsdk:"ready"`
 	Region                            types.String                           `tfsdk:"region"`
 	RegionData                        *tfTypes.GetPostgresDatabaseRegionData `tfsdk:"region_data"`
-	Replicas                          types.Float64                          `tfsdk:"replicas"`
+	Replicas                          types.Int64                            `tfsdk:"replicas"`
 	RequireApprovalForDeploy          types.Bool                             `tfsdk:"require_approval_for_deploy"`
 	ResizeQueued                      types.Bool                             `tfsdk:"resize_queued"`
 	Resizing                          types.Bool                             `tfsdk:"resizing"`
@@ -111,7 +111,7 @@ func (r *DatabasePostgresResource) Schema(ctx context.Context, req resource.Sche
 								Computed:    true,
 								Description: `Hostname of the data source`,
 							},
-							"port": schema.Float64Attribute{
+							"port": schema.Int64Attribute{
 								Computed:    true,
 								Description: `Port of the data source`,
 							},
@@ -227,10 +227,10 @@ func (r *DatabasePostgresResource) Schema(ctx context.Context, req resource.Sche
 					},
 				},
 			},
-			"replicas": schema.Float64Attribute{
+			"replicas": schema.Int64Attribute{
 				Optional: true,
-				PlanModifiers: []planmodifier.Float64{
-					float64planmodifier.RequiresReplaceIfConfigured(),
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `The number of replicas for the database. 0 for non-HA, 2+ for HA. Requires replacement if changed.`,
 			},

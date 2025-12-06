@@ -200,19 +200,19 @@ type GetBackupBackupPolicy struct {
 	// Whether the policy is for production or development branches
 	Target GetBackupTarget `json:"target"`
 	// A number value for the retention period of the backup policy
-	RetentionValue float64 `json:"retention_value"`
+	RetentionValue int64 `json:"retention_value"`
 	// The unit for the retention period of the backup policy
 	RetentionUnit string `json:"retention_unit"`
 	// A number value for the frequency of the backup policy
-	FrequencyValue float64 `json:"frequency_value"`
+	FrequencyValue int64 `json:"frequency_value"`
 	// The unit for the frequency of the backup policy
 	FrequencyUnit string `json:"frequency_unit"`
 	// The time of day that the backup is scheduled, in HH:MM format
 	ScheduleTime string `json:"schedule_time"`
 	// Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
-	ScheduleDay float64 `json:"schedule_day"`
+	ScheduleDay int64 `json:"schedule_day"`
 	// Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
-	ScheduleWeek float64 `json:"schedule_week"`
+	ScheduleWeek int64 `json:"schedule_week"`
 	// When the backup policy was created
 	CreatedAt string `json:"created_at"`
 	// When the backup policy was last updated
@@ -246,9 +246,9 @@ func (g *GetBackupBackupPolicy) GetTarget() GetBackupTarget {
 	return g.Target
 }
 
-func (g *GetBackupBackupPolicy) GetRetentionValue() float64 {
+func (g *GetBackupBackupPolicy) GetRetentionValue() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.RetentionValue
 }
@@ -260,9 +260,9 @@ func (g *GetBackupBackupPolicy) GetRetentionUnit() string {
 	return g.RetentionUnit
 }
 
-func (g *GetBackupBackupPolicy) GetFrequencyValue() float64 {
+func (g *GetBackupBackupPolicy) GetFrequencyValue() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.FrequencyValue
 }
@@ -281,16 +281,16 @@ func (g *GetBackupBackupPolicy) GetScheduleTime() string {
 	return g.ScheduleTime
 }
 
-func (g *GetBackupBackupPolicy) GetScheduleDay() float64 {
+func (g *GetBackupBackupPolicy) GetScheduleDay() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.ScheduleDay
 }
 
-func (g *GetBackupBackupPolicy) GetScheduleWeek() float64 {
+func (g *GetBackupBackupPolicy) GetScheduleWeek() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.ScheduleWeek
 }
@@ -444,7 +444,7 @@ type GetBackupResponseBody struct {
 	// The current state of the backup
 	State GetBackupState `json:"state"`
 	// The size of the backup in bytes
-	Size float64 `json:"size"`
+	Size int64 `json:"size"`
 	// The estimated storage cost of the backup
 	EstimatedStorageCost float64 `json:"estimated_storage_cost"`
 	// When the backup was created
@@ -460,7 +460,7 @@ type GetBackupResponseBody struct {
 	// When the backup was deleted
 	DeletedAt string `json:"deleted_at"`
 	// Size of the PVC used for the backup
-	PvcSize float64 `json:"pvc_size"`
+	PvcSize int64 `json:"pvc_size"`
 	// Whether or not the backup is protected from deletion
 	Protected bool `json:"protected"`
 	// Whether or not the backup policy is required
@@ -493,9 +493,9 @@ func (g *GetBackupResponseBody) GetState() GetBackupState {
 	return g.State
 }
 
-func (g *GetBackupResponseBody) GetSize() float64 {
+func (g *GetBackupResponseBody) GetSize() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.Size
 }
@@ -549,9 +549,9 @@ func (g *GetBackupResponseBody) GetDeletedAt() string {
 	return g.DeletedAt
 }
 
-func (g *GetBackupResponseBody) GetPvcSize() float64 {
+func (g *GetBackupResponseBody) GetPvcSize() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.PvcSize
 }

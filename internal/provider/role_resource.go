@@ -10,12 +10,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_float64planmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/float64planmodifier"
+	speakeasy_int64planmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/listplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
@@ -46,6 +46,7 @@ type RoleResourceModel struct {
 	DatabaseName                 types.String              `tfsdk:"database_name"`
 	Default                      types.Bool                `tfsdk:"default"`
 	DeletedAt                    types.String              `tfsdk:"deleted_at"`
+	DisabledAt                   types.String              `tfsdk:"disabled_at"`
 	DropFailed                   types.String              `tfsdk:"drop_failed"`
 	DroppedAt                    types.String              `tfsdk:"dropped_at"`
 	Expired                      types.Bool                `tfsdk:"expired"`
@@ -58,7 +59,7 @@ type RoleResourceModel struct {
 	PrivateAccessHostURL         types.String              `tfsdk:"private_access_host_url"`
 	PrivateConnectionServiceName types.String              `tfsdk:"private_connection_service_name"`
 	Successor                    types.String              `tfsdk:"successor"`
-	TTL                          types.Float64             `tfsdk:"ttl"`
+	TTL                          types.Int64               `tfsdk:"ttl"`
 	UpdatedAt                    types.String              `tfsdk:"updated_at"`
 	Username                     types.String              `tfsdk:"username"`
 }
@@ -141,6 +142,10 @@ func (r *RoleResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed:    true,
 				Description: `When the role was deleted`,
 			},
+			"disabled_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the role was disabled`,
+			},
 			"drop_failed": schema.StringAttribute{
 				Computed:    true,
 				Description: `Error message available when dropping the role fails`,
@@ -196,12 +201,12 @@ func (r *RoleResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:    true,
 				Description: `The optional role to reassign ownership to before dropping`,
 			},
-			"ttl": schema.Float64Attribute{
+			"ttl": schema.Int64Attribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Float64{
-					float64planmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_float64planmodifier.SuppressDiff(speakeasy_float64planmodifier.ExplicitSuppress),
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
 				},
 				Description: `Time to live in seconds. Requires replacement if changed.`,
 			},

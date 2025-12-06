@@ -200,7 +200,7 @@ type UpdateBranchChangeRequestResponseBody struct {
 	// The ID of the branch change request
 	ID string `json:"id"`
 	// The ports requiring a restart when changes are applied
-	Restart []float64 `json:"restart"`
+	Restart []int64 `json:"restart"`
 	// The state of the branch change request
 	State UpdateBranchChangeRequestState `json:"state"`
 	// The time the branch change request started
@@ -219,7 +219,7 @@ type UpdateBranchChangeRequestResponseBody struct {
 	// Whether or not this is a metal database
 	ClusterMetal bool `json:"cluster_metal"`
 	// The total number of replicas
-	Replicas float64 `json:"replicas"`
+	Replicas int64 `json:"replicas"`
 	// The branch parameters
 	Parameters map[string]any `json:"parameters"`
 	// The previous SKU representing the branch cluster
@@ -229,13 +229,13 @@ type UpdateBranchChangeRequestResponseBody struct {
 	// Whether or not the previous SKU was a metal database
 	PreviousClusterMetal bool `json:"previous_cluster_metal"`
 	// The previous total number of replicas
-	PreviousReplicas float64 `json:"previous_replicas"`
+	PreviousReplicas int64 `json:"previous_replicas"`
 	// The previous branch parameters
 	PreviousParameters map[string]any `json:"previous_parameters"`
 	// The minimum storage size in bytes
-	MinimumStorageBytes float64 `json:"minimum_storage_bytes"`
+	MinimumStorageBytes int64 `json:"minimum_storage_bytes"`
 	// The maximum storage size in bytes
-	MaximumStorageBytes float64 `json:"maximum_storage_bytes"`
+	MaximumStorageBytes int64 `json:"maximum_storage_bytes"`
 	// Whether storage autoscaling is enabled
 	StorageAutoscaling bool `json:"storage_autoscaling"`
 	// Whether storage shrinking is enabled when autoscaling is enabled
@@ -243,13 +243,13 @@ type UpdateBranchChangeRequestResponseBody struct {
 	// The storage type (gp3 or io2)
 	StorageType UpdateBranchChangeRequestStorageType `json:"storage_type"`
 	// The storage IOPS
-	StorageIops float64 `json:"storage_iops"`
+	StorageIops int64 `json:"storage_iops"`
 	// The storage throughput in MiB/s
-	StorageThroughputMibs float64 `json:"storage_throughput_mibs"`
+	StorageThroughputMibs int64 `json:"storage_throughput_mibs"`
 	// The previous minimum storage size in bytes
-	PreviousMinimumStorageBytes float64 `json:"previous_minimum_storage_bytes"`
+	PreviousMinimumStorageBytes int64 `json:"previous_minimum_storage_bytes"`
 	// The previous maximum storage size in bytes
-	PreviousMaximumStorageBytes float64 `json:"previous_maximum_storage_bytes"`
+	PreviousMaximumStorageBytes int64 `json:"previous_maximum_storage_bytes"`
 	// Whether storage autoscaling was previously enabled
 	PreviousStorageAutoscaling bool `json:"previous_storage_autoscaling"`
 	// Whether storage shrinking was previously enabled
@@ -257,9 +257,9 @@ type UpdateBranchChangeRequestResponseBody struct {
 	// The previous storage type
 	PreviousStorageType string `json:"previous_storage_type"`
 	// The previous storage IOPS
-	PreviousStorageIops float64 `json:"previous_storage_iops"`
+	PreviousStorageIops int64 `json:"previous_storage_iops"`
 	// The previous storage throughput in MiB/s
-	PreviousStorageThroughputMibs float64 `json:"previous_storage_throughput_mibs"`
+	PreviousStorageThroughputMibs int64 `json:"previous_storage_throughput_mibs"`
 }
 
 func (u *UpdateBranchChangeRequestResponseBody) GetID() string {
@@ -269,9 +269,9 @@ func (u *UpdateBranchChangeRequestResponseBody) GetID() string {
 	return u.ID
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetRestart() []float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetRestart() []int64 {
 	if u == nil {
-		return []float64{}
+		return []int64{}
 	}
 	return u.Restart
 }
@@ -339,9 +339,9 @@ func (u *UpdateBranchChangeRequestResponseBody) GetClusterMetal() bool {
 	return u.ClusterMetal
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetReplicas() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetReplicas() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.Replicas
 }
@@ -374,9 +374,9 @@ func (u *UpdateBranchChangeRequestResponseBody) GetPreviousClusterMetal() bool {
 	return u.PreviousClusterMetal
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousReplicas() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetPreviousReplicas() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.PreviousReplicas
 }
@@ -388,16 +388,16 @@ func (u *UpdateBranchChangeRequestResponseBody) GetPreviousParameters() map[stri
 	return u.PreviousParameters
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetMinimumStorageBytes() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetMinimumStorageBytes() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.MinimumStorageBytes
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetMaximumStorageBytes() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetMaximumStorageBytes() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.MaximumStorageBytes
 }
@@ -423,30 +423,30 @@ func (u *UpdateBranchChangeRequestResponseBody) GetStorageType() UpdateBranchCha
 	return u.StorageType
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageIops() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetStorageIops() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.StorageIops
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageThroughputMibs() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetStorageThroughputMibs() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.StorageThroughputMibs
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousMinimumStorageBytes() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetPreviousMinimumStorageBytes() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.PreviousMinimumStorageBytes
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousMaximumStorageBytes() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetPreviousMaximumStorageBytes() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.PreviousMaximumStorageBytes
 }
@@ -472,16 +472,16 @@ func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageType() string 
 	return u.PreviousStorageType
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageIops() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageIops() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.PreviousStorageIops
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageThroughputMibs() float64 {
+func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageThroughputMibs() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.PreviousStorageThroughputMibs
 }

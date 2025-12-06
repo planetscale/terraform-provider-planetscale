@@ -409,7 +409,7 @@ type GetDeployQueueOperation struct {
 	// The percent completion for the deploy operation
 	ProgressPercentage float64 `json:"progress_percentage"`
 	// The estimated seconds until completion for the deploy operation
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 }
 
 func (g *GetDeployQueueOperation) GetID() string {
@@ -440,9 +440,9 @@ func (g *GetDeployQueueOperation) GetProgressPercentage() float64 {
 	return g.ProgressPercentage
 }
 
-func (g *GetDeployQueueOperation) GetEtaSeconds() float64 {
+func (g *GetDeployQueueOperation) GetEtaSeconds() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.EtaSeconds
 }
@@ -457,7 +457,7 @@ type GetDeployQueueDeployOperationSummary struct {
 	// The DDL statement for the deploy operation summary
 	DdlStatement string `json:"ddl_statement"`
 	// The estimated seconds until completion for the deploy operation summary
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 	// The keyspace modified by the deploy operation summary
 	KeyspaceName string `json:"keyspace_name"`
 	// The operation name of the deploy operation summary
@@ -477,7 +477,7 @@ type GetDeployQueueDeployOperationSummary struct {
 	// Names of foreign keys removed by this operation summary
 	RemovedForeignKeyNames []string `json:"removed_foreign_key_names"`
 	// The number of shards in the keyspace modified by the deploy operation summary
-	ShardCount float64 `json:"shard_count"`
+	ShardCount int64 `json:"shard_count"`
 	// Names of shards in the keyspace modified by the deploy operation summary
 	ShardNames []string `json:"shard_names"`
 	// Whether or not the deploy operation summary is capable of dropping data
@@ -517,9 +517,9 @@ func (g *GetDeployQueueDeployOperationSummary) GetDdlStatement() string {
 	return g.DdlStatement
 }
 
-func (g *GetDeployQueueDeployOperationSummary) GetEtaSeconds() float64 {
+func (g *GetDeployQueueDeployOperationSummary) GetEtaSeconds() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.EtaSeconds
 }
@@ -587,9 +587,9 @@ func (g *GetDeployQueueDeployOperationSummary) GetRemovedForeignKeyNames() []str
 	return g.RemovedForeignKeyNames
 }
 
-func (g *GetDeployQueueDeployOperationSummary) GetShardCount() float64 {
+func (g *GetDeployQueueDeployOperationSummary) GetShardCount() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.ShardCount
 }
@@ -751,7 +751,7 @@ type GetDeployQueueData struct {
 	// The name of the base branch the deployment will be merged into
 	IntoBranch string `json:"into_branch"`
 	// The number of the deploy request associated with this deployment
-	DeployRequestNumber float64 `json:"deploy_request_number"`
+	DeployRequestNumber int64 `json:"deploy_request_number"`
 	// Whether the deployment is deployable
 	Deployable bool `json:"deployable"`
 	// The deployments ahead of this one in the queue
@@ -888,9 +888,9 @@ func (g *GetDeployQueueData) GetIntoBranch() string {
 	return g.IntoBranch
 }
 
-func (g *GetDeployQueueData) GetDeployRequestNumber() float64 {
+func (g *GetDeployQueueData) GetDeployRequestNumber() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.DeployRequestNumber
 }
@@ -1017,28 +1017,28 @@ func (g *GetDeployQueueData) GetInstantDdlEligible() bool {
 // GetDeployQueueResponseBody - Returns the deploy queue for a database
 type GetDeployQueueResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string               `json:"prev_page_url"`
 	Data        []GetDeployQueueData `json:"data"`
 }
 
-func (g *GetDeployQueueResponseBody) GetCurrentPage() float64 {
+func (g *GetDeployQueueResponseBody) GetCurrentPage() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.CurrentPage
 }
 
-func (g *GetDeployQueueResponseBody) GetNextPage() float64 {
+func (g *GetDeployQueueResponseBody) GetNextPage() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.NextPage
 }
@@ -1050,9 +1050,9 @@ func (g *GetDeployQueueResponseBody) GetNextPageURL() string {
 	return g.NextPageURL
 }
 
-func (g *GetDeployQueueResponseBody) GetPrevPage() float64 {
+func (g *GetDeployQueueResponseBody) GetPrevPage() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.PrevPage
 }

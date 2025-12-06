@@ -56,7 +56,7 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 							Computed:    true,
 							Description: `When the organization was created`,
 						},
-						"database_count": schema.Float64Attribute{
+						"database_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The number of databases in the organization`,
 						},
@@ -85,7 +85,7 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 							Computed:    true,
 							Description: `The expected monthly budget for the organization`,
 						},
-						"keyspace_shard_limit": schema.Float64Attribute{
+						"keyspace_shard_limit": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The keyspace shard limit for the organization`,
 						},

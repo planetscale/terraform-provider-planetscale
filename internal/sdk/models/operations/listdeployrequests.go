@@ -681,7 +681,7 @@ type ListDeployRequestsOperation struct {
 	// The percent completion for the deploy operation
 	ProgressPercentage float64 `json:"progress_percentage"`
 	// The estimated seconds until completion for the deploy operation
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 }
 
 func (l *ListDeployRequestsOperation) GetID() string {
@@ -712,9 +712,9 @@ func (l *ListDeployRequestsOperation) GetProgressPercentage() float64 {
 	return l.ProgressPercentage
 }
 
-func (l *ListDeployRequestsOperation) GetEtaSeconds() float64 {
+func (l *ListDeployRequestsOperation) GetEtaSeconds() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.EtaSeconds
 }
@@ -729,7 +729,7 @@ type ListDeployRequestsDeployOperationSummary struct {
 	// The DDL statement for the deploy operation summary
 	DdlStatement string `json:"ddl_statement"`
 	// The estimated seconds until completion for the deploy operation summary
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 	// The keyspace modified by the deploy operation summary
 	KeyspaceName string `json:"keyspace_name"`
 	// The operation name of the deploy operation summary
@@ -749,7 +749,7 @@ type ListDeployRequestsDeployOperationSummary struct {
 	// Names of foreign keys removed by this operation summary
 	RemovedForeignKeyNames []string `json:"removed_foreign_key_names"`
 	// The number of shards in the keyspace modified by the deploy operation summary
-	ShardCount float64 `json:"shard_count"`
+	ShardCount int64 `json:"shard_count"`
 	// Names of shards in the keyspace modified by the deploy operation summary
 	ShardNames []string `json:"shard_names"`
 	// Whether or not the deploy operation summary is capable of dropping data
@@ -789,9 +789,9 @@ func (l *ListDeployRequestsDeployOperationSummary) GetDdlStatement() string {
 	return l.DdlStatement
 }
 
-func (l *ListDeployRequestsDeployOperationSummary) GetEtaSeconds() float64 {
+func (l *ListDeployRequestsDeployOperationSummary) GetEtaSeconds() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.EtaSeconds
 }
@@ -859,9 +859,9 @@ func (l *ListDeployRequestsDeployOperationSummary) GetRemovedForeignKeyNames() [
 	return l.RemovedForeignKeyNames
 }
 
-func (l *ListDeployRequestsDeployOperationSummary) GetShardCount() float64 {
+func (l *ListDeployRequestsDeployOperationSummary) GetShardCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ShardCount
 }
@@ -1023,7 +1023,7 @@ type ListDeployRequestsDeployment struct {
 	// The name of the base branch the deployment will be merged into
 	IntoBranch string `json:"into_branch"`
 	// The number of the deploy request associated with this deployment
-	DeployRequestNumber float64 `json:"deploy_request_number"`
+	DeployRequestNumber int64 `json:"deploy_request_number"`
 	// Whether the deployment is deployable
 	Deployable bool `json:"deployable"`
 	// The deployments ahead of this one in the queue
@@ -1160,9 +1160,9 @@ func (l *ListDeployRequestsDeployment) GetIntoBranch() string {
 	return l.IntoBranch
 }
 
-func (l *ListDeployRequestsDeployment) GetDeployRequestNumber() float64 {
+func (l *ListDeployRequestsDeployment) GetDeployRequestNumber() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.DeployRequestNumber
 }
@@ -1290,7 +1290,7 @@ type ListDeployRequestsData struct {
 	// The ID of the deploy request
 	ID string `json:"id"`
 	// The number of the deploy request
-	Number   float64                    `json:"number"`
+	Number   int64                      `json:"number"`
 	Actor    ListDeployRequestsActor    `json:"actor"`
 	ClosedBy ListDeployRequestsClosedBy `json:"closed_by"`
 	// The name of the branch the deploy request was created from
@@ -1307,7 +1307,7 @@ type ListDeployRequestsData struct {
 	// Whether or not the branch the deploy request will be merged into is sharded
 	IntoBranchSharded bool `json:"into_branch_sharded"`
 	// The number of shards the branch the deploy request will be merged into has
-	IntoBranchShardCount float64 `json:"into_branch_shard_count"`
+	IntoBranchShardCount int64 `json:"into_branch_shard_count"`
 	// Whether or not the deploy request is approved
 	Approved bool `json:"approved"`
 	// Whether the deploy request is open or closed
@@ -1316,7 +1316,7 @@ type ListDeployRequestsData struct {
 	DeploymentState ListDeployRequestsDeploymentState1 `json:"deployment_state"`
 	Deployment      ListDeployRequestsDeployment       `json:"deployment"`
 	// The number of comments on the deploy request
-	NumComments float64 `json:"num_comments"`
+	NumComments int64 `json:"num_comments"`
 	// The PlanetScale app address for the deploy request
 	HTMLURL string `json:"html_url"`
 	// Notes on the deploy request
@@ -1340,9 +1340,9 @@ func (l *ListDeployRequestsData) GetID() string {
 	return l.ID
 }
 
-func (l *ListDeployRequestsData) GetNumber() float64 {
+func (l *ListDeployRequestsData) GetNumber() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Number
 }
@@ -1410,9 +1410,9 @@ func (l *ListDeployRequestsData) GetIntoBranchSharded() bool {
 	return l.IntoBranchSharded
 }
 
-func (l *ListDeployRequestsData) GetIntoBranchShardCount() float64 {
+func (l *ListDeployRequestsData) GetIntoBranchShardCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.IntoBranchShardCount
 }
@@ -1445,9 +1445,9 @@ func (l *ListDeployRequestsData) GetDeployment() ListDeployRequestsDeployment {
 	return l.Deployment
 }
 
-func (l *ListDeployRequestsData) GetNumComments() float64 {
+func (l *ListDeployRequestsData) GetNumComments() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NumComments
 }
@@ -1504,28 +1504,28 @@ func (l *ListDeployRequestsData) GetDeployedAt() string {
 // ListDeployRequestsResponseBody - Returns a list of deploy requests
 type ListDeployRequestsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                   `json:"prev_page_url"`
 	Data        []ListDeployRequestsData `json:"data"`
 }
 
-func (l *ListDeployRequestsResponseBody) GetCurrentPage() float64 {
+func (l *ListDeployRequestsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListDeployRequestsResponseBody) GetNextPage() float64 {
+func (l *ListDeployRequestsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -1537,9 +1537,9 @@ func (l *ListDeployRequestsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListDeployRequestsResponseBody) GetPrevPage() float64 {
+func (l *ListDeployRequestsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

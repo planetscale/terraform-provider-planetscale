@@ -14,6 +14,7 @@ type ListRolesData struct {
 	DatabaseName                 types.String    `tfsdk:"database_name"`
 	Default                      types.Bool      `tfsdk:"default"`
 	DeletedAt                    types.String    `tfsdk:"deleted_at"`
+	DisabledAt                   types.String    `tfsdk:"disabled_at"`
 	DropFailed                   types.String    `tfsdk:"drop_failed"`
 	DroppedAt                    types.String    `tfsdk:"dropped_at"`
 	Expired                      types.Bool      `tfsdk:"expired"`
@@ -24,7 +25,7 @@ type ListRolesData struct {
 	Password                     types.String    `tfsdk:"password"`
 	PrivateAccessHostURL         types.String    `tfsdk:"private_access_host_url"`
 	PrivateConnectionServiceName types.String    `tfsdk:"private_connection_service_name"`
-	TTL                          types.Float64   `tfsdk:"ttl"`
+	TTL                          types.Int64     `tfsdk:"ttl"`
 	UpdatedAt                    types.String    `tfsdk:"updated_at"`
 	Username                     types.String    `tfsdk:"username"`
 }

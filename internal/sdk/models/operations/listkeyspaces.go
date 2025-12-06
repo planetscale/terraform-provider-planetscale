@@ -146,13 +146,13 @@ type ListKeyspacesData struct {
 	// Name of the keyspace
 	Name string `json:"name"`
 	// The number of keyspace shards
-	Shards float64 `json:"shards"`
+	Shards int64 `json:"shards"`
 	// If the keyspace is sharded
 	Sharded bool `json:"sharded"`
 	// Total number of replicas in the keyspace
-	Replicas float64 `json:"replicas"`
+	Replicas int64 `json:"replicas"`
 	// Number of extra replicas in the keyspace
-	ExtraReplicas float64 `json:"extra_replicas"`
+	ExtraReplicas int64 `json:"extra_replicas"`
 	// When the keyspace was created
 	CreatedAt string `json:"created_at"`
 	// When the keyspace was last updated
@@ -193,9 +193,9 @@ func (l *ListKeyspacesData) GetName() string {
 	return l.Name
 }
 
-func (l *ListKeyspacesData) GetShards() float64 {
+func (l *ListKeyspacesData) GetShards() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Shards
 }
@@ -207,16 +207,16 @@ func (l *ListKeyspacesData) GetSharded() bool {
 	return l.Sharded
 }
 
-func (l *ListKeyspacesData) GetReplicas() float64 {
+func (l *ListKeyspacesData) GetReplicas() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Replicas
 }
 
-func (l *ListKeyspacesData) GetExtraReplicas() float64 {
+func (l *ListKeyspacesData) GetExtraReplicas() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ExtraReplicas
 }
@@ -315,28 +315,28 @@ func (l *ListKeyspacesData) GetVreplicationFlags() ListKeyspacesVreplicationFlag
 // ListKeyspacesResponseBody - Returns keyspaces
 type ListKeyspacesResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string              `json:"prev_page_url"`
 	Data        []ListKeyspacesData `json:"data"`
 }
 
-func (l *ListKeyspacesResponseBody) GetCurrentPage() float64 {
+func (l *ListKeyspacesResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListKeyspacesResponseBody) GetNextPage() float64 {
+func (l *ListKeyspacesResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -348,9 +348,9 @@ func (l *ListKeyspacesResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListKeyspacesResponseBody) GetPrevPage() float64 {
+func (l *ListKeyspacesResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

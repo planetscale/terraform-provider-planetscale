@@ -105,9 +105,9 @@ type CreateBouncerSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (c *CreateBouncerSku) GetName() string {
@@ -131,16 +131,16 @@ func (c *CreateBouncerSku) GetCPU() string {
 	return c.CPU
 }
 
-func (c *CreateBouncerSku) GetRAM() float64 {
+func (c *CreateBouncerSku) GetRAM() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.RAM
 }
 
-func (c *CreateBouncerSku) GetSortOrder() float64 {
+func (c *CreateBouncerSku) GetSortOrder() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.SortOrder
 }
@@ -541,7 +541,7 @@ type CreateBouncerResponseBody struct {
 	// The instance type the bouncer targets
 	Target CreateBouncerTarget `json:"target"`
 	// The count of replicas in each cell
-	ReplicasPerCell float64 `json:"replicas_per_cell"`
+	ReplicasPerCell int64 `json:"replicas_per_cell"`
 	// When the bouncer was created
 	CreatedAt string `json:"created_at"`
 	// When the bouncer was updated
@@ -581,9 +581,9 @@ func (c *CreateBouncerResponseBody) GetTarget() CreateBouncerTarget {
 	return c.Target
 }
 
-func (c *CreateBouncerResponseBody) GetReplicasPerCell() float64 {
+func (c *CreateBouncerResponseBody) GetReplicasPerCell() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.ReplicasPerCell
 }

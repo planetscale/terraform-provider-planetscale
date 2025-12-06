@@ -18,7 +18,7 @@ type CreateVitessDatabaseRequestBody struct {
 	// The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization.
 	ClusterSize string `json:"cluster_size"`
 	// The number of replicas for the database. 0 for non-HA, 2+ for HA.
-	Replicas *float64 `json:"replicas,omitzero"`
+	Replicas *int64 `json:"replicas,omitzero"`
 	// The kind of database (always mysql for Vitess databases).
 	kind *string `const:"mysql" json:"kind"`
 }
@@ -55,7 +55,7 @@ func (c *CreateVitessDatabaseRequestBody) GetClusterSize() string {
 	return c.ClusterSize
 }
 
-func (c *CreateVitessDatabaseRequestBody) GetReplicas() *float64 {
+func (c *CreateVitessDatabaseRequestBody) GetReplicas() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -101,7 +101,7 @@ type CreateVitessDatabaseDataSource struct {
 	// Hostname of the data source
 	Hostname *string `json:"hostname,omitzero"`
 	// Port of the data source
-	Port *float64 `json:"port,omitzero"`
+	Port *int64 `json:"port,omitzero"`
 	// Database name of the data source
 	Database *string `json:"database,omitzero"`
 }
@@ -113,7 +113,7 @@ func (c *CreateVitessDatabaseDataSource) GetHostname() *string {
 	return c.Hostname
 }
 
-func (c *CreateVitessDatabaseDataSource) GetPort() *float64 {
+func (c *CreateVitessDatabaseDataSource) GetPort() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -322,15 +322,15 @@ type CreateVitessDatabaseResponseBody struct {
 	// The URL to retrieve this database's branches via the API
 	BranchesURL *string `json:"branches_url,omitzero"`
 	// The total number of database branches
-	BranchesCount *float64 `json:"branches_count,omitzero"`
+	BranchesCount *int64 `json:"branches_count,omitzero"`
 	// The total number of schema recommendations
-	OpenSchemaRecommendationsCount *float64 `json:"open_schema_recommendations_count,omitzero"`
+	OpenSchemaRecommendationsCount *int64 `json:"open_schema_recommendations_count,omitzero"`
 	// The total number of database development branches
-	DevelopmentBranchesCount *float64 `json:"development_branches_count,omitzero"`
+	DevelopmentBranchesCount *int64 `json:"development_branches_count,omitzero"`
 	// The total number of database production branches
-	ProductionBranchesCount *float64 `json:"production_branches_count,omitzero"`
+	ProductionBranchesCount *int64 `json:"production_branches_count,omitzero"`
 	// The total number of ongoing issues within a database
-	IssuesCount *float64 `json:"issues_count,omitzero"`
+	IssuesCount *int64 `json:"issues_count,omitzero"`
 	// If the database requires multiple admins for deletion
 	MultipleAdminsRequiredForDeletion *bool `json:"multiple_admins_required_for_deletion,omitzero"`
 	// If the database is ready to be used
@@ -350,11 +350,11 @@ type CreateVitessDatabaseResponseBody struct {
 	// If the database is sharded
 	Sharded *bool `json:"sharded,omitzero"`
 	// Number of shards in the default branch
-	DefaultBranchShardCount *float64 `json:"default_branch_shard_count,omitzero"`
+	DefaultBranchShardCount *int64 `json:"default_branch_shard_count,omitzero"`
 	// Number of read only regions in the default branch
-	DefaultBranchReadOnlyRegionsCount *float64 `json:"default_branch_read_only_regions_count,omitzero"`
+	DefaultBranchReadOnlyRegionsCount *int64 `json:"default_branch_read_only_regions_count,omitzero"`
 	// Number of tables in the default branch schema
-	DefaultBranchTableCount *float64 `json:"default_branch_table_count,omitzero"`
+	DefaultBranchTableCount *int64 `json:"default_branch_table_count,omitzero"`
 	// The default branch for the database
 	DefaultBranch *string `json:"default_branch,omitzero"`
 	// Whether an approval is required to deploy schema changes to this database
@@ -425,35 +425,35 @@ func (c *CreateVitessDatabaseResponseBody) GetBranchesURL() *string {
 	return c.BranchesURL
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetBranchesCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetBranchesCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.BranchesCount
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetOpenSchemaRecommendationsCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetOpenSchemaRecommendationsCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.OpenSchemaRecommendationsCount
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetDevelopmentBranchesCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetDevelopmentBranchesCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.DevelopmentBranchesCount
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetProductionBranchesCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetProductionBranchesCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.ProductionBranchesCount
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetIssuesCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetIssuesCount() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -530,21 +530,21 @@ func (c *CreateVitessDatabaseResponseBody) GetSharded() *bool {
 	return c.Sharded
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetDefaultBranchShardCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetDefaultBranchShardCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.DefaultBranchShardCount
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.DefaultBranchReadOnlyRegionsCount
 }
 
-func (c *CreateVitessDatabaseResponseBody) GetDefaultBranchTableCount() *float64 {
+func (c *CreateVitessDatabaseResponseBody) GetDefaultBranchTableCount() *int64 {
 	if c == nil {
 		return nil
 	}

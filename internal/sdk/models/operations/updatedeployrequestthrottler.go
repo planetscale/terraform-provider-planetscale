@@ -45,7 +45,7 @@ type UpdateDeployRequestThrottlerRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number string                                   `pathParam:"style=simple,explode=false,name=number"`
+	Number float64                                  `pathParam:"style=simple,explode=false,name=number"`
 	Body   *UpdateDeployRequestThrottlerRequestBody `request:"mediaType=application/json"`
 }
 
@@ -74,9 +74,9 @@ func (u *UpdateDeployRequestThrottlerRequest) GetDatabase() string {
 	return u.Database
 }
 
-func (u *UpdateDeployRequestThrottlerRequest) GetNumber() string {
+func (u *UpdateDeployRequestThrottlerRequest) GetNumber() float64 {
 	if u == nil {
-		return ""
+		return 0.0
 	}
 	return u.Number
 }

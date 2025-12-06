@@ -168,7 +168,7 @@ type ListBranchChangeRequestsData struct {
 	// The ID of the branch change request
 	ID string `json:"id"`
 	// The ports requiring a restart when changes are applied
-	Restart []float64 `json:"restart"`
+	Restart []int64 `json:"restart"`
 	// The state of the branch change request
 	State ListBranchChangeRequestsState `json:"state"`
 	// The time the branch change request started
@@ -187,7 +187,7 @@ type ListBranchChangeRequestsData struct {
 	// Whether or not this is a metal database
 	ClusterMetal bool `json:"cluster_metal"`
 	// The total number of replicas
-	Replicas float64 `json:"replicas"`
+	Replicas int64 `json:"replicas"`
 	// The branch parameters
 	Parameters map[string]any `json:"parameters"`
 	// The previous SKU representing the branch cluster
@@ -197,13 +197,13 @@ type ListBranchChangeRequestsData struct {
 	// Whether or not the previous SKU was a metal database
 	PreviousClusterMetal bool `json:"previous_cluster_metal"`
 	// The previous total number of replicas
-	PreviousReplicas float64 `json:"previous_replicas"`
+	PreviousReplicas int64 `json:"previous_replicas"`
 	// The previous branch parameters
 	PreviousParameters map[string]any `json:"previous_parameters"`
 	// The minimum storage size in bytes
-	MinimumStorageBytes float64 `json:"minimum_storage_bytes"`
+	MinimumStorageBytes int64 `json:"minimum_storage_bytes"`
 	// The maximum storage size in bytes
-	MaximumStorageBytes float64 `json:"maximum_storage_bytes"`
+	MaximumStorageBytes int64 `json:"maximum_storage_bytes"`
 	// Whether storage autoscaling is enabled
 	StorageAutoscaling bool `json:"storage_autoscaling"`
 	// Whether storage shrinking is enabled when autoscaling is enabled
@@ -211,13 +211,13 @@ type ListBranchChangeRequestsData struct {
 	// The storage type (gp3 or io2)
 	StorageType ListBranchChangeRequestsStorageType `json:"storage_type"`
 	// The storage IOPS
-	StorageIops float64 `json:"storage_iops"`
+	StorageIops int64 `json:"storage_iops"`
 	// The storage throughput in MiB/s
-	StorageThroughputMibs float64 `json:"storage_throughput_mibs"`
+	StorageThroughputMibs int64 `json:"storage_throughput_mibs"`
 	// The previous minimum storage size in bytes
-	PreviousMinimumStorageBytes float64 `json:"previous_minimum_storage_bytes"`
+	PreviousMinimumStorageBytes int64 `json:"previous_minimum_storage_bytes"`
 	// The previous maximum storage size in bytes
-	PreviousMaximumStorageBytes float64 `json:"previous_maximum_storage_bytes"`
+	PreviousMaximumStorageBytes int64 `json:"previous_maximum_storage_bytes"`
 	// Whether storage autoscaling was previously enabled
 	PreviousStorageAutoscaling bool `json:"previous_storage_autoscaling"`
 	// Whether storage shrinking was previously enabled
@@ -225,9 +225,9 @@ type ListBranchChangeRequestsData struct {
 	// The previous storage type
 	PreviousStorageType string `json:"previous_storage_type"`
 	// The previous storage IOPS
-	PreviousStorageIops float64 `json:"previous_storage_iops"`
+	PreviousStorageIops int64 `json:"previous_storage_iops"`
 	// The previous storage throughput in MiB/s
-	PreviousStorageThroughputMibs float64 `json:"previous_storage_throughput_mibs"`
+	PreviousStorageThroughputMibs int64 `json:"previous_storage_throughput_mibs"`
 }
 
 func (l *ListBranchChangeRequestsData) GetID() string {
@@ -237,9 +237,9 @@ func (l *ListBranchChangeRequestsData) GetID() string {
 	return l.ID
 }
 
-func (l *ListBranchChangeRequestsData) GetRestart() []float64 {
+func (l *ListBranchChangeRequestsData) GetRestart() []int64 {
 	if l == nil {
-		return []float64{}
+		return []int64{}
 	}
 	return l.Restart
 }
@@ -307,9 +307,9 @@ func (l *ListBranchChangeRequestsData) GetClusterMetal() bool {
 	return l.ClusterMetal
 }
 
-func (l *ListBranchChangeRequestsData) GetReplicas() float64 {
+func (l *ListBranchChangeRequestsData) GetReplicas() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Replicas
 }
@@ -342,9 +342,9 @@ func (l *ListBranchChangeRequestsData) GetPreviousClusterMetal() bool {
 	return l.PreviousClusterMetal
 }
 
-func (l *ListBranchChangeRequestsData) GetPreviousReplicas() float64 {
+func (l *ListBranchChangeRequestsData) GetPreviousReplicas() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PreviousReplicas
 }
@@ -356,16 +356,16 @@ func (l *ListBranchChangeRequestsData) GetPreviousParameters() map[string]any {
 	return l.PreviousParameters
 }
 
-func (l *ListBranchChangeRequestsData) GetMinimumStorageBytes() float64 {
+func (l *ListBranchChangeRequestsData) GetMinimumStorageBytes() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.MinimumStorageBytes
 }
 
-func (l *ListBranchChangeRequestsData) GetMaximumStorageBytes() float64 {
+func (l *ListBranchChangeRequestsData) GetMaximumStorageBytes() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.MaximumStorageBytes
 }
@@ -391,30 +391,30 @@ func (l *ListBranchChangeRequestsData) GetStorageType() ListBranchChangeRequests
 	return l.StorageType
 }
 
-func (l *ListBranchChangeRequestsData) GetStorageIops() float64 {
+func (l *ListBranchChangeRequestsData) GetStorageIops() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.StorageIops
 }
 
-func (l *ListBranchChangeRequestsData) GetStorageThroughputMibs() float64 {
+func (l *ListBranchChangeRequestsData) GetStorageThroughputMibs() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.StorageThroughputMibs
 }
 
-func (l *ListBranchChangeRequestsData) GetPreviousMinimumStorageBytes() float64 {
+func (l *ListBranchChangeRequestsData) GetPreviousMinimumStorageBytes() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PreviousMinimumStorageBytes
 }
 
-func (l *ListBranchChangeRequestsData) GetPreviousMaximumStorageBytes() float64 {
+func (l *ListBranchChangeRequestsData) GetPreviousMaximumStorageBytes() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PreviousMaximumStorageBytes
 }
@@ -440,16 +440,16 @@ func (l *ListBranchChangeRequestsData) GetPreviousStorageType() string {
 	return l.PreviousStorageType
 }
 
-func (l *ListBranchChangeRequestsData) GetPreviousStorageIops() float64 {
+func (l *ListBranchChangeRequestsData) GetPreviousStorageIops() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PreviousStorageIops
 }
 
-func (l *ListBranchChangeRequestsData) GetPreviousStorageThroughputMibs() float64 {
+func (l *ListBranchChangeRequestsData) GetPreviousStorageThroughputMibs() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PreviousStorageThroughputMibs
 }
@@ -457,28 +457,28 @@ func (l *ListBranchChangeRequestsData) GetPreviousStorageThroughputMibs() float6
 // ListBranchChangeRequestsResponseBody - Returns branch change requests
 type ListBranchChangeRequestsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                         `json:"prev_page_url"`
 	Data        []ListBranchChangeRequestsData `json:"data"`
 }
 
-func (l *ListBranchChangeRequestsResponseBody) GetCurrentPage() float64 {
+func (l *ListBranchChangeRequestsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListBranchChangeRequestsResponseBody) GetNextPage() float64 {
+func (l *ListBranchChangeRequestsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -490,9 +490,9 @@ func (l *ListBranchChangeRequestsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListBranchChangeRequestsResponseBody) GetPrevPage() float64 {
+func (l *ListBranchChangeRequestsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

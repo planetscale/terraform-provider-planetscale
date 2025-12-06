@@ -126,28 +126,28 @@ func (l *ListRegionsForOrganizationData) GetCurrentDefault() bool {
 // ListRegionsForOrganizationResponseBody - Returns the organization's regions
 type ListRegionsForOrganizationResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                           `json:"prev_page_url"`
 	Data        []ListRegionsForOrganizationData `json:"data"`
 }
 
-func (l *ListRegionsForOrganizationResponseBody) GetCurrentPage() float64 {
+func (l *ListRegionsForOrganizationResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListRegionsForOrganizationResponseBody) GetNextPage() float64 {
+func (l *ListRegionsForOrganizationResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -159,9 +159,9 @@ func (l *ListRegionsForOrganizationResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListRegionsForOrganizationResponseBody) GetPrevPage() float64 {
+func (l *ListRegionsForOrganizationResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

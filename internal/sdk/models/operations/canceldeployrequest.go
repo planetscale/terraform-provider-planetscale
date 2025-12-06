@@ -15,7 +15,7 @@ type CancelDeployRequestRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number string `pathParam:"style=simple,explode=false,name=number"`
+	Number float64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (c *CancelDeployRequestRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (c *CancelDeployRequestRequest) GetDatabase() string {
 	return c.Database
 }
 
-func (c *CancelDeployRequestRequest) GetNumber() string {
+func (c *CancelDeployRequestRequest) GetNumber() float64 {
 	if c == nil {
-		return ""
+		return 0.0
 	}
 	return c.Number
 }
@@ -616,7 +616,7 @@ type CancelDeployRequestOperation struct {
 	// The percent completion for the deploy operation
 	ProgressPercentage float64 `json:"progress_percentage"`
 	// The estimated seconds until completion for the deploy operation
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 }
 
 func (c *CancelDeployRequestOperation) GetID() string {
@@ -647,9 +647,9 @@ func (c *CancelDeployRequestOperation) GetProgressPercentage() float64 {
 	return c.ProgressPercentage
 }
 
-func (c *CancelDeployRequestOperation) GetEtaSeconds() float64 {
+func (c *CancelDeployRequestOperation) GetEtaSeconds() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.EtaSeconds
 }
@@ -664,7 +664,7 @@ type CancelDeployRequestDeployOperationSummary struct {
 	// The DDL statement for the deploy operation summary
 	DdlStatement string `json:"ddl_statement"`
 	// The estimated seconds until completion for the deploy operation summary
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 	// The keyspace modified by the deploy operation summary
 	KeyspaceName string `json:"keyspace_name"`
 	// The operation name of the deploy operation summary
@@ -684,7 +684,7 @@ type CancelDeployRequestDeployOperationSummary struct {
 	// Names of foreign keys removed by this operation summary
 	RemovedForeignKeyNames []string `json:"removed_foreign_key_names"`
 	// The number of shards in the keyspace modified by the deploy operation summary
-	ShardCount float64 `json:"shard_count"`
+	ShardCount int64 `json:"shard_count"`
 	// Names of shards in the keyspace modified by the deploy operation summary
 	ShardNames []string `json:"shard_names"`
 	// Whether or not the deploy operation summary is capable of dropping data
@@ -724,9 +724,9 @@ func (c *CancelDeployRequestDeployOperationSummary) GetDdlStatement() string {
 	return c.DdlStatement
 }
 
-func (c *CancelDeployRequestDeployOperationSummary) GetEtaSeconds() float64 {
+func (c *CancelDeployRequestDeployOperationSummary) GetEtaSeconds() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.EtaSeconds
 }
@@ -794,9 +794,9 @@ func (c *CancelDeployRequestDeployOperationSummary) GetRemovedForeignKeyNames() 
 	return c.RemovedForeignKeyNames
 }
 
-func (c *CancelDeployRequestDeployOperationSummary) GetShardCount() float64 {
+func (c *CancelDeployRequestDeployOperationSummary) GetShardCount() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.ShardCount
 }
@@ -958,7 +958,7 @@ type CancelDeployRequestDeployment struct {
 	// The name of the base branch the deployment will be merged into
 	IntoBranch string `json:"into_branch"`
 	// The number of the deploy request associated with this deployment
-	DeployRequestNumber float64 `json:"deploy_request_number"`
+	DeployRequestNumber int64 `json:"deploy_request_number"`
 	// Whether the deployment is deployable
 	Deployable bool `json:"deployable"`
 	// The deployments ahead of this one in the queue
@@ -1095,9 +1095,9 @@ func (c *CancelDeployRequestDeployment) GetIntoBranch() string {
 	return c.IntoBranch
 }
 
-func (c *CancelDeployRequestDeployment) GetDeployRequestNumber() float64 {
+func (c *CancelDeployRequestDeployment) GetDeployRequestNumber() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.DeployRequestNumber
 }
@@ -1226,7 +1226,7 @@ type CancelDeployRequestResponseBody struct {
 	// The ID of the deploy request
 	ID string `json:"id"`
 	// The number of the deploy request
-	Number   float64                     `json:"number"`
+	Number   int64                       `json:"number"`
 	Actor    CancelDeployRequestActor    `json:"actor"`
 	ClosedBy CancelDeployRequestClosedBy `json:"closed_by"`
 	// The name of the branch the deploy request was created from
@@ -1243,7 +1243,7 @@ type CancelDeployRequestResponseBody struct {
 	// Whether or not the branch the deploy request will be merged into is sharded
 	IntoBranchSharded bool `json:"into_branch_sharded"`
 	// The number of shards the branch the deploy request will be merged into has
-	IntoBranchShardCount float64 `json:"into_branch_shard_count"`
+	IntoBranchShardCount int64 `json:"into_branch_shard_count"`
 	// Whether or not the deploy request is approved
 	Approved bool `json:"approved"`
 	// Whether the deploy request is open or closed
@@ -1252,7 +1252,7 @@ type CancelDeployRequestResponseBody struct {
 	DeploymentState CancelDeployRequestDeploymentState1 `json:"deployment_state"`
 	Deployment      CancelDeployRequestDeployment       `json:"deployment"`
 	// The number of comments on the deploy request
-	NumComments float64 `json:"num_comments"`
+	NumComments int64 `json:"num_comments"`
 	// The PlanetScale app address for the deploy request
 	HTMLURL string `json:"html_url"`
 	// Notes on the deploy request
@@ -1276,9 +1276,9 @@ func (c *CancelDeployRequestResponseBody) GetID() string {
 	return c.ID
 }
 
-func (c *CancelDeployRequestResponseBody) GetNumber() float64 {
+func (c *CancelDeployRequestResponseBody) GetNumber() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.Number
 }
@@ -1346,9 +1346,9 @@ func (c *CancelDeployRequestResponseBody) GetIntoBranchSharded() bool {
 	return c.IntoBranchSharded
 }
 
-func (c *CancelDeployRequestResponseBody) GetIntoBranchShardCount() float64 {
+func (c *CancelDeployRequestResponseBody) GetIntoBranchShardCount() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.IntoBranchShardCount
 }
@@ -1381,9 +1381,9 @@ func (c *CancelDeployRequestResponseBody) GetDeployment() CancelDeployRequestDep
 	return c.Deployment
 }
 
-func (c *CancelDeployRequestResponseBody) GetNumComments() float64 {
+func (c *CancelDeployRequestResponseBody) GetNumComments() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.NumComments
 }

@@ -10,14 +10,14 @@ import (
 type ListOrganizationsData struct {
 	BillingEmail        types.String                    `tfsdk:"billing_email"`
 	CreatedAt           types.String                    `tfsdk:"created_at"`
-	DatabaseCount       types.Float64                   `tfsdk:"database_count"`
+	DatabaseCount       types.Int64                     `tfsdk:"database_count"`
 	Features            map[string]jsontypes.Normalized `tfsdk:"features"`
 	HasCard             types.Bool                      `tfsdk:"has_card"`
 	HasPastDueInvoices  types.Bool                      `tfsdk:"has_past_due_invoices"`
 	ID                  types.String                    `tfsdk:"id"`
 	IdpManagedRoles     types.Bool                      `tfsdk:"idp_managed_roles"`
 	InvoiceBudgetAmount types.String                    `tfsdk:"invoice_budget_amount"`
-	KeyspaceShardLimit  types.Float64                   `tfsdk:"keyspace_shard_limit"`
+	KeyspaceShardLimit  types.Int64                     `tfsdk:"keyspace_shard_limit"`
 	ManagedTenancy      types.Bool                      `tfsdk:"managed_tenancy"`
 	Name                types.String                    `tfsdk:"name"`
 	PaymentInfoRequired types.Bool                      `tfsdk:"payment_info_required"`

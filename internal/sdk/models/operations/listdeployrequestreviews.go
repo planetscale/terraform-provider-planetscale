@@ -15,7 +15,7 @@ type ListDeployRequestReviewsRequest struct {
 	// The name of the database the deploy request belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number string `pathParam:"style=simple,explode=false,name=number"`
+	Number float64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (l *ListDeployRequestReviewsRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (l *ListDeployRequestReviewsRequest) GetDatabase() string {
 	return l.Database
 }
 
-func (l *ListDeployRequestReviewsRequest) GetNumber() string {
+func (l *ListDeployRequestReviewsRequest) GetNumber() float64 {
 	if l == nil {
-		return ""
+		return 0.0
 	}
 	return l.Number
 }
@@ -164,28 +164,28 @@ func (l *ListDeployRequestReviewsData) GetActor() ListDeployRequestReviewsActor 
 // ListDeployRequestReviewsResponseBody - Returns an array of deploy request reviews
 type ListDeployRequestReviewsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                         `json:"prev_page_url"`
 	Data        []ListDeployRequestReviewsData `json:"data"`
 }
 
-func (l *ListDeployRequestReviewsResponseBody) GetCurrentPage() float64 {
+func (l *ListDeployRequestReviewsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListDeployRequestReviewsResponseBody) GetNextPage() float64 {
+func (l *ListDeployRequestReviewsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -197,9 +197,9 @@ func (l *ListDeployRequestReviewsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListDeployRequestReviewsResponseBody) GetPrevPage() float64 {
+func (l *ListDeployRequestReviewsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

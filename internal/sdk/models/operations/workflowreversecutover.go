@@ -15,7 +15,7 @@ type WorkflowReverseCutoverRequest struct {
 	// The name of the database the workflow belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The sequence number of the workflow
-	Number string `pathParam:"style=simple,explode=false,name=number"`
+	Number float64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (w *WorkflowReverseCutoverRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (w *WorkflowReverseCutoverRequest) GetDatabase() string {
 	return w.Database
 }
 
-func (w *WorkflowReverseCutoverRequest) GetNumber() string {
+func (w *WorkflowReverseCutoverRequest) GetNumber() float64 {
 	if w == nil {
-		return ""
+		return 0.0
 	}
 	return w.Number
 }
@@ -673,7 +673,7 @@ type WorkflowReverseCutoverResponseBody struct {
 	// The name of the workflow
 	Name string `json:"name"`
 	// The sequence number of the workflow
-	Number float64 `json:"number"`
+	Number int64 `json:"number"`
 	// The state of the workflow
 	State WorkflowReverseCutoverState `json:"state"`
 	// When the workflow was created
@@ -752,9 +752,9 @@ func (w *WorkflowReverseCutoverResponseBody) GetName() string {
 	return w.Name
 }
 
-func (w *WorkflowReverseCutoverResponseBody) GetNumber() float64 {
+func (w *WorkflowReverseCutoverResponseBody) GetNumber() int64 {
 	if w == nil {
-		return 0.0
+		return 0
 	}
 	return w.Number
 }

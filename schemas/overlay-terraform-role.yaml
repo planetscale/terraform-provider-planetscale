@@ -23,6 +23,11 @@ actions:
     update:
       x-speakeasy-entity-operation: Role#update
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.requestBody.content["application/json"].schema.properties.ttl
+    description: Fix type mismatch between request (number) and response (integer) for ttl field.
+    update:
+      type: integer
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties
     description: Prevent type mismatch between request and response data. Mark sensitive property.
     update:

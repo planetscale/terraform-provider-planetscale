@@ -50,7 +50,7 @@ type PasswordDataSourceModel struct {
 	Renewable              types.Bool                        `tfsdk:"renewable"`
 	Replica                types.Bool                        `tfsdk:"replica"`
 	Role                   types.String                      `tfsdk:"role"`
-	TTLSeconds             types.Float64                     `tfsdk:"ttl_seconds"`
+	TTLSeconds             types.Int64                       `tfsdk:"ttl_seconds"`
 	Username               types.String                      `tfsdk:"username"`
 }
 
@@ -219,7 +219,7 @@ func (r *PasswordDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed:    true,
 				Description: `The role for the password`,
 			},
-			"ttl_seconds": schema.Float64Attribute{
+			"ttl_seconds": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Time to live (in seconds) for the password. The password will be invalid when TTL has passed`,
 			},

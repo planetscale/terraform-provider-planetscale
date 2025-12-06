@@ -173,28 +173,28 @@ func (g *GetInvoiceLineItemsData) GetResource() GetInvoiceLineItemsResource {
 // GetInvoiceLineItemsResponseBody - Gets the line items for an invoice
 type GetInvoiceLineItemsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                    `json:"prev_page_url"`
 	Data        []GetInvoiceLineItemsData `json:"data"`
 }
 
-func (g *GetInvoiceLineItemsResponseBody) GetCurrentPage() float64 {
+func (g *GetInvoiceLineItemsResponseBody) GetCurrentPage() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.CurrentPage
 }
 
-func (g *GetInvoiceLineItemsResponseBody) GetNextPage() float64 {
+func (g *GetInvoiceLineItemsResponseBody) GetNextPage() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.NextPage
 }
@@ -206,9 +206,9 @@ func (g *GetInvoiceLineItemsResponseBody) GetNextPageURL() string {
 	return g.NextPageURL
 }
 
-func (g *GetInvoiceLineItemsResponseBody) GetPrevPage() float64 {
+func (g *GetInvoiceLineItemsResponseBody) GetPrevPage() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.PrevPage
 }

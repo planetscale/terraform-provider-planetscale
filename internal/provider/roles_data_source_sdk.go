@@ -34,6 +34,7 @@ func (r *RolesDataSourceModel) RefreshFromOperationsListRolesResponseBody(ctx co
 			data.DatabaseName = types.StringValue(dataItem.DatabaseName)
 			data.Default = types.BoolValue(dataItem.Default)
 			data.DeletedAt = types.StringValue(dataItem.DeletedAt)
+			data.DisabledAt = types.StringValue(dataItem.DisabledAt)
 			data.DropFailed = types.StringValue(dataItem.DropFailed)
 			data.DroppedAt = types.StringValue(dataItem.DroppedAt)
 			data.Expired = types.BoolValue(dataItem.Expired)
@@ -49,7 +50,7 @@ func (r *RolesDataSourceModel) RefreshFromOperationsListRolesResponseBody(ctx co
 			data.Password = types.StringValue(dataItem.Password)
 			data.PrivateAccessHostURL = types.StringValue(dataItem.PrivateAccessHostURL)
 			data.PrivateConnectionServiceName = types.StringValue(dataItem.PrivateConnectionServiceName)
-			data.TTL = types.Float64Value(dataItem.TTL)
+			data.TTL = types.Int64Value(dataItem.TTL)
 			data.UpdatedAt = types.StringValue(dataItem.UpdatedAt)
 			data.Username = types.StringValue(dataItem.Username)
 

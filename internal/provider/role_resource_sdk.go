@@ -26,6 +26,7 @@ func (r *RoleResourceModel) RefreshFromOperationsCreateRoleResponseBody(ctx cont
 		r.DatabaseName = types.StringValue(resp.DatabaseName)
 		r.Default = types.BoolValue(resp.Default)
 		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DisabledAt = types.StringValue(resp.DisabledAt)
 		r.DropFailed = types.StringValue(resp.DropFailed)
 		r.DroppedAt = types.StringValue(resp.DroppedAt)
 		r.Expired = types.BoolValue(resp.Expired)
@@ -39,7 +40,7 @@ func (r *RoleResourceModel) RefreshFromOperationsCreateRoleResponseBody(ctx cont
 		r.Password = types.StringValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.TTL = types.Float64Value(resp.TTL)
+		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
 	}
@@ -64,6 +65,7 @@ func (r *RoleResourceModel) RefreshFromOperationsGetRoleResponseBody(ctx context
 		r.DatabaseName = types.StringValue(resp.DatabaseName)
 		r.Default = types.BoolValue(resp.Default)
 		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DisabledAt = types.StringValue(resp.DisabledAt)
 		r.DropFailed = types.StringValue(resp.DropFailed)
 		r.DroppedAt = types.StringValue(resp.DroppedAt)
 		r.Expired = types.BoolValue(resp.Expired)
@@ -77,7 +79,7 @@ func (r *RoleResourceModel) RefreshFromOperationsGetRoleResponseBody(ctx context
 		r.Password = types.StringValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.TTL = types.Float64Value(resp.TTL)
+		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
 	}
@@ -102,6 +104,7 @@ func (r *RoleResourceModel) RefreshFromOperationsUpdateRoleResponseBody(ctx cont
 		r.DatabaseName = types.StringValue(resp.DatabaseName)
 		r.Default = types.BoolValue(resp.Default)
 		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DisabledAt = types.StringValue(resp.DisabledAt)
 		r.DropFailed = types.StringValue(resp.DropFailed)
 		r.DroppedAt = types.StringValue(resp.DroppedAt)
 		r.Expired = types.BoolValue(resp.Expired)
@@ -115,7 +118,7 @@ func (r *RoleResourceModel) RefreshFromOperationsUpdateRoleResponseBody(ctx cont
 		r.Password = types.StringValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.TTL = types.Float64Value(resp.TTL)
+		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
 	}
@@ -155,9 +158,9 @@ func (r *RoleResourceModel) ToOperationsCreateRoleRequest(ctx context.Context) (
 func (r *RoleResourceModel) ToOperationsCreateRoleRequestBody(ctx context.Context) (*operations.CreateRoleRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	ttl := new(float64)
+	ttl := new(int64)
 	if !r.TTL.IsUnknown() && !r.TTL.IsNull() {
-		*ttl = r.TTL.ValueFloat64()
+		*ttl = r.TTL.ValueInt64()
 	} else {
 		ttl = nil
 	}

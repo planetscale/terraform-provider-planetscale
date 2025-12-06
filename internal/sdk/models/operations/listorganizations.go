@@ -65,7 +65,7 @@ type ListOrganizationsData struct {
 	// Whether or not the organization has past due billing invoices
 	HasPastDueInvoices bool `json:"has_past_due_invoices"`
 	// The number of databases in the organization
-	DatabaseCount float64 `json:"database_count"`
+	DatabaseCount int64 `json:"database_count"`
 	// The URL of the organization's SSO portal
 	SsoPortalURL string `json:"sso_portal_url"`
 	// Features that can be enabled on the organization
@@ -75,7 +75,7 @@ type ListOrganizationsData struct {
 	// The expected monthly budget for the organization
 	InvoiceBudgetAmount string `json:"invoice_budget_amount"`
 	// The keyspace shard limit for the organization
-	KeyspaceShardLimit float64 `json:"keyspace_shard_limit"`
+	KeyspaceShardLimit int64 `json:"keyspace_shard_limit"`
 	// Whether or not the organization has a payment method on file
 	HasCard bool `json:"has_card"`
 	// Whether or not the organization requires payment information
@@ -166,9 +166,9 @@ func (l *ListOrganizationsData) GetHasPastDueInvoices() bool {
 	return l.HasPastDueInvoices
 }
 
-func (l *ListOrganizationsData) GetDatabaseCount() float64 {
+func (l *ListOrganizationsData) GetDatabaseCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.DatabaseCount
 }
@@ -201,9 +201,9 @@ func (l *ListOrganizationsData) GetInvoiceBudgetAmount() string {
 	return l.InvoiceBudgetAmount
 }
 
-func (l *ListOrganizationsData) GetKeyspaceShardLimit() float64 {
+func (l *ListOrganizationsData) GetKeyspaceShardLimit() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.KeyspaceShardLimit
 }
@@ -225,28 +225,28 @@ func (l *ListOrganizationsData) GetPaymentInfoRequired() bool {
 // ListOrganizationsResponseBody - Gets the organizations for the current user
 type ListOrganizationsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                  `json:"prev_page_url"`
 	Data        []ListOrganizationsData `json:"data"`
 }
 
-func (l *ListOrganizationsResponseBody) GetCurrentPage() float64 {
+func (l *ListOrganizationsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListOrganizationsResponseBody) GetNextPage() float64 {
+func (l *ListOrganizationsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -258,9 +258,9 @@ func (l *ListOrganizationsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListOrganizationsResponseBody) GetPrevPage() float64 {
+func (l *ListOrganizationsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

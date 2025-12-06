@@ -18,7 +18,7 @@ type CreatePostgresDatabaseRequestBody struct {
 	// The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization.
 	ClusterSize string `json:"cluster_size"`
 	// The number of replicas for the database. 0 for non-HA, 2+ for HA.
-	Replicas *float64 `json:"replicas,omitzero"`
+	Replicas *int64 `json:"replicas,omitzero"`
 	// The kind of database (always postgresql for PostgreSQL databases).
 	kind *string `const:"postgresql" json:"kind"`
 	// The PostgreSQL major version to use for the database. Defaults to the latest available major version.
@@ -57,7 +57,7 @@ func (c *CreatePostgresDatabaseRequestBody) GetClusterSize() string {
 	return c.ClusterSize
 }
 
-func (c *CreatePostgresDatabaseRequestBody) GetReplicas() *float64 {
+func (c *CreatePostgresDatabaseRequestBody) GetReplicas() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -110,7 +110,7 @@ type CreatePostgresDatabaseDataSource struct {
 	// Hostname of the data source
 	Hostname *string `json:"hostname,omitzero"`
 	// Port of the data source
-	Port *float64 `json:"port,omitzero"`
+	Port *int64 `json:"port,omitzero"`
 	// Database name of the data source
 	Database *string `json:"database,omitzero"`
 }
@@ -122,7 +122,7 @@ func (c *CreatePostgresDatabaseDataSource) GetHostname() *string {
 	return c.Hostname
 }
 
-func (c *CreatePostgresDatabaseDataSource) GetPort() *float64 {
+func (c *CreatePostgresDatabaseDataSource) GetPort() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -331,15 +331,15 @@ type CreatePostgresDatabaseResponseBody struct {
 	// The URL to retrieve this database's branches via the API
 	BranchesURL *string `json:"branches_url,omitzero"`
 	// The total number of database branches
-	BranchesCount *float64 `json:"branches_count,omitzero"`
+	BranchesCount *int64 `json:"branches_count,omitzero"`
 	// The total number of schema recommendations
-	OpenSchemaRecommendationsCount *float64 `json:"open_schema_recommendations_count,omitzero"`
+	OpenSchemaRecommendationsCount *int64 `json:"open_schema_recommendations_count,omitzero"`
 	// The total number of database development branches
-	DevelopmentBranchesCount *float64 `json:"development_branches_count,omitzero"`
+	DevelopmentBranchesCount *int64 `json:"development_branches_count,omitzero"`
 	// The total number of database production branches
-	ProductionBranchesCount *float64 `json:"production_branches_count,omitzero"`
+	ProductionBranchesCount *int64 `json:"production_branches_count,omitzero"`
 	// The total number of ongoing issues within a database
-	IssuesCount *float64 `json:"issues_count,omitzero"`
+	IssuesCount *int64 `json:"issues_count,omitzero"`
 	// If the database requires multiple admins for deletion
 	MultipleAdminsRequiredForDeletion *bool `json:"multiple_admins_required_for_deletion,omitzero"`
 	// If the database is ready to be used
@@ -357,11 +357,11 @@ type CreatePostgresDatabaseResponseBody struct {
 	// State of the database
 	State *CreatePostgresDatabaseState `json:"state,omitzero"`
 	// Number of shards in the default branch
-	DefaultBranchShardCount *float64 `json:"default_branch_shard_count,omitzero"`
+	DefaultBranchShardCount *int64 `json:"default_branch_shard_count,omitzero"`
 	// Number of read only regions in the default branch
-	DefaultBranchReadOnlyRegionsCount *float64 `json:"default_branch_read_only_regions_count,omitzero"`
+	DefaultBranchReadOnlyRegionsCount *int64 `json:"default_branch_read_only_regions_count,omitzero"`
 	// Number of tables in the default branch schema
-	DefaultBranchTableCount *float64 `json:"default_branch_table_count,omitzero"`
+	DefaultBranchTableCount *int64 `json:"default_branch_table_count,omitzero"`
 	// The default branch for the database
 	DefaultBranch *string `json:"default_branch,omitzero"`
 	// Whether an approval is required to deploy schema changes to this database
@@ -422,35 +422,35 @@ func (c *CreatePostgresDatabaseResponseBody) GetBranchesURL() *string {
 	return c.BranchesURL
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetBranchesCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetBranchesCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.BranchesCount
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetOpenSchemaRecommendationsCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetOpenSchemaRecommendationsCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.OpenSchemaRecommendationsCount
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetDevelopmentBranchesCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetDevelopmentBranchesCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.DevelopmentBranchesCount
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetProductionBranchesCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetProductionBranchesCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.ProductionBranchesCount
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetIssuesCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetIssuesCount() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -520,21 +520,21 @@ func (c *CreatePostgresDatabaseResponseBody) GetState() *CreatePostgresDatabaseS
 	return c.State
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetDefaultBranchShardCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetDefaultBranchShardCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.DefaultBranchShardCount
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.DefaultBranchReadOnlyRegionsCount
 }
 
-func (c *CreatePostgresDatabaseResponseBody) GetDefaultBranchTableCount() *float64 {
+func (c *CreatePostgresDatabaseResponseBody) GetDefaultBranchTableCount() *int64 {
 	if c == nil {
 		return nil
 	}

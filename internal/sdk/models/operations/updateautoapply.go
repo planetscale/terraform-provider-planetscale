@@ -27,7 +27,7 @@ type UpdateAutoApplyRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number string                      `pathParam:"style=simple,explode=false,name=number"`
+	Number float64                     `pathParam:"style=simple,explode=false,name=number"`
 	Body   *UpdateAutoApplyRequestBody `request:"mediaType=application/json"`
 }
 
@@ -56,9 +56,9 @@ func (u *UpdateAutoApplyRequest) GetDatabase() string {
 	return u.Database
 }
 
-func (u *UpdateAutoApplyRequest) GetNumber() string {
+func (u *UpdateAutoApplyRequest) GetNumber() float64 {
 	if u == nil {
-		return ""
+		return 0.0
 	}
 	return u.Number
 }
@@ -647,7 +647,7 @@ type UpdateAutoApplyOperation struct {
 	// The percent completion for the deploy operation
 	ProgressPercentage float64 `json:"progress_percentage"`
 	// The estimated seconds until completion for the deploy operation
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 }
 
 func (u *UpdateAutoApplyOperation) GetID() string {
@@ -678,9 +678,9 @@ func (u *UpdateAutoApplyOperation) GetProgressPercentage() float64 {
 	return u.ProgressPercentage
 }
 
-func (u *UpdateAutoApplyOperation) GetEtaSeconds() float64 {
+func (u *UpdateAutoApplyOperation) GetEtaSeconds() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.EtaSeconds
 }
@@ -695,7 +695,7 @@ type UpdateAutoApplyDeployOperationSummary struct {
 	// The DDL statement for the deploy operation summary
 	DdlStatement string `json:"ddl_statement"`
 	// The estimated seconds until completion for the deploy operation summary
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 	// The keyspace modified by the deploy operation summary
 	KeyspaceName string `json:"keyspace_name"`
 	// The operation name of the deploy operation summary
@@ -715,7 +715,7 @@ type UpdateAutoApplyDeployOperationSummary struct {
 	// Names of foreign keys removed by this operation summary
 	RemovedForeignKeyNames []string `json:"removed_foreign_key_names"`
 	// The number of shards in the keyspace modified by the deploy operation summary
-	ShardCount float64 `json:"shard_count"`
+	ShardCount int64 `json:"shard_count"`
 	// Names of shards in the keyspace modified by the deploy operation summary
 	ShardNames []string `json:"shard_names"`
 	// Whether or not the deploy operation summary is capable of dropping data
@@ -755,9 +755,9 @@ func (u *UpdateAutoApplyDeployOperationSummary) GetDdlStatement() string {
 	return u.DdlStatement
 }
 
-func (u *UpdateAutoApplyDeployOperationSummary) GetEtaSeconds() float64 {
+func (u *UpdateAutoApplyDeployOperationSummary) GetEtaSeconds() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.EtaSeconds
 }
@@ -825,9 +825,9 @@ func (u *UpdateAutoApplyDeployOperationSummary) GetRemovedForeignKeyNames() []st
 	return u.RemovedForeignKeyNames
 }
 
-func (u *UpdateAutoApplyDeployOperationSummary) GetShardCount() float64 {
+func (u *UpdateAutoApplyDeployOperationSummary) GetShardCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.ShardCount
 }
@@ -989,7 +989,7 @@ type UpdateAutoApplyDeployment struct {
 	// The name of the base branch the deployment will be merged into
 	IntoBranch string `json:"into_branch"`
 	// The number of the deploy request associated with this deployment
-	DeployRequestNumber float64 `json:"deploy_request_number"`
+	DeployRequestNumber int64 `json:"deploy_request_number"`
 	// Whether the deployment is deployable
 	Deployable bool `json:"deployable"`
 	// The deployments ahead of this one in the queue
@@ -1126,9 +1126,9 @@ func (u *UpdateAutoApplyDeployment) GetIntoBranch() string {
 	return u.IntoBranch
 }
 
-func (u *UpdateAutoApplyDeployment) GetDeployRequestNumber() float64 {
+func (u *UpdateAutoApplyDeployment) GetDeployRequestNumber() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.DeployRequestNumber
 }
@@ -1257,7 +1257,7 @@ type UpdateAutoApplyResponseBody struct {
 	// The ID of the deploy request
 	ID string `json:"id"`
 	// The number of the deploy request
-	Number   float64                 `json:"number"`
+	Number   int64                   `json:"number"`
 	Actor    UpdateAutoApplyActor    `json:"actor"`
 	ClosedBy UpdateAutoApplyClosedBy `json:"closed_by"`
 	// The name of the branch the deploy request was created from
@@ -1274,7 +1274,7 @@ type UpdateAutoApplyResponseBody struct {
 	// Whether or not the branch the deploy request will be merged into is sharded
 	IntoBranchSharded bool `json:"into_branch_sharded"`
 	// The number of shards the branch the deploy request will be merged into has
-	IntoBranchShardCount float64 `json:"into_branch_shard_count"`
+	IntoBranchShardCount int64 `json:"into_branch_shard_count"`
 	// Whether or not the deploy request is approved
 	Approved bool `json:"approved"`
 	// Whether the deploy request is open or closed
@@ -1283,7 +1283,7 @@ type UpdateAutoApplyResponseBody struct {
 	DeploymentState UpdateAutoApplyDeploymentState1 `json:"deployment_state"`
 	Deployment      UpdateAutoApplyDeployment       `json:"deployment"`
 	// The number of comments on the deploy request
-	NumComments float64 `json:"num_comments"`
+	NumComments int64 `json:"num_comments"`
 	// The PlanetScale app address for the deploy request
 	HTMLURL string `json:"html_url"`
 	// Notes on the deploy request
@@ -1307,9 +1307,9 @@ func (u *UpdateAutoApplyResponseBody) GetID() string {
 	return u.ID
 }
 
-func (u *UpdateAutoApplyResponseBody) GetNumber() float64 {
+func (u *UpdateAutoApplyResponseBody) GetNumber() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.Number
 }
@@ -1377,9 +1377,9 @@ func (u *UpdateAutoApplyResponseBody) GetIntoBranchSharded() bool {
 	return u.IntoBranchSharded
 }
 
-func (u *UpdateAutoApplyResponseBody) GetIntoBranchShardCount() float64 {
+func (u *UpdateAutoApplyResponseBody) GetIntoBranchShardCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.IntoBranchShardCount
 }
@@ -1412,9 +1412,9 @@ func (u *UpdateAutoApplyResponseBody) GetDeployment() UpdateAutoApplyDeployment 
 	return u.Deployment
 }
 
-func (u *UpdateAutoApplyResponseBody) GetNumComments() float64 {
+func (u *UpdateAutoApplyResponseBody) GetNumComments() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.NumComments
 }

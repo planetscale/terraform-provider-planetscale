@@ -4,5 +4,5 @@ resource "planetscale_database_postgres" "my_databasepostgres" {
   name          = "...my_name..."
   organization  = "...my_organization..."
   region        = "...my_region..."
-  replicas      = 7.89
+  replicas      = 8
 }

@@ -25,7 +25,7 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 
 			data.BillingEmail = types.StringValue(dataItem.BillingEmail)
 			data.CreatedAt = types.StringValue(dataItem.CreatedAt)
-			data.DatabaseCount = types.Float64Value(dataItem.DatabaseCount)
+			data.DatabaseCount = types.Int64Value(dataItem.DatabaseCount)
 			if len(dataItem.Features) > 0 {
 				data.Features = make(map[string]jsontypes.Normalized, len(dataItem.Features))
 				for key, value := range dataItem.Features {
@@ -38,7 +38,7 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 			data.ID = types.StringValue(dataItem.ID)
 			data.IdpManagedRoles = types.BoolValue(dataItem.IdpManagedRoles)
 			data.InvoiceBudgetAmount = types.StringValue(dataItem.InvoiceBudgetAmount)
-			data.KeyspaceShardLimit = types.Float64Value(dataItem.KeyspaceShardLimit)
+			data.KeyspaceShardLimit = types.Int64Value(dataItem.KeyspaceShardLimit)
 			data.ManagedTenancy = types.BoolValue(dataItem.ManagedTenancy)
 			data.Name = types.StringValue(dataItem.Name)
 			data.PaymentInfoRequired = types.BoolValue(dataItem.PaymentInfoRequired)

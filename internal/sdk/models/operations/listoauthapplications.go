@@ -68,7 +68,7 @@ type ListOauthApplicationsData struct {
 	// The OAuth application's unique client id
 	ClientID string `json:"client_id"`
 	// The number of tokens issued by the OAuth application
-	Tokens float64 `json:"tokens"`
+	Tokens int64 `json:"tokens"`
 }
 
 func (l *ListOauthApplicationsData) GetID() string {
@@ -134,9 +134,9 @@ func (l *ListOauthApplicationsData) GetClientID() string {
 	return l.ClientID
 }
 
-func (l *ListOauthApplicationsData) GetTokens() float64 {
+func (l *ListOauthApplicationsData) GetTokens() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Tokens
 }
@@ -144,28 +144,28 @@ func (l *ListOauthApplicationsData) GetTokens() float64 {
 // ListOauthApplicationsResponseBody - Returns a list of the organization's oauth applications
 type ListOauthApplicationsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                      `json:"prev_page_url"`
 	Data        []ListOauthApplicationsData `json:"data"`
 }
 
-func (l *ListOauthApplicationsResponseBody) GetCurrentPage() float64 {
+func (l *ListOauthApplicationsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListOauthApplicationsResponseBody) GetNextPage() float64 {
+func (l *ListOauthApplicationsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -177,9 +177,9 @@ func (l *ListOauthApplicationsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListOauthApplicationsResponseBody) GetPrevPage() float64 {
+func (l *ListOauthApplicationsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

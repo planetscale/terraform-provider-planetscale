@@ -13,7 +13,7 @@ type GetDeployRequestThrottlerRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number string `pathParam:"style=simple,explode=false,name=number"`
+	Number float64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (g *GetDeployRequestThrottlerRequest) GetOrganization() string {
@@ -30,9 +30,9 @@ func (g *GetDeployRequestThrottlerRequest) GetDatabase() string {
 	return g.Database
 }
 
-func (g *GetDeployRequestThrottlerRequest) GetNumber() string {
+func (g *GetDeployRequestThrottlerRequest) GetNumber() float64 {
 	if g == nil {
-		return ""
+		return 0.0
 	}
 	return g.Number
 }

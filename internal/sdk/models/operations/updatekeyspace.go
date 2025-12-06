@@ -127,13 +127,13 @@ type UpdateKeyspaceResponseBody struct {
 	// Name of the keyspace
 	Name string `json:"name"`
 	// The number of keyspace shards
-	Shards float64 `json:"shards"`
+	Shards int64 `json:"shards"`
 	// If the keyspace is sharded
 	Sharded bool `json:"sharded"`
 	// Total number of replicas in the keyspace
-	Replicas float64 `json:"replicas"`
+	Replicas int64 `json:"replicas"`
 	// Number of extra replicas in the keyspace
-	ExtraReplicas float64 `json:"extra_replicas"`
+	ExtraReplicas int64 `json:"extra_replicas"`
 	// When the keyspace was created
 	CreatedAt string `json:"created_at"`
 	// When the keyspace was last updated
@@ -174,9 +174,9 @@ func (u *UpdateKeyspaceResponseBody) GetName() string {
 	return u.Name
 }
 
-func (u *UpdateKeyspaceResponseBody) GetShards() float64 {
+func (u *UpdateKeyspaceResponseBody) GetShards() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.Shards
 }
@@ -188,16 +188,16 @@ func (u *UpdateKeyspaceResponseBody) GetSharded() bool {
 	return u.Sharded
 }
 
-func (u *UpdateKeyspaceResponseBody) GetReplicas() float64 {
+func (u *UpdateKeyspaceResponseBody) GetReplicas() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.Replicas
 }
 
-func (u *UpdateKeyspaceResponseBody) GetExtraReplicas() float64 {
+func (u *UpdateKeyspaceResponseBody) GetExtraReplicas() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.ExtraReplicas
 }

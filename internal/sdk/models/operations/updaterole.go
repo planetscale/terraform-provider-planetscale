@@ -241,6 +241,8 @@ type UpdateRoleResponseBody struct {
 	ExpiresAt string `json:"expires_at"`
 	// When the role was dropped
 	DroppedAt string `json:"dropped_at"`
+	// When the role was disabled
+	DisabledAt string `json:"disabled_at"`
 	// Error message available when dropping the role fails
 	DropFailed string `json:"drop_failed"`
 	// True if the credentials are expired
@@ -248,7 +250,7 @@ type UpdateRoleResponseBody struct {
 	// Whether the role is the default postgres user
 	Default bool `json:"default"`
 	// Number of seconds before the credentials expire
-	TTL float64 `json:"ttl"`
+	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []UpdateRoleInheritedRole `json:"inherited_roles"`
 	BranchData     UpdateRoleBranchData      `json:"branch"`
@@ -346,6 +348,13 @@ func (u *UpdateRoleResponseBody) GetDroppedAt() string {
 	return u.DroppedAt
 }
 
+func (u *UpdateRoleResponseBody) GetDisabledAt() string {
+	if u == nil {
+		return ""
+	}
+	return u.DisabledAt
+}
+
 func (u *UpdateRoleResponseBody) GetDropFailed() string {
 	if u == nil {
 		return ""
@@ -367,9 +376,9 @@ func (u *UpdateRoleResponseBody) GetDefault() bool {
 	return u.Default
 }
 
-func (u *UpdateRoleResponseBody) GetTTL() float64 {
+func (u *UpdateRoleResponseBody) GetTTL() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.TTL
 }

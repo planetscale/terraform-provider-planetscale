@@ -196,9 +196,9 @@ type ListBouncerResizeRequestsSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (l *ListBouncerResizeRequestsSku) GetName() string {
@@ -222,16 +222,16 @@ func (l *ListBouncerResizeRequestsSku) GetCPU() string {
 	return l.CPU
 }
 
-func (l *ListBouncerResizeRequestsSku) GetRAM() float64 {
+func (l *ListBouncerResizeRequestsSku) GetRAM() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.RAM
 }
 
-func (l *ListBouncerResizeRequestsSku) GetSortOrder() float64 {
+func (l *ListBouncerResizeRequestsSku) GetSortOrder() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.SortOrder
 }
@@ -244,9 +244,9 @@ type ListBouncerResizeRequestsPreviousSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (l *ListBouncerResizeRequestsPreviousSku) GetName() string {
@@ -270,16 +270,16 @@ func (l *ListBouncerResizeRequestsPreviousSku) GetCPU() string {
 	return l.CPU
 }
 
-func (l *ListBouncerResizeRequestsPreviousSku) GetRAM() float64 {
+func (l *ListBouncerResizeRequestsPreviousSku) GetRAM() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.RAM
 }
 
-func (l *ListBouncerResizeRequestsPreviousSku) GetSortOrder() float64 {
+func (l *ListBouncerResizeRequestsPreviousSku) GetSortOrder() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.SortOrder
 }
@@ -290,11 +290,11 @@ type ListBouncerResizeRequestsData struct {
 	// The state of the bouncer resize
 	State ListBouncerResizeRequestsState `json:"state"`
 	// The number of replicas per cell for the bouncer after the resize
-	ReplicasPerCell float64 `json:"replicas_per_cell"`
+	ReplicasPerCell int64 `json:"replicas_per_cell"`
 	// The bouncer parameters
 	Parameters map[string]any `json:"parameters"`
 	// The number of replicas per cell for the bouncer before the resize
-	PreviousReplicasPerCell float64 `json:"previous_replicas_per_cell"`
+	PreviousReplicasPerCell int64 `json:"previous_replicas_per_cell"`
 	// The previous bouncer parameters
 	PreviousParameters map[string]any `json:"previous_parameters"`
 	// The time the bouncer resize started
@@ -325,9 +325,9 @@ func (l *ListBouncerResizeRequestsData) GetState() ListBouncerResizeRequestsStat
 	return l.State
 }
 
-func (l *ListBouncerResizeRequestsData) GetReplicasPerCell() float64 {
+func (l *ListBouncerResizeRequestsData) GetReplicasPerCell() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ReplicasPerCell
 }
@@ -339,9 +339,9 @@ func (l *ListBouncerResizeRequestsData) GetParameters() map[string]any {
 	return l.Parameters
 }
 
-func (l *ListBouncerResizeRequestsData) GetPreviousReplicasPerCell() float64 {
+func (l *ListBouncerResizeRequestsData) GetPreviousReplicasPerCell() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PreviousReplicasPerCell
 }
@@ -412,28 +412,28 @@ func (l *ListBouncerResizeRequestsData) GetPreviousSku() ListBouncerResizeReques
 // ListBouncerResizeRequestsResponseBody - Returns bouncer resize requests
 type ListBouncerResizeRequestsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                          `json:"prev_page_url"`
 	Data        []ListBouncerResizeRequestsData `json:"data"`
 }
 
-func (l *ListBouncerResizeRequestsResponseBody) GetCurrentPage() float64 {
+func (l *ListBouncerResizeRequestsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListBouncerResizeRequestsResponseBody) GetNextPage() float64 {
+func (l *ListBouncerResizeRequestsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -445,9 +445,9 @@ func (l *ListBouncerResizeRequestsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListBouncerResizeRequestsResponseBody) GetPrevPage() float64 {
+func (l *ListBouncerResizeRequestsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }
