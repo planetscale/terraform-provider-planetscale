@@ -322,19 +322,19 @@ type ListBackupsBackupPolicy struct {
 	// Whether the policy is for production or development branches
 	Target ListBackupsTarget `json:"target"`
 	// A number value for the retention period of the backup policy
-	RetentionValue float64 `json:"retention_value"`
+	RetentionValue int64 `json:"retention_value"`
 	// The unit for the retention period of the backup policy
 	RetentionUnit string `json:"retention_unit"`
 	// A number value for the frequency of the backup policy
-	FrequencyValue float64 `json:"frequency_value"`
+	FrequencyValue int64 `json:"frequency_value"`
 	// The unit for the frequency of the backup policy
 	FrequencyUnit string `json:"frequency_unit"`
 	// The time of day that the backup is scheduled, in HH:MM format
 	ScheduleTime string `json:"schedule_time"`
 	// Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
-	ScheduleDay float64 `json:"schedule_day"`
+	ScheduleDay int64 `json:"schedule_day"`
 	// Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
-	ScheduleWeek float64 `json:"schedule_week"`
+	ScheduleWeek int64 `json:"schedule_week"`
 	// When the backup policy was created
 	CreatedAt string `json:"created_at"`
 	// When the backup policy was last updated
@@ -368,9 +368,9 @@ func (l *ListBackupsBackupPolicy) GetTarget() ListBackupsTarget {
 	return l.Target
 }
 
-func (l *ListBackupsBackupPolicy) GetRetentionValue() float64 {
+func (l *ListBackupsBackupPolicy) GetRetentionValue() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.RetentionValue
 }
@@ -382,9 +382,9 @@ func (l *ListBackupsBackupPolicy) GetRetentionUnit() string {
 	return l.RetentionUnit
 }
 
-func (l *ListBackupsBackupPolicy) GetFrequencyValue() float64 {
+func (l *ListBackupsBackupPolicy) GetFrequencyValue() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.FrequencyValue
 }
@@ -403,16 +403,16 @@ func (l *ListBackupsBackupPolicy) GetScheduleTime() string {
 	return l.ScheduleTime
 }
 
-func (l *ListBackupsBackupPolicy) GetScheduleDay() float64 {
+func (l *ListBackupsBackupPolicy) GetScheduleDay() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ScheduleDay
 }
 
-func (l *ListBackupsBackupPolicy) GetScheduleWeek() float64 {
+func (l *ListBackupsBackupPolicy) GetScheduleWeek() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ScheduleWeek
 }
@@ -565,7 +565,7 @@ type ListBackupsData struct {
 	// The current state of the backup
 	State ListBackupsDataState `json:"state"`
 	// The size of the backup in bytes
-	Size float64 `json:"size"`
+	Size int64 `json:"size"`
 	// The estimated storage cost of the backup
 	EstimatedStorageCost float64 `json:"estimated_storage_cost"`
 	// When the backup was created
@@ -581,7 +581,7 @@ type ListBackupsData struct {
 	// When the backup was deleted
 	DeletedAt string `json:"deleted_at"`
 	// Size of the PVC used for the backup
-	PvcSize float64 `json:"pvc_size"`
+	PvcSize int64 `json:"pvc_size"`
 	// Whether or not the backup is protected from deletion
 	Protected bool `json:"protected"`
 	// Whether or not the backup policy is required
@@ -614,9 +614,9 @@ func (l *ListBackupsData) GetState() ListBackupsDataState {
 	return l.State
 }
 
-func (l *ListBackupsData) GetSize() float64 {
+func (l *ListBackupsData) GetSize() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Size
 }
@@ -670,9 +670,9 @@ func (l *ListBackupsData) GetDeletedAt() string {
 	return l.DeletedAt
 }
 
-func (l *ListBackupsData) GetPvcSize() float64 {
+func (l *ListBackupsData) GetPvcSize() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PvcSize
 }
@@ -729,28 +729,28 @@ func (l *ListBackupsData) GetDatabaseBranch() ListBackupsDatabaseBranch {
 // ListBackupsResponseBody - Returns database branch backups
 type ListBackupsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string            `json:"prev_page_url"`
 	Data        []ListBackupsData `json:"data"`
 }
 
-func (l *ListBackupsResponseBody) GetCurrentPage() float64 {
+func (l *ListBackupsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListBackupsResponseBody) GetNextPage() float64 {
+func (l *ListBackupsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -762,9 +762,9 @@ func (l *ListBackupsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListBackupsResponseBody) GetPrevPage() float64 {
+func (l *ListBackupsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

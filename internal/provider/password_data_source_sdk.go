@@ -53,7 +53,7 @@ func (r *PasswordDataSourceModel) RefreshFromOperationsGetPasswordResponseBody(c
 		r.Renewable = types.BoolValue(resp.Renewable)
 		r.Replica = types.BoolValue(resp.Replica)
 		r.Role = types.StringValue(string(resp.Role))
-		r.TTLSeconds = types.Float64Value(resp.TTLSeconds)
+		r.TTLSeconds = types.Int64Value(resp.TTLSeconds)
 		r.Username = types.StringValue(resp.Username)
 	}
 

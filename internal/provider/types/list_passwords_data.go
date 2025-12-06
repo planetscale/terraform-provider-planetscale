@@ -27,6 +27,6 @@ type ListPasswordsData struct {
 	Renewable              types.Bool                  `tfsdk:"renewable"`
 	Replica                types.Bool                  `tfsdk:"replica"`
 	Role                   types.String                `tfsdk:"role"`
-	TTLSeconds             types.Float64               `tfsdk:"ttl_seconds"`
+	TTLSeconds             types.Int64                 `tfsdk:"ttl_seconds"`
 	Username               types.String                `tfsdk:"username"`
 }

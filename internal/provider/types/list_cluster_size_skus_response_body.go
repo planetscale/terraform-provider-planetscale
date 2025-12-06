@@ -18,9 +18,9 @@ type ListClusterSizeSkusResponseBody struct {
 	Name              types.String  `tfsdk:"name"`
 	Production        types.Bool    `tfsdk:"production"`
 	Provider          types.String  `tfsdk:"provider"`
-	RAM               types.Float64 `tfsdk:"ram"`
+	RAM               types.Int64   `tfsdk:"ram"`
 	Rate              types.Float64 `tfsdk:"rate"`
 	ReplicaRate       types.Float64 `tfsdk:"replica_rate"`
-	SortOrder         types.Float64 `tfsdk:"sort_order"`
-	Storage           types.Float64 `tfsdk:"storage"`
+	SortOrder         types.Int64   `tfsdk:"sort_order"`
+	Storage           types.Int64   `tfsdk:"storage"`
 }

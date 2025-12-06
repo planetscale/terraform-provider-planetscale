@@ -40,6 +40,7 @@ data "planetscale_role" "my_role" {
 - `database_name` (String) The database name
 - `default` (Boolean) Whether the role is the default postgres user
 - `deleted_at` (String) When the role was deleted
+- `disabled_at` (String) When the role was disabled
 - `drop_failed` (String) Error message available when dropping the role fails
 - `dropped_at` (String) When the role was dropped
 - `expired` (Boolean) True if the credentials are expired

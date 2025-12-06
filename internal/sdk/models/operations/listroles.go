@@ -229,6 +229,8 @@ type ListRolesData struct {
 	ExpiresAt string `json:"expires_at"`
 	// When the role was dropped
 	DroppedAt string `json:"dropped_at"`
+	// When the role was disabled
+	DisabledAt string `json:"disabled_at"`
 	// Error message available when dropping the role fails
 	DropFailed string `json:"drop_failed"`
 	// True if the credentials are expired
@@ -236,7 +238,7 @@ type ListRolesData struct {
 	// Whether the role is the default postgres user
 	Default bool `json:"default"`
 	// Number of seconds before the credentials expire
-	TTL float64 `json:"ttl"`
+	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []ListRolesInheritedRole `json:"inherited_roles"`
 	Branch         ListRolesBranch          `json:"branch"`
@@ -334,6 +336,13 @@ func (l *ListRolesData) GetDroppedAt() string {
 	return l.DroppedAt
 }
 
+func (l *ListRolesData) GetDisabledAt() string {
+	if l == nil {
+		return ""
+	}
+	return l.DisabledAt
+}
+
 func (l *ListRolesData) GetDropFailed() string {
 	if l == nil {
 		return ""
@@ -355,9 +364,9 @@ func (l *ListRolesData) GetDefault() bool {
 	return l.Default
 }
 
-func (l *ListRolesData) GetTTL() float64 {
+func (l *ListRolesData) GetTTL() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.TTL
 }
@@ -386,28 +395,28 @@ func (l *ListRolesData) GetActor() ListRolesActor {
 // ListRolesResponseBody - Returns roles
 type ListRolesResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string          `json:"prev_page_url"`
 	Data        []ListRolesData `json:"data"`
 }
 
-func (l *ListRolesResponseBody) GetCurrentPage() float64 {
+func (l *ListRolesResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListRolesResponseBody) GetNextPage() float64 {
+func (l *ListRolesResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -419,9 +428,9 @@ func (l *ListRolesResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListRolesResponseBody) GetPrevPage() float64 {
+func (l *ListRolesResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

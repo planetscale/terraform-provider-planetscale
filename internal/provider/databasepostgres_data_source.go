@@ -31,26 +31,26 @@ type DatabasePostgresDataSource struct {
 type DatabasePostgresDataSourceModel struct {
 	AtBackupRestoreBranchesLimit      types.Bool                             `tfsdk:"at_backup_restore_branches_limit"`
 	AtDevelopmentBranchUsageLimit     types.Bool                             `tfsdk:"at_development_branch_usage_limit"`
-	BranchesCount                     types.Float64                          `tfsdk:"branches_count"`
+	BranchesCount                     types.Int64                            `tfsdk:"branches_count"`
 	BranchesURL                       types.String                           `tfsdk:"branches_url"`
 	CreatedAt                         types.String                           `tfsdk:"created_at"`
 	DataImport                        *tfTypes.GetPostgresDatabaseDataImport `tfsdk:"data_import"`
 	DefaultBranch                     types.String                           `tfsdk:"default_branch"`
-	DefaultBranchReadOnlyRegionsCount types.Float64                          `tfsdk:"default_branch_read_only_regions_count"`
-	DefaultBranchShardCount           types.Float64                          `tfsdk:"default_branch_shard_count"`
-	DefaultBranchTableCount           types.Float64                          `tfsdk:"default_branch_table_count"`
-	DevelopmentBranchesCount          types.Float64                          `tfsdk:"development_branches_count"`
+	DefaultBranchReadOnlyRegionsCount types.Int64                            `tfsdk:"default_branch_read_only_regions_count"`
+	DefaultBranchShardCount           types.Int64                            `tfsdk:"default_branch_shard_count"`
+	DefaultBranchTableCount           types.Int64                            `tfsdk:"default_branch_table_count"`
+	DevelopmentBranchesCount          types.Int64                            `tfsdk:"development_branches_count"`
 	HTMLURL                           types.String                           `tfsdk:"html_url"`
 	ID                                types.String                           `tfsdk:"id"`
 	InsightsEnabled                   types.Bool                             `tfsdk:"insights_enabled"`
 	InsightsRawQueries                types.Bool                             `tfsdk:"insights_raw_queries"`
-	IssuesCount                       types.Float64                          `tfsdk:"issues_count"`
+	IssuesCount                       types.Int64                            `tfsdk:"issues_count"`
 	MultipleAdminsRequiredForDeletion types.Bool                             `tfsdk:"multiple_admins_required_for_deletion"`
 	Name                              types.String                           `tfsdk:"name"`
-	OpenSchemaRecommendationsCount    types.Float64                          `tfsdk:"open_schema_recommendations_count"`
+	OpenSchemaRecommendationsCount    types.Int64                            `tfsdk:"open_schema_recommendations_count"`
 	Organization                      types.String                           `tfsdk:"organization"`
 	Plan                              types.String                           `tfsdk:"plan"`
-	ProductionBranchesCount           types.Float64                          `tfsdk:"production_branches_count"`
+	ProductionBranchesCount           types.Int64                            `tfsdk:"production_branches_count"`
 	ProductionBranchWebConsole        types.Bool                             `tfsdk:"production_branch_web_console"`
 	Ready                             types.Bool                             `tfsdk:"ready"`
 	RegionData                        *tfTypes.GetPostgresDatabaseRegionData `tfsdk:"region_data"`
@@ -83,7 +83,7 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `If the database has reached its development branch limit`,
 			},
-			"branches_count": schema.Float64Attribute{
+			"branches_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The total number of database branches`,
 			},
@@ -109,7 +109,7 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 								Computed:    true,
 								Description: `Hostname of the data source`,
 							},
-							"port": schema.Float64Attribute{
+							"port": schema.Int64Attribute{
 								Computed:    true,
 								Description: `Port of the data source`,
 							},
@@ -137,19 +137,19 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `The default branch for the database`,
 			},
-			"default_branch_read_only_regions_count": schema.Float64Attribute{
+			"default_branch_read_only_regions_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Number of read only regions in the default branch`,
 			},
-			"default_branch_shard_count": schema.Float64Attribute{
+			"default_branch_shard_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Number of shards in the default branch`,
 			},
-			"default_branch_table_count": schema.Float64Attribute{
+			"default_branch_table_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Number of tables in the default branch schema`,
 			},
-			"development_branches_count": schema.Float64Attribute{
+			"development_branches_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The total number of database development branches`,
 			},
@@ -169,7 +169,7 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `Whether raw SQL queries are collected`,
 			},
-			"issues_count": schema.Float64Attribute{
+			"issues_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The total number of ongoing issues within a database`,
 			},
@@ -181,7 +181,7 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `Name of the database`,
 			},
-			"open_schema_recommendations_count": schema.Float64Attribute{
+			"open_schema_recommendations_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The total number of schema recommendations`,
 			},
@@ -197,7 +197,7 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `Whether web console is enabled for production branches`,
 			},
-			"production_branches_count": schema.Float64Attribute{
+			"production_branches_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The total number of database production branches`,
 			},

@@ -37,16 +37,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -93,7 +93,7 @@ paths:
                           type: boolean
                           description: Whether or not the organization has past due billing invoices
                         database_count:
-                          type: number
+                          type: integer
                           description: The number of databases in the organization
                         sso_portal_url:
                           type: string
@@ -109,7 +109,7 @@ paths:
                           type: number
                           description: The expected monthly budget for the organization
                         keyspace_shard_limit:
-                          type: number
+                          type: integer
                           description: The keyspace shard limit for the organization
                         has_card:
                           type: boolean
@@ -224,7 +224,7 @@ paths:
                     type: boolean
                     description: Whether or not the organization has past due billing invoices
                   database_count:
-                    type: number
+                    type: integer
                     description: The number of databases in the organization
                   sso_portal_url:
                     type: string
@@ -240,7 +240,7 @@ paths:
                     type: number
                     description: The expected monthly budget for the organization
                   keyspace_shard_limit:
-                    type: number
+                    type: integer
                     description: The keyspace shard limit for the organization
                   has_card:
                     type: boolean
@@ -366,7 +366,7 @@ paths:
                     type: boolean
                     description: Whether or not the organization has past due billing invoices
                   database_count:
-                    type: number
+                    type: integer
                     description: The number of databases in the organization
                   sso_portal_url:
                     type: string
@@ -382,7 +382,7 @@ paths:
                     type: number
                     description: The expected monthly budget for the organization
                   keyspace_shard_limit:
-                    type: number
+                    type: integer
                     description: The keyspace shard limit for the organization
                   has_card:
                     type: boolean
@@ -615,10 +615,10 @@ paths:
                       type: string
                       description: The number of CPUs
                     storage:
-                      type: number
+                      type: integer
                       description: The amount of storage in bytes
                     ram:
-                      type: number
+                      type: integer
                       description: The amount of memory in bytes
                     metal:
                       type: boolean
@@ -642,7 +642,7 @@ paths:
                       type: number
                       description: The rate for the cluster SKU
                     sort_order:
-                      type: number
+                      type: integer
                       description: The sort order of the cluster SKU
                     architecture:
                       type: string
@@ -731,16 +731,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -760,19 +760,19 @@ paths:
                           type: string
                           description: The URL to retrieve this database's branches via the API
                         branches_count:
-                          type: number
+                          type: integer
                           description: The total number of database branches
                         open_schema_recommendations_count:
-                          type: number
+                          type: integer
                           description: The total number of schema recommendations
                         development_branches_count:
-                          type: number
+                          type: integer
                           description: The total number of database development branches
                         production_branches_count:
-                          type: number
+                          type: integer
                           description: The total number of database production branches
                         issues_count:
-                          type: number
+                          type: integer
                           description: The total number of ongoing issues within a database
                         multiple_admins_required_for_deletion:
                           type: boolean
@@ -808,7 +808,7 @@ paths:
                                   type: string
                                   description: Hostname of the data source
                                 port:
-                                  type: number
+                                  type: integer
                                   description: Port of the data source
                                 database:
                                   type: string
@@ -885,13 +885,13 @@ paths:
                           type: boolean
                           description: If the database is sharded
                         default_branch_shard_count:
-                          type: number
+                          type: integer
                           description: Number of shards in the default branch
                         default_branch_read_only_regions_count:
-                          type: number
+                          type: integer
                           description: Number of read only regions in the default branch
                         default_branch_table_count:
-                          type: number
+                          type: integer
                           description: Number of tables in the default branch schema
                         default_branch:
                           type: string
@@ -1082,19 +1082,19 @@ paths:
                     type: string
                     description: The URL to retrieve this database's branches via the API
                   branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database branches
                   open_schema_recommendations_count:
-                    type: number
+                    type: integer
                     description: The total number of schema recommendations
                   development_branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database development branches
                   production_branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database production branches
                   issues_count:
-                    type: number
+                    type: integer
                     description: The total number of ongoing issues within a database
                   multiple_admins_required_for_deletion:
                     type: boolean
@@ -1130,7 +1130,7 @@ paths:
                             type: string
                             description: Hostname of the data source
                           port:
-                            type: number
+                            type: integer
                             description: Port of the data source
                           database:
                             type: string
@@ -1207,13 +1207,13 @@ paths:
                     type: boolean
                     description: If the database is sharded
                   default_branch_shard_count:
-                    type: number
+                    type: integer
                     description: Number of shards in the default branch
                   default_branch_read_only_regions_count:
-                    type: number
+                    type: integer
                     description: Number of read only regions in the default branch
                   default_branch_table_count:
-                    type: number
+                    type: integer
                     description: Number of tables in the default branch schema
                   default_branch:
                     type: string
@@ -1372,19 +1372,19 @@ paths:
                     type: string
                     description: The URL to retrieve this database's branches via the API
                   branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database branches
                   open_schema_recommendations_count:
-                    type: number
+                    type: integer
                     description: The total number of schema recommendations
                   development_branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database development branches
                   production_branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database production branches
                   issues_count:
-                    type: number
+                    type: integer
                     description: The total number of ongoing issues within a database
                   multiple_admins_required_for_deletion:
                     type: boolean
@@ -1420,7 +1420,7 @@ paths:
                             type: string
                             description: Hostname of the data source
                           port:
-                            type: number
+                            type: integer
                             description: Port of the data source
                           database:
                             type: string
@@ -1497,13 +1497,13 @@ paths:
                     type: boolean
                     description: If the database is sharded
                   default_branch_shard_count:
-                    type: number
+                    type: integer
                     description: Number of shards in the default branch
                   default_branch_read_only_regions_count:
-                    type: number
+                    type: integer
                     description: Number of read only regions in the default branch
                   default_branch_table_count:
-                    type: number
+                    type: integer
                     description: Number of tables in the default branch schema
                   default_branch:
                     type: string
@@ -1702,19 +1702,19 @@ paths:
                     type: string
                     description: The URL to retrieve this database's branches via the API
                   branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database branches
                   open_schema_recommendations_count:
-                    type: number
+                    type: integer
                     description: The total number of schema recommendations
                   development_branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database development branches
                   production_branches_count:
-                    type: number
+                    type: integer
                     description: The total number of database production branches
                   issues_count:
-                    type: number
+                    type: integer
                     description: The total number of ongoing issues within a database
                   multiple_admins_required_for_deletion:
                     type: boolean
@@ -1750,7 +1750,7 @@ paths:
                             type: string
                             description: Hostname of the data source
                           port:
-                            type: number
+                            type: integer
                             description: Port of the data source
                           database:
                             type: string
@@ -1827,13 +1827,13 @@ paths:
                     type: boolean
                     description: If the database is sharded
                   default_branch_shard_count:
-                    type: number
+                    type: integer
                     description: Number of shards in the default branch
                   default_branch_read_only_regions_count:
-                    type: number
+                    type: integer
                     description: Number of read only regions in the default branch
                   default_branch_table_count:
-                    type: number
+                    type: integer
                     description: Number of tables in the default branch schema
                   default_branch:
                     type: string
@@ -2063,16 +2063,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -2131,13 +2131,13 @@ paths:
                           type: string
                           description: The size of the vtgate cluster for the branch
                         vtgate_count:
-                          type: number
+                          type: integer
                           description: The number of vtgate instances in the branch
                         cluster_name:
                           type: string
                           description: The SKU representing the branch's cluster size
                         cluster_iops:
-                          type: number
+                          type: integer
                           description: IOPS for the cluster
                         ready:
                           type: boolean
@@ -2158,7 +2158,7 @@ paths:
                           type: boolean
                           description: Whether or not the branch is sharded
                         shard_count:
-                          type: number
+                          type: integer
                           description: The number of shards in the branch
                         stale_schema:
                           type: boolean
@@ -2440,13 +2440,13 @@ paths:
                     type: string
                     description: The size of the vtgate cluster for the branch
                   vtgate_count:
-                    type: number
+                    type: integer
                     description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
                   cluster_iops:
-                    type: number
+                    type: integer
                     description: IOPS for the cluster
                   ready:
                     type: boolean
@@ -2467,7 +2467,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch is sharded
                   shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards in the branch
                   stale_schema:
                     type: boolean
@@ -2712,13 +2712,13 @@ paths:
                     type: string
                     description: The size of the vtgate cluster for the branch
                   vtgate_count:
-                    type: number
+                    type: integer
                     description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
                   cluster_iops:
-                    type: number
+                    type: integer
                     description: IOPS for the cluster
                   ready:
                     type: boolean
@@ -2739,7 +2739,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch is sharded
                   shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards in the branch
                   stale_schema:
                     type: boolean
@@ -3041,16 +3041,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -3077,7 +3077,7 @@ paths:
                             - ignored
                           description: The current state of the backup
                         size:
-                          type: number
+                          type: integer
                           description: The size of the backup in bytes
                         estimated_storage_cost:
                           type: number
@@ -3101,7 +3101,7 @@ paths:
                           type: string
                           description: When the backup was deleted
                         pvc_size:
-                          type: number
+                          type: integer
                           description: Size of the PVC used for the backup
                         protected:
                           type: boolean
@@ -3169,13 +3169,13 @@ paths:
                                 - development
                               description: Whether the policy is for production or development branches
                             retention_value:
-                              type: number
+                              type: integer
                               description: A number value for the retention period of the backup policy
                             retention_unit:
                               type: string
                               description: The unit for the retention period of the backup policy
                             frequency_value:
-                              type: number
+                              type: integer
                               description: A number value for the frequency of the backup policy
                             frequency_unit:
                               type: string
@@ -3184,10 +3184,10 @@ paths:
                               type: string
                               description: The time of day that the backup is scheduled, in HH:MM format
                             schedule_day:
-                              type: number
+                              type: integer
                               description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
                             schedule_week:
-                              type: number
+                              type: integer
                               description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                             created_at:
                               type: string
@@ -3402,7 +3402,7 @@ paths:
                       - ignored
                     description: The current state of the backup
                   size:
-                    type: number
+                    type: integer
                     description: The size of the backup in bytes
                   estimated_storage_cost:
                     type: number
@@ -3426,7 +3426,7 @@ paths:
                     type: string
                     description: When the backup was deleted
                   pvc_size:
-                    type: number
+                    type: integer
                     description: Size of the PVC used for the backup
                   protected:
                     type: boolean
@@ -3494,13 +3494,13 @@ paths:
                           - development
                         description: Whether the policy is for production or development branches
                       retention_value:
-                        type: number
+                        type: integer
                         description: A number value for the retention period of the backup policy
                       retention_unit:
                         type: string
                         description: The unit for the retention period of the backup policy
                       frequency_value:
-                        type: number
+                        type: integer
                         description: A number value for the frequency of the backup policy
                       frequency_unit:
                         type: string
@@ -3509,10 +3509,10 @@ paths:
                         type: string
                         description: The time of day that the backup is scheduled, in HH:MM format
                       schedule_day:
-                        type: number
+                        type: integer
                         description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
                       schedule_week:
-                        type: number
+                        type: integer
                         description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                       created_at:
                         type: string
@@ -3701,7 +3701,7 @@ paths:
                       - ignored
                     description: The current state of the backup
                   size:
-                    type: number
+                    type: integer
                     description: The size of the backup in bytes
                   estimated_storage_cost:
                     type: number
@@ -3725,7 +3725,7 @@ paths:
                     type: string
                     description: When the backup was deleted
                   pvc_size:
-                    type: number
+                    type: integer
                     description: Size of the PVC used for the backup
                   protected:
                     type: boolean
@@ -3793,13 +3793,13 @@ paths:
                           - development
                         description: Whether the policy is for production or development branches
                       retention_value:
-                        type: number
+                        type: integer
                         description: A number value for the retention period of the backup policy
                       retention_unit:
                         type: string
                         description: The unit for the retention period of the backup policy
                       frequency_value:
-                        type: number
+                        type: integer
                         description: A number value for the frequency of the backup policy
                       frequency_unit:
                         type: string
@@ -3808,10 +3808,10 @@ paths:
                         type: string
                         description: The time of day that the backup is scheduled, in HH:MM format
                       schedule_day:
-                        type: number
+                        type: integer
                         description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
                       schedule_week:
-                        type: number
+                        type: integer
                         description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                       created_at:
                         type: string
@@ -4009,7 +4009,7 @@ paths:
                       - ignored
                     description: The current state of the backup
                   size:
-                    type: number
+                    type: integer
                     description: The size of the backup in bytes
                   estimated_storage_cost:
                     type: number
@@ -4033,7 +4033,7 @@ paths:
                     type: string
                     description: When the backup was deleted
                   pvc_size:
-                    type: number
+                    type: integer
                     description: Size of the PVC used for the backup
                   protected:
                     type: boolean
@@ -4101,13 +4101,13 @@ paths:
                           - development
                         description: Whether the policy is for production or development branches
                       retention_value:
-                        type: number
+                        type: integer
                         description: A number value for the retention period of the backup policy
                       retention_unit:
                         type: string
                         description: The unit for the retention period of the backup policy
                       frequency_value:
-                        type: number
+                        type: integer
                         description: A number value for the frequency of the backup policy
                       frequency_unit:
                         type: string
@@ -4116,10 +4116,10 @@ paths:
                         type: string
                         description: The time of day that the backup is scheduled, in HH:MM format
                       schedule_day:
-                        type: number
+                        type: integer
                         description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
                       schedule_week:
-                        type: number
+                        type: integer
                         description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                       created_at:
                         type: string
@@ -4355,16 +4355,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -4386,14 +4386,14 @@ paths:
                             - completed
                           description: The state of the bouncer resize
                         replicas_per_cell:
-                          type: number
+                          type: integer
                           description: The number of replicas per cell for the bouncer after the resize
                         parameters:
                           type: object
                           additionalProperties: true
                           description: The bouncer parameters
                         previous_replicas_per_cell:
-                          type: number
+                          type: integer
                           description: The number of replicas per cell for the bouncer before the resize
                         previous_parameters:
                           type: object
@@ -4466,10 +4466,10 @@ paths:
                               type: string
                               description: The CPU allocation
                             ram:
-                              type: number
+                              type: integer
                               description: The amount of memory in bytes
                             sort_order:
-                              type: number
+                              type: integer
                               description: The sort order of the Postgres bouncer SKU
                           additionalProperties: false
                           required:
@@ -4491,10 +4491,10 @@ paths:
                               type: string
                               description: The CPU allocation
                             ram:
-                              type: number
+                              type: integer
                               description: The amount of memory in bytes
                             sort_order:
-                              type: number
+                              type: integer
                               description: The sort order of the Postgres bouncer SKU
                           additionalProperties: false
                           required:
@@ -4597,16 +4597,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -4635,10 +4635,10 @@ paths:
                               type: string
                               description: The CPU allocation
                             ram:
-                              type: number
+                              type: integer
                               description: The amount of memory in bytes
                             sort_order:
-                              type: number
+                              type: integer
                               description: The sort order of the Postgres bouncer SKU
                           additionalProperties: false
                           required:
@@ -4655,7 +4655,7 @@ paths:
                             - replica_az_affinity
                           description: The instance type the bouncer targets
                         replicas_per_cell:
-                          type: number
+                          type: integer
                           description: The count of replicas in each cell
                         created_at:
                           type: string
@@ -4935,10 +4935,10 @@ paths:
                         type: string
                         description: The CPU allocation
                       ram:
-                        type: number
+                        type: integer
                         description: The amount of memory in bytes
                       sort_order:
-                        type: number
+                        type: integer
                         description: The sort order of the Postgres bouncer SKU
                     additionalProperties: false
                     required:
@@ -4955,7 +4955,7 @@ paths:
                       - replica_az_affinity
                     description: The instance type the bouncer targets
                   replicas_per_cell:
-                    type: number
+                    type: integer
                     description: The count of replicas in each cell
                   created_at:
                     type: string
@@ -5214,10 +5214,10 @@ paths:
                         type: string
                         description: The CPU allocation
                       ram:
-                        type: number
+                        type: integer
                         description: The amount of memory in bytes
                       sort_order:
-                        type: number
+                        type: integer
                         description: The sort order of the Postgres bouncer SKU
                     additionalProperties: false
                     required:
@@ -5234,7 +5234,7 @@ paths:
                       - replica_az_affinity
                     description: The instance type the bouncer targets
                   replicas_per_cell:
-                    type: number
+                    type: integer
                     description: The count of replicas in each cell
                   created_at:
                     type: string
@@ -5544,16 +5544,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -5575,14 +5575,14 @@ paths:
                             - completed
                           description: The state of the bouncer resize
                         replicas_per_cell:
-                          type: number
+                          type: integer
                           description: The number of replicas per cell for the bouncer after the resize
                         parameters:
                           type: object
                           additionalProperties: true
                           description: The bouncer parameters
                         previous_replicas_per_cell:
-                          type: number
+                          type: integer
                           description: The number of replicas per cell for the bouncer before the resize
                         previous_parameters:
                           type: object
@@ -5655,10 +5655,10 @@ paths:
                               type: string
                               description: The CPU allocation
                             ram:
-                              type: number
+                              type: integer
                               description: The amount of memory in bytes
                             sort_order:
-                              type: number
+                              type: integer
                               description: The sort order of the Postgres bouncer SKU
                           additionalProperties: false
                           required:
@@ -5680,10 +5680,10 @@ paths:
                               type: string
                               description: The CPU allocation
                             ram:
-                              type: number
+                              type: integer
                               description: The amount of memory in bytes
                             sort_order:
-                              type: number
+                              type: integer
                               description: The sort order of the Postgres bouncer SKU
                           additionalProperties: false
                           required:
@@ -5807,14 +5807,14 @@ paths:
                       - completed
                     description: The state of the bouncer resize
                   replicas_per_cell:
-                    type: number
+                    type: integer
                     description: The number of replicas per cell for the bouncer after the resize
                   parameters:
                     type: object
                     additionalProperties: true
                     description: The bouncer parameters
                   previous_replicas_per_cell:
-                    type: number
+                    type: integer
                     description: The number of replicas per cell for the bouncer before the resize
                   previous_parameters:
                     type: object
@@ -5887,10 +5887,10 @@ paths:
                         type: string
                         description: The CPU allocation
                       ram:
-                        type: number
+                        type: integer
                         description: The amount of memory in bytes
                       sort_order:
-                        type: number
+                        type: integer
                         description: The sort order of the Postgres bouncer SKU
                     additionalProperties: false
                     required:
@@ -5912,10 +5912,10 @@ paths:
                         type: string
                         description: The CPU allocation
                       ram:
-                        type: number
+                        type: integer
                         description: The amount of memory in bytes
                       sort_order:
-                        type: number
+                        type: integer
                         description: The sort order of the Postgres bouncer SKU
                     additionalProperties: false
                     required:
@@ -6065,16 +6065,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -6089,7 +6089,7 @@ paths:
                           description: The ID of the branch change request
                         restart:
                           items:
-                            type: number
+                            type: integer
                           type: array
                           description: The ports requiring a restart when changes are applied
                         state:
@@ -6140,7 +6140,7 @@ paths:
                           type: boolean
                           description: Whether or not this is a metal database
                         replicas:
-                          type: number
+                          type: integer
                           description: The total number of replicas
                         parameters:
                           type: object
@@ -6156,17 +6156,17 @@ paths:
                           type: boolean
                           description: Whether or not the previous SKU was a metal database
                         previous_replicas:
-                          type: number
+                          type: integer
                           description: The previous total number of replicas
                         previous_parameters:
                           type: object
                           additionalProperties: true
                           description: The previous branch parameters
                         minimum_storage_bytes:
-                          type: number
+                          type: integer
                           description: The minimum storage size in bytes
                         maximum_storage_bytes:
-                          type: number
+                          type: integer
                           description: The maximum storage size in bytes
                         storage_autoscaling:
                           type: boolean
@@ -6182,16 +6182,16 @@ paths:
                             - pd_ssd
                           description: The storage type (gp3 or io2)
                         storage_iops:
-                          type: number
+                          type: integer
                           description: The storage IOPS
                         storage_throughput_mibs:
-                          type: number
+                          type: integer
                           description: The storage throughput in MiB/s
                         previous_minimum_storage_bytes:
-                          type: number
+                          type: integer
                           description: The previous minimum storage size in bytes
                         previous_maximum_storage_bytes:
-                          type: number
+                          type: integer
                           description: The previous maximum storage size in bytes
                         previous_storage_autoscaling:
                           type: boolean
@@ -6203,10 +6203,10 @@ paths:
                           type: string
                           description: The previous storage type
                         previous_storage_iops:
-                          type: number
+                          type: integer
                           description: The previous storage IOPS
                         previous_storage_throughput_mibs:
-                          type: number
+                          type: integer
                           description: The previous storage throughput in MiB/s
                       additionalProperties: false
                       required:
@@ -6328,7 +6328,7 @@ paths:
                     description: The ID of the branch change request
                   restart:
                     items:
-                      type: number
+                      type: integer
                     type: array
                     description: The ports requiring a restart when changes are applied
                   state:
@@ -6379,7 +6379,7 @@ paths:
                     type: boolean
                     description: Whether or not this is a metal database
                   replicas:
-                    type: number
+                    type: integer
                     description: The total number of replicas
                   parameters:
                     type: object
@@ -6395,17 +6395,17 @@ paths:
                     type: boolean
                     description: Whether or not the previous SKU was a metal database
                   previous_replicas:
-                    type: number
+                    type: integer
                     description: The previous total number of replicas
                   previous_parameters:
                     type: object
                     additionalProperties: true
                     description: The previous branch parameters
                   minimum_storage_bytes:
-                    type: number
+                    type: integer
                     description: The minimum storage size in bytes
                   maximum_storage_bytes:
-                    type: number
+                    type: integer
                     description: The maximum storage size in bytes
                   storage_autoscaling:
                     type: boolean
@@ -6421,16 +6421,16 @@ paths:
                       - pd_ssd
                     description: The storage type (gp3 or io2)
                   storage_iops:
-                    type: number
+                    type: integer
                     description: The storage IOPS
                   storage_throughput_mibs:
-                    type: number
+                    type: integer
                     description: The storage throughput in MiB/s
                   previous_minimum_storage_bytes:
-                    type: number
+                    type: integer
                     description: The previous minimum storage size in bytes
                   previous_maximum_storage_bytes:
-                    type: number
+                    type: integer
                     description: The previous maximum storage size in bytes
                   previous_storage_autoscaling:
                     type: boolean
@@ -6442,10 +6442,10 @@ paths:
                     type: string
                     description: The previous storage type
                   previous_storage_iops:
-                    type: number
+                    type: integer
                     description: The previous storage IOPS
                   previous_storage_throughput_mibs:
-                    type: number
+                    type: integer
                     description: The previous storage throughput in MiB/s
                 additionalProperties: false
                 required:
@@ -6643,13 +6643,13 @@ paths:
                     type: string
                     description: The size of the vtgate cluster for the branch
                   vtgate_count:
-                    type: number
+                    type: integer
                     description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
                   cluster_iops:
-                    type: number
+                    type: integer
                     description: IOPS for the cluster
                   ready:
                     type: boolean
@@ -6670,7 +6670,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch is sharded
                   shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards in the branch
                   stale_schema:
                     type: boolean
@@ -7082,16 +7082,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -7108,16 +7108,16 @@ paths:
                           type: string
                           description: Name of the keyspace
                         shards:
-                          type: number
+                          type: integer
                           description: The number of keyspace shards
                         sharded:
                           type: boolean
                           description: If the keyspace is sharded
                         replicas:
-                          type: number
+                          type: integer
                           description: Total number of replicas in the keyspace
                         extra_replicas:
-                          type: number
+                          type: integer
                           description: Number of extra replicas in the keyspace
                         created_at:
                           type: string
@@ -7289,16 +7289,16 @@ paths:
                     type: string
                     description: Name of the keyspace
                   shards:
-                    type: number
+                    type: integer
                     description: The number of keyspace shards
                   sharded:
                     type: boolean
                     description: If the keyspace is sharded
                   replicas:
-                    type: number
+                    type: integer
                     description: Total number of replicas in the keyspace
                   extra_replicas:
-                    type: number
+                    type: integer
                     description: Number of extra replicas in the keyspace
                   created_at:
                     type: string
@@ -7447,16 +7447,16 @@ paths:
                     type: string
                     description: Name of the keyspace
                   shards:
-                    type: number
+                    type: integer
                     description: The number of keyspace shards
                   sharded:
                     type: boolean
                     description: If the keyspace is sharded
                   replicas:
-                    type: number
+                    type: integer
                     description: Total number of replicas in the keyspace
                   extra_replicas:
-                    type: number
+                    type: integer
                     description: Number of extra replicas in the keyspace
                   created_at:
                     type: string
@@ -7604,16 +7604,16 @@ paths:
                     type: string
                     description: Name of the keyspace
                   shards:
-                    type: number
+                    type: integer
                     description: The number of keyspace shards
                   sharded:
                     type: boolean
                     description: If the keyspace is sharded
                   replicas:
-                    type: number
+                    type: integer
                     description: Total number of replicas in the keyspace
                   extra_replicas:
-                    type: number
+                    type: integer
                     description: Number of extra replicas in the keyspace
                   created_at:
                     type: string
@@ -8221,16 +8221,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -8283,7 +8283,7 @@ paths:
                           type: array
                           description: The list of hosts in each availability zone providing direct access to a vtgate
                         ttl_seconds:
-                          type: number
+                          type: integer
                           description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
                         access_host_url:
                           type: string
@@ -8552,7 +8552,7 @@ paths:
                     type: array
                     description: The list of hosts in each availability zone providing direct access to a vtgate
                   ttl_seconds:
-                    type: number
+                    type: integer
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
                   access_host_url:
                     type: string
@@ -8790,7 +8790,7 @@ paths:
                     type: array
                     description: The list of hosts in each availability zone providing direct access to a vtgate
                   ttl_seconds:
-                    type: number
+                    type: integer
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
                   access_host_url:
                     type: string
@@ -9040,7 +9040,7 @@ paths:
                     type: array
                     description: The list of hosts in each availability zone providing direct access to a vtgate
                   ttl_seconds:
-                    type: number
+                    type: integer
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
                   access_host_url:
                     type: string
@@ -9333,7 +9333,7 @@ paths:
                     type: array
                     description: The list of hosts in each availability zone providing direct access to a vtgate
                   ttl_seconds:
-                    type: number
+                    type: integer
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
                   access_host_url:
                     type: string
@@ -9569,13 +9569,13 @@ paths:
                     type: string
                     description: The size of the vtgate cluster for the branch
                   vtgate_count:
-                    type: number
+                    type: integer
                     description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
                   cluster_iops:
-                    type: number
+                    type: integer
                     description: IOPS for the cluster
                   ready:
                     type: boolean
@@ -9596,7 +9596,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch is sharded
                   shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards in the branch
                   stale_schema:
                     type: boolean
@@ -10367,16 +10367,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -10425,6 +10425,9 @@ paths:
                         dropped_at:
                           type: string
                           description: When the role was dropped
+                        disabled_at:
+                          type: string
+                          description: When the role was disabled
                         drop_failed:
                           type: string
                           description: Error message available when dropping the role fails
@@ -10435,7 +10438,7 @@ paths:
                           type: boolean
                           description: Whether the role is the default postgres user
                         ttl:
-                          type: number
+                          type: integer
                           description: Number of seconds before the credentials expire
                         inherited_roles:
                           items:
@@ -10512,6 +10515,7 @@ paths:
                         - deleted_at
                         - expires_at
                         - dropped_at
+                        - disabled_at
                         - drop_failed
                         - expired
                         - default
@@ -10650,6 +10654,9 @@ paths:
                   dropped_at:
                     type: string
                     description: When the role was dropped
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
@@ -10660,7 +10667,7 @@ paths:
                     type: boolean
                     description: Whether the role is the default postgres user
                   ttl:
-                    type: number
+                    type: integer
                     description: Number of seconds before the credentials expire
                   inherited_roles:
                     items:
@@ -10737,6 +10744,7 @@ paths:
                   - deleted_at
                   - expires_at
                   - dropped_at
+                  - disabled_at
                   - drop_failed
                   - expired
                   - default
@@ -10846,6 +10854,9 @@ paths:
                   dropped_at:
                     type: string
                     description: When the role was dropped
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
@@ -10856,7 +10867,7 @@ paths:
                     type: boolean
                     description: Whether the role is the default postgres user
                   ttl:
-                    type: number
+                    type: integer
                     description: Number of seconds before the credentials expire
                   inherited_roles:
                     items:
@@ -10933,6 +10944,7 @@ paths:
                   - deleted_at
                   - expires_at
                   - dropped_at
+                  - disabled_at
                   - drop_failed
                   - expired
                   - default
@@ -11051,6 +11063,9 @@ paths:
                   dropped_at:
                     type: string
                     description: When the role was dropped
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
@@ -11061,7 +11076,7 @@ paths:
                     type: boolean
                     description: Whether the role is the default postgres user
                   ttl:
-                    type: number
+                    type: integer
                     description: Number of seconds before the credentials expire
                   inherited_roles:
                     items:
@@ -11138,6 +11153,7 @@ paths:
                   - deleted_at
                   - expires_at
                   - dropped_at
+                  - disabled_at
                   - drop_failed
                   - expired
                   - default
@@ -11384,6 +11400,9 @@ paths:
                   dropped_at:
                     type: string
                     description: When the role was dropped
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
@@ -11394,7 +11413,7 @@ paths:
                     type: boolean
                     description: Whether the role is the default postgres user
                   ttl:
-                    type: number
+                    type: integer
                     description: Number of seconds before the credentials expire
                   inherited_roles:
                     items:
@@ -11471,6 +11490,7 @@ paths:
                   - deleted_at
                   - expires_at
                   - dropped_at
+                  - disabled_at
                   - drop_failed
                   - expired
                   - default
@@ -11580,6 +11600,9 @@ paths:
                   dropped_at:
                     type: string
                     description: When the role was dropped
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
@@ -11590,7 +11613,7 @@ paths:
                     type: boolean
                     description: Whether the role is the default postgres user
                   ttl:
-                    type: number
+                    type: integer
                     description: Number of seconds before the credentials expire
                   inherited_roles:
                     items:
@@ -11667,6 +11690,7 @@ paths:
                   - deleted_at
                   - expires_at
                   - dropped_at
+                  - disabled_at
                   - drop_failed
                   - expired
                   - default
@@ -11780,13 +11804,13 @@ paths:
                     type: string
                     description: The size of the vtgate cluster for the branch
                   vtgate_count:
-                    type: number
+                    type: integer
                     description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
                   cluster_iops:
-                    type: number
+                    type: integer
                     description: IOPS for the cluster
                   ready:
                     type: boolean
@@ -11807,7 +11831,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch is sharded
                   shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards in the branch
                   stale_schema:
                     type: boolean
@@ -12038,13 +12062,13 @@ paths:
                     type: string
                     description: The size of the vtgate cluster for the branch
                   vtgate_count:
-                    type: number
+                    type: integer
                     description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
                   cluster_iops:
-                    type: number
+                    type: integer
                     description: IOPS for the cluster
                   ready:
                     type: boolean
@@ -12065,7 +12089,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch is sharded
                   shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards in the branch
                   stale_schema:
                     type: boolean
@@ -12350,16 +12374,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -12519,16 +12543,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -13040,16 +13064,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -13126,7 +13150,7 @@ paths:
                           type: string
                           description: The name of the base branch the deployment will be merged into
                         deploy_request_number:
-                          type: number
+                          type: integer
                           description: The number of the deploy request associated with this deployment
                         deployable:
                           type: boolean
@@ -13247,7 +13271,7 @@ paths:
                                 type: string
                                 description: The DDL statement for the deploy operation summary
                               eta_seconds:
-                                type: number
+                                type: integer
                                 description: The estimated seconds until completion for the deploy operation summary
                               keyspace_name:
                                 type: string
@@ -13285,7 +13309,7 @@ paths:
                                 type: array
                                 description: Names of foreign keys removed by this operation summary
                               shard_count:
-                                type: number
+                                type: integer
                                 description: The number of shards in the keyspace modified by the deploy operation summary
                               shard_names:
                                 items:
@@ -13326,7 +13350,7 @@ paths:
                                       type: number
                                       description: The percent completion for the deploy operation
                                     eta_seconds:
-                                      type: number
+                                      type: integer
                                       description: The estimated seconds until completion for the deploy operation
                                   additionalProperties: false
                                   required:
@@ -13570,16 +13594,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -13593,7 +13617,7 @@ paths:
                           type: string
                           description: The ID of the deploy request
                         number:
-                          type: number
+                          type: integer
                           description: The number of the deploy request
                         actor:
                           type: object
@@ -13665,7 +13689,7 @@ paths:
                           type: boolean
                           description: Whether or not the branch the deploy request will be merged into is sharded
                         into_branch_shard_count:
-                          type: number
+                          type: integer
                           description: The number of shards the branch the deploy request will be merged into has
                         approved:
                           type: boolean
@@ -13770,7 +13794,7 @@ paths:
                               type: string
                               description: The name of the base branch the deployment will be merged into
                             deploy_request_number:
-                              type: number
+                              type: integer
                               description: The number of the deploy request associated with this deployment
                             deployable:
                               type: boolean
@@ -13891,7 +13915,7 @@ paths:
                                     type: string
                                     description: The DDL statement for the deploy operation summary
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation summary
                                   keyspace_name:
                                     type: string
@@ -13929,7 +13953,7 @@ paths:
                                     type: array
                                     description: Names of foreign keys removed by this operation summary
                                   shard_count:
-                                    type: number
+                                    type: integer
                                     description: The number of shards in the keyspace modified by the deploy operation summary
                                   shard_names:
                                     items:
@@ -13970,7 +13994,7 @@ paths:
                                           type: number
                                           description: The percent completion for the deploy operation
                                         eta_seconds:
-                                          type: number
+                                          type: integer
                                           description: The estimated seconds until completion for the deploy operation
                                       additionalProperties: false
                                       required:
@@ -14131,7 +14155,7 @@ paths:
                             - instant_ddl
                             - instant_ddl_eligible
                         num_comments:
-                          type: number
+                          type: integer
                           description: The number of comments on the deploy request
                         html_url:
                           type: string
@@ -14266,7 +14290,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -14338,7 +14362,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -14443,7 +14467,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -14564,7 +14588,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -14602,7 +14626,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -14643,7 +14667,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -14804,7 +14828,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -14899,7 +14923,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns information about a deploy request
@@ -14913,7 +14937,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -14985,7 +15009,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -15090,7 +15114,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -15211,7 +15235,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -15249,7 +15273,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -15290,7 +15314,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -15451,7 +15475,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -15545,7 +15569,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       requestBody:
         content:
           application/json:
@@ -15571,7 +15595,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -15643,7 +15667,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -15748,7 +15772,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -15869,7 +15893,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -15907,7 +15931,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -15948,7 +15972,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -16109,7 +16133,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -16204,7 +16228,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns the deploy request whose deployment has been completed
@@ -16218,7 +16242,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -16290,7 +16314,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -16395,7 +16419,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -16516,7 +16540,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -16554,7 +16578,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -16595,7 +16619,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -16756,7 +16780,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -16851,7 +16875,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       requestBody:
         content:
           application/json:
@@ -16875,7 +16899,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -16947,7 +16971,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -17052,7 +17076,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -17173,7 +17197,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -17211,7 +17235,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -17252,7 +17276,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -17413,7 +17437,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -17508,7 +17532,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       requestBody:
         content:
           application/json:
@@ -17532,7 +17556,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -17604,7 +17628,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -17709,7 +17733,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -17830,7 +17854,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -17868,7 +17892,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -17909,7 +17933,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -18070,7 +18094,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -18165,7 +18189,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns the deploy request whose deployment was canceled
@@ -18179,7 +18203,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -18251,7 +18275,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -18356,7 +18380,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -18477,7 +18501,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -18515,7 +18539,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -18556,7 +18580,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -18717,7 +18741,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -18812,7 +18836,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns the completed deploy request
@@ -18826,7 +18850,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -18898,7 +18922,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -19003,7 +19027,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -19124,7 +19148,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -19162,7 +19186,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -19203,7 +19227,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -19364,7 +19388,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -19459,7 +19483,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       requestBody:
         content:
           application/json:
@@ -19483,7 +19507,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -19555,7 +19579,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -19660,7 +19684,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -19781,7 +19805,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -19819,7 +19843,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -19860,7 +19884,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -20021,7 +20045,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -20116,7 +20140,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns the deployment for a deploy request
@@ -20193,7 +20217,7 @@ paths:
                     type: string
                     description: The name of the base branch the deployment will be merged into
                   deploy_request_number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request associated with this deployment
                   deployable:
                     type: boolean
@@ -20314,7 +20338,7 @@ paths:
                           type: string
                           description: The DDL statement for the deploy operation summary
                         eta_seconds:
-                          type: number
+                          type: integer
                           description: The estimated seconds until completion for the deploy operation summary
                         keyspace_name:
                           type: string
@@ -20352,7 +20376,7 @@ paths:
                           type: array
                           description: Names of foreign keys removed by this operation summary
                         shard_count:
-                          type: number
+                          type: integer
                           description: The number of shards in the keyspace modified by the deploy operation summary
                         shard_names:
                           items:
@@ -20393,7 +20417,7 @@ paths:
                                 type: number
                                 description: The percent completion for the deploy operation
                               eta_seconds:
-                                type: number
+                                type: integer
                                 description: The estimated seconds until completion for the deploy operation
                             additionalProperties: false
                             required:
@@ -20587,7 +20611,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
         - name: organization
           in: path
           required: true
@@ -20622,16 +20646,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -20782,7 +20806,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns the deploy request that was reverted
@@ -20796,7 +20820,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -20868,7 +20892,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -20973,7 +20997,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -21094,7 +21118,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -21132,7 +21156,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -21173,7 +21197,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -21334,7 +21358,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -21429,7 +21453,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns an array of deploy request reviews
@@ -21440,16 +21464,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -21559,7 +21583,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       requestBody:
         content:
           application/json:
@@ -21678,7 +21702,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns the deploy request whose deploy revert was skipped
@@ -21692,7 +21716,7 @@ paths:
                     type: string
                     description: The ID of the deploy request
                   number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request
                   actor:
                     type: object
@@ -21764,7 +21788,7 @@ paths:
                     type: boolean
                     description: Whether or not the branch the deploy request will be merged into is sharded
                   into_branch_shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards the branch the deploy request will be merged into has
                   approved:
                     type: boolean
@@ -21869,7 +21893,7 @@ paths:
                         type: string
                         description: The name of the base branch the deployment will be merged into
                       deploy_request_number:
-                        type: number
+                        type: integer
                         description: The number of the deploy request associated with this deployment
                       deployable:
                         type: boolean
@@ -21990,7 +22014,7 @@ paths:
                               type: string
                               description: The DDL statement for the deploy operation summary
                             eta_seconds:
-                              type: number
+                              type: integer
                               description: The estimated seconds until completion for the deploy operation summary
                             keyspace_name:
                               type: string
@@ -22028,7 +22052,7 @@ paths:
                               type: array
                               description: Names of foreign keys removed by this operation summary
                             shard_count:
-                              type: number
+                              type: integer
                               description: The number of shards in the keyspace modified by the deploy operation summary
                             shard_names:
                               items:
@@ -22069,7 +22093,7 @@ paths:
                                     type: number
                                     description: The percent completion for the deploy operation
                                   eta_seconds:
-                                    type: number
+                                    type: integer
                                     description: The estimated seconds until completion for the deploy operation
                                 additionalProperties: false
                                 required:
@@ -22230,7 +22254,7 @@ paths:
                       - instant_ddl
                       - instant_ddl_eligible
                   num_comments:
-                    type: number
+                    type: integer
                     description: The number of comments on the deploy request
                   html_url:
                     type: string
@@ -22325,7 +22349,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Deploy request throttler configurations
@@ -22430,7 +22454,7 @@ paths:
           required: true
           description: The number of the deploy request
           schema:
-            type: string
+            type: number
       requestBody:
         content:
           application/json:
@@ -22568,16 +22592,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -22742,16 +22766,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -23082,16 +23106,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -23728,16 +23752,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -23754,7 +23778,7 @@ paths:
                           type: string
                           description: The name of the workflow
                         number:
-                          type: number
+                          type: integer
                           description: The sequence number of the workflow
                         state:
                           type: string
@@ -24260,7 +24284,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -24708,7 +24732,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -24725,7 +24749,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -25172,7 +25196,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -25189,7 +25213,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -25637,7 +25661,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -25654,7 +25678,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -26102,7 +26126,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -26119,7 +26143,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -26567,7 +26591,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -26584,7 +26608,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -27032,7 +27056,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -27049,7 +27073,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -27497,7 +27521,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -27514,7 +27538,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -27962,7 +27986,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -27979,7 +28003,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -28427,7 +28451,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -28444,7 +28468,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -28892,7 +28916,7 @@ paths:
           required: true
           description: The sequence number of the workflow
           schema:
-            type: string
+            type: number
       responses:
         "200":
           description: Returns a workflow
@@ -28909,7 +28933,7 @@ paths:
                     type: string
                     description: The name of the workflow
                   number:
-                    type: number
+                    type: integer
                     description: The sequence number of the workflow
                   state:
                     type: string
@@ -29368,16 +29392,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -29542,16 +29566,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -29682,16 +29706,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -30233,16 +30257,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -30282,7 +30306,7 @@ paths:
                           type: string
                           description: The OAuth application's unique client id
                         tokens:
-                          type: number
+                          type: integer
                           description: The number of tokens issued by the OAuth application
                       additionalProperties: false
                       required:
@@ -30378,7 +30402,7 @@ paths:
                     type: string
                     description: The OAuth application's unique client id
                   tokens:
-                    type: number
+                    type: integer
                     description: The number of tokens issued by the OAuth application
                 additionalProperties: false
                 required:
@@ -30449,16 +30473,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -31579,16 +31603,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -31699,16 +31723,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -32781,16 +32805,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -33720,16 +33744,16 @@ paths:
                 type: object
                 properties:
                   current_page:
-                    type: number
+                    type: integer
                     description: The current page number
                   next_page:
-                    type: number
+                    type: integer
                     description: The next page number
                   next_page_url:
                     type: string
                     description: The next page of results
                   prev_page:
-                    type: number
+                    type: integer
                     description: The previous page number
                   prev_page_url:
                     type: string
@@ -33993,16 +34017,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -34029,7 +34053,7 @@ components:
                   - ignored
                 description: The current state of the backup
               size:
-                type: number
+                type: integer
                 description: The size of the backup in bytes
               estimated_storage_cost:
                 type: number
@@ -34053,7 +34077,7 @@ components:
                 type: string
                 description: When the backup was deleted
               pvc_size:
-                type: number
+                type: integer
                 description: Size of the PVC used for the backup
               protected:
                 type: boolean
@@ -34121,13 +34145,13 @@ components:
                       - development
                     description: Whether the policy is for production or development branches
                   retention_value:
-                    type: number
+                    type: integer
                     description: A number value for the retention period of the backup policy
                   retention_unit:
                     type: string
                     description: The unit for the retention period of the backup policy
                   frequency_value:
-                    type: number
+                    type: integer
                     description: A number value for the frequency of the backup policy
                   frequency_unit:
                     type: string
@@ -34136,10 +34160,10 @@ components:
                     type: string
                     description: The time of day that the backup is scheduled, in HH:MM format
                   schedule_day:
-                    type: number
+                    type: integer
                     description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
                   schedule_week:
-                    type: number
+                    type: integer
                     description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                   created_at:
                     type: string
@@ -34276,7 +34300,7 @@ components:
             - ignored
           description: The current state of the backup
         size:
-          type: number
+          type: integer
           description: The size of the backup in bytes
         estimated_storage_cost:
           type: number
@@ -34300,7 +34324,7 @@ components:
           type: string
           description: When the backup was deleted
         pvc_size:
-          type: number
+          type: integer
           description: Size of the PVC used for the backup
         protected:
           type: boolean
@@ -34368,13 +34392,13 @@ components:
                 - development
               description: Whether the policy is for production or development branches
             retention_value:
-              type: number
+              type: integer
               description: A number value for the retention period of the backup policy
             retention_unit:
               type: string
               description: The unit for the retention period of the backup policy
             frequency_value:
-              type: number
+              type: integer
               description: A number value for the frequency of the backup policy
             frequency_unit:
               type: string
@@ -34383,10 +34407,10 @@ components:
               type: string
               description: The time of day that the backup is scheduled, in HH:MM format
             schedule_day:
-              type: number
+              type: integer
               description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
             schedule_week:
-              type: number
+              type: integer
               description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
             created_at:
               type: string
@@ -34499,16 +34523,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -34530,14 +34554,14 @@ components:
                   - completed
                 description: The state of the bouncer resize
               replicas_per_cell:
-                type: number
+                type: integer
                 description: The number of replicas per cell for the bouncer after the resize
               parameters:
                 type: object
                 additionalProperties: true
                 description: The bouncer parameters
               previous_replicas_per_cell:
-                type: number
+                type: integer
                 description: The number of replicas per cell for the bouncer before the resize
               previous_parameters:
                 type: object
@@ -34610,10 +34634,10 @@ components:
                     type: string
                     description: The CPU allocation
                   ram:
-                    type: number
+                    type: integer
                     description: The amount of memory in bytes
                   sort_order:
-                    type: number
+                    type: integer
                     description: The sort order of the Postgres bouncer SKU
                 additionalProperties: false
                 required:
@@ -34635,10 +34659,10 @@ components:
                     type: string
                     description: The CPU allocation
                   ram:
-                    type: number
+                    type: integer
                     description: The amount of memory in bytes
                   sort_order:
-                    type: number
+                    type: integer
                     description: The sort order of the Postgres bouncer SKU
                 additionalProperties: false
                 required:
@@ -34675,16 +34699,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -34699,7 +34723,7 @@ components:
                 description: The ID of the branch change request
               restart:
                 items:
-                  type: number
+                  type: integer
                 type: array
                 description: The ports requiring a restart when changes are applied
               state:
@@ -34750,7 +34774,7 @@ components:
                 type: boolean
                 description: Whether or not this is a metal database
               replicas:
-                type: number
+                type: integer
                 description: The total number of replicas
               parameters:
                 type: object
@@ -34766,17 +34790,17 @@ components:
                 type: boolean
                 description: Whether or not the previous SKU was a metal database
               previous_replicas:
-                type: number
+                type: integer
                 description: The previous total number of replicas
               previous_parameters:
                 type: object
                 additionalProperties: true
                 description: The previous branch parameters
               minimum_storage_bytes:
-                type: number
+                type: integer
                 description: The minimum storage size in bytes
               maximum_storage_bytes:
-                type: number
+                type: integer
                 description: The maximum storage size in bytes
               storage_autoscaling:
                 type: boolean
@@ -34792,16 +34816,16 @@ components:
                   - pd_ssd
                 description: The storage type (gp3 or io2)
               storage_iops:
-                type: number
+                type: integer
                 description: The storage IOPS
               storage_throughput_mibs:
-                type: number
+                type: integer
                 description: The storage throughput in MiB/s
               previous_minimum_storage_bytes:
-                type: number
+                type: integer
                 description: The previous minimum storage size in bytes
               previous_maximum_storage_bytes:
-                type: number
+                type: integer
                 description: The previous maximum storage size in bytes
               previous_storage_autoscaling:
                 type: boolean
@@ -34813,10 +34837,10 @@ components:
                 type: string
                 description: The previous storage type
               previous_storage_iops:
-                type: number
+                type: integer
                 description: The previous storage IOPS
               previous_storage_throughput_mibs:
-                type: number
+                type: integer
                 description: The previous storage throughput in MiB/s
             additionalProperties: false
             required:
@@ -34868,7 +34892,7 @@ components:
           description: The ID of the branch change request
         restart:
           items:
-            type: number
+            type: integer
           type: array
           description: The ports requiring a restart when changes are applied
         state:
@@ -34919,7 +34943,7 @@ components:
           type: boolean
           description: Whether or not this is a metal database
         replicas:
-          type: number
+          type: integer
           description: The total number of replicas
         parameters:
           type: object
@@ -34935,17 +34959,17 @@ components:
           type: boolean
           description: Whether or not the previous SKU was a metal database
         previous_replicas:
-          type: number
+          type: integer
           description: The previous total number of replicas
         previous_parameters:
           type: object
           additionalProperties: true
           description: The previous branch parameters
         minimum_storage_bytes:
-          type: number
+          type: integer
           description: The minimum storage size in bytes
         maximum_storage_bytes:
-          type: number
+          type: integer
           description: The maximum storage size in bytes
         storage_autoscaling:
           type: boolean
@@ -34961,16 +34985,16 @@ components:
             - pd_ssd
           description: The storage type (gp3 or io2)
         storage_iops:
-          type: number
+          type: integer
           description: The storage IOPS
         storage_throughput_mibs:
-          type: number
+          type: integer
           description: The storage throughput in MiB/s
         previous_minimum_storage_bytes:
-          type: number
+          type: integer
           description: The previous minimum storage size in bytes
         previous_maximum_storage_bytes:
-          type: number
+          type: integer
           description: The previous maximum storage size in bytes
         previous_storage_autoscaling:
           type: boolean
@@ -34982,10 +35006,10 @@ components:
           type: string
           description: The previous storage type
         previous_storage_iops:
-          type: number
+          type: integer
           description: The previous storage IOPS
         previous_storage_throughput_mibs:
-          type: number
+          type: integer
           description: The previous storage throughput in MiB/s
       additionalProperties: false
       required:
@@ -35025,16 +35049,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -35093,13 +35117,13 @@ components:
                 type: string
                 description: The size of the vtgate cluster for the branch
               vtgate_count:
-                type: number
+                type: integer
                 description: The number of vtgate instances in the branch
               cluster_name:
                 type: string
                 description: The SKU representing the branch's cluster size
               cluster_iops:
-                type: number
+                type: integer
                 description: IOPS for the cluster
               ready:
                 type: boolean
@@ -35120,7 +35144,7 @@ components:
                 type: boolean
                 description: Whether or not the branch is sharded
               shard_count:
-                type: number
+                type: integer
                 description: The number of shards in the branch
               stale_schema:
                 type: boolean
@@ -35319,13 +35343,13 @@ components:
           type: string
           description: The size of the vtgate cluster for the branch
         vtgate_count:
-          type: number
+          type: integer
           description: The number of vtgate instances in the branch
         cluster_name:
           type: string
           description: The SKU representing the branch's cluster size
         cluster_iops:
-          type: number
+          type: integer
           description: IOPS for the cluster
         ready:
           type: boolean
@@ -35346,7 +35370,7 @@ components:
           type: boolean
           description: Whether or not the branch is sharded
         shard_count:
-          type: number
+          type: integer
           description: The number of shards in the branch
         stale_schema:
           type: boolean
@@ -35489,16 +35513,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -35866,16 +35890,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -35892,16 +35916,16 @@ components:
                 type: string
                 description: Name of the keyspace
               shards:
-                type: number
+                type: integer
                 description: The number of keyspace shards
               sharded:
                 type: boolean
                 description: If the keyspace is sharded
               replicas:
-                type: number
+                type: integer
                 description: Total number of replicas in the keyspace
               extra_replicas:
-                type: number
+                type: integer
                 description: Number of extra replicas in the keyspace
               created_at:
                 type: string
@@ -36005,16 +36029,16 @@ components:
           type: string
           description: Name of the keyspace
         shards:
-          type: number
+          type: integer
           description: The number of keyspace shards
         sharded:
           type: boolean
           description: If the keyspace is sharded
         replicas:
-          type: number
+          type: integer
           description: Total number of replicas in the keyspace
         extra_replicas:
-          type: number
+          type: integer
           description: Number of extra replicas in the keyspace
         created_at:
           type: string
@@ -36104,16 +36128,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -36166,7 +36190,7 @@ components:
                 type: array
                 description: The list of hosts in each availability zone providing direct access to a vtgate
               ttl_seconds:
-                type: number
+                type: integer
                 description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
               access_host_url:
                 type: string
@@ -36350,7 +36374,7 @@ components:
           type: array
           description: The list of hosts in each availability zone providing direct access to a vtgate
         ttl_seconds:
-          type: number
+          type: integer
           description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
         access_host_url:
           type: string
@@ -36484,16 +36508,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -36618,16 +36642,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -36647,19 +36671,19 @@ components:
                 type: string
                 description: The URL to retrieve this database's branches via the API
               branches_count:
-                type: number
+                type: integer
                 description: The total number of database branches
               open_schema_recommendations_count:
-                type: number
+                type: integer
                 description: The total number of schema recommendations
               development_branches_count:
-                type: number
+                type: integer
                 description: The total number of database development branches
               production_branches_count:
-                type: number
+                type: integer
                 description: The total number of database production branches
               issues_count:
-                type: number
+                type: integer
                 description: The total number of ongoing issues within a database
               multiple_admins_required_for_deletion:
                 type: boolean
@@ -36695,7 +36719,7 @@ components:
                         type: string
                         description: Hostname of the data source
                       port:
-                        type: number
+                        type: integer
                         description: Port of the data source
                       database:
                         type: string
@@ -36772,13 +36796,13 @@ components:
                 type: boolean
                 description: If the database is sharded
               default_branch_shard_count:
-                type: number
+                type: integer
                 description: Number of shards in the default branch
               default_branch_read_only_regions_count:
-                type: number
+                type: integer
                 description: Number of read only regions in the default branch
               default_branch_table_count:
-                type: number
+                type: integer
                 description: Number of tables in the default branch schema
               default_branch:
                 type: string
@@ -36899,19 +36923,19 @@ components:
           type: string
           description: The URL to retrieve this database's branches via the API
         branches_count:
-          type: number
+          type: integer
           description: The total number of database branches
         open_schema_recommendations_count:
-          type: number
+          type: integer
           description: The total number of schema recommendations
         development_branches_count:
-          type: number
+          type: integer
           description: The total number of database development branches
         production_branches_count:
-          type: number
+          type: integer
           description: The total number of database production branches
         issues_count:
-          type: number
+          type: integer
           description: The total number of ongoing issues within a database
         multiple_admins_required_for_deletion:
           type: boolean
@@ -36947,7 +36971,7 @@ components:
                   type: string
                   description: Hostname of the data source
                 port:
-                  type: number
+                  type: integer
                   description: Port of the data source
                 database:
                   type: string
@@ -37024,13 +37048,13 @@ components:
           type: boolean
           description: If the database is sharded
         default_branch_shard_count:
-          type: number
+          type: integer
           description: Number of shards in the default branch
         default_branch_read_only_regions_count:
-          type: number
+          type: integer
           description: Number of read only regions in the default branch
         default_branch_table_count:
-          type: number
+          type: integer
           description: Number of tables in the default branch schema
         default_branch:
           type: string
@@ -37134,16 +37158,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -37201,16 +37225,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -37369,16 +37393,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -37418,7 +37442,7 @@ components:
                 type: string
                 description: The OAuth application's unique client id
               tokens:
-                type: number
+                type: integer
                 description: The number of tokens issued by the OAuth application
             additionalProperties: false
             required:
@@ -37473,7 +37497,7 @@ components:
           type: string
           description: The OAuth application's unique client id
         tokens:
-          type: number
+          type: integer
           description: The number of tokens issued by the OAuth application
       additionalProperties: false
       required:
@@ -37491,16 +37515,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -38113,16 +38137,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -38349,16 +38373,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -38405,7 +38429,7 @@ components:
                 type: boolean
                 description: Whether or not the organization has past due billing invoices
               database_count:
-                type: number
+                type: integer
                 description: The number of databases in the organization
               sso_portal_url:
                 type: string
@@ -38421,7 +38445,7 @@ components:
                 type: number
                 description: The expected monthly budget for the organization
               keyspace_shard_limit:
-                type: number
+                type: integer
                 description: The keyspace shard limit for the organization
               has_card:
                 type: boolean
@@ -38499,7 +38523,7 @@ components:
           type: boolean
           description: Whether or not the organization has past due billing invoices
         database_count:
-          type: number
+          type: integer
           description: The number of databases in the organization
         sso_portal_url:
           type: string
@@ -38515,7 +38539,7 @@ components:
           type: number
           description: The expected monthly budget for the organization
         keyspace_shard_limit:
-          type: number
+          type: integer
           description: The keyspace shard limit for the organization
         has_card:
           type: boolean
@@ -38558,10 +38582,10 @@ components:
           type: string
           description: The number of CPUs
         storage:
-          type: number
+          type: integer
           description: The amount of storage in bytes
         ram:
-          type: number
+          type: integer
           description: The amount of memory in bytes
         metal:
           type: boolean
@@ -38585,7 +38609,7 @@ components:
           type: number
           description: The rate for the cluster SKU
         sort_order:
-          type: number
+          type: integer
           description: The sort order of the cluster SKU
         architecture:
           type: string
@@ -38725,14 +38749,14 @@ components:
             - completed
           description: The state of the bouncer resize
         replicas_per_cell:
-          type: number
+          type: integer
           description: The number of replicas per cell for the bouncer after the resize
         parameters:
           type: object
           additionalProperties: true
           description: The bouncer parameters
         previous_replicas_per_cell:
-          type: number
+          type: integer
           description: The number of replicas per cell for the bouncer before the resize
         previous_parameters:
           type: object
@@ -38805,10 +38829,10 @@ components:
               type: string
               description: The CPU allocation
             ram:
-              type: number
+              type: integer
               description: The amount of memory in bytes
             sort_order:
-              type: number
+              type: integer
               description: The sort order of the Postgres bouncer SKU
           additionalProperties: false
           required:
@@ -38830,10 +38854,10 @@ components:
               type: string
               description: The CPU allocation
             ram:
-              type: number
+              type: integer
               description: The amount of memory in bytes
             sort_order:
-              type: number
+              type: integer
               description: The sort order of the Postgres bouncer SKU
           additionalProperties: false
           required:
@@ -38862,16 +38886,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -38900,10 +38924,10 @@ components:
                     type: string
                     description: The CPU allocation
                   ram:
-                    type: number
+                    type: integer
                     description: The amount of memory in bytes
                   sort_order:
-                    type: number
+                    type: integer
                     description: The sort order of the Postgres bouncer SKU
                 additionalProperties: false
                 required:
@@ -38920,7 +38944,7 @@ components:
                   - replica_az_affinity
                 description: The instance type the bouncer targets
               replicas_per_cell:
-                type: number
+                type: integer
                 description: The count of replicas in each cell
               created_at:
                 type: string
@@ -39128,10 +39152,10 @@ components:
               type: string
               description: The CPU allocation
             ram:
-              type: number
+              type: integer
               description: The amount of memory in bytes
             sort_order:
-              type: number
+              type: integer
               description: The sort order of the Postgres bouncer SKU
           additionalProperties: false
           required:
@@ -39148,7 +39172,7 @@ components:
             - replica_az_affinity
           description: The instance type the bouncer targets
         replicas_per_cell:
-          type: number
+          type: integer
           description: The count of replicas in each cell
         created_at:
           type: string
@@ -39330,16 +39354,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -39388,6 +39412,9 @@ components:
               dropped_at:
                 type: string
                 description: When the role was dropped
+              disabled_at:
+                type: string
+                description: When the role was disabled
               drop_failed:
                 type: string
                 description: Error message available when dropping the role fails
@@ -39398,7 +39425,7 @@ components:
                 type: boolean
                 description: Whether the role is the default postgres user
               ttl:
-                type: number
+                type: integer
                 description: Number of seconds before the credentials expire
               inherited_roles:
                 items:
@@ -39475,6 +39502,7 @@ components:
               - deleted_at
               - expires_at
               - dropped_at
+              - disabled_at
               - drop_failed
               - expired
               - default
@@ -39532,6 +39560,9 @@ components:
         dropped_at:
           type: string
           description: When the role was dropped
+        disabled_at:
+          type: string
+          description: When the role was disabled
         drop_failed:
           type: string
           description: Error message available when dropping the role fails
@@ -39542,7 +39573,7 @@ components:
           type: boolean
           description: Whether the role is the default postgres user
         ttl:
-          type: number
+          type: integer
           description: Number of seconds before the credentials expire
         inherited_roles:
           items:
@@ -39619,6 +39650,7 @@ components:
         - deleted_at
         - expires_at
         - dropped_at
+        - disabled_at
         - drop_failed
         - expired
         - default
@@ -39756,16 +39788,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -39898,16 +39930,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -39924,7 +39956,7 @@ components:
                 type: string
                 description: The name of the workflow
               number:
-                type: number
+                type: integer
                 description: The sequence number of the workflow
               state:
                 type: string
@@ -40356,7 +40388,7 @@ components:
           type: string
           description: The name of the workflow
         number:
-          type: number
+          type: integer
           description: The sequence number of the workflow
         state:
           type: string
@@ -40774,16 +40806,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -40902,16 +40934,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -40925,7 +40957,7 @@ components:
                 type: string
                 description: The ID of the deploy request
               number:
-                type: number
+                type: integer
                 description: The number of the deploy request
               actor:
                 type: object
@@ -40997,7 +41029,7 @@ components:
                 type: boolean
                 description: Whether or not the branch the deploy request will be merged into is sharded
               into_branch_shard_count:
-                type: number
+                type: integer
                 description: The number of shards the branch the deploy request will be merged into has
               approved:
                 type: boolean
@@ -41102,7 +41134,7 @@ components:
                     type: string
                     description: The name of the base branch the deployment will be merged into
                   deploy_request_number:
-                    type: number
+                    type: integer
                     description: The number of the deploy request associated with this deployment
                   deployable:
                     type: boolean
@@ -41223,7 +41255,7 @@ components:
                           type: string
                           description: The DDL statement for the deploy operation summary
                         eta_seconds:
-                          type: number
+                          type: integer
                           description: The estimated seconds until completion for the deploy operation summary
                         keyspace_name:
                           type: string
@@ -41261,7 +41293,7 @@ components:
                           type: array
                           description: Names of foreign keys removed by this operation summary
                         shard_count:
-                          type: number
+                          type: integer
                           description: The number of shards in the keyspace modified by the deploy operation summary
                         shard_names:
                           items:
@@ -41302,7 +41334,7 @@ components:
                                 type: number
                                 description: The percent completion for the deploy operation
                               eta_seconds:
-                                type: number
+                                type: integer
                                 description: The estimated seconds until completion for the deploy operation
                             additionalProperties: false
                             required:
@@ -41463,7 +41495,7 @@ components:
                   - instant_ddl
                   - instant_ddl_eligible
               num_comments:
-                type: number
+                type: integer
                 description: The number of comments on the deploy request
               html_url:
                 type: string
@@ -41527,7 +41559,7 @@ components:
           type: string
           description: The ID of the deploy request
         number:
-          type: number
+          type: integer
           description: The number of the deploy request
         actor:
           type: object
@@ -41599,7 +41631,7 @@ components:
           type: boolean
           description: Whether or not the branch the deploy request will be merged into is sharded
         into_branch_shard_count:
-          type: number
+          type: integer
           description: The number of shards the branch the deploy request will be merged into has
         approved:
           type: boolean
@@ -41704,7 +41736,7 @@ components:
               type: string
               description: The name of the base branch the deployment will be merged into
             deploy_request_number:
-              type: number
+              type: integer
               description: The number of the deploy request associated with this deployment
             deployable:
               type: boolean
@@ -41825,7 +41857,7 @@ components:
                     type: string
                     description: The DDL statement for the deploy operation summary
                   eta_seconds:
-                    type: number
+                    type: integer
                     description: The estimated seconds until completion for the deploy operation summary
                   keyspace_name:
                     type: string
@@ -41863,7 +41895,7 @@ components:
                     type: array
                     description: Names of foreign keys removed by this operation summary
                   shard_count:
-                    type: number
+                    type: integer
                     description: The number of shards in the keyspace modified by the deploy operation summary
                   shard_names:
                     items:
@@ -41904,7 +41936,7 @@ components:
                           type: number
                           description: The percent completion for the deploy operation
                         eta_seconds:
-                          type: number
+                          type: integer
                           description: The estimated seconds until completion for the deploy operation
                       additionalProperties: false
                       required:
@@ -42065,7 +42097,7 @@ components:
             - instant_ddl
             - instant_ddl_eligible
         num_comments:
-          type: number
+          type: integer
           description: The number of comments on the deploy request
         html_url:
           type: string
@@ -42184,7 +42216,7 @@ components:
           type: string
           description: The name of the base branch the deployment will be merged into
         deploy_request_number:
-          type: number
+          type: integer
           description: The number of the deploy request associated with this deployment
         deployable:
           type: boolean
@@ -42305,7 +42337,7 @@ components:
                 type: string
                 description: The DDL statement for the deploy operation summary
               eta_seconds:
-                type: number
+                type: integer
                 description: The estimated seconds until completion for the deploy operation summary
               keyspace_name:
                 type: string
@@ -42343,7 +42375,7 @@ components:
                 type: array
                 description: Names of foreign keys removed by this operation summary
               shard_count:
-                type: number
+                type: integer
                 description: The number of shards in the keyspace modified by the deploy operation summary
               shard_names:
                 items:
@@ -42384,7 +42416,7 @@ components:
                       type: number
                       description: The percent completion for the deploy operation
                     eta_seconds:
-                      type: number
+                      type: integer
                       description: The estimated seconds until completion for the deploy operation
                   additionalProperties: false
                   required:
@@ -42548,16 +42580,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -42666,16 +42698,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -42752,7 +42784,7 @@ components:
                 type: string
                 description: The name of the base branch the deployment will be merged into
               deploy_request_number:
-                type: number
+                type: integer
                 description: The number of the deploy request associated with this deployment
               deployable:
                 type: boolean
@@ -42873,7 +42905,7 @@ components:
                       type: string
                       description: The DDL statement for the deploy operation summary
                     eta_seconds:
-                      type: number
+                      type: integer
                       description: The estimated seconds until completion for the deploy operation summary
                     keyspace_name:
                       type: string
@@ -42911,7 +42943,7 @@ components:
                       type: array
                       description: Names of foreign keys removed by this operation summary
                     shard_count:
-                      type: number
+                      type: integer
                       description: The number of shards in the keyspace modified by the deploy operation summary
                     shard_names:
                       items:
@@ -42952,7 +42984,7 @@ components:
                             type: number
                             description: The percent completion for the deploy operation
                           eta_seconds:
-                            type: number
+                            type: integer
                             description: The estimated seconds until completion for the deploy operation
                         additionalProperties: false
                         required:
@@ -43124,16 +43156,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -43284,16 +43316,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -43367,16 +43399,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string
@@ -43437,16 +43469,16 @@ components:
       type: object
       properties:
         current_page:
-          type: number
+          type: integer
           description: The current page number
         next_page:
-          type: number
+          type: integer
           description: The next page number
         next_page_url:
           type: string
           description: The next page of results
         prev_page:
-          type: number
+          type: integer
           description: The previous page number
         prev_page_url:
           type: string

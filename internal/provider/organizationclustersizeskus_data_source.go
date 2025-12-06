@@ -97,7 +97,7 @@ func (r *OrganizationClusterSizeSkusDataSource) Schema(ctx context.Context, req 
 							Computed:    true,
 							Description: `The provider of the cluster SKU (nil, AWS or GCP)`,
 						},
-						"ram": schema.Float64Attribute{
+						"ram": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The amount of memory in bytes`,
 						},
@@ -109,11 +109,11 @@ func (r *OrganizationClusterSizeSkusDataSource) Schema(ctx context.Context, req 
 							Computed:    true,
 							Description: `The replica rate for the cluster SKU`,
 						},
-						"sort_order": schema.Float64Attribute{
+						"sort_order": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The sort order of the cluster SKU`,
 						},
-						"storage": schema.Float64Attribute{
+						"storage": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The amount of storage in bytes`,
 						},

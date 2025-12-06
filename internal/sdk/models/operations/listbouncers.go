@@ -76,9 +76,9 @@ type ListBouncersSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (l *ListBouncersSku) GetName() string {
@@ -102,16 +102,16 @@ func (l *ListBouncersSku) GetCPU() string {
 	return l.CPU
 }
 
-func (l *ListBouncersSku) GetRAM() float64 {
+func (l *ListBouncersSku) GetRAM() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.RAM
 }
 
-func (l *ListBouncersSku) GetSortOrder() float64 {
+func (l *ListBouncersSku) GetSortOrder() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.SortOrder
 }
@@ -511,7 +511,7 @@ type ListBouncersData struct {
 	// The instance type the bouncer targets
 	Target ListBouncersTarget `json:"target"`
 	// The count of replicas in each cell
-	ReplicasPerCell float64 `json:"replicas_per_cell"`
+	ReplicasPerCell int64 `json:"replicas_per_cell"`
 	// When the bouncer was created
 	CreatedAt string `json:"created_at"`
 	// When the bouncer was updated
@@ -551,9 +551,9 @@ func (l *ListBouncersData) GetTarget() ListBouncersTarget {
 	return l.Target
 }
 
-func (l *ListBouncersData) GetReplicasPerCell() float64 {
+func (l *ListBouncersData) GetReplicasPerCell() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ReplicasPerCell
 }
@@ -603,28 +603,28 @@ func (l *ListBouncersData) GetParameters() []ListBouncersParameter {
 // ListBouncersResponseBody - Returns bouncers
 type ListBouncersResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string             `json:"prev_page_url"`
 	Data        []ListBouncersData `json:"data"`
 }
 
-func (l *ListBouncersResponseBody) GetCurrentPage() float64 {
+func (l *ListBouncersResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListBouncersResponseBody) GetNextPage() float64 {
+func (l *ListBouncersResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -636,9 +636,9 @@ func (l *ListBouncersResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListBouncersResponseBody) GetPrevPage() float64 {
+func (l *ListBouncersResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

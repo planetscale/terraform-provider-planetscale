@@ -49,7 +49,7 @@ type GetOauthApplicationResponseBody struct {
 	// The OAuth application's unique client id
 	ClientID string `json:"client_id"`
 	// The number of tokens issued by the OAuth application
-	Tokens float64 `json:"tokens"`
+	Tokens int64 `json:"tokens"`
 }
 
 func (g *GetOauthApplicationResponseBody) GetID() string {
@@ -115,9 +115,9 @@ func (g *GetOauthApplicationResponseBody) GetClientID() string {
 	return g.ClientID
 }
 
-func (g *GetOauthApplicationResponseBody) GetTokens() float64 {
+func (g *GetOauthApplicationResponseBody) GetTokens() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.Tokens
 }

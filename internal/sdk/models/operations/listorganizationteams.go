@@ -366,28 +366,28 @@ func (l *ListOrganizationTeamsData) GetManaged() bool {
 // ListOrganizationTeamsResponseBody - Returns teams in the organization
 type ListOrganizationTeamsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                      `json:"prev_page_url"`
 	Data        []ListOrganizationTeamsData `json:"data"`
 }
 
-func (l *ListOrganizationTeamsResponseBody) GetCurrentPage() float64 {
+func (l *ListOrganizationTeamsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListOrganizationTeamsResponseBody) GetNextPage() float64 {
+func (l *ListOrganizationTeamsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -399,9 +399,9 @@ func (l *ListOrganizationTeamsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListOrganizationTeamsResponseBody) GetPrevPage() float64 {
+func (l *ListOrganizationTeamsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

@@ -41,7 +41,7 @@ type BranchResourceModel struct {
 	Actor                       tfTypes.GetBranchActor              `tfsdk:"actor"`
 	BackupID                    types.String                        `tfsdk:"backup_id"`
 	Branch                      types.String                        `tfsdk:"branch"`
-	ClusterIops                 types.Float64                       `tfsdk:"cluster_iops"`
+	ClusterIops                 types.Int64                         `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                        `tfsdk:"cluster_name"`
 	ClusterSize                 types.String                        `tfsdk:"cluster_size"`
 	CreatedAt                   types.String                        `tfsdk:"created_at"`
@@ -72,13 +72,13 @@ type BranchResourceModel struct {
 	SchemaLastUpdatedAt         types.String                        `tfsdk:"schema_last_updated_at"`
 	SchemaReady                 types.Bool                          `tfsdk:"schema_ready"`
 	SeedData                    types.String                        `tfsdk:"seed_data"`
-	ShardCount                  types.Float64                       `tfsdk:"shard_count"`
+	ShardCount                  types.Int64                         `tfsdk:"shard_count"`
 	Sharded                     types.Bool                          `tfsdk:"sharded"`
 	StaleSchema                 types.Bool                          `tfsdk:"stale_schema"`
 	State                       types.String                        `tfsdk:"state"`
 	UpdatedAt                   types.String                        `tfsdk:"updated_at"`
 	URL                         types.String                        `tfsdk:"url"`
-	VtgateCount                 types.Float64                       `tfsdk:"vtgate_count"`
+	VtgateCount                 types.Int64                         `tfsdk:"vtgate_count"`
 	VtgateSize                  types.String                        `tfsdk:"vtgate_size"`
 }
 
@@ -121,7 +121,7 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `The name of the branch. Requires replacement if changed.`,
 			},
-			"cluster_iops": schema.Float64Attribute{
+			"cluster_iops": schema.Int64Attribute{
 				Computed:    true,
 				Description: `IOPS for the cluster`,
 			},
@@ -334,7 +334,7 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					),
 				},
 			},
-			"shard_count": schema.Float64Attribute{
+			"shard_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The number of shards in the branch`,
 			},
@@ -358,7 +358,7 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `Planetscale API URL for the branch`,
 			},
-			"vtgate_count": schema.Float64Attribute{
+			"vtgate_count": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The number of vtgate instances in the branch`,
 			},

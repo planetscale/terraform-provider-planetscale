@@ -74,7 +74,7 @@ func (r *PasswordsDataSourceModel) RefreshFromOperationsListPasswordsResponseBod
 			data.Renewable = types.BoolValue(dataItem.Renewable)
 			data.Replica = types.BoolValue(dataItem.Replica)
 			data.Role = types.StringValue(string(dataItem.Role))
-			data.TTLSeconds = types.Float64Value(dataItem.TTLSeconds)
+			data.TTLSeconds = types.Int64Value(dataItem.TTLSeconds)
 			data.Username = types.StringValue(dataItem.Username)
 
 			r.Data = append(r.Data, data)

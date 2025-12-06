@@ -29,11 +29,11 @@ func (r *OrganizationClusterSizeSkusDataSourceModel) RefreshFromListClusterSizeS
 		data.Name = types.StringValue(dataItem.Name)
 		data.Production = types.BoolValue(dataItem.Production)
 		data.Provider = types.StringValue(dataItem.Provider)
-		data.RAM = types.Float64Value(dataItem.RAM)
+		data.RAM = types.Int64Value(dataItem.RAM)
 		data.Rate = types.Float64PointerValue(dataItem.Rate)
 		data.ReplicaRate = types.Float64PointerValue(dataItem.ReplicaRate)
-		data.SortOrder = types.Float64Value(dataItem.SortOrder)
-		data.Storage = types.Float64Value(dataItem.Storage)
+		data.SortOrder = types.Int64Value(dataItem.SortOrder)
+		data.Storage = types.Int64Value(dataItem.Storage)
 
 		r.Data = append(r.Data, data)
 	}

@@ -257,7 +257,7 @@ type GetPasswordResponseBody struct {
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
 	DirectVtgate bool `json:"direct_vtgate"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTLSeconds float64 `json:"ttl_seconds"`
+	TTLSeconds int64 `json:"ttl_seconds"`
 	// The host URL for the password
 	AccessHostURL string `json:"access_host_url"`
 	// The regional host URL
@@ -345,9 +345,9 @@ func (g *GetPasswordResponseBody) GetDirectVtgate() bool {
 	return g.DirectVtgate
 }
 
-func (g *GetPasswordResponseBody) GetTTLSeconds() float64 {
+func (g *GetPasswordResponseBody) GetTTLSeconds() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.TTLSeconds
 }

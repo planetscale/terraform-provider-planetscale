@@ -64,7 +64,7 @@ type PasswordResourceModel struct {
 	Replica                types.Bool                        `tfsdk:"replica"`
 	Role                   types.String                      `tfsdk:"role"`
 	TTL                    types.Float64                     `tfsdk:"ttl"`
-	TTLSeconds             types.Float64                     `tfsdk:"ttl_seconds"`
+	TTLSeconds             types.Int64                       `tfsdk:"ttl_seconds"`
 	Username               types.String                      `tfsdk:"username"`
 }
 
@@ -272,7 +272,7 @@ func (r *PasswordResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 				Description: `Time to live (in seconds) for the password. The password will be invalid when TTL has passed. Requires replacement if changed.`,
 			},
-			"ttl_seconds": schema.Float64Attribute{
+			"ttl_seconds": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Time to live (in seconds) for the password. The password will be invalid when TTL has passed`,
 			},

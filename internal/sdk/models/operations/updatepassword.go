@@ -310,7 +310,7 @@ type UpdatePasswordResponseBody struct {
 	// The list of hosts in each availability zone providing direct access to a vtgate
 	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTLSeconds float64 `json:"ttl_seconds"`
+	TTLSeconds int64 `json:"ttl_seconds"`
 	// The host URL for the password
 	AccessHostURL string `json:"access_host_url"`
 	// The regional host URL
@@ -407,9 +407,9 @@ func (u *UpdatePasswordResponseBody) GetDirectVtgateAddresses() []string {
 	return u.DirectVtgateAddresses
 }
 
-func (u *UpdatePasswordResponseBody) GetTTLSeconds() float64 {
+func (u *UpdatePasswordResponseBody) GetTTLSeconds() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.TTLSeconds
 }

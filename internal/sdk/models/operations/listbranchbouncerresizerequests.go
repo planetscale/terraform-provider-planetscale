@@ -187,9 +187,9 @@ type ListBranchBouncerResizeRequestsSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (l *ListBranchBouncerResizeRequestsSku) GetName() string {
@@ -213,16 +213,16 @@ func (l *ListBranchBouncerResizeRequestsSku) GetCPU() string {
 	return l.CPU
 }
 
-func (l *ListBranchBouncerResizeRequestsSku) GetRAM() float64 {
+func (l *ListBranchBouncerResizeRequestsSku) GetRAM() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.RAM
 }
 
-func (l *ListBranchBouncerResizeRequestsSku) GetSortOrder() float64 {
+func (l *ListBranchBouncerResizeRequestsSku) GetSortOrder() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.SortOrder
 }
@@ -235,9 +235,9 @@ type ListBranchBouncerResizeRequestsPreviousSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (l *ListBranchBouncerResizeRequestsPreviousSku) GetName() string {
@@ -261,16 +261,16 @@ func (l *ListBranchBouncerResizeRequestsPreviousSku) GetCPU() string {
 	return l.CPU
 }
 
-func (l *ListBranchBouncerResizeRequestsPreviousSku) GetRAM() float64 {
+func (l *ListBranchBouncerResizeRequestsPreviousSku) GetRAM() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.RAM
 }
 
-func (l *ListBranchBouncerResizeRequestsPreviousSku) GetSortOrder() float64 {
+func (l *ListBranchBouncerResizeRequestsPreviousSku) GetSortOrder() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.SortOrder
 }
@@ -281,11 +281,11 @@ type ListBranchBouncerResizeRequestsData struct {
 	// The state of the bouncer resize
 	State ListBranchBouncerResizeRequestsState `json:"state"`
 	// The number of replicas per cell for the bouncer after the resize
-	ReplicasPerCell float64 `json:"replicas_per_cell"`
+	ReplicasPerCell int64 `json:"replicas_per_cell"`
 	// The bouncer parameters
 	Parameters map[string]any `json:"parameters"`
 	// The number of replicas per cell for the bouncer before the resize
-	PreviousReplicasPerCell float64 `json:"previous_replicas_per_cell"`
+	PreviousReplicasPerCell int64 `json:"previous_replicas_per_cell"`
 	// The previous bouncer parameters
 	PreviousParameters map[string]any `json:"previous_parameters"`
 	// The time the bouncer resize started
@@ -316,9 +316,9 @@ func (l *ListBranchBouncerResizeRequestsData) GetState() ListBranchBouncerResize
 	return l.State
 }
 
-func (l *ListBranchBouncerResizeRequestsData) GetReplicasPerCell() float64 {
+func (l *ListBranchBouncerResizeRequestsData) GetReplicasPerCell() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ReplicasPerCell
 }
@@ -330,9 +330,9 @@ func (l *ListBranchBouncerResizeRequestsData) GetParameters() map[string]any {
 	return l.Parameters
 }
 
-func (l *ListBranchBouncerResizeRequestsData) GetPreviousReplicasPerCell() float64 {
+func (l *ListBranchBouncerResizeRequestsData) GetPreviousReplicasPerCell() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PreviousReplicasPerCell
 }
@@ -403,28 +403,28 @@ func (l *ListBranchBouncerResizeRequestsData) GetPreviousSku() ListBranchBouncer
 // ListBranchBouncerResizeRequestsResponseBody - Returns bouncer resize requests
 type ListBranchBouncerResizeRequestsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                                `json:"prev_page_url"`
 	Data        []ListBranchBouncerResizeRequestsData `json:"data"`
 }
 
-func (l *ListBranchBouncerResizeRequestsResponseBody) GetCurrentPage() float64 {
+func (l *ListBranchBouncerResizeRequestsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListBranchBouncerResizeRequestsResponseBody) GetNextPage() float64 {
+func (l *ListBranchBouncerResizeRequestsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -436,9 +436,9 @@ func (l *ListBranchBouncerResizeRequestsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListBranchBouncerResizeRequestsResponseBody) GetPrevPage() float64 {
+func (l *ListBranchBouncerResizeRequestsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

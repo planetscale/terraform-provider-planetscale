@@ -782,7 +782,7 @@ type CreateWorkflowResponseBody struct {
 	// The name of the workflow
 	Name string `json:"name"`
 	// The sequence number of the workflow
-	Number float64 `json:"number"`
+	Number int64 `json:"number"`
 	// The state of the workflow
 	State CreateWorkflowState `json:"state"`
 	// When the workflow was created
@@ -861,9 +861,9 @@ func (c *CreateWorkflowResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreateWorkflowResponseBody) GetNumber() float64 {
+func (c *CreateWorkflowResponseBody) GetNumber() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.Number
 }

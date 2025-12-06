@@ -83,9 +83,9 @@ type ListClusterSizeSkusResponseBody struct {
 	// The number of CPUs
 	CPU string `json:"cpu"`
 	// The amount of storage in bytes
-	Storage float64 `json:"storage"`
+	Storage int64 `json:"storage"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// Whether or not the cluster SKU is Metal
 	Metal bool `json:"metal"`
 	// Whether or not the cluster SKU is enabled for the organization
@@ -101,7 +101,7 @@ type ListClusterSizeSkusResponseBody struct {
 	// The rate for the cluster SKU
 	Rate *float64 `json:"rate,omitzero"`
 	// The sort order of the cluster SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 	// The architecture of the cluster SKU (null, x86_64 or arm64)
 	Architecture string `json:"architecture"`
 	// Whether or not the cluster SKU is a development SKU
@@ -131,16 +131,16 @@ func (l *ListClusterSizeSkusResponseBody) GetCPU() string {
 	return l.CPU
 }
 
-func (l *ListClusterSizeSkusResponseBody) GetStorage() float64 {
+func (l *ListClusterSizeSkusResponseBody) GetStorage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Storage
 }
 
-func (l *ListClusterSizeSkusResponseBody) GetRAM() float64 {
+func (l *ListClusterSizeSkusResponseBody) GetRAM() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.RAM
 }
@@ -194,9 +194,9 @@ func (l *ListClusterSizeSkusResponseBody) GetRate() *float64 {
 	return l.Rate
 }
 
-func (l *ListClusterSizeSkusResponseBody) GetSortOrder() float64 {
+func (l *ListClusterSizeSkusResponseBody) GetSortOrder() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.SortOrder
 }

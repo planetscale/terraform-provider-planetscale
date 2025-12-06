@@ -227,9 +227,9 @@ type UpdateBouncerResizeRequestSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (u *UpdateBouncerResizeRequestSku) GetName() string {
@@ -253,16 +253,16 @@ func (u *UpdateBouncerResizeRequestSku) GetCPU() string {
 	return u.CPU
 }
 
-func (u *UpdateBouncerResizeRequestSku) GetRAM() float64 {
+func (u *UpdateBouncerResizeRequestSku) GetRAM() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.RAM
 }
 
-func (u *UpdateBouncerResizeRequestSku) GetSortOrder() float64 {
+func (u *UpdateBouncerResizeRequestSku) GetSortOrder() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.SortOrder
 }
@@ -275,9 +275,9 @@ type UpdateBouncerResizeRequestPreviousSku struct {
 	// The CPU allocation
 	CPU string `json:"cpu"`
 	// The amount of memory in bytes
-	RAM float64 `json:"ram"`
+	RAM int64 `json:"ram"`
 	// The sort order of the Postgres bouncer SKU
-	SortOrder float64 `json:"sort_order"`
+	SortOrder int64 `json:"sort_order"`
 }
 
 func (u *UpdateBouncerResizeRequestPreviousSku) GetName() string {
@@ -301,16 +301,16 @@ func (u *UpdateBouncerResizeRequestPreviousSku) GetCPU() string {
 	return u.CPU
 }
 
-func (u *UpdateBouncerResizeRequestPreviousSku) GetRAM() float64 {
+func (u *UpdateBouncerResizeRequestPreviousSku) GetRAM() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.RAM
 }
 
-func (u *UpdateBouncerResizeRequestPreviousSku) GetSortOrder() float64 {
+func (u *UpdateBouncerResizeRequestPreviousSku) GetSortOrder() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.SortOrder
 }
@@ -322,11 +322,11 @@ type UpdateBouncerResizeRequestResponseBody struct {
 	// The state of the bouncer resize
 	State UpdateBouncerResizeRequestState `json:"state"`
 	// The number of replicas per cell for the bouncer after the resize
-	ReplicasPerCell float64 `json:"replicas_per_cell"`
+	ReplicasPerCell int64 `json:"replicas_per_cell"`
 	// The bouncer parameters
 	Parameters map[string]any `json:"parameters"`
 	// The number of replicas per cell for the bouncer before the resize
-	PreviousReplicasPerCell float64 `json:"previous_replicas_per_cell"`
+	PreviousReplicasPerCell int64 `json:"previous_replicas_per_cell"`
 	// The previous bouncer parameters
 	PreviousParameters map[string]any `json:"previous_parameters"`
 	// The time the bouncer resize started
@@ -357,9 +357,9 @@ func (u *UpdateBouncerResizeRequestResponseBody) GetState() UpdateBouncerResizeR
 	return u.State
 }
 
-func (u *UpdateBouncerResizeRequestResponseBody) GetReplicasPerCell() float64 {
+func (u *UpdateBouncerResizeRequestResponseBody) GetReplicasPerCell() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.ReplicasPerCell
 }
@@ -371,9 +371,9 @@ func (u *UpdateBouncerResizeRequestResponseBody) GetParameters() map[string]any 
 	return u.Parameters
 }
 
-func (u *UpdateBouncerResizeRequestResponseBody) GetPreviousReplicasPerCell() float64 {
+func (u *UpdateBouncerResizeRequestResponseBody) GetPreviousReplicasPerCell() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.PreviousReplicasPerCell
 }

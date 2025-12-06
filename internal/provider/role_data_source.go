@@ -38,6 +38,7 @@ type RoleDataSourceModel struct {
 	DatabaseName                 types.String              `tfsdk:"database_name"`
 	Default                      types.Bool                `tfsdk:"default"`
 	DeletedAt                    types.String              `tfsdk:"deleted_at"`
+	DisabledAt                   types.String              `tfsdk:"disabled_at"`
 	DropFailed                   types.String              `tfsdk:"drop_failed"`
 	DroppedAt                    types.String              `tfsdk:"dropped_at"`
 	Expired                      types.Bool                `tfsdk:"expired"`
@@ -49,7 +50,7 @@ type RoleDataSourceModel struct {
 	Password                     types.String              `tfsdk:"password"`
 	PrivateAccessHostURL         types.String              `tfsdk:"private_access_host_url"`
 	PrivateConnectionServiceName types.String              `tfsdk:"private_connection_service_name"`
-	TTL                          types.Float64             `tfsdk:"ttl"`
+	TTL                          types.Int64               `tfsdk:"ttl"`
 	UpdatedAt                    types.String              `tfsdk:"updated_at"`
 	Username                     types.String              `tfsdk:"username"`
 }
@@ -135,6 +136,10 @@ func (r *RoleDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:    true,
 				Description: `When the role was deleted`,
 			},
+			"disabled_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the role was disabled`,
+			},
 			"drop_failed": schema.StringAttribute{
 				Computed:    true,
 				Description: `Error message available when dropping the role fails`,
@@ -181,7 +186,7 @@ func (r *RoleDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:    true,
 				Description: `The service name to set up private connectivity`,
 			},
-			"ttl": schema.Float64Attribute{
+			"ttl": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Number of seconds before the credentials expire`,
 			},

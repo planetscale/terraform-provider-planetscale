@@ -287,7 +287,7 @@ type ListPasswordsData struct {
 	// The list of hosts in each availability zone providing direct access to a vtgate
 	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTLSeconds float64 `json:"ttl_seconds"`
+	TTLSeconds int64 `json:"ttl_seconds"`
 	// The host URL for the password
 	AccessHostURL string `json:"access_host_url"`
 	// The regional host URL
@@ -384,9 +384,9 @@ func (l *ListPasswordsData) GetDirectVtgateAddresses() []string {
 	return l.DirectVtgateAddresses
 }
 
-func (l *ListPasswordsData) GetTTLSeconds() float64 {
+func (l *ListPasswordsData) GetTTLSeconds() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.TTLSeconds
 }
@@ -464,28 +464,28 @@ func (l *ListPasswordsData) GetDatabaseBranch() ListPasswordsDatabaseBranch {
 // ListPasswordsResponseBody - Returns passwords for the branch
 type ListPasswordsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string              `json:"prev_page_url"`
 	Data        []ListPasswordsData `json:"data"`
 }
 
-func (l *ListPasswordsResponseBody) GetCurrentPage() float64 {
+func (l *ListPasswordsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListPasswordsResponseBody) GetNextPage() float64 {
+func (l *ListPasswordsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -497,9 +497,9 @@ func (l *ListPasswordsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListPasswordsResponseBody) GetPrevPage() float64 {
+func (l *ListPasswordsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

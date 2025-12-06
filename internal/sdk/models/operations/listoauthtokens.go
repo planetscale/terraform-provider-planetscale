@@ -642,28 +642,28 @@ func (l *ListOauthTokensData) GetOauthAccessesByResource() ListOauthTokensOauthA
 // ListOauthTokensResponseBody - Returns the OAuth tokens issued on behalf of the OAuth application
 type ListOauthTokensResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                `json:"prev_page_url"`
 	Data        []ListOauthTokensData `json:"data"`
 }
 
-func (l *ListOauthTokensResponseBody) GetCurrentPage() float64 {
+func (l *ListOauthTokensResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListOauthTokensResponseBody) GetNextPage() float64 {
+func (l *ListOauthTokensResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -675,9 +675,9 @@ func (l *ListOauthTokensResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListOauthTokensResponseBody) GetPrevPage() float64 {
+func (l *ListOauthTokensResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

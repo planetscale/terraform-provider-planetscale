@@ -15,7 +15,7 @@ type WorkflowCompleteRequest struct {
 	// The name of the database the workflow belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The sequence number of the workflow
-	Number string `pathParam:"style=simple,explode=false,name=number"`
+	Number float64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (w *WorkflowCompleteRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (w *WorkflowCompleteRequest) GetDatabase() string {
 	return w.Database
 }
 
-func (w *WorkflowCompleteRequest) GetNumber() string {
+func (w *WorkflowCompleteRequest) GetNumber() float64 {
 	if w == nil {
-		return ""
+		return 0.0
 	}
 	return w.Number
 }
@@ -673,7 +673,7 @@ type WorkflowCompleteResponseBody struct {
 	// The name of the workflow
 	Name string `json:"name"`
 	// The sequence number of the workflow
-	Number float64 `json:"number"`
+	Number int64 `json:"number"`
 	// The state of the workflow
 	State WorkflowCompleteState `json:"state"`
 	// When the workflow was created
@@ -752,9 +752,9 @@ func (w *WorkflowCompleteResponseBody) GetName() string {
 	return w.Name
 }
 
-func (w *WorkflowCompleteResponseBody) GetNumber() float64 {
+func (w *WorkflowCompleteResponseBody) GetNumber() int64 {
 	if w == nil {
-		return 0.0
+		return 0
 	}
 	return w.Number
 }

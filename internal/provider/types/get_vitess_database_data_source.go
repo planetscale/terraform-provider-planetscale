@@ -7,7 +7,7 @@ import (
 )
 
 type GetVitessDatabaseDataSource struct {
-	Database types.String  `tfsdk:"database"`
-	Hostname types.String  `tfsdk:"hostname"`
-	Port     types.Float64 `tfsdk:"port"`
+	Database types.String `tfsdk:"database"`
+	Hostname types.String `tfsdk:"hostname"`
+	Port     types.Int64  `tfsdk:"port"`
 }

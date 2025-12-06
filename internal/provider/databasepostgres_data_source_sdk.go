@@ -16,7 +16,7 @@ func (r *DatabasePostgresDataSourceModel) RefreshFromOperationsGetPostgresDataba
 	if resp != nil {
 		r.AtBackupRestoreBranchesLimit = types.BoolPointerValue(resp.AtBackupRestoreBranchesLimit)
 		r.AtDevelopmentBranchUsageLimit = types.BoolPointerValue(resp.AtDevelopmentBranchUsageLimit)
-		r.BranchesCount = types.Float64PointerValue(resp.BranchesCount)
+		r.BranchesCount = types.Int64PointerValue(resp.BranchesCount)
 		r.BranchesURL = types.StringPointerValue(resp.BranchesURL)
 		r.CreatedAt = types.StringPointerValue(resp.CreatedAt)
 		if resp.DataImport == nil {
@@ -29,7 +29,7 @@ func (r *DatabasePostgresDataSourceModel) RefreshFromOperationsGetPostgresDataba
 				r.DataImport.DataSource = &tfTypes.GetPostgresDatabaseDataSource{}
 				r.DataImport.DataSource.Database = types.StringPointerValue(resp.DataImport.DataSource.Database)
 				r.DataImport.DataSource.Hostname = types.StringPointerValue(resp.DataImport.DataSource.Hostname)
-				r.DataImport.DataSource.Port = types.Float64PointerValue(resp.DataImport.DataSource.Port)
+				r.DataImport.DataSource.Port = types.Int64PointerValue(resp.DataImport.DataSource.Port)
 			}
 			r.DataImport.FinishedAt = types.StringPointerValue(resp.DataImport.FinishedAt)
 			r.DataImport.ImportCheckErrors = types.StringPointerValue(resp.DataImport.ImportCheckErrors)
@@ -37,21 +37,21 @@ func (r *DatabasePostgresDataSourceModel) RefreshFromOperationsGetPostgresDataba
 			r.DataImport.State = types.StringPointerValue(resp.DataImport.State)
 		}
 		r.DefaultBranch = types.StringPointerValue(resp.DefaultBranch)
-		r.DefaultBranchReadOnlyRegionsCount = types.Float64PointerValue(resp.DefaultBranchReadOnlyRegionsCount)
-		r.DefaultBranchShardCount = types.Float64PointerValue(resp.DefaultBranchShardCount)
-		r.DefaultBranchTableCount = types.Float64PointerValue(resp.DefaultBranchTableCount)
-		r.DevelopmentBranchesCount = types.Float64PointerValue(resp.DevelopmentBranchesCount)
+		r.DefaultBranchReadOnlyRegionsCount = types.Int64PointerValue(resp.DefaultBranchReadOnlyRegionsCount)
+		r.DefaultBranchShardCount = types.Int64PointerValue(resp.DefaultBranchShardCount)
+		r.DefaultBranchTableCount = types.Int64PointerValue(resp.DefaultBranchTableCount)
+		r.DevelopmentBranchesCount = types.Int64PointerValue(resp.DevelopmentBranchesCount)
 		r.HTMLURL = types.StringPointerValue(resp.HTMLURL)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.InsightsEnabled = types.BoolPointerValue(resp.InsightsEnabled)
 		r.InsightsRawQueries = types.BoolPointerValue(resp.InsightsRawQueries)
-		r.IssuesCount = types.Float64PointerValue(resp.IssuesCount)
+		r.IssuesCount = types.Int64PointerValue(resp.IssuesCount)
 		r.MultipleAdminsRequiredForDeletion = types.BoolPointerValue(resp.MultipleAdminsRequiredForDeletion)
 		r.Name = types.StringPointerValue(resp.Name)
-		r.OpenSchemaRecommendationsCount = types.Float64PointerValue(resp.OpenSchemaRecommendationsCount)
+		r.OpenSchemaRecommendationsCount = types.Int64PointerValue(resp.OpenSchemaRecommendationsCount)
 		r.Plan = types.StringPointerValue(resp.Plan)
 		r.ProductionBranchWebConsole = types.BoolPointerValue(resp.ProductionBranchWebConsole)
-		r.ProductionBranchesCount = types.Float64PointerValue(resp.ProductionBranchesCount)
+		r.ProductionBranchesCount = types.Int64PointerValue(resp.ProductionBranchesCount)
 		r.Ready = types.BoolPointerValue(resp.Ready)
 		if resp.RegionData == nil {
 			r.RegionData = nil

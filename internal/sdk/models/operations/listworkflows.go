@@ -701,7 +701,7 @@ type ListWorkflowsData struct {
 	// The name of the workflow
 	Name string `json:"name"`
 	// The sequence number of the workflow
-	Number float64 `json:"number"`
+	Number int64 `json:"number"`
 	// The state of the workflow
 	State ListWorkflowsState `json:"state"`
 	// When the workflow was created
@@ -780,9 +780,9 @@ func (l *ListWorkflowsData) GetName() string {
 	return l.Name
 }
 
-func (l *ListWorkflowsData) GetNumber() float64 {
+func (l *ListWorkflowsData) GetNumber() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Number
 }
@@ -1056,28 +1056,28 @@ func (l *ListWorkflowsData) GetGlobalKeyspace() ListWorkflowsGlobalKeyspace {
 // ListWorkflowsResponseBody - Returns workflows
 type ListWorkflowsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string              `json:"prev_page_url"`
 	Data        []ListWorkflowsData `json:"data"`
 }
 
-func (l *ListWorkflowsResponseBody) GetCurrentPage() float64 {
+func (l *ListWorkflowsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListWorkflowsResponseBody) GetNextPage() float64 {
+func (l *ListWorkflowsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -1089,9 +1089,9 @@ func (l *ListWorkflowsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListWorkflowsResponseBody) GetPrevPage() float64 {
+func (l *ListWorkflowsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

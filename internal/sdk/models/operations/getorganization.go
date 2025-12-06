@@ -46,7 +46,7 @@ type GetOrganizationResponseBody struct {
 	// Whether or not the organization has past due billing invoices
 	HasPastDueInvoices bool `json:"has_past_due_invoices"`
 	// The number of databases in the organization
-	DatabaseCount float64 `json:"database_count"`
+	DatabaseCount int64 `json:"database_count"`
 	// The URL of the organization's SSO portal
 	SsoPortalURL string `json:"sso_portal_url"`
 	// Features that can be enabled on the organization
@@ -56,7 +56,7 @@ type GetOrganizationResponseBody struct {
 	// The expected monthly budget for the organization
 	InvoiceBudgetAmount float64 `json:"invoice_budget_amount"`
 	// The keyspace shard limit for the organization
-	KeyspaceShardLimit float64 `json:"keyspace_shard_limit"`
+	KeyspaceShardLimit int64 `json:"keyspace_shard_limit"`
 	// Whether or not the organization has a payment method on file
 	HasCard bool `json:"has_card"`
 	// Whether or not the organization requires payment information
@@ -147,9 +147,9 @@ func (g *GetOrganizationResponseBody) GetHasPastDueInvoices() bool {
 	return g.HasPastDueInvoices
 }
 
-func (g *GetOrganizationResponseBody) GetDatabaseCount() float64 {
+func (g *GetOrganizationResponseBody) GetDatabaseCount() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.DatabaseCount
 }
@@ -182,9 +182,9 @@ func (g *GetOrganizationResponseBody) GetInvoiceBudgetAmount() float64 {
 	return g.InvoiceBudgetAmount
 }
 
-func (g *GetOrganizationResponseBody) GetKeyspaceShardLimit() float64 {
+func (g *GetOrganizationResponseBody) GetKeyspaceShardLimit() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.KeyspaceShardLimit
 }

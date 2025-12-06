@@ -67,7 +67,7 @@ func (e *InheritedRoleRequest) UnmarshalJSON(data []byte) error {
 
 type CreateRoleRequestBody struct {
 	// Time to live in seconds
-	TTL *float64 `json:"ttl,omitzero"`
+	TTL *int64 `json:"ttl,omitzero"`
 	// Roles to inherit from
 	InheritedRoles []InheritedRoleRequest `json:"inherited_roles,omitzero"`
 }
@@ -83,7 +83,7 @@ func (c *CreateRoleRequestBody) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CreateRoleRequestBody) GetTTL() *float64 {
+func (c *CreateRoleRequestBody) GetTTL() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -308,6 +308,8 @@ type CreateRoleResponseBody struct {
 	ExpiresAt string `json:"expires_at"`
 	// When the role was dropped
 	DroppedAt string `json:"dropped_at"`
+	// When the role was disabled
+	DisabledAt string `json:"disabled_at"`
 	// Error message available when dropping the role fails
 	DropFailed string `json:"drop_failed"`
 	// True if the credentials are expired
@@ -315,7 +317,7 @@ type CreateRoleResponseBody struct {
 	// Whether the role is the default postgres user
 	Default bool `json:"default"`
 	// Number of seconds before the credentials expire
-	TTL float64 `json:"ttl"`
+	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []CreateRoleInheritedRoleResponse `json:"inherited_roles"`
 	BranchData     CreateRoleBranchData              `json:"branch"`
@@ -413,6 +415,13 @@ func (c *CreateRoleResponseBody) GetDroppedAt() string {
 	return c.DroppedAt
 }
 
+func (c *CreateRoleResponseBody) GetDisabledAt() string {
+	if c == nil {
+		return ""
+	}
+	return c.DisabledAt
+}
+
 func (c *CreateRoleResponseBody) GetDropFailed() string {
 	if c == nil {
 		return ""
@@ -434,9 +443,9 @@ func (c *CreateRoleResponseBody) GetDefault() bool {
 	return c.Default
 }
 
-func (c *CreateRoleResponseBody) GetTTL() float64 {
+func (c *CreateRoleResponseBody) GetTTL() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.TTL
 }

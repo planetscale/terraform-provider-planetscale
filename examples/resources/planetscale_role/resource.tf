@@ -6,5 +6,5 @@ resource "planetscale_role" "my_role" {
   ]
   organization = "...my_organization..."
   successor    = "...my_successor..."
-  ttl          = 5.33
+  ttl          = 5
 }

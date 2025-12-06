@@ -238,28 +238,28 @@ func (l *ListReadOnlyRegionsData) GetRegion() ListReadOnlyRegionsRegion {
 // ListReadOnlyRegionsResponseBody - List of the database's read-only regions
 type ListReadOnlyRegionsResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string                    `json:"prev_page_url"`
 	Data        []ListReadOnlyRegionsData `json:"data"`
 }
 
-func (l *ListReadOnlyRegionsResponseBody) GetCurrentPage() float64 {
+func (l *ListReadOnlyRegionsResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListReadOnlyRegionsResponseBody) GetNextPage() float64 {
+func (l *ListReadOnlyRegionsResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -271,9 +271,9 @@ func (l *ListReadOnlyRegionsResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListReadOnlyRegionsResponseBody) GetPrevPage() float64 {
+func (l *ListReadOnlyRegionsResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

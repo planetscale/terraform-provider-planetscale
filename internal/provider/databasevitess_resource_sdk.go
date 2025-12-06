@@ -30,7 +30,7 @@ func (r *DatabaseVitessResourceModel) RefreshFromOperationsCreateVitessDatabaseR
 				r.DataImport.DataSource = &tfTypes.GetVitessDatabaseDataSource{}
 				r.DataImport.DataSource.Database = types.StringPointerValue(resp.DataImport.DataSource.Database)
 				r.DataImport.DataSource.Hostname = types.StringPointerValue(resp.DataImport.DataSource.Hostname)
-				r.DataImport.DataSource.Port = types.Float64PointerValue(resp.DataImport.DataSource.Port)
+				r.DataImport.DataSource.Port = types.Int64PointerValue(resp.DataImport.DataSource.Port)
 			}
 			r.DataImport.FinishedAt = types.StringPointerValue(resp.DataImport.FinishedAt)
 			r.DataImport.ImportCheckErrors = types.StringPointerValue(resp.DataImport.ImportCheckErrors)
@@ -103,7 +103,7 @@ func (r *DatabaseVitessResourceModel) RefreshFromOperationsGetVitessDatabaseResp
 				r.DataImport.DataSource = &tfTypes.GetVitessDatabaseDataSource{}
 				r.DataImport.DataSource.Database = types.StringPointerValue(resp.DataImport.DataSource.Database)
 				r.DataImport.DataSource.Hostname = types.StringPointerValue(resp.DataImport.DataSource.Hostname)
-				r.DataImport.DataSource.Port = types.Float64PointerValue(resp.DataImport.DataSource.Port)
+				r.DataImport.DataSource.Port = types.Int64PointerValue(resp.DataImport.DataSource.Port)
 			}
 			r.DataImport.FinishedAt = types.StringPointerValue(resp.DataImport.FinishedAt)
 			r.DataImport.ImportCheckErrors = types.StringPointerValue(resp.DataImport.ImportCheckErrors)
@@ -202,9 +202,9 @@ func (r *DatabaseVitessResourceModel) ToOperationsCreateVitessDatabaseRequestBod
 	var clusterSize string
 	clusterSize = r.ClusterSize.ValueString()
 
-	replicas := new(float64)
+	replicas := new(int64)
 	if !r.Replicas.IsUnknown() && !r.Replicas.IsNull() {
-		*replicas = r.Replicas.ValueFloat64()
+		*replicas = r.Replicas.ValueInt64()
 	} else {
 		replicas = nil
 	}

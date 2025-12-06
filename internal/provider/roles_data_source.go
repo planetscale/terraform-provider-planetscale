@@ -116,6 +116,10 @@ func (r *RolesDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `When the role was deleted`,
 						},
+						"disabled_at": schema.StringAttribute{
+							Computed:    true,
+							Description: `When the role was disabled`,
+						},
 						"drop_failed": schema.StringAttribute{
 							Computed:    true,
 							Description: `Error message available when dropping the role fails`,
@@ -157,7 +161,7 @@ func (r *RolesDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `The service name to set up private connectivity`,
 						},
-						"ttl": schema.Float64Attribute{
+						"ttl": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Number of seconds before the credentials expire`,
 						},

@@ -155,7 +155,7 @@ type UpdateDatabaseSettingsDataSource struct {
 	// Hostname of the data source
 	Hostname string `json:"hostname"`
 	// Port of the data source
-	Port float64 `json:"port"`
+	Port int64 `json:"port"`
 	// Database name of the data source
 	Database string `json:"database"`
 }
@@ -167,9 +167,9 @@ func (u *UpdateDatabaseSettingsDataSource) GetHostname() string {
 	return u.Hostname
 }
 
-func (u *UpdateDatabaseSettingsDataSource) GetPort() float64 {
+func (u *UpdateDatabaseSettingsDataSource) GetPort() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.Port
 }
@@ -381,15 +381,15 @@ type UpdateDatabaseSettingsResponseBody struct {
 	// The URL to retrieve this database's branches via the API
 	BranchesURL string `json:"branches_url"`
 	// The total number of database branches
-	BranchesCount float64 `json:"branches_count"`
+	BranchesCount int64 `json:"branches_count"`
 	// The total number of schema recommendations
-	OpenSchemaRecommendationsCount float64 `json:"open_schema_recommendations_count"`
+	OpenSchemaRecommendationsCount int64 `json:"open_schema_recommendations_count"`
 	// The total number of database development branches
-	DevelopmentBranchesCount float64 `json:"development_branches_count"`
+	DevelopmentBranchesCount int64 `json:"development_branches_count"`
 	// The total number of database production branches
-	ProductionBranchesCount float64 `json:"production_branches_count"`
+	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
-	IssuesCount float64 `json:"issues_count"`
+	IssuesCount int64 `json:"issues_count"`
 	// If the database requires multiple admins for deletion
 	MultipleAdminsRequiredForDeletion bool `json:"multiple_admins_required_for_deletion"`
 	// If the database is ready to be used
@@ -409,11 +409,11 @@ type UpdateDatabaseSettingsResponseBody struct {
 	// If the database is sharded
 	Sharded bool `json:"sharded"`
 	// Number of shards in the default branch
-	DefaultBranchShardCount float64 `json:"default_branch_shard_count"`
+	DefaultBranchShardCount int64 `json:"default_branch_shard_count"`
 	// Number of read only regions in the default branch
-	DefaultBranchReadOnlyRegionsCount float64 `json:"default_branch_read_only_regions_count"`
+	DefaultBranchReadOnlyRegionsCount int64 `json:"default_branch_read_only_regions_count"`
 	// Number of tables in the default branch schema
-	DefaultBranchTableCount float64 `json:"default_branch_table_count"`
+	DefaultBranchTableCount int64 `json:"default_branch_table_count"`
 	// The default branch for the database
 	DefaultBranch string `json:"default_branch"`
 	// Whether an approval is required to deploy schema changes to this database
@@ -473,37 +473,37 @@ func (u *UpdateDatabaseSettingsResponseBody) GetBranchesURL() string {
 	return u.BranchesURL
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetBranchesCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetBranchesCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.BranchesCount
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetOpenSchemaRecommendationsCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetOpenSchemaRecommendationsCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.OpenSchemaRecommendationsCount
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetDevelopmentBranchesCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetDevelopmentBranchesCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.DevelopmentBranchesCount
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetProductionBranchesCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetProductionBranchesCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.ProductionBranchesCount
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetIssuesCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetIssuesCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.IssuesCount
 }
@@ -578,23 +578,23 @@ func (u *UpdateDatabaseSettingsResponseBody) GetSharded() bool {
 	return u.Sharded
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetDefaultBranchShardCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetDefaultBranchShardCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.DefaultBranchShardCount
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetDefaultBranchReadOnlyRegionsCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetDefaultBranchReadOnlyRegionsCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.DefaultBranchReadOnlyRegionsCount
 }
 
-func (u *UpdateDatabaseSettingsResponseBody) GetDefaultBranchTableCount() float64 {
+func (u *UpdateDatabaseSettingsResponseBody) GetDefaultBranchTableCount() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.DefaultBranchTableCount
 }

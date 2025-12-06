@@ -63,7 +63,7 @@ type ListDatabasesDataSource struct {
 	// Hostname of the data source
 	Hostname string `json:"hostname"`
 	// Port of the data source
-	Port float64 `json:"port"`
+	Port int64 `json:"port"`
 	// Database name of the data source
 	Database string `json:"database"`
 }
@@ -75,9 +75,9 @@ func (l *ListDatabasesDataSource) GetHostname() string {
 	return l.Hostname
 }
 
-func (l *ListDatabasesDataSource) GetPort() float64 {
+func (l *ListDatabasesDataSource) GetPort() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Port
 }
@@ -288,15 +288,15 @@ type ListDatabasesData struct {
 	// The URL to retrieve this database's branches via the API
 	BranchesURL string `json:"branches_url"`
 	// The total number of database branches
-	BranchesCount float64 `json:"branches_count"`
+	BranchesCount int64 `json:"branches_count"`
 	// The total number of schema recommendations
-	OpenSchemaRecommendationsCount float64 `json:"open_schema_recommendations_count"`
+	OpenSchemaRecommendationsCount int64 `json:"open_schema_recommendations_count"`
 	// The total number of database development branches
-	DevelopmentBranchesCount float64 `json:"development_branches_count"`
+	DevelopmentBranchesCount int64 `json:"development_branches_count"`
 	// The total number of database production branches
-	ProductionBranchesCount float64 `json:"production_branches_count"`
+	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
-	IssuesCount float64 `json:"issues_count"`
+	IssuesCount int64 `json:"issues_count"`
 	// If the database requires multiple admins for deletion
 	MultipleAdminsRequiredForDeletion bool `json:"multiple_admins_required_for_deletion"`
 	// If the database is ready to be used
@@ -316,11 +316,11 @@ type ListDatabasesData struct {
 	// If the database is sharded
 	Sharded bool `json:"sharded"`
 	// Number of shards in the default branch
-	DefaultBranchShardCount float64 `json:"default_branch_shard_count"`
+	DefaultBranchShardCount int64 `json:"default_branch_shard_count"`
 	// Number of read only regions in the default branch
-	DefaultBranchReadOnlyRegionsCount float64 `json:"default_branch_read_only_regions_count"`
+	DefaultBranchReadOnlyRegionsCount int64 `json:"default_branch_read_only_regions_count"`
 	// Number of tables in the default branch schema
-	DefaultBranchTableCount float64 `json:"default_branch_table_count"`
+	DefaultBranchTableCount int64 `json:"default_branch_table_count"`
 	// The default branch for the database
 	DefaultBranch string `json:"default_branch"`
 	// Whether an approval is required to deploy schema changes to this database
@@ -380,37 +380,37 @@ func (l *ListDatabasesData) GetBranchesURL() string {
 	return l.BranchesURL
 }
 
-func (l *ListDatabasesData) GetBranchesCount() float64 {
+func (l *ListDatabasesData) GetBranchesCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.BranchesCount
 }
 
-func (l *ListDatabasesData) GetOpenSchemaRecommendationsCount() float64 {
+func (l *ListDatabasesData) GetOpenSchemaRecommendationsCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.OpenSchemaRecommendationsCount
 }
 
-func (l *ListDatabasesData) GetDevelopmentBranchesCount() float64 {
+func (l *ListDatabasesData) GetDevelopmentBranchesCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.DevelopmentBranchesCount
 }
 
-func (l *ListDatabasesData) GetProductionBranchesCount() float64 {
+func (l *ListDatabasesData) GetProductionBranchesCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.ProductionBranchesCount
 }
 
-func (l *ListDatabasesData) GetIssuesCount() float64 {
+func (l *ListDatabasesData) GetIssuesCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.IssuesCount
 }
@@ -485,23 +485,23 @@ func (l *ListDatabasesData) GetSharded() bool {
 	return l.Sharded
 }
 
-func (l *ListDatabasesData) GetDefaultBranchShardCount() float64 {
+func (l *ListDatabasesData) GetDefaultBranchShardCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.DefaultBranchShardCount
 }
 
-func (l *ListDatabasesData) GetDefaultBranchReadOnlyRegionsCount() float64 {
+func (l *ListDatabasesData) GetDefaultBranchReadOnlyRegionsCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.DefaultBranchReadOnlyRegionsCount
 }
 
-func (l *ListDatabasesData) GetDefaultBranchTableCount() float64 {
+func (l *ListDatabasesData) GetDefaultBranchTableCount() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.DefaultBranchTableCount
 }
@@ -635,28 +635,28 @@ func (l *ListDatabasesData) GetKind() ListDatabasesKind {
 // ListDatabasesResponseBody - Retrieves the databases for an organization
 type ListDatabasesResponseBody struct {
 	// The current page number
-	CurrentPage float64 `json:"current_page"`
+	CurrentPage int64 `json:"current_page"`
 	// The next page number
-	NextPage float64 `json:"next_page"`
+	NextPage int64 `json:"next_page"`
 	// The next page of results
 	NextPageURL string `json:"next_page_url"`
 	// The previous page number
-	PrevPage float64 `json:"prev_page"`
+	PrevPage int64 `json:"prev_page"`
 	// The previous page of results
 	PrevPageURL string              `json:"prev_page_url"`
 	Data        []ListDatabasesData `json:"data"`
 }
 
-func (l *ListDatabasesResponseBody) GetCurrentPage() float64 {
+func (l *ListDatabasesResponseBody) GetCurrentPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.CurrentPage
 }
 
-func (l *ListDatabasesResponseBody) GetNextPage() float64 {
+func (l *ListDatabasesResponseBody) GetNextPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.NextPage
 }
@@ -668,9 +668,9 @@ func (l *ListDatabasesResponseBody) GetNextPageURL() string {
 	return l.NextPageURL
 }
 
-func (l *ListDatabasesResponseBody) GetPrevPage() float64 {
+func (l *ListDatabasesResponseBody) GetPrevPage() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.PrevPage
 }

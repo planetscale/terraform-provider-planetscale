@@ -65,7 +65,7 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `Whether to automatically manage Rails migrations during deploy requests`,
 						},
-						"branches_count": schema.Float64Attribute{
+						"branches_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The total number of database branches`,
 						},
@@ -91,7 +91,7 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 											Computed:    true,
 											Description: `Hostname of the data source`,
 										},
-										"port": schema.Float64Attribute{
+										"port": schema.Int64Attribute{
 											Computed:    true,
 											Description: `Port of the data source`,
 										},
@@ -119,19 +119,19 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `The default branch for the database`,
 						},
-						"default_branch_read_only_regions_count": schema.Float64Attribute{
+						"default_branch_read_only_regions_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Number of read only regions in the default branch`,
 						},
-						"default_branch_shard_count": schema.Float64Attribute{
+						"default_branch_shard_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Number of shards in the default branch`,
 						},
-						"default_branch_table_count": schema.Float64Attribute{
+						"default_branch_table_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Number of tables in the default branch schema`,
 						},
-						"development_branches_count": schema.Float64Attribute{
+						"development_branches_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The total number of database development branches`,
 						},
@@ -155,7 +155,7 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `Whether raw SQL queries are collected`,
 						},
-						"issues_count": schema.Float64Attribute{
+						"issues_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The total number of ongoing issues within a database`,
 						},
@@ -179,7 +179,7 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `Name of the database`,
 						},
-						"open_schema_recommendations_count": schema.Float64Attribute{
+						"open_schema_recommendations_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The total number of schema recommendations`,
 						},
@@ -191,7 +191,7 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `Whether web console is enabled for production branches`,
 						},
-						"production_branches_count": schema.Float64Attribute{
+						"production_branches_count": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The total number of database production branches`,
 						},

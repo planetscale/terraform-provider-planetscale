@@ -15,7 +15,7 @@ type GetDeployRequestRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number string `pathParam:"style=simple,explode=false,name=number"`
+	Number float64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (g *GetDeployRequestRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (g *GetDeployRequestRequest) GetDatabase() string {
 	return g.Database
 }
 
-func (g *GetDeployRequestRequest) GetNumber() string {
+func (g *GetDeployRequestRequest) GetNumber() float64 {
 	if g == nil {
-		return ""
+		return 0.0
 	}
 	return g.Number
 }
@@ -616,7 +616,7 @@ type GetDeployRequestOperation struct {
 	// The percent completion for the deploy operation
 	ProgressPercentage float64 `json:"progress_percentage"`
 	// The estimated seconds until completion for the deploy operation
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 }
 
 func (g *GetDeployRequestOperation) GetID() string {
@@ -647,9 +647,9 @@ func (g *GetDeployRequestOperation) GetProgressPercentage() float64 {
 	return g.ProgressPercentage
 }
 
-func (g *GetDeployRequestOperation) GetEtaSeconds() float64 {
+func (g *GetDeployRequestOperation) GetEtaSeconds() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.EtaSeconds
 }
@@ -664,7 +664,7 @@ type GetDeployRequestDeployOperationSummary struct {
 	// The DDL statement for the deploy operation summary
 	DdlStatement string `json:"ddl_statement"`
 	// The estimated seconds until completion for the deploy operation summary
-	EtaSeconds float64 `json:"eta_seconds"`
+	EtaSeconds int64 `json:"eta_seconds"`
 	// The keyspace modified by the deploy operation summary
 	KeyspaceName string `json:"keyspace_name"`
 	// The operation name of the deploy operation summary
@@ -684,7 +684,7 @@ type GetDeployRequestDeployOperationSummary struct {
 	// Names of foreign keys removed by this operation summary
 	RemovedForeignKeyNames []string `json:"removed_foreign_key_names"`
 	// The number of shards in the keyspace modified by the deploy operation summary
-	ShardCount float64 `json:"shard_count"`
+	ShardCount int64 `json:"shard_count"`
 	// Names of shards in the keyspace modified by the deploy operation summary
 	ShardNames []string `json:"shard_names"`
 	// Whether or not the deploy operation summary is capable of dropping data
@@ -724,9 +724,9 @@ func (g *GetDeployRequestDeployOperationSummary) GetDdlStatement() string {
 	return g.DdlStatement
 }
 
-func (g *GetDeployRequestDeployOperationSummary) GetEtaSeconds() float64 {
+func (g *GetDeployRequestDeployOperationSummary) GetEtaSeconds() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.EtaSeconds
 }
@@ -794,9 +794,9 @@ func (g *GetDeployRequestDeployOperationSummary) GetRemovedForeignKeyNames() []s
 	return g.RemovedForeignKeyNames
 }
 
-func (g *GetDeployRequestDeployOperationSummary) GetShardCount() float64 {
+func (g *GetDeployRequestDeployOperationSummary) GetShardCount() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.ShardCount
 }
@@ -958,7 +958,7 @@ type GetDeployRequestDeployment struct {
 	// The name of the base branch the deployment will be merged into
 	IntoBranch string `json:"into_branch"`
 	// The number of the deploy request associated with this deployment
-	DeployRequestNumber float64 `json:"deploy_request_number"`
+	DeployRequestNumber int64 `json:"deploy_request_number"`
 	// Whether the deployment is deployable
 	Deployable bool `json:"deployable"`
 	// The deployments ahead of this one in the queue
@@ -1095,9 +1095,9 @@ func (g *GetDeployRequestDeployment) GetIntoBranch() string {
 	return g.IntoBranch
 }
 
-func (g *GetDeployRequestDeployment) GetDeployRequestNumber() float64 {
+func (g *GetDeployRequestDeployment) GetDeployRequestNumber() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.DeployRequestNumber
 }
@@ -1226,7 +1226,7 @@ type GetDeployRequestResponseBody struct {
 	// The ID of the deploy request
 	ID string `json:"id"`
 	// The number of the deploy request
-	Number   float64                  `json:"number"`
+	Number   int64                    `json:"number"`
 	Actor    GetDeployRequestActor    `json:"actor"`
 	ClosedBy GetDeployRequestClosedBy `json:"closed_by"`
 	// The name of the branch the deploy request was created from
@@ -1243,7 +1243,7 @@ type GetDeployRequestResponseBody struct {
 	// Whether or not the branch the deploy request will be merged into is sharded
 	IntoBranchSharded bool `json:"into_branch_sharded"`
 	// The number of shards the branch the deploy request will be merged into has
-	IntoBranchShardCount float64 `json:"into_branch_shard_count"`
+	IntoBranchShardCount int64 `json:"into_branch_shard_count"`
 	// Whether or not the deploy request is approved
 	Approved bool `json:"approved"`
 	// Whether the deploy request is open or closed
@@ -1252,7 +1252,7 @@ type GetDeployRequestResponseBody struct {
 	DeploymentState GetDeployRequestDeploymentState1 `json:"deployment_state"`
 	Deployment      GetDeployRequestDeployment       `json:"deployment"`
 	// The number of comments on the deploy request
-	NumComments float64 `json:"num_comments"`
+	NumComments int64 `json:"num_comments"`
 	// The PlanetScale app address for the deploy request
 	HTMLURL string `json:"html_url"`
 	// Notes on the deploy request
@@ -1276,9 +1276,9 @@ func (g *GetDeployRequestResponseBody) GetID() string {
 	return g.ID
 }
 
-func (g *GetDeployRequestResponseBody) GetNumber() float64 {
+func (g *GetDeployRequestResponseBody) GetNumber() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.Number
 }
@@ -1346,9 +1346,9 @@ func (g *GetDeployRequestResponseBody) GetIntoBranchSharded() bool {
 	return g.IntoBranchSharded
 }
 
-func (g *GetDeployRequestResponseBody) GetIntoBranchShardCount() float64 {
+func (g *GetDeployRequestResponseBody) GetIntoBranchShardCount() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.IntoBranchShardCount
 }
@@ -1381,9 +1381,9 @@ func (g *GetDeployRequestResponseBody) GetDeployment() GetDeployRequestDeploymen
 	return g.Deployment
 }
 
-func (g *GetDeployRequestResponseBody) GetNumComments() float64 {
+func (g *GetDeployRequestResponseBody) GetNumComments() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.NumComments
 }

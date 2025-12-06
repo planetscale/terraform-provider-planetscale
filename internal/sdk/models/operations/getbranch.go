@@ -284,11 +284,11 @@ type GetBranchResponseBody struct {
 	// The size of the vtgate cluster for the branch
 	VtgateSize string `json:"vtgate_size"`
 	// The number of vtgate instances in the branch
-	VtgateCount float64 `json:"vtgate_count"`
+	VtgateCount int64 `json:"vtgate_count"`
 	// The SKU representing the branch's cluster size
 	ClusterName string `json:"cluster_name"`
 	// IOPS for the cluster
-	ClusterIops float64 `json:"cluster_iops"`
+	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
 	// Whether or not the schema is ready for queries
@@ -302,7 +302,7 @@ type GetBranchResponseBody struct {
 	// Whether or not the branch is sharded
 	Sharded bool `json:"sharded"`
 	// The number of shards in the branch
-	ShardCount float64 `json:"shard_count"`
+	ShardCount int64 `json:"shard_count"`
 	// Whether or not the branch has a stale schema
 	StaleSchema        bool                        `json:"stale_schema"`
 	Actor              GetBranchActor              `json:"actor"`
@@ -413,9 +413,9 @@ func (g *GetBranchResponseBody) GetVtgateSize() string {
 	return g.VtgateSize
 }
 
-func (g *GetBranchResponseBody) GetVtgateCount() float64 {
+func (g *GetBranchResponseBody) GetVtgateCount() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.VtgateCount
 }
@@ -427,9 +427,9 @@ func (g *GetBranchResponseBody) GetClusterName() string {
 	return g.ClusterName
 }
 
-func (g *GetBranchResponseBody) GetClusterIops() float64 {
+func (g *GetBranchResponseBody) GetClusterIops() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.ClusterIops
 }
@@ -476,9 +476,9 @@ func (g *GetBranchResponseBody) GetSharded() bool {
 	return g.Sharded
 }
 
-func (g *GetBranchResponseBody) GetShardCount() float64 {
+func (g *GetBranchResponseBody) GetShardCount() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.ShardCount
 }

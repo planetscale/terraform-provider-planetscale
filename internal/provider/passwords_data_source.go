@@ -206,7 +206,7 @@ func (r *PasswordsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `The role for the password`,
 						},
-						"ttl_seconds": schema.Float64Attribute{
+						"ttl_seconds": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Time to live (in seconds) for the password. The password will be invalid when TTL has passed`,
 						},

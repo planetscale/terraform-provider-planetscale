@@ -17,7 +17,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 	if resp != nil {
 		r.BillingEmail = types.StringValue(resp.BillingEmail)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		r.DatabaseCount = types.Float64Value(resp.DatabaseCount)
+		r.DatabaseCount = types.Int64Value(resp.DatabaseCount)
 		if len(resp.Features) > 0 {
 			r.Features = make(map[string]jsontypes.Normalized, len(resp.Features))
 			for key, value := range resp.Features {
@@ -30,7 +30,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 		r.ID = types.StringValue(resp.ID)
 		r.IdpManagedRoles = types.BoolValue(resp.IdpManagedRoles)
 		r.InvoiceBudgetAmount = types.Float64Value(resp.InvoiceBudgetAmount)
-		r.KeyspaceShardLimit = types.Float64Value(resp.KeyspaceShardLimit)
+		r.KeyspaceShardLimit = types.Int64Value(resp.KeyspaceShardLimit)
 		r.ManagedTenancy = types.BoolValue(resp.ManagedTenancy)
 		r.Name = types.StringValue(resp.Name)
 		r.PaymentInfoRequired = types.BoolValue(resp.PaymentInfoRequired)
