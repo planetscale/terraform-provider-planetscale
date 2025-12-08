@@ -113,7 +113,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = planetscale_database_vitess.my_planetscale_database_vitess
   id = jsonencode({
-    name = "..."
+    id = "..."
     organization = "..."
   })
 }
@@ -122,5 +122,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import planetscale_database_vitess.my_planetscale_database_vitess '{"name": "...", "organization": "..."}'
+terraform import planetscale_database_vitess.my_planetscale_database_vitess '{"id": "...", "organization": "..."}'
 ```

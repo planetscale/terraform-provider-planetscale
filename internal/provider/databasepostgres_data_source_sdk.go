@@ -93,7 +93,7 @@ func (r *DatabasePostgresDataSourceModel) ToOperationsGetPostgresDatabaseRequest
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Name.ValueString()
+	database = r.ID.ValueString()
 
 	out := operations.GetPostgresDatabaseRequest{
 		Organization: organization,

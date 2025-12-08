@@ -220,7 +220,7 @@ func (r *DatabasePostgresResourceModel) ToOperationsDeletePostgresDatabaseReques
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Name.ValueString()
+	database = r.ID.ValueString()
 
 	out := operations.DeletePostgresDatabaseRequest{
 		Organization: organization,
@@ -237,7 +237,7 @@ func (r *DatabasePostgresResourceModel) ToOperationsGetPostgresDatabaseRequest(c
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Name.ValueString()
+	database = r.ID.ValueString()
 
 	out := operations.GetPostgresDatabaseRequest{
 		Organization: organization,
@@ -254,7 +254,7 @@ func (r *DatabasePostgresResourceModel) ToOperationsUpdatePostgresDatabaseReques
 	organization = r.Organization.ValueString()
 
 	var database string
-	database = r.Name.ValueString()
+	database = r.ID.ValueString()
 
 	body, bodyDiags := r.ToOperationsUpdatePostgresDatabaseRequestBody(ctx)
 	diags.Append(bodyDiags...)
