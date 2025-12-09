@@ -67,8 +67,6 @@ Available configuration:
 
 ### Resources
 
-* [planetscale_database_postgres](docs/resources/database_postgres.md)
-* [planetscale_database_vitess](docs/resources/database_vitess.md)
 * [planetscale_postgres_branch](docs/resources/postgres_branch.md)
 * [planetscale_postgres_branch_role](docs/resources/postgres_branch_role.md)
 * [planetscale_vitess_branch](docs/resources/vitess_branch.md)

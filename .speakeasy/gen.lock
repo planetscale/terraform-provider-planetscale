@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 6c38cbb4f60c46ffd0e34b718038906e
+  docChecksum: 97b211a61dbb35b5f096282acb884b6a
   docVersion: v1
   speakeasyVersion: 1.668.0
   generationVersion: 2.770.0
@@ -36,12 +36,6 @@ generatedFiles:
   - examples/data-sources/planetscale_vitess_branch_password/data-source.tf
   - examples/data-sources/planetscale_vitess_branch_passwords/data-source.tf
   - examples/provider/provider.tf
-  - examples/resources/planetscale_database_postgres/import-by-string-id.tf
-  - examples/resources/planetscale_database_postgres/import.sh
-  - examples/resources/planetscale_database_postgres/resource.tf
-  - examples/resources/planetscale_database_vitess/import-by-string-id.tf
-  - examples/resources/planetscale_database_vitess/import.sh
-  - examples/resources/planetscale_database_vitess/resource.tf
   - examples/resources/planetscale_postgres_branch/import-by-string-id.tf
   - examples/resources/planetscale_postgres_branch/import.sh
   - examples/resources/planetscale_postgres_branch/resource.tf
@@ -72,14 +66,10 @@ generatedFiles:
   - internal/provider/branches_data_source_sdk.go
   - internal/provider/databasepostgres_data_source.go
   - internal/provider/databasepostgres_data_source_sdk.go
-  - internal/provider/databasepostgres_resource.go
-  - internal/provider/databasepostgres_resource_sdk.go
   - internal/provider/databases_data_source.go
   - internal/provider/databases_data_source_sdk.go
   - internal/provider/databasevitess_data_source.go
   - internal/provider/databasevitess_data_source_sdk.go
-  - internal/provider/databasevitess_resource.go
-  - internal/provider/databasevitess_resource_sdk.go
   - internal/provider/organization_data_source.go
   - internal/provider/organization_data_source_sdk.go
   - internal/provider/organizations_data_source.go
