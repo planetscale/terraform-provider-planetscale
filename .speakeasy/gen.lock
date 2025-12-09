@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 8a90ed9535ef3f97655c76f3f20ff4f8
+  docChecksum: 6c38cbb4f60c46ffd0e34b718038906e
   docVersion: v1
   speakeasyVersion: 1.668.0
   generationVersion: 2.770.0
@@ -28,13 +28,13 @@ generatedFiles:
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
   - examples/data-sources/planetscale_organizations/data-source.tf
-  - examples/data-sources/planetscale_password/data-source.tf
-  - examples/data-sources/planetscale_passwords/data-source.tf
   - examples/data-sources/planetscale_postgres_branch/data-source.tf
-  - examples/data-sources/planetscale_role/data-source.tf
-  - examples/data-sources/planetscale_roles/data-source.tf
+  - examples/data-sources/planetscale_postgres_branch_role/data-source.tf
+  - examples/data-sources/planetscale_postgres_branch_roles/data-source.tf
   - examples/data-sources/planetscale_user/data-source.tf
   - examples/data-sources/planetscale_vitess_branch/data-source.tf
+  - examples/data-sources/planetscale_vitess_branch_password/data-source.tf
+  - examples/data-sources/planetscale_vitess_branch_passwords/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/planetscale_database_postgres/import-by-string-id.tf
   - examples/resources/planetscale_database_postgres/import.sh
@@ -42,18 +42,18 @@ generatedFiles:
   - examples/resources/planetscale_database_vitess/import-by-string-id.tf
   - examples/resources/planetscale_database_vitess/import.sh
   - examples/resources/planetscale_database_vitess/resource.tf
-  - examples/resources/planetscale_password/import-by-string-id.tf
-  - examples/resources/planetscale_password/import.sh
-  - examples/resources/planetscale_password/resource.tf
   - examples/resources/planetscale_postgres_branch/import-by-string-id.tf
   - examples/resources/planetscale_postgres_branch/import.sh
   - examples/resources/planetscale_postgres_branch/resource.tf
-  - examples/resources/planetscale_role/import-by-string-id.tf
-  - examples/resources/planetscale_role/import.sh
-  - examples/resources/planetscale_role/resource.tf
+  - examples/resources/planetscale_postgres_branch_role/import-by-string-id.tf
+  - examples/resources/planetscale_postgres_branch_role/import.sh
+  - examples/resources/planetscale_postgres_branch_role/resource.tf
   - examples/resources/planetscale_vitess_branch/import-by-string-id.tf
   - examples/resources/planetscale_vitess_branch/import.sh
   - examples/resources/planetscale_vitess_branch/resource.tf
+  - examples/resources/planetscale_vitess_branch_password/import-by-string-id.tf
+  - examples/resources/planetscale_vitess_branch_password/import.sh
+  - examples/resources/planetscale_vitess_branch_password/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -84,16 +84,16 @@ generatedFiles:
   - internal/provider/organization_data_source_sdk.go
   - internal/provider/organizations_data_source.go
   - internal/provider/organizations_data_source_sdk.go
-  - internal/provider/password_data_source.go
-  - internal/provider/password_data_source_sdk.go
-  - internal/provider/password_resource.go
-  - internal/provider/password_resource_sdk.go
-  - internal/provider/passwords_data_source.go
-  - internal/provider/passwords_data_source_sdk.go
   - internal/provider/postgresbranch_data_source.go
   - internal/provider/postgresbranch_data_source_sdk.go
   - internal/provider/postgresbranch_resource.go
   - internal/provider/postgresbranch_resource_sdk.go
+  - internal/provider/postgresbranchrole_data_source.go
+  - internal/provider/postgresbranchrole_data_source_sdk.go
+  - internal/provider/postgresbranchrole_resource.go
+  - internal/provider/postgresbranchrole_resource_sdk.go
+  - internal/provider/postgresbranchroles_data_source.go
+  - internal/provider/postgresbranchroles_data_source_sdk.go
   - internal/provider/provider.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go
@@ -109,12 +109,6 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
-  - internal/provider/role_data_source.go
-  - internal/provider/role_data_source_sdk.go
-  - internal/provider/role_resource.go
-  - internal/provider/role_resource_sdk.go
-  - internal/provider/roles_data_source.go
-  - internal/provider/roles_data_source_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
@@ -159,6 +153,12 @@ generatedFiles:
   - internal/provider/vitessbranch_data_source_sdk.go
   - internal/provider/vitessbranch_resource.go
   - internal/provider/vitessbranch_resource_sdk.go
+  - internal/provider/vitessbranchpassword_data_source.go
+  - internal/provider/vitessbranchpassword_data_source_sdk.go
+  - internal/provider/vitessbranchpassword_resource.go
+  - internal/provider/vitessbranchpassword_resource_sdk.go
+  - internal/provider/vitessbranchpasswords_data_source.go
+  - internal/provider/vitessbranchpasswords_data_source_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/apibranchbouncerresizes.go
   - internal/sdk/backups.go

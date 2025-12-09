@@ -1,0 +1,59 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_role managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: PostgresBranchRole#create
+      x-speakeasy-entity-description: Manage a PlanetScale database role.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: PostgresBranchRole#delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get
+    description: API operation for data and managed resource read.
+    update:
+      x-speakeasy-entity-operation: PostgresBranchRole#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale database role.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation: PostgresBranchRole#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.requestBody.content["application/json"].schema.properties.ttl
+    description: Fix type mismatch between request (number) and response (integer) for ttl field.
+    update:
+      type: integer
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    update:
+      actor:
+        x-speakeasy-name-override: actor_data
+      branch:
+        x-speakeasy-name-override: branch_data
+      password:
+        x-speakeasy-param-sensitive: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    update:
+      actor:
+        x-speakeasy-name-override: actor_data
+      branch:
+        x-speakeasy-name-override: branch_data
+      password:
+        x-speakeasy-param-sensitive: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties
+    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    update:
+      actor:
+        x-speakeasy-name-override: actor_data
+      branch:
+        x-speakeasy-name-override: branch_data
+      password:
+        x-speakeasy-param-sensitive: true

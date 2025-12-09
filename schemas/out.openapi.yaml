@@ -8460,7 +8460,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Passwords#read
+      x-speakeasy-entity-operation: VitessBranchPasswords#read
       x-speakeasy-entity-description: Returns information about PlanetScale database branch passwords.
       x-speakeasy-pagination:
         type: offsetLimit
@@ -8733,7 +8733,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#create
+      x-speakeasy-entity-operation: VitessBranchPassword#create
       x-speakeasy-entity-description: Manage a PlanetScale database branch password.
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}:
     get:
@@ -8966,7 +8966,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#read
+      x-speakeasy-entity-operation: VitessBranchPassword#read
       x-speakeasy-entity-description: Returns information about a PlanetScale database branch password.
     patch:
       tags:
@@ -9217,7 +9217,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#update
+      x-speakeasy-entity-operation: VitessBranchPassword#update
     delete:
       tags:
         - Database branch passwords
@@ -9274,7 +9274,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Password#delete
+      x-speakeasy-entity-operation: VitessBranchPassword#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew:
     post:
       tags:
@@ -10577,7 +10577,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Roles#read
+      x-speakeasy-entity-operation: PostgresBranchRoles#read
       x-speakeasy-entity-description: Returns information about PlanetScale database branch roles.
       x-speakeasy-pagination:
         type: offsetLimit
@@ -10810,7 +10810,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#create
+      x-speakeasy-entity-operation: PostgresBranchRole#create
       x-speakeasy-entity-description: Manage a PlanetScale database role.
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}:
     get:
@@ -11014,7 +11014,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#read
+      x-speakeasy-entity-operation: PostgresBranchRole#read
       x-speakeasy-entity-description: Returns information about a PlanetScale database role.
     patch:
       tags:
@@ -11227,7 +11227,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#update
+      x-speakeasy-entity-operation: PostgresBranchRole#update
     delete:
       tags:
         - Roles
@@ -11294,7 +11294,7 @@ paths:
         | Organization | `manage_passwords`, `manage_production_branch_passwords` |
         | Database | `manage_passwords`, `manage_production_branch_passwords` |
         | Branch | `manage_passwords` |
-      x-speakeasy-entity-operation: Role#delete
+      x-speakeasy-entity-operation: PostgresBranchRole#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}/reassign:
     post:
       tags:

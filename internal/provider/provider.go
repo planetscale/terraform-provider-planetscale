@@ -131,10 +131,10 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 	return []func() resource.Resource{
 		NewDatabasePostgresResource,
 		NewDatabaseVitessResource,
-		NewPasswordResource,
 		NewPostgresBranchResource,
-		NewRoleResource,
+		NewPostgresBranchRoleResource,
 		NewVitessBranchResource,
+		NewVitessBranchPasswordResource,
 	}
 }
 
@@ -146,13 +146,13 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewDatabaseVitessDataSource,
 		NewOrganizationDataSource,
 		NewOrganizationsDataSource,
-		NewPasswordDataSource,
-		NewPasswordsDataSource,
 		NewPostgresBranchDataSource,
-		NewRoleDataSource,
-		NewRolesDataSource,
+		NewPostgresBranchRoleDataSource,
+		NewPostgresBranchRolesDataSource,
 		NewUserDataSource,
 		NewVitessBranchDataSource,
+		NewVitessBranchPasswordDataSource,
+		NewVitessBranchPasswordsDataSource,
 	}
 }
 
