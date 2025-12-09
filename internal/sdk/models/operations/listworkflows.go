@@ -17,9 +17,9 @@ type ListWorkflowsRequest struct {
 	// Filter workflows to those active during a time range (e.g. 2025-01-01T00:00:00Z..2025-01-01T23:59:59)
 	Between *string `queryParam:"style=form,explode=true,name=between"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListWorkflowsRequest) MarshalJSON() ([]byte, error) {
@@ -54,14 +54,14 @@ func (l *ListWorkflowsRequest) GetBetween() *string {
 	return l.Between
 }
 
-func (l *ListWorkflowsRequest) GetPage() *float64 {
+func (l *ListWorkflowsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListWorkflowsRequest) GetPerPage() *float64 {
+func (l *ListWorkflowsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

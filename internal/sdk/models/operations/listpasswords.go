@@ -19,9 +19,9 @@ type ListPasswordsRequest struct {
 	// A read-only region of the database branch. If present, the password results will be filtered to only those in the region
 	ReadOnlyRegionID *string `queryParam:"style=form,explode=true,name=read_only_region_id"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListPasswordsRequest) MarshalJSON() ([]byte, error) {
@@ -63,14 +63,14 @@ func (l *ListPasswordsRequest) GetReadOnlyRegionID() *string {
 	return l.ReadOnlyRegionID
 }
 
-func (l *ListPasswordsRequest) GetPage() *float64 {
+func (l *ListPasswordsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListPasswordsRequest) GetPerPage() *float64 {
+func (l *ListPasswordsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

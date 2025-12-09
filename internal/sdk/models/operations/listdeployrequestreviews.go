@@ -15,7 +15,7 @@ type ListDeployRequestReviewsRequest struct {
 	// The name of the database the deploy request belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (l *ListDeployRequestReviewsRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (l *ListDeployRequestReviewsRequest) GetDatabase() string {
 	return l.Database
 }
 
-func (l *ListDeployRequestReviewsRequest) GetNumber() float64 {
+func (l *ListDeployRequestReviewsRequest) GetNumber() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Number
 }

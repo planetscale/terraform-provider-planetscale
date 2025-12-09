@@ -13,9 +13,9 @@ type GetInvoiceLineItemsRequest struct {
 	// The ID of the invoice
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (g GetInvoiceLineItemsRequest) MarshalJSON() ([]byte, error) {
@@ -43,14 +43,14 @@ func (g *GetInvoiceLineItemsRequest) GetID() string {
 	return g.ID
 }
 
-func (g *GetInvoiceLineItemsRequest) GetPage() *float64 {
+func (g *GetInvoiceLineItemsRequest) GetPage() *int64 {
 	if g == nil {
 		return nil
 	}
 	return g.Page
 }
 
-func (g *GetInvoiceLineItemsRequest) GetPerPage() *float64 {
+func (g *GetInvoiceLineItemsRequest) GetPerPage() *int64 {
 	if g == nil {
 		return nil
 	}

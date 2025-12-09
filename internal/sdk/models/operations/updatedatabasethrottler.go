@@ -9,7 +9,7 @@ import (
 
 type UpdateDatabaseThrottlerRequestBody struct {
 	// A throttler ratio between 0 and 95 that will apply to all keyspaces in the database. 0 effectively disables throttler, while 95 drastically slows down deploy request migrations
-	Ratio *float64 `json:"ratio,omitzero"`
+	Ratio *int64 `json:"ratio,omitzero"`
 	// If specifying throttler ratios per keyspace, an array of { "keyspace_name": "mykeyspace", "ratio": 10 }, one for each eligible keyspace
 	Configurations []string `json:"configurations,omitzero"`
 }
@@ -25,7 +25,7 @@ func (u *UpdateDatabaseThrottlerRequestBody) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (u *UpdateDatabaseThrottlerRequestBody) GetRatio() *float64 {
+func (u *UpdateDatabaseThrottlerRequestBody) GetRatio() *int64 {
 	if u == nil {
 		return nil
 	}

@@ -15,9 +15,9 @@ type CreateKeyspaceRequestBody struct {
 	// The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization. /v1/organizations/:organization/cluster-size-skus
 	ClusterSize string `json:"cluster_size"`
 	// The number of additional replicas beyond the included default
-	ExtraReplicas *float64 `json:"extra_replicas,omitzero"`
+	ExtraReplicas *int64 `json:"extra_replicas,omitzero"`
 	// The number of shards. Default: 1
-	Shards *float64 `json:"shards,omitzero"`
+	Shards *int64 `json:"shards,omitzero"`
 }
 
 func (c *CreateKeyspaceRequestBody) GetName() string {
@@ -34,14 +34,14 @@ func (c *CreateKeyspaceRequestBody) GetClusterSize() string {
 	return c.ClusterSize
 }
 
-func (c *CreateKeyspaceRequestBody) GetExtraReplicas() *float64 {
+func (c *CreateKeyspaceRequestBody) GetExtraReplicas() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.ExtraReplicas
 }
 
-func (c *CreateKeyspaceRequestBody) GetShards() *float64 {
+func (c *CreateKeyspaceRequestBody) GetShards() *int64 {
 	if c == nil {
 		return nil
 	}

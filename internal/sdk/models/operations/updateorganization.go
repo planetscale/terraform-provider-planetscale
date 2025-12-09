@@ -13,7 +13,7 @@ type UpdateOrganizationRequestBody struct {
 	// Whether or not the IdP provider is be responsible for managing roles in PlanetScale
 	IdpManagedRoles *bool `json:"idp_managed_roles,omitzero"`
 	// The expected monthly budget for the organization
-	InvoiceBudgetAmount *float64 `json:"invoice_budget_amount,omitzero"`
+	InvoiceBudgetAmount *int64 `json:"invoice_budget_amount,omitzero"`
 }
 
 func (u *UpdateOrganizationRequestBody) GetBillingEmail() *string {
@@ -30,7 +30,7 @@ func (u *UpdateOrganizationRequestBody) GetIdpManagedRoles() *bool {
 	return u.IdpManagedRoles
 }
 
-func (u *UpdateOrganizationRequestBody) GetInvoiceBudgetAmount() *float64 {
+func (u *UpdateOrganizationRequestBody) GetInvoiceBudgetAmount() *int64 {
 	if u == nil {
 		return nil
 	}

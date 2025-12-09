@@ -9,7 +9,7 @@ import (
 
 type UpdateDeployRequestThrottlerRequestBody struct {
 	// A throttler ratio between 0 and 95 that will apply to all keyspaces affected by the deploy request. 0 effectively disables throttler, while 95 drastically slows down migrations in the deploy request
-	Ratio *float64 `json:"ratio,omitzero"`
+	Ratio *int64 `json:"ratio,omitzero"`
 	// If specifying throttler ratios per keyspace, an array of { "keyspace_name": "mykeyspace", "ratio": 10 }, one for each eligible keyspace
 	Configurations []string `json:"configurations,omitzero"`
 }
@@ -25,7 +25,7 @@ func (u *UpdateDeployRequestThrottlerRequestBody) UnmarshalJSON(data []byte) err
 	return nil
 }
 
-func (u *UpdateDeployRequestThrottlerRequestBody) GetRatio() *float64 {
+func (u *UpdateDeployRequestThrottlerRequestBody) GetRatio() *int64 {
 	if u == nil {
 		return nil
 	}
@@ -45,7 +45,7 @@ type UpdateDeployRequestThrottlerRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64                                  `pathParam:"style=simple,explode=false,name=number"`
+	Number int64                                    `pathParam:"style=simple,explode=false,name=number"`
 	Body   *UpdateDeployRequestThrottlerRequestBody `request:"mediaType=application/json"`
 }
 
@@ -74,9 +74,9 @@ func (u *UpdateDeployRequestThrottlerRequest) GetDatabase() string {
 	return u.Database
 }
 
-func (u *UpdateDeployRequestThrottlerRequest) GetNumber() float64 {
+func (u *UpdateDeployRequestThrottlerRequest) GetNumber() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.Number
 }

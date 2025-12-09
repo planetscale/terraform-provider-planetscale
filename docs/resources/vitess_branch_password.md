@@ -24,7 +24,7 @@ resource "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
   organization  = "...my_organization..."
   replica       = false
   role          = "admin"
-  ttl           = 8.45
+  ttl           = 9
 }
 ```
 

@@ -11,15 +11,15 @@ import (
 
 type ListDeployOperationsRequest struct {
 	// The number of the deploy request
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 	// The name of the deploy request's organization
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListDeployOperationsRequest) MarshalJSON() ([]byte, error) {
@@ -33,9 +33,9 @@ func (l *ListDeployOperationsRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (l *ListDeployOperationsRequest) GetNumber() float64 {
+func (l *ListDeployOperationsRequest) GetNumber() int64 {
 	if l == nil {
-		return 0.0
+		return 0
 	}
 	return l.Number
 }
@@ -54,14 +54,14 @@ func (l *ListDeployOperationsRequest) GetDatabase() string {
 	return l.Database
 }
 
-func (l *ListDeployOperationsRequest) GetPage() *float64 {
+func (l *ListDeployOperationsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListDeployOperationsRequest) GetPerPage() *float64 {
+func (l *ListDeployOperationsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

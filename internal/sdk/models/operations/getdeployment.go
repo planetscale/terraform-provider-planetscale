@@ -15,7 +15,7 @@ type GetDeploymentRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (g *GetDeploymentRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (g *GetDeploymentRequest) GetDatabase() string {
 	return g.Database
 }
 
-func (g *GetDeploymentRequest) GetNumber() float64 {
+func (g *GetDeploymentRequest) GetNumber() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.Number
 }

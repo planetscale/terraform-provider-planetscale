@@ -82,6 +82,7 @@ func (u *UpdateRoleRequest) GetBody() *UpdateRoleRequestBody {
 type UpdateRoleInheritedRole string
 
 const (
+	UpdateRoleInheritedRolePscaleManaged            UpdateRoleInheritedRole = "pscale_managed"
 	UpdateRoleInheritedRolePgCheckpoint             UpdateRoleInheritedRole = "pg_checkpoint"
 	UpdateRoleInheritedRolePgCreateSubscription     UpdateRoleInheritedRole = "pg_create_subscription"
 	UpdateRoleInheritedRolePgMaintain               UpdateRoleInheritedRole = "pg_maintain"
@@ -105,6 +106,8 @@ func (e *UpdateRoleInheritedRole) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "pscale_managed":
+		fallthrough
 	case "pg_checkpoint":
 		fallthrough
 	case "pg_create_subscription":

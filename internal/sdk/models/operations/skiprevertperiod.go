@@ -15,7 +15,7 @@ type SkipRevertPeriodRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (s *SkipRevertPeriodRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (s *SkipRevertPeriodRequest) GetDatabase() string {
 	return s.Database
 }
 
-func (s *SkipRevertPeriodRequest) GetNumber() float64 {
+func (s *SkipRevertPeriodRequest) GetNumber() int64 {
 	if s == nil {
-		return 0.0
+		return 0
 	}
 	return s.Number
 }

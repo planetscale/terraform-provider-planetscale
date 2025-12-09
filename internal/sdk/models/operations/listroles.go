@@ -17,9 +17,9 @@ type ListRolesRequest struct {
 	// The name of the branch that owns this resource
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListRolesRequest) MarshalJSON() ([]byte, error) {
@@ -54,14 +54,14 @@ func (l *ListRolesRequest) GetBranch() string {
 	return l.Branch
 }
 
-func (l *ListRolesRequest) GetPage() *float64 {
+func (l *ListRolesRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListRolesRequest) GetPerPage() *float64 {
+func (l *ListRolesRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}
@@ -71,6 +71,7 @@ func (l *ListRolesRequest) GetPerPage() *float64 {
 type ListRolesInheritedRole string
 
 const (
+	ListRolesInheritedRolePscaleManaged            ListRolesInheritedRole = "pscale_managed"
 	ListRolesInheritedRolePgCheckpoint             ListRolesInheritedRole = "pg_checkpoint"
 	ListRolesInheritedRolePgCreateSubscription     ListRolesInheritedRole = "pg_create_subscription"
 	ListRolesInheritedRolePgMaintain               ListRolesInheritedRole = "pg_maintain"
@@ -94,6 +95,8 @@ func (e *ListRolesInheritedRole) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "pscale_managed":
+		fallthrough
 	case "pg_checkpoint":
 		fallthrough
 	case "pg_create_subscription":

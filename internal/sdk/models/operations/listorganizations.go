@@ -9,9 +9,9 @@ import (
 
 type ListOrganizationsRequest struct {
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListOrganizationsRequest) MarshalJSON() ([]byte, error) {
@@ -25,14 +25,14 @@ func (l *ListOrganizationsRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (l *ListOrganizationsRequest) GetPage() *float64 {
+func (l *ListOrganizationsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListOrganizationsRequest) GetPerPage() *float64 {
+func (l *ListOrganizationsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

@@ -27,7 +27,7 @@ type QueueDeployRequestRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64                        `pathParam:"style=simple,explode=false,name=number"`
+	Number int64                          `pathParam:"style=simple,explode=false,name=number"`
 	Body   *QueueDeployRequestRequestBody `request:"mediaType=application/json"`
 }
 
@@ -56,9 +56,9 @@ func (q *QueueDeployRequestRequest) GetDatabase() string {
 	return q.Database
 }
 
-func (q *QueueDeployRequestRequest) GetNumber() float64 {
+func (q *QueueDeployRequestRequest) GetNumber() int64 {
 	if q == nil {
-		return 0.0
+		return 0
 	}
 	return q.Number
 }

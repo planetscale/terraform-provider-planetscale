@@ -13,9 +13,9 @@ type ListOauthTokensRequest struct {
 	// The ID of the OAuth application
 	ApplicationID string `pathParam:"style=simple,explode=false,name=application_id"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListOauthTokensRequest) MarshalJSON() ([]byte, error) {
@@ -43,14 +43,14 @@ func (l *ListOauthTokensRequest) GetApplicationID() string {
 	return l.ApplicationID
 }
 
-func (l *ListOauthTokensRequest) GetPage() *float64 {
+func (l *ListOauthTokensRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListOauthTokensRequest) GetPerPage() *float64 {
+func (l *ListOauthTokensRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

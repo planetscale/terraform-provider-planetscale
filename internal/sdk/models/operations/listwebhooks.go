@@ -15,9 +15,9 @@ type ListWebhooksRequest struct {
 	// The name of the database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListWebhooksRequest) MarshalJSON() ([]byte, error) {
@@ -45,14 +45,14 @@ func (l *ListWebhooksRequest) GetDatabase() string {
 	return l.Database
 }
 
-func (l *ListWebhooksRequest) GetPage() *float64 {
+func (l *ListWebhooksRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListWebhooksRequest) GetPerPage() *float64 {
+func (l *ListWebhooksRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

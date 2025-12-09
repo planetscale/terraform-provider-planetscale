@@ -13,7 +13,7 @@ type UpdateBranchChangeRequestRequestBody struct {
 	// The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 	ClusterSize *string `json:"cluster_size,omitzero"`
 	// The total number of replicas
-	Replicas *float64 `json:"replicas,omitzero"`
+	Replicas *int64 `json:"replicas,omitzero"`
 	// Cluster configuration parameters nested by namespace (e.g., {"pgconf": {"max_connections": "200"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Supported namespaces include 'patroni', 'pgconf', and 'pgbouncer'.
 	Parameters map[string]any `json:"parameters,omitzero"`
 }
@@ -36,7 +36,7 @@ func (u *UpdateBranchChangeRequestRequestBody) GetClusterSize() *string {
 	return u.ClusterSize
 }
 
-func (u *UpdateBranchChangeRequestRequestBody) GetReplicas() *float64 {
+func (u *UpdateBranchChangeRequestRequestBody) GetReplicas() *int64 {
 	if u == nil {
 		return nil
 	}

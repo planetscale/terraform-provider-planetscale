@@ -9,9 +9,9 @@ import (
 
 type ListPublicRegionsRequest struct {
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListPublicRegionsRequest) MarshalJSON() ([]byte, error) {
@@ -25,14 +25,14 @@ func (l *ListPublicRegionsRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (l *ListPublicRegionsRequest) GetPage() *float64 {
+func (l *ListPublicRegionsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListPublicRegionsRequest) GetPerPage() *float64 {
+func (l *ListPublicRegionsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

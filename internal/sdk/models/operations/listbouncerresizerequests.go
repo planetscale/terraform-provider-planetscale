@@ -19,9 +19,9 @@ type ListBouncerResizeRequestsRequest struct {
 	// The name of the bouncer
 	Bouncer string `pathParam:"style=simple,explode=false,name=bouncer"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListBouncerResizeRequestsRequest) MarshalJSON() ([]byte, error) {
@@ -63,14 +63,14 @@ func (l *ListBouncerResizeRequestsRequest) GetBouncer() string {
 	return l.Bouncer
 }
 
-func (l *ListBouncerResizeRequestsRequest) GetPage() *float64 {
+func (l *ListBouncerResizeRequestsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListBouncerResizeRequestsRequest) GetPerPage() *float64 {
+func (l *ListBouncerResizeRequestsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

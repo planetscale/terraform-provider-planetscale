@@ -63,7 +63,7 @@ type ReviewDeployRequestRequest struct {
 	// The name of the database the deploy request belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64                         `pathParam:"style=simple,explode=false,name=number"`
+	Number int64                           `pathParam:"style=simple,explode=false,name=number"`
 	Body   *ReviewDeployRequestRequestBody `request:"mediaType=application/json"`
 }
 
@@ -92,9 +92,9 @@ func (r *ReviewDeployRequestRequest) GetDatabase() string {
 	return r.Database
 }
 
-func (r *ReviewDeployRequestRequest) GetNumber() float64 {
+func (r *ReviewDeployRequestRequest) GetNumber() int64 {
 	if r == nil {
-		return 0.0
+		return 0
 	}
 	return r.Number
 }
