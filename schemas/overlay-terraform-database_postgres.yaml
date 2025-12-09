@@ -13,7 +13,7 @@ actions:
             - Databases
           operationId: create_postgres_database
           summary: Create a PostgreSQL database
-          x-speakeasy-entity-operation: DatabasePostgres#create
+          # x-speakeasy-entity-operation: DatabasePostgres#create
           x-speakeasy-entity-description: Manage a PlanetScale PostgreSQL database.
           parameters:
             - name: organization
@@ -261,10 +261,10 @@ actions:
           summary: Get a PostgreSQL database
           x-speakeasy-entity-operation:
             - DatabasePostgres#read
-            - entityOperation: DatabasePostgres#create#2
-              options:
-                polling:
-                  name: WaitForReady
+          #   - entityOperation: DatabasePostgres#create#2
+          #     options:
+          #       polling:
+          #         name: WaitForReady
           x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database.
           x-speakeasy-polling:
             - name: WaitForReady
@@ -484,7 +484,7 @@ actions:
             - Databases
           operationId: update_postgres_database
           summary: Update PostgreSQL database settings
-          x-speakeasy-entity-operation: DatabasePostgres#update
+          # x-speakeasy-entity-operation: DatabasePostgres#update
           parameters:
             - name: organization
               in: path
@@ -564,7 +564,7 @@ actions:
             - Databases
           operationId: delete_postgres_database
           summary: Delete a PostgreSQL database
-          x-speakeasy-entity-operation: DatabasePostgres#delete
+          # x-speakeasy-entity-operation: DatabasePostgres#delete
           parameters:
             - name: organization
               in: path

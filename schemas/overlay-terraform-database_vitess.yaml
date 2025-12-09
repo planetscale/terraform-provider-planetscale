@@ -13,7 +13,7 @@ actions:
             - Databases
           operationId: create_vitess_database
           summary: Create a Vitess database
-          x-speakeasy-entity-operation: DatabaseVitess#create
+          # x-speakeasy-entity-operation: DatabaseVitess#create
           x-speakeasy-entity-description: Manage a PlanetScale Vitess database.
           parameters:
             - name: organization
@@ -276,10 +276,10 @@ actions:
           summary: Get a Vitess database
           x-speakeasy-entity-operation:
             - DatabaseVitess#read
-            - entityOperation: DatabaseVitess#create#2
-              options:
-                polling:
-                  name: WaitForReady
+            # - entityOperation: DatabaseVitess#create#2
+            #   options:
+            #     polling:
+            #       name: WaitForReady
           x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database.
           x-speakeasy-polling:
             - name: WaitForReady
@@ -517,7 +517,7 @@ actions:
             - Databases
           operationId: update_vitess_database
           summary: Update Vitess database settings
-          x-speakeasy-entity-operation: DatabaseVitess#update
+          # x-speakeasy-entity-operation: DatabaseVitess#update
           parameters:
             - name: organization
               in: path
@@ -612,7 +612,7 @@ actions:
             - Databases
           operationId: delete_vitess_database
           summary: Delete a Vitess database
-          x-speakeasy-entity-operation: DatabaseVitess#delete
+          # x-speakeasy-entity-operation: DatabaseVitess#delete
           parameters:
             - name: organization
               in: path
