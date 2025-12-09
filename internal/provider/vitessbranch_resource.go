@@ -643,21 +643,21 @@ func (r *VitessBranchResource) ImportState(ctx context.Context, req resource.Imp
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		Name         string `json:"name"`
+		ID           string `json:"id"`
 		Database     string `json:"database"`
 		Organization string `json:"organization"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"database": "...", "name": "...", "organization": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"database": "...", "id": "...", "organization": "..."}': `+err.Error())
 		return
 	}
 
-	if len(data.Name) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field name is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), data.Name)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	if len(data.Database) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field database is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return

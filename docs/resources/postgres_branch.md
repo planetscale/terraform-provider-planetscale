@@ -131,7 +131,7 @@ import {
   to = planetscale_postgres_branch.my_planetscale_postgres_branch
   id = jsonencode({
     database = "..."
-    name = "..."
+    id = "..."
     organization = "..."
   })
 }
@@ -140,5 +140,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import planetscale_postgres_branch.my_planetscale_postgres_branch '{"database": "...", "name": "...", "organization": "..."}'
+terraform import planetscale_postgres_branch.my_planetscale_postgres_branch '{"database": "...", "id": "...", "organization": "..."}'
 ```

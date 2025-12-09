@@ -295,7 +295,7 @@ actions:
               in: path
               required: true
               description: The name of the branch
-              x-speakeasy-match: name
+              x-speakeasy-match: id
               schema:
                 type: string
           responses:
@@ -522,7 +522,7 @@ actions:
               in: path
               required: true
               description: The name of the branch
-              x-speakeasy-match: name
+              x-speakeasy-match: id
               schema:
                 type: string
           responses:

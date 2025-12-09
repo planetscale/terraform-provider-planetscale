@@ -248,7 +248,7 @@ func (r *VitessBranchResourceModel) ToOperationsDeleteVitessBranchRequest(ctx co
 	database = r.Database.ValueString()
 
 	var branch string
-	branch = r.Name.ValueString()
+	branch = r.ID.ValueString()
 
 	out := operations.DeleteVitessBranchRequest{
 		Organization: organization,
@@ -269,7 +269,7 @@ func (r *VitessBranchResourceModel) ToOperationsGetVitessBranchRequest(ctx conte
 	database = r.Database.ValueString()
 
 	var branch string
-	branch = r.Name.ValueString()
+	branch = r.ID.ValueString()
 
 	out := operations.GetVitessBranchRequest{
 		Organization: organization,
