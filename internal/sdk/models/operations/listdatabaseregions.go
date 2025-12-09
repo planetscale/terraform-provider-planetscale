@@ -198,8 +198,6 @@ type ListDatabaseRegionsResponse struct {
 	RawResponse *http.Response
 	// Returns the available regions for a database
 	Object *ListDatabaseRegionsResponseBody
-
-	Next func() (*ListDatabaseRegionsResponse, error)
 }
 
 func (l ListDatabaseRegionsResponse) MarshalJSON() ([]byte, error) {

@@ -189,8 +189,6 @@ type ListRegionsForOrganizationResponse struct {
 	RawResponse *http.Response
 	// Returns the organization's regions
 	Object *ListRegionsForOrganizationResponseBody
-
-	Next func() (*ListRegionsForOrganizationResponse, error)
 }
 
 func (l ListRegionsForOrganizationResponse) MarshalJSON() ([]byte, error) {

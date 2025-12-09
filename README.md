@@ -68,7 +68,6 @@ Available configuration:
 ### Resources
 
 * [planetscale_branch](docs/resources/branch.md)
-* [planetscale_database_default_branch](docs/resources/database_default_branch.md)
 * [planetscale_database_postgres](docs/resources/database_postgres.md)
 * [planetscale_database_vitess](docs/resources/database_vitess.md)
 * [planetscale_password](docs/resources/password.md)
@@ -77,16 +76,10 @@ Available configuration:
 
 * [planetscale_branch](docs/data-sources/branch.md)
 * [planetscale_branches](docs/data-sources/branches.md)
-* [planetscale_branch_schema](docs/data-sources/branch_schema.md)
-* [planetscale_database_default_branch](docs/data-sources/database_default_branch.md)
 * [planetscale_database_postgres](docs/data-sources/database_postgres.md)
-* [planetscale_database_read_only_regions](docs/data-sources/database_read_only_regions.md)
-* [planetscale_database_regions](docs/data-sources/database_regions.md)
 * [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_database_vitess](docs/data-sources/database_vitess.md)
 * [planetscale_organization](docs/data-sources/organization.md)
-* [planetscale_organization_cluster_size_skus](docs/data-sources/organization_cluster_size_skus.md)
-* [planetscale_organization_regions](docs/data-sources/organization_regions.md)
 * [planetscale_organizations](docs/data-sources/organizations.md)
 * [planetscale_password](docs/data-sources/password.md)
 * [planetscale_passwords](docs/data-sources/passwords.md)
