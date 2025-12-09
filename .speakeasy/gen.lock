@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: d60de280b7f2d523b39ad35d7a6d6959
+  docChecksum: 34309a69be9635195dfebdd24e88e494
   docVersion: v1
   speakeasyVersion: 1.668.0
   generationVersion: 2.770.0
@@ -23,17 +23,11 @@ generatedFiles:
   - .gitattributes
   - USAGE.md
   - examples/data-sources/planetscale_branch/data-source.tf
-  - examples/data-sources/planetscale_branch_schema/data-source.tf
   - examples/data-sources/planetscale_branches/data-source.tf
-  - examples/data-sources/planetscale_database_default_branch/data-source.tf
   - examples/data-sources/planetscale_database_postgres/data-source.tf
-  - examples/data-sources/planetscale_database_read_only_regions/data-source.tf
-  - examples/data-sources/planetscale_database_regions/data-source.tf
   - examples/data-sources/planetscale_database_vitess/data-source.tf
   - examples/data-sources/planetscale_databases/data-source.tf
   - examples/data-sources/planetscale_organization/data-source.tf
-  - examples/data-sources/planetscale_organization_cluster_size_skus/data-source.tf
-  - examples/data-sources/planetscale_organization_regions/data-source.tf
   - examples/data-sources/planetscale_organizations/data-source.tf
   - examples/data-sources/planetscale_password/data-source.tf
   - examples/data-sources/planetscale_passwords/data-source.tf
@@ -44,9 +38,6 @@ generatedFiles:
   - examples/resources/planetscale_branch/import-by-string-id.tf
   - examples/resources/planetscale_branch/import.sh
   - examples/resources/planetscale_branch/resource.tf
-  - examples/resources/planetscale_database_default_branch/import-by-string-id.tf
-  - examples/resources/planetscale_database_default_branch/import.sh
-  - examples/resources/planetscale_database_default_branch/resource.tf
   - examples/resources/planetscale_database_postgres/import-by-string-id.tf
   - examples/resources/planetscale_database_postgres/import.sh
   - examples/resources/planetscale_database_postgres/resource.tf
@@ -79,20 +70,10 @@ generatedFiles:
   - internal/provider/branch_resource_sdk.go
   - internal/provider/branches_data_source.go
   - internal/provider/branches_data_source_sdk.go
-  - internal/provider/branchschema_data_source.go
-  - internal/provider/branchschema_data_source_sdk.go
-  - internal/provider/databasedefaultbranch_data_source.go
-  - internal/provider/databasedefaultbranch_data_source_sdk.go
-  - internal/provider/databasedefaultbranch_resource.go
-  - internal/provider/databasedefaultbranch_resource_sdk.go
   - internal/provider/databasepostgres_data_source.go
   - internal/provider/databasepostgres_data_source_sdk.go
   - internal/provider/databasepostgres_resource.go
   - internal/provider/databasepostgres_resource_sdk.go
-  - internal/provider/databasereadonlyregions_data_source.go
-  - internal/provider/databasereadonlyregions_data_source_sdk.go
-  - internal/provider/databaseregions_data_source.go
-  - internal/provider/databaseregions_data_source_sdk.go
   - internal/provider/databases_data_source.go
   - internal/provider/databases_data_source_sdk.go
   - internal/provider/databasevitess_data_source.go
@@ -101,10 +82,6 @@ generatedFiles:
   - internal/provider/databasevitess_resource_sdk.go
   - internal/provider/organization_data_source.go
   - internal/provider/organization_data_source_sdk.go
-  - internal/provider/organizationclustersizeskus_data_source.go
-  - internal/provider/organizationclustersizeskus_data_source_sdk.go
-  - internal/provider/organizationregions_data_source.go
-  - internal/provider/organizationregions_data_source_sdk.go
   - internal/provider/organizations_data_source.go
   - internal/provider/organizations_data_source_sdk.go
   - internal/provider/password_data_source.go
@@ -140,7 +117,6 @@ generatedFiles:
   - internal/provider/types/get_branch_actor.go
   - internal/provider/types/get_branch_region_data.go
   - internal/provider/types/get_branch_restored_from_branch.go
-  - internal/provider/types/get_branch_schema_data.go
   - internal/provider/types/get_current_user_default_organization.go
   - internal/provider/types/get_password_actor.go
   - internal/provider/types/get_password_database_branch.go
@@ -157,8 +133,6 @@ generatedFiles:
   - internal/provider/types/list_branches_data.go
   - internal/provider/types/list_branches_region.go
   - internal/provider/types/list_branches_restored_from_branch.go
-  - internal/provider/types/list_cluster_size_skus_response_body.go
-  - internal/provider/types/list_database_regions_data.go
   - internal/provider/types/list_databases_data.go
   - internal/provider/types/list_databases_data_import.go
   - internal/provider/types/list_databases_data_source.go
@@ -168,10 +142,6 @@ generatedFiles:
   - internal/provider/types/list_passwords_data.go
   - internal/provider/types/list_passwords_database_branch.go
   - internal/provider/types/list_passwords_region.go
-  - internal/provider/types/list_read_only_regions_actor.go
-  - internal/provider/types/list_read_only_regions_data.go
-  - internal/provider/types/list_read_only_regions_region.go
-  - internal/provider/types/list_regions_for_organization_data.go
   - internal/provider/types/list_roles_actor.go
   - internal/provider/types/list_roles_branch.go
   - internal/provider/types/list_roles_data.go
@@ -257,7 +227,6 @@ generatedFiles:
   - internal/sdk/models/operations/getbranchschema.go
   - internal/sdk/models/operations/getcurrentuser.go
   - internal/sdk/models/operations/getdatabase.go
-  - internal/sdk/models/operations/getdatabasedefaultbranch.go
   - internal/sdk/models/operations/getdatabasepostgrescidr.go
   - internal/sdk/models/operations/getdatabasethrottler.go
   - internal/sdk/models/operations/getdeployment.go
@@ -323,7 +292,6 @@ generatedFiles:
   - internal/sdk/models/operations/removeorganizationmember.go
   - internal/sdk/models/operations/renewpassword.go
   - internal/sdk/models/operations/renewrole.go
-  - internal/sdk/models/operations/resetdatabasedefaultbranch.go
   - internal/sdk/models/operations/resetrole.go
   - internal/sdk/models/operations/reviewdeployrequest.go
   - internal/sdk/models/operations/skiprevertperiod.go
@@ -334,7 +302,6 @@ generatedFiles:
   - internal/sdk/models/operations/updatebouncerresizerequest.go
   - internal/sdk/models/operations/updatebranchchangerequest.go
   - internal/sdk/models/operations/updatebranchclusterconfig.go
-  - internal/sdk/models/operations/updatedatabasedefaultbranch.go
   - internal/sdk/models/operations/updatedatabasepostgrescidr.go
   - internal/sdk/models/operations/updatedatabasesettings.go
   - internal/sdk/models/operations/updatedatabasethrottler.go

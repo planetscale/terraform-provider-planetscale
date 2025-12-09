@@ -130,7 +130,6 @@ func (p *PlanetscaleProvider) Configure(ctx context.Context, req provider.Config
 func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewBranchResource,
-		NewDatabaseDefaultBranchResource,
 		NewDatabasePostgresResource,
 		NewDatabaseVitessResource,
 		NewPasswordResource,
@@ -142,16 +141,10 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 	return []func() datasource.DataSource{
 		NewBranchDataSource,
 		NewBranchesDataSource,
-		NewBranchSchemaDataSource,
-		NewDatabaseDefaultBranchDataSource,
 		NewDatabasePostgresDataSource,
-		NewDatabaseReadOnlyRegionsDataSource,
-		NewDatabaseRegionsDataSource,
 		NewDatabasesDataSource,
 		NewDatabaseVitessDataSource,
 		NewOrganizationDataSource,
-		NewOrganizationClusterSizeSkusDataSource,
-		NewOrganizationRegionsDataSource,
 		NewOrganizationsDataSource,
 		NewPasswordDataSource,
 		NewPasswordsDataSource,
