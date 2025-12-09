@@ -67,14 +67,14 @@ Available configuration:
 
 ### Resources
 
-* [planetscale_branch](docs/resources/branch.md)
 * [planetscale_database_postgres](docs/resources/database_postgres.md)
 * [planetscale_database_vitess](docs/resources/database_vitess.md)
 * [planetscale_password](docs/resources/password.md)
+* [planetscale_postgres_branch](docs/resources/postgres_branch.md)
 * [planetscale_role](docs/resources/role.md)
+* [planetscale_vitess_branch](docs/resources/vitess_branch.md)
 ### Data Sources
 
-* [planetscale_branch](docs/data-sources/branch.md)
 * [planetscale_branches](docs/data-sources/branches.md)
 * [planetscale_database_postgres](docs/data-sources/database_postgres.md)
 * [planetscale_databases](docs/data-sources/databases.md)
@@ -83,9 +83,11 @@ Available configuration:
 * [planetscale_organizations](docs/data-sources/organizations.md)
 * [planetscale_password](docs/data-sources/password.md)
 * [planetscale_passwords](docs/data-sources/passwords.md)
+* [planetscale_postgres_branch](docs/data-sources/postgres_branch.md)
 * [planetscale_role](docs/data-sources/role.md)
 * [planetscale_roles](docs/data-sources/roles.md)
 * [planetscale_user](docs/data-sources/user.md)
+* [planetscale_vitess_branch](docs/data-sources/vitess_branch.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

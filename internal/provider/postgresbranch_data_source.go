@@ -14,68 +14,73 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &BranchDataSource{}
-var _ datasource.DataSourceWithConfigure = &BranchDataSource{}
+var _ datasource.DataSource = &PostgresBranchDataSource{}
+var _ datasource.DataSourceWithConfigure = &PostgresBranchDataSource{}
 
-func NewBranchDataSource() datasource.DataSource {
-	return &BranchDataSource{}
+func NewPostgresBranchDataSource() datasource.DataSource {
+	return &PostgresBranchDataSource{}
 }
 
-// BranchDataSource is the data source implementation.
-type BranchDataSource struct {
+// PostgresBranchDataSource is the data source implementation.
+type PostgresBranchDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.Planetscale
 }
 
-// BranchDataSourceModel describes the data model.
-type BranchDataSourceModel struct {
-	Actor                       tfTypes.GetBranchActor              `tfsdk:"actor"`
-	Branch                      types.String                        `tfsdk:"branch"`
-	ClusterIops                 types.Int64                         `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                        `tfsdk:"cluster_name"`
-	CreatedAt                   types.String                        `tfsdk:"created_at"`
-	Database                    types.String                        `tfsdk:"database"`
-	DeletedAt                   types.String                        `tfsdk:"deleted_at"`
-	DirectVtgate                types.Bool                          `tfsdk:"direct_vtgate"`
-	HasReadOnlyReplicas         types.Bool                          `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                          `tfsdk:"has_replicas"`
-	HTMLURL                     types.String                        `tfsdk:"html_url"`
-	ID                          types.String                        `tfsdk:"id"`
-	Kind                        types.String                        `tfsdk:"kind"`
-	Metal                       types.Bool                          `tfsdk:"metal"`
-	MysqlAddress                types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            types.String                        `tfsdk:"mysql_edge_address"`
-	Name                        types.String                        `tfsdk:"name"`
-	Organization                types.String                        `tfsdk:"organization"`
-	ParentBranch                types.String                        `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity     types.Bool                          `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                          `tfsdk:"production"`
-	Ready                       types.Bool                          `tfsdk:"ready"`
-	RegionData                  tfTypes.GetBranchRegionData         `tfsdk:"region_data"`
-	RestoreChecklistCompletedAt types.String                        `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          tfTypes.GetBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	SafeMigrations              types.Bool                          `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                        `tfsdk:"schema_last_updated_at"`
-	SchemaReady                 types.Bool                          `tfsdk:"schema_ready"`
-	ShardCount                  types.Int64                         `tfsdk:"shard_count"`
-	Sharded                     types.Bool                          `tfsdk:"sharded"`
-	StaleSchema                 types.Bool                          `tfsdk:"stale_schema"`
-	State                       types.String                        `tfsdk:"state"`
-	UpdatedAt                   types.String                        `tfsdk:"updated_at"`
-	URL                         types.String                        `tfsdk:"url"`
-	VtgateCount                 types.Int64                         `tfsdk:"vtgate_count"`
-	VtgateSize                  types.String                        `tfsdk:"vtgate_size"`
+// PostgresBranchDataSourceModel describes the data model.
+type PostgresBranchDataSourceModel struct {
+	Actor                       *tfTypes.GetPostgresBranchActor              `tfsdk:"actor"`
+	ClusterArchitecture         types.String                                 `tfsdk:"cluster_architecture"`
+	ClusterDisplayName          types.String                                 `tfsdk:"cluster_display_name"`
+	ClusterIops                 types.Int64                                  `tfsdk:"cluster_iops"`
+	ClusterName                 types.String                                 `tfsdk:"cluster_name"`
+	CreatedAt                   types.String                                 `tfsdk:"created_at"`
+	Database                    types.String                                 `tfsdk:"database"`
+	Default                     types.Bool                                   `tfsdk:"default"`
+	EnablingVectors             types.Bool                                   `tfsdk:"enabling_vectors"`
+	Frozen                      types.Bool                                   `tfsdk:"frozen"`
+	HasReadOnlyReplicas         types.Bool                                   `tfsdk:"has_read_only_replicas"`
+	HasReplicas                 types.Bool                                   `tfsdk:"has_replicas"`
+	HasRoles                    types.Bool                                   `tfsdk:"has_roles"`
+	ID                          types.String                                 `tfsdk:"id"`
+	ImageVersion                types.String                                 `tfsdk:"image_version"`
+	LatestImageVersion          types.String                                 `tfsdk:"latest_image_version"`
+	MaximumStorageBytes         types.Int64                                  `tfsdk:"maximum_storage_bytes"`
+	Metal                       types.Bool                                   `tfsdk:"metal"`
+	MinimumStorageBytes         types.Int64                                  `tfsdk:"minimum_storage_bytes"`
+	Name                        types.String                                 `tfsdk:"name"`
+	Organization                types.String                                 `tfsdk:"organization"`
+	ParentBranch                types.String                                 `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity     types.Bool                                   `tfsdk:"private_edge_connectivity"`
+	Production                  types.Bool                                   `tfsdk:"production"`
+	ReadOnlyAt                  types.String                                 `tfsdk:"read_only_at"`
+	ReadOnlyReason              types.String                                 `tfsdk:"read_only_reason"`
+	Ready                       types.Bool                                   `tfsdk:"ready"`
+	RegionData                  *tfTypes.GetPostgresBranchRegionData         `tfsdk:"region_data"`
+	Replicas                    types.Int64                                  `tfsdk:"replicas"`
+	RestoreChecklistCompletedAt types.String                                 `tfsdk:"restore_checklist_completed_at"`
+	RestoredFromBranch          *tfTypes.GetPostgresBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
+	SafeMigrations              types.Bool                                   `tfsdk:"safe_migrations"`
+	SchemaLastUpdatedAt         types.String                                 `tfsdk:"schema_last_updated_at"`
+	StaleSchema                 types.Bool                                   `tfsdk:"stale_schema"`
+	State                       types.String                                 `tfsdk:"state"`
+	StorageAutoscaling          types.Bool                                   `tfsdk:"storage_autoscaling"`
+	StorageIops                 types.Int64                                  `tfsdk:"storage_iops"`
+	StorageShrinking            types.Bool                                   `tfsdk:"storage_shrinking"`
+	StorageThroughputMibs       types.Int64                                  `tfsdk:"storage_throughput_mibs"`
+	StorageType                 types.String                                 `tfsdk:"storage_type"`
+	UpdatedAt                   types.String                                 `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
-func (r *BranchDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_branch"
+func (r *PostgresBranchDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_postgres_branch"
 }
 
 // Schema defines the schema for the data source.
-func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Branch DataSource",
+		MarkdownDescription: "PostgresBranch DataSource",
 
 		Attributes: map[string]schema.Attribute{
 			"actor": schema.SingleNestedAttribute{
@@ -95,9 +100,13 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
-			"branch": schema.StringAttribute{
-				Required:    true,
-				Description: `The name of the branch`,
+			"cluster_architecture": schema.StringAttribute{
+				Computed:    true,
+				Description: `The CPU architecture for the cluster (e.g., x86_64)`,
+			},
+			"cluster_display_name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Display name for the cluster size`,
 			},
 			"cluster_iops": schema.Int64Attribute{
 				Computed:    true,
@@ -115,13 +124,17 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Required:    true,
 				Description: `The name of the database the branch belongs to`,
 			},
-			"deleted_at": schema.StringAttribute{
+			"default": schema.BoolAttribute{
 				Computed:    true,
-				Description: `When the branch was deleted`,
+				Description: `Whether or not this is the default branch`,
 			},
-			"direct_vtgate": schema.BoolAttribute{
+			"enabling_vectors": schema.BoolAttribute{
 				Computed:    true,
-				Description: `True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers`,
+				Description: `Whether or not vector support is being enabled`,
+			},
+			"frozen": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not the branch is frozen`,
 			},
 			"has_read_only_replicas": schema.BoolAttribute{
 				Computed:    true,
@@ -131,29 +144,33 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:    true,
 				Description: `True if the branch has replica servers`,
 			},
-			"html_url": schema.StringAttribute{
+			"has_roles": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Planetscale app URL for the branch`,
+				Description: `True if the branch has roles`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
 			},
-			"kind": schema.StringAttribute{
+			"image_version": schema.StringAttribute{
 				Computed:    true,
-				Description: `The kind of branch`,
+				Description: `The current PostgreSQL image version`,
+			},
+			"latest_image_version": schema.StringAttribute{
+				Computed:    true,
+				Description: `The latest available PostgreSQL image version`,
+			},
+			"maximum_storage_bytes": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Maximum storage size in bytes`,
 			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not this is a metal database`,
 			},
-			"mysql_address": schema.StringAttribute{
+			"minimum_storage_bytes": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The MySQL address for the branch`,
-			},
-			"mysql_edge_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The address of the MySQL provider for the branch`,
+				Description: `Minimum storage size in bytes`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
@@ -174,6 +191,14 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"production": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch is a production branch`,
+			},
+			"read_only_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the branch became read-only`,
+			},
+			"read_only_reason": schema.StringAttribute{
+				Computed:    true,
+				Description: `Reason why the branch is read-only, if applicable`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -217,6 +242,10 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
+			"replicas": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The number of replicas for the branch`,
+			},
 			"restore_checklist_completed_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `When a user last marked a backup restore checklist as completed`,
@@ -254,18 +283,6 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:    true,
 				Description: `When the schema for the branch was last updated`,
 			},
-			"schema_ready": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the schema is ready for queries`,
-			},
-			"shard_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of shards in the branch`,
-			},
-			"sharded": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is sharded`,
-			},
 			"stale_schema": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch has a stale schema`,
@@ -274,27 +291,35 @@ func (r *BranchDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:    true,
 				Description: `The current state of the branch`,
 			},
+			"storage_autoscaling": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether storage autoscaling is enabled`,
+			},
+			"storage_iops": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Storage IOPS`,
+			},
+			"storage_shrinking": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether storage shrinking is enabled`,
+			},
+			"storage_throughput_mibs": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Storage throughput in MiB/s`,
+			},
+			"storage_type": schema.StringAttribute{
+				Computed:    true,
+				Description: `The type of storage (e.g., pd_ssd)`,
+			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `When the branch was last updated`,
-			},
-			"url": schema.StringAttribute{
-				Computed:    true,
-				Description: `Planetscale API URL for the branch`,
-			},
-			"vtgate_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of vtgate instances in the branch`,
-			},
-			"vtgate_size": schema.StringAttribute{
-				Computed:    true,
-				Description: `The size of the vtgate cluster for the branch`,
 			},
 		},
 	}
 }
 
-func (r *BranchDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *PostgresBranchDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -314,8 +339,8 @@ func (r *BranchDataSource) Configure(ctx context.Context, req datasource.Configu
 	r.client = client
 }
 
-func (r *BranchDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *BranchDataSourceModel
+func (r *PostgresBranchDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *PostgresBranchDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)
@@ -332,13 +357,13 @@ func (r *BranchDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPostgresBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DatabaseBranches.GetBranch(ctx, *request)
+	res, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -358,7 +383,7 @@ func (r *BranchDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBranchResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

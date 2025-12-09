@@ -1,8 +1,8 @@
 import {
-  to = planetscale_branch.my_planetscale_branch
+  to = planetscale_vitess_branch.my_planetscale_vitess_branch
   id = jsonencode({
-    branch = "..."
     database = "..."
+    name = "..."
     organization = "..."
   })
 }

@@ -405,7 +405,6 @@ func (s *DatabaseBranches) CreateBranch(ctx context.Context, request operations.
 func (s *DatabaseBranches) GetBranch(ctx context.Context, request operations.GetBranchRequest, opts ...operations.Option) (*operations.GetBranchResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
-		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -461,19 +460,6 @@ func (s *DatabaseBranches) GetBranch(ctx context.Context, request operations.Get
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
-
-	if o.Polling != nil {
-		switch o.Polling.Name {
-		case "WaitForReady":
-			return s.getBranchWaitForReady(ctx, hookCtx, req, o)
-		}
-	}
-
-	return s.getBranch(ctx, hookCtx, req, o)
-}
-
-func (s *DatabaseBranches) getBranch(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchResponse, error) {
-	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -548,89 +534,6 @@ func (s *DatabaseBranches) getBranch(ctx context.Context, hookCtx hooks.HookCont
 
 	return res, nil
 
-}
-
-// Use with GetBranch by adding the operations.WithPolling option.
-// Responses are returned when enabling polling, however additional errors may
-// be returned:
-//   - polling.FailureCriteriaError: If the polling option has explicit failure
-//     criteria defined, polling will immediately stop and return this error.
-//   - polling.LimitCountError: When polling has reached the maximum number of
-//     attempts. Use the polling.WithLimitCountOverride polling option to
-//     override the predefined limit.
-func (s *DatabaseBranches) GetBranchWaitForReady() polling.ConfigFunc {
-	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 1
-		defaultIntervalSeconds := 1
-		defaultLimitCount := 300
-		result := &polling.Config{
-			DelaySeconds:    &defaultDelaySeconds,
-			IntervalSeconds: &defaultIntervalSeconds,
-			LimitCount:      &defaultLimitCount,
-			Name:            "WaitForReady",
-		}
-
-		for _, pollingOpt := range pollingOpts {
-			if err := pollingOpt(result); err != nil {
-				return nil, err
-			}
-		}
-
-		return result, nil
-	}
-}
-
-func (s *DatabaseBranches) getBranchWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchResponse, error) {
-	if o.Polling == nil || o.Polling.LimitCount == nil {
-		return s.getBranch(ctx, hookCtx, req, o)
-	}
-
-	if o.Polling.DelaySeconds != nil {
-		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
-	}
-
-	var res *operations.GetBranchResponse
-
-	for i := 1; i <= *o.Polling.LimitCount; i++ {
-		// Ensure request body, if exists, is not empty on subsequent requests.
-		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-			copyBody, err := req.GetBody()
-
-			if err != nil {
-				return nil, err
-			}
-
-			req.Body = copyBody
-		}
-
-		var err error
-
-		res, err = s.getBranch(ctx, hookCtx, req, o)
-
-		if err != nil {
-			return res, err
-		}
-
-		successCriteriaMet := true
-
-		if successCriteriaMet {
-			successCriteriaMet = res.StatusCode == 200
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = res.Object.State == "ready"
-		}
-
-		if successCriteriaMet {
-			return res, nil
-		}
-
-		if o.Polling.IntervalSeconds != nil {
-			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
-		}
-	}
-
-	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
 // DeleteBranch - Delete a branch
@@ -1751,6 +1654,1082 @@ func (s *DatabaseBranches) LintBranchSchema(ctx context.Context, request operati
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+	case httpRes.StatusCode == 500:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// CreatePostgresBranch - Create a PostgreSQL branch
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`create_branch`, `restore_production_branch_backup`, `restore_backup`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `write_branches` |
+// | Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
+// | Branch | `restore_backups` |
+func (s *DatabaseBranches) CreatePostgresBranch(ctx context.Context, request operations.CreatePostgresBranchRequest, opts ...operations.Option) (*operations.CreatePostgresBranchResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "create_postgres_branch",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.CreatePostgresBranchResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 201:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out operations.CreatePostgresBranchResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Object = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+	case httpRes.StatusCode == 500:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// GetPostgresBranch - Get a PostgreSQL branch
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `read_branches` |
+// | Database | `read_branches` |
+// | Branch | `read_branch` |
+func (s *DatabaseBranches) GetPostgresBranch(ctx context.Context, request operations.GetPostgresBranchRequest, opts ...operations.Option) (*operations.GetPostgresBranchResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionPolling,
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "get_postgres_branch",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	if o.Polling != nil {
+		switch o.Polling.Name {
+		case "WaitForReady":
+			return s.getPostgresBranchWaitForReady(ctx, hookCtx, req, o)
+		}
+	}
+
+	return s.getPostgresBranch(ctx, hookCtx, req, o)
+}
+
+func (s *DatabaseBranches) getPostgresBranch(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchResponse, error) {
+	var err error
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.GetPostgresBranchResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out operations.GetPostgresBranchResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Object = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+	case httpRes.StatusCode == 500:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// Use with GetPostgresBranch by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *DatabaseBranches) GetPostgresBranchWaitForReady() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 1
+		defaultIntervalSeconds := 1
+		defaultLimitCount := 300
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForReady",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *DatabaseBranches) getPostgresBranchWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getPostgresBranch(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetPostgresBranchResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getPostgresBranch(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 200
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = res.Object.State != nil
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = *res.Object.State == "ready"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
+}
+
+// DeletePostgresBranch - Delete a PostgreSQL branch
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`delete_branch`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `delete_branches`, `delete_production_branches` |
+// | Database | `delete_branches`, `delete_production_branches` |
+// | Branch | `delete_branch` |
+func (s *DatabaseBranches) DeletePostgresBranch(ctx context.Context, request operations.DeletePostgresBranchRequest, opts ...operations.Option) (*operations.DeletePostgresBranchResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "delete_postgres_branch",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "DELETE", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.DeletePostgresBranchResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 204:
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+	case httpRes.StatusCode == 500:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// CreateVitessBranch - Create a Vitess branch
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`create_branch`, `restore_production_branch_backup`, `restore_backup`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `write_branches` |
+// | Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
+// | Branch | `restore_backups` |
+func (s *DatabaseBranches) CreateVitessBranch(ctx context.Context, request operations.CreateVitessBranchRequest, opts ...operations.Option) (*operations.CreateVitessBranchResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "create_vitess_branch",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.CreateVitessBranchResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 201:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out operations.CreateVitessBranchResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Object = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+	case httpRes.StatusCode == 500:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// GetVitessBranch - Get a Vitess branch
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `read_branches` |
+// | Database | `read_branches` |
+// | Branch | `read_branch` |
+func (s *DatabaseBranches) GetVitessBranch(ctx context.Context, request operations.GetVitessBranchRequest, opts ...operations.Option) (*operations.GetVitessBranchResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionPolling,
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "get_vitess_branch",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	if o.Polling != nil {
+		switch o.Polling.Name {
+		case "WaitForReady":
+			return s.getVitessBranchWaitForReady(ctx, hookCtx, req, o)
+		}
+	}
+
+	return s.getVitessBranch(ctx, hookCtx, req, o)
+}
+
+func (s *DatabaseBranches) getVitessBranch(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessBranchResponse, error) {
+	var err error
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.GetVitessBranchResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out operations.GetVitessBranchResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Object = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+	case httpRes.StatusCode == 500:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// Use with GetVitessBranch by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *DatabaseBranches) GetVitessBranchWaitForReady() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 1
+		defaultIntervalSeconds := 1
+		defaultLimitCount := 300
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForReady",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *DatabaseBranches) getVitessBranchWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessBranchResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getVitessBranch(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetVitessBranchResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getVitessBranch(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 200
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = res.Object.State != nil
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = *res.Object.State == "ready"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
+}
+
+// DeleteVitessBranch - Delete a Vitess branch
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`delete_branch`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `delete_branches`, `delete_production_branches` |
+// | Database | `delete_branches`, `delete_production_branches` |
+// | Branch | `delete_branch` |
+func (s *DatabaseBranches) DeleteVitessBranch(ctx context.Context, request operations.DeleteVitessBranchRequest, opts ...operations.Option) (*operations.DeleteVitessBranchResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "delete_vitess_branch",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "DELETE", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.DeleteVitessBranchResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 204:
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
