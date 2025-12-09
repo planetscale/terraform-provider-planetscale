@@ -99,7 +99,7 @@ func (r *VitessBranchDataSourceModel) ToOperationsGetVitessBranchRequest(ctx con
 	database = r.Database.ValueString()
 
 	var branch string
-	branch = r.Name.ValueString()
+	branch = r.ID.ValueString()
 
 	out := operations.GetVitessBranchRequest{
 		Organization: organization,

@@ -263,7 +263,7 @@ func (r *PostgresBranchResourceModel) ToOperationsDeletePostgresBranchRequest(ct
 	database = r.Database.ValueString()
 
 	var branch string
-	branch = r.Name.ValueString()
+	branch = r.ID.ValueString()
 
 	out := operations.DeletePostgresBranchRequest{
 		Organization: organization,
@@ -284,7 +284,7 @@ func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx c
 	database = r.Database.ValueString()
 
 	var branch string
-	branch = r.Name.ValueString()
+	branch = r.ID.ValueString()
 
 	out := operations.GetPostgresBranchRequest{
 		Organization: organization,

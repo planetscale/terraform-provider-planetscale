@@ -103,7 +103,7 @@ func (r *PostgresBranchDataSourceModel) ToOperationsGetPostgresBranchRequest(ctx
 	database = r.Database.ValueString()
 
 	var branch string
-	branch = r.Name.ValueString()
+	branch = r.ID.ValueString()
 
 	out := operations.GetPostgresBranchRequest{
 		Organization: organization,
