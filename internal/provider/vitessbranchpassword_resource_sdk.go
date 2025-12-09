@@ -222,9 +222,9 @@ func (r *VitessBranchPasswordResourceModel) ToOperationsCreatePasswordRequestBod
 	} else {
 		replica = nil
 	}
-	ttl := new(float64)
+	ttl := new(int64)
 	if !r.TTL.IsUnknown() && !r.TTL.IsNull() {
-		*ttl = r.TTL.ValueFloat64()
+		*ttl = r.TTL.ValueInt64()
 	} else {
 		ttl = nil
 	}

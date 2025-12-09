@@ -15,7 +15,7 @@ type WorkflowCancelRequest struct {
 	// The name of the database the workflow belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The sequence number of the workflow
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (w *WorkflowCancelRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (w *WorkflowCancelRequest) GetDatabase() string {
 	return w.Database
 }
 
-func (w *WorkflowCancelRequest) GetNumber() float64 {
+func (w *WorkflowCancelRequest) GetNumber() int64 {
 	if w == nil {
-		return 0.0
+		return 0
 	}
 	return w.Number
 }

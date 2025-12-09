@@ -11,9 +11,9 @@ type ListOauthApplicationsRequest struct {
 	// The name of the organization the OAuth applications belong to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListOauthApplicationsRequest) MarshalJSON() ([]byte, error) {
@@ -34,14 +34,14 @@ func (l *ListOauthApplicationsRequest) GetOrganization() string {
 	return l.Organization
 }
 
-func (l *ListOauthApplicationsRequest) GetPage() *float64 {
+func (l *ListOauthApplicationsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListOauthApplicationsRequest) GetPerPage() *float64 {
+func (l *ListOauthApplicationsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

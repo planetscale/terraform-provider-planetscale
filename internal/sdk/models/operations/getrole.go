@@ -51,6 +51,7 @@ func (g *GetRoleRequest) GetID() string {
 type GetRoleInheritedRole string
 
 const (
+	GetRoleInheritedRolePscaleManaged            GetRoleInheritedRole = "pscale_managed"
 	GetRoleInheritedRolePgCheckpoint             GetRoleInheritedRole = "pg_checkpoint"
 	GetRoleInheritedRolePgCreateSubscription     GetRoleInheritedRole = "pg_create_subscription"
 	GetRoleInheritedRolePgMaintain               GetRoleInheritedRole = "pg_maintain"
@@ -74,6 +75,8 @@ func (e *GetRoleInheritedRole) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "pscale_managed":
+		fallthrough
 	case "pg_checkpoint":
 		fallthrough
 	case "pg_create_subscription":

@@ -15,7 +15,7 @@ type CompleteErroredDeployRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (c *CompleteErroredDeployRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (c *CompleteErroredDeployRequest) GetDatabase() string {
 	return c.Database
 }
 
-func (c *CompleteErroredDeployRequest) GetNumber() float64 {
+func (c *CompleteErroredDeployRequest) GetNumber() int64 {
 	if c == nil {
-		return 0.0
+		return 0
 	}
 	return c.Number
 }

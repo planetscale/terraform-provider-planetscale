@@ -16,7 +16,7 @@ import (
 	"net/url"
 )
 
-// Organizations -             Resources for managing organizations.
+// Organizations -           Resources for managing organizations.
 type Organizations struct {
 	rootSDK          *Planetscale
 	sdkConfiguration config.SDKConfiguration
@@ -149,11 +149,11 @@ func (s *Organizations) ListOrganizations(ctx context.Context, request operation
 		if err != nil {
 			return nil, err
 		}
-		var p float64 = 1
+		var p int64 = 1
 		if request.Page != nil {
 			p = *request.Page
 		}
-		nP := float64(p + 1)
+		nP := int64(p + 1)
 		r, err := ajson.Eval(b, "$.data")
 		if err != nil {
 			return nil, err

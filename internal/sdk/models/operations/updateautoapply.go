@@ -27,7 +27,7 @@ type UpdateAutoApplyRequest struct {
 	// The name of the deploy request's database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The number of the deploy request
-	Number float64                     `pathParam:"style=simple,explode=false,name=number"`
+	Number int64                       `pathParam:"style=simple,explode=false,name=number"`
 	Body   *UpdateAutoApplyRequestBody `request:"mediaType=application/json"`
 }
 
@@ -56,9 +56,9 @@ func (u *UpdateAutoApplyRequest) GetDatabase() string {
 	return u.Database
 }
 
-func (u *UpdateAutoApplyRequest) GetNumber() float64 {
+func (u *UpdateAutoApplyRequest) GetNumber() int64 {
 	if u == nil {
-		return 0.0
+		return 0
 	}
 	return u.Number
 }

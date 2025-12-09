@@ -50,10 +50,10 @@ func Pointer[T any](v T) *T { return &v }
 // Planetscale - Terraform Provider for PlanetScale: Manage your PlanetScale resources with Terraform
 type Planetscale struct {
 	SDKVersion string
-	//             Resources for managing organizations.
+	//           Resources for managing organizations.
 	//
 	Organizations *Organizations
-	//             Resources for managing databases within an organization.
+	//           Resources for managing databases within an organization.
 	//
 	Databases        *Databases
 	DatabaseBranches *DatabaseBranches

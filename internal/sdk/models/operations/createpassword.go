@@ -50,7 +50,7 @@ type CreatePasswordRequestBody struct {
 	// Whether the password is for a read replica
 	Replica *bool `json:"replica,omitzero"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTL *float64 `json:"ttl,omitzero"`
+	TTL *int64 `json:"ttl,omitzero"`
 	// List of IP addresses or CIDR ranges that can use this password
 	Cidrs []string `json:"cidrs,omitzero"`
 	// Whether the password connects directly to a VTGate
@@ -89,7 +89,7 @@ func (c *CreatePasswordRequestBody) GetReplica() *bool {
 	return c.Replica
 }
 
-func (c *CreatePasswordRequestBody) GetTTL() *float64 {
+func (c *CreatePasswordRequestBody) GetTTL() *int64 {
 	if c == nil {
 		return nil
 	}

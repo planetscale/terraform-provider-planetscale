@@ -51,7 +51,7 @@ type CreateBackupRequestBody struct {
 	// Unit for the retention period of the backup
 	RetentionUnit *RetentionUnit `json:"retention_unit,omitzero"`
 	// Value between `1` and `1000` for the retention period of the backup (i.e retention_value `6` and retention_unit `hour` means 6 hours)
-	RetentionValue *float64 `json:"retention_value,omitzero"`
+	RetentionValue *int64 `json:"retention_value,omitzero"`
 	// Whether the backup is an immediate backup that may affect database performance. Emergency backups are only supported for PostgreSQL databases.
 	Emergency *bool `json:"emergency,omitzero"`
 }
@@ -70,7 +70,7 @@ func (c *CreateBackupRequestBody) GetRetentionUnit() *RetentionUnit {
 	return c.RetentionUnit
 }
 
-func (c *CreateBackupRequestBody) GetRetentionValue() *float64 {
+func (c *CreateBackupRequestBody) GetRetentionValue() *int64 {
 	if c == nil {
 		return nil
 	}

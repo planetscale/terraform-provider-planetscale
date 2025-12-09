@@ -25,9 +25,9 @@ type ListDeployRequestsRequest struct {
 	// Filter deploy requests by the date they were running. (e.g. 2023-01-01T00:00:00Z..2023-01-31T23:59:59Z)
 	RunningAt *string `queryParam:"style=form,explode=true,name=running_at"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListDeployRequestsRequest) MarshalJSON() ([]byte, error) {
@@ -90,14 +90,14 @@ func (l *ListDeployRequestsRequest) GetRunningAt() *string {
 	return l.RunningAt
 }
 
-func (l *ListDeployRequestsRequest) GetPage() *float64 {
+func (l *ListDeployRequestsRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListDeployRequestsRequest) GetPerPage() *float64 {
+func (l *ListDeployRequestsRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

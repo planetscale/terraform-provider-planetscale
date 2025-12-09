@@ -17,7 +17,7 @@ type CreateBouncerRequestBody struct {
 	// The size SKU for the bouncer
 	BouncerSize *string `json:"bouncer_size,omitzero"`
 	// The number of replica servers per cell
-	ReplicasPerCell *float64 `json:"replicas_per_cell,omitzero"`
+	ReplicasPerCell *int64 `json:"replicas_per_cell,omitzero"`
 }
 
 func (c *CreateBouncerRequestBody) GetName() *string {
@@ -41,7 +41,7 @@ func (c *CreateBouncerRequestBody) GetBouncerSize() *string {
 	return c.BouncerSize
 }
 
-func (c *CreateBouncerRequestBody) GetReplicasPerCell() *float64 {
+func (c *CreateBouncerRequestBody) GetReplicasPerCell() *int64 {
 	if c == nil {
 		return nil
 	}

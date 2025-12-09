@@ -12,6 +12,7 @@ import (
 type InheritedRoleRequest string
 
 const (
+	InheritedRoleRequestPscaleManaged            InheritedRoleRequest = "pscale_managed"
 	InheritedRoleRequestPgCheckpoint             InheritedRoleRequest = "pg_checkpoint"
 	InheritedRoleRequestPgCreateSubscription     InheritedRoleRequest = "pg_create_subscription"
 	InheritedRoleRequestPgMaintain               InheritedRoleRequest = "pg_maintain"
@@ -35,6 +36,8 @@ func (e *InheritedRoleRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "pscale_managed":
+		fallthrough
 	case "pg_checkpoint":
 		fallthrough
 	case "pg_create_subscription":
@@ -149,6 +152,7 @@ func (c *CreateRoleRequest) GetBody() *CreateRoleRequestBody {
 type CreateRoleInheritedRoleResponse string
 
 const (
+	CreateRoleInheritedRoleResponsePscaleManaged            CreateRoleInheritedRoleResponse = "pscale_managed"
 	CreateRoleInheritedRoleResponsePgCheckpoint             CreateRoleInheritedRoleResponse = "pg_checkpoint"
 	CreateRoleInheritedRoleResponsePgCreateSubscription     CreateRoleInheritedRoleResponse = "pg_create_subscription"
 	CreateRoleInheritedRoleResponsePgMaintain               CreateRoleInheritedRoleResponse = "pg_maintain"
@@ -172,6 +176,8 @@ func (e *CreateRoleInheritedRoleResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "pscale_managed":
+		fallthrough
 	case "pg_checkpoint":
 		fallthrough
 	case "pg_create_subscription":

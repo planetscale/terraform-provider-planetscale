@@ -15,7 +15,7 @@ type VerifyWorkflowRequest struct {
 	// The name of the database the workflow belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The sequence number of the workflow
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (v *VerifyWorkflowRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (v *VerifyWorkflowRequest) GetDatabase() string {
 	return v.Database
 }
 
-func (v *VerifyWorkflowRequest) GetNumber() float64 {
+func (v *VerifyWorkflowRequest) GetNumber() int64 {
 	if v == nil {
-		return 0.0
+		return 0
 	}
 	return v.Number
 }

@@ -11,9 +11,9 @@ type ListServiceTokensRequest struct {
 	// The name of the organization
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// If provided, specifies the page offset of returned results
-	Page *float64 `default:"1" queryParam:"style=form,explode=true,name=page"`
+	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
-	PerPage *float64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
 }
 
 func (l ListServiceTokensRequest) MarshalJSON() ([]byte, error) {
@@ -34,14 +34,14 @@ func (l *ListServiceTokensRequest) GetOrganization() string {
 	return l.Organization
 }
 
-func (l *ListServiceTokensRequest) GetPage() *float64 {
+func (l *ListServiceTokensRequest) GetPage() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.Page
 }
 
-func (l *ListServiceTokensRequest) GetPerPage() *float64 {
+func (l *ListServiceTokensRequest) GetPerPage() *int64 {
 	if l == nil {
 		return nil
 	}

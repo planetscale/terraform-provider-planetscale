@@ -15,7 +15,7 @@ type GetWorkflowRequest struct {
 	// The name of the database the workflow belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The sequence number of the workflow
-	Number float64 `pathParam:"style=simple,explode=false,name=number"`
+	Number int64 `pathParam:"style=simple,explode=false,name=number"`
 }
 
 func (g *GetWorkflowRequest) GetOrganization() string {
@@ -32,9 +32,9 @@ func (g *GetWorkflowRequest) GetDatabase() string {
 	return g.Database
 }
 
-func (g *GetWorkflowRequest) GetNumber() float64 {
+func (g *GetWorkflowRequest) GetNumber() int64 {
 	if g == nil {
-		return 0.0
+		return 0
 	}
 	return g.Number
 }
