@@ -67,7 +67,7 @@ func (u *UpdatePostgresDatabaseRequestBody) GetDefaultBranch() *string {
 type UpdatePostgresDatabaseRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database
+	// The ID of the database
 	Database string                             `pathParam:"style=simple,explode=false,name=database"`
 	Body     *UpdatePostgresDatabaseRequestBody `request:"mediaType=application/json"`
 }
