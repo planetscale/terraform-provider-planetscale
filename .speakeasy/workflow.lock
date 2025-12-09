@@ -2,8 +2,8 @@ speakeasyVersion: 1.668.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:fa990c97e36703b541468f42936f5a7c34d94302325703d5da2605f0043309b2
-        sourceBlobDigest: sha256:3a577ac26113c83c84ab5ccd77d81046571bae20ebe4cb327263dc74761d9437
+        sourceRevisionDigest: sha256:43d506413551bd4370f015d9a61be35fa79570d507805a235ad7c780c3f09155
+        sourceBlobDigest: sha256:9f206dfa9ef691b200cc9ef5fd6a80d9e8c2929fbe4913e7a5d320bdbf1a4cbd
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:fa990c97e36703b541468f42936f5a7c34d94302325703d5da2605f0043309b2
-        sourceBlobDigest: sha256:3a577ac26113c83c84ab5ccd77d81046571bae20ebe4cb327263dc74761d9437
+        sourceRevisionDigest: sha256:43d506413551bd4370f015d9a61be35fa79570d507805a235ad7c780c3f09155
+        sourceBlobDigest: sha256:9f206dfa9ef691b200cc9ef5fd6a80d9e8c2929fbe4913e7a5d320bdbf1a4cbd
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.668.0
@@ -22,7 +22,6 @@ workflow:
                 - location: schemas/openapi.yaml
             overlays:
                 - location: schemas/overlay-terraform.yaml
-                - location: schemas/overlay-terraform-branch.yaml
                 - location: schemas/overlay-terraform-branches.yaml
                 - location: schemas/overlay-terraform-database_vitess.yaml
                 - location: schemas/overlay-terraform-database_postgres.yaml
@@ -31,9 +30,11 @@ workflow:
                 - location: schemas/overlay-terraform-organizations.yaml
                 - location: schemas/overlay-terraform-password.yaml
                 - location: schemas/overlay-terraform-passwords.yaml
+                - location: schemas/overlay-terraform-postgres-branch.yaml
                 - location: schemas/overlay-terraform-role.yaml
                 - location: schemas/overlay-terraform-roles.yaml
                 - location: schemas/overlay-terraform-user.yaml
+                - location: schemas/overlay-terraform-vitess-branch.yaml
             output: schemas/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/planetscale/dev/planet-scale-api

@@ -7,13 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
@@ -23,72 +21,76 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &BranchResource{}
-var _ resource.ResourceWithImportState = &BranchResource{}
+var _ resource.Resource = &PostgresBranchResource{}
+var _ resource.ResourceWithImportState = &PostgresBranchResource{}
 
-func NewBranchResource() resource.Resource {
-	return &BranchResource{}
+func NewPostgresBranchResource() resource.Resource {
+	return &PostgresBranchResource{}
 }
 
-// BranchResource defines the resource implementation.
-type BranchResource struct {
+// PostgresBranchResource defines the resource implementation.
+type PostgresBranchResource struct {
 	// Provider configured SDK client.
 	client *sdk.Planetscale
 }
 
-// BranchResourceModel describes the resource data model.
-type BranchResourceModel struct {
-	Actor                       tfTypes.GetBranchActor              `tfsdk:"actor"`
-	BackupID                    types.String                        `tfsdk:"backup_id"`
-	Branch                      types.String                        `tfsdk:"branch"`
-	ClusterIops                 types.Int64                         `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                        `tfsdk:"cluster_name"`
-	ClusterSize                 types.String                        `tfsdk:"cluster_size"`
-	CreatedAt                   types.String                        `tfsdk:"created_at"`
-	Database                    types.String                        `tfsdk:"database"`
-	DeletedAt                   types.String                        `tfsdk:"deleted_at"`
-	DirectVtgate                types.Bool                          `tfsdk:"direct_vtgate"`
-	HasReadOnlyReplicas         types.Bool                          `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                          `tfsdk:"has_replicas"`
-	HTMLURL                     types.String                        `tfsdk:"html_url"`
-	ID                          types.String                        `tfsdk:"id"`
-	Kind                        types.String                        `tfsdk:"kind"`
-	MajorVersion                types.String                        `tfsdk:"major_version"`
-	Metal                       types.Bool                          `tfsdk:"metal"`
-	MysqlAddress                types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            types.String                        `tfsdk:"mysql_edge_address"`
-	Name                        types.String                        `tfsdk:"name"`
-	Organization                types.String                        `tfsdk:"organization"`
-	ParentBranch                types.String                        `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity     types.Bool                          `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                          `tfsdk:"production"`
-	Ready                       types.Bool                          `tfsdk:"ready"`
-	Region                      types.String                        `tfsdk:"region"`
-	RegionData                  tfTypes.GetBranchRegionData         `tfsdk:"region_data"`
-	RestoreChecklistCompletedAt types.String                        `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          tfTypes.GetBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	RestorePoint                types.String                        `tfsdk:"restore_point"`
-	SafeMigrations              types.Bool                          `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                        `tfsdk:"schema_last_updated_at"`
-	SchemaReady                 types.Bool                          `tfsdk:"schema_ready"`
-	SeedData                    types.String                        `tfsdk:"seed_data"`
-	ShardCount                  types.Int64                         `tfsdk:"shard_count"`
-	Sharded                     types.Bool                          `tfsdk:"sharded"`
-	StaleSchema                 types.Bool                          `tfsdk:"stale_schema"`
-	State                       types.String                        `tfsdk:"state"`
-	UpdatedAt                   types.String                        `tfsdk:"updated_at"`
-	URL                         types.String                        `tfsdk:"url"`
-	VtgateCount                 types.Int64                         `tfsdk:"vtgate_count"`
-	VtgateSize                  types.String                        `tfsdk:"vtgate_size"`
+// PostgresBranchResourceModel describes the resource data model.
+type PostgresBranchResourceModel struct {
+	Actor                       *tfTypes.GetPostgresBranchActor              `tfsdk:"actor"`
+	BackupID                    types.String                                 `tfsdk:"backup_id"`
+	ClusterArchitecture         types.String                                 `tfsdk:"cluster_architecture"`
+	ClusterDisplayName          types.String                                 `tfsdk:"cluster_display_name"`
+	ClusterIops                 types.Int64                                  `tfsdk:"cluster_iops"`
+	ClusterName                 types.String                                 `tfsdk:"cluster_name"`
+	ClusterSize                 types.String                                 `tfsdk:"cluster_size"`
+	CreatedAt                   types.String                                 `tfsdk:"created_at"`
+	Database                    types.String                                 `tfsdk:"database"`
+	Default                     types.Bool                                   `tfsdk:"default"`
+	EnablingVectors             types.Bool                                   `tfsdk:"enabling_vectors"`
+	Frozen                      types.Bool                                   `tfsdk:"frozen"`
+	HasReadOnlyReplicas         types.Bool                                   `tfsdk:"has_read_only_replicas"`
+	HasReplicas                 types.Bool                                   `tfsdk:"has_replicas"`
+	HasRoles                    types.Bool                                   `tfsdk:"has_roles"`
+	ID                          types.String                                 `tfsdk:"id"`
+	ImageVersion                types.String                                 `tfsdk:"image_version"`
+	LatestImageVersion          types.String                                 `tfsdk:"latest_image_version"`
+	MajorVersion                types.String                                 `tfsdk:"major_version"`
+	MaximumStorageBytes         types.Int64                                  `tfsdk:"maximum_storage_bytes"`
+	Metal                       types.Bool                                   `tfsdk:"metal"`
+	MinimumStorageBytes         types.Int64                                  `tfsdk:"minimum_storage_bytes"`
+	Name                        types.String                                 `tfsdk:"name"`
+	Organization                types.String                                 `tfsdk:"organization"`
+	ParentBranch                types.String                                 `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity     types.Bool                                   `tfsdk:"private_edge_connectivity"`
+	Production                  types.Bool                                   `tfsdk:"production"`
+	ReadOnlyAt                  types.String                                 `tfsdk:"read_only_at"`
+	ReadOnlyReason              types.String                                 `tfsdk:"read_only_reason"`
+	Ready                       types.Bool                                   `tfsdk:"ready"`
+	Region                      types.String                                 `tfsdk:"region"`
+	RegionData                  *tfTypes.GetPostgresBranchRegionData         `tfsdk:"region_data"`
+	Replicas                    types.Int64                                  `tfsdk:"replicas"`
+	RestoreChecklistCompletedAt types.String                                 `tfsdk:"restore_checklist_completed_at"`
+	RestoredFromBranch          *tfTypes.GetPostgresBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
+	RestorePoint                types.String                                 `tfsdk:"restore_point"`
+	SafeMigrations              types.Bool                                   `tfsdk:"safe_migrations"`
+	SchemaLastUpdatedAt         types.String                                 `tfsdk:"schema_last_updated_at"`
+	StaleSchema                 types.Bool                                   `tfsdk:"stale_schema"`
+	State                       types.String                                 `tfsdk:"state"`
+	StorageAutoscaling          types.Bool                                   `tfsdk:"storage_autoscaling"`
+	StorageIops                 types.Int64                                  `tfsdk:"storage_iops"`
+	StorageShrinking            types.Bool                                   `tfsdk:"storage_shrinking"`
+	StorageThroughputMibs       types.Int64                                  `tfsdk:"storage_throughput_mibs"`
+	StorageType                 types.String                                 `tfsdk:"storage_type"`
+	UpdatedAt                   types.String                                 `tfsdk:"updated_at"`
 }
 
-func (r *BranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_branch"
+func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_postgres_branch"
 }
 
-func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Branch Resource",
+		MarkdownDescription: "PostgresBranch Resource",
 		Attributes: map[string]schema.Attribute{
 			"actor": schema.SingleNestedAttribute{
 				Computed: true,
@@ -114,12 +116,13 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `If provided, restores the backup's schema and data to the new branch. Must have ` + "`" + `restore_production_branch_backup(s)` + "`" + ` or ` + "`" + `restore_backup(s)` + "`" + ` access to do this. Requires replacement if changed.`,
 			},
-			"branch": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `The name of the branch. Requires replacement if changed.`,
+			"cluster_architecture": schema.StringAttribute{
+				Computed:    true,
+				Description: `The CPU architecture for the cluster (e.g., x86_64)`,
+			},
+			"cluster_display_name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Display name for the cluster size`,
 			},
 			"cluster_iops": schema.Int64Attribute{
 				Computed:    true,
@@ -134,7 +137,7 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.`,
+				Description: `The database cluster size is required if a backup_id is provided. Requires replacement if changed.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -147,13 +150,17 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 				Description: `The name of the database the branch belongs to. Requires replacement if changed.`,
 			},
-			"deleted_at": schema.StringAttribute{
+			"default": schema.BoolAttribute{
 				Computed:    true,
-				Description: `When the branch was deleted`,
+				Description: `Whether or not this is the default branch`,
 			},
-			"direct_vtgate": schema.BoolAttribute{
+			"enabling_vectors": schema.BoolAttribute{
 				Computed:    true,
-				Description: `True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers`,
+				Description: `Whether or not vector support is being enabled`,
+			},
+			"frozen": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not the branch is frozen`,
 			},
 			"has_read_only_replicas": schema.BoolAttribute{
 				Computed:    true,
@@ -163,36 +170,40 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `True if the branch has replica servers`,
 			},
-			"html_url": schema.StringAttribute{
+			"has_roles": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Planetscale app URL for the branch`,
+				Description: `True if the branch has roles`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
 			},
-			"kind": schema.StringAttribute{
+			"image_version": schema.StringAttribute{
 				Computed:    true,
-				Description: `The kind of branch`,
+				Description: `The current PostgreSQL image version`,
+			},
+			"latest_image_version": schema.StringAttribute{
+				Computed:    true,
+				Description: `The latest available PostgreSQL image version`,
 			},
 			"major_version": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.`,
+				Description: `The PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.`,
+			},
+			"maximum_storage_bytes": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Maximum storage size in bytes`,
 			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not this is a metal database`,
 			},
-			"mysql_address": schema.StringAttribute{
+			"minimum_storage_bytes": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The MySQL address for the branch`,
-			},
-			"mysql_edge_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The address of the MySQL provider for the branch`,
+				Description: `Minimum storage size in bytes`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -224,6 +235,14 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"production": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch is a production branch`,
+			},
+			"read_only_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the branch became read-only`,
+			},
+			"read_only_reason": schema.StringAttribute{
+				Computed:    true,
+				Description: `Reason why the branch is read-only, if applicable`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -274,6 +293,10 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
+			"replicas": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The number of replicas for the branch`,
+			},
 			"restore_checklist_completed_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `When a user last marked a backup restore checklist as completed`,
@@ -283,7 +306,7 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.`,
+				Description: `Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Requires replacement if changed.`,
 			},
 			"restored_from_branch": schema.SingleNestedAttribute{
 				Computed: true,
@@ -318,30 +341,6 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `When the schema for the branch was last updated`,
 			},
-			"schema_ready": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the schema is ready for queries`,
-			},
-			"seed_data": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `If provided, restores the last successful backup's schema and data to the new branch. Must have ` + "`" + `restore_production_branch_backup(s)` + "`" + ` or ` + "`" + `restore_backup(s)` + "`" + ` access to do this, in addition to Data Branching™ being enabled for the branch. must be "last_successful_backup"; Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"last_successful_backup",
-					),
-				},
-			},
-			"shard_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of shards in the branch`,
-			},
-			"sharded": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is sharded`,
-			},
 			"stale_schema": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch has a stale schema`,
@@ -350,27 +349,35 @@ func (r *BranchResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `The current state of the branch`,
 			},
+			"storage_autoscaling": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether storage autoscaling is enabled`,
+			},
+			"storage_iops": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Storage IOPS`,
+			},
+			"storage_shrinking": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether storage shrinking is enabled`,
+			},
+			"storage_throughput_mibs": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Storage throughput in MiB/s`,
+			},
+			"storage_type": schema.StringAttribute{
+				Computed:    true,
+				Description: `The type of storage (e.g., pd_ssd)`,
+			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `When the branch was last updated`,
-			},
-			"url": schema.StringAttribute{
-				Computed:    true,
-				Description: `Planetscale API URL for the branch`,
-			},
-			"vtgate_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of vtgate instances in the branch`,
-			},
-			"vtgate_size": schema.StringAttribute{
-				Computed:    true,
-				Description: `The size of the vtgate cluster for the branch`,
 			},
 		},
 	}
 }
 
-func (r *BranchResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *PostgresBranchResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -390,8 +397,8 @@ func (r *BranchResource) Configure(ctx context.Context, req resource.ConfigureRe
 	r.client = client
 }
 
-func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *BranchResourceModel
+func (r *PostgresBranchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *PostgresBranchResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -408,13 +415,13 @@ func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsCreatePostgresBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DatabaseBranches.CreateBranch(ctx, *request)
+	res, err := r.client.DatabaseBranches.CreatePostgresBranch(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -434,7 +441,7 @@ func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateBranchResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreatePostgresBranchResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -445,18 +452,18 @@ func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetBranchRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	getBranchOptions := make([]operations.Option, 0, 1)
-	getBranchOptions = append(getBranchOptions, operations.WithPolling(
-		r.client.DatabaseBranches.GetBranchWaitForReady(),
+	getPostgresBranchOptions := make([]operations.Option, 0, 1)
+	getPostgresBranchOptions = append(getPostgresBranchOptions, operations.WithPolling(
+		r.client.DatabaseBranches.GetPostgresBranchWaitForReady(),
 	))
-	res1, err := r.client.DatabaseBranches.GetBranch(ctx, *request1, getBranchOptions...)
+	res1, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request1, getPostgresBranchOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -476,7 +483,7 @@ func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBranchResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -487,13 +494,13 @@ func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request2, request2Diags := data.ToOperationsGetBranchRequest(ctx)
+	request2, request2Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
 	resp.Diagnostics.Append(request2Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res2, err := r.client.DatabaseBranches.GetBranch(ctx, *request2)
+	res2, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request2)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res2 != nil && res2.RawResponse != nil {
@@ -513,7 +520,7 @@ func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBranchResponseBody(ctx, res2.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -529,8 +536,8 @@ func (r *BranchResource) Create(ctx context.Context, req resource.CreateRequest,
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *BranchResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *BranchResourceModel
+func (r *PostgresBranchResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *PostgresBranchResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -547,13 +554,13 @@ func (r *BranchResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPostgresBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DatabaseBranches.GetBranch(ctx, *request)
+	res, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -577,7 +584,7 @@ func (r *BranchResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBranchResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -587,8 +594,8 @@ func (r *BranchResource) Read(ctx context.Context, req resource.ReadRequest, res
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *BranchResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *BranchResourceModel
+func (r *PostgresBranchResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *PostgresBranchResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -607,8 +614,8 @@ func (r *BranchResource) Update(ctx context.Context, req resource.UpdateRequest,
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *BranchResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *BranchResourceModel
+func (r *PostgresBranchResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *PostgresBranchResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -625,13 +632,13 @@ func (r *BranchResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsDeletePostgresBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DatabaseBranches.DeleteBranch(ctx, *request)
+	res, err := r.client.DatabaseBranches.DeletePostgresBranch(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -653,25 +660,25 @@ func (r *BranchResource) Delete(ctx context.Context, req resource.DeleteRequest,
 
 }
 
-func (r *BranchResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *PostgresBranchResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		Branch       string `json:"branch"`
+		Name         string `json:"name"`
 		Database     string `json:"database"`
 		Organization string `json:"organization"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"branch": "...", "database": "...", "organization": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"database": "...", "name": "...", "organization": "..."}': `+err.Error())
 		return
 	}
 
-	if len(data.Branch) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field branch is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+	if len(data.Name) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field name is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("branch"), data.Branch)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), data.Name)...)
 	if len(data.Database) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field database is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
 		return

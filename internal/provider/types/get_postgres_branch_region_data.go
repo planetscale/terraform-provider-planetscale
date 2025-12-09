@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GetBranchRegionData struct {
+type GetPostgresBranchRegionData struct {
 	CurrentDefault    types.Bool     `tfsdk:"current_default"`
 	DisplayName       types.String   `tfsdk:"display_name"`
 	Enabled           types.Bool     `tfsdk:"enabled"`

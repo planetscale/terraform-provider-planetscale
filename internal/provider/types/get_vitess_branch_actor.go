@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GetBranchActor struct {
+type GetVitessBranchActor struct {
 	AvatarURL   types.String `tfsdk:"avatar_url"`
 	DisplayName types.String `tfsdk:"display_name"`
 	ID          types.String `tfsdk:"id"`

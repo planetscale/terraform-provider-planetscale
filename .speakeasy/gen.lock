@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 34309a69be9635195dfebdd24e88e494
+  docChecksum: 8a90ed9535ef3f97655c76f3f20ff4f8
   docVersion: v1
   speakeasyVersion: 1.668.0
   generationVersion: 2.770.0
@@ -22,7 +22,6 @@ features:
 generatedFiles:
   - .gitattributes
   - USAGE.md
-  - examples/data-sources/planetscale_branch/data-source.tf
   - examples/data-sources/planetscale_branches/data-source.tf
   - examples/data-sources/planetscale_database_postgres/data-source.tf
   - examples/data-sources/planetscale_database_vitess/data-source.tf
@@ -31,13 +30,12 @@ generatedFiles:
   - examples/data-sources/planetscale_organizations/data-source.tf
   - examples/data-sources/planetscale_password/data-source.tf
   - examples/data-sources/planetscale_passwords/data-source.tf
+  - examples/data-sources/planetscale_postgres_branch/data-source.tf
   - examples/data-sources/planetscale_role/data-source.tf
   - examples/data-sources/planetscale_roles/data-source.tf
   - examples/data-sources/planetscale_user/data-source.tf
+  - examples/data-sources/planetscale_vitess_branch/data-source.tf
   - examples/provider/provider.tf
-  - examples/resources/planetscale_branch/import-by-string-id.tf
-  - examples/resources/planetscale_branch/import.sh
-  - examples/resources/planetscale_branch/resource.tf
   - examples/resources/planetscale_database_postgres/import-by-string-id.tf
   - examples/resources/planetscale_database_postgres/import.sh
   - examples/resources/planetscale_database_postgres/resource.tf
@@ -47,9 +45,15 @@ generatedFiles:
   - examples/resources/planetscale_password/import-by-string-id.tf
   - examples/resources/planetscale_password/import.sh
   - examples/resources/planetscale_password/resource.tf
+  - examples/resources/planetscale_postgres_branch/import-by-string-id.tf
+  - examples/resources/planetscale_postgres_branch/import.sh
+  - examples/resources/planetscale_postgres_branch/resource.tf
   - examples/resources/planetscale_role/import-by-string-id.tf
   - examples/resources/planetscale_role/import.sh
   - examples/resources/planetscale_role/resource.tf
+  - examples/resources/planetscale_vitess_branch/import-by-string-id.tf
+  - examples/resources/planetscale_vitess_branch/import.sh
+  - examples/resources/planetscale_vitess_branch/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -64,10 +68,6 @@ generatedFiles:
   - internal/planmodifiers/setplanmodifier/suppress_diff.go
   - internal/planmodifiers/stringplanmodifier/suppress_diff.go
   - internal/planmodifiers/utils/state_check.go
-  - internal/provider/branch_data_source.go
-  - internal/provider/branch_data_source_sdk.go
-  - internal/provider/branch_resource.go
-  - internal/provider/branch_resource_sdk.go
   - internal/provider/branches_data_source.go
   - internal/provider/branches_data_source_sdk.go
   - internal/provider/databasepostgres_data_source.go
@@ -90,6 +90,10 @@ generatedFiles:
   - internal/provider/password_resource_sdk.go
   - internal/provider/passwords_data_source.go
   - internal/provider/passwords_data_source_sdk.go
+  - internal/provider/postgresbranch_data_source.go
+  - internal/provider/postgresbranch_data_source_sdk.go
+  - internal/provider/postgresbranch_resource.go
+  - internal/provider/postgresbranch_resource_sdk.go
   - internal/provider/provider.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go
@@ -114,18 +118,21 @@ generatedFiles:
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
-  - internal/provider/types/get_branch_actor.go
-  - internal/provider/types/get_branch_region_data.go
-  - internal/provider/types/get_branch_restored_from_branch.go
   - internal/provider/types/get_current_user_default_organization.go
   - internal/provider/types/get_password_actor.go
   - internal/provider/types/get_password_database_branch.go
   - internal/provider/types/get_password_region.go
+  - internal/provider/types/get_postgres_branch_actor.go
+  - internal/provider/types/get_postgres_branch_region_data.go
+  - internal/provider/types/get_postgres_branch_restored_from_branch.go
   - internal/provider/types/get_postgres_database_data_import.go
   - internal/provider/types/get_postgres_database_data_source.go
   - internal/provider/types/get_postgres_database_region_data.go
   - internal/provider/types/get_role_actor_data.go
   - internal/provider/types/get_role_branch_data.go
+  - internal/provider/types/get_vitess_branch_actor.go
+  - internal/provider/types/get_vitess_branch_region_data.go
+  - internal/provider/types/get_vitess_branch_restored_from_branch.go
   - internal/provider/types/get_vitess_database_data_import.go
   - internal/provider/types/get_vitess_database_data_source.go
   - internal/provider/types/get_vitess_database_region_data.go
@@ -148,6 +155,10 @@ generatedFiles:
   - internal/provider/user_data_source.go
   - internal/provider/user_data_source_sdk.go
   - internal/provider/utils.go
+  - internal/provider/vitessbranch_data_source.go
+  - internal/provider/vitessbranch_data_source_sdk.go
+  - internal/provider/vitessbranch_resource.go
+  - internal/provider/vitessbranch_resource_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/apibranchbouncerresizes.go
   - internal/sdk/backups.go
@@ -196,10 +207,12 @@ generatedFiles:
   - internal/sdk/models/operations/createoauthtoken.go
   - internal/sdk/models/operations/createorganizationteam.go
   - internal/sdk/models/operations/createpassword.go
+  - internal/sdk/models/operations/createpostgresbranch.go
   - internal/sdk/models/operations/createpostgresdatabase.go
   - internal/sdk/models/operations/createquerypatternsreport.go
   - internal/sdk/models/operations/createrole.go
   - internal/sdk/models/operations/createservicetoken.go
+  - internal/sdk/models/operations/createvitessbranch.go
   - internal/sdk/models/operations/createvitessdatabase.go
   - internal/sdk/models/operations/createwebhook.go
   - internal/sdk/models/operations/createworkflow.go
@@ -212,10 +225,12 @@ generatedFiles:
   - internal/sdk/models/operations/deleteoauthtoken.go
   - internal/sdk/models/operations/deleteorganizationteam.go
   - internal/sdk/models/operations/deletepassword.go
+  - internal/sdk/models/operations/deletepostgresbranch.go
   - internal/sdk/models/operations/deletepostgresdatabase.go
   - internal/sdk/models/operations/deletequerypatternsreport.go
   - internal/sdk/models/operations/deleterole.go
   - internal/sdk/models/operations/deleteservicetoken.go
+  - internal/sdk/models/operations/deletevitessbranch.go
   - internal/sdk/models/operations/deletevitessdatabase.go
   - internal/sdk/models/operations/deletewebhook.go
   - internal/sdk/models/operations/demotebranch.go
@@ -244,11 +259,13 @@ generatedFiles:
   - internal/sdk/models/operations/getorganizationmembership.go
   - internal/sdk/models/operations/getorganizationteam.go
   - internal/sdk/models/operations/getpassword.go
+  - internal/sdk/models/operations/getpostgresbranch.go
   - internal/sdk/models/operations/getpostgresdatabase.go
   - internal/sdk/models/operations/getquerypatternsreport.go
   - internal/sdk/models/operations/getquerypatternsreportstatus.go
   - internal/sdk/models/operations/getrole.go
   - internal/sdk/models/operations/getservicetoken.go
+  - internal/sdk/models/operations/getvitessbranch.go
   - internal/sdk/models/operations/getvitessdatabase.go
   - internal/sdk/models/operations/getwebhook.go
   - internal/sdk/models/operations/getworkflow.go
@@ -1846,4 +1863,56 @@ examples:
         path:
           organization: "<value>"
           database: "<value>"
+  create_postgres_branch:
+    speakeasy-default-create-postgres-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"kind": "postgresql"}
+  get_postgres_branch:
+    speakeasy-default-get-postgres-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"kind": "postgresql"}
+  delete_postgres_branch:
+    speakeasy-default-delete-postgres-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+  create_vitess_branch:
+    speakeasy-default-create-vitess-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"kind": "mysql"}
+  get_vitess_branch:
+    speakeasy-default-get-vitess-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"kind": "mysql"}
+  delete_vitess_branch:
+    speakeasy-default-delete-vitess-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
 examplesVersion: 1.0.2
