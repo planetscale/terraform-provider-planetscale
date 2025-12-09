@@ -138,7 +138,7 @@ func TestProviderConfigure(t *testing.T) {
 				"endpoint":           tftypes.NewValue(tftypes.String, nil),
 				"access_token":       tftypes.NewValue(tftypes.String, nil),
 			},
-			expectWarn:  false,
+			expectWarn:  true, // v0.x deprecation warning always emitted
 			expectError: false,
 		},
 
@@ -150,7 +150,7 @@ func TestProviderConfigure(t *testing.T) {
 				"endpoint":           tftypes.NewValue(tftypes.String, nil),
 				"access_token":       tftypes.NewValue(tftypes.String, "acctoken123"),
 			},
-			expectWarn:  false,
+			expectWarn:  true, // v0.x deprecation warning always emitted
 			expectError: true,
 		},
 

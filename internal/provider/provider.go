@@ -110,6 +110,13 @@ Known limitations:
 }
 
 func (p *PlanetScaleProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	resp.Diagnostics.AddWarning(
+		"PlanetScale Provider v0.x Deprecation Notice",
+		"The v0.x versions of the PlanetScale Terraform provider are deprecated and will not receive updates. "+
+			"A rewrite is in progress for v1.0. Please pin your provider version and monitor the repository for the v1.0 release. "+
+			"The new v1.0 versions will not be backwards compatible with v0.x, so please plan your migration accordingly.",
+	)
+
 	var data PlanetScaleProviderModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
