@@ -4,7 +4,6 @@ info:
   title: Terraform generation overlay for planetscale_branch_postgres managed and data resources.
   version: 0.0.1
 actions:
-  # First create empty path entries, then copy the entire path object into them
   - target: $.paths
     description: Add PostgresBranch path entries
     update:
