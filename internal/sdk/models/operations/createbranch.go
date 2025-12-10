@@ -9,27 +9,27 @@ import (
 	"net/http"
 )
 
-// CreateBranchSeedData - If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
-type CreateBranchSeedData string
+// SeedData - If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
+type SeedData string
 
 const (
-	CreateBranchSeedDataLastSuccessfulBackup CreateBranchSeedData = "last_successful_backup"
+	SeedDataLastSuccessfulBackup SeedData = "last_successful_backup"
 )
 
-func (e CreateBranchSeedData) ToPointer() *CreateBranchSeedData {
+func (e SeedData) ToPointer() *SeedData {
 	return &e
 }
-func (e *CreateBranchSeedData) UnmarshalJSON(data []byte) error {
+func (e *SeedData) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "last_successful_backup":
-		*e = CreateBranchSeedData(v)
+		*e = SeedData(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreateBranchSeedData: %v", v)
+		return fmt.Errorf("invalid value for SeedData: %v", v)
 	}
 }
 
@@ -45,7 +45,7 @@ type CreateBranchRequestBody struct {
 	// Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases.
 	RestorePoint *string `json:"restore_point,omitzero"`
 	// If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
-	SeedData *CreateBranchSeedData `json:"seed_data,omitzero"`
+	SeedData *SeedData `json:"seed_data,omitzero"`
 	// The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800
 	ClusterSize *string `json:"cluster_size,omitzero"`
 	// For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
@@ -87,7 +87,7 @@ func (c *CreateBranchRequestBody) GetRestorePoint() *string {
 	return c.RestorePoint
 }
 
-func (c *CreateBranchRequestBody) GetSeedData() *CreateBranchSeedData {
+func (c *CreateBranchRequestBody) GetSeedData() *SeedData {
 	if c == nil {
 		return nil
 	}
