@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 6fe482d33266c68fe5b43b565482b2b6
+  docChecksum: 4830c707a1e09bdf143a0149f25fbf4b
   docVersion: v1
   speakeasyVersion: 1.675.1
   generationVersion: 2.778.0
   releaseVersion: 1.0.0
   configChecksum: b069bd5d828188ad34159b08dbdc9ef5
 persistentEdits:
-  generation_id: ee846f2b-7131-4437-8a0e-b779646f6bb7
-  pristine_commit_hash: 3cff91cd3b6a6564ec189b11521f28bd712daf63
-  pristine_tree_hash: a6af9bc17ef1a73aaf9dd938d9f03c82add32ab5
+  generation_id: 563d0b9b-9e0e-4daf-af03-cc76a6d1f16e
+  pristine_commit_hash: 92ff8f9ac6b85bbff595b5edb2dbb2993317a672
+  pristine_tree_hash: b88636690cca32d6be1cfbc9595ae5ec2d5439d5
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -562,8 +562,8 @@ trackedFiles:
     pristine_git_object: 7d16eabed185c19f01f1a5d888cd68cfc70d38a8
   internal/sdk/branchchanges.go:
     id: 8e6302b97003
-    last_write_checksum: sha1:ed6e38416bb1bac09337b7372fb5207a1dd4f525
-    pristine_git_object: 54d3b2096e02aab4bd3266edcd076040ae3713db
+    last_write_checksum: sha1:ef69bb7ad469297d925f76866031184c996a700d
+    pristine_git_object: bf7a2d486e01da43b7801f8604742d346e3f7b73
   internal/sdk/clusterextensions.go:
     id: 5bfc27287d4c
     last_write_checksum: sha1:401a1b1a81f82415a408812e7d34897cd324b939
@@ -590,8 +590,8 @@ trackedFiles:
     pristine_git_object: aefa9ef7a71385f2e04a75b077b0145d8bc27fc4
   internal/sdk/databases.go:
     id: 5bb9b0f6f18a
-    last_write_checksum: sha1:d6ce7aab02fe691292035c9e847e537787a7fb4a
-    pristine_git_object: 278b9889a2daf44ed8e15a311d97fc681c899d87
+    last_write_checksum: sha1:6bc9f2226df96a161a465efadef1c1e16437c501
+    pristine_git_object: 5468fdbb411ba389eeed156f42782f5fc477ab0d
   internal/sdk/deployrequests.go:
     id: 7722a5da268d
     last_write_checksum: sha1:859958846cd95041f9dd3f46bcbff9e482214df2
@@ -868,6 +868,10 @@ trackedFiles:
     id: fe54f1ad815a
     last_write_checksum: sha1:c48a1c7ef6c1ad6f9d941362457bd7d9ef649c56
     pristine_git_object: 4165d8583cceb25df75c13a3a884c85fc5c2009c
+  internal/sdk/models/operations/getbranchchangerequest.go:
+    id: 4416b39c63da
+    last_write_checksum: sha1:c03e3de680f051ec26bb8fd274e1df2210a010a7
+    pristine_git_object: d42b0825a1e73c7e36d0b528edd73eeeaa17f5eb
   internal/sdk/models/operations/getbranchschema.go:
     id: 4a5e62dfedff
     last_write_checksum: sha1:e59c70aea201eefdc286cfc8b777ee0f52e9d01b
@@ -1306,16 +1310,16 @@ trackedFiles:
     pristine_git_object: 7201f0a4da25426d61dabfbeb1b63be02ca26dc9
   internal/sdk/organizations.go:
     id: df1bc34ceddd
-    last_write_checksum: sha1:b08ea0e4b85d7bbe8c9835f85aed96684f4dbbd9
-    pristine_git_object: f2c0a72b0be49fa3bf56467ca06e955130db7a82
+    last_write_checksum: sha1:ec55338a9bd320c8c1e9e6aab30d50dbad951880
+    pristine_git_object: 668717038aa54665258e67c3b41023e6d70175a1
   internal/sdk/organizationteams.go:
     id: ee7ed3da02cc
     last_write_checksum: sha1:dc8151a4941e22417c8aecb2bb91759b3f3606dd
     pristine_git_object: 91e94e418e1a1db3aceccdfdef514c3a4d87ab91
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:73dbe59e94098bbfa0a00c207cd66ca720ce002c
-    pristine_git_object: d597cf01f0ba1c7a119fbf36efb0de702ce69290
+    last_write_checksum: sha1:b2ee50f94ec8b6319650ee4623d18f67eced6862
+    pristine_git_object: fbb7d413bd1799c74dead78d21441e5159c1a0d9
   internal/sdk/polling/config.go:
     id: e14a17f21f84
     last_write_checksum: sha1:03925c7547c53642f0a85808205d88775a328f4c
@@ -2979,6 +2983,17 @@ examples:
           organization: "<value>"
           database: "<value>"
           branch: "<value>"
+  get_branch_change_request:
+    speakeasy-default-get-branch-change-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "restart": [467708, 621231, 315762], "state": "canceled", "started_at": "<value>", "completed_at": "<value>", "created_at": "1724106374512", "updated_at": "1735675744897", "actor": {"id": "<id>", "display_name": "Hortense33", "avatar_url": "https://ruddy-sprinkles.com/"}, "cluster_name": "<value>", "cluster_display_name": "<value>", "cluster_metal": false, "replicas": 339817, "parameters": {"key": "<value>"}, "previous_cluster_name": "<value>", "previous_cluster_display_name": "<value>", "previous_cluster_metal": true, "previous_replicas": 948650, "previous_parameters": {}, "minimum_storage_bytes": 366137, "maximum_storage_bytes": 486863, "storage_autoscaling": true, "storage_shrinking": false, "storage_type": "gp3", "storage_iops": 776612, "storage_throughput_mibs": 979664, "previous_minimum_storage_bytes": 684187, "previous_maximum_storage_bytes": 861199, "previous_storage_autoscaling": true, "previous_storage_shrinking": false, "previous_storage_type": "<value>", "previous_storage_iops": 892428, "previous_storage_throughput_mibs": 21847}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes
