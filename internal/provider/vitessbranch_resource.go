@@ -42,7 +42,6 @@ type VitessBranchResourceModel struct {
 	BackupID                    types.String                              `tfsdk:"backup_id"`
 	ClusterIops                 types.Int64                               `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                              `tfsdk:"cluster_name"`
-	ClusterRateName             types.String                              `tfsdk:"cluster_rate_name"`
 	ClusterSize                 types.String                              `tfsdk:"cluster_size"`
 	CreatedAt                   types.String                              `tfsdk:"created_at"`
 	Database                    types.String                              `tfsdk:"database"`
@@ -55,11 +54,9 @@ type VitessBranchResourceModel struct {
 	Metal                       types.Bool                                `tfsdk:"metal"`
 	MysqlAddress                types.String                              `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                              `tfsdk:"mysql_edge_address"`
-	MysqlProviderAddress        types.String                              `tfsdk:"mysql_provider_address"`
 	Name                        types.String                              `tfsdk:"name"`
 	Organization                types.String                              `tfsdk:"organization"`
 	ParentBranch                types.String                              `tfsdk:"parent_branch"`
-	PrivateConnectivity         types.Bool                                `tfsdk:"private_connectivity"`
 	PrivateEdgeConnectivity     types.Bool                                `tfsdk:"private_edge_connectivity"`
 	Production                  types.Bool                                `tfsdk:"production"`
 	Ready                       types.Bool                                `tfsdk:"ready"`
@@ -121,10 +118,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
 			},
-			"cluster_rate_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `The rate name for the cluster`,
-			},
 			"cluster_size": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -179,10 +172,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Description: `The address of the MySQL provider for the branch`,
 			},
-			"mysql_provider_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The MySQL provider address for the branch`,
-			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
@@ -205,10 +194,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Parent branch. Requires replacement if changed.`,
-			},
-			"private_connectivity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if private connectivity is enabled`,
 			},
 			"private_edge_connectivity": schema.BoolAttribute{
 				Computed:    true,
