@@ -169,3 +169,18 @@ actions:
     description: Add x-speakeasy-match to branch parameter
     update:
       x-speakeasy-match: id
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation: PostgresBranch#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.id
+    description: Add id name override
+    update:
+      x-speakeasy-name-override: change_request_id
