@@ -16,7 +16,7 @@ import (
 	"net/url"
 )
 
-// Organizations -           Resources for managing organizations.
+// Organizations -             Resources for managing organizations.
 type Organizations struct {
 	rootSDK          *Planetscale
 	sdkConfiguration config.SDKConfiguration
