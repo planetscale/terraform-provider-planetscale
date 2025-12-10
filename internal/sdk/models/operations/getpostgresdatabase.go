@@ -6,14 +6,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
-	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/types"
 	"net/http"
 )
 
 type GetPostgresDatabaseRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The ID of the database
+	// The name of the database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 }
 
@@ -33,174 +32,152 @@ func (g *GetPostgresDatabaseRequest) GetDatabase() string {
 
 type GetPostgresDatabaseDataSource struct {
 	// Hostname of the data source
-	Hostname *string `json:"hostname,omitzero"`
+	Hostname string `json:"hostname"`
 	// Port of the data source
-	Port *int64 `json:"port,omitzero"`
+	Port int64 `json:"port"`
 	// Database name of the data source
-	Database *string `json:"database,omitzero"`
+	Database string `json:"database"`
 }
 
-func (g *GetPostgresDatabaseDataSource) GetHostname() *string {
+func (g *GetPostgresDatabaseDataSource) GetHostname() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Hostname
 }
 
-func (g *GetPostgresDatabaseDataSource) GetPort() *int64 {
+func (g *GetPostgresDatabaseDataSource) GetPort() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.Port
 }
 
-func (g *GetPostgresDatabaseDataSource) GetDatabase() *string {
+func (g *GetPostgresDatabaseDataSource) GetDatabase() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Database
 }
 
 type GetPostgresDatabaseDataImport struct {
 	// State of the data import
-	State *string `json:"state,omitzero"`
+	State string `json:"state"`
 	// Errors encountered during the import check
-	ImportCheckErrors *string `json:"import_check_errors,omitzero"`
+	ImportCheckErrors string `json:"import_check_errors"`
 	// When the import started
-	StartedAt *string `json:"started_at,omitzero"`
+	StartedAt string `json:"started_at"`
 	// When the import finished
-	FinishedAt *string                        `json:"finished_at,omitzero"`
-	DataSource *GetPostgresDatabaseDataSource `json:"data_source,omitzero"`
+	FinishedAt string                        `json:"finished_at"`
+	DataSource GetPostgresDatabaseDataSource `json:"data_source"`
 }
 
-func (g GetPostgresDatabaseDataImport) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetPostgresDatabaseDataImport) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GetPostgresDatabaseDataImport) GetState() *string {
+func (g *GetPostgresDatabaseDataImport) GetState() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.State
 }
 
-func (g *GetPostgresDatabaseDataImport) GetImportCheckErrors() *string {
+func (g *GetPostgresDatabaseDataImport) GetImportCheckErrors() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.ImportCheckErrors
 }
 
-func (g *GetPostgresDatabaseDataImport) GetStartedAt() *string {
+func (g *GetPostgresDatabaseDataImport) GetStartedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.StartedAt
 }
 
-func (g *GetPostgresDatabaseDataImport) GetFinishedAt() *string {
+func (g *GetPostgresDatabaseDataImport) GetFinishedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.FinishedAt
 }
 
-func (g *GetPostgresDatabaseDataImport) GetDataSource() *GetPostgresDatabaseDataSource {
+func (g *GetPostgresDatabaseDataImport) GetDataSource() GetPostgresDatabaseDataSource {
 	if g == nil {
-		return nil
+		return GetPostgresDatabaseDataSource{}
 	}
 	return g.DataSource
 }
 
 type GetPostgresDatabaseRegionData struct {
 	// The ID of the region
-	ID *string `json:"id,omitzero"`
+	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
-	Provider *string `json:"provider,omitzero"`
+	Provider string `json:"provider"`
 	// Whether or not the region is currently active
-	Enabled *bool `json:"enabled,omitzero"`
+	Enabled bool `json:"enabled"`
 	// Public IP addresses for the region
-	PublicIPAddresses []string `json:"public_ip_addresses,omitzero"`
+	PublicIPAddresses []string `json:"public_ip_addresses"`
 	// Name of the region
-	DisplayName *string `json:"display_name,omitzero"`
+	DisplayName string `json:"display_name"`
 	// Location of the region
-	Location *string `json:"location,omitzero"`
+	Location string `json:"location"`
 	// The slug of the region
-	Slug *string `json:"slug,omitzero"`
+	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
-	CurrentDefault *bool `json:"current_default,omitzero"`
+	CurrentDefault bool `json:"current_default"`
 }
 
-func (g GetPostgresDatabaseRegionData) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetPostgresDatabaseRegionData) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GetPostgresDatabaseRegionData) GetID() *string {
+func (g *GetPostgresDatabaseRegionData) GetID() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.ID
 }
 
-func (g *GetPostgresDatabaseRegionData) GetProvider() *string {
+func (g *GetPostgresDatabaseRegionData) GetProvider() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Provider
 }
 
-func (g *GetPostgresDatabaseRegionData) GetEnabled() *bool {
+func (g *GetPostgresDatabaseRegionData) GetEnabled() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.Enabled
 }
 
 func (g *GetPostgresDatabaseRegionData) GetPublicIPAddresses() []string {
 	if g == nil {
-		return nil
+		return []string{}
 	}
 	return g.PublicIPAddresses
 }
 
-func (g *GetPostgresDatabaseRegionData) GetDisplayName() *string {
+func (g *GetPostgresDatabaseRegionData) GetDisplayName() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.DisplayName
 }
 
-func (g *GetPostgresDatabaseRegionData) GetLocation() *string {
+func (g *GetPostgresDatabaseRegionData) GetLocation() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Location
 }
 
-func (g *GetPostgresDatabaseRegionData) GetSlug() *string {
+func (g *GetPostgresDatabaseRegionData) GetSlug() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Slug
 }
 
-func (g *GetPostgresDatabaseRegionData) GetCurrentDefault() *bool {
+func (g *GetPostgresDatabaseRegionData) GetCurrentDefault() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.CurrentDefault
 }
@@ -250,69 +227,69 @@ func (e *GetPostgresDatabaseState) UnmarshalJSON(data []byte) error {
 // GetPostgresDatabaseResponseBody - Returns a database
 type GetPostgresDatabaseResponseBody struct {
 	// The ID of the database
-	ID *string `json:"id,omitzero"`
+	ID string `json:"id"`
 	// The URL to the database API endpoint
-	URL *string `json:"url,omitzero"`
+	URL string `json:"url"`
 	// The URL to retrieve this database's branches via the API
-	BranchesURL *string `json:"branches_url,omitzero"`
+	BranchesURL string `json:"branches_url"`
 	// The total number of database branches
-	BranchesCount *int64 `json:"branches_count,omitzero"`
+	BranchesCount int64 `json:"branches_count"`
 	// The total number of schema recommendations
-	OpenSchemaRecommendationsCount *int64 `json:"open_schema_recommendations_count,omitzero"`
+	OpenSchemaRecommendationsCount int64 `json:"open_schema_recommendations_count"`
 	// The total number of database development branches
-	DevelopmentBranchesCount *int64 `json:"development_branches_count,omitzero"`
+	DevelopmentBranchesCount int64 `json:"development_branches_count"`
 	// The total number of database production branches
-	ProductionBranchesCount *int64 `json:"production_branches_count,omitzero"`
+	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
-	IssuesCount *int64 `json:"issues_count,omitzero"`
+	IssuesCount int64 `json:"issues_count"`
 	// If the database requires multiple admins for deletion
-	MultipleAdminsRequiredForDeletion *bool `json:"multiple_admins_required_for_deletion,omitzero"`
+	MultipleAdminsRequiredForDeletion bool `json:"multiple_admins_required_for_deletion"`
 	// If the database is ready to be used
-	Ready *bool `json:"ready,omitzero"`
+	Ready bool `json:"ready"`
 	// If the database has reached its backup restored branch limit
-	AtBackupRestoreBranchesLimit *bool `json:"at_backup_restore_branches_limit,omitzero"`
+	AtBackupRestoreBranchesLimit bool `json:"at_backup_restore_branches_limit"`
 	// If the database has reached its development branch limit
-	AtDevelopmentBranchUsageLimit *bool                          `json:"at_development_branch_usage_limit,omitzero"`
-	DataImport                    *GetPostgresDatabaseDataImport `json:"data_import,omitzero"`
-	RegionData                    *GetPostgresDatabaseRegionData `json:"region,omitzero"`
+	AtDevelopmentBranchUsageLimit bool                          `json:"at_development_branch_usage_limit"`
+	DataImport                    GetPostgresDatabaseDataImport `json:"data_import"`
+	RegionData                    GetPostgresDatabaseRegionData `json:"region"`
 	// The URL to see this database's branches in the web UI
-	HTMLURL *string `json:"html_url,omitzero"`
+	HTMLURL string `json:"html_url"`
 	// Name of the database
-	Name *string `json:"name,omitzero"`
+	Name string `json:"name"`
 	// State of the database
-	State *GetPostgresDatabaseState `json:"state,omitzero"`
+	State GetPostgresDatabaseState `json:"state"`
 	// Number of shards in the default branch
-	DefaultBranchShardCount *int64 `json:"default_branch_shard_count,omitzero"`
+	DefaultBranchShardCount int64 `json:"default_branch_shard_count"`
 	// Number of read only regions in the default branch
-	DefaultBranchReadOnlyRegionsCount *int64 `json:"default_branch_read_only_regions_count,omitzero"`
+	DefaultBranchReadOnlyRegionsCount int64 `json:"default_branch_read_only_regions_count"`
 	// Number of tables in the default branch schema
-	DefaultBranchTableCount *int64 `json:"default_branch_table_count,omitzero"`
+	DefaultBranchTableCount int64 `json:"default_branch_table_count"`
 	// The default branch for the database
-	DefaultBranch *string `json:"default_branch,omitzero"`
+	DefaultBranch string `json:"default_branch"`
 	// Whether an approval is required to deploy schema changes to this database
-	RequireApprovalForDeploy *bool `json:"require_approval_for_deploy,omitzero"`
+	RequireApprovalForDeploy bool `json:"require_approval_for_deploy"`
 	// True if a branch is currently resizing
-	Resizing *bool `json:"resizing,omitzero"`
+	Resizing bool `json:"resizing"`
 	// True if a branch has a queued resize request
-	ResizeQueued *bool `json:"resize_queued,omitzero"`
+	ResizeQueued bool `json:"resize_queued"`
 	// Whether to restrict branch creation to one region
-	RestrictBranchRegion *bool `json:"restrict_branch_region,omitzero"`
+	RestrictBranchRegion bool `json:"restrict_branch_region"`
 	// Whether raw SQL queries are collected
-	InsightsRawQueries *bool `json:"insights_raw_queries,omitzero"`
+	InsightsRawQueries bool `json:"insights_raw_queries"`
 	// The database plan
-	Plan *string `json:"plan,omitzero"`
+	Plan string `json:"plan"`
 	// True if query insights is enabled for the database
-	InsightsEnabled *bool `json:"insights_enabled,omitzero"`
+	InsightsEnabled bool `json:"insights_enabled"`
 	// Whether web console is enabled for production branches
-	ProductionBranchWebConsole *bool `json:"production_branch_web_console,omitzero"`
+	ProductionBranchWebConsole bool `json:"production_branch_web_console"`
 	// When the database was created
-	CreatedAt *string `json:"created_at,omitzero"`
+	CreatedAt string `json:"created_at"`
 	// When the database was last updated
-	UpdatedAt *string `json:"updated_at,omitzero"`
+	UpdatedAt string `json:"updated_at"`
 	// When the default branch schema was last changed.
-	SchemaLastUpdatedAt *string `json:"schema_last_updated_at,omitzero"`
+	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The kind of database
-	kind *string `const:"postgresql" json:"kind,omitzero"`
+	kind string `const:"postgresql" json:"kind"`
 }
 
 func (g GetPostgresDatabaseResponseBody) MarshalJSON() ([]byte, error) {
@@ -326,232 +303,232 @@ func (g *GetPostgresDatabaseResponseBody) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetID() *string {
+func (g *GetPostgresDatabaseResponseBody) GetID() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.ID
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetURL() *string {
+func (g *GetPostgresDatabaseResponseBody) GetURL() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.URL
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetBranchesURL() *string {
+func (g *GetPostgresDatabaseResponseBody) GetBranchesURL() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.BranchesURL
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetBranchesCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetBranchesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.BranchesCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetOpenSchemaRecommendationsCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetOpenSchemaRecommendationsCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.OpenSchemaRecommendationsCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetDevelopmentBranchesCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetDevelopmentBranchesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DevelopmentBranchesCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetProductionBranchesCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetProductionBranchesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.ProductionBranchesCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetIssuesCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetIssuesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.IssuesCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetMultipleAdminsRequiredForDeletion() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetMultipleAdminsRequiredForDeletion() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.MultipleAdminsRequiredForDeletion
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetReady() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetReady() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.Ready
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetAtBackupRestoreBranchesLimit() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetAtBackupRestoreBranchesLimit() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.AtBackupRestoreBranchesLimit
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetAtDevelopmentBranchUsageLimit() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetAtDevelopmentBranchUsageLimit() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.AtDevelopmentBranchUsageLimit
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetDataImport() *GetPostgresDatabaseDataImport {
+func (g *GetPostgresDatabaseResponseBody) GetDataImport() GetPostgresDatabaseDataImport {
 	if g == nil {
-		return nil
+		return GetPostgresDatabaseDataImport{}
 	}
 	return g.DataImport
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetRegionData() *GetPostgresDatabaseRegionData {
+func (g *GetPostgresDatabaseResponseBody) GetRegionData() GetPostgresDatabaseRegionData {
 	if g == nil {
-		return nil
+		return GetPostgresDatabaseRegionData{}
 	}
 	return g.RegionData
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetHTMLURL() *string {
+func (g *GetPostgresDatabaseResponseBody) GetHTMLURL() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.HTMLURL
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetName() *string {
+func (g *GetPostgresDatabaseResponseBody) GetName() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Name
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetState() *GetPostgresDatabaseState {
+func (g *GetPostgresDatabaseResponseBody) GetState() GetPostgresDatabaseState {
 	if g == nil {
-		return nil
+		return GetPostgresDatabaseState("")
 	}
 	return g.State
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetDefaultBranchShardCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetDefaultBranchShardCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DefaultBranchShardCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DefaultBranchReadOnlyRegionsCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetDefaultBranchTableCount() *int64 {
+func (g *GetPostgresDatabaseResponseBody) GetDefaultBranchTableCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DefaultBranchTableCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetDefaultBranch() *string {
+func (g *GetPostgresDatabaseResponseBody) GetDefaultBranch() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.DefaultBranch
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetRequireApprovalForDeploy() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetRequireApprovalForDeploy() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.RequireApprovalForDeploy
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetResizing() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetResizing() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.Resizing
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetResizeQueued() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetResizeQueued() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.ResizeQueued
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetRestrictBranchRegion() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetRestrictBranchRegion() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.RestrictBranchRegion
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetInsightsRawQueries() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetInsightsRawQueries() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.InsightsRawQueries
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetPlan() *string {
+func (g *GetPostgresDatabaseResponseBody) GetPlan() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Plan
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetInsightsEnabled() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetInsightsEnabled() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.InsightsEnabled
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetProductionBranchWebConsole() *bool {
+func (g *GetPostgresDatabaseResponseBody) GetProductionBranchWebConsole() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.ProductionBranchWebConsole
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetCreatedAt() *string {
+func (g *GetPostgresDatabaseResponseBody) GetCreatedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetUpdatedAt() *string {
+func (g *GetPostgresDatabaseResponseBody) GetUpdatedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetSchemaLastUpdatedAt() *string {
+func (g *GetPostgresDatabaseResponseBody) GetSchemaLastUpdatedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.SchemaLastUpdatedAt
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetKind() *string {
-	return types.Pointer("postgresql")
+func (g *GetPostgresDatabaseResponseBody) GetKind() string {
+	return "postgresql"
 }
 
 type GetPostgresDatabaseResponse struct {
