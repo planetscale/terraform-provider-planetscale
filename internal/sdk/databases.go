@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-// Databases -           Resources for managing databases within an organization.
+// Databases -             Resources for managing databases within an organization.
 type Databases struct {
 	rootSDK          *Planetscale
 	sdkConfiguration config.SDKConfiguration
