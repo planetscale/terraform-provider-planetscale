@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -14,79 +13,60 @@ func (r *DatabaseVitessDataSourceModel) RefreshFromOperationsGetVitessDatabaseRe
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.AllowDataBranching = types.BoolPointerValue(resp.AllowDataBranching)
-		r.AtBackupRestoreBranchesLimit = types.BoolPointerValue(resp.AtBackupRestoreBranchesLimit)
-		r.AtDevelopmentBranchUsageLimit = types.BoolPointerValue(resp.AtDevelopmentBranchUsageLimit)
-		r.AutomaticMigrations = types.BoolPointerValue(resp.AutomaticMigrations)
-		r.BranchesCount = types.Int64PointerValue(resp.BranchesCount)
-		r.BranchesURL = types.StringPointerValue(resp.BranchesURL)
-		r.CreatedAt = types.StringPointerValue(resp.CreatedAt)
-		if resp.DataImport == nil {
-			r.DataImport = nil
-		} else {
-			r.DataImport = &tfTypes.GetVitessDatabaseDataImport{}
-			if resp.DataImport.DataSource == nil {
-				r.DataImport.DataSource = nil
-			} else {
-				r.DataImport.DataSource = &tfTypes.GetVitessDatabaseDataSource{}
-				r.DataImport.DataSource.Database = types.StringPointerValue(resp.DataImport.DataSource.Database)
-				r.DataImport.DataSource.Hostname = types.StringPointerValue(resp.DataImport.DataSource.Hostname)
-				r.DataImport.DataSource.Port = types.Int64PointerValue(resp.DataImport.DataSource.Port)
-			}
-			r.DataImport.FinishedAt = types.StringPointerValue(resp.DataImport.FinishedAt)
-			r.DataImport.ImportCheckErrors = types.StringPointerValue(resp.DataImport.ImportCheckErrors)
-			r.DataImport.StartedAt = types.StringPointerValue(resp.DataImport.StartedAt)
-			r.DataImport.State = types.StringPointerValue(resp.DataImport.State)
+		r.AllowDataBranching = types.BoolValue(resp.AllowDataBranching)
+		r.AtBackupRestoreBranchesLimit = types.BoolValue(resp.AtBackupRestoreBranchesLimit)
+		r.AtDevelopmentBranchUsageLimit = types.BoolValue(resp.AtDevelopmentBranchUsageLimit)
+		r.AutomaticMigrations = types.BoolValue(resp.AutomaticMigrations)
+		r.BranchesCount = types.Int64Value(resp.BranchesCount)
+		r.BranchesURL = types.StringValue(resp.BranchesURL)
+		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DataImport.DataSource.Database = types.StringValue(resp.DataImport.DataSource.Database)
+		r.DataImport.DataSource.Hostname = types.StringValue(resp.DataImport.DataSource.Hostname)
+		r.DataImport.DataSource.Port = types.Int64Value(resp.DataImport.DataSource.Port)
+		r.DataImport.FinishedAt = types.StringValue(resp.DataImport.FinishedAt)
+		r.DataImport.ImportCheckErrors = types.StringValue(resp.DataImport.ImportCheckErrors)
+		r.DataImport.StartedAt = types.StringValue(resp.DataImport.StartedAt)
+		r.DataImport.State = types.StringValue(resp.DataImport.State)
+		r.DefaultBranch = types.StringValue(resp.DefaultBranch)
+		r.DefaultBranchReadOnlyRegionsCount = types.Int64Value(resp.DefaultBranchReadOnlyRegionsCount)
+		r.DefaultBranchShardCount = types.Int64Value(resp.DefaultBranchShardCount)
+		r.DefaultBranchTableCount = types.Int64Value(resp.DefaultBranchTableCount)
+		r.DevelopmentBranchesCount = types.Int64Value(resp.DevelopmentBranchesCount)
+		r.ForeignKeysEnabled = types.BoolValue(resp.ForeignKeysEnabled)
+		r.HTMLURL = types.StringValue(resp.HTMLURL)
+		r.ID = types.StringValue(resp.ID)
+		r.InsightsEnabled = types.BoolValue(resp.InsightsEnabled)
+		r.InsightsRawQueries = types.BoolValue(resp.InsightsRawQueries)
+		r.IssuesCount = types.Int64Value(resp.IssuesCount)
+		r.MigrationFramework = types.StringValue(resp.MigrationFramework)
+		r.MigrationTableName = types.StringValue(resp.MigrationTableName)
+		r.MultipleAdminsRequiredForDeletion = types.BoolValue(resp.MultipleAdminsRequiredForDeletion)
+		r.Name = types.StringValue(resp.Name)
+		r.OpenSchemaRecommendationsCount = types.Int64Value(resp.OpenSchemaRecommendationsCount)
+		r.Plan = types.StringValue(resp.Plan)
+		r.ProductionBranchWebConsole = types.BoolValue(resp.ProductionBranchWebConsole)
+		r.ProductionBranchesCount = types.Int64Value(resp.ProductionBranchesCount)
+		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
+		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
+		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
+		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
+		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
+		for _, v := range resp.RegionData.PublicIPAddresses {
+			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
 		}
-		r.DefaultBranch = types.StringPointerValue(resp.DefaultBranch)
-		r.DefaultBranchReadOnlyRegionsCount = types.Int64PointerValue(resp.DefaultBranchReadOnlyRegionsCount)
-		r.DefaultBranchShardCount = types.Int64PointerValue(resp.DefaultBranchShardCount)
-		r.DefaultBranchTableCount = types.Int64PointerValue(resp.DefaultBranchTableCount)
-		r.DevelopmentBranchesCount = types.Int64PointerValue(resp.DevelopmentBranchesCount)
-		r.ForeignKeysEnabled = types.BoolPointerValue(resp.ForeignKeysEnabled)
-		r.HTMLURL = types.StringPointerValue(resp.HTMLURL)
-		r.ID = types.StringPointerValue(resp.ID)
-		r.InsightsEnabled = types.BoolPointerValue(resp.InsightsEnabled)
-		r.InsightsRawQueries = types.BoolPointerValue(resp.InsightsRawQueries)
-		r.IssuesCount = types.Int64PointerValue(resp.IssuesCount)
-		r.MigrationFramework = types.StringPointerValue(resp.MigrationFramework)
-		r.MigrationTableName = types.StringPointerValue(resp.MigrationTableName)
-		r.MultipleAdminsRequiredForDeletion = types.BoolPointerValue(resp.MultipleAdminsRequiredForDeletion)
-		r.Name = types.StringPointerValue(resp.Name)
-		r.OpenSchemaRecommendationsCount = types.Int64PointerValue(resp.OpenSchemaRecommendationsCount)
-		r.Plan = types.StringPointerValue(resp.Plan)
-		r.ProductionBranchWebConsole = types.BoolPointerValue(resp.ProductionBranchWebConsole)
-		r.ProductionBranchesCount = types.Int64PointerValue(resp.ProductionBranchesCount)
-		r.Ready = types.BoolPointerValue(resp.Ready)
-		if resp.RegionData == nil {
-			r.RegionData = nil
-		} else {
-			r.RegionData = &tfTypes.GetVitessDatabaseRegionData{}
-			r.RegionData.CurrentDefault = types.BoolPointerValue(resp.RegionData.CurrentDefault)
-			r.RegionData.DisplayName = types.StringPointerValue(resp.RegionData.DisplayName)
-			r.RegionData.Enabled = types.BoolPointerValue(resp.RegionData.Enabled)
-			r.RegionData.ID = types.StringPointerValue(resp.RegionData.ID)
-			r.RegionData.Location = types.StringPointerValue(resp.RegionData.Location)
-			r.RegionData.Provider = types.StringPointerValue(resp.RegionData.Provider)
-			r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-			for _, v := range resp.RegionData.PublicIPAddresses {
-				r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-			}
-			r.RegionData.Slug = types.StringPointerValue(resp.RegionData.Slug)
-		}
-		r.RequireApprovalForDeploy = types.BoolPointerValue(resp.RequireApprovalForDeploy)
-		r.ResizeQueued = types.BoolPointerValue(resp.ResizeQueued)
-		r.Resizing = types.BoolPointerValue(resp.Resizing)
-		r.RestrictBranchRegion = types.BoolPointerValue(resp.RestrictBranchRegion)
-		r.SchemaLastUpdatedAt = types.StringPointerValue(resp.SchemaLastUpdatedAt)
-		r.Sharded = types.BoolPointerValue(resp.Sharded)
-		if resp.State != nil {
-			r.State = types.StringValue(string(*resp.State))
-		} else {
-			r.State = types.StringNull()
-		}
-		r.UpdatedAt = types.StringPointerValue(resp.UpdatedAt)
-		r.URL = types.StringPointerValue(resp.URL)
+		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
+		r.RequireApprovalForDeploy = types.BoolValue(resp.RequireApprovalForDeploy)
+		r.ResizeQueued = types.BoolValue(resp.ResizeQueued)
+		r.Resizing = types.BoolValue(resp.Resizing)
+		r.RestrictBranchRegion = types.BoolValue(resp.RestrictBranchRegion)
+		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
+		r.Sharded = types.BoolValue(resp.Sharded)
+		r.State = types.StringValue(string(resp.State))
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
+		r.URL = types.StringValue(resp.URL)
 	}
 
 	return diags

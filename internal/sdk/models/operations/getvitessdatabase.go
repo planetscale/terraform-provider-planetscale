@@ -6,14 +6,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
-	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/types"
 	"net/http"
 )
 
 type GetVitessDatabaseRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The ID of the database
+	// The name of the database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 }
 
@@ -33,174 +32,152 @@ func (g *GetVitessDatabaseRequest) GetDatabase() string {
 
 type GetVitessDatabaseDataSource struct {
 	// Hostname of the data source
-	Hostname *string `json:"hostname,omitzero"`
+	Hostname string `json:"hostname"`
 	// Port of the data source
-	Port *int64 `json:"port,omitzero"`
+	Port int64 `json:"port"`
 	// Database name of the data source
-	Database *string `json:"database,omitzero"`
+	Database string `json:"database"`
 }
 
-func (g *GetVitessDatabaseDataSource) GetHostname() *string {
+func (g *GetVitessDatabaseDataSource) GetHostname() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Hostname
 }
 
-func (g *GetVitessDatabaseDataSource) GetPort() *int64 {
+func (g *GetVitessDatabaseDataSource) GetPort() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.Port
 }
 
-func (g *GetVitessDatabaseDataSource) GetDatabase() *string {
+func (g *GetVitessDatabaseDataSource) GetDatabase() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Database
 }
 
 type GetVitessDatabaseDataImport struct {
 	// State of the data import
-	State *string `json:"state,omitzero"`
+	State string `json:"state"`
 	// Errors encountered during the import check
-	ImportCheckErrors *string `json:"import_check_errors,omitzero"`
+	ImportCheckErrors string `json:"import_check_errors"`
 	// When the import started
-	StartedAt *string `json:"started_at,omitzero"`
+	StartedAt string `json:"started_at"`
 	// When the import finished
-	FinishedAt *string                      `json:"finished_at,omitzero"`
-	DataSource *GetVitessDatabaseDataSource `json:"data_source,omitzero"`
+	FinishedAt string                      `json:"finished_at"`
+	DataSource GetVitessDatabaseDataSource `json:"data_source"`
 }
 
-func (g GetVitessDatabaseDataImport) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetVitessDatabaseDataImport) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GetVitessDatabaseDataImport) GetState() *string {
+func (g *GetVitessDatabaseDataImport) GetState() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.State
 }
 
-func (g *GetVitessDatabaseDataImport) GetImportCheckErrors() *string {
+func (g *GetVitessDatabaseDataImport) GetImportCheckErrors() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.ImportCheckErrors
 }
 
-func (g *GetVitessDatabaseDataImport) GetStartedAt() *string {
+func (g *GetVitessDatabaseDataImport) GetStartedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.StartedAt
 }
 
-func (g *GetVitessDatabaseDataImport) GetFinishedAt() *string {
+func (g *GetVitessDatabaseDataImport) GetFinishedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.FinishedAt
 }
 
-func (g *GetVitessDatabaseDataImport) GetDataSource() *GetVitessDatabaseDataSource {
+func (g *GetVitessDatabaseDataImport) GetDataSource() GetVitessDatabaseDataSource {
 	if g == nil {
-		return nil
+		return GetVitessDatabaseDataSource{}
 	}
 	return g.DataSource
 }
 
 type GetVitessDatabaseRegionData struct {
 	// The ID of the region
-	ID *string `json:"id,omitzero"`
+	ID string `json:"id"`
 	// Provider for the region (ex. AWS)
-	Provider *string `json:"provider,omitzero"`
+	Provider string `json:"provider"`
 	// Whether or not the region is currently active
-	Enabled *bool `json:"enabled,omitzero"`
+	Enabled bool `json:"enabled"`
 	// Public IP addresses for the region
-	PublicIPAddresses []string `json:"public_ip_addresses,omitzero"`
+	PublicIPAddresses []string `json:"public_ip_addresses"`
 	// Name of the region
-	DisplayName *string `json:"display_name,omitzero"`
+	DisplayName string `json:"display_name"`
 	// Location of the region
-	Location *string `json:"location,omitzero"`
+	Location string `json:"location"`
 	// The slug of the region
-	Slug *string `json:"slug,omitzero"`
+	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
-	CurrentDefault *bool `json:"current_default,omitzero"`
+	CurrentDefault bool `json:"current_default"`
 }
 
-func (g GetVitessDatabaseRegionData) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetVitessDatabaseRegionData) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GetVitessDatabaseRegionData) GetID() *string {
+func (g *GetVitessDatabaseRegionData) GetID() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.ID
 }
 
-func (g *GetVitessDatabaseRegionData) GetProvider() *string {
+func (g *GetVitessDatabaseRegionData) GetProvider() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Provider
 }
 
-func (g *GetVitessDatabaseRegionData) GetEnabled() *bool {
+func (g *GetVitessDatabaseRegionData) GetEnabled() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.Enabled
 }
 
 func (g *GetVitessDatabaseRegionData) GetPublicIPAddresses() []string {
 	if g == nil {
-		return nil
+		return []string{}
 	}
 	return g.PublicIPAddresses
 }
 
-func (g *GetVitessDatabaseRegionData) GetDisplayName() *string {
+func (g *GetVitessDatabaseRegionData) GetDisplayName() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.DisplayName
 }
 
-func (g *GetVitessDatabaseRegionData) GetLocation() *string {
+func (g *GetVitessDatabaseRegionData) GetLocation() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Location
 }
 
-func (g *GetVitessDatabaseRegionData) GetSlug() *string {
+func (g *GetVitessDatabaseRegionData) GetSlug() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Slug
 }
 
-func (g *GetVitessDatabaseRegionData) GetCurrentDefault() *bool {
+func (g *GetVitessDatabaseRegionData) GetCurrentDefault() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.CurrentDefault
 }
@@ -250,81 +227,81 @@ func (e *GetVitessDatabaseState) UnmarshalJSON(data []byte) error {
 // GetVitessDatabaseResponseBody - Returns a database
 type GetVitessDatabaseResponseBody struct {
 	// The ID of the database
-	ID *string `json:"id,omitzero"`
+	ID string `json:"id"`
 	// The URL to the database API endpoint
-	URL *string `json:"url,omitzero"`
+	URL string `json:"url"`
 	// The URL to retrieve this database's branches via the API
-	BranchesURL *string `json:"branches_url,omitzero"`
+	BranchesURL string `json:"branches_url"`
 	// The total number of database branches
-	BranchesCount *int64 `json:"branches_count,omitzero"`
+	BranchesCount int64 `json:"branches_count"`
 	// The total number of schema recommendations
-	OpenSchemaRecommendationsCount *int64 `json:"open_schema_recommendations_count,omitzero"`
+	OpenSchemaRecommendationsCount int64 `json:"open_schema_recommendations_count"`
 	// The total number of database development branches
-	DevelopmentBranchesCount *int64 `json:"development_branches_count,omitzero"`
+	DevelopmentBranchesCount int64 `json:"development_branches_count"`
 	// The total number of database production branches
-	ProductionBranchesCount *int64 `json:"production_branches_count,omitzero"`
+	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
-	IssuesCount *int64 `json:"issues_count,omitzero"`
+	IssuesCount int64 `json:"issues_count"`
 	// If the database requires multiple admins for deletion
-	MultipleAdminsRequiredForDeletion *bool `json:"multiple_admins_required_for_deletion,omitzero"`
+	MultipleAdminsRequiredForDeletion bool `json:"multiple_admins_required_for_deletion"`
 	// If the database is ready to be used
-	Ready *bool `json:"ready,omitzero"`
+	Ready bool `json:"ready"`
 	// If the database has reached its backup restored branch limit
-	AtBackupRestoreBranchesLimit *bool `json:"at_backup_restore_branches_limit,omitzero"`
+	AtBackupRestoreBranchesLimit bool `json:"at_backup_restore_branches_limit"`
 	// If the database has reached its development branch limit
-	AtDevelopmentBranchUsageLimit *bool                        `json:"at_development_branch_usage_limit,omitzero"`
-	DataImport                    *GetVitessDatabaseDataImport `json:"data_import,omitzero"`
-	RegionData                    *GetVitessDatabaseRegionData `json:"region,omitzero"`
+	AtDevelopmentBranchUsageLimit bool                        `json:"at_development_branch_usage_limit"`
+	DataImport                    GetVitessDatabaseDataImport `json:"data_import"`
+	RegionData                    GetVitessDatabaseRegionData `json:"region"`
 	// The URL to see this database's branches in the web UI
-	HTMLURL *string `json:"html_url,omitzero"`
+	HTMLURL string `json:"html_url"`
 	// Name of the database
-	Name *string `json:"name,omitzero"`
+	Name string `json:"name"`
 	// State of the database
-	State *GetVitessDatabaseState `json:"state,omitzero"`
+	State GetVitessDatabaseState `json:"state"`
 	// If the database is sharded
-	Sharded *bool `json:"sharded,omitzero"`
+	Sharded bool `json:"sharded"`
 	// Number of shards in the default branch
-	DefaultBranchShardCount *int64 `json:"default_branch_shard_count,omitzero"`
+	DefaultBranchShardCount int64 `json:"default_branch_shard_count"`
 	// Number of read only regions in the default branch
-	DefaultBranchReadOnlyRegionsCount *int64 `json:"default_branch_read_only_regions_count,omitzero"`
+	DefaultBranchReadOnlyRegionsCount int64 `json:"default_branch_read_only_regions_count"`
 	// Number of tables in the default branch schema
-	DefaultBranchTableCount *int64 `json:"default_branch_table_count,omitzero"`
+	DefaultBranchTableCount int64 `json:"default_branch_table_count"`
 	// The default branch for the database
-	DefaultBranch *string `json:"default_branch,omitzero"`
+	DefaultBranch string `json:"default_branch"`
 	// Whether an approval is required to deploy schema changes to this database
-	RequireApprovalForDeploy *bool `json:"require_approval_for_deploy,omitzero"`
+	RequireApprovalForDeploy bool `json:"require_approval_for_deploy"`
 	// True if a branch is currently resizing
-	Resizing *bool `json:"resizing,omitzero"`
+	Resizing bool `json:"resizing"`
 	// True if a branch has a queued resize request
-	ResizeQueued *bool `json:"resize_queued,omitzero"`
+	ResizeQueued bool `json:"resize_queued"`
 	// Whether seeding branches with data is enabled for all branches
-	AllowDataBranching *bool `json:"allow_data_branching,omitzero"`
+	AllowDataBranching bool `json:"allow_data_branching"`
 	// Whether foreign key constraints are enabled
-	ForeignKeysEnabled *bool `json:"foreign_keys_enabled,omitzero"`
+	ForeignKeysEnabled bool `json:"foreign_keys_enabled"`
 	// Whether to automatically manage Rails migrations during deploy requests
-	AutomaticMigrations *bool `json:"automatic_migrations,omitzero"`
+	AutomaticMigrations bool `json:"automatic_migrations"`
 	// Whether to restrict branch creation to one region
-	RestrictBranchRegion *bool `json:"restrict_branch_region,omitzero"`
+	RestrictBranchRegion bool `json:"restrict_branch_region"`
 	// Whether raw SQL queries are collected
-	InsightsRawQueries *bool `json:"insights_raw_queries,omitzero"`
+	InsightsRawQueries bool `json:"insights_raw_queries"`
 	// The database plan
-	Plan *string `json:"plan,omitzero"`
+	Plan string `json:"plan"`
 	// True if query insights is enabled for the database
-	InsightsEnabled *bool `json:"insights_enabled,omitzero"`
+	InsightsEnabled bool `json:"insights_enabled"`
 	// Whether web console is enabled for production branches
-	ProductionBranchWebConsole *bool `json:"production_branch_web_console,omitzero"`
+	ProductionBranchWebConsole bool `json:"production_branch_web_console"`
 	// Table name to use for copying schema migration data
-	MigrationTableName *string `json:"migration_table_name,omitzero"`
+	MigrationTableName string `json:"migration_table_name"`
 	// Framework used for applying migrations
-	MigrationFramework *string `json:"migration_framework,omitzero"`
+	MigrationFramework string `json:"migration_framework"`
 	// When the database was created
-	CreatedAt *string `json:"created_at,omitzero"`
+	CreatedAt string `json:"created_at"`
 	// When the database was last updated
-	UpdatedAt *string `json:"updated_at,omitzero"`
+	UpdatedAt string `json:"updated_at"`
 	// When the default branch schema was last changed.
-	SchemaLastUpdatedAt *string `json:"schema_last_updated_at,omitzero"`
+	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The kind of database
-	kind *string `const:"mysql" json:"kind,omitzero"`
+	kind string `const:"mysql" json:"kind"`
 }
 
 func (g GetVitessDatabaseResponseBody) MarshalJSON() ([]byte, error) {
@@ -338,274 +315,274 @@ func (g *GetVitessDatabaseResponseBody) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GetVitessDatabaseResponseBody) GetID() *string {
+func (g *GetVitessDatabaseResponseBody) GetID() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.ID
 }
 
-func (g *GetVitessDatabaseResponseBody) GetURL() *string {
+func (g *GetVitessDatabaseResponseBody) GetURL() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.URL
 }
 
-func (g *GetVitessDatabaseResponseBody) GetBranchesURL() *string {
+func (g *GetVitessDatabaseResponseBody) GetBranchesURL() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.BranchesURL
 }
 
-func (g *GetVitessDatabaseResponseBody) GetBranchesCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetBranchesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.BranchesCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetOpenSchemaRecommendationsCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetOpenSchemaRecommendationsCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.OpenSchemaRecommendationsCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetDevelopmentBranchesCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetDevelopmentBranchesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DevelopmentBranchesCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetProductionBranchesCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetProductionBranchesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.ProductionBranchesCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetIssuesCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetIssuesCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.IssuesCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetMultipleAdminsRequiredForDeletion() *bool {
+func (g *GetVitessDatabaseResponseBody) GetMultipleAdminsRequiredForDeletion() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.MultipleAdminsRequiredForDeletion
 }
 
-func (g *GetVitessDatabaseResponseBody) GetReady() *bool {
+func (g *GetVitessDatabaseResponseBody) GetReady() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.Ready
 }
 
-func (g *GetVitessDatabaseResponseBody) GetAtBackupRestoreBranchesLimit() *bool {
+func (g *GetVitessDatabaseResponseBody) GetAtBackupRestoreBranchesLimit() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.AtBackupRestoreBranchesLimit
 }
 
-func (g *GetVitessDatabaseResponseBody) GetAtDevelopmentBranchUsageLimit() *bool {
+func (g *GetVitessDatabaseResponseBody) GetAtDevelopmentBranchUsageLimit() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.AtDevelopmentBranchUsageLimit
 }
 
-func (g *GetVitessDatabaseResponseBody) GetDataImport() *GetVitessDatabaseDataImport {
+func (g *GetVitessDatabaseResponseBody) GetDataImport() GetVitessDatabaseDataImport {
 	if g == nil {
-		return nil
+		return GetVitessDatabaseDataImport{}
 	}
 	return g.DataImport
 }
 
-func (g *GetVitessDatabaseResponseBody) GetRegionData() *GetVitessDatabaseRegionData {
+func (g *GetVitessDatabaseResponseBody) GetRegionData() GetVitessDatabaseRegionData {
 	if g == nil {
-		return nil
+		return GetVitessDatabaseRegionData{}
 	}
 	return g.RegionData
 }
 
-func (g *GetVitessDatabaseResponseBody) GetHTMLURL() *string {
+func (g *GetVitessDatabaseResponseBody) GetHTMLURL() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.HTMLURL
 }
 
-func (g *GetVitessDatabaseResponseBody) GetName() *string {
+func (g *GetVitessDatabaseResponseBody) GetName() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Name
 }
 
-func (g *GetVitessDatabaseResponseBody) GetState() *GetVitessDatabaseState {
+func (g *GetVitessDatabaseResponseBody) GetState() GetVitessDatabaseState {
 	if g == nil {
-		return nil
+		return GetVitessDatabaseState("")
 	}
 	return g.State
 }
 
-func (g *GetVitessDatabaseResponseBody) GetSharded() *bool {
+func (g *GetVitessDatabaseResponseBody) GetSharded() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.Sharded
 }
 
-func (g *GetVitessDatabaseResponseBody) GetDefaultBranchShardCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetDefaultBranchShardCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DefaultBranchShardCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetDefaultBranchReadOnlyRegionsCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DefaultBranchReadOnlyRegionsCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetDefaultBranchTableCount() *int64 {
+func (g *GetVitessDatabaseResponseBody) GetDefaultBranchTableCount() int64 {
 	if g == nil {
-		return nil
+		return 0
 	}
 	return g.DefaultBranchTableCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetDefaultBranch() *string {
+func (g *GetVitessDatabaseResponseBody) GetDefaultBranch() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.DefaultBranch
 }
 
-func (g *GetVitessDatabaseResponseBody) GetRequireApprovalForDeploy() *bool {
+func (g *GetVitessDatabaseResponseBody) GetRequireApprovalForDeploy() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.RequireApprovalForDeploy
 }
 
-func (g *GetVitessDatabaseResponseBody) GetResizing() *bool {
+func (g *GetVitessDatabaseResponseBody) GetResizing() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.Resizing
 }
 
-func (g *GetVitessDatabaseResponseBody) GetResizeQueued() *bool {
+func (g *GetVitessDatabaseResponseBody) GetResizeQueued() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.ResizeQueued
 }
 
-func (g *GetVitessDatabaseResponseBody) GetAllowDataBranching() *bool {
+func (g *GetVitessDatabaseResponseBody) GetAllowDataBranching() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.AllowDataBranching
 }
 
-func (g *GetVitessDatabaseResponseBody) GetForeignKeysEnabled() *bool {
+func (g *GetVitessDatabaseResponseBody) GetForeignKeysEnabled() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.ForeignKeysEnabled
 }
 
-func (g *GetVitessDatabaseResponseBody) GetAutomaticMigrations() *bool {
+func (g *GetVitessDatabaseResponseBody) GetAutomaticMigrations() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.AutomaticMigrations
 }
 
-func (g *GetVitessDatabaseResponseBody) GetRestrictBranchRegion() *bool {
+func (g *GetVitessDatabaseResponseBody) GetRestrictBranchRegion() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.RestrictBranchRegion
 }
 
-func (g *GetVitessDatabaseResponseBody) GetInsightsRawQueries() *bool {
+func (g *GetVitessDatabaseResponseBody) GetInsightsRawQueries() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.InsightsRawQueries
 }
 
-func (g *GetVitessDatabaseResponseBody) GetPlan() *string {
+func (g *GetVitessDatabaseResponseBody) GetPlan() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Plan
 }
 
-func (g *GetVitessDatabaseResponseBody) GetInsightsEnabled() *bool {
+func (g *GetVitessDatabaseResponseBody) GetInsightsEnabled() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.InsightsEnabled
 }
 
-func (g *GetVitessDatabaseResponseBody) GetProductionBranchWebConsole() *bool {
+func (g *GetVitessDatabaseResponseBody) GetProductionBranchWebConsole() bool {
 	if g == nil {
-		return nil
+		return false
 	}
 	return g.ProductionBranchWebConsole
 }
 
-func (g *GetVitessDatabaseResponseBody) GetMigrationTableName() *string {
+func (g *GetVitessDatabaseResponseBody) GetMigrationTableName() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.MigrationTableName
 }
 
-func (g *GetVitessDatabaseResponseBody) GetMigrationFramework() *string {
+func (g *GetVitessDatabaseResponseBody) GetMigrationFramework() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.MigrationFramework
 }
 
-func (g *GetVitessDatabaseResponseBody) GetCreatedAt() *string {
+func (g *GetVitessDatabaseResponseBody) GetCreatedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.CreatedAt
 }
 
-func (g *GetVitessDatabaseResponseBody) GetUpdatedAt() *string {
+func (g *GetVitessDatabaseResponseBody) GetUpdatedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.UpdatedAt
 }
 
-func (g *GetVitessDatabaseResponseBody) GetSchemaLastUpdatedAt() *string {
+func (g *GetVitessDatabaseResponseBody) GetSchemaLastUpdatedAt() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.SchemaLastUpdatedAt
 }
 
-func (g *GetVitessDatabaseResponseBody) GetKind() *string {
-	return types.Pointer("mysql")
+func (g *GetVitessDatabaseResponseBody) GetKind() string {
+	return "mysql"
 }
 
 type GetVitessDatabaseResponse struct {

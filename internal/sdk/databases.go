@@ -1811,11 +1811,7 @@ func (s *Databases) getVitessDatabaseWaitForReady(ctx context.Context, hookCtx h
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.Object.State != nil
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = *res.Object.State == "ready"
+			successCriteriaMet = res.Object.State == "ready"
 		}
 
 		if successCriteriaMet {
@@ -2501,11 +2497,7 @@ func (s *Databases) getPostgresDatabaseWaitForReady(ctx context.Context, hookCtx
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.Object.State != nil
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = *res.Object.State == "ready"
+			successCriteriaMet = res.Object.State == "ready"
 		}
 
 		if successCriteriaMet {
