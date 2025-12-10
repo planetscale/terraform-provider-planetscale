@@ -5,650 +5,125 @@ info:
   version: 0.0.1
 actions:
   - target: $.paths
-    description: Add duplicate API operations for DatabaseVitess managed resource.
     update:
-      /organizations/{organization}/databases#vitess:
-        post:
-          tags:
-            - Databases
-          operationId: create_vitess_database
-          summary: Create a Vitess database
-          # x-speakeasy-entity-operation: DatabaseVitess#create
-          x-speakeasy-entity-description: Manage a PlanetScale Vitess database.
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: The name of the organization the database belongs to
-              schema:
-                type: string
-          requestBody:
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                      description: Name of the database
-                    region:
-                      type: string
-                      description: The region the database will be deployed in. If left blank, defaults to the organization's default region.
-                    cluster_size:
-                      type: string
-                      description: The database cluster size name (e.g., 'PS_10', 'PS_80'). Use the 'List available cluster sizes' endpoint to get available options for your organization.
-                    replicas:
-                      type: integer
-                      description: The number of replicas for the database. 0 for non-HA, 2+ for HA.
-                    kind:
-                      type: string
-                      const: mysql
-                      default: mysql
-                      description: The kind of database (always mysql for Vitess databases).
-                  additionalProperties: false
-                  required:
-                    - name
-                    - cluster_size
-          responses:
-            "201":
-              description: Returns the created database
-              headers: {}
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of the database
-                      url:
-                        type: string
-                        description: The URL to the database API endpoint
-                      branches_url:
-                        type: string
-                        description: The URL to retrieve this database's branches via the API
-                      branches_count:
-                        type: integer
-                        description: The total number of database branches
-                        x-speakeasy-terraform-ignore: true
-                      open_schema_recommendations_count:
-                        type: integer
-                        description: The total number of schema recommendations
-                        x-speakeasy-terraform-ignore: true
-                      development_branches_count:
-                        type: integer
-                        description: The total number of database development branches
-                        x-speakeasy-terraform-ignore: true
-                      production_branches_count:
-                        type: integer
-                        description: The total number of database production branches
-                        x-speakeasy-terraform-ignore: true
-                      issues_count:
-                        type: integer
-                        description: The total number of ongoing issues within a database
-                        x-speakeasy-terraform-ignore: true
-                      multiple_admins_required_for_deletion:
-                        type: boolean
-                        description: If the database requires multiple admins for deletion
-                      ready:
-                        type: boolean
-                        description: If the database is ready to be used
-                      at_backup_restore_branches_limit:
-                        type: boolean
-                        description: If the database has reached its backup restored branch limit
-                      at_development_branch_usage_limit:
-                        type: boolean
-                        description: If the database has reached its development branch limit
-                      data_import:
-                        type: object
-                        properties:
-                          state:
-                            type: string
-                            description: State of the data import
-                          import_check_errors:
-                            type: string
-                            description: Errors encountered during the import check
-                          started_at:
-                            type: string
-                            description: When the import started
-                          finished_at:
-                            type: string
-                            description: When the import finished
-                          data_source:
-                            type: object
-                            properties:
-                              hostname:
-                                type: string
-                                description: Hostname of the data source
-                              port:
-                                type: integer
-                                description: Port of the data source
-                              database:
-                                type: string
-                                description: Database name of the data source
-                            additionalProperties: false
-                        additionalProperties: false
-                      region:
-                        x-speakeasy-name-override: region_data
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the region
-                          provider:
-                            type: string
-                            description: Provider for the region (ex. AWS)
-                          enabled:
-                            type: boolean
-                            description: Whether or not the region is currently active
-                          public_ip_addresses:
-                            items:
-                              type: string
-                            type: array
-                            description: Public IP addresses for the region
-                          display_name:
-                            type: string
-                            description: Name of the region
-                          location:
-                            type: string
-                            description: Location of the region
-                          slug:
-                            type: string
-                            description: The slug of the region
-                          current_default:
-                            type: boolean
-                            description: True if the region is the default for new branch creation
-                        additionalProperties: false
-                      html_url:
-                        type: string
-                        description: The URL to see this database's branches in the web UI
-                      name:
-                        type: string
-                        description: Name of the database
-                      state:
-                        type: string
-                        enum:
-                          - pending
-                          - importing
-                          - sleep_in_progress
-                          - sleeping
-                          - awakening
-                          - import_ready
-                          - ready
-                        description: State of the database
-                      sharded:
-                        type: boolean
-                        description: If the database is sharded
-                      default_branch_shard_count:
-                        type: integer
-                        description: Number of shards in the default branch
-                        x-speakeasy-terraform-ignore: true
-                      default_branch_read_only_regions_count:
-                        type: integer
-                        description: Number of read only regions in the default branch
-                        x-speakeasy-terraform-ignore: true
-                      default_branch_table_count:
-                        type: integer
-                        description: Number of tables in the default branch schema
-                        x-speakeasy-terraform-ignore: true
-                      default_branch:
-                        type: string
-                        description: The default branch for the database
-                        x-speakeasy-terraform-ignore: true
-                      require_approval_for_deploy:
-                        type: boolean
-                        description: Whether an approval is required to deploy schema changes to this database
-                      resizing:
-                        type: boolean
-                        description: True if a branch is currently resizing
-                      resize_queued:
-                        type: boolean
-                        description: True if a branch has a queued resize request
-                      allow_data_branching:
-                        type: boolean
-                        description: Whether seeding branches with data is enabled for all branches
-                      foreign_keys_enabled:
-                        type: boolean
-                        description: Whether foreign key constraints are enabled
-                      automatic_migrations:
-                        type: boolean
-                        description: Whether to automatically manage Rails migrations during deploy requests
-                      restrict_branch_region:
-                        type: boolean
-                        description: Whether to restrict branch creation to one region
-                      insights_raw_queries:
-                        type: boolean
-                        description: Whether raw SQL queries are collected
-                      plan:
-                        type: string
-                        description: The database plan
-                      insights_enabled:
-                        type: boolean
-                        description: True if query insights is enabled for the database
-                      production_branch_web_console:
-                        type: boolean
-                        description: Whether web console is enabled for production branches
-                      migration_table_name:
-                        type: string
-                        description: Table name to use for copying schema migration data
-                      migration_framework:
-                        type: string
-                        description: Framework used for applying migrations
-                      created_at:
-                        type: string
-                        description: When the database was created
-                      updated_at:
-                        type: string
-                        description: When the database was last updated
-                      schema_last_updated_at:
-                        type: string
-                        description: When the default branch schema was last changed.
-                      kind:
-                        type: string
-                        const: mysql
-                        description: The kind of database
-                    additionalProperties: false
-            "401":
-              description: Unauthorized
-            "403":
-              description: Forbidden
-            "404":
-              description: Not Found
-            "500":
-              description: Internal Server Error
-          description: |-
-            ### Authorization
-            A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+      /organizations/{organization}/databases#vitess: {}
 
-            **Service Token Accesses**
-             `create_databases`
+  - target: $.paths['/organizations/{organization}/databases#vitess']
+    description: Copy databases path as base
+    copy: $.paths['/organizations/{organization}/databases']
 
-            **OAuth Scopes**
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}#vitess: {}
 
-             | Resource | Scopes |
-            | :------- | :---------- |
-            | Organization | `create_databases` |
-      /organizations/{organization}/databases/{database}#vitess:
-        get:
-          tags:
-            - Databases
-          operationId: get_vitess_database
-          summary: Get a Vitess database
-          x-speakeasy-entity-operation:
-            - DatabaseVitess#read
-            # - entityOperation: DatabaseVitess#create#2
-            #   options:
-            #     polling:
-            #       name: WaitForReady
-          x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database.
-          x-speakeasy-polling:
-            - name: WaitForReady
-              limitCount: 300
-              successCriteria:
-                - condition: $statusCode == 200
-                - condition: $response.body#/state == "ready"
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: The name of the organization the database belongs to
-              schema:
-                type: string
-            - name: database
-              in: path
-              required: true
-              description: The ID of the database
-              x-speakeasy-match: id
-              schema:
-                type: string
-          responses:
-            "200":
-              description: Returns a database
-              headers: {}
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of the database
-                      url:
-                        type: string
-                        description: The URL to the database API endpoint
-                      branches_url:
-                        type: string
-                        description: The URL to retrieve this database's branches via the API
-                      branches_count:
-                        type: integer
-                        description: The total number of database branches
-                      open_schema_recommendations_count:
-                        type: integer
-                        description: The total number of schema recommendations
-                      development_branches_count:
-                        type: integer
-                        description: The total number of database development branches
-                      production_branches_count:
-                        type: integer
-                        description: The total number of database production branches
-                      issues_count:
-                        type: integer
-                        description: The total number of ongoing issues within a database
-                      multiple_admins_required_for_deletion:
-                        type: boolean
-                        description: If the database requires multiple admins for deletion
-                      ready:
-                        type: boolean
-                        description: If the database is ready to be used
-                      at_backup_restore_branches_limit:
-                        type: boolean
-                        description: If the database has reached its backup restored branch limit
-                      at_development_branch_usage_limit:
-                        type: boolean
-                        description: If the database has reached its development branch limit
-                      data_import:
-                        type: object
-                        properties:
-                          state:
-                            type: string
-                            description: State of the data import
-                          import_check_errors:
-                            type: string
-                            description: Errors encountered during the import check
-                          started_at:
-                            type: string
-                            description: When the import started
-                          finished_at:
-                            type: string
-                            description: When the import finished
-                          data_source:
-                            type: object
-                            properties:
-                              hostname:
-                                type: string
-                                description: Hostname of the data source
-                              port:
-                                type: integer
-                                description: Port of the data source
-                              database:
-                                type: string
-                                description: Database name of the data source
-                            additionalProperties: false
-                        additionalProperties: false
-                      region:
-                        x-speakeasy-name-override: region_data
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the region
-                          provider:
-                            type: string
-                            description: Provider for the region (ex. AWS)
-                          enabled:
-                            type: boolean
-                            description: Whether or not the region is currently active
-                          public_ip_addresses:
-                            items:
-                              type: string
-                            type: array
-                            description: Public IP addresses for the region
-                          display_name:
-                            type: string
-                            description: Name of the region
-                          location:
-                            type: string
-                            description: Location of the region
-                          slug:
-                            type: string
-                            description: The slug of the region
-                          current_default:
-                            type: boolean
-                            description: True if the region is the default for new branch creation
-                        additionalProperties: false
-                      html_url:
-                        type: string
-                        description: The URL to see this database's branches in the web UI
-                      name:
-                        type: string
-                        description: Name of the database
-                      state:
-                        type: string
-                        enum:
-                          - pending
-                          - importing
-                          - sleep_in_progress
-                          - sleeping
-                          - awakening
-                          - import_ready
-                          - ready
-                        description: State of the database
-                      sharded:
-                        type: boolean
-                        description: If the database is sharded
-                      default_branch_shard_count:
-                        type: integer
-                        description: Number of shards in the default branch
-                      default_branch_read_only_regions_count:
-                        type: integer
-                        description: Number of read only regions in the default branch
-                      default_branch_table_count:
-                        type: integer
-                        description: Number of tables in the default branch schema
-                      default_branch:
-                        type: string
-                        description: The default branch for the database
-                      require_approval_for_deploy:
-                        type: boolean
-                        description: Whether an approval is required to deploy schema changes to this database
-                      resizing:
-                        type: boolean
-                        description: True if a branch is currently resizing
-                      resize_queued:
-                        type: boolean
-                        description: True if a branch has a queued resize request
-                      allow_data_branching:
-                        type: boolean
-                        description: Whether seeding branches with data is enabled for all branches
-                      foreign_keys_enabled:
-                        type: boolean
-                        description: Whether foreign key constraints are enabled
-                      automatic_migrations:
-                        type: boolean
-                        description: Whether to automatically manage Rails migrations during deploy requests
-                      restrict_branch_region:
-                        type: boolean
-                        description: Whether to restrict branch creation to one region
-                      insights_raw_queries:
-                        type: boolean
-                        description: Whether raw SQL queries are collected
-                      plan:
-                        type: string
-                        description: The database plan
-                      insights_enabled:
-                        type: boolean
-                        description: True if query insights is enabled for the database
-                      production_branch_web_console:
-                        type: boolean
-                        description: Whether web console is enabled for production branches
-                      migration_table_name:
-                        type: string
-                        description: Table name to use for copying schema migration data
-                      migration_framework:
-                        type: string
-                        description: Framework used for applying migrations
-                      created_at:
-                        type: string
-                        description: When the database was created
-                      updated_at:
-                        type: string
-                        description: When the database was last updated
-                      schema_last_updated_at:
-                        type: string
-                        description: When the default branch schema was last changed.
-                      kind:
-                        type: string
-                        const: mysql
-                        description: The kind of database
-                    additionalProperties: false
-            "401":
-              description: Unauthorized
-            "403":
-              description: Forbidden
-            "404":
-              description: Not Found
-            "500":
-              description: Internal Server Error
-          description: |-
-            ### Authorization
-            A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess']
+    description: Copy database path as base
+    copy: $.paths['/organizations/{organization}/databases/{database}']
 
-            **Service Token Accesses**
-             `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
+  - target: $.paths['/organizations/{organization}/databases#vitess'].get
+    remove: true
 
-            **OAuth Scopes**
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post
+    update:
+      operationId: create_vitess_database
+      summary: Create a Vitess database
+      x-speakeasy-entity-description: Manage a PlanetScale Vitess database.
 
-             | Resource | Scopes |
-            | :------- | :---------- |
-            | Organization | `read_databases` |
-            | Database | `read_database` |
-        patch:
-          tags:
-            - Databases
-          operationId: update_vitess_database
-          summary: Update Vitess database settings
-          # x-speakeasy-entity-operation: DatabaseVitess#update
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: The name of the organization the database belongs to
-              schema:
-                type: string
-            - name: database
-              in: path
-              required: true
-              description: The ID of the database
-              x-speakeasy-match: id
-              schema:
-                type: string
-          requestBody:
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                      description: The name to update the database to
-                    automatic_migrations:
-                      type: boolean
-                      description: Whether or not to copy migration data to new branches and in deploy requests.
-                    migration_framework:
-                      type: string
-                      description: A migration framework to use on the database.
-                    migration_table_name:
-                      type: string
-                      description: Name of table to use as migration table for the database.
-                    require_approval_for_deploy:
-                      type: boolean
-                      description: Whether or not deploy requests must be approved by a database administrator other than the request creator
-                    restrict_branch_region:
-                      type: boolean
-                      description: Whether or not to limit branch creation to the same region as the one selected during database creation.
-                    allow_data_branching:
-                      type: boolean
-                      description: Whether or not data branching is allowed on the database.
-                    allow_foreign_key_constraints:
-                      type: boolean
-                      description: Whether or not foreign key constraints are allowed on the database.
-                    insights_raw_queries:
-                      type: boolean
-                      description: Whether or not full queries should be collected from the database
-                    production_branch_web_console:
-                      type: boolean
-                      description: Whether or not the web console can be used on the production branch of the database
-                    default_branch:
-                      type: string
-                      description: The default branch of the database
-                      x-speakeasy-terraform-ignore: true
-                  additionalProperties: false
-          responses:
-            "200":
-              description: Returns the updated database
-              headers: {}
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of the database
-                    additionalProperties: false
-            "401":
-              description: Unauthorized
-            "403":
-              description: Forbidden
-            "404":
-              description: Not Found
-            "500":
-              description: Internal Server Error
-          description: |-
-            ### Authorization
-            A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.requestBody.content['application/json'].schema.properties
+    update:
+      kind:
+        type: string
+        const: mysql
+        default: mysql
+        description: The kind of database (always mysql for Vitess databases).
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.requestBody.content['application/json'].schema.properties.major_version
+    remove: true
 
-            **Service Token Accesses**
-             `write_database`
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.kind
+    update:
+      const: mysql
+      description: The kind of database
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.kind.enum
+    remove: true
 
-            **OAuth Scopes**
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.region
+    update:
+      x-speakeasy-name-override: region_data
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.branches_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.open_schema_recommendations_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.development_branches_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.production_branches_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.issues_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.default_branch_shard_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.default_branch_read_only_regions_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.default_branch_table_count
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.default_branch
+    update:
+      x-speakeasy-terraform-ignore: true
 
-             | Resource | Scopes |
-            | :------- | :---------- |
-            | Organization | `write_databases` |
-            | Database | `write_database` |
-        delete:
-          tags:
-            - Databases
-          operationId: delete_vitess_database
-          summary: Delete a Vitess database
-          # x-speakeasy-entity-operation: DatabaseVitess#delete
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: The name of the organization the database belongs to
-              schema:
-                type: string
-            - name: database
-              in: path
-              required: true
-              description: The ID of the database
-              x-speakeasy-match: id
-              schema:
-                type: string
-          responses:
-            "204":
-              description: Deletes a database
-              headers: {}
-            "401":
-              description: Unauthorized
-            "403":
-              description: Forbidden
-            "404":
-              description: Not Found
-            "500":
-              description: Internal Server Error
-          description: |-
-            ### Authorization
-            A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get
+    update:
+      operationId: get_vitess_database
+      summary: Get a Vitess database
+      x-speakeasy-entity-operation:
+        - DatabaseVitess#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
 
-            **Service Token Accesses**
-             `delete_database`
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.parameters[?@.name == 'database']
+    update:
+      x-speakeasy-match: id
 
-            **OAuth Scopes**
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind
+    update:
+      const: mysql
+      description: The kind of database
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind.enum
+    remove: true
 
-             | Resource | Scopes |
-            | :------- | :---------- |
-            | Organization | `delete_databases` |
-            | Database | `delete_database` |
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.responses['200'].content['application/json'].schema.properties.region
+    update:
+      x-speakeasy-name-override: region_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].patch
+    update:
+      operationId: update_vitess_database
+      summary: Update Vitess database settings
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].patch.parameters[?@.name == 'database']
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].patch.requestBody.content['application/json'].schema.properties.default_branch
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].delete
+    update:
+      operationId: delete_vitess_database
+      summary: Delete a Vitess database
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].delete.parameters[?@.name == 'database']
+    update:
+      x-speakeasy-match: id

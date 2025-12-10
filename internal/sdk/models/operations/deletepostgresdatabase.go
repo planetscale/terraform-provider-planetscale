@@ -9,7 +9,7 @@ import (
 type DeletePostgresDatabaseRequest struct {
 	// The name of the organization the database belongs to
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The ID of the database
+	// The name of the database
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 }
 

@@ -9,18 +9,18 @@ import (
 	"net/http"
 )
 
-// KindRequest - The kind of database to create.
-type KindRequest string
+// KindRequestBody - The kind of database to create.
+type KindRequestBody string
 
 const (
-	KindRequestMysql      KindRequest = "mysql"
-	KindRequestPostgresql KindRequest = "postgresql"
+	KindRequestBodyMysql      KindRequestBody = "mysql"
+	KindRequestBodyPostgresql KindRequestBody = "postgresql"
 )
 
-func (e KindRequest) ToPointer() *KindRequest {
+func (e KindRequestBody) ToPointer() *KindRequestBody {
 	return &e
 }
-func (e *KindRequest) UnmarshalJSON(data []byte) error {
+func (e *KindRequestBody) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -29,10 +29,10 @@ func (e *KindRequest) UnmarshalJSON(data []byte) error {
 	case "mysql":
 		fallthrough
 	case "postgresql":
-		*e = KindRequest(v)
+		*e = KindRequestBody(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for KindRequest: %v", v)
+		return fmt.Errorf("invalid value for KindRequestBody: %v", v)
 	}
 }
 
@@ -46,7 +46,7 @@ type CreateDatabaseRequestBody struct {
 	// The number of replicas for the database. 0 for non-HA, 2+ for HA.
 	Replicas *int64 `json:"replicas,omitzero"`
 	// The kind of database to create.
-	Kind *KindRequest `json:"kind,omitzero"`
+	Kind *KindRequestBody `json:"kind,omitzero"`
 	// For PostgreSQL databases, the PostgreSQL major version to use for the database. Defaults to the latest available major version.
 	MajorVersion *string `json:"major_version,omitzero"`
 }
@@ -79,7 +79,7 @@ func (c *CreateDatabaseRequestBody) GetReplicas() *int64 {
 	return c.Replicas
 }
 
-func (c *CreateDatabaseRequestBody) GetKind() *KindRequest {
+func (c *CreateDatabaseRequestBody) GetKind() *KindRequestBody {
 	if c == nil {
 		return nil
 	}
