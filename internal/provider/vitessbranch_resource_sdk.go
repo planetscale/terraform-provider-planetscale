@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -14,76 +13,54 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.Actor == nil {
-			r.Actor = nil
-		} else {
-			r.Actor = &tfTypes.GetVitessBranchActor{}
-			r.Actor.AvatarURL = types.StringPointerValue(resp.Actor.AvatarURL)
-			r.Actor.DisplayName = types.StringPointerValue(resp.Actor.DisplayName)
-			r.Actor.ID = types.StringPointerValue(resp.Actor.ID)
+		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ClusterIops = types.Int64Value(resp.ClusterIops)
+		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
+		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
+		r.HasReplicas = types.BoolValue(resp.HasReplicas)
+		r.HTMLURL = types.StringValue(resp.HTMLURL)
+		r.ID = types.StringValue(resp.ID)
+		r.Metal = types.BoolValue(resp.Metal)
+		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
+		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
+		r.Name = types.StringValue(resp.Name)
+		r.ParentBranch = types.StringValue(resp.ParentBranch)
+		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
+		r.Production = types.BoolValue(resp.Production)
+		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
+		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
+		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
+		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
+		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
+		for _, v := range resp.RegionData.PublicIPAddresses {
+			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
 		}
-		r.ClusterIops = types.Int64PointerValue(resp.ClusterIops)
-		r.ClusterName = types.StringPointerValue(resp.ClusterName)
-		r.ClusterRateName = types.StringPointerValue(resp.ClusterRateName)
-		r.CreatedAt = types.StringPointerValue(resp.CreatedAt)
-		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
-		r.DirectVtgate = types.BoolPointerValue(resp.DirectVtgate)
-		r.HasReadOnlyReplicas = types.BoolPointerValue(resp.HasReadOnlyReplicas)
-		r.HasReplicas = types.BoolPointerValue(resp.HasReplicas)
-		r.HTMLURL = types.StringPointerValue(resp.HTMLURL)
-		r.ID = types.StringPointerValue(resp.ID)
-		r.Metal = types.BoolPointerValue(resp.Metal)
-		r.MysqlAddress = types.StringPointerValue(resp.MysqlAddress)
-		r.MysqlEdgeAddress = types.StringPointerValue(resp.MysqlEdgeAddress)
-		r.MysqlProviderAddress = types.StringPointerValue(resp.MysqlProviderAddress)
-		r.Name = types.StringPointerValue(resp.Name)
-		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
-		r.PrivateConnectivity = types.BoolPointerValue(resp.PrivateConnectivity)
-		r.PrivateEdgeConnectivity = types.BoolPointerValue(resp.PrivateEdgeConnectivity)
-		r.Production = types.BoolPointerValue(resp.Production)
-		r.Ready = types.BoolPointerValue(resp.Ready)
-		if resp.RegionData == nil {
-			r.RegionData = nil
-		} else {
-			r.RegionData = &tfTypes.GetVitessBranchRegionData{}
-			r.RegionData.CurrentDefault = types.BoolPointerValue(resp.RegionData.CurrentDefault)
-			r.RegionData.DisplayName = types.StringPointerValue(resp.RegionData.DisplayName)
-			r.RegionData.Enabled = types.BoolPointerValue(resp.RegionData.Enabled)
-			r.RegionData.ID = types.StringPointerValue(resp.RegionData.ID)
-			r.RegionData.Location = types.StringPointerValue(resp.RegionData.Location)
-			r.RegionData.Provider = types.StringPointerValue(resp.RegionData.Provider)
-			r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-			for _, v := range resp.RegionData.PublicIPAddresses {
-				r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-			}
-			r.RegionData.Slug = types.StringPointerValue(resp.RegionData.Slug)
-		}
-		r.RestoreChecklistCompletedAt = types.StringPointerValue(resp.RestoreChecklistCompletedAt)
-		if resp.RestoredFromBranch == nil {
-			r.RestoredFromBranch = nil
-		} else {
-			r.RestoredFromBranch = &tfTypes.GetVitessBranchRestoredFromBranch{}
-			r.RestoredFromBranch.CreatedAt = types.StringPointerValue(resp.RestoredFromBranch.CreatedAt)
-			r.RestoredFromBranch.DeletedAt = types.StringPointerValue(resp.RestoredFromBranch.DeletedAt)
-			r.RestoredFromBranch.ID = types.StringPointerValue(resp.RestoredFromBranch.ID)
-			r.RestoredFromBranch.Name = types.StringPointerValue(resp.RestoredFromBranch.Name)
-			r.RestoredFromBranch.UpdatedAt = types.StringPointerValue(resp.RestoredFromBranch.UpdatedAt)
-		}
-		r.SafeMigrations = types.BoolPointerValue(resp.SafeMigrations)
-		r.SchemaLastUpdatedAt = types.StringPointerValue(resp.SchemaLastUpdatedAt)
-		r.SchemaReady = types.BoolPointerValue(resp.SchemaReady)
-		r.ShardCount = types.Int64PointerValue(resp.ShardCount)
-		r.Sharded = types.BoolPointerValue(resp.Sharded)
-		r.StaleSchema = types.BoolPointerValue(resp.StaleSchema)
-		if resp.State != nil {
-			r.State = types.StringValue(string(*resp.State))
-		} else {
-			r.State = types.StringNull()
-		}
-		r.UpdatedAt = types.StringPointerValue(resp.UpdatedAt)
-		r.URL = types.StringPointerValue(resp.URL)
-		r.VtgateCount = types.Int64PointerValue(resp.VtgateCount)
-		r.VtgateSize = types.StringPointerValue(resp.VtgateSize)
+		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
+		r.RestoreChecklistCompletedAt = types.StringValue(resp.RestoreChecklistCompletedAt)
+		r.RestoredFromBranch.CreatedAt = types.StringValue(resp.RestoredFromBranch.CreatedAt)
+		r.RestoredFromBranch.DeletedAt = types.StringValue(resp.RestoredFromBranch.DeletedAt)
+		r.RestoredFromBranch.ID = types.StringValue(resp.RestoredFromBranch.ID)
+		r.RestoredFromBranch.Name = types.StringValue(resp.RestoredFromBranch.Name)
+		r.RestoredFromBranch.UpdatedAt = types.StringValue(resp.RestoredFromBranch.UpdatedAt)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
+		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
+		r.SchemaReady = types.BoolValue(resp.SchemaReady)
+		r.ShardCount = types.Int64Value(resp.ShardCount)
+		r.Sharded = types.BoolValue(resp.Sharded)
+		r.StaleSchema = types.BoolValue(resp.StaleSchema)
+		r.State = types.StringValue(string(resp.State))
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
+		r.URL = types.StringValue(resp.URL)
+		r.VtgateCount = types.Int64Value(resp.VtgateCount)
+		r.VtgateSize = types.StringValue(resp.VtgateSize)
 	}
 
 	return diags
@@ -93,76 +70,54 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.Actor == nil {
-			r.Actor = nil
-		} else {
-			r.Actor = &tfTypes.GetVitessBranchActor{}
-			r.Actor.AvatarURL = types.StringPointerValue(resp.Actor.AvatarURL)
-			r.Actor.DisplayName = types.StringPointerValue(resp.Actor.DisplayName)
-			r.Actor.ID = types.StringPointerValue(resp.Actor.ID)
+		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ClusterIops = types.Int64Value(resp.ClusterIops)
+		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
+		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
+		r.HasReplicas = types.BoolValue(resp.HasReplicas)
+		r.HTMLURL = types.StringValue(resp.HTMLURL)
+		r.ID = types.StringValue(resp.ID)
+		r.Metal = types.BoolValue(resp.Metal)
+		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
+		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
+		r.Name = types.StringValue(resp.Name)
+		r.ParentBranch = types.StringValue(resp.ParentBranch)
+		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
+		r.Production = types.BoolValue(resp.Production)
+		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
+		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
+		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
+		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
+		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
+		for _, v := range resp.RegionData.PublicIPAddresses {
+			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
 		}
-		r.ClusterIops = types.Int64PointerValue(resp.ClusterIops)
-		r.ClusterName = types.StringPointerValue(resp.ClusterName)
-		r.ClusterRateName = types.StringPointerValue(resp.ClusterRateName)
-		r.CreatedAt = types.StringPointerValue(resp.CreatedAt)
-		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
-		r.DirectVtgate = types.BoolPointerValue(resp.DirectVtgate)
-		r.HasReadOnlyReplicas = types.BoolPointerValue(resp.HasReadOnlyReplicas)
-		r.HasReplicas = types.BoolPointerValue(resp.HasReplicas)
-		r.HTMLURL = types.StringPointerValue(resp.HTMLURL)
-		r.ID = types.StringPointerValue(resp.ID)
-		r.Metal = types.BoolPointerValue(resp.Metal)
-		r.MysqlAddress = types.StringPointerValue(resp.MysqlAddress)
-		r.MysqlEdgeAddress = types.StringPointerValue(resp.MysqlEdgeAddress)
-		r.MysqlProviderAddress = types.StringPointerValue(resp.MysqlProviderAddress)
-		r.Name = types.StringPointerValue(resp.Name)
-		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
-		r.PrivateConnectivity = types.BoolPointerValue(resp.PrivateConnectivity)
-		r.PrivateEdgeConnectivity = types.BoolPointerValue(resp.PrivateEdgeConnectivity)
-		r.Production = types.BoolPointerValue(resp.Production)
-		r.Ready = types.BoolPointerValue(resp.Ready)
-		if resp.RegionData == nil {
-			r.RegionData = nil
-		} else {
-			r.RegionData = &tfTypes.GetVitessBranchRegionData{}
-			r.RegionData.CurrentDefault = types.BoolPointerValue(resp.RegionData.CurrentDefault)
-			r.RegionData.DisplayName = types.StringPointerValue(resp.RegionData.DisplayName)
-			r.RegionData.Enabled = types.BoolPointerValue(resp.RegionData.Enabled)
-			r.RegionData.ID = types.StringPointerValue(resp.RegionData.ID)
-			r.RegionData.Location = types.StringPointerValue(resp.RegionData.Location)
-			r.RegionData.Provider = types.StringPointerValue(resp.RegionData.Provider)
-			r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-			for _, v := range resp.RegionData.PublicIPAddresses {
-				r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-			}
-			r.RegionData.Slug = types.StringPointerValue(resp.RegionData.Slug)
-		}
-		r.RestoreChecklistCompletedAt = types.StringPointerValue(resp.RestoreChecklistCompletedAt)
-		if resp.RestoredFromBranch == nil {
-			r.RestoredFromBranch = nil
-		} else {
-			r.RestoredFromBranch = &tfTypes.GetVitessBranchRestoredFromBranch{}
-			r.RestoredFromBranch.CreatedAt = types.StringPointerValue(resp.RestoredFromBranch.CreatedAt)
-			r.RestoredFromBranch.DeletedAt = types.StringPointerValue(resp.RestoredFromBranch.DeletedAt)
-			r.RestoredFromBranch.ID = types.StringPointerValue(resp.RestoredFromBranch.ID)
-			r.RestoredFromBranch.Name = types.StringPointerValue(resp.RestoredFromBranch.Name)
-			r.RestoredFromBranch.UpdatedAt = types.StringPointerValue(resp.RestoredFromBranch.UpdatedAt)
-		}
-		r.SafeMigrations = types.BoolPointerValue(resp.SafeMigrations)
-		r.SchemaLastUpdatedAt = types.StringPointerValue(resp.SchemaLastUpdatedAt)
-		r.SchemaReady = types.BoolPointerValue(resp.SchemaReady)
-		r.ShardCount = types.Int64PointerValue(resp.ShardCount)
-		r.Sharded = types.BoolPointerValue(resp.Sharded)
-		r.StaleSchema = types.BoolPointerValue(resp.StaleSchema)
-		if resp.State != nil {
-			r.State = types.StringValue(string(*resp.State))
-		} else {
-			r.State = types.StringNull()
-		}
-		r.UpdatedAt = types.StringPointerValue(resp.UpdatedAt)
-		r.URL = types.StringPointerValue(resp.URL)
-		r.VtgateCount = types.Int64PointerValue(resp.VtgateCount)
-		r.VtgateSize = types.StringPointerValue(resp.VtgateSize)
+		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
+		r.RestoreChecklistCompletedAt = types.StringValue(resp.RestoreChecklistCompletedAt)
+		r.RestoredFromBranch.CreatedAt = types.StringValue(resp.RestoredFromBranch.CreatedAt)
+		r.RestoredFromBranch.DeletedAt = types.StringValue(resp.RestoredFromBranch.DeletedAt)
+		r.RestoredFromBranch.ID = types.StringValue(resp.RestoredFromBranch.ID)
+		r.RestoredFromBranch.Name = types.StringValue(resp.RestoredFromBranch.Name)
+		r.RestoredFromBranch.UpdatedAt = types.StringValue(resp.RestoredFromBranch.UpdatedAt)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
+		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
+		r.SchemaReady = types.BoolValue(resp.SchemaReady)
+		r.ShardCount = types.Int64Value(resp.ShardCount)
+		r.Sharded = types.BoolValue(resp.Sharded)
+		r.StaleSchema = types.BoolValue(resp.StaleSchema)
+		r.State = types.StringValue(string(resp.State))
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
+		r.URL = types.StringValue(resp.URL)
+		r.VtgateCount = types.Int64Value(resp.VtgateCount)
+		r.VtgateSize = types.StringValue(resp.VtgateSize)
 	}
 
 	return diags

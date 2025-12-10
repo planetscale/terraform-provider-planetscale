@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -14,80 +13,46 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.Actor == nil {
-			r.Actor = nil
-		} else {
-			r.Actor = &tfTypes.GetPostgresBranchActor{}
-			r.Actor.AvatarURL = types.StringPointerValue(resp.Actor.AvatarURL)
-			r.Actor.DisplayName = types.StringPointerValue(resp.Actor.DisplayName)
-			r.Actor.ID = types.StringPointerValue(resp.Actor.ID)
-		}
+		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterArchitecture = types.StringPointerValue(resp.ClusterArchitecture)
 		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
-		r.ClusterIops = types.Int64PointerValue(resp.ClusterIops)
-		r.ClusterName = types.StringPointerValue(resp.ClusterName)
-		r.CreatedAt = types.StringPointerValue(resp.CreatedAt)
-		r.Default = types.BoolPointerValue(resp.Default)
-		r.EnablingVectors = types.BoolPointerValue(resp.EnablingVectors)
-		r.Frozen = types.BoolPointerValue(resp.Frozen)
-		r.HasReadOnlyReplicas = types.BoolPointerValue(resp.HasReadOnlyReplicas)
-		r.HasReplicas = types.BoolPointerValue(resp.HasReplicas)
-		r.HasRoles = types.BoolPointerValue(resp.HasRoles)
-		r.ID = types.StringPointerValue(resp.ID)
-		r.ImageVersion = types.StringPointerValue(resp.ImageVersion)
-		r.LatestImageVersion = types.StringPointerValue(resp.LatestImageVersion)
-		r.MaximumStorageBytes = types.Int64PointerValue(resp.MaximumStorageBytes)
-		r.Metal = types.BoolPointerValue(resp.Metal)
-		r.MinimumStorageBytes = types.Int64PointerValue(resp.MinimumStorageBytes)
-		r.Name = types.StringPointerValue(resp.Name)
-		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
-		r.PrivateEdgeConnectivity = types.BoolPointerValue(resp.PrivateEdgeConnectivity)
-		r.Production = types.BoolPointerValue(resp.Production)
-		r.ReadOnlyAt = types.StringPointerValue(resp.ReadOnlyAt)
-		r.ReadOnlyReason = types.StringPointerValue(resp.ReadOnlyReason)
-		r.Ready = types.BoolPointerValue(resp.Ready)
-		if resp.RegionData == nil {
-			r.RegionData = nil
-		} else {
-			r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
-			r.RegionData.CurrentDefault = types.BoolPointerValue(resp.RegionData.CurrentDefault)
-			r.RegionData.DisplayName = types.StringPointerValue(resp.RegionData.DisplayName)
-			r.RegionData.Enabled = types.BoolPointerValue(resp.RegionData.Enabled)
-			r.RegionData.ID = types.StringPointerValue(resp.RegionData.ID)
-			r.RegionData.Location = types.StringPointerValue(resp.RegionData.Location)
-			r.RegionData.Provider = types.StringPointerValue(resp.RegionData.Provider)
-			r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-			for _, v := range resp.RegionData.PublicIPAddresses {
-				r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-			}
-			r.RegionData.Slug = types.StringPointerValue(resp.RegionData.Slug)
+		r.ClusterIops = types.Int64Value(resp.ClusterIops)
+		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
+		r.HasReplicas = types.BoolValue(resp.HasReplicas)
+		r.ID = types.StringValue(resp.ID)
+		r.Metal = types.BoolValue(resp.Metal)
+		r.Name = types.StringValue(resp.Name)
+		r.ParentBranch = types.StringValue(resp.ParentBranch)
+		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
+		r.Production = types.BoolValue(resp.Production)
+		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
+		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
+		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
+		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
+		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
+		for _, v := range resp.RegionData.PublicIPAddresses {
+			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
 		}
+		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
-		r.RestoreChecklistCompletedAt = types.StringPointerValue(resp.RestoreChecklistCompletedAt)
-		if resp.RestoredFromBranch == nil {
-			r.RestoredFromBranch = nil
-		} else {
-			r.RestoredFromBranch = &tfTypes.GetPostgresBranchRestoredFromBranch{}
-			r.RestoredFromBranch.CreatedAt = types.StringPointerValue(resp.RestoredFromBranch.CreatedAt)
-			r.RestoredFromBranch.DeletedAt = types.StringPointerValue(resp.RestoredFromBranch.DeletedAt)
-			r.RestoredFromBranch.ID = types.StringPointerValue(resp.RestoredFromBranch.ID)
-			r.RestoredFromBranch.Name = types.StringPointerValue(resp.RestoredFromBranch.Name)
-			r.RestoredFromBranch.UpdatedAt = types.StringPointerValue(resp.RestoredFromBranch.UpdatedAt)
-		}
-		r.SafeMigrations = types.BoolPointerValue(resp.SafeMigrations)
-		r.SchemaLastUpdatedAt = types.StringPointerValue(resp.SchemaLastUpdatedAt)
-		r.StaleSchema = types.BoolPointerValue(resp.StaleSchema)
-		if resp.State != nil {
-			r.State = types.StringValue(string(*resp.State))
-		} else {
-			r.State = types.StringNull()
-		}
-		r.StorageAutoscaling = types.BoolPointerValue(resp.StorageAutoscaling)
-		r.StorageIops = types.Int64PointerValue(resp.StorageIops)
-		r.StorageShrinking = types.BoolPointerValue(resp.StorageShrinking)
-		r.StorageThroughputMibs = types.Int64PointerValue(resp.StorageThroughputMibs)
-		r.StorageType = types.StringPointerValue(resp.StorageType)
-		r.UpdatedAt = types.StringPointerValue(resp.UpdatedAt)
+		r.RestoreChecklistCompletedAt = types.StringValue(resp.RestoreChecklistCompletedAt)
+		r.RestoredFromBranch.CreatedAt = types.StringValue(resp.RestoredFromBranch.CreatedAt)
+		r.RestoredFromBranch.DeletedAt = types.StringValue(resp.RestoredFromBranch.DeletedAt)
+		r.RestoredFromBranch.ID = types.StringValue(resp.RestoredFromBranch.ID)
+		r.RestoredFromBranch.Name = types.StringValue(resp.RestoredFromBranch.Name)
+		r.RestoredFromBranch.UpdatedAt = types.StringValue(resp.RestoredFromBranch.UpdatedAt)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
+		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
+		r.StaleSchema = types.BoolValue(resp.StaleSchema)
+		r.State = types.StringValue(string(resp.State))
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 	}
 
 	return diags

@@ -1,18 +1,29 @@
-overlay: 1.0.0
+overlay: 1.1.0
 x-speakeasy-jsonpath: rfc9535
 info:
   title: Terraform generation overlay for planetscale_branch_postgres managed and data resources.
   version: 0.0.1
 actions:
+  # First create empty path entries, then copy the entire path object into them
   - target: $.paths
     description: Add PostgresBranch path entries
     update:
       /organizations/{organization}/databases/{database}/branches#postgres: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres']
+    description: Copy branches path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches']
+
+  - target: $.paths
+    update:
       /organizations/{organization}/databases/{database}/branches/{branch}#postgres: {}
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post
-    description: Copy create_branch operation as base
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches'].post
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres']
+    description: Copy branch path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].get
+    remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post
     description: Update operation metadata for PostgreSQL
@@ -49,9 +60,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.url
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.required
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.kind
     description: Set kind to const postgresql
     update:
@@ -69,63 +77,14 @@ actions:
       cluster_architecture:
         type: string
         description: The CPU architecture for the cluster (e.g., x86_64)
-      default:
-        type: boolean
-        description: Whether or not this is the default branch
-      frozen:
-        type: boolean
-        description: Whether or not the branch is frozen
-      enabling_vectors:
-        type: boolean
-        description: Whether or not vector support is being enabled
       replicas:
         type: integer
         description: The number of replicas for the branch
-      image_version:
-        type: string
-        description: The current PostgreSQL image version
-      latest_image_version:
-        type: string
-        description: The latest available PostgreSQL image version
-      read_only_reason:
-        type: string
-        description: Reason why the branch is read-only, if applicable
-      read_only_at:
-        type: string
-        description: When the branch became read-only
-      minimum_storage_bytes:
-        type: integer
-        description: Minimum storage size in bytes
-      maximum_storage_bytes:
-        type: integer
-        description: Maximum storage size in bytes
-      storage_autoscaling:
-        type: boolean
-        description: Whether storage autoscaling is enabled
-      storage_shrinking:
-        type: boolean
-        description: Whether storage shrinking is enabled
-      storage_type:
-        type: string
-        description: The type of storage (e.g., pd_ssd)
-      storage_iops:
-        type: integer
-        description: Storage IOPS
-      storage_throughput_mibs:
-        type: integer
-        description: Storage throughput in MiB/s
-      has_roles:
-        type: boolean
-        description: True if the branch has roles
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.region
     description: Add region_data name override
     update:
       x-speakeasy-name-override: region_data
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get
-    description: Copy get_branch operation as base
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get
     description: Update operation metadata for PostgreSQL
@@ -174,9 +133,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.url
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.required
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.kind
     description: Set kind to const postgresql
     update:
@@ -194,63 +150,14 @@ actions:
       cluster_architecture:
         type: string
         description: The CPU architecture for the cluster (e.g., x86_64)
-      default:
-        type: boolean
-        description: Whether or not this is the default branch
-      frozen:
-        type: boolean
-        description: Whether or not the branch is frozen
-      enabling_vectors:
-        type: boolean
-        description: Whether or not vector support is being enabled
       replicas:
         type: integer
         description: The number of replicas for the branch
-      image_version:
-        type: string
-        description: The current PostgreSQL image version
-      latest_image_version:
-        type: string
-        description: The latest available PostgreSQL image version
-      read_only_reason:
-        type: string
-        description: Reason why the branch is read-only, if applicable
-      read_only_at:
-        type: string
-        description: When the branch became read-only
-      minimum_storage_bytes:
-        type: integer
-        description: Minimum storage size in bytes
-      maximum_storage_bytes:
-        type: integer
-        description: Maximum storage size in bytes
-      storage_autoscaling:
-        type: boolean
-        description: Whether storage autoscaling is enabled
-      storage_shrinking:
-        type: boolean
-        description: Whether storage shrinking is enabled
-      storage_type:
-        type: string
-        description: The type of storage (e.g., pd_ssd)
-      storage_iops:
-        type: integer
-        description: Storage IOPS
-      storage_throughput_mibs:
-        type: integer
-        description: Storage throughput in MiB/s
-      has_roles:
-        type: boolean
-        description: True if the branch has roles
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.region
     description: Add region_data name override
     update:
       x-speakeasy-name-override: region_data
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].delete
-    description: Copy delete_branch operation as base
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].delete
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].delete
     description: Update operation metadata for PostgreSQL

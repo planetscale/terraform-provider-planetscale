@@ -1,4 +1,4 @@
-overlay: 1.0.0
+overlay: 1.1.0
 x-speakeasy-jsonpath: rfc9535
 info:
   title: Terraform generation overlay for planetscale_branch_vitess managed and data resources.
@@ -8,11 +8,21 @@ actions:
     description: Add VitessBranch path entries
     update:
       /organizations/{organization}/databases/{database}/branches#vitess: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess']
+    description: Copy branches path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches']
+
+  - target: $.paths
+    update:
       /organizations/{organization}/databases/{database}/branches/{branch}#vitess: {}
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post
-    description: Copy create_branch operation as base
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches'].post
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess']
+    description: Copy branch path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].get
+    remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post
     description: Update operation metadata for Vitess
@@ -29,11 +39,6 @@ actions:
     description: Remove major_version (Postgres-only field)
     remove: true
 
-  # Remove required fields that don't apply to Vitess
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.required
-    remove: true
-
-  # Update kind to be const: mysql instead of enum
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.kind
     description: Set kind to const mysql
     update:
@@ -42,27 +47,10 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.kind.enum
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties
-    description: Add Vitess-specific response fields
-    update:
-      mysql_provider_address:
-        type: string
-        description: The MySQL provider address for the branch
-      cluster_rate_name:
-        type: string
-        description: The rate name for the cluster
-      private_connectivity:
-        type: boolean
-        description: True if private connectivity is enabled
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.region
     description: Add region_data name override
     update:
       x-speakeasy-name-override: region_data
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
-    description: Copy get_branch operation as base
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
     description: Update operation metadata for Vitess
@@ -88,9 +76,6 @@ actions:
     update:
       x-speakeasy-match: id
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.required
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind
     description: Set kind to const mysql
     update:
@@ -99,27 +84,10 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind.enum
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties
-    description: Add Vitess-specific response fields
-    update:
-      mysql_provider_address:
-        type: string
-        description: The MySQL provider address for the branch
-      cluster_rate_name:
-        type: string
-        description: The rate name for the cluster
-      private_connectivity:
-        type: boolean
-        description: True if private connectivity is enabled
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.region
     description: Add region_data name override
     update:
       x-speakeasy-name-override: region_data
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
-    description: Copy delete_branch operation as base
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].delete
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
     description: Update operation metadata for Vitess

@@ -36,52 +36,37 @@ type PostgresBranchResource struct {
 
 // PostgresBranchResourceModel describes the resource data model.
 type PostgresBranchResourceModel struct {
-	Actor                       *tfTypes.GetPostgresBranchActor              `tfsdk:"actor"`
-	BackupID                    types.String                                 `tfsdk:"backup_id"`
-	ClusterArchitecture         types.String                                 `tfsdk:"cluster_architecture"`
-	ClusterDisplayName          types.String                                 `tfsdk:"cluster_display_name"`
-	ClusterIops                 types.Int64                                  `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                                 `tfsdk:"cluster_name"`
-	ClusterSize                 types.String                                 `tfsdk:"cluster_size"`
-	CreatedAt                   types.String                                 `tfsdk:"created_at"`
-	Database                    types.String                                 `tfsdk:"database"`
-	Default                     types.Bool                                   `tfsdk:"default"`
-	EnablingVectors             types.Bool                                   `tfsdk:"enabling_vectors"`
-	Frozen                      types.Bool                                   `tfsdk:"frozen"`
-	HasReadOnlyReplicas         types.Bool                                   `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                                   `tfsdk:"has_replicas"`
-	HasRoles                    types.Bool                                   `tfsdk:"has_roles"`
-	ID                          types.String                                 `tfsdk:"id"`
-	ImageVersion                types.String                                 `tfsdk:"image_version"`
-	LatestImageVersion          types.String                                 `tfsdk:"latest_image_version"`
-	MajorVersion                types.String                                 `tfsdk:"major_version"`
-	MaximumStorageBytes         types.Int64                                  `tfsdk:"maximum_storage_bytes"`
-	Metal                       types.Bool                                   `tfsdk:"metal"`
-	MinimumStorageBytes         types.Int64                                  `tfsdk:"minimum_storage_bytes"`
-	Name                        types.String                                 `tfsdk:"name"`
-	Organization                types.String                                 `tfsdk:"organization"`
-	ParentBranch                types.String                                 `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity     types.Bool                                   `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                                   `tfsdk:"production"`
-	ReadOnlyAt                  types.String                                 `tfsdk:"read_only_at"`
-	ReadOnlyReason              types.String                                 `tfsdk:"read_only_reason"`
-	Ready                       types.Bool                                   `tfsdk:"ready"`
-	Region                      types.String                                 `tfsdk:"region"`
-	RegionData                  *tfTypes.GetPostgresBranchRegionData         `tfsdk:"region_data"`
-	Replicas                    types.Int64                                  `tfsdk:"replicas"`
-	RestoreChecklistCompletedAt types.String                                 `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          *tfTypes.GetPostgresBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	RestorePoint                types.String                                 `tfsdk:"restore_point"`
-	SafeMigrations              types.Bool                                   `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                                 `tfsdk:"schema_last_updated_at"`
-	StaleSchema                 types.Bool                                   `tfsdk:"stale_schema"`
-	State                       types.String                                 `tfsdk:"state"`
-	StorageAutoscaling          types.Bool                                   `tfsdk:"storage_autoscaling"`
-	StorageIops                 types.Int64                                  `tfsdk:"storage_iops"`
-	StorageShrinking            types.Bool                                   `tfsdk:"storage_shrinking"`
-	StorageThroughputMibs       types.Int64                                  `tfsdk:"storage_throughput_mibs"`
-	StorageType                 types.String                                 `tfsdk:"storage_type"`
-	UpdatedAt                   types.String                                 `tfsdk:"updated_at"`
+	Actor                       tfTypes.GetPostgresBranchActor              `tfsdk:"actor"`
+	BackupID                    types.String                                `tfsdk:"backup_id"`
+	ClusterArchitecture         types.String                                `tfsdk:"cluster_architecture"`
+	ClusterDisplayName          types.String                                `tfsdk:"cluster_display_name"`
+	ClusterIops                 types.Int64                                 `tfsdk:"cluster_iops"`
+	ClusterName                 types.String                                `tfsdk:"cluster_name"`
+	ClusterSize                 types.String                                `tfsdk:"cluster_size"`
+	CreatedAt                   types.String                                `tfsdk:"created_at"`
+	Database                    types.String                                `tfsdk:"database"`
+	HasReadOnlyReplicas         types.Bool                                  `tfsdk:"has_read_only_replicas"`
+	HasReplicas                 types.Bool                                  `tfsdk:"has_replicas"`
+	ID                          types.String                                `tfsdk:"id"`
+	MajorVersion                types.String                                `tfsdk:"major_version"`
+	Metal                       types.Bool                                  `tfsdk:"metal"`
+	Name                        types.String                                `tfsdk:"name"`
+	Organization                types.String                                `tfsdk:"organization"`
+	ParentBranch                types.String                                `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity     types.Bool                                  `tfsdk:"private_edge_connectivity"`
+	Production                  types.Bool                                  `tfsdk:"production"`
+	Ready                       types.Bool                                  `tfsdk:"ready"`
+	Region                      types.String                                `tfsdk:"region"`
+	RegionData                  tfTypes.GetPostgresBranchRegionData         `tfsdk:"region_data"`
+	Replicas                    types.Int64                                 `tfsdk:"replicas"`
+	RestoreChecklistCompletedAt types.String                                `tfsdk:"restore_checklist_completed_at"`
+	RestoredFromBranch          tfTypes.GetPostgresBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
+	RestorePoint                types.String                                `tfsdk:"restore_point"`
+	SafeMigrations              types.Bool                                  `tfsdk:"safe_migrations"`
+	SchemaLastUpdatedAt         types.String                                `tfsdk:"schema_last_updated_at"`
+	StaleSchema                 types.Bool                                  `tfsdk:"stale_schema"`
+	State                       types.String                                `tfsdk:"state"`
+	UpdatedAt                   types.String                                `tfsdk:"updated_at"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -137,7 +122,7 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `The database cluster size is required if a backup_id is provided. Requires replacement if changed.`,
+				Description: `The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -150,18 +135,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				},
 				Description: `The name of the database the branch belongs to. Requires replacement if changed.`,
 			},
-			"default": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not this is the default branch`,
-			},
-			"enabling_vectors": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not vector support is being enabled`,
-			},
-			"frozen": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is frozen`,
-			},
 			"has_read_only_replicas": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if the branch has read-only replica servers`,
@@ -170,40 +143,20 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Computed:    true,
 				Description: `True if the branch has replica servers`,
 			},
-			"has_roles": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has roles`,
-			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
-			},
-			"image_version": schema.StringAttribute{
-				Computed:    true,
-				Description: `The current PostgreSQL image version`,
-			},
-			"latest_image_version": schema.StringAttribute{
-				Computed:    true,
-				Description: `The latest available PostgreSQL image version`,
 			},
 			"major_version": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `The PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.`,
-			},
-			"maximum_storage_bytes": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Maximum storage size in bytes`,
+				Description: `For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.`,
 			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not this is a metal database`,
-			},
-			"minimum_storage_bytes": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Minimum storage size in bytes`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -235,14 +188,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"production": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch is a production branch`,
-			},
-			"read_only_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch became read-only`,
-			},
-			"read_only_reason": schema.StringAttribute{
-				Computed:    true,
-				Description: `Reason why the branch is read-only, if applicable`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -306,7 +251,7 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Requires replacement if changed.`,
+				Description: `Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.`,
 			},
 			"restored_from_branch": schema.SingleNestedAttribute{
 				Computed: true,
@@ -348,26 +293,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
-			},
-			"storage_autoscaling": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether storage autoscaling is enabled`,
-			},
-			"storage_iops": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Storage IOPS`,
-			},
-			"storage_shrinking": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether storage shrinking is enabled`,
-			},
-			"storage_throughput_mibs": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Storage throughput in MiB/s`,
-			},
-			"storage_type": schema.StringAttribute{
-				Computed:    true,
-				Description: `The type of storage (e.g., pd_ssd)`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,

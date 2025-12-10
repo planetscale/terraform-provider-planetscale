@@ -1685,7 +1685,7 @@ func (s *DatabaseBranches) LintBranchSchema(ctx context.Context, request operati
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `write_branches` |
+// | Organization | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
 // | Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
 // | Branch | `restore_backups` |
 func (s *DatabaseBranches) CreatePostgresBranch(ctx context.Context, request operations.CreatePostgresBranchRequest, opts ...operations.Option) (*operations.CreatePostgresBranchResponse, error) {
@@ -2061,11 +2061,7 @@ func (s *DatabaseBranches) getPostgresBranchWaitForReady(ctx context.Context, ho
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.Object.State != nil
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = *res.Object.State == "ready"
+			successCriteriaMet = res.Object.State == "ready"
 		}
 
 		if successCriteriaMet {
@@ -2223,7 +2219,7 @@ func (s *DatabaseBranches) DeletePostgresBranch(ctx context.Context, request ope
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `write_branches` |
+// | Organization | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
 // | Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
 // | Branch | `restore_backups` |
 func (s *DatabaseBranches) CreateVitessBranch(ctx context.Context, request operations.CreateVitessBranchRequest, opts ...operations.Option) (*operations.CreateVitessBranchResponse, error) {
@@ -2599,11 +2595,7 @@ func (s *DatabaseBranches) getVitessBranchWaitForReady(ctx context.Context, hook
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.Object.State != nil
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = *res.Object.State == "ready"
+			successCriteriaMet = res.Object.State == "ready"
 		}
 
 		if successCriteriaMet {

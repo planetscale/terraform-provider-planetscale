@@ -32,7 +32,6 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `cluster_iops` (Number) IOPS for the cluster
 - `cluster_name` (String) The SKU representing the branch's cluster size
-- `cluster_rate_name` (String) The rate name for the cluster
 - `created_at` (String) When the branch was created
 - `deleted_at` (String) When the branch was deleted
 - `direct_vtgate` (Boolean) True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
@@ -43,11 +42,9 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 - `metal` (Boolean) Whether or not this is a metal database
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
-- `mysql_provider_address` (String) The MySQL provider address for the branch
 - `name` (String) The name of the branch
 - `parent_branch` (String) The name of the parent branch from which the branch was created
-- `private_connectivity` (Boolean) True if private connectivity is enabled
-- `private_edge_connectivity` (Boolean) True if private edge connections are enabled
+- `private_edge_connectivity` (Boolean) True if private connections are enabled
 - `production` (Boolean) Whether or not the branch is a production branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))

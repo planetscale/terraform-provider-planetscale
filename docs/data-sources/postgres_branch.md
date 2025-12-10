@@ -35,24 +35,14 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `cluster_iops` (Number) IOPS for the cluster
 - `cluster_name` (String) The SKU representing the branch's cluster size
 - `created_at` (String) When the branch was created
-- `default` (Boolean) Whether or not this is the default branch
-- `enabling_vectors` (Boolean) Whether or not vector support is being enabled
-- `frozen` (Boolean) Whether or not the branch is frozen
 - `has_read_only_replicas` (Boolean) True if the branch has read-only replica servers
 - `has_replicas` (Boolean) True if the branch has replica servers
-- `has_roles` (Boolean) True if the branch has roles
 - `id` (String) The ID of the branch
-- `image_version` (String) The current PostgreSQL image version
-- `latest_image_version` (String) The latest available PostgreSQL image version
-- `maximum_storage_bytes` (Number) Maximum storage size in bytes
 - `metal` (Boolean) Whether or not this is a metal database
-- `minimum_storage_bytes` (Number) Minimum storage size in bytes
 - `name` (String) The name of the branch
 - `parent_branch` (String) The name of the parent branch from which the branch was created
 - `private_edge_connectivity` (Boolean) True if private connections are enabled
 - `production` (Boolean) Whether or not the branch is a production branch
-- `read_only_at` (String) When the branch became read-only
-- `read_only_reason` (String) Reason why the branch is read-only, if applicable
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
 - `replicas` (Number) The number of replicas for the branch
@@ -62,11 +52,6 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `schema_last_updated_at` (String) When the schema for the branch was last updated
 - `stale_schema` (Boolean) Whether or not the branch has a stale schema
 - `state` (String) The current state of the branch
-- `storage_autoscaling` (Boolean) Whether storage autoscaling is enabled
-- `storage_iops` (Number) Storage IOPS
-- `storage_shrinking` (Boolean) Whether storage shrinking is enabled
-- `storage_throughput_mibs` (Number) Storage throughput in MiB/s
-- `storage_type` (String) The type of storage (e.g., pd_ssd)
 - `updated_at` (String) When the branch was last updated
 
 <a id="nestedatt--actor"></a>
