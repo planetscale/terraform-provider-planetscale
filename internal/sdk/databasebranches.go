@@ -2061,11 +2061,7 @@ func (s *DatabaseBranches) getPostgresBranchWaitForReady(ctx context.Context, ho
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.Object.State != nil
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = *res.Object.State == "ready"
+			successCriteriaMet = res.Object.State == "ready"
 		}
 
 		if successCriteriaMet {
@@ -2599,11 +2595,7 @@ func (s *DatabaseBranches) getVitessBranchWaitForReady(ctx context.Context, hook
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.Object.State != nil
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = *res.Object.State == "ready"
+			successCriteriaMet = res.Object.State == "ready"
 		}
 
 		if successCriteriaMet {

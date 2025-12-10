@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
-	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/types"
 	"net/http"
 )
 
@@ -323,68 +322,68 @@ func (c *CreateVitessBranchRegionData) GetCurrentDefault() bool {
 // CreateVitessBranchResponseBody - Returns the created branch
 type CreateVitessBranchResponseBody struct {
 	// The ID of the branch
-	ID *string `json:"id,omitzero"`
+	ID string `json:"id"`
 	// The name of the branch
-	Name *string `json:"name,omitzero"`
+	Name string `json:"name"`
 	// When the branch was created
-	CreatedAt *string `json:"created_at,omitzero"`
+	CreatedAt string `json:"created_at"`
 	// When the branch was last updated
-	UpdatedAt *string `json:"updated_at,omitzero"`
+	UpdatedAt string `json:"updated_at"`
 	// When the branch was deleted
-	DeletedAt *string `json:"deleted_at,omitzero"`
+	DeletedAt string `json:"deleted_at"`
 	// When a user last marked a backup restore checklist as completed
-	RestoreChecklistCompletedAt *string `json:"restore_checklist_completed_at,omitzero"`
+	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
 	// When the schema for the branch was last updated
-	SchemaLastUpdatedAt *string `json:"schema_last_updated_at,omitzero"`
+	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The kind of branch (always mysql for Vitess branches)
-	kind *string `const:"mysql" json:"kind,omitzero"`
+	kind string `const:"mysql" json:"kind"`
 	// The MySQL address for the branch
-	MysqlAddress *string `json:"mysql_address,omitzero"`
+	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
-	MysqlEdgeAddress *string `json:"mysql_edge_address,omitzero"`
+	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
-	State *CreateVitessBranchState `json:"state,omitzero"`
+	State CreateVitessBranchState `json:"state"`
 	// True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-	DirectVtgate *bool `json:"direct_vtgate,omitzero"`
+	DirectVtgate bool `json:"direct_vtgate"`
 	// The size of the vtgate cluster for the branch
-	VtgateSize *string `json:"vtgate_size,omitzero"`
+	VtgateSize string `json:"vtgate_size"`
 	// The number of vtgate instances in the branch
-	VtgateCount *int64 `json:"vtgate_count,omitzero"`
+	VtgateCount int64 `json:"vtgate_count"`
 	// The SKU representing the branch's cluster size
-	ClusterName *string `json:"cluster_name,omitzero"`
+	ClusterName string `json:"cluster_name"`
 	// IOPS for the cluster
-	ClusterIops *int64 `json:"cluster_iops,omitzero"`
+	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
-	Ready *bool `json:"ready,omitzero"`
+	Ready bool `json:"ready"`
 	// Whether or not the schema is ready for queries
-	SchemaReady *bool `json:"schema_ready,omitzero"`
+	SchemaReady bool `json:"schema_ready"`
 	// Whether or not this is a metal database
-	Metal *bool `json:"metal,omitzero"`
+	Metal bool `json:"metal"`
 	// Whether or not the branch is a production branch
-	Production *bool `json:"production,omitzero"`
+	Production bool `json:"production"`
 	// Whether or not the branch has safe migrations enabled
-	SafeMigrations *bool `json:"safe_migrations,omitzero"`
+	SafeMigrations bool `json:"safe_migrations"`
 	// Whether or not the branch is sharded
-	Sharded *bool `json:"sharded,omitzero"`
+	Sharded bool `json:"sharded"`
 	// The number of shards in the branch
-	ShardCount *int64 `json:"shard_count,omitzero"`
+	ShardCount int64 `json:"shard_count"`
 	// Whether or not the branch has a stale schema
-	StaleSchema        *bool                                 `json:"stale_schema,omitzero"`
-	Actor              *CreateVitessBranchActor              `json:"actor,omitzero"`
-	RestoredFromBranch *CreateVitessBranchRestoredFromBranch `json:"restored_from_branch,omitzero"`
+	StaleSchema        bool                                 `json:"stale_schema"`
+	Actor              CreateVitessBranchActor              `json:"actor"`
+	RestoredFromBranch CreateVitessBranchRestoredFromBranch `json:"restored_from_branch"`
 	// True if private connections are enabled
-	PrivateEdgeConnectivity *bool `json:"private_edge_connectivity,omitzero"`
+	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
 	// True if the branch has replica servers
-	HasReplicas *bool `json:"has_replicas,omitzero"`
+	HasReplicas bool `json:"has_replicas"`
 	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas *bool `json:"has_read_only_replicas,omitzero"`
+	HasReadOnlyReplicas bool `json:"has_read_only_replicas"`
 	// Planetscale app URL for the branch
-	HTMLURL *string `json:"html_url,omitzero"`
+	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL        *string                       `json:"url,omitzero"`
-	RegionData *CreateVitessBranchRegionData `json:"region,omitzero"`
+	URL        string                       `json:"url"`
+	RegionData CreateVitessBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
-	ParentBranch *string `json:"parent_branch,omitzero"`
+	ParentBranch string `json:"parent_branch"`
 	// The MySQL provider address for the branch
 	MysqlProviderAddress *string `json:"mysql_provider_address,omitzero"`
 	// The rate name for the cluster
@@ -404,230 +403,230 @@ func (c *CreateVitessBranchResponseBody) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CreateVitessBranchResponseBody) GetID() *string {
+func (c *CreateVitessBranchResponseBody) GetID() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.ID
 }
 
-func (c *CreateVitessBranchResponseBody) GetName() *string {
+func (c *CreateVitessBranchResponseBody) GetName() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.Name
 }
 
-func (c *CreateVitessBranchResponseBody) GetCreatedAt() *string {
+func (c *CreateVitessBranchResponseBody) GetCreatedAt() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.CreatedAt
 }
 
-func (c *CreateVitessBranchResponseBody) GetUpdatedAt() *string {
+func (c *CreateVitessBranchResponseBody) GetUpdatedAt() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.UpdatedAt
 }
 
-func (c *CreateVitessBranchResponseBody) GetDeletedAt() *string {
+func (c *CreateVitessBranchResponseBody) GetDeletedAt() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.DeletedAt
 }
 
-func (c *CreateVitessBranchResponseBody) GetRestoreChecklistCompletedAt() *string {
+func (c *CreateVitessBranchResponseBody) GetRestoreChecklistCompletedAt() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.RestoreChecklistCompletedAt
 }
 
-func (c *CreateVitessBranchResponseBody) GetSchemaLastUpdatedAt() *string {
+func (c *CreateVitessBranchResponseBody) GetSchemaLastUpdatedAt() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.SchemaLastUpdatedAt
 }
 
-func (c *CreateVitessBranchResponseBody) GetKind() *string {
-	return types.Pointer("mysql")
+func (c *CreateVitessBranchResponseBody) GetKind() string {
+	return "mysql"
 }
 
-func (c *CreateVitessBranchResponseBody) GetMysqlAddress() *string {
+func (c *CreateVitessBranchResponseBody) GetMysqlAddress() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.MysqlAddress
 }
 
-func (c *CreateVitessBranchResponseBody) GetMysqlEdgeAddress() *string {
+func (c *CreateVitessBranchResponseBody) GetMysqlEdgeAddress() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.MysqlEdgeAddress
 }
 
-func (c *CreateVitessBranchResponseBody) GetState() *CreateVitessBranchState {
+func (c *CreateVitessBranchResponseBody) GetState() CreateVitessBranchState {
 	if c == nil {
-		return nil
+		return CreateVitessBranchState("")
 	}
 	return c.State
 }
 
-func (c *CreateVitessBranchResponseBody) GetDirectVtgate() *bool {
+func (c *CreateVitessBranchResponseBody) GetDirectVtgate() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.DirectVtgate
 }
 
-func (c *CreateVitessBranchResponseBody) GetVtgateSize() *string {
+func (c *CreateVitessBranchResponseBody) GetVtgateSize() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.VtgateSize
 }
 
-func (c *CreateVitessBranchResponseBody) GetVtgateCount() *int64 {
+func (c *CreateVitessBranchResponseBody) GetVtgateCount() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.VtgateCount
 }
 
-func (c *CreateVitessBranchResponseBody) GetClusterName() *string {
+func (c *CreateVitessBranchResponseBody) GetClusterName() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.ClusterName
 }
 
-func (c *CreateVitessBranchResponseBody) GetClusterIops() *int64 {
+func (c *CreateVitessBranchResponseBody) GetClusterIops() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.ClusterIops
 }
 
-func (c *CreateVitessBranchResponseBody) GetReady() *bool {
+func (c *CreateVitessBranchResponseBody) GetReady() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.Ready
 }
 
-func (c *CreateVitessBranchResponseBody) GetSchemaReady() *bool {
+func (c *CreateVitessBranchResponseBody) GetSchemaReady() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.SchemaReady
 }
 
-func (c *CreateVitessBranchResponseBody) GetMetal() *bool {
+func (c *CreateVitessBranchResponseBody) GetMetal() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.Metal
 }
 
-func (c *CreateVitessBranchResponseBody) GetProduction() *bool {
+func (c *CreateVitessBranchResponseBody) GetProduction() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.Production
 }
 
-func (c *CreateVitessBranchResponseBody) GetSafeMigrations() *bool {
+func (c *CreateVitessBranchResponseBody) GetSafeMigrations() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.SafeMigrations
 }
 
-func (c *CreateVitessBranchResponseBody) GetSharded() *bool {
+func (c *CreateVitessBranchResponseBody) GetSharded() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.Sharded
 }
 
-func (c *CreateVitessBranchResponseBody) GetShardCount() *int64 {
+func (c *CreateVitessBranchResponseBody) GetShardCount() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.ShardCount
 }
 
-func (c *CreateVitessBranchResponseBody) GetStaleSchema() *bool {
+func (c *CreateVitessBranchResponseBody) GetStaleSchema() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.StaleSchema
 }
 
-func (c *CreateVitessBranchResponseBody) GetActor() *CreateVitessBranchActor {
+func (c *CreateVitessBranchResponseBody) GetActor() CreateVitessBranchActor {
 	if c == nil {
-		return nil
+		return CreateVitessBranchActor{}
 	}
 	return c.Actor
 }
 
-func (c *CreateVitessBranchResponseBody) GetRestoredFromBranch() *CreateVitessBranchRestoredFromBranch {
+func (c *CreateVitessBranchResponseBody) GetRestoredFromBranch() CreateVitessBranchRestoredFromBranch {
 	if c == nil {
-		return nil
+		return CreateVitessBranchRestoredFromBranch{}
 	}
 	return c.RestoredFromBranch
 }
 
-func (c *CreateVitessBranchResponseBody) GetPrivateEdgeConnectivity() *bool {
+func (c *CreateVitessBranchResponseBody) GetPrivateEdgeConnectivity() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.PrivateEdgeConnectivity
 }
 
-func (c *CreateVitessBranchResponseBody) GetHasReplicas() *bool {
+func (c *CreateVitessBranchResponseBody) GetHasReplicas() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.HasReplicas
 }
 
-func (c *CreateVitessBranchResponseBody) GetHasReadOnlyReplicas() *bool {
+func (c *CreateVitessBranchResponseBody) GetHasReadOnlyReplicas() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.HasReadOnlyReplicas
 }
 
-func (c *CreateVitessBranchResponseBody) GetHTMLURL() *string {
+func (c *CreateVitessBranchResponseBody) GetHTMLURL() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.HTMLURL
 }
 
-func (c *CreateVitessBranchResponseBody) GetURL() *string {
+func (c *CreateVitessBranchResponseBody) GetURL() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.URL
 }
 
-func (c *CreateVitessBranchResponseBody) GetRegionData() *CreateVitessBranchRegionData {
+func (c *CreateVitessBranchResponseBody) GetRegionData() CreateVitessBranchRegionData {
 	if c == nil {
-		return nil
+		return CreateVitessBranchRegionData{}
 	}
 	return c.RegionData
 }
 
-func (c *CreateVitessBranchResponseBody) GetParentBranch() *string {
+func (c *CreateVitessBranchResponseBody) GetParentBranch() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.ParentBranch
 }
