@@ -6558,10 +6558,7 @@ paths:
           description: The ID of the change request
           schema:
             type: string
-<<<<<<< HEAD
           x-speakeasy-match: change_request_id
-=======
->>>>>>> speakeasy
       responses:
         "200":
           description: Returns a branch change request
@@ -6751,7 +6748,6 @@ paths:
         | Organization | `read_branches` |
         | Database | `read_branches` |
         | Branch | `read_branch` |
-<<<<<<< HEAD
       x-speakeasy-entity-operation:
         - entityOperation: PostgresBranch#update#2
           options:
@@ -6759,12 +6755,14 @@ paths:
               name: WaitForChangeRequestComplete
       x-speakeasy-polling:
         - name: WaitForChangeRequestComplete
-          limitCount: 300
+          delaySeconds: 30
+          intervalSeconds: 30
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "canceled"
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "completed"
-=======
->>>>>>> speakeasy
   /organizations/{organization}/databases/{database}/branches/{branch}/cluster:
     patch:
       tags:
