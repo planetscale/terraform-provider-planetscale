@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 67a043b4ba6a84655134cdc371f34782
+  docChecksum: 2926fab992cf7dea64baf7cad28d1b53
   docVersion: v1
   speakeasyVersion: 1.675.1
   generationVersion: 2.778.0
   releaseVersion: 1.0.0
   configChecksum: b069bd5d828188ad34159b08dbdc9ef5
 persistentEdits:
-  generation_id: 3518328b-37f3-4828-8daf-7a89cb68b300
-  pristine_commit_hash: 12bfc33386b64c87827298f054579375defa886a
-  pristine_tree_hash: 42577b144b93fbb35507c9212b2fac45ef7225de
+  generation_id: 86df3ef4-173a-462d-ac50-900555f4bb3a
+  pristine_commit_hash: 45d827d307cfa9b9e3f15e15dcbcf965ed1fcd83
+  pristine_tree_hash: cb63426b94a18337fa6088e226a4b8113e517125
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -242,20 +242,20 @@ trackedFiles:
     pristine_git_object: a1d710ae3f5869fdb942700e564d26716f5eeb3f
   internal/provider/postgresbranch_data_source.go:
     id: 3d4847eac64b
-    last_write_checksum: sha1:3e85c33b89b9c0f86160d772a6c7f61d8cdc8abd
-    pristine_git_object: 284492750356345d6236ccd49d0969baf7da8828
+    last_write_checksum: sha1:20c361e51fe015a8e33a0556e94e84ed79ff9b4f
+    pristine_git_object: e128a7064b000b9bba30bae8e9c6b81d839aae1b
   internal/provider/postgresbranch_data_source_sdk.go:
     id: 65aff8470b2f
-    last_write_checksum: sha1:1ad07f37a02fc502265682b45f54ddd2c8f00d06
-    pristine_git_object: 037fbe10bdff37167f522613ca4cd54bd4240de3
+    last_write_checksum: sha1:4a18ab87748994bbf315c76345f73e62c56cf79b
+    pristine_git_object: 837075e1d0026b7b1db9196b4b32ce180e2f0153
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:e5970555edea2a81a0d421c41fd0b8feabcd5273
-    pristine_git_object: d736bb8ed90080acd7a189f61f6e1190f4f23ef7
+    last_write_checksum: sha1:e9837f79ae3bc16ad491b0b14664e2ec2b1ead9d
+    pristine_git_object: 4d0054cc7f17466d9d08886e45f8e61843bfef7d
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:76abbba28017bdd277fc60e66c8a6db0953f7ad8
-    pristine_git_object: 01c9097fc0cbd09a74d25ec057957a2d9b65f38d
+    last_write_checksum: sha1:203d3497cd6f009ed1e9f58e2e38ddbfa43e4c1a
+    pristine_git_object: b751518cc02738c2aafc2797d29957ea31eac43f
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
     last_write_checksum: sha1:4a1c7f458cf831c3a57e234757a0898ac7edb96c
@@ -502,20 +502,20 @@ trackedFiles:
     pristine_git_object: 2b167edfe9b7df08d35bacb896143fd8c6e3bf8c
   internal/provider/vitessbranch_data_source.go:
     id: 4ef7739d6663
-    last_write_checksum: sha1:57d91dc49fbdfdc0c412c8bdbfde64b68872d10a
-    pristine_git_object: f8d79daa160e8c163bc26a278da37a2a530c49dd
+    last_write_checksum: sha1:27428665edbe485fa6166547b02f997d71790d95
+    pristine_git_object: d2b4906c6ba5c314abdb4149a5b6a8b3211db71a
   internal/provider/vitessbranch_data_source_sdk.go:
     id: a204240a587d
-    last_write_checksum: sha1:15692a6da11d148aeff9a9176591456cf004d648
-    pristine_git_object: 3b5e94851e6b25506692b8e3d92fa4c3e1e7acad
+    last_write_checksum: sha1:bd6bf44c67c2dbc85f46f0a83017bc26c080c983
+    pristine_git_object: 6893c66ab2d4d662b0e64ae1e1dca41c8ce7f515
   internal/provider/vitessbranch_resource.go:
     id: 253814c7c29a
-    last_write_checksum: sha1:3dc4ace4f547bc4279b564b33ff71be22e597acf
-    pristine_git_object: 72ecb4427b112cc0501e596ead4394a6fda534e1
+    last_write_checksum: sha1:8dbb7dc9d762ae8d3d439210fe83587fbf623a67
+    pristine_git_object: d2f47a180938e32c0a3fdf3cdb89ad8ed0feff3d
   internal/provider/vitessbranch_resource_sdk.go:
     id: b7741edc0d6e
-    last_write_checksum: sha1:4acad89d3734c891e4faec243cedb2fd9bb05340
-    pristine_git_object: 397e3a2debd083e557d99595b2b99298dcbb4a30
+    last_write_checksum: sha1:e7779d0ae74024c1b6bcde2cf89c60ef7a1439c8
+    pristine_git_object: 5128d1924f87e3f328d54f7ded1f83ff2faf0e1f
   internal/provider/vitessbranchpassword_data_source.go:
     id: e6cd1d778135
     last_write_checksum: sha1:94604ee64cda77d8a67e1d1176edf5329a9ce0c0
@@ -574,8 +574,8 @@ trackedFiles:
     pristine_git_object: 3a7db18790bd705dac922a05563f60a0727eba1f
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
-    last_write_checksum: sha1:607ec57fa2c90bfdffb11184189b21b69070fb3d
-    pristine_git_object: f6781b83b03a615d751c7d0b4afaa02cdcb87233
+    last_write_checksum: sha1:92ee8f15cc5e3a0086226bd5f1336f615abf934a
+    pristine_git_object: cedc799380030d7df65ec1b394812dbd3412c774
   internal/sdk/databasebranchkeyspaces.go:
     id: 0b770c1e020b
     last_write_checksum: sha1:8afc2a81e84b593fb9e3c4f832723618e4c7a9ba
@@ -742,8 +742,8 @@ trackedFiles:
     pristine_git_object: e84cf733d521e8be177285c0496c8540f011c362
   internal/sdk/models/operations/createpostgresbranch.go:
     id: 952731e87008
-    last_write_checksum: sha1:c9fedb7a4b80bb8f1f921f3071e304141daf3671
-    pristine_git_object: a3677706f9b085203d9db2fa9cce03841affed90
+    last_write_checksum: sha1:b9cd923f248e6980a62b742cbd2e3c1ccb836b1c
+    pristine_git_object: eb2a491f9e4afaa587cea21baa7f4846aa36ad1a
   internal/sdk/models/operations/createpostgresdatabase.go:
     id: ff2cc50c485f
     last_write_checksum: sha1:2ffbec1c833f6fe25175a1d22d803f426d0db2a4
@@ -762,8 +762,8 @@ trackedFiles:
     pristine_git_object: 2a2dfe9e78b87b2a9f2c342ae0fcd309611f58a9
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
-    last_write_checksum: sha1:7b27317914f3a27988b4efac518440b6834f6611
-    pristine_git_object: bc033fb4b5b20d3edc3b1ba17081bcf71282746b
+    last_write_checksum: sha1:8ebbe12ace8b8a328b45d9995e47acc09b8fb22a
+    pristine_git_object: eaf7b94f7a209b361e93315cf725328f833d5611
   internal/sdk/models/operations/createvitessdatabase.go:
     id: e8c1d370d78c
     last_write_checksum: sha1:0b506b9cd23da8bc5145d2b47df027cc05350ade
@@ -950,8 +950,8 @@ trackedFiles:
     pristine_git_object: a4c11b32082c9f2f4f56a644c50a8da506fe64e7
   internal/sdk/models/operations/getpostgresbranch.go:
     id: e4f92de0a1c5
-    last_write_checksum: sha1:5866477f5029c3603f904c289c33e61a99919a38
-    pristine_git_object: f1d97ea50c24a290c4be9dfacc00532291765804
+    last_write_checksum: sha1:1269752135ecd21ce1d2c26b7e0c13235d0625ef
+    pristine_git_object: 56fbc683f286d75c9d194d20acfae54b476a0140
   internal/sdk/models/operations/getpostgresdatabase.go:
     id: 71f9d1711996
     last_write_checksum: sha1:c55aaf57b7c5826744f88ee9ee3962fbc84e2371
@@ -974,8 +974,8 @@ trackedFiles:
     pristine_git_object: 20d5b9f1247ccffa12d00189731e5ca3bcad7efa
   internal/sdk/models/operations/getvitessbranch.go:
     id: 91f8cc51ecc6
-    last_write_checksum: sha1:ba5ae59a245ea532819e6ab3f9df44bd7f4e4481
-    pristine_git_object: 950e32adb140929010c3486a5ecd75db2943cf34
+    last_write_checksum: sha1:305e38c16d330f2b1981f3146c279f84e42b4191
+    pristine_git_object: 0ec0723c9e6187e4ca55bac2353e5e2979f9da1e
   internal/sdk/models/operations/getvitessdatabase.go:
     id: c46fe7ab51ba
     last_write_checksum: sha1:5035f5727db7947b4e70b0a2d3b188ba55ad83ad
@@ -2935,7 +2935,7 @@ examples:
           database: "<value>"
       responses:
         "201":
-          application/json: {"kind": "postgresql"}
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1731560867369", "updated_at": "1735674740630", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "postgresql", "state": "sleep_in_progress", "cluster_name": "<value>", "cluster_iops": 440180, "ready": true, "metal": true, "production": false, "safe_migrations": false, "stale_schema": true, "actor": {"id": "<id>", "display_name": "Emely_Greenfelder", "avatar_url": "https://minor-suspension.net"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1713222955949", "updated_at": "1735684410731", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": true, "has_read_only_replicas": true, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Selina47", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
   get_postgres_branch:
     speakeasy-default-get-postgres-branch:
       parameters:
@@ -2945,7 +2945,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"kind": "postgresql"}
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1716416237332", "updated_at": "1735681322992", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "postgresql", "state": "awakening", "cluster_name": "<value>", "cluster_iops": 473583, "ready": true, "metal": true, "production": false, "safe_migrations": false, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Kevon_Brown-Olson", "avatar_url": "https://educated-travel.name"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1734294805327", "updated_at": "1735616269907", "deleted_at": "<value>"}, "private_edge_connectivity": false, "has_replicas": false, "has_read_only_replicas": false, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Carlos79", "location": "<value>", "slug": "<value>", "current_default": true}, "parent_branch": "<value>"}
   delete_postgres_branch:
     speakeasy-default-delete-postgres-branch:
       parameters:
@@ -2961,7 +2961,7 @@ examples:
           database: "<value>"
       responses:
         "201":
-          application/json: {"kind": "mysql"}
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1718824909191", "updated_at": "1735633086171", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "pending", "direct_vtgate": false, "vtgate_size": "<value>", "vtgate_count": 652629, "cluster_name": "<value>", "cluster_iops": 417527, "ready": true, "schema_ready": true, "metal": false, "production": true, "safe_migrations": true, "sharded": true, "shard_count": 129377, "stale_schema": false, "actor": {"id": "<id>", "display_name": "Elton.Ankunding", "avatar_url": "https://utter-pilot.org"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1733717688245", "updated_at": "1735626398931", "deleted_at": "<value>"}, "private_edge_connectivity": true, "has_replicas": true, "has_read_only_replicas": true, "html_url": "https://lone-vicinity.name", "url": "https://secret-fedora.info/", "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Lonzo_Quitzon", "location": "<value>", "slug": "<value>", "current_default": true}, "parent_branch": "<value>"}
   get_vitess_branch:
     speakeasy-default-get-vitess-branch:
       parameters:
@@ -2971,7 +2971,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"kind": "mysql"}
+          application/json: {"id": "<id>", "name": "<value>", "created_at": "1713195627833", "updated_at": "1735678033591", "deleted_at": "<value>", "restore_checklist_completed_at": "<value>", "schema_last_updated_at": "<value>", "kind": "mysql", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "direct_vtgate": true, "vtgate_size": "<value>", "vtgate_count": 390406, "cluster_name": "<value>", "cluster_iops": 938889, "ready": true, "schema_ready": false, "metal": false, "production": true, "safe_migrations": true, "sharded": true, "shard_count": 868266, "stale_schema": true, "actor": {"id": "<id>", "display_name": "Sandy.Bins98", "avatar_url": "https://scratchy-halt.biz/"}, "restored_from_branch": {"id": "<id>", "name": "<value>", "created_at": "1723398274541", "updated_at": "1735642088670", "deleted_at": "<value>"}, "private_edge_connectivity": false, "has_replicas": false, "has_read_only_replicas": true, "html_url": "https://far-flung-toothbrush.name", "url": "https://present-deed.info", "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": [], "display_name": "Kristina59", "location": "<value>", "slug": "<value>", "current_default": false}, "parent_branch": "<value>"}
   delete_vitess_branch:
     speakeasy-default-delete-vitess-branch:
       parameters:

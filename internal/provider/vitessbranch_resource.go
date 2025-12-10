@@ -38,47 +38,44 @@ type VitessBranchResource struct {
 
 // VitessBranchResourceModel describes the resource data model.
 type VitessBranchResourceModel struct {
-	Actor                       *tfTypes.GetVitessBranchActor              `tfsdk:"actor"`
-	BackupID                    types.String                               `tfsdk:"backup_id"`
-	ClusterIops                 types.Int64                                `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                               `tfsdk:"cluster_name"`
-	ClusterRateName             types.String                               `tfsdk:"cluster_rate_name"`
-	ClusterSize                 types.String                               `tfsdk:"cluster_size"`
-	CreatedAt                   types.String                               `tfsdk:"created_at"`
-	Database                    types.String                               `tfsdk:"database"`
-	DeletedAt                   types.String                               `tfsdk:"deleted_at"`
-	DirectVtgate                types.Bool                                 `tfsdk:"direct_vtgate"`
-	HasReadOnlyReplicas         types.Bool                                 `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                                 `tfsdk:"has_replicas"`
-	HTMLURL                     types.String                               `tfsdk:"html_url"`
-	ID                          types.String                               `tfsdk:"id"`
-	Metal                       types.Bool                                 `tfsdk:"metal"`
-	MysqlAddress                types.String                               `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            types.String                               `tfsdk:"mysql_edge_address"`
-	MysqlProviderAddress        types.String                               `tfsdk:"mysql_provider_address"`
-	Name                        types.String                               `tfsdk:"name"`
-	Organization                types.String                               `tfsdk:"organization"`
-	ParentBranch                types.String                               `tfsdk:"parent_branch"`
-	PrivateConnectivity         types.Bool                                 `tfsdk:"private_connectivity"`
-	PrivateEdgeConnectivity     types.Bool                                 `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                                 `tfsdk:"production"`
-	Ready                       types.Bool                                 `tfsdk:"ready"`
-	Region                      types.String                               `tfsdk:"region"`
-	RegionData                  *tfTypes.GetVitessBranchRegionData         `tfsdk:"region_data"`
-	RestoreChecklistCompletedAt types.String                               `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          *tfTypes.GetVitessBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	SafeMigrations              types.Bool                                 `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                               `tfsdk:"schema_last_updated_at"`
-	SchemaReady                 types.Bool                                 `tfsdk:"schema_ready"`
-	SeedData                    types.String                               `tfsdk:"seed_data"`
-	ShardCount                  types.Int64                                `tfsdk:"shard_count"`
-	Sharded                     types.Bool                                 `tfsdk:"sharded"`
-	StaleSchema                 types.Bool                                 `tfsdk:"stale_schema"`
-	State                       types.String                               `tfsdk:"state"`
-	UpdatedAt                   types.String                               `tfsdk:"updated_at"`
-	URL                         types.String                               `tfsdk:"url"`
-	VtgateCount                 types.Int64                                `tfsdk:"vtgate_count"`
-	VtgateSize                  types.String                               `tfsdk:"vtgate_size"`
+	Actor                       tfTypes.GetVitessBranchActor              `tfsdk:"actor"`
+	BackupID                    types.String                              `tfsdk:"backup_id"`
+	ClusterIops                 types.Int64                               `tfsdk:"cluster_iops"`
+	ClusterName                 types.String                              `tfsdk:"cluster_name"`
+	ClusterSize                 types.String                              `tfsdk:"cluster_size"`
+	CreatedAt                   types.String                              `tfsdk:"created_at"`
+	Database                    types.String                              `tfsdk:"database"`
+	DeletedAt                   types.String                              `tfsdk:"deleted_at"`
+	DirectVtgate                types.Bool                                `tfsdk:"direct_vtgate"`
+	HasReadOnlyReplicas         types.Bool                                `tfsdk:"has_read_only_replicas"`
+	HasReplicas                 types.Bool                                `tfsdk:"has_replicas"`
+	HTMLURL                     types.String                              `tfsdk:"html_url"`
+	ID                          types.String                              `tfsdk:"id"`
+	Metal                       types.Bool                                `tfsdk:"metal"`
+	MysqlAddress                types.String                              `tfsdk:"mysql_address"`
+	MysqlEdgeAddress            types.String                              `tfsdk:"mysql_edge_address"`
+	Name                        types.String                              `tfsdk:"name"`
+	Organization                types.String                              `tfsdk:"organization"`
+	ParentBranch                types.String                              `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity     types.Bool                                `tfsdk:"private_edge_connectivity"`
+	Production                  types.Bool                                `tfsdk:"production"`
+	Ready                       types.Bool                                `tfsdk:"ready"`
+	Region                      types.String                              `tfsdk:"region"`
+	RegionData                  tfTypes.GetVitessBranchRegionData         `tfsdk:"region_data"`
+	RestoreChecklistCompletedAt types.String                              `tfsdk:"restore_checklist_completed_at"`
+	RestoredFromBranch          tfTypes.GetVitessBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
+	SafeMigrations              types.Bool                                `tfsdk:"safe_migrations"`
+	SchemaLastUpdatedAt         types.String                              `tfsdk:"schema_last_updated_at"`
+	SchemaReady                 types.Bool                                `tfsdk:"schema_ready"`
+	SeedData                    types.String                              `tfsdk:"seed_data"`
+	ShardCount                  types.Int64                               `tfsdk:"shard_count"`
+	Sharded                     types.Bool                                `tfsdk:"sharded"`
+	StaleSchema                 types.Bool                                `tfsdk:"stale_schema"`
+	State                       types.String                              `tfsdk:"state"`
+	UpdatedAt                   types.String                              `tfsdk:"updated_at"`
+	URL                         types.String                              `tfsdk:"url"`
+	VtgateCount                 types.Int64                               `tfsdk:"vtgate_count"`
+	VtgateSize                  types.String                              `tfsdk:"vtgate_size"`
 }
 
 func (r *VitessBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -121,16 +118,12 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
 			},
-			"cluster_rate_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `The rate name for the cluster`,
-			},
 			"cluster_size": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `The database cluster size is required if a backup_id is provided. Requires replacement if changed.`,
+				Description: `The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.`,
 			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
@@ -179,10 +172,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Description: `The address of the MySQL provider for the branch`,
 			},
-			"mysql_provider_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The MySQL provider address for the branch`,
-			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
@@ -206,13 +195,9 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `Parent branch. Requires replacement if changed.`,
 			},
-			"private_connectivity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if private connectivity is enabled`,
-			},
 			"private_edge_connectivity": schema.BoolAttribute{
 				Computed:    true,
-				Description: `True if private edge connections are enabled`,
+				Description: `True if private connections are enabled`,
 			},
 			"production": schema.BoolAttribute{
 				Computed:    true,

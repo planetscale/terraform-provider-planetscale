@@ -29,47 +29,32 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor                       *tfTypes.GetPostgresBranchActor              `tfsdk:"actor"`
-	ClusterArchitecture         types.String                                 `tfsdk:"cluster_architecture"`
-	ClusterDisplayName          types.String                                 `tfsdk:"cluster_display_name"`
-	ClusterIops                 types.Int64                                  `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                                 `tfsdk:"cluster_name"`
-	CreatedAt                   types.String                                 `tfsdk:"created_at"`
-	Database                    types.String                                 `tfsdk:"database"`
-	Default                     types.Bool                                   `tfsdk:"default"`
-	EnablingVectors             types.Bool                                   `tfsdk:"enabling_vectors"`
-	Frozen                      types.Bool                                   `tfsdk:"frozen"`
-	HasReadOnlyReplicas         types.Bool                                   `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                                   `tfsdk:"has_replicas"`
-	HasRoles                    types.Bool                                   `tfsdk:"has_roles"`
-	ID                          types.String                                 `tfsdk:"id"`
-	ImageVersion                types.String                                 `tfsdk:"image_version"`
-	LatestImageVersion          types.String                                 `tfsdk:"latest_image_version"`
-	MaximumStorageBytes         types.Int64                                  `tfsdk:"maximum_storage_bytes"`
-	Metal                       types.Bool                                   `tfsdk:"metal"`
-	MinimumStorageBytes         types.Int64                                  `tfsdk:"minimum_storage_bytes"`
-	Name                        types.String                                 `tfsdk:"name"`
-	Organization                types.String                                 `tfsdk:"organization"`
-	ParentBranch                types.String                                 `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity     types.Bool                                   `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                                   `tfsdk:"production"`
-	ReadOnlyAt                  types.String                                 `tfsdk:"read_only_at"`
-	ReadOnlyReason              types.String                                 `tfsdk:"read_only_reason"`
-	Ready                       types.Bool                                   `tfsdk:"ready"`
-	RegionData                  *tfTypes.GetPostgresBranchRegionData         `tfsdk:"region_data"`
-	Replicas                    types.Int64                                  `tfsdk:"replicas"`
-	RestoreChecklistCompletedAt types.String                                 `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          *tfTypes.GetPostgresBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	SafeMigrations              types.Bool                                   `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                                 `tfsdk:"schema_last_updated_at"`
-	StaleSchema                 types.Bool                                   `tfsdk:"stale_schema"`
-	State                       types.String                                 `tfsdk:"state"`
-	StorageAutoscaling          types.Bool                                   `tfsdk:"storage_autoscaling"`
-	StorageIops                 types.Int64                                  `tfsdk:"storage_iops"`
-	StorageShrinking            types.Bool                                   `tfsdk:"storage_shrinking"`
-	StorageThroughputMibs       types.Int64                                  `tfsdk:"storage_throughput_mibs"`
-	StorageType                 types.String                                 `tfsdk:"storage_type"`
-	UpdatedAt                   types.String                                 `tfsdk:"updated_at"`
+	Actor                       tfTypes.GetPostgresBranchActor              `tfsdk:"actor"`
+	ClusterArchitecture         types.String                                `tfsdk:"cluster_architecture"`
+	ClusterDisplayName          types.String                                `tfsdk:"cluster_display_name"`
+	ClusterIops                 types.Int64                                 `tfsdk:"cluster_iops"`
+	ClusterName                 types.String                                `tfsdk:"cluster_name"`
+	CreatedAt                   types.String                                `tfsdk:"created_at"`
+	Database                    types.String                                `tfsdk:"database"`
+	HasReadOnlyReplicas         types.Bool                                  `tfsdk:"has_read_only_replicas"`
+	HasReplicas                 types.Bool                                  `tfsdk:"has_replicas"`
+	ID                          types.String                                `tfsdk:"id"`
+	Metal                       types.Bool                                  `tfsdk:"metal"`
+	Name                        types.String                                `tfsdk:"name"`
+	Organization                types.String                                `tfsdk:"organization"`
+	ParentBranch                types.String                                `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity     types.Bool                                  `tfsdk:"private_edge_connectivity"`
+	Production                  types.Bool                                  `tfsdk:"production"`
+	Ready                       types.Bool                                  `tfsdk:"ready"`
+	RegionData                  tfTypes.GetPostgresBranchRegionData         `tfsdk:"region_data"`
+	Replicas                    types.Int64                                 `tfsdk:"replicas"`
+	RestoreChecklistCompletedAt types.String                                `tfsdk:"restore_checklist_completed_at"`
+	RestoredFromBranch          tfTypes.GetPostgresBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
+	SafeMigrations              types.Bool                                  `tfsdk:"safe_migrations"`
+	SchemaLastUpdatedAt         types.String                                `tfsdk:"schema_last_updated_at"`
+	StaleSchema                 types.Bool                                  `tfsdk:"stale_schema"`
+	State                       types.String                                `tfsdk:"state"`
+	UpdatedAt                   types.String                                `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
@@ -124,18 +109,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 				Required:    true,
 				Description: `The name of the database the branch belongs to`,
 			},
-			"default": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not this is the default branch`,
-			},
-			"enabling_vectors": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not vector support is being enabled`,
-			},
-			"frozen": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is frozen`,
-			},
 			"has_read_only_replicas": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if the branch has read-only replica servers`,
@@ -144,33 +117,13 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:    true,
 				Description: `True if the branch has replica servers`,
 			},
-			"has_roles": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has roles`,
-			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
 			},
-			"image_version": schema.StringAttribute{
-				Computed:    true,
-				Description: `The current PostgreSQL image version`,
-			},
-			"latest_image_version": schema.StringAttribute{
-				Computed:    true,
-				Description: `The latest available PostgreSQL image version`,
-			},
-			"maximum_storage_bytes": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Maximum storage size in bytes`,
-			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not this is a metal database`,
-			},
-			"minimum_storage_bytes": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Minimum storage size in bytes`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
@@ -191,14 +144,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"production": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch is a production branch`,
-			},
-			"read_only_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch became read-only`,
-			},
-			"read_only_reason": schema.StringAttribute{
-				Computed:    true,
-				Description: `Reason why the branch is read-only, if applicable`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -290,26 +235,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
-			},
-			"storage_autoscaling": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether storage autoscaling is enabled`,
-			},
-			"storage_iops": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Storage IOPS`,
-			},
-			"storage_shrinking": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether storage shrinking is enabled`,
-			},
-			"storage_throughput_mibs": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Storage throughput in MiB/s`,
-			},
-			"storage_type": schema.StringAttribute{
-				Computed:    true,
-				Description: `The type of storage (e.g., pd_ssd)`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
