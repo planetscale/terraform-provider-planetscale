@@ -184,3 +184,22 @@ actions:
     description: Add id name override
     update:
       x-speakeasy-name-override: change_request_id
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.parameters[?@.name == 'id']
+    description: Add x-speakeasy-match to id parameter
+    update:
+      x-speakeasy-match: change_request_id
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get
+    update:
+      x-speakeasy-entity-operation:
+        - entityOperation: PostgresBranch#update#2
+          options:
+            polling:
+              name: WaitForChangeRequestComplete
+      x-speakeasy-polling:
+        - name: WaitForChangeRequestComplete
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "completed"
