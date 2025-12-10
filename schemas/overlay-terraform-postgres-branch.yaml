@@ -199,7 +199,11 @@ actions:
               name: WaitForChangeRequestComplete
       x-speakeasy-polling:
         - name: WaitForChangeRequestComplete
-          limitCount: 300
+          delaySeconds: 30
+          intervalSeconds: 30
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "canceled"
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "completed"
