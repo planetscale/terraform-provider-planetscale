@@ -5,550 +5,130 @@ info:
   version: 0.0.1
 actions:
   - target: $.paths
-    description: Add duplicate API operations for VitessBranch managed resource.
+    description: Add VitessBranch path entries
     update:
-      /organizations/{organization}/databases/{database}/branches#vitess:
-        post:
-          tags:
-            - Database branches
-          operationId: create_vitess_branch
-          summary: Create a Vitess branch
-          x-speakeasy-entity-operation: VitessBranch#create
-          x-speakeasy-entity-description: Manage a PlanetScale Vitess database branch.
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: The name of the organization the branch belongs to
-              schema:
-                type: string
-            - name: database
-              in: path
-              required: true
-              description: The name of the database the branch belongs to
-              schema:
-                type: string
-          requestBody:
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                      description: The name of the branch to create
-                    parent_branch:
-                      type: string
-                      description: Parent branch
-                    backup_id:
-                      type: string
-                      description: If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
-                    region:
-                      type: string
-                      description: The region to create the branch in. If not provided, the branch will be created in the default region for its database.
-                    seed_data:
-                      type: string
-                      enum:
-                        - last_successful_backup
-                      description: If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
-                    cluster_size:
-                      type: string
-                      description: The database cluster size is required if a backup_id is provided.
-                  additionalProperties: false
-                  required:
-                    - name
-                    - parent_branch
-          responses:
-            "201":
-              description: Returns the created branch
-              headers: {}
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of the branch
-                      name:
-                        type: string
-                        description: The name of the branch
-                      created_at:
-                        type: string
-                        description: When the branch was created
-                      updated_at:
-                        type: string
-                        description: When the branch was last updated
-                      deleted_at:
-                        type: string
-                        description: When the branch was deleted
-                      restore_checklist_completed_at:
-                        type: string
-                        description: When a user last marked a backup restore checklist as completed
-                      schema_last_updated_at:
-                        type: string
-                        description: When the schema for the branch was last updated
-                      kind:
-                        type: string
-                        const: mysql
-                        description: The kind of branch (always mysql for Vitess branches)
-                      mysql_address:
-                        type: string
-                        description: The MySQL address for the branch
-                      mysql_provider_address:
-                        type: string
-                        description: The MySQL provider address for the branch
-                      mysql_edge_address:
-                        type: string
-                        description: The address of the MySQL provider for the branch
-                      state:
-                        type: string
-                        enum:
-                          - pending
-                          - sleep_in_progress
-                          - sleeping
-                          - awakening
-                          - ready
-                        description: The current state of the branch
-                      direct_vtgate:
-                        type: boolean
-                        description: True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-                      vtgate_size:
-                        type: string
-                        description: The size of the vtgate cluster for the branch
-                      vtgate_count:
-                        type: integer
-                        description: The number of vtgate instances in the branch
-                      cluster_name:
-                        type: string
-                        description: The SKU representing the branch's cluster size
-                      cluster_iops:
-                        type: integer
-                        description: IOPS for the cluster
-                      cluster_rate_name:
-                        type: string
-                        description: The rate name for the cluster
-                      ready:
-                        type: boolean
-                        description: Whether or not the branch is ready to serve queries
-                      schema_ready:
-                        type: boolean
-                        description: Whether or not the schema is ready for queries
-                      metal:
-                        type: boolean
-                        description: Whether or not this is a metal database
-                      production:
-                        type: boolean
-                        description: Whether or not the branch is a production branch
-                      safe_migrations:
-                        type: boolean
-                        description: Whether or not the branch has safe migrations enabled
-                      sharded:
-                        type: boolean
-                        description: Whether or not the branch is sharded
-                      shard_count:
-                        type: integer
-                        description: The number of shards in the branch
-                      stale_schema:
-                        type: boolean
-                        description: Whether or not the branch has a stale schema
-                      actor:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the actor
-                          display_name:
-                            type: string
-                            description: The name of the actor
-                          avatar_url:
-                            type: string
-                            description: The URL of the actor's avatar
-                        additionalProperties: false
-                      restored_from_branch:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID for the resource
-                          name:
-                            type: string
-                            description: The name for the resource
-                          created_at:
-                            type: string
-                            description: When the resource was created
-                          updated_at:
-                            type: string
-                            description: When the resource was last updated
-                          deleted_at:
-                            type: string
-                            description: When the resource was deleted, if deleted
-                        additionalProperties: false
-                      private_connectivity:
-                        type: boolean
-                        description: True if private connectivity is enabled
-                      private_edge_connectivity:
-                        type: boolean
-                        description: True if private edge connections are enabled
-                      has_replicas:
-                        type: boolean
-                        description: True if the branch has replica servers
-                      has_read_only_replicas:
-                        type: boolean
-                        description: True if the branch has read-only replica servers
-                      html_url:
-                        type: string
-                        description: Planetscale app URL for the branch
-                      url:
-                        type: string
-                        description: Planetscale API URL for the branch
-                      region:
-                        x-speakeasy-name-override: region_data
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the region
-                          provider:
-                            type: string
-                            description: Provider for the region (ex. AWS)
-                          enabled:
-                            type: boolean
-                            description: Whether or not the region is currently active
-                          public_ip_addresses:
-                            items:
-                              type: string
-                            type: array
-                            description: Public IP addresses for the region
-                          display_name:
-                            type: string
-                            description: Name of the region
-                          location:
-                            type: string
-                            description: Location of the region
-                          slug:
-                            type: string
-                            description: The slug of the region
-                          current_default:
-                            type: boolean
-                            description: True if the region is the default for new branch creation
-                        additionalProperties: false
-                      parent_branch:
-                        type: string
-                        description: The name of the parent branch from which the branch was created
-                    additionalProperties: false
-            "401":
-              description: Unauthorized
-            "403":
-              description: Forbidden
-            "404":
-              description: Not Found
-            "500":
-              description: Internal Server Error
-          description: |-
-            ### Authorization
-            A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+      /organizations/{organization}/databases/{database}/branches#vitess: {}
+      /organizations/{organization}/databases/{database}/branches/{branch}#vitess: {}
 
-            **Service Token Accesses**
-             `create_branch`, `restore_production_branch_backup`, `restore_backup`
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post
+    description: Copy create_branch operation as base
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches'].post
 
-            **OAuth Scopes**
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post
+    description: Update operation metadata for Vitess
+    update:
+      operationId: create_vitess_branch
+      summary: Create a Vitess branch
+      x-speakeasy-entity-operation: VitessBranch#create
+      x-speakeasy-entity-description: Manage a PlanetScale Vitess database branch.
 
-             | Resource | Scopes |
-            | :------- | :---------- |
-            | Organization | `write_branches` |
-            | Database | `write_branches`, `restore_production_branch_backups`, `restore_backups` |
-            | Branch | `restore_backups` |
-      /organizations/{organization}/databases/{database}/branches/{branch}#vitess:
-        get:
-          tags:
-            - Database branches
-          operationId: get_vitess_branch
-          summary: Get a Vitess branch
-          x-speakeasy-entity-operation:
-            - VitessBranch#read
-            - entityOperation: VitessBranch#create#2
-              options:
-                polling:
-                  name: WaitForReady
-          x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch.
-          x-speakeasy-polling:
-            - name: WaitForReady
-              limitCount: 300
-              successCriteria:
-                - condition: $statusCode == 200
-                - condition: $response.body#/state == "ready"
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: The name of the organization the branch belongs to
-              schema:
-                type: string
-            - name: database
-              in: path
-              required: true
-              description: The name of the database the branch belongs to
-              schema:
-                type: string
-            - name: branch
-              in: path
-              required: true
-              description: The name of the branch
-              x-speakeasy-match: id
-              schema:
-                type: string
-          responses:
-            "200":
-              description: Returns information about a branch
-              headers: {}
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of the branch
-                      name:
-                        type: string
-                        description: The name of the branch
-                      created_at:
-                        type: string
-                        description: When the branch was created
-                      updated_at:
-                        type: string
-                        description: When the branch was last updated
-                      deleted_at:
-                        type: string
-                        description: When the branch was deleted
-                      restore_checklist_completed_at:
-                        type: string
-                        description: When a user last marked a backup restore checklist as completed
-                      schema_last_updated_at:
-                        type: string
-                        description: When the schema for the branch was last updated
-                      kind:
-                        type: string
-                        const: mysql
-                        description: The kind of branch (always mysql for Vitess branches)
-                      mysql_address:
-                        type: string
-                        description: The MySQL address for the branch
-                      mysql_provider_address:
-                        type: string
-                        description: The MySQL provider address for the branch
-                      mysql_edge_address:
-                        type: string
-                        description: The address of the MySQL provider for the branch
-                      state:
-                        type: string
-                        enum:
-                          - pending
-                          - sleep_in_progress
-                          - sleeping
-                          - awakening
-                          - ready
-                        description: The current state of the branch
-                      direct_vtgate:
-                        type: boolean
-                        description: True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-                      vtgate_size:
-                        type: string
-                        description: The size of the vtgate cluster for the branch
-                      vtgate_count:
-                        type: integer
-                        description: The number of vtgate instances in the branch
-                      cluster_name:
-                        type: string
-                        description: The SKU representing the branch's cluster size
-                      cluster_iops:
-                        type: integer
-                        description: IOPS for the cluster
-                      cluster_rate_name:
-                        type: string
-                        description: The rate name for the cluster
-                      ready:
-                        type: boolean
-                        description: Whether or not the branch is ready to serve queries
-                      schema_ready:
-                        type: boolean
-                        description: Whether or not the schema is ready for queries
-                      metal:
-                        type: boolean
-                        description: Whether or not this is a metal database
-                      production:
-                        type: boolean
-                        description: Whether or not the branch is a production branch
-                      safe_migrations:
-                        type: boolean
-                        description: Whether or not the branch has safe migrations enabled
-                      sharded:
-                        type: boolean
-                        description: Whether or not the branch is sharded
-                      shard_count:
-                        type: integer
-                        description: The number of shards in the branch
-                      stale_schema:
-                        type: boolean
-                        description: Whether or not the branch has a stale schema
-                      actor:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the actor
-                          display_name:
-                            type: string
-                            description: The name of the actor
-                          avatar_url:
-                            type: string
-                            description: The URL of the actor's avatar
-                        additionalProperties: false
-                      restored_from_branch:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID for the resource
-                          name:
-                            type: string
-                            description: The name for the resource
-                          created_at:
-                            type: string
-                            description: When the resource was created
-                          updated_at:
-                            type: string
-                            description: When the resource was last updated
-                          deleted_at:
-                            type: string
-                            description: When the resource was deleted, if deleted
-                        additionalProperties: false
-                      private_connectivity:
-                        type: boolean
-                        description: True if private connectivity is enabled
-                      private_edge_connectivity:
-                        type: boolean
-                        description: True if private edge connections are enabled
-                      has_replicas:
-                        type: boolean
-                        description: True if the branch has replica servers
-                      has_read_only_replicas:
-                        type: boolean
-                        description: True if the branch has read-only replica servers
-                      html_url:
-                        type: string
-                        description: Planetscale app URL for the branch
-                      url:
-                        type: string
-                        description: Planetscale API URL for the branch
-                      region:
-                        x-speakeasy-name-override: region_data
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the region
-                          provider:
-                            type: string
-                            description: Provider for the region (ex. AWS)
-                          enabled:
-                            type: boolean
-                            description: Whether or not the region is currently active
-                          public_ip_addresses:
-                            items:
-                              type: string
-                            type: array
-                            description: Public IP addresses for the region
-                          display_name:
-                            type: string
-                            description: Name of the region
-                          location:
-                            type: string
-                            description: Location of the region
-                          slug:
-                            type: string
-                            description: The slug of the region
-                          current_default:
-                            type: boolean
-                            description: True if the region is the default for new branch creation
-                        additionalProperties: false
-                      parent_branch:
-                        type: string
-                        description: The name of the parent branch from which the branch was created
-                    additionalProperties: false
-            "401":
-              description: Unauthorized
-            "403":
-              description: Forbidden
-            "404":
-              description: Not Found
-            "500":
-              description: Internal Server Error
-          description: |-
-            ### Authorization
-            A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.restore_point
+    description: Remove restore_point (Postgres-only field)
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.major_version
+    description: Remove major_version (Postgres-only field)
+    remove: true
 
-            **Service Token Accesses**
-             `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+  # Remove required fields that don't apply to Vitess
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.required
+    remove: true
 
-            **OAuth Scopes**
+  # Update kind to be const: mysql instead of enum
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.kind
+    description: Set kind to const mysql
+    update:
+      const: mysql
+      description: The kind of branch (always mysql for Vitess branches)
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.kind.enum
+    remove: true
 
-             | Resource | Scopes |
-            | :------- | :---------- |
-            | Organization | `read_branches` |
-            | Database | `read_branches` |
-            | Branch | `read_branch` |
-        delete:
-          tags:
-            - Database branches
-          operationId: delete_vitess_branch
-          summary: Delete a Vitess branch
-          x-speakeasy-entity-operation: VitessBranch#delete
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: The name of the organization the branch belongs to
-              schema:
-                type: string
-            - name: database
-              in: path
-              required: true
-              description: The name of the database the branch belongs to
-              schema:
-                type: string
-            - name: branch
-              in: path
-              required: true
-              description: The name of the branch
-              x-speakeasy-match: id
-              schema:
-                type: string
-          responses:
-            "204":
-              description: Delete a branch
-              headers: {}
-            "401":
-              description: Unauthorized
-            "403":
-              description: Forbidden
-            "404":
-              description: Not Found
-            "500":
-              description: Internal Server Error
-          description: |-
-            ### Authorization
-            A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties
+    description: Add Vitess-specific response fields
+    update:
+      mysql_provider_address:
+        type: string
+        description: The MySQL provider address for the branch
+      cluster_rate_name:
+        type: string
+        description: The rate name for the cluster
+      private_connectivity:
+        type: boolean
+        description: True if private connectivity is enabled
 
-            **Service Token Accesses**
-             `delete_branch`
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.region
+    description: Add region_data name override
+    update:
+      x-speakeasy-name-override: region_data
 
-            **OAuth Scopes**
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
+    description: Copy get_branch operation as base
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get
 
-             | Resource | Scopes |
-            | :------- | :---------- |
-            | Organization | `delete_branches`, `delete_production_branches` |
-            | Database | `delete_branches`, `delete_production_branches` |
-            | Branch | `delete_branch` |
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
+    description: Update operation metadata for Vitess
+    update:
+      operationId: get_vitess_branch
+      summary: Get a Vitess branch
+      x-speakeasy-entity-operation:
+        - VitessBranch#read
+        - entityOperation: VitessBranch#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          limitCount: 300
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind
+    description: Set kind to const mysql
+    update:
+      const: mysql
+      description: The kind of branch (always mysql for Vitess branches)
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind.enum
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties
+    description: Add Vitess-specific response fields
+    update:
+      mysql_provider_address:
+        type: string
+        description: The MySQL provider address for the branch
+      cluster_rate_name:
+        type: string
+        description: The rate name for the cluster
+      private_connectivity:
+        type: boolean
+        description: True if private connectivity is enabled
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.region
+    description: Add region_data name override
+    update:
+      x-speakeasy-name-override: region_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
+    description: Copy delete_branch operation as base
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].delete
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
+    description: Update operation metadata for Vitess
+    update:
+      operationId: delete_vitess_branch
+      summary: Delete a Vitess branch
+      x-speakeasy-entity-operation: VitessBranch#delete
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
+    update:
+      x-speakeasy-match: id
