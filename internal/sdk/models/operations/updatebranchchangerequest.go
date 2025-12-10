@@ -165,19 +165,19 @@ func (u *UpdateBranchChangeRequestActor) GetAvatarURL() string {
 	return u.AvatarURL
 }
 
-// UpdateBranchChangeRequestStorageType - The storage type (gp3 or io2)
-type UpdateBranchChangeRequestStorageType string
+// StorageType - The storage type (gp3 or io2)
+type StorageType string
 
 const (
-	UpdateBranchChangeRequestStorageTypeGp3   UpdateBranchChangeRequestStorageType = "gp3"
-	UpdateBranchChangeRequestStorageTypeIo2   UpdateBranchChangeRequestStorageType = "io2"
-	UpdateBranchChangeRequestStorageTypePdSsd UpdateBranchChangeRequestStorageType = "pd_ssd"
+	StorageTypeGp3   StorageType = "gp3"
+	StorageTypeIo2   StorageType = "io2"
+	StorageTypePdSsd StorageType = "pd_ssd"
 )
 
-func (e UpdateBranchChangeRequestStorageType) ToPointer() *UpdateBranchChangeRequestStorageType {
+func (e StorageType) ToPointer() *StorageType {
 	return &e
 }
-func (e *UpdateBranchChangeRequestStorageType) UnmarshalJSON(data []byte) error {
+func (e *StorageType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -188,10 +188,10 @@ func (e *UpdateBranchChangeRequestStorageType) UnmarshalJSON(data []byte) error 
 	case "io2":
 		fallthrough
 	case "pd_ssd":
-		*e = UpdateBranchChangeRequestStorageType(v)
+		*e = StorageType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for UpdateBranchChangeRequestStorageType: %v", v)
+		return fmt.Errorf("invalid value for StorageType: %v", v)
 	}
 }
 
@@ -241,7 +241,7 @@ type UpdateBranchChangeRequestResponseBody struct {
 	// Whether storage shrinking is enabled when autoscaling is enabled
 	StorageShrinking bool `json:"storage_shrinking"`
 	// The storage type (gp3 or io2)
-	StorageType UpdateBranchChangeRequestStorageType `json:"storage_type"`
+	StorageType StorageType `json:"storage_type"`
 	// The storage IOPS
 	StorageIops int64 `json:"storage_iops"`
 	// The storage throughput in MiB/s
@@ -416,9 +416,9 @@ func (u *UpdateBranchChangeRequestResponseBody) GetStorageShrinking() bool {
 	return u.StorageShrinking
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageType() UpdateBranchChangeRequestStorageType {
+func (u *UpdateBranchChangeRequestResponseBody) GetStorageType() StorageType {
 	if u == nil {
-		return UpdateBranchChangeRequestStorageType("")
+		return StorageType("")
 	}
 	return u.StorageType
 }

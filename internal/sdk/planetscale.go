@@ -57,75 +57,15 @@ type Planetscale struct {
 	//
 	Databases        *Databases
 	DatabaseBranches *DatabaseBranches
-	//           Resources for managing database branch backups.
-	//
-	Backups                 *Backups
-	APIBranchBouncerResizes *APIBranchBouncerResizes
-	//           Resources for managing postgres bouncers.
-	//
-	Bouncers *Bouncers
-	//           Resources for managing Postgres bouncer resize requests.
-	//
-	BouncerResizes *BouncerResizes
 	//           Resources for managing cluster changes.
 	//
 	BranchChanges *BranchChanges
-	//           Resources for managing cluster extension configuration.
-	//
-	ClusterExtensions *ClusterExtensions
-	//           Resources for managing keyspaces.
-	//
-	DatabaseBranchKeyspaces *DatabaseBranchKeyspaces
-	//           Resources for managing VSchemas within a keyspace.
-	//
-	KeyspaceVSchemas *KeyspaceVSchemas
-	//           Resources for managing cluster configuration parameters.
-	//
-	ClusterParameters *ClusterParameters
 	//           Resources for managing database branch passwords.
 	//
 	DatabaseBranchPasswords *DatabaseBranchPasswords
-	//           Resources for downloading query insights data.
-	//
-	QueryInsightsReports *QueryInsightsReports
 	//           Resources for managing role credentials.
 	//
 	Roles *Roles
-	//           Resources for managing Postgres IP restriction entries for databases.
-	//
-	//           Note: This endpoint is only available for PostgreSQL databases. For MySQL databases, use the Database Branch Passwords endpoint.
-	//
-	DatabasePostgresIPRestrictions *DatabasePostgresIPRestrictions
-	//             Resources for managing deploy requests.
-	//
-	DeployRequests *DeployRequests
-	//             Resources for managing database webhooks.
-	//
-	Webhooks *Webhooks
-	//           API endpoints for managing workflows.
-	//
-	Workflows *Workflows
-	//             Resources for managing invoices.
-	//
-	Invoices *Invoices
-	//           Resources for managing organization members and their roles.
-	//
-	OrganizationMembers *OrganizationMembers
-	//           Resources for managing OAuth applications.
-	//
-	OAuthApplications *OAuthApplications
-	//           Resources for managing OAuth tokens.
-	//
-	OAuthTokens *OAuthTokens
-	//           API endpoints for managing service tokens within an organization.
-	//
-	ServiceTokens *ServiceTokens
-	//             Resources for managing teams within an organization. Teams allow you to group members and grant them access to specific databases.
-	//
-	//             Note: Teams managed through SSO/directory services cannot be modified via API.
-	//
-	OrganizationTeams *OrganizationTeams
-	Regions           *Regions
 	//           Resources for managing users.
 	//
 	Users *Users
@@ -230,29 +170,9 @@ func New(opts ...SDKOption) *Planetscale {
 	sdk.Organizations = newOrganizations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.APIBranchBouncerResizes = newAPIBranchBouncerResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Bouncers = newBouncers(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.BouncerResizes = newBouncerResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.ClusterExtensions = newClusterExtensions(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.DatabaseBranchKeyspaces = newDatabaseBranchKeyspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.KeyspaceVSchemas = newKeyspaceVSchemas(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.ClusterParameters = newClusterParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.QueryInsightsReports = newQueryInsightsReports(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.DatabasePostgresIPRestrictions = newDatabasePostgresIPRestrictions(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.DeployRequests = newDeployRequests(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Webhooks = newWebhooks(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Workflows = newWorkflows(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Invoices = newInvoices(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.OrganizationMembers = newOrganizationMembers(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.OAuthApplications = newOAuthApplications(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.OAuthTokens = newOAuthTokens(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.ServiceTokens = newServiceTokens(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.OrganizationTeams = newOrganizationTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Regions = newRegions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk

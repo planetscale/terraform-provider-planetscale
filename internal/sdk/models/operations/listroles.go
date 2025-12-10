@@ -127,7 +127,7 @@ func (e *ListRolesInheritedRole) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type ListRolesBranch struct {
+type Branch struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -140,39 +140,39 @@ type ListRolesBranch struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (l *ListRolesBranch) GetID() string {
-	if l == nil {
+func (b *Branch) GetID() string {
+	if b == nil {
 		return ""
 	}
-	return l.ID
+	return b.ID
 }
 
-func (l *ListRolesBranch) GetName() string {
-	if l == nil {
+func (b *Branch) GetName() string {
+	if b == nil {
 		return ""
 	}
-	return l.Name
+	return b.Name
 }
 
-func (l *ListRolesBranch) GetCreatedAt() string {
-	if l == nil {
+func (b *Branch) GetCreatedAt() string {
+	if b == nil {
 		return ""
 	}
-	return l.CreatedAt
+	return b.CreatedAt
 }
 
-func (l *ListRolesBranch) GetUpdatedAt() string {
-	if l == nil {
+func (b *Branch) GetUpdatedAt() string {
+	if b == nil {
 		return ""
 	}
-	return l.UpdatedAt
+	return b.UpdatedAt
 }
 
-func (l *ListRolesBranch) GetDeletedAt() string {
-	if l == nil {
+func (b *Branch) GetDeletedAt() string {
+	if b == nil {
 		return ""
 	}
-	return l.DeletedAt
+	return b.DeletedAt
 }
 
 type ListRolesActor struct {
@@ -244,7 +244,7 @@ type ListRolesData struct {
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []ListRolesInheritedRole `json:"inherited_roles"`
-	Branch         ListRolesBranch          `json:"branch"`
+	Branch         Branch                   `json:"branch"`
 	Actor          ListRolesActor           `json:"actor"`
 }
 
@@ -381,9 +381,9 @@ func (l *ListRolesData) GetInheritedRoles() []ListRolesInheritedRole {
 	return l.InheritedRoles
 }
 
-func (l *ListRolesData) GetBranch() ListRolesBranch {
+func (l *ListRolesData) GetBranch() Branch {
 	if l == nil {
-		return ListRolesBranch{}
+		return Branch{}
 	}
 	return l.Branch
 }

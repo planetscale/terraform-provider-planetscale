@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type GetCurrentUserDefaultOrganization struct {
+type DefaultOrganization struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -20,39 +20,39 @@ type GetCurrentUserDefaultOrganization struct {
 	DeletedAt string `json:"deleted_at"`
 }
 
-func (g *GetCurrentUserDefaultOrganization) GetID() string {
-	if g == nil {
+func (d *DefaultOrganization) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return g.ID
+	return d.ID
 }
 
-func (g *GetCurrentUserDefaultOrganization) GetName() string {
-	if g == nil {
+func (d *DefaultOrganization) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return g.Name
+	return d.Name
 }
 
-func (g *GetCurrentUserDefaultOrganization) GetCreatedAt() string {
-	if g == nil {
+func (d *DefaultOrganization) GetCreatedAt() string {
+	if d == nil {
 		return ""
 	}
-	return g.CreatedAt
+	return d.CreatedAt
 }
 
-func (g *GetCurrentUserDefaultOrganization) GetUpdatedAt() string {
-	if g == nil {
+func (d *DefaultOrganization) GetUpdatedAt() string {
+	if d == nil {
 		return ""
 	}
-	return g.UpdatedAt
+	return d.UpdatedAt
 }
 
-func (g *GetCurrentUserDefaultOrganization) GetDeletedAt() string {
-	if g == nil {
+func (d *DefaultOrganization) GetDeletedAt() string {
+	if d == nil {
 		return ""
 	}
-	return g.DeletedAt
+	return d.DeletedAt
 }
 
 // GetCurrentUserResponseBody - Returns the user associated with this service token
@@ -72,8 +72,8 @@ type GetCurrentUserResponseBody struct {
 	// When the user was last updated
 	UpdatedAt string `json:"updated_at"`
 	// Whether or not the user has configured two factor authentication
-	TwoFactorAuthConfigured bool                              `json:"two_factor_auth_configured"`
-	DefaultOrganization     GetCurrentUserDefaultOrganization `json:"default_organization"`
+	TwoFactorAuthConfigured bool                `json:"two_factor_auth_configured"`
+	DefaultOrganization     DefaultOrganization `json:"default_organization"`
 	// Whether or not the user is managed by SSO
 	Sso bool `json:"sso"`
 	// Whether or not the user is managed by an authentication provider
@@ -140,9 +140,9 @@ func (g *GetCurrentUserResponseBody) GetTwoFactorAuthConfigured() bool {
 	return g.TwoFactorAuthConfigured
 }
 
-func (g *GetCurrentUserResponseBody) GetDefaultOrganization() GetCurrentUserDefaultOrganization {
+func (g *GetCurrentUserResponseBody) GetDefaultOrganization() DefaultOrganization {
 	if g == nil {
-		return GetCurrentUserDefaultOrganization{}
+		return DefaultOrganization{}
 	}
 	return g.DefaultOrganization
 }

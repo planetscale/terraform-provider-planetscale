@@ -9,27 +9,27 @@ import (
 	"net/http"
 )
 
-// CreateVitessBranchSeedData - If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
-type CreateVitessBranchSeedData string
+// SeedData - If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
+type SeedData string
 
 const (
-	CreateVitessBranchSeedDataLastSuccessfulBackup CreateVitessBranchSeedData = "last_successful_backup"
+	SeedDataLastSuccessfulBackup SeedData = "last_successful_backup"
 )
 
-func (e CreateVitessBranchSeedData) ToPointer() *CreateVitessBranchSeedData {
+func (e SeedData) ToPointer() *SeedData {
 	return &e
 }
-func (e *CreateVitessBranchSeedData) UnmarshalJSON(data []byte) error {
+func (e *SeedData) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "last_successful_backup":
-		*e = CreateVitessBranchSeedData(v)
+		*e = SeedData(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreateVitessBranchSeedData: %v", v)
+		return fmt.Errorf("invalid value for SeedData: %v", v)
 	}
 }
 
@@ -43,7 +43,7 @@ type CreateVitessBranchRequestBody struct {
 	// The region to create the branch in. If not provided, the branch will be created in the default region for its database.
 	Region *string `json:"region,omitzero"`
 	// If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
-	SeedData *CreateVitessBranchSeedData `json:"seed_data,omitzero"`
+	SeedData *SeedData `json:"seed_data,omitzero"`
 	// The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800
 	ClusterSize *string `json:"cluster_size,omitzero"`
 }
@@ -76,7 +76,7 @@ func (c *CreateVitessBranchRequestBody) GetRegion() *string {
 	return c.Region
 }
 
-func (c *CreateVitessBranchRequestBody) GetSeedData() *CreateVitessBranchSeedData {
+func (c *CreateVitessBranchRequestBody) GetSeedData() *SeedData {
 	if c == nil {
 		return nil
 	}
