@@ -255,7 +255,7 @@ func (r *PostgresBranchResourceModel) ToOperationsUpdateBranchChangeRequestReque
 	database = r.Database.ValueString()
 
 	var branch string
-	branch = r.Branch.ValueString()
+	branch = r.ID.ValueString()
 
 	body, bodyDiags := r.ToOperationsUpdateBranchChangeRequestRequestBody(ctx)
 	diags.Append(bodyDiags...)
