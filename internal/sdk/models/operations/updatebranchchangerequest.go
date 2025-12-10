@@ -198,7 +198,7 @@ func (e *UpdateBranchChangeRequestStorageType) UnmarshalJSON(data []byte) error 
 // UpdateBranchChangeRequestResponseBody - Returns the branch change request
 type UpdateBranchChangeRequestResponseBody struct {
 	// The ID of the branch change request
-	ID string `json:"id"`
+	ChangeRequestID string `json:"id"`
 	// The ports requiring a restart when changes are applied
 	Restart []int64 `json:"restart"`
 	// The state of the branch change request
@@ -262,11 +262,11 @@ type UpdateBranchChangeRequestResponseBody struct {
 	PreviousStorageThroughputMibs int64 `json:"previous_storage_throughput_mibs"`
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetID() string {
+func (u *UpdateBranchChangeRequestResponseBody) GetChangeRequestID() string {
 	if u == nil {
 		return ""
 	}
-	return u.ID
+	return u.ChangeRequestID
 }
 
 func (u *UpdateBranchChangeRequestResponseBody) GetRestart() []int64 {

@@ -117,7 +117,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		r.ID = types.StringValue(resp.ID)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
