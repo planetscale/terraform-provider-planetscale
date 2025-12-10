@@ -106,7 +106,7 @@ func (c CreateOauthTokenRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOauthTokenRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -732,7 +732,7 @@ func (c CreateOauthTokenResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOauthTokenResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

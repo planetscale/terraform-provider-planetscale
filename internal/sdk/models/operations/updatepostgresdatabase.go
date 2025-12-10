@@ -77,7 +77,7 @@ func (u UpdatePostgresDatabaseRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdatePostgresDatabaseRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -133,7 +133,7 @@ func (u UpdatePostgresDatabaseResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdatePostgresDatabaseResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil

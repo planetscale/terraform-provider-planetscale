@@ -27,7 +27,7 @@ func (l ListKeyspacesRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListKeyspacesRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -385,7 +385,7 @@ func (l ListKeyspacesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListKeyspacesResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

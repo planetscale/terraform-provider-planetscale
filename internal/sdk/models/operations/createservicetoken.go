@@ -30,7 +30,7 @@ func (c CreateServiceTokenRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateServiceTokenRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -649,7 +649,7 @@ func (c CreateServiceTokenResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateServiceTokenResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

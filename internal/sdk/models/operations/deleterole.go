@@ -36,7 +36,7 @@ func (d DeleteRoleRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteRoleRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"organization", "database", "branch", "id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil

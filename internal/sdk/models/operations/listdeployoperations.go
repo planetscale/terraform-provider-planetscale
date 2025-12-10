@@ -27,7 +27,7 @@ func (l ListDeployOperationsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDeployOperationsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"number", "organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -354,7 +354,7 @@ func (l ListDeployOperationsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDeployOperationsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

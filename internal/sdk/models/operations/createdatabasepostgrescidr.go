@@ -50,7 +50,7 @@ func (c CreateDatabasePostgresCidrRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDatabasePostgresCidrRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -198,7 +198,7 @@ func (c CreateDatabasePostgresCidrResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDatabasePostgresCidrResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

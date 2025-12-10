@@ -52,7 +52,7 @@ func (u UpdateDatabaseThrottlerRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateDatabaseThrottlerRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -193,7 +193,7 @@ func (u UpdateDatabaseThrottlerResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateDatabaseThrottlerResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil

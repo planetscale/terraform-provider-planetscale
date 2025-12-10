@@ -36,7 +36,7 @@ func (q QueueDeployRequestRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (q *QueueDeployRequestRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &q, "", false, []string{"organization", "database", "number"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &q, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1484,7 +1484,7 @@ func (q QueueDeployRequestResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (q *QueueDeployRequestResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &q, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &q, "", false, nil); err != nil {
 		return err
 	}
 	return nil

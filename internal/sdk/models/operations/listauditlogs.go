@@ -239,7 +239,7 @@ func (l ListAuditLogsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListAuditLogsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

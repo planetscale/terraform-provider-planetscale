@@ -115,7 +115,7 @@ func (c CreateRoleRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateRoleRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -493,7 +493,7 @@ func (c CreateRoleResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateRoleResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
