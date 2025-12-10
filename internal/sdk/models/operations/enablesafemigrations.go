@@ -569,7 +569,7 @@ func (e EnableSafeMigrationsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EnableSafeMigrationsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -181,7 +181,7 @@ func (c CreateQueryPatternsReportResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateQueryPatternsReportResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

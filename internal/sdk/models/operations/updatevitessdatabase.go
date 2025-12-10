@@ -122,7 +122,7 @@ func (u UpdateVitessDatabaseRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateVitessDatabaseRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -178,7 +178,7 @@ func (u UpdateVitessDatabaseResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateVitessDatabaseResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil

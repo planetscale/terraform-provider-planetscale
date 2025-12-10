@@ -1453,7 +1453,7 @@ func (c CompleteRevertResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CompleteRevertResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

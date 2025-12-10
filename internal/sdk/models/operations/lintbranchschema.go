@@ -27,7 +27,7 @@ func (l LintBranchSchemaRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LintBranchSchemaRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -327,7 +327,7 @@ func (l LintBranchSchemaResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *LintBranchSchemaResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

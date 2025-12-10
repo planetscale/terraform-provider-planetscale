@@ -392,7 +392,7 @@ func (r RenewRoleResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RenewRoleResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

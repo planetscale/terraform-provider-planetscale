@@ -36,7 +36,7 @@ func (u UpdateKeyspaceVschemaRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateKeyspaceVschemaRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch", "keyspace"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -106,7 +106,7 @@ func (u UpdateKeyspaceVschemaResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateKeyspaceVschemaResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil

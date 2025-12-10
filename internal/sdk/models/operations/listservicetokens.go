@@ -21,7 +21,7 @@ func (l ListServiceTokensRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListServiceTokensRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -703,7 +703,7 @@ func (l ListServiceTokensResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListServiceTokensResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -104,7 +104,7 @@ func (c CreateDatabaseRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDatabaseRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -714,7 +714,7 @@ func (c CreateDatabaseResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDatabaseResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

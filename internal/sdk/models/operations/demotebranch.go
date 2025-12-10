@@ -569,7 +569,7 @@ func (d DemoteBranchResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DemoteBranchResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil

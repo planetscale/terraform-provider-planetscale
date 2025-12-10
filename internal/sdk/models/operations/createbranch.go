@@ -121,7 +121,7 @@ func (c CreateBranchRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateBranchRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -678,7 +678,7 @@ func (c CreateBranchResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateBranchResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

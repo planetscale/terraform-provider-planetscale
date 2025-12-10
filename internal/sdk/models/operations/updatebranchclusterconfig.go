@@ -34,7 +34,7 @@ func (u UpdateBranchClusterConfigRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateBranchClusterConfigRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil

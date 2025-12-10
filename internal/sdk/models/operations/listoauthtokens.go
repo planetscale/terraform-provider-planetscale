@@ -23,7 +23,7 @@ func (l ListOauthTokensRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListOauthTokensRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "application_id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -712,7 +712,7 @@ func (l ListOauthTokensResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListOauthTokensResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

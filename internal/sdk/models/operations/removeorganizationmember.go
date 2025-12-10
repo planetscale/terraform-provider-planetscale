@@ -41,7 +41,7 @@ func (r RemoveOrganizationMemberRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (r *RemoveOrganizationMemberRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"organization", "id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

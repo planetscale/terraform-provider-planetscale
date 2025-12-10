@@ -21,7 +21,7 @@ func (l ListRegionsForOrganizationRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListRegionsForOrganizationRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -196,7 +196,7 @@ func (l ListRegionsForOrganizationResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListRegionsForOrganizationResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -1041,7 +1041,7 @@ func (w WorkflowReverseTrafficResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowReverseTrafficResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil

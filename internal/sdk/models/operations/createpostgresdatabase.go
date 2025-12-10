@@ -30,7 +30,7 @@ func (c CreatePostgresDatabaseRequestBody) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreatePostgresDatabaseRequestBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"name", "cluster_size"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -86,7 +86,7 @@ func (c CreatePostgresDatabaseRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreatePostgresDatabaseRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -645,7 +645,7 @@ func (c CreatePostgresDatabaseResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreatePostgresDatabaseResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

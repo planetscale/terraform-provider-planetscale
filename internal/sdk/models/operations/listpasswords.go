@@ -29,7 +29,7 @@ func (l ListPasswordsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListPasswordsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -536,7 +536,7 @@ func (l ListPasswordsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListPasswordsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

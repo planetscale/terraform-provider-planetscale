@@ -38,7 +38,7 @@ func (u UpdateRoleRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateRoleRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "branch", "id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -423,7 +423,7 @@ func (u UpdateRoleResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateRoleResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -27,7 +27,7 @@ func (l ListWorkflowsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListWorkflowsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1126,7 +1126,7 @@ func (l ListWorkflowsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListWorkflowsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

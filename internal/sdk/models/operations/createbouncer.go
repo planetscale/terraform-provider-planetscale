@@ -63,7 +63,7 @@ func (c CreateBouncerRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateBouncerRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -646,7 +646,7 @@ func (c CreateBouncerResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateBouncerResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

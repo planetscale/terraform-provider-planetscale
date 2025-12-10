@@ -27,7 +27,7 @@ func (l ListBranchChangeRequestsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListBranchChangeRequestsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -527,7 +527,7 @@ func (l ListBranchChangeRequestsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListBranchChangeRequestsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

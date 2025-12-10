@@ -21,7 +21,7 @@ func (l ListInvoicesRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListInvoicesRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -160,7 +160,7 @@ func (l ListInvoicesResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListInvoicesResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

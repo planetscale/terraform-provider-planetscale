@@ -1453,7 +1453,7 @@ func (s SkipRevertPeriodResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SkipRevertPeriodResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil

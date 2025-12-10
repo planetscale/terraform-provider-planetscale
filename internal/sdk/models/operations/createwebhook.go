@@ -23,7 +23,7 @@ func (c CreateWebhookRequestBody) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateWebhookRequestBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"url"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -63,7 +63,7 @@ func (c CreateWebhookRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateWebhookRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -274,7 +274,7 @@ func (c CreateWebhookResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateWebhookResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

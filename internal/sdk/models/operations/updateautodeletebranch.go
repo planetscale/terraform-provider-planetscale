@@ -36,7 +36,7 @@ func (u UpdateAutoDeleteBranchRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateAutoDeleteBranchRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"organization", "database", "number"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1484,7 +1484,7 @@ func (u UpdateAutoDeleteBranchResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UpdateAutoDeleteBranchResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -36,7 +36,7 @@ func (r ReassignRoleObjectsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (r *ReassignRoleObjectsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"organization", "database", "branch", "id"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -80,7 +80,7 @@ func (l ListBackupsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListBackupsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database", "branch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -799,7 +799,7 @@ func (l ListBackupsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListBackupsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

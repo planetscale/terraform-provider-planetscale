@@ -23,7 +23,7 @@ func (l ListDatabasePostgresCidrsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDatabasePostgresCidrsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -234,7 +234,7 @@ func (l ListDatabasePostgresCidrsResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (l *ListDatabasePostgresCidrsResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
 	}
 	return nil

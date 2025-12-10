@@ -70,7 +70,7 @@ func (c CreateDeployRequestRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDeployRequestRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"organization", "database"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1511,7 +1511,7 @@ func (c CreateDeployRequestResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateDeployRequestResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ContentType", "StatusCode", "RawResponse"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
