@@ -275,38 +275,8 @@ type GetPostgresBranchResponseBody struct {
 	ClusterDisplayName *string `json:"cluster_display_name,omitzero"`
 	// The CPU architecture for the cluster (e.g., x86_64)
 	ClusterArchitecture *string `json:"cluster_architecture,omitzero"`
-	// Whether or not this is the default branch
-	Default *bool `json:"default,omitzero"`
-	// Whether or not the branch is frozen
-	Frozen *bool `json:"frozen,omitzero"`
-	// Whether or not vector support is being enabled
-	EnablingVectors *bool `json:"enabling_vectors,omitzero"`
 	// The number of replicas for the branch
 	Replicas *int64 `json:"replicas,omitzero"`
-	// The current PostgreSQL image version
-	ImageVersion *string `json:"image_version,omitzero"`
-	// The latest available PostgreSQL image version
-	LatestImageVersion *string `json:"latest_image_version,omitzero"`
-	// Reason why the branch is read-only, if applicable
-	ReadOnlyReason *string `json:"read_only_reason,omitzero"`
-	// When the branch became read-only
-	ReadOnlyAt *string `json:"read_only_at,omitzero"`
-	// Minimum storage size in bytes
-	MinimumStorageBytes *int64 `json:"minimum_storage_bytes,omitzero"`
-	// Maximum storage size in bytes
-	MaximumStorageBytes *int64 `json:"maximum_storage_bytes,omitzero"`
-	// Whether storage autoscaling is enabled
-	StorageAutoscaling *bool `json:"storage_autoscaling,omitzero"`
-	// Whether storage shrinking is enabled
-	StorageShrinking *bool `json:"storage_shrinking,omitzero"`
-	// The type of storage (e.g., pd_ssd)
-	StorageType *string `json:"storage_type,omitzero"`
-	// Storage IOPS
-	StorageIops *int64 `json:"storage_iops,omitzero"`
-	// Storage throughput in MiB/s
-	StorageThroughputMibs *int64 `json:"storage_throughput_mibs,omitzero"`
-	// True if the branch has roles
-	HasRoles *bool `json:"has_roles,omitzero"`
 }
 
 func (g GetPostgresBranchResponseBody) MarshalJSON() ([]byte, error) {
@@ -485,116 +455,11 @@ func (g *GetPostgresBranchResponseBody) GetClusterArchitecture() *string {
 	return g.ClusterArchitecture
 }
 
-func (g *GetPostgresBranchResponseBody) GetDefault() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.Default
-}
-
-func (g *GetPostgresBranchResponseBody) GetFrozen() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.Frozen
-}
-
-func (g *GetPostgresBranchResponseBody) GetEnablingVectors() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.EnablingVectors
-}
-
 func (g *GetPostgresBranchResponseBody) GetReplicas() *int64 {
 	if g == nil {
 		return nil
 	}
 	return g.Replicas
-}
-
-func (g *GetPostgresBranchResponseBody) GetImageVersion() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ImageVersion
-}
-
-func (g *GetPostgresBranchResponseBody) GetLatestImageVersion() *string {
-	if g == nil {
-		return nil
-	}
-	return g.LatestImageVersion
-}
-
-func (g *GetPostgresBranchResponseBody) GetReadOnlyReason() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ReadOnlyReason
-}
-
-func (g *GetPostgresBranchResponseBody) GetReadOnlyAt() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ReadOnlyAt
-}
-
-func (g *GetPostgresBranchResponseBody) GetMinimumStorageBytes() *int64 {
-	if g == nil {
-		return nil
-	}
-	return g.MinimumStorageBytes
-}
-
-func (g *GetPostgresBranchResponseBody) GetMaximumStorageBytes() *int64 {
-	if g == nil {
-		return nil
-	}
-	return g.MaximumStorageBytes
-}
-
-func (g *GetPostgresBranchResponseBody) GetStorageAutoscaling() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.StorageAutoscaling
-}
-
-func (g *GetPostgresBranchResponseBody) GetStorageShrinking() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.StorageShrinking
-}
-
-func (g *GetPostgresBranchResponseBody) GetStorageType() *string {
-	if g == nil {
-		return nil
-	}
-	return g.StorageType
-}
-
-func (g *GetPostgresBranchResponseBody) GetStorageIops() *int64 {
-	if g == nil {
-		return nil
-	}
-	return g.StorageIops
-}
-
-func (g *GetPostgresBranchResponseBody) GetStorageThroughputMibs() *int64 {
-	if g == nil {
-		return nil
-	}
-	return g.StorageThroughputMibs
-}
-
-func (g *GetPostgresBranchResponseBody) GetHasRoles() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.HasRoles
 }
 
 type GetPostgresBranchResponse struct {

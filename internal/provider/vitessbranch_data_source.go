@@ -32,7 +32,6 @@ type VitessBranchDataSourceModel struct {
 	Actor                       tfTypes.GetVitessBranchActor              `tfsdk:"actor"`
 	ClusterIops                 types.Int64                               `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                              `tfsdk:"cluster_name"`
-	ClusterRateName             types.String                              `tfsdk:"cluster_rate_name"`
 	CreatedAt                   types.String                              `tfsdk:"created_at"`
 	Database                    types.String                              `tfsdk:"database"`
 	DeletedAt                   types.String                              `tfsdk:"deleted_at"`
@@ -44,11 +43,9 @@ type VitessBranchDataSourceModel struct {
 	Metal                       types.Bool                                `tfsdk:"metal"`
 	MysqlAddress                types.String                              `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                              `tfsdk:"mysql_edge_address"`
-	MysqlProviderAddress        types.String                              `tfsdk:"mysql_provider_address"`
 	Name                        types.String                              `tfsdk:"name"`
 	Organization                types.String                              `tfsdk:"organization"`
 	ParentBranch                types.String                              `tfsdk:"parent_branch"`
-	PrivateConnectivity         types.Bool                                `tfsdk:"private_connectivity"`
 	PrivateEdgeConnectivity     types.Bool                                `tfsdk:"private_edge_connectivity"`
 	Production                  types.Bool                                `tfsdk:"production"`
 	Ready                       types.Bool                                `tfsdk:"ready"`
@@ -104,10 +101,6 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
 			},
-			"cluster_rate_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `The rate name for the cluster`,
-			},
 			"created_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `When the branch was created`,
@@ -152,10 +145,6 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:    true,
 				Description: `The address of the MySQL provider for the branch`,
 			},
-			"mysql_provider_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The MySQL provider address for the branch`,
-			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The name of the branch`,
@@ -167,10 +156,6 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"parent_branch": schema.StringAttribute{
 				Computed:    true,
 				Description: `The name of the parent branch from which the branch was created`,
-			},
-			"private_connectivity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if private connectivity is enabled`,
 			},
 			"private_edge_connectivity": schema.BoolAttribute{
 				Computed:    true,

@@ -293,12 +293,6 @@ type GetVitessBranchResponseBody struct {
 	RegionData GetVitessBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
-	// The MySQL provider address for the branch
-	MysqlProviderAddress *string `json:"mysql_provider_address,omitzero"`
-	// The rate name for the cluster
-	ClusterRateName *string `json:"cluster_rate_name,omitzero"`
-	// True if private connectivity is enabled
-	PrivateConnectivity *bool `json:"private_connectivity,omitzero"`
 }
 
 func (g GetVitessBranchResponseBody) MarshalJSON() ([]byte, error) {
@@ -538,27 +532,6 @@ func (g *GetVitessBranchResponseBody) GetParentBranch() string {
 		return ""
 	}
 	return g.ParentBranch
-}
-
-func (g *GetVitessBranchResponseBody) GetMysqlProviderAddress() *string {
-	if g == nil {
-		return nil
-	}
-	return g.MysqlProviderAddress
-}
-
-func (g *GetVitessBranchResponseBody) GetClusterRateName() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ClusterRateName
-}
-
-func (g *GetVitessBranchResponseBody) GetPrivateConnectivity() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.PrivateConnectivity
 }
 
 type GetVitessBranchResponse struct {
