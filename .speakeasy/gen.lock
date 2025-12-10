@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 88f6b20ac164f9a47bc174ceee7be3c9
+  docChecksum: 6fe482d33266c68fe5b43b565482b2b6
   docVersion: v1
   speakeasyVersion: 1.675.1
   generationVersion: 2.778.0
   releaseVersion: 1.0.0
   configChecksum: b069bd5d828188ad34159b08dbdc9ef5
 persistentEdits:
-  generation_id: c9d6edaf-7e0e-4442-9c87-2dadecdd99da
-  pristine_commit_hash: ed809bb303f8399fca4de83986862aa2ae1f706c
-  pristine_tree_hash: 98f3e659d12a221587033949fa5742d0eafd5bc4
+  generation_id: ee846f2b-7131-4437-8a0e-b779646f6bb7
+  pristine_commit_hash: 3cff91cd3b6a6564ec189b11521f28bd712daf63
+  pristine_tree_hash: a6af9bc17ef1a73aaf9dd938d9f03c82add32ab5
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -250,12 +250,12 @@ trackedFiles:
     pristine_git_object: 837075e1d0026b7b1db9196b4b32ce180e2f0153
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:e9837f79ae3bc16ad491b0b14664e2ec2b1ead9d
-    pristine_git_object: 4d0054cc7f17466d9d08886e45f8e61843bfef7d
+    last_write_checksum: sha1:42fb3684ad267888157ac320d6b86e3093cb9b80
+    pristine_git_object: b22e6ea946fc55e3cce25fb3dd1e18701e662bf1
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:203d3497cd6f009ed1e9f58e2e38ddbfa43e4c1a
-    pristine_git_object: b751518cc02738c2aafc2797d29957ea31eac43f
+    last_write_checksum: sha1:60a511b1d683e11d57e4ae1981ba34cbdca803ef
+    pristine_git_object: 788479a0b920927979c2ddbfd184d766333aab22
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
     last_write_checksum: sha1:4a1c7f458cf831c3a57e234757a0898ac7edb96c
@@ -1182,8 +1182,8 @@ trackedFiles:
     pristine_git_object: 370ff5415e9a2f300bc592bfeeb29c6d9848b740
   internal/sdk/models/operations/updatebranchchangerequest.go:
     id: 64fa24c88493
-    last_write_checksum: sha1:c3e6576938a13e05a2d46b70cc689f7661a027a7
-    pristine_git_object: 9b2bf6c26b152fd6ef9fa5db9d2e099717e108bb
+    last_write_checksum: sha1:5ddf5991f1dbbacf9508a2d60962d6b2ce10f1ee
+    pristine_git_object: 12149fabbdc814723a60bac3c30e5dd285ed5619
   internal/sdk/models/operations/updatebranchclusterconfig.go:
     id: 9e1d6ab40eb3
     last_write_checksum: sha1:3c00d43fceaed27f0b376e125414dbf4370eaddc

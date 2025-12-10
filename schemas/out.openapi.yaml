@@ -6319,6 +6319,7 @@ paths:
           description: The name of the branch that owns this resource
           schema:
             type: string
+          x-speakeasy-match: id
       requestBody:
         content:
           application/json:
@@ -6348,6 +6349,7 @@ paths:
                   id:
                     type: string
                     description: The ID of the branch change request
+                    x-speakeasy-name-override: change_request_id
                   restart:
                     items:
                       type: integer
@@ -6524,6 +6526,7 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresBranch#update
   /organizations/{organization}/databases/{database}/branches/{branch}/cluster:
     patch:
       tags:

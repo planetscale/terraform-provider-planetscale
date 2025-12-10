@@ -107,6 +107,24 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 	return diags
 }
 
+func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeRequestResponseBody(ctx context.Context, resp *operations.UpdateBranchChangeRequestResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
+		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.Replicas = types.Int64Value(resp.Replicas)
+		r.State = types.StringValue(string(resp.State))
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
+	}
+
+	return diags
+}
+
 func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequest(ctx context.Context) (*operations.CreatePostgresBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -221,6 +239,58 @@ func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx c
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
+	}
+
+	return &out, diags
+}
+
+func (r *PostgresBranchResourceModel) ToOperationsUpdateBranchChangeRequestRequest(ctx context.Context) (*operations.UpdateBranchChangeRequestRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsUpdateBranchChangeRequestRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateBranchChangeRequestRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         body,
+	}
+
+	return &out, diags
+}
+
+func (r *PostgresBranchResourceModel) ToOperationsUpdateBranchChangeRequestRequestBody(ctx context.Context) (*operations.UpdateBranchChangeRequestRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	clusterSize := new(string)
+	if !r.ClusterSize.IsUnknown() && !r.ClusterSize.IsNull() {
+		*clusterSize = r.ClusterSize.ValueString()
+	} else {
+		clusterSize = nil
+	}
+	replicas := new(int64)
+	if !r.Replicas.IsUnknown() && !r.Replicas.IsNull() {
+		*replicas = r.Replicas.ValueInt64()
+	} else {
+		replicas = nil
+	}
+	out := operations.UpdateBranchChangeRequestRequestBody{
+		ClusterSize: clusterSize,
+		Replicas:    replicas,
 	}
 
 	return &out, diags
