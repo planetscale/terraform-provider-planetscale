@@ -4,26 +4,6 @@ info:
   title: Terraform generation overlay for planetscale_branch_postgres managed and data resources.
   version: 0.0.1
 actions:
-  - target: $.paths
-    description: Add PostgresBranch path entries
-    update:
-      /organizations/{organization}/databases/{database}/branches#postgres: {}
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres']
-    description: Copy branches path as base for postgres
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches']
-
-  - target: $.paths
-    update:
-      /organizations/{organization}/databases/{database}/branches/{branch}#postgres: {}
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres']
-    description: Copy branch path as base for postgres
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].get
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post
     description: Update operation metadata for PostgreSQL
     update:
@@ -80,11 +60,6 @@ actions:
         type: integer
         description: The number of replicas for the branch
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.region
-    description: Add region_data name override
-    update:
-      x-speakeasy-name-override: region_data
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get
     description: Update operation metadata for PostgreSQL
     update:
@@ -103,11 +78,6 @@ actions:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.parameters[?@.name == 'branch']
-    description: Add x-speakeasy-match to branch parameter
-    update:
-      x-speakeasy-match: id
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.deleted_at
     remove: true
@@ -153,22 +123,12 @@ actions:
         type: integer
         description: The number of replicas for the branch
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.region
-    description: Add region_data name override
-    update:
-      x-speakeasy-name-override: region_data
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].delete
     description: Update operation metadata for PostgreSQL
     update:
       operationId: delete_postgres_branch
       summary: Delete a PostgreSQL branch
       x-speakeasy-entity-operation: PostgresBranch#delete
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].delete.parameters[?@.name == 'branch']
-    description: Add x-speakeasy-match to branch parameter
-    update:
-      x-speakeasy-match: id
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter

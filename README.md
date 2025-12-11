@@ -73,7 +73,6 @@ Available configuration:
 * [planetscale_vitess_branch_password](docs/resources/vitess_branch_password.md)
 ### Data Sources
 
-* [planetscale_branches](docs/data-sources/branches.md)
 * [planetscale_database_postgres](docs/data-sources/database_postgres.md)
 * [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_database_vitess](docs/data-sources/database_vitess.md)

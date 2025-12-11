@@ -1,37 +1,73 @@
 overlay: 1.1.0
 x-speakeasy-jsonpath: rfc9535
 info:
-  title: Terraform generation overlay for planetscale_branches data resource.
+  title: Terraform generation overlay for branch resources
   version: 0.0.1
 actions:
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches"].get
-    description: API operation for read and enable pagination.
+  # Modifications
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
     update:
-      x-speakeasy-entity-operation: Branches#read
-      x-speakeasy-entity-description: Returns information about PlanetScale database branches.
-      x-speakeasy-pagination:
-        type: offsetLimit
-        inputs:
-          - name: page
-            in: parameters
-            type: page
-        outputs:
-          results: $.data
+      x-speakeasy-match: id
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches"].get.parameters[?@.name == 'per_page']
-    description: Ignore extraneous parameter in Terraform schema.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].delete.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
     update:
-      x-speakeasy-terraform-ignore: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches"].get.responses["200"].content["application/json"].schema.properties
-    description: Ignore extraneous response properties in Terraform schema.
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.region
+    description: Add region_data name override
     update:
-      current_page:
-        x-speakeasy-terraform-ignore: true
-      next_page:
-        x-speakeasy-terraform-ignore: true
-      next_page_url:
-        x-speakeasy-terraform-ignore: true
-      prev_page:
-        x-speakeasy-terraform-ignore: true
-      prev_page_url:
-        x-speakeasy-terraform-ignore: true
+      x-speakeasy-name-override: region_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.region
+    description: Add region_data name override
+    update:
+      x-speakeasy-name-override: region_data
+
+  # Copy and split out branch resources by kind
+  - target: $.paths
+    description: Add PostgresBranch path entries
+    update:
+      /organizations/{organization}/databases/{database}/branches#postgres: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres']
+    description: Copy branches path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}#postgres: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres']
+    description: Copy branch path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].get
+    remove: true
+
+  - target: $.paths
+    description: Add VitessBranch path entries
+    update:
+      /organizations/{organization}/databases/{database}/branches#vitess: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess']
+    description: Copy branches path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}#vitess: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess']
+    description: Copy branch path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].get
+    remove: true
+
+  # Remove copied base branches paths
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
+    remove: true

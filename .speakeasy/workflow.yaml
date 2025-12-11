@@ -6,17 +6,19 @@ sources:
             - location: schemas/openapi.yaml
         overlays:
             - location: schemas/overlay-terraform.yaml
+
             - location: schemas/overlay-terraform-branches.yaml
+            - location: schemas/overlay-terraform-postgres-branch.yaml
+            - location: schemas/overlay-terraform-vitess-branch.yaml
+
             - location: schemas/overlay-terraform-database_vitess.yaml
             - location: schemas/overlay-terraform-database_postgres.yaml
             - location: schemas/overlay-terraform-databases.yaml
             - location: schemas/overlay-terraform-organization.yaml
             - location: schemas/overlay-terraform-organizations.yaml
-            - location: schemas/overlay-terraform-postgres-branch.yaml
             - location: schemas/overlay-terraform-postgres-branch-role.yaml
             - location: schemas/overlay-terraform-postgres-branch-roles.yaml
             - location: schemas/overlay-terraform-user.yaml
-            - location: schemas/overlay-terraform-vitess-branch.yaml
             - location: schemas/overlay-terraform-vitess-branch-password.yaml
             - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
 
