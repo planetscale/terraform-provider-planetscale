@@ -1,0 +1,9 @@
+overlay: 1.0.0
+info:
+  title: Final overlay for cleanup tasks
+  version: 0.1.0
+actions:
+  # Find all paths that do not have x-speakeasy-entity-operation and operationId
+  # https://www.speakeasy.com/docs/terraform/guides/remove-nontf-endpoints
+  - target: $.paths.*.*[?(!@.x-speakeasy-entity-operation && @.operationId)]
+    remove: true

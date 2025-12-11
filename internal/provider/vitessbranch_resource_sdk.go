@@ -169,9 +169,9 @@ func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequestBody(ct
 	} else {
 		region = nil
 	}
-	seedData := new(operations.CreateVitessBranchSeedData)
+	seedData := new(operations.SeedData)
 	if !r.SeedData.IsUnknown() && !r.SeedData.IsNull() {
-		*seedData = operations.CreateVitessBranchSeedData(r.SeedData.ValueString())
+		*seedData = operations.SeedData(r.SeedData.ValueString())
 	} else {
 		seedData = nil
 	}
