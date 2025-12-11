@@ -55,8 +55,7 @@ type Planetscale struct {
 	Organizations *Organizations
 	//             Resources for managing databases within an organization.
 	//
-	Databases        *Databases
-	DatabaseBranches *DatabaseBranches
+	Databases *Databases
 	//           Resources for managing cluster changes.
 	//
 	BranchChanges *BranchChanges
@@ -68,7 +67,8 @@ type Planetscale struct {
 	Roles *Roles
 	//           Resources for managing users.
 	//
-	Users *Users
+	Users            *Users
+	DatabaseBranches *DatabaseBranches
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -169,11 +169,11 @@ func New(opts ...SDKOption) *Planetscale {
 
 	sdk.Organizations = newOrganizations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

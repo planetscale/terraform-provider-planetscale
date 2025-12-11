@@ -20,7 +20,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
 		r.ClusterIops = types.Int64Value(resp.ClusterIops)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
 		r.HasReplicas = types.BoolValue(resp.HasReplicas)
 		r.ID = types.StringValue(resp.ID)
@@ -52,7 +51,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
 		r.StaleSchema = types.BoolValue(resp.StaleSchema)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 	}
 
 	return diags
@@ -69,7 +67,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
 		r.ClusterIops = types.Int64Value(resp.ClusterIops)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
 		r.HasReplicas = types.BoolValue(resp.HasReplicas)
 		r.ID = types.StringValue(resp.ID)
@@ -101,7 +98,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
 		r.StaleSchema = types.BoolValue(resp.StaleSchema)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 	}
 
 	return diags
@@ -116,10 +112,8 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 	}
 
 	return diags

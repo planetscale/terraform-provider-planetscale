@@ -314,26 +314,44 @@ type CreatePostgresBranchResponseBody struct {
 	CreatedAt string `json:"created_at"`
 	// When the branch was last updated
 	UpdatedAt string `json:"updated_at"`
+	// When the branch was deleted
+	DeletedAt string `json:"deleted_at"`
 	// When a user last marked a backup restore checklist as completed
 	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
 	// When the schema for the branch was last updated
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The kind of branch (always postgresql for PostgreSQL branches)
 	kind string `const:"postgresql" json:"kind"`
+	// The MySQL address for the branch
+	MysqlAddress string `json:"mysql_address"`
+	// The address of the MySQL provider for the branch
+	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreatePostgresBranchState `json:"state"`
+	// True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
+	DirectVtgate bool `json:"direct_vtgate"`
+	// The size of the vtgate cluster for the branch
+	VtgateSize string `json:"vtgate_size"`
+	// The number of vtgate instances in the branch
+	VtgateCount int64 `json:"vtgate_count"`
 	// The SKU representing the branch's cluster size
 	ClusterName string `json:"cluster_name"`
 	// IOPS for the cluster
 	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
+	// Whether or not the schema is ready for queries
+	SchemaReady bool `json:"schema_ready"`
 	// Whether or not this is a metal database
 	Metal bool `json:"metal"`
 	// Whether or not the branch is a production branch
 	Production bool `json:"production"`
 	// Whether or not the branch has safe migrations enabled
 	SafeMigrations bool `json:"safe_migrations"`
+	// Whether or not the branch is sharded
+	Sharded bool `json:"sharded"`
+	// The number of shards in the branch
+	ShardCount int64 `json:"shard_count"`
 	// Whether or not the branch has a stale schema
 	StaleSchema        bool                                   `json:"stale_schema"`
 	Actor              CreatePostgresBranchActor              `json:"actor"`
@@ -343,8 +361,12 @@ type CreatePostgresBranchResponseBody struct {
 	// True if the branch has replica servers
 	HasReplicas bool `json:"has_replicas"`
 	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas bool                           `json:"has_read_only_replicas"`
-	RegionData          CreatePostgresBranchRegionData `json:"region"`
+	HasReadOnlyReplicas bool `json:"has_read_only_replicas"`
+	// Planetscale app URL for the branch
+	HTMLURL string `json:"html_url"`
+	// Planetscale API URL for the branch
+	URL        string                         `json:"url"`
+	RegionData CreatePostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 	// Display name for the cluster size
@@ -394,6 +416,13 @@ func (c *CreatePostgresBranchResponseBody) GetUpdatedAt() string {
 	return c.UpdatedAt
 }
 
+func (c *CreatePostgresBranchResponseBody) GetDeletedAt() string {
+	if c == nil {
+		return ""
+	}
+	return c.DeletedAt
+}
+
 func (c *CreatePostgresBranchResponseBody) GetRestoreChecklistCompletedAt() string {
 	if c == nil {
 		return ""
@@ -412,11 +441,46 @@ func (c *CreatePostgresBranchResponseBody) GetKind() string {
 	return "postgresql"
 }
 
+func (c *CreatePostgresBranchResponseBody) GetMysqlAddress() string {
+	if c == nil {
+		return ""
+	}
+	return c.MysqlAddress
+}
+
+func (c *CreatePostgresBranchResponseBody) GetMysqlEdgeAddress() string {
+	if c == nil {
+		return ""
+	}
+	return c.MysqlEdgeAddress
+}
+
 func (c *CreatePostgresBranchResponseBody) GetState() CreatePostgresBranchState {
 	if c == nil {
 		return CreatePostgresBranchState("")
 	}
 	return c.State
+}
+
+func (c *CreatePostgresBranchResponseBody) GetDirectVtgate() bool {
+	if c == nil {
+		return false
+	}
+	return c.DirectVtgate
+}
+
+func (c *CreatePostgresBranchResponseBody) GetVtgateSize() string {
+	if c == nil {
+		return ""
+	}
+	return c.VtgateSize
+}
+
+func (c *CreatePostgresBranchResponseBody) GetVtgateCount() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.VtgateCount
 }
 
 func (c *CreatePostgresBranchResponseBody) GetClusterName() string {
@@ -440,6 +504,13 @@ func (c *CreatePostgresBranchResponseBody) GetReady() bool {
 	return c.Ready
 }
 
+func (c *CreatePostgresBranchResponseBody) GetSchemaReady() bool {
+	if c == nil {
+		return false
+	}
+	return c.SchemaReady
+}
+
 func (c *CreatePostgresBranchResponseBody) GetMetal() bool {
 	if c == nil {
 		return false
@@ -459,6 +530,20 @@ func (c *CreatePostgresBranchResponseBody) GetSafeMigrations() bool {
 		return false
 	}
 	return c.SafeMigrations
+}
+
+func (c *CreatePostgresBranchResponseBody) GetSharded() bool {
+	if c == nil {
+		return false
+	}
+	return c.Sharded
+}
+
+func (c *CreatePostgresBranchResponseBody) GetShardCount() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.ShardCount
 }
 
 func (c *CreatePostgresBranchResponseBody) GetStaleSchema() bool {
@@ -501,6 +586,20 @@ func (c *CreatePostgresBranchResponseBody) GetHasReadOnlyReplicas() bool {
 		return false
 	}
 	return c.HasReadOnlyReplicas
+}
+
+func (c *CreatePostgresBranchResponseBody) GetHTMLURL() string {
+	if c == nil {
+		return ""
+	}
+	return c.HTMLURL
+}
+
+func (c *CreatePostgresBranchResponseBody) GetURL() string {
+	if c == nil {
+		return ""
+	}
+	return c.URL
 }
 
 func (c *CreatePostgresBranchResponseBody) GetRegionData() CreatePostgresBranchRegionData {
