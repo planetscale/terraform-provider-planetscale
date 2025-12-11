@@ -34,6 +34,7 @@ type PostgresBranchDataSourceModel struct {
 	ClusterDisplayName          types.String                                `tfsdk:"cluster_display_name"`
 	ClusterIops                 types.Int64                                 `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                                `tfsdk:"cluster_name"`
+	CreatedAt                   types.String                                `tfsdk:"created_at"`
 	Database                    types.String                                `tfsdk:"database"`
 	HasReadOnlyReplicas         types.Bool                                  `tfsdk:"has_read_only_replicas"`
 	HasReplicas                 types.Bool                                  `tfsdk:"has_replicas"`
@@ -53,6 +54,7 @@ type PostgresBranchDataSourceModel struct {
 	SchemaLastUpdatedAt         types.String                                `tfsdk:"schema_last_updated_at"`
 	StaleSchema                 types.Bool                                  `tfsdk:"stale_schema"`
 	State                       types.String                                `tfsdk:"state"`
+	UpdatedAt                   types.String                                `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.
@@ -98,6 +100,10 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"cluster_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
+			},
+			"created_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the branch was created`,
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
@@ -229,6 +235,10 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
+			},
+			"updated_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the branch was last updated`,
 			},
 		},
 	}

@@ -43,6 +43,7 @@ type PostgresBranchResourceModel struct {
 	ClusterIops                 types.Int64                                 `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                                `tfsdk:"cluster_name"`
 	ClusterSize                 types.String                                `tfsdk:"cluster_size"`
+	CreatedAt                   types.String                                `tfsdk:"created_at"`
 	Database                    types.String                                `tfsdk:"database"`
 	HasReadOnlyReplicas         types.Bool                                  `tfsdk:"has_read_only_replicas"`
 	HasReplicas                 types.Bool                                  `tfsdk:"has_replicas"`
@@ -65,6 +66,7 @@ type PostgresBranchResourceModel struct {
 	SchemaLastUpdatedAt         types.String                                `tfsdk:"schema_last_updated_at"`
 	StaleSchema                 types.Bool                                  `tfsdk:"stale_schema"`
 	State                       types.String                                `tfsdk:"state"`
+	UpdatedAt                   types.String                                `tfsdk:"updated_at"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -118,6 +120,10 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"cluster_size": schema.StringAttribute{
 				Optional:    true,
 				Description: `The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800`,
+			},
+			"created_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the branch was created`,
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
@@ -278,6 +284,10 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
+			},
+			"updated_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the branch was last updated`,
 			},
 		},
 	}
