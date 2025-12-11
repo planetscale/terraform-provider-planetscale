@@ -29,19 +29,19 @@ type UserDataSource struct {
 
 // UserDataSourceModel describes the data model.
 type UserDataSourceModel struct {
-	AvatarURL               types.String                              `tfsdk:"avatar_url"`
-	CreatedAt               types.String                              `tfsdk:"created_at"`
-	DefaultOrganization     tfTypes.GetCurrentUserDefaultOrganization `tfsdk:"default_organization"`
-	DirectoryManaged        types.Bool                                `tfsdk:"directory_managed"`
-	DisplayName             types.String                              `tfsdk:"display_name"`
-	Email                   types.String                              `tfsdk:"email"`
-	EmailVerified           types.Bool                                `tfsdk:"email_verified"`
-	ID                      types.String                              `tfsdk:"id"`
-	Managed                 types.Bool                                `tfsdk:"managed"`
-	Name                    types.String                              `tfsdk:"name"`
-	Sso                     types.Bool                                `tfsdk:"sso"`
-	TwoFactorAuthConfigured types.Bool                                `tfsdk:"two_factor_auth_configured"`
-	UpdatedAt               types.String                              `tfsdk:"updated_at"`
+	AvatarURL               types.String                `tfsdk:"avatar_url"`
+	CreatedAt               types.String                `tfsdk:"created_at"`
+	DefaultOrganization     tfTypes.DefaultOrganization `tfsdk:"default_organization"`
+	DirectoryManaged        types.Bool                  `tfsdk:"directory_managed"`
+	DisplayName             types.String                `tfsdk:"display_name"`
+	Email                   types.String                `tfsdk:"email"`
+	EmailVerified           types.Bool                  `tfsdk:"email_verified"`
+	ID                      types.String                `tfsdk:"id"`
+	Managed                 types.Bool                  `tfsdk:"managed"`
+	Name                    types.String                `tfsdk:"name"`
+	Sso                     types.Bool                  `tfsdk:"sso"`
+	TwoFactorAuthConfigured types.Bool                  `tfsdk:"two_factor_auth_configured"`
+	UpdatedAt               types.String                `tfsdk:"updated_at"`
 }
 
 // Metadata returns the data source type name.

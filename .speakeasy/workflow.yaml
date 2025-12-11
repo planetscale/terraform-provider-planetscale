@@ -19,6 +19,8 @@ sources:
             - location: schemas/overlay-terraform-vitess-branch.yaml
             - location: schemas/overlay-terraform-vitess-branch-password.yaml
             - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
+
+            - location: schemas/overlay-terraform-cleanup.yaml
         output: schemas/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/planetscale/dev/planet-scale-api
