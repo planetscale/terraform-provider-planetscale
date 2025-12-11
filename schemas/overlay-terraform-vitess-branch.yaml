@@ -4,26 +4,6 @@ info:
   title: Terraform generation overlay for planetscale_branch_vitess managed and data resources.
   version: 0.0.1
 actions:
-  - target: $.paths
-    description: Add VitessBranch path entries
-    update:
-      /organizations/{organization}/databases/{database}/branches#vitess: {}
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess']
-    description: Copy branches path as base for vitess
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches']
-
-  - target: $.paths
-    update:
-      /organizations/{organization}/databases/{database}/branches/{branch}#vitess: {}
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess']
-    description: Copy branch path as base for vitess
-    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].get
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post
     description: Update operation metadata for Vitess
     update:
@@ -47,11 +27,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.kind.enum
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.region
-    description: Add region_data name override
-    update:
-      x-speakeasy-name-override: region_data
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
     description: Update operation metadata for Vitess
     update:
@@ -71,11 +46,6 @@ actions:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.parameters[?@.name == 'branch']
-    description: Add x-speakeasy-match to branch parameter
-    update:
-      x-speakeasy-match: id
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind
     description: Set kind to const mysql
     update:
@@ -84,11 +54,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind.enum
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.region
-    description: Add region_data name override
-    update:
-      x-speakeasy-name-override: region_data
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
     description: Update operation metadata for Vitess
     update:
@@ -96,7 +61,3 @@ actions:
       summary: Delete a Vitess branch
       x-speakeasy-entity-operation: VitessBranch#delete
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete.parameters[?@.name == 'branch']
-    description: Add x-speakeasy-match to branch parameter
-    update:
-      x-speakeasy-match: id

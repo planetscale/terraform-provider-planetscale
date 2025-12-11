@@ -2,8 +2,8 @@ speakeasyVersion: 1.675.1
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:80749c940117e57110bd2b9051919719f94c1129369ae5dcd3894d7426c1a6fe
-        sourceBlobDigest: sha256:382fb98764957df44b55a34e8f7f3c9d88487fae06a106a174f50e14d4d9002e
+        sourceRevisionDigest: sha256:6edd3e3b4833d152d5a2187debdfbcaaaf28f5b449841f29a7832189f02d11b7
+        sourceBlobDigest: sha256:f09294035dd815ef29c0191a756f3a15783130b3bc37f4993c347379daf876dc
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:80749c940117e57110bd2b9051919719f94c1129369ae5dcd3894d7426c1a6fe
-        sourceBlobDigest: sha256:382fb98764957df44b55a34e8f7f3c9d88487fae06a106a174f50e14d4d9002e
+        sourceRevisionDigest: sha256:6edd3e3b4833d152d5a2187debdfbcaaaf28f5b449841f29a7832189f02d11b7
+        sourceBlobDigest: sha256:f09294035dd815ef29c0191a756f3a15783130b3bc37f4993c347379daf876dc
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.675.1
@@ -23,16 +23,16 @@ workflow:
             overlays:
                 - location: schemas/overlay-terraform.yaml
                 - location: schemas/overlay-terraform-branches.yaml
+                - location: schemas/overlay-terraform-postgres-branch.yaml
+                - location: schemas/overlay-terraform-vitess-branch.yaml
                 - location: schemas/overlay-terraform-database_vitess.yaml
                 - location: schemas/overlay-terraform-database_postgres.yaml
                 - location: schemas/overlay-terraform-databases.yaml
                 - location: schemas/overlay-terraform-organization.yaml
                 - location: schemas/overlay-terraform-organizations.yaml
-                - location: schemas/overlay-terraform-postgres-branch.yaml
                 - location: schemas/overlay-terraform-postgres-branch-role.yaml
                 - location: schemas/overlay-terraform-postgres-branch-roles.yaml
                 - location: schemas/overlay-terraform-user.yaml
-                - location: schemas/overlay-terraform-vitess-branch.yaml
                 - location: schemas/overlay-terraform-vitess-branch-password.yaml
                 - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
                 - location: schemas/overlay-terraform-cleanup.yaml
