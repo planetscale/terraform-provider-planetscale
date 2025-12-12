@@ -39,33 +39,6 @@ func (g *GetPostgresBranchRequest) GetBranch() string {
 	return g.Branch
 }
 
-// GetPostgresBranchKind - The kind of branch
-type GetPostgresBranchKind string
-
-const (
-	GetPostgresBranchKindMysql      GetPostgresBranchKind = "mysql"
-	GetPostgresBranchKindPostgresql GetPostgresBranchKind = "postgresql"
-)
-
-func (e GetPostgresBranchKind) ToPointer() *GetPostgresBranchKind {
-	return &e
-}
-func (e *GetPostgresBranchKind) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "mysql":
-		fallthrough
-	case "postgresql":
-		*e = GetPostgresBranchKind(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetPostgresBranchKind: %v", v)
-	}
-}
-
 // GetPostgresBranchState - The current state of the branch
 type GetPostgresBranchState string
 
@@ -261,38 +234,22 @@ type GetPostgresBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When the branch was created
-	CreatedAt string `json:"created_at"`
-	// When the branch was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When the branch was deleted
-	DeletedAt string `json:"deleted_at"`
 	// When a user last marked a backup restore checklist as completed
 	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
 	// When the schema for the branch was last updated
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
-	// The kind of branch
-	Kind GetPostgresBranchKind `json:"kind"`
 	// The MySQL address for the branch
 	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State GetPostgresBranchState `json:"state"`
-	// True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-	DirectVtgate bool `json:"direct_vtgate"`
-	// The size of the vtgate cluster for the branch
-	VtgateSize string `json:"vtgate_size"`
-	// The number of vtgate instances in the branch
-	VtgateCount int64 `json:"vtgate_count"`
 	// The SKU representing the branch's cluster size
 	ClusterName string `json:"cluster_name"`
 	// IOPS for the cluster
 	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
-	// Whether or not the schema is ready for queries
-	SchemaReady bool `json:"schema_ready"`
 	// Whether or not this is a metal database
 	Metal bool `json:"metal"`
 	// Whether or not the branch is a production branch
@@ -312,12 +269,8 @@ type GetPostgresBranchResponseBody struct {
 	// True if the branch has replica servers
 	HasReplicas bool `json:"has_replicas"`
 	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas bool `json:"has_read_only_replicas"`
-	// Planetscale app URL for the branch
-	HTMLURL string `json:"html_url"`
-	// Planetscale API URL for the branch
-	URL        string                      `json:"url"`
-	RegionData GetPostgresBranchRegionData `json:"region"`
+	HasReadOnlyReplicas bool                        `json:"has_read_only_replicas"`
+	RegionData          GetPostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 	// Display name for the cluster size
@@ -342,27 +295,6 @@ func (g *GetPostgresBranchResponseBody) GetName() string {
 	return g.Name
 }
 
-func (g *GetPostgresBranchResponseBody) GetCreatedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.CreatedAt
-}
-
-func (g *GetPostgresBranchResponseBody) GetUpdatedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.UpdatedAt
-}
-
-func (g *GetPostgresBranchResponseBody) GetDeletedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.DeletedAt
-}
-
 func (g *GetPostgresBranchResponseBody) GetRestoreChecklistCompletedAt() string {
 	if g == nil {
 		return ""
@@ -375,13 +307,6 @@ func (g *GetPostgresBranchResponseBody) GetSchemaLastUpdatedAt() string {
 		return ""
 	}
 	return g.SchemaLastUpdatedAt
-}
-
-func (g *GetPostgresBranchResponseBody) GetKind() GetPostgresBranchKind {
-	if g == nil {
-		return GetPostgresBranchKind("")
-	}
-	return g.Kind
 }
 
 func (g *GetPostgresBranchResponseBody) GetMysqlAddress() string {
@@ -405,27 +330,6 @@ func (g *GetPostgresBranchResponseBody) GetState() GetPostgresBranchState {
 	return g.State
 }
 
-func (g *GetPostgresBranchResponseBody) GetDirectVtgate() bool {
-	if g == nil {
-		return false
-	}
-	return g.DirectVtgate
-}
-
-func (g *GetPostgresBranchResponseBody) GetVtgateSize() string {
-	if g == nil {
-		return ""
-	}
-	return g.VtgateSize
-}
-
-func (g *GetPostgresBranchResponseBody) GetVtgateCount() int64 {
-	if g == nil {
-		return 0
-	}
-	return g.VtgateCount
-}
-
 func (g *GetPostgresBranchResponseBody) GetClusterName() string {
 	if g == nil {
 		return ""
@@ -445,13 +349,6 @@ func (g *GetPostgresBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return g.Ready
-}
-
-func (g *GetPostgresBranchResponseBody) GetSchemaReady() bool {
-	if g == nil {
-		return false
-	}
-	return g.SchemaReady
 }
 
 func (g *GetPostgresBranchResponseBody) GetMetal() bool {
@@ -529,20 +426,6 @@ func (g *GetPostgresBranchResponseBody) GetHasReadOnlyReplicas() bool {
 		return false
 	}
 	return g.HasReadOnlyReplicas
-}
-
-func (g *GetPostgresBranchResponseBody) GetHTMLURL() string {
-	if g == nil {
-		return ""
-	}
-	return g.HTMLURL
-}
-
-func (g *GetPostgresBranchResponseBody) GetURL() string {
-	if g == nil {
-		return ""
-	}
-	return g.URL
 }
 
 func (g *GetPostgresBranchResponseBody) GetRegionData() GetPostgresBranchRegionData {

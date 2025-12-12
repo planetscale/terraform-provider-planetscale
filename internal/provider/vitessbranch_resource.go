@@ -43,15 +43,11 @@ type VitessBranchResourceModel struct {
 	ClusterIops                 types.Int64                               `tfsdk:"cluster_iops"`
 	ClusterName                 types.String                              `tfsdk:"cluster_name"`
 	ClusterSize                 types.String                              `tfsdk:"cluster_size"`
-	CreatedAt                   types.String                              `tfsdk:"created_at"`
 	Database                    types.String                              `tfsdk:"database"`
-	DeletedAt                   types.String                              `tfsdk:"deleted_at"`
-	DirectVtgate                types.Bool                                `tfsdk:"direct_vtgate"`
 	HasReadOnlyReplicas         types.Bool                                `tfsdk:"has_read_only_replicas"`
 	HasReplicas                 types.Bool                                `tfsdk:"has_replicas"`
 	HTMLURL                     types.String                              `tfsdk:"html_url"`
 	ID                          types.String                              `tfsdk:"id"`
-	Kind                        types.String                              `tfsdk:"kind"`
 	Metal                       types.Bool                                `tfsdk:"metal"`
 	MysqlAddress                types.String                              `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                              `tfsdk:"mysql_edge_address"`
@@ -67,16 +63,12 @@ type VitessBranchResourceModel struct {
 	RestoredFromBranch          tfTypes.GetVitessBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
 	SafeMigrations              types.Bool                                `tfsdk:"safe_migrations"`
 	SchemaLastUpdatedAt         types.String                              `tfsdk:"schema_last_updated_at"`
-	SchemaReady                 types.Bool                                `tfsdk:"schema_ready"`
 	SeedData                    types.String                              `tfsdk:"seed_data"`
 	ShardCount                  types.Int64                               `tfsdk:"shard_count"`
 	Sharded                     types.Bool                                `tfsdk:"sharded"`
 	StaleSchema                 types.Bool                                `tfsdk:"stale_schema"`
 	State                       types.String                              `tfsdk:"state"`
-	UpdatedAt                   types.String                              `tfsdk:"updated_at"`
 	URL                         types.String                              `tfsdk:"url"`
-	VtgateCount                 types.Int64                               `tfsdk:"vtgate_count"`
-	VtgateSize                  types.String                              `tfsdk:"vtgate_size"`
 }
 
 func (r *VitessBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -126,24 +118,12 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.`,
 			},
-			"created_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch was created`,
-			},
 			"database": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `The name of the database the branch belongs to. Requires replacement if changed.`,
-			},
-			"deleted_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch was deleted`,
-			},
-			"direct_vtgate": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers`,
 			},
 			"has_read_only_replicas": schema.BoolAttribute{
 				Computed:    true,
@@ -160,10 +140,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
-			},
-			"kind": schema.StringAttribute{
-				Computed:    true,
-				Description: `The kind of branch`,
 			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
@@ -294,10 +270,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Description: `When the schema for the branch was last updated`,
 			},
-			"schema_ready": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the schema is ready for queries`,
-			},
 			"seed_data": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -326,21 +298,9 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Description: `The current state of the branch`,
 			},
-			"updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch was last updated`,
-			},
 			"url": schema.StringAttribute{
 				Computed:    true,
 				Description: `Planetscale API URL for the branch`,
-			},
-			"vtgate_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of vtgate instances in the branch`,
-			},
-			"vtgate_size": schema.StringAttribute{
-				Computed:    true,
-				Description: `The size of the vtgate cluster for the branch`,
 			},
 		},
 	}

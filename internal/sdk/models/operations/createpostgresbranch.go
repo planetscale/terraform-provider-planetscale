@@ -349,12 +349,6 @@ type CreatePostgresBranchResponseBody struct {
 	RegionData          CreatePostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
-	// Display name for the cluster size
-	ClusterDisplayName *string `json:"cluster_display_name,omitzero"`
-	// The CPU architecture for the cluster (e.g., x86_64)
-	ClusterArchitecture *string `json:"cluster_architecture,omitzero"`
-	// The number of replicas for the branch
-	Replicas *int64 `json:"replicas,omitzero"`
 }
 
 func (c *CreatePostgresBranchResponseBody) GetID() string {
@@ -516,27 +510,6 @@ func (c *CreatePostgresBranchResponseBody) GetParentBranch() string {
 		return ""
 	}
 	return c.ParentBranch
-}
-
-func (c *CreatePostgresBranchResponseBody) GetClusterDisplayName() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ClusterDisplayName
-}
-
-func (c *CreatePostgresBranchResponseBody) GetClusterArchitecture() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ClusterArchitecture
-}
-
-func (c *CreatePostgresBranchResponseBody) GetReplicas() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Replicas
 }
 
 type CreatePostgresBranchResponse struct {

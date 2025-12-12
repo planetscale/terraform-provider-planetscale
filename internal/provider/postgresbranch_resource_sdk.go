@@ -16,8 +16,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
 		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterArchitecture = types.StringPointerValue(resp.ClusterArchitecture)
-		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
 		r.ClusterIops = types.Int64Value(resp.ClusterIops)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
@@ -42,7 +40,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
 		}
 		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
-		r.Replicas = types.Int64PointerValue(resp.Replicas)
 		r.RestoreChecklistCompletedAt = types.StringValue(resp.RestoreChecklistCompletedAt)
 		r.RestoredFromBranch.CreatedAt = types.StringValue(resp.RestoredFromBranch.CreatedAt)
 		r.RestoredFromBranch.DeletedAt = types.StringValue(resp.RestoredFromBranch.DeletedAt)
@@ -71,14 +68,9 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
 		r.ClusterIops = types.Int64Value(resp.ClusterIops)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
-		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
 		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
 		r.HasReplicas = types.BoolValue(resp.HasReplicas)
-		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
-		r.Kind = types.StringValue(string(resp.Kind))
 		r.Metal = types.BoolValue(resp.Metal)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
@@ -107,15 +99,10 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.RestoredFromBranch.UpdatedAt = types.StringValue(resp.RestoredFromBranch.UpdatedAt)
 		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
-		r.SchemaReady = types.BoolValue(resp.SchemaReady)
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.Sharded = types.BoolValue(resp.Sharded)
 		r.StaleSchema = types.BoolValue(resp.StaleSchema)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
-		r.URL = types.StringValue(resp.URL)
-		r.VtgateCount = types.Int64Value(resp.VtgateCount)
-		r.VtgateSize = types.StringValue(resp.VtgateSize)
 	}
 
 	return diags
@@ -130,10 +117,8 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 	}
 
 	return diags

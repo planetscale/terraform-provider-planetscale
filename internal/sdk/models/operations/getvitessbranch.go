@@ -39,33 +39,6 @@ func (g *GetVitessBranchRequest) GetBranch() string {
 	return g.Branch
 }
 
-// GetVitessBranchKind - The kind of branch
-type GetVitessBranchKind string
-
-const (
-	GetVitessBranchKindMysql      GetVitessBranchKind = "mysql"
-	GetVitessBranchKindPostgresql GetVitessBranchKind = "postgresql"
-)
-
-func (e GetVitessBranchKind) ToPointer() *GetVitessBranchKind {
-	return &e
-}
-func (e *GetVitessBranchKind) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "mysql":
-		fallthrough
-	case "postgresql":
-		*e = GetVitessBranchKind(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetVitessBranchKind: %v", v)
-	}
-}
-
 // GetVitessBranchState - The current state of the branch
 type GetVitessBranchState string
 
@@ -261,38 +234,22 @@ type GetVitessBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When the branch was created
-	CreatedAt string `json:"created_at"`
-	// When the branch was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When the branch was deleted
-	DeletedAt string `json:"deleted_at"`
 	// When a user last marked a backup restore checklist as completed
 	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
 	// When the schema for the branch was last updated
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
-	// The kind of branch
-	Kind GetVitessBranchKind `json:"kind"`
 	// The MySQL address for the branch
 	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State GetVitessBranchState `json:"state"`
-	// True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-	DirectVtgate bool `json:"direct_vtgate"`
-	// The size of the vtgate cluster for the branch
-	VtgateSize string `json:"vtgate_size"`
-	// The number of vtgate instances in the branch
-	VtgateCount int64 `json:"vtgate_count"`
 	// The SKU representing the branch's cluster size
 	ClusterName string `json:"cluster_name"`
 	// IOPS for the cluster
 	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
-	// Whether or not the schema is ready for queries
-	SchemaReady bool `json:"schema_ready"`
 	// Whether or not this is a metal database
 	Metal bool `json:"metal"`
 	// Whether or not the branch is a production branch
@@ -336,27 +293,6 @@ func (g *GetVitessBranchResponseBody) GetName() string {
 	return g.Name
 }
 
-func (g *GetVitessBranchResponseBody) GetCreatedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.CreatedAt
-}
-
-func (g *GetVitessBranchResponseBody) GetUpdatedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.UpdatedAt
-}
-
-func (g *GetVitessBranchResponseBody) GetDeletedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.DeletedAt
-}
-
 func (g *GetVitessBranchResponseBody) GetRestoreChecklistCompletedAt() string {
 	if g == nil {
 		return ""
@@ -369,13 +305,6 @@ func (g *GetVitessBranchResponseBody) GetSchemaLastUpdatedAt() string {
 		return ""
 	}
 	return g.SchemaLastUpdatedAt
-}
-
-func (g *GetVitessBranchResponseBody) GetKind() GetVitessBranchKind {
-	if g == nil {
-		return GetVitessBranchKind("")
-	}
-	return g.Kind
 }
 
 func (g *GetVitessBranchResponseBody) GetMysqlAddress() string {
@@ -399,27 +328,6 @@ func (g *GetVitessBranchResponseBody) GetState() GetVitessBranchState {
 	return g.State
 }
 
-func (g *GetVitessBranchResponseBody) GetDirectVtgate() bool {
-	if g == nil {
-		return false
-	}
-	return g.DirectVtgate
-}
-
-func (g *GetVitessBranchResponseBody) GetVtgateSize() string {
-	if g == nil {
-		return ""
-	}
-	return g.VtgateSize
-}
-
-func (g *GetVitessBranchResponseBody) GetVtgateCount() int64 {
-	if g == nil {
-		return 0
-	}
-	return g.VtgateCount
-}
-
 func (g *GetVitessBranchResponseBody) GetClusterName() string {
 	if g == nil {
 		return ""
@@ -439,13 +347,6 @@ func (g *GetVitessBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return g.Ready
-}
-
-func (g *GetVitessBranchResponseBody) GetSchemaReady() bool {
-	if g == nil {
-		return false
-	}
-	return g.SchemaReady
 }
 
 func (g *GetVitessBranchResponseBody) GetMetal() bool {
