@@ -45,11 +45,17 @@ type PostgresBranchResourceModel struct {
 	ClusterSize                 types.String                                `tfsdk:"cluster_size"`
 	CreatedAt                   types.String                                `tfsdk:"created_at"`
 	Database                    types.String                                `tfsdk:"database"`
+	DeletedAt                   types.String                                `tfsdk:"deleted_at"`
+	DirectVtgate                types.Bool                                  `tfsdk:"direct_vtgate"`
 	HasReadOnlyReplicas         types.Bool                                  `tfsdk:"has_read_only_replicas"`
 	HasReplicas                 types.Bool                                  `tfsdk:"has_replicas"`
+	HTMLURL                     types.String                                `tfsdk:"html_url"`
 	ID                          types.String                                `tfsdk:"id"`
+	Kind                        types.String                                `tfsdk:"kind"`
 	MajorVersion                types.String                                `tfsdk:"major_version"`
 	Metal                       types.Bool                                  `tfsdk:"metal"`
+	MysqlAddress                types.String                                `tfsdk:"mysql_address"`
+	MysqlEdgeAddress            types.String                                `tfsdk:"mysql_edge_address"`
 	Name                        types.String                                `tfsdk:"name"`
 	Organization                types.String                                `tfsdk:"organization"`
 	ParentBranch                types.String                                `tfsdk:"parent_branch"`
@@ -64,9 +70,15 @@ type PostgresBranchResourceModel struct {
 	RestorePoint                types.String                                `tfsdk:"restore_point"`
 	SafeMigrations              types.Bool                                  `tfsdk:"safe_migrations"`
 	SchemaLastUpdatedAt         types.String                                `tfsdk:"schema_last_updated_at"`
+	SchemaReady                 types.Bool                                  `tfsdk:"schema_ready"`
+	ShardCount                  types.Int64                                 `tfsdk:"shard_count"`
+	Sharded                     types.Bool                                  `tfsdk:"sharded"`
 	StaleSchema                 types.Bool                                  `tfsdk:"stale_schema"`
 	State                       types.String                                `tfsdk:"state"`
 	UpdatedAt                   types.String                                `tfsdk:"updated_at"`
+	URL                         types.String                                `tfsdk:"url"`
+	VtgateCount                 types.Int64                                 `tfsdk:"vtgate_count"`
+	VtgateSize                  types.String                                `tfsdk:"vtgate_size"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -129,6 +141,14 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Required:    true,
 				Description: `The name of the database the branch belongs to`,
 			},
+			"deleted_at": schema.StringAttribute{
+				Computed:    true,
+				Description: `When the branch was deleted`,
+			},
+			"direct_vtgate": schema.BoolAttribute{
+				Computed:    true,
+				Description: `True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers`,
+			},
 			"has_read_only_replicas": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if the branch has read-only replica servers`,
@@ -137,9 +157,17 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Computed:    true,
 				Description: `True if the branch has replica servers`,
 			},
+			"html_url": schema.StringAttribute{
+				Computed:    true,
+				Description: `Planetscale app URL for the branch`,
+			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
+			},
+			"kind": schema.StringAttribute{
+				Computed:    true,
+				Description: `The kind of branch`,
 			},
 			"major_version": schema.StringAttribute{
 				Optional: true,
@@ -151,6 +179,14 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"metal": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not this is a metal database`,
+			},
+			"mysql_address": schema.StringAttribute{
+				Computed:    true,
+				Description: `The MySQL address for the branch`,
+			},
+			"mysql_edge_address": schema.StringAttribute{
+				Computed:    true,
+				Description: `The address of the MySQL provider for the branch`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -277,6 +313,18 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Computed:    true,
 				Description: `When the schema for the branch was last updated`,
 			},
+			"schema_ready": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not the schema is ready for queries`,
+			},
+			"shard_count": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The number of shards in the branch`,
+			},
+			"sharded": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not the branch is sharded`,
+			},
 			"stale_schema": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch has a stale schema`,
@@ -288,6 +336,18 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"updated_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `When the branch was last updated`,
+			},
+			"url": schema.StringAttribute{
+				Computed:    true,
+				Description: `Planetscale API URL for the branch`,
+			},
+			"vtgate_count": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The number of vtgate instances in the branch`,
+			},
+			"vtgate_size": schema.StringAttribute{
+				Computed:    true,
+				Description: `The size of the vtgate cluster for the branch`,
 			},
 		},
 	}

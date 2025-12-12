@@ -39,6 +39,33 @@ func (g *GetVitessBranchRequest) GetBranch() string {
 	return g.Branch
 }
 
+// GetVitessBranchKind - The kind of branch
+type GetVitessBranchKind string
+
+const (
+	GetVitessBranchKindMysql      GetVitessBranchKind = "mysql"
+	GetVitessBranchKindPostgresql GetVitessBranchKind = "postgresql"
+)
+
+func (e GetVitessBranchKind) ToPointer() *GetVitessBranchKind {
+	return &e
+}
+func (e *GetVitessBranchKind) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "mysql":
+		fallthrough
+	case "postgresql":
+		*e = GetVitessBranchKind(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for GetVitessBranchKind: %v", v)
+	}
+}
+
 // GetVitessBranchState - The current state of the branch
 type GetVitessBranchState string
 
@@ -244,8 +271,8 @@ type GetVitessBranchResponseBody struct {
 	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
 	// When the schema for the branch was last updated
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
-	// The kind of branch (always mysql for Vitess branches)
-	kind string `const:"mysql" json:"kind"`
+	// The kind of branch
+	Kind GetVitessBranchKind `json:"kind"`
 	// The MySQL address for the branch
 	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
@@ -293,17 +320,6 @@ type GetVitessBranchResponseBody struct {
 	RegionData GetVitessBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
-}
-
-func (g GetVitessBranchResponseBody) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetVitessBranchResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (g *GetVitessBranchResponseBody) GetID() string {
@@ -355,8 +371,11 @@ func (g *GetVitessBranchResponseBody) GetSchemaLastUpdatedAt() string {
 	return g.SchemaLastUpdatedAt
 }
 
-func (g *GetVitessBranchResponseBody) GetKind() string {
-	return "mysql"
+func (g *GetVitessBranchResponseBody) GetKind() GetVitessBranchKind {
+	if g == nil {
+		return GetVitessBranchKind("")
+	}
+	return g.Kind
 }
 
 func (g *GetVitessBranchResponseBody) GetMysqlAddress() string {

@@ -25,6 +25,7 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 		r.HasReplicas = types.BoolValue(resp.HasReplicas)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
+		r.Kind = types.StringValue(string(resp.Kind))
 		r.Metal = types.BoolValue(resp.Metal)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)

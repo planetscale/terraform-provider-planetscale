@@ -253,18 +253,18 @@ func (e *ListDatabasesState) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// Kind - The kind of database
-type Kind string
+// ListDatabasesKind - The kind of database
+type ListDatabasesKind string
 
 const (
-	KindMysql      Kind = "mysql"
-	KindPostgresql Kind = "postgresql"
+	ListDatabasesKindMysql      ListDatabasesKind = "mysql"
+	ListDatabasesKindPostgresql ListDatabasesKind = "postgresql"
 )
 
-func (e Kind) ToPointer() *Kind {
+func (e ListDatabasesKind) ToPointer() *ListDatabasesKind {
 	return &e
 }
-func (e *Kind) UnmarshalJSON(data []byte) error {
+func (e *ListDatabasesKind) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -273,10 +273,10 @@ func (e *Kind) UnmarshalJSON(data []byte) error {
 	case "mysql":
 		fallthrough
 	case "postgresql":
-		*e = Kind(v)
+		*e = ListDatabasesKind(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for Kind: %v", v)
+		return fmt.Errorf("invalid value for ListDatabasesKind: %v", v)
 	}
 }
 
@@ -356,7 +356,7 @@ type ListDatabasesData struct {
 	// When the default branch schema was last changed.
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The kind of database
-	Kind Kind `json:"kind"`
+	Kind ListDatabasesKind `json:"kind"`
 }
 
 func (l *ListDatabasesData) GetID() string {
@@ -625,9 +625,9 @@ func (l *ListDatabasesData) GetSchemaLastUpdatedAt() string {
 	return l.SchemaLastUpdatedAt
 }
 
-func (l *ListDatabasesData) GetKind() Kind {
+func (l *ListDatabasesData) GetKind() ListDatabasesKind {
 	if l == nil {
-		return Kind("")
+		return ListDatabasesKind("")
 	}
 	return l.Kind
 }

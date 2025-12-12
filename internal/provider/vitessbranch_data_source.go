@@ -40,6 +40,7 @@ type VitessBranchDataSourceModel struct {
 	HasReplicas                 types.Bool                                `tfsdk:"has_replicas"`
 	HTMLURL                     types.String                              `tfsdk:"html_url"`
 	ID                          types.String                              `tfsdk:"id"`
+	Kind                        types.String                              `tfsdk:"kind"`
 	Metal                       types.Bool                                `tfsdk:"metal"`
 	MysqlAddress                types.String                              `tfsdk:"mysql_address"`
 	MysqlEdgeAddress            types.String                              `tfsdk:"mysql_edge_address"`
@@ -132,6 +133,10 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
+			},
+			"kind": schema.StringAttribute{
+				Computed:    true,
+				Description: `The kind of branch`,
 			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,

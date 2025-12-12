@@ -18,9 +18,6 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterIops = types.Int64Value(resp.ClusterIops)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
-		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
 		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
 		r.HasReplicas = types.BoolValue(resp.HasReplicas)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
@@ -52,15 +49,11 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 		r.RestoredFromBranch.UpdatedAt = types.StringValue(resp.RestoredFromBranch.UpdatedAt)
 		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
-		r.SchemaReady = types.BoolValue(resp.SchemaReady)
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.Sharded = types.BoolValue(resp.Sharded)
 		r.StaleSchema = types.BoolValue(resp.StaleSchema)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.URL = types.StringValue(resp.URL)
-		r.VtgateCount = types.Int64Value(resp.VtgateCount)
-		r.VtgateSize = types.StringValue(resp.VtgateSize)
 	}
 
 	return diags
@@ -82,6 +75,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 		r.HasReplicas = types.BoolValue(resp.HasReplicas)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
+		r.Kind = types.StringValue(string(resp.Kind))
 		r.Metal = types.BoolValue(resp.Metal)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)

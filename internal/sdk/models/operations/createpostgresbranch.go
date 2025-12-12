@@ -310,16 +310,14 @@ type CreatePostgresBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When the branch was created
-	CreatedAt string `json:"created_at"`
-	// When the branch was last updated
-	UpdatedAt string `json:"updated_at"`
 	// When a user last marked a backup restore checklist as completed
 	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
 	// When the schema for the branch was last updated
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
-	// The kind of branch (always postgresql for PostgreSQL branches)
-	kind string `const:"postgresql" json:"kind"`
+	// The MySQL address for the branch
+	MysqlAddress string `json:"mysql_address"`
+	// The address of the MySQL provider for the branch
+	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreatePostgresBranchState `json:"state"`
 	// The SKU representing the branch's cluster size
@@ -334,6 +332,10 @@ type CreatePostgresBranchResponseBody struct {
 	Production bool `json:"production"`
 	// Whether or not the branch has safe migrations enabled
 	SafeMigrations bool `json:"safe_migrations"`
+	// Whether or not the branch is sharded
+	Sharded bool `json:"sharded"`
+	// The number of shards in the branch
+	ShardCount int64 `json:"shard_count"`
 	// Whether or not the branch has a stale schema
 	StaleSchema        bool                                   `json:"stale_schema"`
 	Actor              CreatePostgresBranchActor              `json:"actor"`
@@ -355,17 +357,6 @@ type CreatePostgresBranchResponseBody struct {
 	Replicas *int64 `json:"replicas,omitzero"`
 }
 
-func (c CreatePostgresBranchResponseBody) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *CreatePostgresBranchResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
 func (c *CreatePostgresBranchResponseBody) GetID() string {
 	if c == nil {
 		return ""
@@ -378,20 +369,6 @@ func (c *CreatePostgresBranchResponseBody) GetName() string {
 		return ""
 	}
 	return c.Name
-}
-
-func (c *CreatePostgresBranchResponseBody) GetCreatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.CreatedAt
-}
-
-func (c *CreatePostgresBranchResponseBody) GetUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.UpdatedAt
 }
 
 func (c *CreatePostgresBranchResponseBody) GetRestoreChecklistCompletedAt() string {
@@ -408,8 +385,18 @@ func (c *CreatePostgresBranchResponseBody) GetSchemaLastUpdatedAt() string {
 	return c.SchemaLastUpdatedAt
 }
 
-func (c *CreatePostgresBranchResponseBody) GetKind() string {
-	return "postgresql"
+func (c *CreatePostgresBranchResponseBody) GetMysqlAddress() string {
+	if c == nil {
+		return ""
+	}
+	return c.MysqlAddress
+}
+
+func (c *CreatePostgresBranchResponseBody) GetMysqlEdgeAddress() string {
+	if c == nil {
+		return ""
+	}
+	return c.MysqlEdgeAddress
 }
 
 func (c *CreatePostgresBranchResponseBody) GetState() CreatePostgresBranchState {
@@ -459,6 +446,20 @@ func (c *CreatePostgresBranchResponseBody) GetSafeMigrations() bool {
 		return false
 	}
 	return c.SafeMigrations
+}
+
+func (c *CreatePostgresBranchResponseBody) GetSharded() bool {
+	if c == nil {
+		return false
+	}
+	return c.Sharded
+}
+
+func (c *CreatePostgresBranchResponseBody) GetShardCount() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.ShardCount
 }
 
 func (c *CreatePostgresBranchResponseBody) GetStaleSchema() bool {

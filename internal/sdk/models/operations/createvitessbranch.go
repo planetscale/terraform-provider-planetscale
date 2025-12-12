@@ -325,38 +325,22 @@ type CreateVitessBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When the branch was created
-	CreatedAt string `json:"created_at"`
-	// When the branch was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When the branch was deleted
-	DeletedAt string `json:"deleted_at"`
 	// When a user last marked a backup restore checklist as completed
 	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
 	// When the schema for the branch was last updated
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
-	// The kind of branch (always mysql for Vitess branches)
-	kind string `const:"mysql" json:"kind"`
 	// The MySQL address for the branch
 	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreateVitessBranchState `json:"state"`
-	// True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-	DirectVtgate bool `json:"direct_vtgate"`
-	// The size of the vtgate cluster for the branch
-	VtgateSize string `json:"vtgate_size"`
-	// The number of vtgate instances in the branch
-	VtgateCount int64 `json:"vtgate_count"`
 	// The SKU representing the branch's cluster size
 	ClusterName string `json:"cluster_name"`
 	// IOPS for the cluster
 	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
-	// Whether or not the schema is ready for queries
-	SchemaReady bool `json:"schema_ready"`
 	// Whether or not this is a metal database
 	Metal bool `json:"metal"`
 	// Whether or not the branch is a production branch
@@ -386,17 +370,6 @@ type CreateVitessBranchResponseBody struct {
 	ParentBranch string `json:"parent_branch"`
 }
 
-func (c CreateVitessBranchResponseBody) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *CreateVitessBranchResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
 func (c *CreateVitessBranchResponseBody) GetID() string {
 	if c == nil {
 		return ""
@@ -411,27 +384,6 @@ func (c *CreateVitessBranchResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreateVitessBranchResponseBody) GetCreatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.CreatedAt
-}
-
-func (c *CreateVitessBranchResponseBody) GetUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.UpdatedAt
-}
-
-func (c *CreateVitessBranchResponseBody) GetDeletedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.DeletedAt
-}
-
 func (c *CreateVitessBranchResponseBody) GetRestoreChecklistCompletedAt() string {
 	if c == nil {
 		return ""
@@ -444,10 +396,6 @@ func (c *CreateVitessBranchResponseBody) GetSchemaLastUpdatedAt() string {
 		return ""
 	}
 	return c.SchemaLastUpdatedAt
-}
-
-func (c *CreateVitessBranchResponseBody) GetKind() string {
-	return "mysql"
 }
 
 func (c *CreateVitessBranchResponseBody) GetMysqlAddress() string {
@@ -471,27 +419,6 @@ func (c *CreateVitessBranchResponseBody) GetState() CreateVitessBranchState {
 	return c.State
 }
 
-func (c *CreateVitessBranchResponseBody) GetDirectVtgate() bool {
-	if c == nil {
-		return false
-	}
-	return c.DirectVtgate
-}
-
-func (c *CreateVitessBranchResponseBody) GetVtgateSize() string {
-	if c == nil {
-		return ""
-	}
-	return c.VtgateSize
-}
-
-func (c *CreateVitessBranchResponseBody) GetVtgateCount() int64 {
-	if c == nil {
-		return 0
-	}
-	return c.VtgateCount
-}
-
 func (c *CreateVitessBranchResponseBody) GetClusterName() string {
 	if c == nil {
 		return ""
@@ -511,13 +438,6 @@ func (c *CreateVitessBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return c.Ready
-}
-
-func (c *CreateVitessBranchResponseBody) GetSchemaReady() bool {
-	if c == nil {
-		return false
-	}
-	return c.SchemaReady
 }
 
 func (c *CreateVitessBranchResponseBody) GetMetal() bool {
