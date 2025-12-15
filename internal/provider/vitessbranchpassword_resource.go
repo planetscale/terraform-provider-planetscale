@@ -177,7 +177,7 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `The ID for the password`,
+				Description: `The ID of the password`,
 			},
 			"last_used_at": schema.StringAttribute{
 				Computed:    true,

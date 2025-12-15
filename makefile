@@ -12,6 +12,13 @@ download-openapi:
 generate:
 	speakeasy run --skip-versioning
 
+.PHONY: update-speakeasy
+update-speakeasy:
+	speakeasy update
+	@VERSION=$$(speakeasy --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) && \
+		sed -i '' "s/^speakeasyVersion:.*/speakeasyVersion: $$VERSION/" .speakeasy/workflow.yaml
+	$(MAKE) generate
+
 .PHONY: lint
 lint:
 	golangci-lint run -v ./...
