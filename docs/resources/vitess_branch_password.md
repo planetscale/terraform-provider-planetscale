@@ -58,7 +58,7 @@ resource "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
 - `direct_vtgate_addresses` (List of String) The list of hosts in each availability zone providing direct access to a vtgate
 - `expired` (Boolean) True if the credentials are expired
 - `expires_at` (String) When the password will expire
-- `id` (String) The ID for the password
+- `id` (String) The ID of the password
 - `last_used_at` (String) When the password was last used to execute a query
 - `plain_text` (String, Sensitive) The plain text password, available only after create
 - `region` (Attributes) (see [below for nested schema](#nestedatt--region))

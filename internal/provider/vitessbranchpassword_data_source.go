@@ -155,7 +155,7 @@ func (r *VitessBranchPasswordDataSource) Schema(ctx context.Context, req datasou
 			},
 			"id": schema.StringAttribute{
 				Required:    true,
-				Description: `The ID of the password`,
+				Description: `The ID for the password`,
 			},
 			"last_used_at": schema.StringAttribute{
 				Computed:    true,

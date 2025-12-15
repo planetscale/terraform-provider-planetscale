@@ -22,7 +22,8 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: body
-  persistentEdits: {}
+  persistentEdits:
+    enabled: never
   tests:
     generateTests: false
     generateNewTests: true
@@ -39,6 +40,7 @@ terraform:
   additionalResources: []
   author: planetscale
   baseErrorName: PlanetscaleError
+  debugLogging: {}
   defaultErrorName: APIError
   enableCustomCodeRegions: false
   enableOperationSecurity: false

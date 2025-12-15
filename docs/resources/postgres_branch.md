@@ -54,7 +54,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
-- `replicas` (Number) The number of replicas for the branch
+- `replicas` (Number) The total number of replicas
 - `state` (String) The current state of the branch
 - `url` (String) Planetscale API URL for the branch
 

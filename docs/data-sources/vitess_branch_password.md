@@ -28,7 +28,7 @@ data "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
 
 - `branch` (String) The name of the branch the password belongs to
 - `database` (String) The name of the database the password belongs to
-- `id` (String) The ID of the password
+- `id` (String) The ID for the password
 - `organization` (String) The name of the organization the password belongs to
 
 ### Read-Only
