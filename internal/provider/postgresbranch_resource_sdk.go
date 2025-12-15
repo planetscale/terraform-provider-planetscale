@@ -13,46 +13,17 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterArchitecture = types.StringPointerValue(resp.ClusterArchitecture)
-		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
-		r.ClusterIops = types.Int64Value(resp.ClusterIops)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
-		r.HasReplicas = types.BoolValue(resp.HasReplicas)
+		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
-		r.Metal = types.BoolValue(resp.Metal)
+		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
+		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
-		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
-		r.Production = types.BoolValue(resp.Production)
 		r.Ready = types.BoolValue(resp.Ready)
-		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
-		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
-		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
-		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
-		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
-		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-		for _, v := range resp.RegionData.PublicIPAddresses {
-			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-		}
-		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
-		r.Replicas = types.Int64PointerValue(resp.Replicas)
-		r.RestoreChecklistCompletedAt = types.StringValue(resp.RestoreChecklistCompletedAt)
-		r.RestoredFromBranch.CreatedAt = types.StringValue(resp.RestoredFromBranch.CreatedAt)
-		r.RestoredFromBranch.DeletedAt = types.StringValue(resp.RestoredFromBranch.DeletedAt)
-		r.RestoredFromBranch.ID = types.StringValue(resp.RestoredFromBranch.ID)
-		r.RestoredFromBranch.Name = types.StringValue(resp.RestoredFromBranch.Name)
-		r.RestoredFromBranch.UpdatedAt = types.StringValue(resp.RestoredFromBranch.UpdatedAt)
-		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
-		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
-		r.StaleSchema = types.BoolValue(resp.StaleSchema)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
+		r.URL = types.StringValue(resp.URL)
 	}
 
 	return diags
@@ -62,46 +33,18 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterArchitecture = types.StringPointerValue(resp.ClusterArchitecture)
-		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
-		r.ClusterIops = types.Int64Value(resp.ClusterIops)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
-		r.HasReplicas = types.BoolValue(resp.HasReplicas)
+		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
-		r.Metal = types.BoolValue(resp.Metal)
+		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
+		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
-		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
-		r.Production = types.BoolValue(resp.Production)
 		r.Ready = types.BoolValue(resp.Ready)
-		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
-		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
-		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
-		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
-		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
-		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-		for _, v := range resp.RegionData.PublicIPAddresses {
-			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-		}
-		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
-		r.RestoreChecklistCompletedAt = types.StringValue(resp.RestoreChecklistCompletedAt)
-		r.RestoredFromBranch.CreatedAt = types.StringValue(resp.RestoredFromBranch.CreatedAt)
-		r.RestoredFromBranch.DeletedAt = types.StringValue(resp.RestoredFromBranch.DeletedAt)
-		r.RestoredFromBranch.ID = types.StringValue(resp.RestoredFromBranch.ID)
-		r.RestoredFromBranch.Name = types.StringValue(resp.RestoredFromBranch.Name)
-		r.RestoredFromBranch.UpdatedAt = types.StringValue(resp.RestoredFromBranch.UpdatedAt)
-		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
-		r.SchemaLastUpdatedAt = types.StringValue(resp.SchemaLastUpdatedAt)
-		r.StaleSchema = types.BoolValue(resp.StaleSchema)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
+		r.URL = types.StringValue(resp.URL)
 	}
 
 	return diags
@@ -111,15 +54,10 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 	}
 
 	return diags

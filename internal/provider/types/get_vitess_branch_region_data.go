@@ -7,12 +7,5 @@ import (
 )
 
 type GetVitessBranchRegionData struct {
-	CurrentDefault    types.Bool     `tfsdk:"current_default"`
-	DisplayName       types.String   `tfsdk:"display_name"`
-	Enabled           types.Bool     `tfsdk:"enabled"`
-	ID                types.String   `tfsdk:"id"`
-	Location          types.String   `tfsdk:"location"`
-	Provider          types.String   `tfsdk:"provider"`
-	PublicIPAddresses []types.String `tfsdk:"public_ip_addresses"`
-	Slug              types.String   `tfsdk:"slug"`
+	ID types.String `tfsdk:"id"`
 }

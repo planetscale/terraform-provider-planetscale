@@ -16,46 +16,9 @@ actions:
     description: Remove seed_data (Vitess-only field)
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.deleted_at
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.mysql_address
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.mysql_edge_address
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.direct_vtgate
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.vtgate_size
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.vtgate_count
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.schema_ready
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.sharded
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.shard_count
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.html_url
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.url
-    remove: true
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.kind
-    description: Set kind to const postgresql
-    update:
-      const: postgresql
-      description: The kind of branch (always postgresql for PostgreSQL branches)
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.kind.enum
-    remove: true
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].post.responses['201'].content['application/json'].schema.properties
     description: Add Postgres response fields
     update:
-      cluster_display_name:
-        type: string
-        description: Display name for the cluster size
-      cluster_architecture:
-        type: string
-        description: The CPU architecture for the cluster (e.g., x86_64)
       replicas:
         type: integer
         description: The number of replicas for the branch
@@ -79,46 +42,10 @@ actions:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.deleted_at
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.mysql_address
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.mysql_edge_address
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.direct_vtgate
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.vtgate_size
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.vtgate_count
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.schema_ready
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.sharded
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.shard_count
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.html_url
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.url
-    remove: true
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.kind
-    description: Set kind to const postgresql
-    update:
-      const: postgresql
-      description: The kind of branch (always postgresql for PostgreSQL branches)
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.kind.enum
-    remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties
     description: Add Postgres response fields
     update:
-      cluster_display_name:
-        type: string
-        description: Display name for the cluster size
-      cluster_architecture:
-        type: string
-        description: The CPU architecture for the cluster (e.g., x86_64)
       replicas:
         type: integer
         description: The number of replicas for the branch
