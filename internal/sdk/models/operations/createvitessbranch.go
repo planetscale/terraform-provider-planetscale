@@ -202,18 +202,16 @@ type CreateVitessBranchResponseBody struct {
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreateVitessBranchState `json:"state"`
+	// The SKU representing the branch's cluster size
+	ClusterName string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool                    `json:"ready"`
 	Actor CreateVitessBranchActor `json:"actor"`
-	// True if private connections are enabled
-	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
 	URL        string                       `json:"url"`
 	RegionData CreateVitessBranchRegionData `json:"region"`
-	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
 }
 
 func (c *CreateVitessBranchResponseBody) GetID() string {
@@ -251,6 +249,13 @@ func (c *CreateVitessBranchResponseBody) GetState() CreateVitessBranchState {
 	return c.State
 }
 
+func (c *CreateVitessBranchResponseBody) GetClusterName() string {
+	if c == nil {
+		return ""
+	}
+	return c.ClusterName
+}
+
 func (c *CreateVitessBranchResponseBody) GetReady() bool {
 	if c == nil {
 		return false
@@ -263,13 +268,6 @@ func (c *CreateVitessBranchResponseBody) GetActor() CreateVitessBranchActor {
 		return CreateVitessBranchActor{}
 	}
 	return c.Actor
-}
-
-func (c *CreateVitessBranchResponseBody) GetPrivateEdgeConnectivity() bool {
-	if c == nil {
-		return false
-	}
-	return c.PrivateEdgeConnectivity
 }
 
 func (c *CreateVitessBranchResponseBody) GetHTMLURL() string {
@@ -291,13 +289,6 @@ func (c *CreateVitessBranchResponseBody) GetRegionData() CreateVitessBranchRegio
 		return CreateVitessBranchRegionData{}
 	}
 	return c.RegionData
-}
-
-func (c *CreateVitessBranchResponseBody) GetParentBranch() string {
-	if c == nil {
-		return ""
-	}
-	return c.ParentBranch
 }
 
 type CreateVitessBranchResponse struct {

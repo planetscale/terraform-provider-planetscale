@@ -14,13 +14,12 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 
 	if resp != nil {
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
-		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
@@ -37,13 +36,12 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterArchitecture = types.StringPointerValue(resp.ClusterArchitecture)
 		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
+		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
-		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
@@ -60,6 +58,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 	if resp != nil {
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
+		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
 	}

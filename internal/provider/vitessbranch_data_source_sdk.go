@@ -14,13 +14,12 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 
 	if resp != nil {
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
-		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))

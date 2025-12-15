@@ -111,18 +111,16 @@ type GetPostgresBranchResponseBody struct {
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State GetPostgresBranchState `json:"state"`
+	// The SKU representing the branch's cluster size
+	ClusterName string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool                   `json:"ready"`
 	Actor GetPostgresBranchActor `json:"actor"`
-	// True if private connections are enabled
-	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
 	URL        string                      `json:"url"`
 	RegionData GetPostgresBranchRegionData `json:"region"`
-	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
 	// Display name for the cluster size
 	ClusterDisplayName *string `json:"cluster_display_name,omitzero"`
 	// The CPU architecture for the cluster (e.g., x86_64)
@@ -166,6 +164,13 @@ func (g *GetPostgresBranchResponseBody) GetState() GetPostgresBranchState {
 	return g.State
 }
 
+func (g *GetPostgresBranchResponseBody) GetClusterName() string {
+	if g == nil {
+		return ""
+	}
+	return g.ClusterName
+}
+
 func (g *GetPostgresBranchResponseBody) GetReady() bool {
 	if g == nil {
 		return false
@@ -178,13 +183,6 @@ func (g *GetPostgresBranchResponseBody) GetActor() GetPostgresBranchActor {
 		return GetPostgresBranchActor{}
 	}
 	return g.Actor
-}
-
-func (g *GetPostgresBranchResponseBody) GetPrivateEdgeConnectivity() bool {
-	if g == nil {
-		return false
-	}
-	return g.PrivateEdgeConnectivity
 }
 
 func (g *GetPostgresBranchResponseBody) GetHTMLURL() string {
@@ -206,13 +204,6 @@ func (g *GetPostgresBranchResponseBody) GetRegionData() GetPostgresBranchRegionD
 		return GetPostgresBranchRegionData{}
 	}
 	return g.RegionData
-}
-
-func (g *GetPostgresBranchResponseBody) GetParentBranch() string {
-	if g == nil {
-		return ""
-	}
-	return g.ParentBranch
 }
 
 func (g *GetPostgresBranchResponseBody) GetClusterDisplayName() *string {

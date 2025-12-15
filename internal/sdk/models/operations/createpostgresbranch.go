@@ -187,18 +187,16 @@ type CreatePostgresBranchResponseBody struct {
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreatePostgresBranchState `json:"state"`
+	// The SKU representing the branch's cluster size
+	ClusterName string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool                      `json:"ready"`
 	Actor CreatePostgresBranchActor `json:"actor"`
-	// True if private connections are enabled
-	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
 	URL        string                         `json:"url"`
 	RegionData CreatePostgresBranchRegionData `json:"region"`
-	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
 }
 
 func (c *CreatePostgresBranchResponseBody) GetID() string {
@@ -236,6 +234,13 @@ func (c *CreatePostgresBranchResponseBody) GetState() CreatePostgresBranchState 
 	return c.State
 }
 
+func (c *CreatePostgresBranchResponseBody) GetClusterName() string {
+	if c == nil {
+		return ""
+	}
+	return c.ClusterName
+}
+
 func (c *CreatePostgresBranchResponseBody) GetReady() bool {
 	if c == nil {
 		return false
@@ -248,13 +253,6 @@ func (c *CreatePostgresBranchResponseBody) GetActor() CreatePostgresBranchActor 
 		return CreatePostgresBranchActor{}
 	}
 	return c.Actor
-}
-
-func (c *CreatePostgresBranchResponseBody) GetPrivateEdgeConnectivity() bool {
-	if c == nil {
-		return false
-	}
-	return c.PrivateEdgeConnectivity
 }
 
 func (c *CreatePostgresBranchResponseBody) GetHTMLURL() string {
@@ -276,13 +274,6 @@ func (c *CreatePostgresBranchResponseBody) GetRegionData() CreatePostgresBranchR
 		return CreatePostgresBranchRegionData{}
 	}
 	return c.RegionData
-}
-
-func (c *CreatePostgresBranchResponseBody) GetParentBranch() string {
-	if c == nil {
-		return ""
-	}
-	return c.ParentBranch
 }
 
 type CreatePostgresBranchResponse struct {

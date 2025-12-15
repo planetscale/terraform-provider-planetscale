@@ -38,24 +38,24 @@ type VitessBranchResource struct {
 
 // VitessBranchResourceModel describes the resource data model.
 type VitessBranchResourceModel struct {
-	Actor                   tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
-	BackupID                types.String                      `tfsdk:"backup_id"`
-	ClusterSize             types.String                      `tfsdk:"cluster_size"`
-	Database                types.String                      `tfsdk:"database"`
-	HTMLURL                 types.String                      `tfsdk:"html_url"`
-	ID                      types.String                      `tfsdk:"id"`
-	MysqlAddress            types.String                      `tfsdk:"mysql_address"`
-	MysqlEdgeAddress        types.String                      `tfsdk:"mysql_edge_address"`
-	Name                    types.String                      `tfsdk:"name"`
-	Organization            types.String                      `tfsdk:"organization"`
-	ParentBranch            types.String                      `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity types.Bool                        `tfsdk:"private_edge_connectivity"`
-	Ready                   types.Bool                        `tfsdk:"ready"`
-	Region                  types.String                      `tfsdk:"region"`
-	RegionData              tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
-	SeedData                types.String                      `tfsdk:"seed_data"`
-	State                   types.String                      `tfsdk:"state"`
-	URL                     types.String                      `tfsdk:"url"`
+	Actor            tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
+	BackupID         types.String                      `tfsdk:"backup_id"`
+	ClusterName      types.String                      `tfsdk:"cluster_name"`
+	ClusterSize      types.String                      `tfsdk:"cluster_size"`
+	Database         types.String                      `tfsdk:"database"`
+	HTMLURL          types.String                      `tfsdk:"html_url"`
+	ID               types.String                      `tfsdk:"id"`
+	MysqlAddress     types.String                      `tfsdk:"mysql_address"`
+	MysqlEdgeAddress types.String                      `tfsdk:"mysql_edge_address"`
+	Name             types.String                      `tfsdk:"name"`
+	Organization     types.String                      `tfsdk:"organization"`
+	ParentBranch     types.String                      `tfsdk:"parent_branch"`
+	Ready            types.Bool                        `tfsdk:"ready"`
+	Region           types.String                      `tfsdk:"region"`
+	RegionData       tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	SeedData         types.String                      `tfsdk:"seed_data"`
+	State            types.String                      `tfsdk:"state"`
+	URL              types.String                      `tfsdk:"url"`
 }
 
 func (r *VitessBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,6 +81,10 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `If provided, restores the backup's schema and data to the new branch. Must have ` + "`" + `restore_production_branch_backup(s)` + "`" + ` or ` + "`" + `restore_backup(s)` + "`" + ` access to do this. Requires replacement if changed.`,
+			},
+			"cluster_name": schema.StringAttribute{
+				Computed:    true,
+				Description: `The SKU representing the branch's cluster size`,
 			},
 			"cluster_size": schema.StringAttribute{
 				Optional: true,
@@ -131,13 +135,8 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Parent branch. Requires replacement if changed.`,
-			},
-			"private_edge_connectivity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if private connections are enabled`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,

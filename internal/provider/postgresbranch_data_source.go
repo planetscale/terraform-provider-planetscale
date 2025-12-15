@@ -29,23 +29,22 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor                   tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	ClusterArchitecture     types.String                        `tfsdk:"cluster_architecture"`
-	ClusterDisplayName      types.String                        `tfsdk:"cluster_display_name"`
-	Database                types.String                        `tfsdk:"database"`
-	HTMLURL                 types.String                        `tfsdk:"html_url"`
-	ID                      types.String                        `tfsdk:"id"`
-	MysqlAddress            types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress        types.String                        `tfsdk:"mysql_edge_address"`
-	Name                    types.String                        `tfsdk:"name"`
-	Organization            types.String                        `tfsdk:"organization"`
-	ParentBranch            types.String                        `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity types.Bool                          `tfsdk:"private_edge_connectivity"`
-	Ready                   types.Bool                          `tfsdk:"ready"`
-	RegionData              tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas                types.Int64                         `tfsdk:"replicas"`
-	State                   types.String                        `tfsdk:"state"`
-	URL                     types.String                        `tfsdk:"url"`
+	Actor               tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	ClusterArchitecture types.String                        `tfsdk:"cluster_architecture"`
+	ClusterDisplayName  types.String                        `tfsdk:"cluster_display_name"`
+	ClusterName         types.String                        `tfsdk:"cluster_name"`
+	Database            types.String                        `tfsdk:"database"`
+	HTMLURL             types.String                        `tfsdk:"html_url"`
+	ID                  types.String                        `tfsdk:"id"`
+	MysqlAddress        types.String                        `tfsdk:"mysql_address"`
+	MysqlEdgeAddress    types.String                        `tfsdk:"mysql_edge_address"`
+	Name                types.String                        `tfsdk:"name"`
+	Organization        types.String                        `tfsdk:"organization"`
+	Ready               types.Bool                          `tfsdk:"ready"`
+	RegionData          tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas            types.Int64                         `tfsdk:"replicas"`
+	State               types.String                        `tfsdk:"state"`
+	URL                 types.String                        `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -76,6 +75,10 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:    true,
 				Description: `Display name for the cluster size`,
 			},
+			"cluster_name": schema.StringAttribute{
+				Computed:    true,
+				Description: `The SKU representing the branch's cluster size`,
+			},
 			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the database the branch belongs to`,
@@ -103,14 +106,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the branch belongs to`,
-			},
-			"parent_branch": schema.StringAttribute{
-				Computed:    true,
-				Description: `The name of the parent branch from which the branch was created`,
-			},
-			"private_edge_connectivity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if private connections are enabled`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,

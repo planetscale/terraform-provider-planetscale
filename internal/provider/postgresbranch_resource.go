@@ -36,28 +36,28 @@ type PostgresBranchResource struct {
 
 // PostgresBranchResourceModel describes the resource data model.
 type PostgresBranchResourceModel struct {
-	Actor                   tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	BackupID                types.String                        `tfsdk:"backup_id"`
-	ClusterArchitecture     types.String                        `tfsdk:"cluster_architecture"`
-	ClusterDisplayName      types.String                        `tfsdk:"cluster_display_name"`
-	ClusterSize             types.String                        `tfsdk:"cluster_size"`
-	Database                types.String                        `tfsdk:"database"`
-	HTMLURL                 types.String                        `tfsdk:"html_url"`
-	ID                      types.String                        `tfsdk:"id"`
-	MajorVersion            types.String                        `tfsdk:"major_version"`
-	MysqlAddress            types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress        types.String                        `tfsdk:"mysql_edge_address"`
-	Name                    types.String                        `tfsdk:"name"`
-	Organization            types.String                        `tfsdk:"organization"`
-	ParentBranch            types.String                        `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity types.Bool                          `tfsdk:"private_edge_connectivity"`
-	Ready                   types.Bool                          `tfsdk:"ready"`
-	Region                  types.String                        `tfsdk:"region"`
-	RegionData              tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas                types.Int64                         `tfsdk:"replicas"`
-	RestorePoint            types.String                        `tfsdk:"restore_point"`
-	State                   types.String                        `tfsdk:"state"`
-	URL                     types.String                        `tfsdk:"url"`
+	Actor               tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	BackupID            types.String                        `tfsdk:"backup_id"`
+	ClusterArchitecture types.String                        `tfsdk:"cluster_architecture"`
+	ClusterDisplayName  types.String                        `tfsdk:"cluster_display_name"`
+	ClusterName         types.String                        `tfsdk:"cluster_name"`
+	ClusterSize         types.String                        `tfsdk:"cluster_size"`
+	Database            types.String                        `tfsdk:"database"`
+	HTMLURL             types.String                        `tfsdk:"html_url"`
+	ID                  types.String                        `tfsdk:"id"`
+	MajorVersion        types.String                        `tfsdk:"major_version"`
+	MysqlAddress        types.String                        `tfsdk:"mysql_address"`
+	MysqlEdgeAddress    types.String                        `tfsdk:"mysql_edge_address"`
+	Name                types.String                        `tfsdk:"name"`
+	Organization        types.String                        `tfsdk:"organization"`
+	ParentBranch        types.String                        `tfsdk:"parent_branch"`
+	Ready               types.Bool                          `tfsdk:"ready"`
+	Region              types.String                        `tfsdk:"region"`
+	RegionData          tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas            types.Int64                         `tfsdk:"replicas"`
+	RestorePoint        types.String                        `tfsdk:"restore_point"`
+	State               types.String                        `tfsdk:"state"`
+	URL                 types.String                        `tfsdk:"url"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,6 +91,10 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"cluster_display_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Display name for the cluster size`,
+			},
+			"cluster_name": schema.StringAttribute{
+				Computed:    true,
+				Description: `The SKU representing the branch's cluster size`,
 			},
 			"cluster_size": schema.StringAttribute{
 				Optional:    true,
@@ -139,13 +143,8 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Parent branch. Requires replacement if changed.`,
-			},
-			"private_edge_connectivity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if private connections are enabled`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
