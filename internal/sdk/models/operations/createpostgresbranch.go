@@ -181,81 +181,6 @@ func (c *CreatePostgresBranchActor) GetAvatarURL() string {
 	return c.AvatarURL
 }
 
-type CreatePostgresBranchRegionData struct {
-	// The ID of the region
-	ID string `json:"id"`
-	// Provider for the region (ex. AWS)
-	Provider string `json:"provider"`
-	// Whether or not the region is currently active
-	Enabled bool `json:"enabled"`
-	// Public IP addresses for the region
-	PublicIPAddresses []string `json:"public_ip_addresses"`
-	// Name of the region
-	DisplayName string `json:"display_name"`
-	// Location of the region
-	Location string `json:"location"`
-	// The slug of the region
-	Slug string `json:"slug"`
-	// True if the region is the default for new branch creation
-	CurrentDefault bool `json:"current_default"`
-}
-
-func (c *CreatePostgresBranchRegionData) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CreatePostgresBranchRegionData) GetProvider() string {
-	if c == nil {
-		return ""
-	}
-	return c.Provider
-}
-
-func (c *CreatePostgresBranchRegionData) GetEnabled() bool {
-	if c == nil {
-		return false
-	}
-	return c.Enabled
-}
-
-func (c *CreatePostgresBranchRegionData) GetPublicIPAddresses() []string {
-	if c == nil {
-		return []string{}
-	}
-	return c.PublicIPAddresses
-}
-
-func (c *CreatePostgresBranchRegionData) GetDisplayName() string {
-	if c == nil {
-		return ""
-	}
-	return c.DisplayName
-}
-
-func (c *CreatePostgresBranchRegionData) GetLocation() string {
-	if c == nil {
-		return ""
-	}
-	return c.Location
-}
-
-func (c *CreatePostgresBranchRegionData) GetSlug() string {
-	if c == nil {
-		return ""
-	}
-	return c.Slug
-}
-
-func (c *CreatePostgresBranchRegionData) GetCurrentDefault() bool {
-	if c == nil {
-		return false
-	}
-	return c.CurrentDefault
-}
-
 // CreatePostgresBranchResponseBody - Returns the created branch
 type CreatePostgresBranchResponseBody struct {
 	// The ID of the branch
@@ -276,8 +201,7 @@ type CreatePostgresBranchResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL        string                         `json:"url"`
-	RegionData CreatePostgresBranchRegionData `json:"region"`
+	URL string `json:"url"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -350,13 +274,6 @@ func (c *CreatePostgresBranchResponseBody) GetURL() string {
 		return ""
 	}
 	return c.URL
-}
-
-func (c *CreatePostgresBranchResponseBody) GetRegionData() CreatePostgresBranchRegionData {
-	if c == nil {
-		return CreatePostgresBranchRegionData{}
-	}
-	return c.RegionData
 }
 
 func (c *CreatePostgresBranchResponseBody) GetParentBranch() string {

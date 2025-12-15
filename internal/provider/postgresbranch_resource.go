@@ -36,28 +36,27 @@ type PostgresBranchResource struct {
 
 // PostgresBranchResourceModel describes the resource data model.
 type PostgresBranchResourceModel struct {
-	Actor                   tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	BackupID                types.String                        `tfsdk:"backup_id"`
-	ClusterArchitecture     types.String                        `tfsdk:"cluster_architecture"`
-	ClusterDisplayName      types.String                        `tfsdk:"cluster_display_name"`
-	ClusterSize             types.String                        `tfsdk:"cluster_size"`
-	Database                types.String                        `tfsdk:"database"`
-	HTMLURL                 types.String                        `tfsdk:"html_url"`
-	ID                      types.String                        `tfsdk:"id"`
-	MajorVersion            types.String                        `tfsdk:"major_version"`
-	MysqlAddress            types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress        types.String                        `tfsdk:"mysql_edge_address"`
-	Name                    types.String                        `tfsdk:"name"`
-	Organization            types.String                        `tfsdk:"organization"`
-	ParentBranch            types.String                        `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity types.Bool                          `tfsdk:"private_edge_connectivity"`
-	Ready                   types.Bool                          `tfsdk:"ready"`
-	Region                  types.String                        `tfsdk:"region"`
-	RegionData              tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas                types.Int64                         `tfsdk:"replicas"`
-	RestorePoint            types.String                        `tfsdk:"restore_point"`
-	State                   types.String                        `tfsdk:"state"`
-	URL                     types.String                        `tfsdk:"url"`
+	Actor                   tfTypes.GetPostgresBranchActor `tfsdk:"actor"`
+	BackupID                types.String                   `tfsdk:"backup_id"`
+	ClusterArchitecture     types.String                   `tfsdk:"cluster_architecture"`
+	ClusterDisplayName      types.String                   `tfsdk:"cluster_display_name"`
+	ClusterSize             types.String                   `tfsdk:"cluster_size"`
+	Database                types.String                   `tfsdk:"database"`
+	HTMLURL                 types.String                   `tfsdk:"html_url"`
+	ID                      types.String                   `tfsdk:"id"`
+	MajorVersion            types.String                   `tfsdk:"major_version"`
+	MysqlAddress            types.String                   `tfsdk:"mysql_address"`
+	MysqlEdgeAddress        types.String                   `tfsdk:"mysql_edge_address"`
+	Name                    types.String                   `tfsdk:"name"`
+	Organization            types.String                   `tfsdk:"organization"`
+	ParentBranch            types.String                   `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity types.Bool                     `tfsdk:"private_edge_connectivity"`
+	Ready                   types.Bool                     `tfsdk:"ready"`
+	Region                  types.String                   `tfsdk:"region"`
+	Replicas                types.Int64                    `tfsdk:"replicas"`
+	RestorePoint            types.String                   `tfsdk:"restore_point"`
+	State                   types.String                   `tfsdk:"state"`
+	URL                     types.String                   `tfsdk:"url"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -165,44 +164,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.`,
-			},
-			"region_data": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"current_default": schema.BoolAttribute{
-						Computed:    true,
-						Description: `True if the region is the default for new branch creation`,
-					},
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Name of the region`,
-					},
-					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Whether or not the region is currently active`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The ID of the region`,
-					},
-					"location": schema.StringAttribute{
-						Computed:    true,
-						Description: `Location of the region`,
-					},
-					"provider": schema.StringAttribute{
-						Computed:    true,
-						Description: `Provider for the region (ex. AWS)`,
-					},
-					"public_ip_addresses": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Public IP addresses for the region`,
-					},
-					"slug": schema.StringAttribute{
-						Computed:    true,
-						Description: `The slug of the region`,
-					},
-				},
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,

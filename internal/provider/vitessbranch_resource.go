@@ -38,24 +38,23 @@ type VitessBranchResource struct {
 
 // VitessBranchResourceModel describes the resource data model.
 type VitessBranchResourceModel struct {
-	Actor                   tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
-	BackupID                types.String                      `tfsdk:"backup_id"`
-	ClusterSize             types.String                      `tfsdk:"cluster_size"`
-	Database                types.String                      `tfsdk:"database"`
-	HTMLURL                 types.String                      `tfsdk:"html_url"`
-	ID                      types.String                      `tfsdk:"id"`
-	MysqlAddress            types.String                      `tfsdk:"mysql_address"`
-	MysqlEdgeAddress        types.String                      `tfsdk:"mysql_edge_address"`
-	Name                    types.String                      `tfsdk:"name"`
-	Organization            types.String                      `tfsdk:"organization"`
-	ParentBranch            types.String                      `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity types.Bool                        `tfsdk:"private_edge_connectivity"`
-	Ready                   types.Bool                        `tfsdk:"ready"`
-	Region                  types.String                      `tfsdk:"region"`
-	RegionData              tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
-	SeedData                types.String                      `tfsdk:"seed_data"`
-	State                   types.String                      `tfsdk:"state"`
-	URL                     types.String                      `tfsdk:"url"`
+	Actor                   tfTypes.GetVitessBranchActor `tfsdk:"actor"`
+	BackupID                types.String                 `tfsdk:"backup_id"`
+	ClusterSize             types.String                 `tfsdk:"cluster_size"`
+	Database                types.String                 `tfsdk:"database"`
+	HTMLURL                 types.String                 `tfsdk:"html_url"`
+	ID                      types.String                 `tfsdk:"id"`
+	MysqlAddress            types.String                 `tfsdk:"mysql_address"`
+	MysqlEdgeAddress        types.String                 `tfsdk:"mysql_edge_address"`
+	Name                    types.String                 `tfsdk:"name"`
+	Organization            types.String                 `tfsdk:"organization"`
+	ParentBranch            types.String                 `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity types.Bool                   `tfsdk:"private_edge_connectivity"`
+	Ready                   types.Bool                   `tfsdk:"ready"`
+	Region                  types.String                 `tfsdk:"region"`
+	SeedData                types.String                 `tfsdk:"seed_data"`
+	State                   types.String                 `tfsdk:"state"`
+	URL                     types.String                 `tfsdk:"url"`
 }
 
 func (r *VitessBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -157,44 +156,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.`,
-			},
-			"region_data": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"current_default": schema.BoolAttribute{
-						Computed:    true,
-						Description: `True if the region is the default for new branch creation`,
-					},
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Name of the region`,
-					},
-					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Whether or not the region is currently active`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The ID of the region`,
-					},
-					"location": schema.StringAttribute{
-						Computed:    true,
-						Description: `Location of the region`,
-					},
-					"provider": schema.StringAttribute{
-						Computed:    true,
-						Description: `Provider for the region (ex. AWS)`,
-					},
-					"public_ip_addresses": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Public IP addresses for the region`,
-					},
-					"slug": schema.StringAttribute{
-						Computed:    true,
-						Description: `The slug of the region`,
-					},
-				},
 			},
 			"seed_data": schema.StringAttribute{
 				Optional: true,

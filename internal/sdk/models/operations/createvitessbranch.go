@@ -196,81 +196,6 @@ func (c *CreateVitessBranchActor) GetAvatarURL() string {
 	return c.AvatarURL
 }
 
-type CreateVitessBranchRegionData struct {
-	// The ID of the region
-	ID string `json:"id"`
-	// Provider for the region (ex. AWS)
-	Provider string `json:"provider"`
-	// Whether or not the region is currently active
-	Enabled bool `json:"enabled"`
-	// Public IP addresses for the region
-	PublicIPAddresses []string `json:"public_ip_addresses"`
-	// Name of the region
-	DisplayName string `json:"display_name"`
-	// Location of the region
-	Location string `json:"location"`
-	// The slug of the region
-	Slug string `json:"slug"`
-	// True if the region is the default for new branch creation
-	CurrentDefault bool `json:"current_default"`
-}
-
-func (c *CreateVitessBranchRegionData) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CreateVitessBranchRegionData) GetProvider() string {
-	if c == nil {
-		return ""
-	}
-	return c.Provider
-}
-
-func (c *CreateVitessBranchRegionData) GetEnabled() bool {
-	if c == nil {
-		return false
-	}
-	return c.Enabled
-}
-
-func (c *CreateVitessBranchRegionData) GetPublicIPAddresses() []string {
-	if c == nil {
-		return []string{}
-	}
-	return c.PublicIPAddresses
-}
-
-func (c *CreateVitessBranchRegionData) GetDisplayName() string {
-	if c == nil {
-		return ""
-	}
-	return c.DisplayName
-}
-
-func (c *CreateVitessBranchRegionData) GetLocation() string {
-	if c == nil {
-		return ""
-	}
-	return c.Location
-}
-
-func (c *CreateVitessBranchRegionData) GetSlug() string {
-	if c == nil {
-		return ""
-	}
-	return c.Slug
-}
-
-func (c *CreateVitessBranchRegionData) GetCurrentDefault() bool {
-	if c == nil {
-		return false
-	}
-	return c.CurrentDefault
-}
-
 // CreateVitessBranchResponseBody - Returns the created branch
 type CreateVitessBranchResponseBody struct {
 	// The ID of the branch
@@ -291,8 +216,7 @@ type CreateVitessBranchResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL        string                       `json:"url"`
-	RegionData CreateVitessBranchRegionData `json:"region"`
+	URL string `json:"url"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -365,13 +289,6 @@ func (c *CreateVitessBranchResponseBody) GetURL() string {
 		return ""
 	}
 	return c.URL
-}
-
-func (c *CreateVitessBranchResponseBody) GetRegionData() CreateVitessBranchRegionData {
-	if c == nil {
-		return CreateVitessBranchRegionData{}
-	}
-	return c.RegionData
 }
 
 func (c *CreateVitessBranchResponseBody) GetParentBranch() string {

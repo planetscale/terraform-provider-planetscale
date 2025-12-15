@@ -29,23 +29,22 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor                   tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	ClusterArchitecture     types.String                        `tfsdk:"cluster_architecture"`
-	ClusterDisplayName      types.String                        `tfsdk:"cluster_display_name"`
-	Database                types.String                        `tfsdk:"database"`
-	HTMLURL                 types.String                        `tfsdk:"html_url"`
-	ID                      types.String                        `tfsdk:"id"`
-	MysqlAddress            types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress        types.String                        `tfsdk:"mysql_edge_address"`
-	Name                    types.String                        `tfsdk:"name"`
-	Organization            types.String                        `tfsdk:"organization"`
-	ParentBranch            types.String                        `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity types.Bool                          `tfsdk:"private_edge_connectivity"`
-	Ready                   types.Bool                          `tfsdk:"ready"`
-	RegionData              tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas                types.Int64                         `tfsdk:"replicas"`
-	State                   types.String                        `tfsdk:"state"`
-	URL                     types.String                        `tfsdk:"url"`
+	Actor                   tfTypes.GetPostgresBranchActor `tfsdk:"actor"`
+	ClusterArchitecture     types.String                   `tfsdk:"cluster_architecture"`
+	ClusterDisplayName      types.String                   `tfsdk:"cluster_display_name"`
+	Database                types.String                   `tfsdk:"database"`
+	HTMLURL                 types.String                   `tfsdk:"html_url"`
+	ID                      types.String                   `tfsdk:"id"`
+	MysqlAddress            types.String                   `tfsdk:"mysql_address"`
+	MysqlEdgeAddress        types.String                   `tfsdk:"mysql_edge_address"`
+	Name                    types.String                   `tfsdk:"name"`
+	Organization            types.String                   `tfsdk:"organization"`
+	ParentBranch            types.String                   `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity types.Bool                     `tfsdk:"private_edge_connectivity"`
+	Ready                   types.Bool                     `tfsdk:"ready"`
+	Replicas                types.Int64                    `tfsdk:"replicas"`
+	State                   types.String                   `tfsdk:"state"`
+	URL                     types.String                   `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -123,44 +122,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"ready": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch is ready to serve queries`,
-			},
-			"region_data": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"current_default": schema.BoolAttribute{
-						Computed:    true,
-						Description: `True if the region is the default for new branch creation`,
-					},
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Name of the region`,
-					},
-					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Whether or not the region is currently active`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The ID of the region`,
-					},
-					"location": schema.StringAttribute{
-						Computed:    true,
-						Description: `Location of the region`,
-					},
-					"provider": schema.StringAttribute{
-						Computed:    true,
-						Description: `Provider for the region (ex. AWS)`,
-					},
-					"public_ip_addresses": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Public IP addresses for the region`,
-					},
-					"slug": schema.StringAttribute{
-						Computed:    true,
-						Description: `The slug of the region`,
-					},
-				},
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,

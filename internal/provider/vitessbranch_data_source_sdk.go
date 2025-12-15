@@ -24,17 +24,6 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
-		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
-		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
-		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
-		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
-		r.RegionData.Location = types.StringValue(resp.RegionData.Location)
-		r.RegionData.Provider = types.StringValue(resp.RegionData.Provider)
-		r.RegionData.PublicIPAddresses = make([]types.String, 0, len(resp.RegionData.PublicIPAddresses))
-		for _, v := range resp.RegionData.PublicIPAddresses {
-			r.RegionData.PublicIPAddresses = append(r.RegionData.PublicIPAddresses, types.StringValue(v))
-		}
-		r.RegionData.Slug = types.StringValue(resp.RegionData.Slug)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
