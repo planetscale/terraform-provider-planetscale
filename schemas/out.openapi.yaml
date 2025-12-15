@@ -3196,22 +3196,12 @@ paths:
                   name:
                     type: string
                     description: The name of the branch
-                  created_at:
+                  mysql_address:
                     type: string
-                    description: When the branch was created
-                  updated_at:
+                    description: The MySQL address for the branch
+                  mysql_edge_address:
                     type: string
-                    description: When the branch was last updated
-                  restore_checklist_completed_at:
-                    type: string
-                    description: When a user last marked a backup restore checklist as completed
-                  schema_last_updated_at:
-                    type: string
-                    description: When the schema for the branch was last updated
-                  kind:
-                    type: string
-                    description: The kind of branch (always postgresql for PostgreSQL branches)
-                    const: postgresql
+                    description: The address of the MySQL provider for the branch
                   state:
                     type: string
                     enum:
@@ -3224,104 +3214,32 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
-                  cluster_iops:
-                    type: integer
-                    description: IOPS for the cluster
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
-                  metal:
-                    type: boolean
-                    description: Whether or not this is a metal database
-                  production:
-                    type: boolean
-                    description: Whether or not the branch is a production branch
-                  safe_migrations:
-                    type: boolean
-                    description: Whether or not the branch has safe migrations enabled
-                  stale_schema:
-                    type: boolean
-                    description: Whether or not the branch has a stale schema
                   actor:
                     type: object
                     properties:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
-                      avatar_url:
-                        type: string
-                        description: The URL of the actor's avatar
                     additionalProperties: false
                     required:
                       - id
                       - display_name
                       - avatar_url
-                  restored_from_branch:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID for the resource
-                      name:
-                        type: string
-                        description: The name for the resource
-                      created_at:
-                        type: string
-                        description: When the resource was created
-                      updated_at:
-                        type: string
-                        description: When the resource was last updated
-                      deleted_at:
-                        type: string
-                        description: When the resource was deleted, if deleted
-                    additionalProperties: false
-                    required:
-                      - id
-                      - name
-                      - created_at
-                      - updated_at
-                      - deleted_at
-                  private_edge_connectivity:
-                    type: boolean
-                    description: True if private connections are enabled
-                  has_replicas:
-                    type: boolean
-                    description: True if the branch has replica servers
-                  has_read_only_replicas:
-                    type: boolean
-                    description: True if the branch has read-only replica servers
+                  html_url:
+                    type: string
+                    description: Planetscale app URL for the branch
+                  url:
+                    type: string
+                    description: Planetscale API URL for the branch
                   region:
                     type: object
                     properties:
                       id:
                         type: string
                         description: The ID of the region
-                      provider:
-                        type: string
-                        description: Provider for the region (ex. AWS)
-                      enabled:
-                        type: boolean
-                        description: Whether or not the region is currently active
-                      public_ip_addresses:
-                        items:
-                          type: string
-                        type: array
-                        description: Public IP addresses for the region
-                      display_name:
-                        type: string
-                        description: Name of the region
-                      location:
-                        type: string
-                        description: Location of the region
-                      slug:
-                        type: string
-                        description: The slug of the region
-                      current_default:
-                        type: boolean
-                        description: True if the region is the default for new branch creation
                     additionalProperties: false
                     required:
                       - id
@@ -3333,18 +3251,6 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
-                  parent_branch:
-                    type: string
-                    description: The name of the parent branch from which the branch was created
-                  cluster_display_name:
-                    type: string
-                    description: Display name for the cluster size
-                  cluster_architecture:
-                    type: string
-                    description: The CPU architecture for the cluster (e.g., x86_64)
-                  replicas:
-                    type: integer
-                    description: The number of replicas for the branch
                 additionalProperties: false
                 required:
                   - id
@@ -3445,22 +3351,12 @@ paths:
                   name:
                     type: string
                     description: The name of the branch
-                  created_at:
+                  mysql_address:
                     type: string
-                    description: When the branch was created
-                  updated_at:
+                    description: The MySQL address for the branch
+                  mysql_edge_address:
                     type: string
-                    description: When the branch was last updated
-                  restore_checklist_completed_at:
-                    type: string
-                    description: When a user last marked a backup restore checklist as completed
-                  schema_last_updated_at:
-                    type: string
-                    description: When the schema for the branch was last updated
-                  kind:
-                    type: string
-                    description: The kind of branch (always postgresql for PostgreSQL branches)
-                    const: postgresql
+                    description: The address of the MySQL provider for the branch
                   state:
                     type: string
                     enum:
@@ -3473,104 +3369,32 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
-                  cluster_iops:
-                    type: integer
-                    description: IOPS for the cluster
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
-                  metal:
-                    type: boolean
-                    description: Whether or not this is a metal database
-                  production:
-                    type: boolean
-                    description: Whether or not the branch is a production branch
-                  safe_migrations:
-                    type: boolean
-                    description: Whether or not the branch has safe migrations enabled
-                  stale_schema:
-                    type: boolean
-                    description: Whether or not the branch has a stale schema
                   actor:
                     type: object
                     properties:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
-                      avatar_url:
-                        type: string
-                        description: The URL of the actor's avatar
                     additionalProperties: false
                     required:
                       - id
                       - display_name
                       - avatar_url
-                  restored_from_branch:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID for the resource
-                      name:
-                        type: string
-                        description: The name for the resource
-                      created_at:
-                        type: string
-                        description: When the resource was created
-                      updated_at:
-                        type: string
-                        description: When the resource was last updated
-                      deleted_at:
-                        type: string
-                        description: When the resource was deleted, if deleted
-                    additionalProperties: false
-                    required:
-                      - id
-                      - name
-                      - created_at
-                      - updated_at
-                      - deleted_at
-                  private_edge_connectivity:
-                    type: boolean
-                    description: True if private connections are enabled
-                  has_replicas:
-                    type: boolean
-                    description: True if the branch has replica servers
-                  has_read_only_replicas:
-                    type: boolean
-                    description: True if the branch has read-only replica servers
+                  html_url:
+                    type: string
+                    description: Planetscale app URL for the branch
+                  url:
+                    type: string
+                    description: Planetscale API URL for the branch
                   region:
                     type: object
                     properties:
                       id:
                         type: string
                         description: The ID of the region
-                      provider:
-                        type: string
-                        description: Provider for the region (ex. AWS)
-                      enabled:
-                        type: boolean
-                        description: Whether or not the region is currently active
-                      public_ip_addresses:
-                        items:
-                          type: string
-                        type: array
-                        description: Public IP addresses for the region
-                      display_name:
-                        type: string
-                        description: Name of the region
-                      location:
-                        type: string
-                        description: Location of the region
-                      slug:
-                        type: string
-                        description: The slug of the region
-                      current_default:
-                        type: boolean
-                        description: True if the region is the default for new branch creation
                     additionalProperties: false
                     required:
                       - id
@@ -3582,9 +3406,6 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
-                  parent_branch:
-                    type: string
-                    description: The name of the parent branch from which the branch was created
                   cluster_display_name:
                     type: string
                     description: Display name for the cluster size
@@ -3780,25 +3601,6 @@ paths:
                   name:
                     type: string
                     description: The name of the branch
-                  created_at:
-                    type: string
-                    description: When the branch was created
-                  updated_at:
-                    type: string
-                    description: When the branch was last updated
-                  deleted_at:
-                    type: string
-                    description: When the branch was deleted
-                  restore_checklist_completed_at:
-                    type: string
-                    description: When a user last marked a backup restore checklist as completed
-                  schema_last_updated_at:
-                    type: string
-                    description: When the schema for the branch was last updated
-                  kind:
-                    type: string
-                    description: The kind of branch (always mysql for Vitess branches)
-                    const: mysql
                   mysql_address:
                     type: string
                     description: The MySQL address for the branch
@@ -3814,96 +3616,23 @@ paths:
                       - awakening
                       - ready
                     description: The current state of the branch
-                  direct_vtgate:
-                    type: boolean
-                    description: True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-                  vtgate_size:
-                    type: string
-                    description: The size of the vtgate cluster for the branch
-                  vtgate_count:
-                    type: integer
-                    description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
-                  cluster_iops:
-                    type: integer
-                    description: IOPS for the cluster
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
-                  schema_ready:
-                    type: boolean
-                    description: Whether or not the schema is ready for queries
-                  metal:
-                    type: boolean
-                    description: Whether or not this is a metal database
-                  production:
-                    type: boolean
-                    description: Whether or not the branch is a production branch
-                  safe_migrations:
-                    type: boolean
-                    description: Whether or not the branch has safe migrations enabled
-                  sharded:
-                    type: boolean
-                    description: Whether or not the branch is sharded
-                  shard_count:
-                    type: integer
-                    description: The number of shards in the branch
-                  stale_schema:
-                    type: boolean
-                    description: Whether or not the branch has a stale schema
                   actor:
                     type: object
                     properties:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
-                      avatar_url:
-                        type: string
-                        description: The URL of the actor's avatar
                     additionalProperties: false
                     required:
                       - id
                       - display_name
                       - avatar_url
-                  restored_from_branch:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID for the resource
-                      name:
-                        type: string
-                        description: The name for the resource
-                      created_at:
-                        type: string
-                        description: When the resource was created
-                      updated_at:
-                        type: string
-                        description: When the resource was last updated
-                      deleted_at:
-                        type: string
-                        description: When the resource was deleted, if deleted
-                    additionalProperties: false
-                    required:
-                      - id
-                      - name
-                      - created_at
-                      - updated_at
-                      - deleted_at
-                  private_edge_connectivity:
-                    type: boolean
-                    description: True if private connections are enabled
-                  has_replicas:
-                    type: boolean
-                    description: True if the branch has replica servers
-                  has_read_only_replicas:
-                    type: boolean
-                    description: True if the branch has read-only replica servers
                   html_url:
                     type: string
                     description: Planetscale app URL for the branch
@@ -3916,29 +3645,6 @@ paths:
                       id:
                         type: string
                         description: The ID of the region
-                      provider:
-                        type: string
-                        description: Provider for the region (ex. AWS)
-                      enabled:
-                        type: boolean
-                        description: Whether or not the region is currently active
-                      public_ip_addresses:
-                        items:
-                          type: string
-                        type: array
-                        description: Public IP addresses for the region
-                      display_name:
-                        type: string
-                        description: Name of the region
-                      location:
-                        type: string
-                        description: Location of the region
-                      slug:
-                        type: string
-                        description: The slug of the region
-                      current_default:
-                        type: boolean
-                        description: True if the region is the default for new branch creation
                     additionalProperties: false
                     required:
                       - id
@@ -3950,9 +3656,6 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
-                  parent_branch:
-                    type: string
-                    description: The name of the parent branch from which the branch was created
                 additionalProperties: false
                 required:
                   - id
@@ -4053,25 +3756,6 @@ paths:
                   name:
                     type: string
                     description: The name of the branch
-                  created_at:
-                    type: string
-                    description: When the branch was created
-                  updated_at:
-                    type: string
-                    description: When the branch was last updated
-                  deleted_at:
-                    type: string
-                    description: When the branch was deleted
-                  restore_checklist_completed_at:
-                    type: string
-                    description: When a user last marked a backup restore checklist as completed
-                  schema_last_updated_at:
-                    type: string
-                    description: When the schema for the branch was last updated
-                  kind:
-                    type: string
-                    description: The kind of branch (always mysql for Vitess branches)
-                    const: mysql
                   mysql_address:
                     type: string
                     description: The MySQL address for the branch
@@ -4087,96 +3771,23 @@ paths:
                       - awakening
                       - ready
                     description: The current state of the branch
-                  direct_vtgate:
-                    type: boolean
-                    description: True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers
-                  vtgate_size:
-                    type: string
-                    description: The size of the vtgate cluster for the branch
-                  vtgate_count:
-                    type: integer
-                    description: The number of vtgate instances in the branch
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
-                  cluster_iops:
-                    type: integer
-                    description: IOPS for the cluster
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
-                  schema_ready:
-                    type: boolean
-                    description: Whether or not the schema is ready for queries
-                  metal:
-                    type: boolean
-                    description: Whether or not this is a metal database
-                  production:
-                    type: boolean
-                    description: Whether or not the branch is a production branch
-                  safe_migrations:
-                    type: boolean
-                    description: Whether or not the branch has safe migrations enabled
-                  sharded:
-                    type: boolean
-                    description: Whether or not the branch is sharded
-                  shard_count:
-                    type: integer
-                    description: The number of shards in the branch
-                  stale_schema:
-                    type: boolean
-                    description: Whether or not the branch has a stale schema
                   actor:
                     type: object
                     properties:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
-                      avatar_url:
-                        type: string
-                        description: The URL of the actor's avatar
                     additionalProperties: false
                     required:
                       - id
                       - display_name
                       - avatar_url
-                  restored_from_branch:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: The ID for the resource
-                      name:
-                        type: string
-                        description: The name for the resource
-                      created_at:
-                        type: string
-                        description: When the resource was created
-                      updated_at:
-                        type: string
-                        description: When the resource was last updated
-                      deleted_at:
-                        type: string
-                        description: When the resource was deleted, if deleted
-                    additionalProperties: false
-                    required:
-                      - id
-                      - name
-                      - created_at
-                      - updated_at
-                      - deleted_at
-                  private_edge_connectivity:
-                    type: boolean
-                    description: True if private connections are enabled
-                  has_replicas:
-                    type: boolean
-                    description: True if the branch has replica servers
-                  has_read_only_replicas:
-                    type: boolean
-                    description: True if the branch has read-only replica servers
                   html_url:
                     type: string
                     description: Planetscale app URL for the branch
@@ -4189,29 +3800,6 @@ paths:
                       id:
                         type: string
                         description: The ID of the region
-                      provider:
-                        type: string
-                        description: Provider for the region (ex. AWS)
-                      enabled:
-                        type: boolean
-                        description: Whether or not the region is currently active
-                      public_ip_addresses:
-                        items:
-                          type: string
-                        type: array
-                        description: Public IP addresses for the region
-                      display_name:
-                        type: string
-                        description: Name of the region
-                      location:
-                        type: string
-                        description: Location of the region
-                      slug:
-                        type: string
-                        description: The slug of the region
-                      current_default:
-                        type: boolean
-                        description: True if the region is the default for new branch creation
                     additionalProperties: false
                     required:
                       - id
@@ -4223,9 +3811,6 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
-                  parent_branch:
-                    type: string
-                    description: The name of the parent branch from which the branch was created
                 additionalProperties: false
                 required:
                   - id

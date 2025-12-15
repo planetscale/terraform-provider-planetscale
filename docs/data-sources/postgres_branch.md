@@ -32,35 +32,23 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `cluster_architecture` (String) The CPU architecture for the cluster (e.g., x86_64)
 - `cluster_display_name` (String) Display name for the cluster size
-- `cluster_iops` (Number) IOPS for the cluster
 - `cluster_name` (String) The SKU representing the branch's cluster size
-- `created_at` (String) When the branch was created
-- `has_read_only_replicas` (Boolean) True if the branch has read-only replica servers
-- `has_replicas` (Boolean) True if the branch has replica servers
+- `html_url` (String) Planetscale app URL for the branch
 - `id` (String) The ID of the branch
-- `metal` (Boolean) Whether or not this is a metal database
+- `mysql_address` (String) The MySQL address for the branch
+- `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `name` (String) The name of the branch
-- `parent_branch` (String) The name of the parent branch from which the branch was created
-- `private_edge_connectivity` (Boolean) True if private connections are enabled
-- `production` (Boolean) Whether or not the branch is a production branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
 - `replicas` (Number) The number of replicas for the branch
-- `restore_checklist_completed_at` (String) When a user last marked a backup restore checklist as completed
-- `restored_from_branch` (Attributes) (see [below for nested schema](#nestedatt--restored_from_branch))
-- `safe_migrations` (Boolean) Whether or not the branch has safe migrations enabled
-- `schema_last_updated_at` (String) When the schema for the branch was last updated
-- `stale_schema` (Boolean) Whether or not the branch has a stale schema
 - `state` (String) The current state of the branch
-- `updated_at` (String) When the branch was last updated
+- `url` (String) Planetscale API URL for the branch
 
 <a id="nestedatt--actor"></a>
 ### Nested Schema for `actor`
 
 Read-Only:
 
-- `avatar_url` (String) The URL of the actor's avatar
-- `display_name` (String) The name of the actor
 - `id` (String) The ID of the actor
 
 
@@ -69,23 +57,4 @@ Read-Only:
 
 Read-Only:
 
-- `current_default` (Boolean) True if the region is the default for new branch creation
-- `display_name` (String) Name of the region
-- `enabled` (Boolean) Whether or not the region is currently active
 - `id` (String) The ID of the region
-- `location` (String) Location of the region
-- `provider` (String) Provider for the region (ex. AWS)
-- `public_ip_addresses` (List of String) Public IP addresses for the region
-- `slug` (String) The slug of the region
-
-
-<a id="nestedatt--restored_from_branch"></a>
-### Nested Schema for `restored_from_branch`
-
-Read-Only:
-
-- `created_at` (String) When the resource was created
-- `deleted_at` (String) When the resource was deleted, if deleted
-- `id` (String) The ID for the resource
-- `name` (String) The name for the resource
-- `updated_at` (String) When the resource was last updated

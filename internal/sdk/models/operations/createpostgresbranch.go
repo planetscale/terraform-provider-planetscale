@@ -154,10 +154,6 @@ func (e *CreatePostgresBranchState) UnmarshalJSON(data []byte) error {
 type CreatePostgresBranchActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
-	// The name of the actor
-	DisplayName string `json:"display_name"`
-	// The URL of the actor's avatar
-	AvatarURL string `json:"avatar_url"`
 }
 
 func (c *CreatePostgresBranchActor) GetID() string {
@@ -167,85 +163,9 @@ func (c *CreatePostgresBranchActor) GetID() string {
 	return c.ID
 }
 
-func (c *CreatePostgresBranchActor) GetDisplayName() string {
-	if c == nil {
-		return ""
-	}
-	return c.DisplayName
-}
-
-func (c *CreatePostgresBranchActor) GetAvatarURL() string {
-	if c == nil {
-		return ""
-	}
-	return c.AvatarURL
-}
-
-type CreatePostgresBranchRestoredFromBranch struct {
-	// The ID for the resource
-	ID string `json:"id"`
-	// The name for the resource
-	Name string `json:"name"`
-	// When the resource was created
-	CreatedAt string `json:"created_at"`
-	// When the resource was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When the resource was deleted, if deleted
-	DeletedAt string `json:"deleted_at"`
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetCreatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.CreatedAt
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.UpdatedAt
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetDeletedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.DeletedAt
-}
-
 type CreatePostgresBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
-	// Provider for the region (ex. AWS)
-	Provider string `json:"provider"`
-	// Whether or not the region is currently active
-	Enabled bool `json:"enabled"`
-	// Public IP addresses for the region
-	PublicIPAddresses []string `json:"public_ip_addresses"`
-	// Name of the region
-	DisplayName string `json:"display_name"`
-	// Location of the region
-	Location string `json:"location"`
-	// The slug of the region
-	Slug string `json:"slug"`
-	// True if the region is the default for new branch creation
-	CurrentDefault bool `json:"current_default"`
 }
 
 func (c *CreatePostgresBranchRegionData) GetID() string {
@@ -255,115 +175,28 @@ func (c *CreatePostgresBranchRegionData) GetID() string {
 	return c.ID
 }
 
-func (c *CreatePostgresBranchRegionData) GetProvider() string {
-	if c == nil {
-		return ""
-	}
-	return c.Provider
-}
-
-func (c *CreatePostgresBranchRegionData) GetEnabled() bool {
-	if c == nil {
-		return false
-	}
-	return c.Enabled
-}
-
-func (c *CreatePostgresBranchRegionData) GetPublicIPAddresses() []string {
-	if c == nil {
-		return []string{}
-	}
-	return c.PublicIPAddresses
-}
-
-func (c *CreatePostgresBranchRegionData) GetDisplayName() string {
-	if c == nil {
-		return ""
-	}
-	return c.DisplayName
-}
-
-func (c *CreatePostgresBranchRegionData) GetLocation() string {
-	if c == nil {
-		return ""
-	}
-	return c.Location
-}
-
-func (c *CreatePostgresBranchRegionData) GetSlug() string {
-	if c == nil {
-		return ""
-	}
-	return c.Slug
-}
-
-func (c *CreatePostgresBranchRegionData) GetCurrentDefault() bool {
-	if c == nil {
-		return false
-	}
-	return c.CurrentDefault
-}
-
 // CreatePostgresBranchResponseBody - Returns the created branch
 type CreatePostgresBranchResponseBody struct {
 	// The ID of the branch
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When the branch was created
-	CreatedAt string `json:"created_at"`
-	// When the branch was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When a user last marked a backup restore checklist as completed
-	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
-	// When the schema for the branch was last updated
-	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
-	// The kind of branch (always postgresql for PostgreSQL branches)
-	kind string `const:"postgresql" json:"kind"`
+	// The MySQL address for the branch
+	MysqlAddress string `json:"mysql_address"`
+	// The address of the MySQL provider for the branch
+	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreatePostgresBranchState `json:"state"`
 	// The SKU representing the branch's cluster size
 	ClusterName string `json:"cluster_name"`
-	// IOPS for the cluster
-	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool `json:"ready"`
-	// Whether or not this is a metal database
-	Metal bool `json:"metal"`
-	// Whether or not the branch is a production branch
-	Production bool `json:"production"`
-	// Whether or not the branch has safe migrations enabled
-	SafeMigrations bool `json:"safe_migrations"`
-	// Whether or not the branch has a stale schema
-	StaleSchema        bool                                   `json:"stale_schema"`
-	Actor              CreatePostgresBranchActor              `json:"actor"`
-	RestoredFromBranch CreatePostgresBranchRestoredFromBranch `json:"restored_from_branch"`
-	// True if private connections are enabled
-	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
-	// True if the branch has replica servers
-	HasReplicas bool `json:"has_replicas"`
-	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas bool                           `json:"has_read_only_replicas"`
-	RegionData          CreatePostgresBranchRegionData `json:"region"`
-	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
-	// Display name for the cluster size
-	ClusterDisplayName *string `json:"cluster_display_name,omitzero"`
-	// The CPU architecture for the cluster (e.g., x86_64)
-	ClusterArchitecture *string `json:"cluster_architecture,omitzero"`
-	// The number of replicas for the branch
-	Replicas *int64 `json:"replicas,omitzero"`
-}
-
-func (c CreatePostgresBranchResponseBody) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *CreatePostgresBranchResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Ready bool                      `json:"ready"`
+	Actor CreatePostgresBranchActor `json:"actor"`
+	// Planetscale app URL for the branch
+	HTMLURL string `json:"html_url"`
+	// Planetscale API URL for the branch
+	URL        string                         `json:"url"`
+	RegionData CreatePostgresBranchRegionData `json:"region"`
 }
 
 func (c *CreatePostgresBranchResponseBody) GetID() string {
@@ -380,36 +213,18 @@ func (c *CreatePostgresBranchResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreatePostgresBranchResponseBody) GetCreatedAt() string {
+func (c *CreatePostgresBranchResponseBody) GetMysqlAddress() string {
 	if c == nil {
 		return ""
 	}
-	return c.CreatedAt
+	return c.MysqlAddress
 }
 
-func (c *CreatePostgresBranchResponseBody) GetUpdatedAt() string {
+func (c *CreatePostgresBranchResponseBody) GetMysqlEdgeAddress() string {
 	if c == nil {
 		return ""
 	}
-	return c.UpdatedAt
-}
-
-func (c *CreatePostgresBranchResponseBody) GetRestoreChecklistCompletedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.RestoreChecklistCompletedAt
-}
-
-func (c *CreatePostgresBranchResponseBody) GetSchemaLastUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.SchemaLastUpdatedAt
-}
-
-func (c *CreatePostgresBranchResponseBody) GetKind() string {
-	return "postgresql"
+	return c.MysqlEdgeAddress
 }
 
 func (c *CreatePostgresBranchResponseBody) GetState() CreatePostgresBranchState {
@@ -426,46 +241,11 @@ func (c *CreatePostgresBranchResponseBody) GetClusterName() string {
 	return c.ClusterName
 }
 
-func (c *CreatePostgresBranchResponseBody) GetClusterIops() int64 {
-	if c == nil {
-		return 0
-	}
-	return c.ClusterIops
-}
-
 func (c *CreatePostgresBranchResponseBody) GetReady() bool {
 	if c == nil {
 		return false
 	}
 	return c.Ready
-}
-
-func (c *CreatePostgresBranchResponseBody) GetMetal() bool {
-	if c == nil {
-		return false
-	}
-	return c.Metal
-}
-
-func (c *CreatePostgresBranchResponseBody) GetProduction() bool {
-	if c == nil {
-		return false
-	}
-	return c.Production
-}
-
-func (c *CreatePostgresBranchResponseBody) GetSafeMigrations() bool {
-	if c == nil {
-		return false
-	}
-	return c.SafeMigrations
-}
-
-func (c *CreatePostgresBranchResponseBody) GetStaleSchema() bool {
-	if c == nil {
-		return false
-	}
-	return c.StaleSchema
 }
 
 func (c *CreatePostgresBranchResponseBody) GetActor() CreatePostgresBranchActor {
@@ -475,32 +255,18 @@ func (c *CreatePostgresBranchResponseBody) GetActor() CreatePostgresBranchActor 
 	return c.Actor
 }
 
-func (c *CreatePostgresBranchResponseBody) GetRestoredFromBranch() CreatePostgresBranchRestoredFromBranch {
+func (c *CreatePostgresBranchResponseBody) GetHTMLURL() string {
 	if c == nil {
-		return CreatePostgresBranchRestoredFromBranch{}
+		return ""
 	}
-	return c.RestoredFromBranch
+	return c.HTMLURL
 }
 
-func (c *CreatePostgresBranchResponseBody) GetPrivateEdgeConnectivity() bool {
+func (c *CreatePostgresBranchResponseBody) GetURL() string {
 	if c == nil {
-		return false
+		return ""
 	}
-	return c.PrivateEdgeConnectivity
-}
-
-func (c *CreatePostgresBranchResponseBody) GetHasReplicas() bool {
-	if c == nil {
-		return false
-	}
-	return c.HasReplicas
-}
-
-func (c *CreatePostgresBranchResponseBody) GetHasReadOnlyReplicas() bool {
-	if c == nil {
-		return false
-	}
-	return c.HasReadOnlyReplicas
+	return c.URL
 }
 
 func (c *CreatePostgresBranchResponseBody) GetRegionData() CreatePostgresBranchRegionData {
@@ -508,34 +274,6 @@ func (c *CreatePostgresBranchResponseBody) GetRegionData() CreatePostgresBranchR
 		return CreatePostgresBranchRegionData{}
 	}
 	return c.RegionData
-}
-
-func (c *CreatePostgresBranchResponseBody) GetParentBranch() string {
-	if c == nil {
-		return ""
-	}
-	return c.ParentBranch
-}
-
-func (c *CreatePostgresBranchResponseBody) GetClusterDisplayName() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ClusterDisplayName
-}
-
-func (c *CreatePostgresBranchResponseBody) GetClusterArchitecture() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ClusterArchitecture
-}
-
-func (c *CreatePostgresBranchResponseBody) GetReplicas() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.Replicas
 }
 
 type CreatePostgresBranchResponse struct {

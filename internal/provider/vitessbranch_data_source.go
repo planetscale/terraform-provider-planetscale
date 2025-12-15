@@ -29,40 +29,19 @@ type VitessBranchDataSource struct {
 
 // VitessBranchDataSourceModel describes the data model.
 type VitessBranchDataSourceModel struct {
-	Actor                       tfTypes.GetVitessBranchActor              `tfsdk:"actor"`
-	ClusterIops                 types.Int64                               `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                              `tfsdk:"cluster_name"`
-	CreatedAt                   types.String                              `tfsdk:"created_at"`
-	Database                    types.String                              `tfsdk:"database"`
-	DeletedAt                   types.String                              `tfsdk:"deleted_at"`
-	DirectVtgate                types.Bool                                `tfsdk:"direct_vtgate"`
-	HasReadOnlyReplicas         types.Bool                                `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                                `tfsdk:"has_replicas"`
-	HTMLURL                     types.String                              `tfsdk:"html_url"`
-	ID                          types.String                              `tfsdk:"id"`
-	Metal                       types.Bool                                `tfsdk:"metal"`
-	MysqlAddress                types.String                              `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            types.String                              `tfsdk:"mysql_edge_address"`
-	Name                        types.String                              `tfsdk:"name"`
-	Organization                types.String                              `tfsdk:"organization"`
-	ParentBranch                types.String                              `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity     types.Bool                                `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                                `tfsdk:"production"`
-	Ready                       types.Bool                                `tfsdk:"ready"`
-	RegionData                  tfTypes.GetVitessBranchRegionData         `tfsdk:"region_data"`
-	RestoreChecklistCompletedAt types.String                              `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          tfTypes.GetVitessBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	SafeMigrations              types.Bool                                `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                              `tfsdk:"schema_last_updated_at"`
-	SchemaReady                 types.Bool                                `tfsdk:"schema_ready"`
-	ShardCount                  types.Int64                               `tfsdk:"shard_count"`
-	Sharded                     types.Bool                                `tfsdk:"sharded"`
-	StaleSchema                 types.Bool                                `tfsdk:"stale_schema"`
-	State                       types.String                              `tfsdk:"state"`
-	UpdatedAt                   types.String                              `tfsdk:"updated_at"`
-	URL                         types.String                              `tfsdk:"url"`
-	VtgateCount                 types.Int64                               `tfsdk:"vtgate_count"`
-	VtgateSize                  types.String                              `tfsdk:"vtgate_size"`
+	Actor            tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
+	ClusterName      types.String                      `tfsdk:"cluster_name"`
+	Database         types.String                      `tfsdk:"database"`
+	HTMLURL          types.String                      `tfsdk:"html_url"`
+	ID               types.String                      `tfsdk:"id"`
+	MysqlAddress     types.String                      `tfsdk:"mysql_address"`
+	MysqlEdgeAddress types.String                      `tfsdk:"mysql_edge_address"`
+	Name             types.String                      `tfsdk:"name"`
+	Organization     types.String                      `tfsdk:"organization"`
+	Ready            types.Bool                        `tfsdk:"ready"`
+	RegionData       tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	State            types.String                      `tfsdk:"state"`
+	URL              types.String                      `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -79,51 +58,19 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"actor": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"avatar_url": schema.StringAttribute{
-						Computed:    true,
-						Description: `The URL of the actor's avatar`,
-					},
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `The name of the actor`,
-					},
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `The ID of the actor`,
 					},
 				},
 			},
-			"cluster_iops": schema.Int64Attribute{
-				Computed:    true,
-				Description: `IOPS for the cluster`,
-			},
 			"cluster_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
 			},
-			"created_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch was created`,
-			},
 			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the database the branch belongs to`,
-			},
-			"deleted_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch was deleted`,
-			},
-			"direct_vtgate": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch allows passwords to connect directly to a vtgate, bypassing load balancers`,
-			},
-			"has_read_only_replicas": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has read-only replica servers`,
-			},
-			"has_replicas": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has replica servers`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
@@ -132,10 +79,6 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
-			},
-			"metal": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not this is a metal database`,
 			},
 			"mysql_address": schema.StringAttribute{
 				Computed:    true,
@@ -153,18 +96,6 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 				Required:    true,
 				Description: `The name of the organization the branch belongs to`,
 			},
-			"parent_branch": schema.StringAttribute{
-				Computed:    true,
-				Description: `The name of the parent branch from which the branch was created`,
-			},
-			"private_edge_connectivity": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if private connections are enabled`,
-			},
-			"production": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is a production branch`,
-			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch is ready to serve queries`,
@@ -172,113 +103,19 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"region_data": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"current_default": schema.BoolAttribute{
-						Computed:    true,
-						Description: `True if the region is the default for new branch creation`,
-					},
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Name of the region`,
-					},
-					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Whether or not the region is currently active`,
-					},
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `The ID of the region`,
 					},
-					"location": schema.StringAttribute{
-						Computed:    true,
-						Description: `Location of the region`,
-					},
-					"provider": schema.StringAttribute{
-						Computed:    true,
-						Description: `Provider for the region (ex. AWS)`,
-					},
-					"public_ip_addresses": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Public IP addresses for the region`,
-					},
-					"slug": schema.StringAttribute{
-						Computed:    true,
-						Description: `The slug of the region`,
-					},
 				},
-			},
-			"restore_checklist_completed_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When a user last marked a backup restore checklist as completed`,
-			},
-			"restored_from_branch": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"created_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was created`,
-					},
-					"deleted_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was deleted, if deleted`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The ID for the resource`,
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `The name for the resource`,
-					},
-					"updated_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was last updated`,
-					},
-				},
-			},
-			"safe_migrations": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch has safe migrations enabled`,
-			},
-			"schema_last_updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the schema for the branch was last updated`,
-			},
-			"schema_ready": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the schema is ready for queries`,
-			},
-			"shard_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of shards in the branch`,
-			},
-			"sharded": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is sharded`,
-			},
-			"stale_schema": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch has a stale schema`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
 			},
-			"updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the branch was last updated`,
-			},
 			"url": schema.StringAttribute{
 				Computed:    true,
 				Description: `Planetscale API URL for the branch`,
-			},
-			"vtgate_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of vtgate instances in the branch`,
-			},
-			"vtgate_size": schema.StringAttribute{
-				Computed:    true,
-				Description: `The size of the vtgate cluster for the branch`,
 			},
 		},
 	}

@@ -19,14 +19,6 @@ actions:
     description: Remove major_version (Postgres-only field)
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.kind
-    description: Set kind to const mysql
-    update:
-      const: mysql
-      description: The kind of branch (always mysql for Vitess branches)
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.kind.enum
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
     description: Update operation metadata for Vitess
     update:
@@ -45,14 +37,6 @@ actions:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
-
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind
-    description: Set kind to const mysql
-    update:
-      const: mysql
-      description: The kind of branch (always mysql for Vitess branches)
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.kind.enum
-    remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
     description: Update operation metadata for Vitess

@@ -7,7 +7,5 @@ import (
 )
 
 type GetVitessBranchActor struct {
-	AvatarURL   types.String `tfsdk:"avatar_url"`
-	DisplayName types.String `tfsdk:"display_name"`
-	ID          types.String `tfsdk:"id"`
+	ID types.String `tfsdk:"id"`
 }
