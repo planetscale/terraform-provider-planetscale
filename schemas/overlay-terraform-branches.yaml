@@ -25,11 +25,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.actor.properties.display_name
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.cluster_display_name
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.cluster_display_name
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.cluster_iops
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.cluster_iops

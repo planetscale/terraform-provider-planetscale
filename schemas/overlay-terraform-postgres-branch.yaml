@@ -46,12 +46,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties
     description: Add Postgres response fields
     update:
-      cluster_display_name:
-        type: string
-        description: Display name for the cluster size
-      cluster_architecture:
-        type: string
-        description: The CPU architecture for the cluster (e.g., x86_64)
       replicas:
         type: integer
         description: The number of replicas for the branch

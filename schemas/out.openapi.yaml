@@ -3406,12 +3406,6 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
-                  cluster_display_name:
-                    type: string
-                    description: Display name for the cluster size
-                  cluster_architecture:
-                    type: string
-                    description: The CPU architecture for the cluster (e.g., x86_64)
                   replicas:
                     type: integer
                     description: The number of replicas for the branch
