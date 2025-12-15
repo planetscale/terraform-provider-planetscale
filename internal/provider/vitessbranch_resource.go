@@ -38,37 +38,24 @@ type VitessBranchResource struct {
 
 // VitessBranchResourceModel describes the resource data model.
 type VitessBranchResourceModel struct {
-	Actor                       tfTypes.GetVitessBranchActor              `tfsdk:"actor"`
-	BackupID                    types.String                              `tfsdk:"backup_id"`
-	ClusterIops                 types.Int64                               `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                              `tfsdk:"cluster_name"`
-	ClusterSize                 types.String                              `tfsdk:"cluster_size"`
-	Database                    types.String                              `tfsdk:"database"`
-	HasReadOnlyReplicas         types.Bool                                `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                                `tfsdk:"has_replicas"`
-	HTMLURL                     types.String                              `tfsdk:"html_url"`
-	ID                          types.String                              `tfsdk:"id"`
-	Metal                       types.Bool                                `tfsdk:"metal"`
-	MysqlAddress                types.String                              `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            types.String                              `tfsdk:"mysql_edge_address"`
-	Name                        types.String                              `tfsdk:"name"`
-	Organization                types.String                              `tfsdk:"organization"`
-	ParentBranch                types.String                              `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity     types.Bool                                `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                                `tfsdk:"production"`
-	Ready                       types.Bool                                `tfsdk:"ready"`
-	Region                      types.String                              `tfsdk:"region"`
-	RegionData                  tfTypes.GetVitessBranchRegionData         `tfsdk:"region_data"`
-	RestoreChecklistCompletedAt types.String                              `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          tfTypes.GetVitessBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	SafeMigrations              types.Bool                                `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                              `tfsdk:"schema_last_updated_at"`
-	SeedData                    types.String                              `tfsdk:"seed_data"`
-	ShardCount                  types.Int64                               `tfsdk:"shard_count"`
-	Sharded                     types.Bool                                `tfsdk:"sharded"`
-	StaleSchema                 types.Bool                                `tfsdk:"stale_schema"`
-	State                       types.String                              `tfsdk:"state"`
-	URL                         types.String                              `tfsdk:"url"`
+	Actor                   tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
+	BackupID                types.String                      `tfsdk:"backup_id"`
+	ClusterSize             types.String                      `tfsdk:"cluster_size"`
+	Database                types.String                      `tfsdk:"database"`
+	HTMLURL                 types.String                      `tfsdk:"html_url"`
+	ID                      types.String                      `tfsdk:"id"`
+	MysqlAddress            types.String                      `tfsdk:"mysql_address"`
+	MysqlEdgeAddress        types.String                      `tfsdk:"mysql_edge_address"`
+	Name                    types.String                      `tfsdk:"name"`
+	Organization            types.String                      `tfsdk:"organization"`
+	ParentBranch            types.String                      `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity types.Bool                        `tfsdk:"private_edge_connectivity"`
+	Ready                   types.Bool                        `tfsdk:"ready"`
+	Region                  types.String                      `tfsdk:"region"`
+	RegionData              tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	SeedData                types.String                      `tfsdk:"seed_data"`
+	State                   types.String                      `tfsdk:"state"`
+	URL                     types.String                      `tfsdk:"url"`
 }
 
 func (r *VitessBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -103,14 +90,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `If provided, restores the backup's schema and data to the new branch. Must have ` + "`" + `restore_production_branch_backup(s)` + "`" + ` or ` + "`" + `restore_backup(s)` + "`" + ` access to do this. Requires replacement if changed.`,
 			},
-			"cluster_iops": schema.Int64Attribute{
-				Computed:    true,
-				Description: `IOPS for the cluster`,
-			},
-			"cluster_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `The SKU representing the branch's cluster size`,
-			},
 			"cluster_size": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -125,14 +104,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `The name of the database the branch belongs to. Requires replacement if changed.`,
 			},
-			"has_read_only_replicas": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has read-only replica servers`,
-			},
-			"has_replicas": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has replica servers`,
-			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
 				Description: `Planetscale app URL for the branch`,
@@ -140,10 +111,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
-			},
-			"metal": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not this is a metal database`,
 			},
 			"mysql_address": schema.StringAttribute{
 				Computed:    true,
@@ -179,10 +146,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			"private_edge_connectivity": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if private connections are enabled`,
-			},
-			"production": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is a production branch`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -233,43 +196,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 					},
 				},
 			},
-			"restore_checklist_completed_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When a user last marked a backup restore checklist as completed`,
-			},
-			"restored_from_branch": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"created_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was created`,
-					},
-					"deleted_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was deleted, if deleted`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The ID for the resource`,
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `The name for the resource`,
-					},
-					"updated_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was last updated`,
-					},
-				},
-			},
-			"safe_migrations": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch has safe migrations enabled`,
-			},
-			"schema_last_updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the schema for the branch was last updated`,
-			},
 			"seed_data": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -281,18 +207,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 						"last_successful_backup",
 					),
 				},
-			},
-			"shard_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of shards in the branch`,
-			},
-			"sharded": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is sharded`,
-			},
-			"stale_schema": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch has a stale schema`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,

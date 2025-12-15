@@ -181,54 +181,6 @@ func (c *CreatePostgresBranchActor) GetAvatarURL() string {
 	return c.AvatarURL
 }
 
-type CreatePostgresBranchRestoredFromBranch struct {
-	// The ID for the resource
-	ID string `json:"id"`
-	// The name for the resource
-	Name string `json:"name"`
-	// When the resource was created
-	CreatedAt string `json:"created_at"`
-	// When the resource was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When the resource was deleted, if deleted
-	DeletedAt string `json:"deleted_at"`
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetCreatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.CreatedAt
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.UpdatedAt
-}
-
-func (c *CreatePostgresBranchRestoredFromBranch) GetDeletedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.DeletedAt
-}
-
 type CreatePostgresBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
@@ -310,42 +262,17 @@ type CreatePostgresBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When a user last marked a backup restore checklist as completed
-	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
-	// When the schema for the branch was last updated
-	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The MySQL address for the branch
 	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreatePostgresBranchState `json:"state"`
-	// The SKU representing the branch's cluster size
-	ClusterName string `json:"cluster_name"`
-	// IOPS for the cluster
-	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool `json:"ready"`
-	// Whether or not this is a metal database
-	Metal bool `json:"metal"`
-	// Whether or not the branch is a production branch
-	Production bool `json:"production"`
-	// Whether or not the branch has safe migrations enabled
-	SafeMigrations bool `json:"safe_migrations"`
-	// Whether or not the branch is sharded
-	Sharded bool `json:"sharded"`
-	// The number of shards in the branch
-	ShardCount int64 `json:"shard_count"`
-	// Whether or not the branch has a stale schema
-	StaleSchema        bool                                   `json:"stale_schema"`
-	Actor              CreatePostgresBranchActor              `json:"actor"`
-	RestoredFromBranch CreatePostgresBranchRestoredFromBranch `json:"restored_from_branch"`
+	Ready bool                      `json:"ready"`
+	Actor CreatePostgresBranchActor `json:"actor"`
 	// True if private connections are enabled
 	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
-	// True if the branch has replica servers
-	HasReplicas bool `json:"has_replicas"`
-	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas bool `json:"has_read_only_replicas"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -369,20 +296,6 @@ func (c *CreatePostgresBranchResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreatePostgresBranchResponseBody) GetRestoreChecklistCompletedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.RestoreChecklistCompletedAt
-}
-
-func (c *CreatePostgresBranchResponseBody) GetSchemaLastUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.SchemaLastUpdatedAt
-}
-
 func (c *CreatePostgresBranchResponseBody) GetMysqlAddress() string {
 	if c == nil {
 		return ""
@@ -404,67 +317,11 @@ func (c *CreatePostgresBranchResponseBody) GetState() CreatePostgresBranchState 
 	return c.State
 }
 
-func (c *CreatePostgresBranchResponseBody) GetClusterName() string {
-	if c == nil {
-		return ""
-	}
-	return c.ClusterName
-}
-
-func (c *CreatePostgresBranchResponseBody) GetClusterIops() int64 {
-	if c == nil {
-		return 0
-	}
-	return c.ClusterIops
-}
-
 func (c *CreatePostgresBranchResponseBody) GetReady() bool {
 	if c == nil {
 		return false
 	}
 	return c.Ready
-}
-
-func (c *CreatePostgresBranchResponseBody) GetMetal() bool {
-	if c == nil {
-		return false
-	}
-	return c.Metal
-}
-
-func (c *CreatePostgresBranchResponseBody) GetProduction() bool {
-	if c == nil {
-		return false
-	}
-	return c.Production
-}
-
-func (c *CreatePostgresBranchResponseBody) GetSafeMigrations() bool {
-	if c == nil {
-		return false
-	}
-	return c.SafeMigrations
-}
-
-func (c *CreatePostgresBranchResponseBody) GetSharded() bool {
-	if c == nil {
-		return false
-	}
-	return c.Sharded
-}
-
-func (c *CreatePostgresBranchResponseBody) GetShardCount() int64 {
-	if c == nil {
-		return 0
-	}
-	return c.ShardCount
-}
-
-func (c *CreatePostgresBranchResponseBody) GetStaleSchema() bool {
-	if c == nil {
-		return false
-	}
-	return c.StaleSchema
 }
 
 func (c *CreatePostgresBranchResponseBody) GetActor() CreatePostgresBranchActor {
@@ -474,32 +331,11 @@ func (c *CreatePostgresBranchResponseBody) GetActor() CreatePostgresBranchActor 
 	return c.Actor
 }
 
-func (c *CreatePostgresBranchResponseBody) GetRestoredFromBranch() CreatePostgresBranchRestoredFromBranch {
-	if c == nil {
-		return CreatePostgresBranchRestoredFromBranch{}
-	}
-	return c.RestoredFromBranch
-}
-
 func (c *CreatePostgresBranchResponseBody) GetPrivateEdgeConnectivity() bool {
 	if c == nil {
 		return false
 	}
 	return c.PrivateEdgeConnectivity
-}
-
-func (c *CreatePostgresBranchResponseBody) GetHasReplicas() bool {
-	if c == nil {
-		return false
-	}
-	return c.HasReplicas
-}
-
-func (c *CreatePostgresBranchResponseBody) GetHasReadOnlyReplicas() bool {
-	if c == nil {
-		return false
-	}
-	return c.HasReadOnlyReplicas
 }
 
 func (c *CreatePostgresBranchResponseBody) GetHTMLURL() string {

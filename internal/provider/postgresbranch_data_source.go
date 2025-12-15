@@ -29,36 +29,23 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor                       tfTypes.GetPostgresBranchActor              `tfsdk:"actor"`
-	ClusterArchitecture         types.String                                `tfsdk:"cluster_architecture"`
-	ClusterDisplayName          types.String                                `tfsdk:"cluster_display_name"`
-	ClusterIops                 types.Int64                                 `tfsdk:"cluster_iops"`
-	ClusterName                 types.String                                `tfsdk:"cluster_name"`
-	Database                    types.String                                `tfsdk:"database"`
-	HasReadOnlyReplicas         types.Bool                                  `tfsdk:"has_read_only_replicas"`
-	HasReplicas                 types.Bool                                  `tfsdk:"has_replicas"`
-	HTMLURL                     types.String                                `tfsdk:"html_url"`
-	ID                          types.String                                `tfsdk:"id"`
-	Metal                       types.Bool                                  `tfsdk:"metal"`
-	MysqlAddress                types.String                                `tfsdk:"mysql_address"`
-	MysqlEdgeAddress            types.String                                `tfsdk:"mysql_edge_address"`
-	Name                        types.String                                `tfsdk:"name"`
-	Organization                types.String                                `tfsdk:"organization"`
-	ParentBranch                types.String                                `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity     types.Bool                                  `tfsdk:"private_edge_connectivity"`
-	Production                  types.Bool                                  `tfsdk:"production"`
-	Ready                       types.Bool                                  `tfsdk:"ready"`
-	RegionData                  tfTypes.GetPostgresBranchRegionData         `tfsdk:"region_data"`
-	Replicas                    types.Int64                                 `tfsdk:"replicas"`
-	RestoreChecklistCompletedAt types.String                                `tfsdk:"restore_checklist_completed_at"`
-	RestoredFromBranch          tfTypes.GetPostgresBranchRestoredFromBranch `tfsdk:"restored_from_branch"`
-	SafeMigrations              types.Bool                                  `tfsdk:"safe_migrations"`
-	SchemaLastUpdatedAt         types.String                                `tfsdk:"schema_last_updated_at"`
-	ShardCount                  types.Int64                                 `tfsdk:"shard_count"`
-	Sharded                     types.Bool                                  `tfsdk:"sharded"`
-	StaleSchema                 types.Bool                                  `tfsdk:"stale_schema"`
-	State                       types.String                                `tfsdk:"state"`
-	URL                         types.String                                `tfsdk:"url"`
+	Actor                   tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	ClusterArchitecture     types.String                        `tfsdk:"cluster_architecture"`
+	ClusterDisplayName      types.String                        `tfsdk:"cluster_display_name"`
+	Database                types.String                        `tfsdk:"database"`
+	HTMLURL                 types.String                        `tfsdk:"html_url"`
+	ID                      types.String                        `tfsdk:"id"`
+	MysqlAddress            types.String                        `tfsdk:"mysql_address"`
+	MysqlEdgeAddress        types.String                        `tfsdk:"mysql_edge_address"`
+	Name                    types.String                        `tfsdk:"name"`
+	Organization            types.String                        `tfsdk:"organization"`
+	ParentBranch            types.String                        `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity types.Bool                          `tfsdk:"private_edge_connectivity"`
+	Ready                   types.Bool                          `tfsdk:"ready"`
+	RegionData              tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas                types.Int64                         `tfsdk:"replicas"`
+	State                   types.String                        `tfsdk:"state"`
+	URL                     types.String                        `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -97,25 +84,9 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:    true,
 				Description: `Display name for the cluster size`,
 			},
-			"cluster_iops": schema.Int64Attribute{
-				Computed:    true,
-				Description: `IOPS for the cluster`,
-			},
-			"cluster_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `The SKU representing the branch's cluster size`,
-			},
 			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the database the branch belongs to`,
-			},
-			"has_read_only_replicas": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has read-only replica servers`,
-			},
-			"has_replicas": schema.BoolAttribute{
-				Computed:    true,
-				Description: `True if the branch has replica servers`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
@@ -124,10 +95,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
-			},
-			"metal": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not this is a metal database`,
 			},
 			"mysql_address": schema.StringAttribute{
 				Computed:    true,
@@ -152,10 +119,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"private_edge_connectivity": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if private connections are enabled`,
-			},
-			"production": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is a production branch`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -202,55 +165,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The number of replicas for the branch`,
-			},
-			"restore_checklist_completed_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When a user last marked a backup restore checklist as completed`,
-			},
-			"restored_from_branch": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"created_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was created`,
-					},
-					"deleted_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was deleted, if deleted`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `The ID for the resource`,
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `The name for the resource`,
-					},
-					"updated_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was last updated`,
-					},
-				},
-			},
-			"safe_migrations": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch has safe migrations enabled`,
-			},
-			"schema_last_updated_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the schema for the branch was last updated`,
-			},
-			"shard_count": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of shards in the branch`,
-			},
-			"sharded": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch is sharded`,
-			},
-			"stale_schema": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether or not the branch has a stale schema`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,

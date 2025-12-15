@@ -196,54 +196,6 @@ func (c *CreateVitessBranchActor) GetAvatarURL() string {
 	return c.AvatarURL
 }
 
-type CreateVitessBranchRestoredFromBranch struct {
-	// The ID for the resource
-	ID string `json:"id"`
-	// The name for the resource
-	Name string `json:"name"`
-	// When the resource was created
-	CreatedAt string `json:"created_at"`
-	// When the resource was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When the resource was deleted, if deleted
-	DeletedAt string `json:"deleted_at"`
-}
-
-func (c *CreateVitessBranchRestoredFromBranch) GetID() string {
-	if c == nil {
-		return ""
-	}
-	return c.ID
-}
-
-func (c *CreateVitessBranchRestoredFromBranch) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CreateVitessBranchRestoredFromBranch) GetCreatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.CreatedAt
-}
-
-func (c *CreateVitessBranchRestoredFromBranch) GetUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.UpdatedAt
-}
-
-func (c *CreateVitessBranchRestoredFromBranch) GetDeletedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.DeletedAt
-}
-
 type CreateVitessBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
@@ -325,42 +277,17 @@ type CreateVitessBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When a user last marked a backup restore checklist as completed
-	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
-	// When the schema for the branch was last updated
-	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The MySQL address for the branch
 	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreateVitessBranchState `json:"state"`
-	// The SKU representing the branch's cluster size
-	ClusterName string `json:"cluster_name"`
-	// IOPS for the cluster
-	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool `json:"ready"`
-	// Whether or not this is a metal database
-	Metal bool `json:"metal"`
-	// Whether or not the branch is a production branch
-	Production bool `json:"production"`
-	// Whether or not the branch has safe migrations enabled
-	SafeMigrations bool `json:"safe_migrations"`
-	// Whether or not the branch is sharded
-	Sharded bool `json:"sharded"`
-	// The number of shards in the branch
-	ShardCount int64 `json:"shard_count"`
-	// Whether or not the branch has a stale schema
-	StaleSchema        bool                                 `json:"stale_schema"`
-	Actor              CreateVitessBranchActor              `json:"actor"`
-	RestoredFromBranch CreateVitessBranchRestoredFromBranch `json:"restored_from_branch"`
+	Ready bool                    `json:"ready"`
+	Actor CreateVitessBranchActor `json:"actor"`
 	// True if private connections are enabled
 	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
-	// True if the branch has replica servers
-	HasReplicas bool `json:"has_replicas"`
-	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas bool `json:"has_read_only_replicas"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -384,20 +311,6 @@ func (c *CreateVitessBranchResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreateVitessBranchResponseBody) GetRestoreChecklistCompletedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.RestoreChecklistCompletedAt
-}
-
-func (c *CreateVitessBranchResponseBody) GetSchemaLastUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.SchemaLastUpdatedAt
-}
-
 func (c *CreateVitessBranchResponseBody) GetMysqlAddress() string {
 	if c == nil {
 		return ""
@@ -419,67 +332,11 @@ func (c *CreateVitessBranchResponseBody) GetState() CreateVitessBranchState {
 	return c.State
 }
 
-func (c *CreateVitessBranchResponseBody) GetClusterName() string {
-	if c == nil {
-		return ""
-	}
-	return c.ClusterName
-}
-
-func (c *CreateVitessBranchResponseBody) GetClusterIops() int64 {
-	if c == nil {
-		return 0
-	}
-	return c.ClusterIops
-}
-
 func (c *CreateVitessBranchResponseBody) GetReady() bool {
 	if c == nil {
 		return false
 	}
 	return c.Ready
-}
-
-func (c *CreateVitessBranchResponseBody) GetMetal() bool {
-	if c == nil {
-		return false
-	}
-	return c.Metal
-}
-
-func (c *CreateVitessBranchResponseBody) GetProduction() bool {
-	if c == nil {
-		return false
-	}
-	return c.Production
-}
-
-func (c *CreateVitessBranchResponseBody) GetSafeMigrations() bool {
-	if c == nil {
-		return false
-	}
-	return c.SafeMigrations
-}
-
-func (c *CreateVitessBranchResponseBody) GetSharded() bool {
-	if c == nil {
-		return false
-	}
-	return c.Sharded
-}
-
-func (c *CreateVitessBranchResponseBody) GetShardCount() int64 {
-	if c == nil {
-		return 0
-	}
-	return c.ShardCount
-}
-
-func (c *CreateVitessBranchResponseBody) GetStaleSchema() bool {
-	if c == nil {
-		return false
-	}
-	return c.StaleSchema
 }
 
 func (c *CreateVitessBranchResponseBody) GetActor() CreateVitessBranchActor {
@@ -489,32 +346,11 @@ func (c *CreateVitessBranchResponseBody) GetActor() CreateVitessBranchActor {
 	return c.Actor
 }
 
-func (c *CreateVitessBranchResponseBody) GetRestoredFromBranch() CreateVitessBranchRestoredFromBranch {
-	if c == nil {
-		return CreateVitessBranchRestoredFromBranch{}
-	}
-	return c.RestoredFromBranch
-}
-
 func (c *CreateVitessBranchResponseBody) GetPrivateEdgeConnectivity() bool {
 	if c == nil {
 		return false
 	}
 	return c.PrivateEdgeConnectivity
-}
-
-func (c *CreateVitessBranchResponseBody) GetHasReplicas() bool {
-	if c == nil {
-		return false
-	}
-	return c.HasReplicas
-}
-
-func (c *CreateVitessBranchResponseBody) GetHasReadOnlyReplicas() bool {
-	if c == nil {
-		return false
-	}
-	return c.HasReadOnlyReplicas
 }
 
 func (c *CreateVitessBranchResponseBody) GetHTMLURL() string {

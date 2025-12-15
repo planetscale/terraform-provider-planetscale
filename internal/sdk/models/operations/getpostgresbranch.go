@@ -105,54 +105,6 @@ func (g *GetPostgresBranchActor) GetAvatarURL() string {
 	return g.AvatarURL
 }
 
-type GetPostgresBranchRestoredFromBranch struct {
-	// The ID for the resource
-	ID string `json:"id"`
-	// The name for the resource
-	Name string `json:"name"`
-	// When the resource was created
-	CreatedAt string `json:"created_at"`
-	// When the resource was last updated
-	UpdatedAt string `json:"updated_at"`
-	// When the resource was deleted, if deleted
-	DeletedAt string `json:"deleted_at"`
-}
-
-func (g *GetPostgresBranchRestoredFromBranch) GetID() string {
-	if g == nil {
-		return ""
-	}
-	return g.ID
-}
-
-func (g *GetPostgresBranchRestoredFromBranch) GetName() string {
-	if g == nil {
-		return ""
-	}
-	return g.Name
-}
-
-func (g *GetPostgresBranchRestoredFromBranch) GetCreatedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.CreatedAt
-}
-
-func (g *GetPostgresBranchRestoredFromBranch) GetUpdatedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.UpdatedAt
-}
-
-func (g *GetPostgresBranchRestoredFromBranch) GetDeletedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.DeletedAt
-}
-
 type GetPostgresBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
@@ -234,42 +186,17 @@ type GetPostgresBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// When a user last marked a backup restore checklist as completed
-	RestoreChecklistCompletedAt string `json:"restore_checklist_completed_at"`
-	// When the schema for the branch was last updated
-	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The MySQL address for the branch
 	MysqlAddress string `json:"mysql_address"`
 	// The address of the MySQL provider for the branch
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State GetPostgresBranchState `json:"state"`
-	// The SKU representing the branch's cluster size
-	ClusterName string `json:"cluster_name"`
-	// IOPS for the cluster
-	ClusterIops int64 `json:"cluster_iops"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool `json:"ready"`
-	// Whether or not this is a metal database
-	Metal bool `json:"metal"`
-	// Whether or not the branch is a production branch
-	Production bool `json:"production"`
-	// Whether or not the branch has safe migrations enabled
-	SafeMigrations bool `json:"safe_migrations"`
-	// Whether or not the branch is sharded
-	Sharded bool `json:"sharded"`
-	// The number of shards in the branch
-	ShardCount int64 `json:"shard_count"`
-	// Whether or not the branch has a stale schema
-	StaleSchema        bool                                `json:"stale_schema"`
-	Actor              GetPostgresBranchActor              `json:"actor"`
-	RestoredFromBranch GetPostgresBranchRestoredFromBranch `json:"restored_from_branch"`
+	Ready bool                   `json:"ready"`
+	Actor GetPostgresBranchActor `json:"actor"`
 	// True if private connections are enabled
 	PrivateEdgeConnectivity bool `json:"private_edge_connectivity"`
-	// True if the branch has replica servers
-	HasReplicas bool `json:"has_replicas"`
-	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas bool `json:"has_read_only_replicas"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -299,20 +226,6 @@ func (g *GetPostgresBranchResponseBody) GetName() string {
 	return g.Name
 }
 
-func (g *GetPostgresBranchResponseBody) GetRestoreChecklistCompletedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.RestoreChecklistCompletedAt
-}
-
-func (g *GetPostgresBranchResponseBody) GetSchemaLastUpdatedAt() string {
-	if g == nil {
-		return ""
-	}
-	return g.SchemaLastUpdatedAt
-}
-
 func (g *GetPostgresBranchResponseBody) GetMysqlAddress() string {
 	if g == nil {
 		return ""
@@ -334,67 +247,11 @@ func (g *GetPostgresBranchResponseBody) GetState() GetPostgresBranchState {
 	return g.State
 }
 
-func (g *GetPostgresBranchResponseBody) GetClusterName() string {
-	if g == nil {
-		return ""
-	}
-	return g.ClusterName
-}
-
-func (g *GetPostgresBranchResponseBody) GetClusterIops() int64 {
-	if g == nil {
-		return 0
-	}
-	return g.ClusterIops
-}
-
 func (g *GetPostgresBranchResponseBody) GetReady() bool {
 	if g == nil {
 		return false
 	}
 	return g.Ready
-}
-
-func (g *GetPostgresBranchResponseBody) GetMetal() bool {
-	if g == nil {
-		return false
-	}
-	return g.Metal
-}
-
-func (g *GetPostgresBranchResponseBody) GetProduction() bool {
-	if g == nil {
-		return false
-	}
-	return g.Production
-}
-
-func (g *GetPostgresBranchResponseBody) GetSafeMigrations() bool {
-	if g == nil {
-		return false
-	}
-	return g.SafeMigrations
-}
-
-func (g *GetPostgresBranchResponseBody) GetSharded() bool {
-	if g == nil {
-		return false
-	}
-	return g.Sharded
-}
-
-func (g *GetPostgresBranchResponseBody) GetShardCount() int64 {
-	if g == nil {
-		return 0
-	}
-	return g.ShardCount
-}
-
-func (g *GetPostgresBranchResponseBody) GetStaleSchema() bool {
-	if g == nil {
-		return false
-	}
-	return g.StaleSchema
 }
 
 func (g *GetPostgresBranchResponseBody) GetActor() GetPostgresBranchActor {
@@ -404,32 +261,11 @@ func (g *GetPostgresBranchResponseBody) GetActor() GetPostgresBranchActor {
 	return g.Actor
 }
 
-func (g *GetPostgresBranchResponseBody) GetRestoredFromBranch() GetPostgresBranchRestoredFromBranch {
-	if g == nil {
-		return GetPostgresBranchRestoredFromBranch{}
-	}
-	return g.RestoredFromBranch
-}
-
 func (g *GetPostgresBranchResponseBody) GetPrivateEdgeConnectivity() bool {
 	if g == nil {
 		return false
 	}
 	return g.PrivateEdgeConnectivity
-}
-
-func (g *GetPostgresBranchResponseBody) GetHasReplicas() bool {
-	if g == nil {
-		return false
-	}
-	return g.HasReplicas
-}
-
-func (g *GetPostgresBranchResponseBody) GetHasReadOnlyReplicas() bool {
-	if g == nil {
-		return false
-	}
-	return g.HasReadOnlyReplicas
 }
 
 func (g *GetPostgresBranchResponseBody) GetHTMLURL() string {
