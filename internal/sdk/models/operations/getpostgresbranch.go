@@ -121,10 +121,6 @@ type GetPostgresBranchResponseBody struct {
 	// Planetscale API URL for the branch
 	URL        string                      `json:"url"`
 	RegionData GetPostgresBranchRegionData `json:"region"`
-	// Display name for the cluster size
-	ClusterDisplayName *string `json:"cluster_display_name,omitzero"`
-	// The CPU architecture for the cluster (e.g., x86_64)
-	ClusterArchitecture *string `json:"cluster_architecture,omitzero"`
 	// The number of replicas for the branch
 	Replicas *int64 `json:"replicas,omitzero"`
 }
@@ -204,20 +200,6 @@ func (g *GetPostgresBranchResponseBody) GetRegionData() GetPostgresBranchRegionD
 		return GetPostgresBranchRegionData{}
 	}
 	return g.RegionData
-}
-
-func (g *GetPostgresBranchResponseBody) GetClusterDisplayName() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ClusterDisplayName
-}
-
-func (g *GetPostgresBranchResponseBody) GetClusterArchitecture() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ClusterArchitecture
 }
 
 func (g *GetPostgresBranchResponseBody) GetReplicas() *int64 {

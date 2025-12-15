@@ -34,8 +34,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 
 	if resp != nil {
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterArchitecture = types.StringPointerValue(resp.ClusterArchitecture)
-		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
@@ -57,7 +55,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 
 	if resp != nil {
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
