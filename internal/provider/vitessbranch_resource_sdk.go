@@ -13,8 +13,6 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
@@ -24,6 +22,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -35,8 +34,6 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
@@ -46,6 +43,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}

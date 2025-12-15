@@ -36,27 +36,28 @@ type PostgresBranchResource struct {
 
 // PostgresBranchResourceModel describes the resource data model.
 type PostgresBranchResourceModel struct {
-	Actor                   tfTypes.GetPostgresBranchActor `tfsdk:"actor"`
-	BackupID                types.String                   `tfsdk:"backup_id"`
-	ClusterArchitecture     types.String                   `tfsdk:"cluster_architecture"`
-	ClusterDisplayName      types.String                   `tfsdk:"cluster_display_name"`
-	ClusterSize             types.String                   `tfsdk:"cluster_size"`
-	Database                types.String                   `tfsdk:"database"`
-	HTMLURL                 types.String                   `tfsdk:"html_url"`
-	ID                      types.String                   `tfsdk:"id"`
-	MajorVersion            types.String                   `tfsdk:"major_version"`
-	MysqlAddress            types.String                   `tfsdk:"mysql_address"`
-	MysqlEdgeAddress        types.String                   `tfsdk:"mysql_edge_address"`
-	Name                    types.String                   `tfsdk:"name"`
-	Organization            types.String                   `tfsdk:"organization"`
-	ParentBranch            types.String                   `tfsdk:"parent_branch"`
-	PrivateEdgeConnectivity types.Bool                     `tfsdk:"private_edge_connectivity"`
-	Ready                   types.Bool                     `tfsdk:"ready"`
-	Region                  types.String                   `tfsdk:"region"`
-	Replicas                types.Int64                    `tfsdk:"replicas"`
-	RestorePoint            types.String                   `tfsdk:"restore_point"`
-	State                   types.String                   `tfsdk:"state"`
-	URL                     types.String                   `tfsdk:"url"`
+	Actor                   tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	BackupID                types.String                        `tfsdk:"backup_id"`
+	ClusterArchitecture     types.String                        `tfsdk:"cluster_architecture"`
+	ClusterDisplayName      types.String                        `tfsdk:"cluster_display_name"`
+	ClusterSize             types.String                        `tfsdk:"cluster_size"`
+	Database                types.String                        `tfsdk:"database"`
+	HTMLURL                 types.String                        `tfsdk:"html_url"`
+	ID                      types.String                        `tfsdk:"id"`
+	MajorVersion            types.String                        `tfsdk:"major_version"`
+	MysqlAddress            types.String                        `tfsdk:"mysql_address"`
+	MysqlEdgeAddress        types.String                        `tfsdk:"mysql_edge_address"`
+	Name                    types.String                        `tfsdk:"name"`
+	Organization            types.String                        `tfsdk:"organization"`
+	ParentBranch            types.String                        `tfsdk:"parent_branch"`
+	PrivateEdgeConnectivity types.Bool                          `tfsdk:"private_edge_connectivity"`
+	Ready                   types.Bool                          `tfsdk:"ready"`
+	Region                  types.String                        `tfsdk:"region"`
+	RegionData              tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas                types.Int64                         `tfsdk:"replicas"`
+	RestorePoint            types.String                        `tfsdk:"restore_point"`
+	State                   types.String                        `tfsdk:"state"`
+	URL                     types.String                        `tfsdk:"url"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,14 +71,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"actor": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"avatar_url": schema.StringAttribute{
-						Computed:    true,
-						Description: `The URL of the actor's avatar`,
-					},
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `The name of the actor`,
-					},
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `The ID of the actor`,
@@ -164,6 +157,15 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.`,
+			},
+			"region_data": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The ID of the region`,
+					},
+				},
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,

@@ -13,8 +13,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
@@ -24,6 +22,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -35,8 +34,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterArchitecture = types.StringPointerValue(resp.ClusterArchitecture)
 		r.ClusterDisplayName = types.StringPointerValue(resp.ClusterDisplayName)
@@ -48,6 +45,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.PrivateEdgeConnectivity = types.BoolValue(resp.PrivateEdgeConnectivity)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
@@ -60,8 +58,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterDisplayName = types.StringValue(resp.ClusterDisplayName)
 		r.Replicas = types.Int64Value(resp.Replicas)

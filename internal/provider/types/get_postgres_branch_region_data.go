@@ -6,6 +6,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GetVitessBranchActor struct {
+type GetPostgresBranchRegionData struct {
 	ID types.String `tfsdk:"id"`
 }

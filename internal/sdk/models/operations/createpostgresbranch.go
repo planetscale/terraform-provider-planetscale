@@ -154,10 +154,6 @@ func (e *CreatePostgresBranchState) UnmarshalJSON(data []byte) error {
 type CreatePostgresBranchActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
-	// The name of the actor
-	DisplayName string `json:"display_name"`
-	// The URL of the actor's avatar
-	AvatarURL string `json:"avatar_url"`
 }
 
 func (c *CreatePostgresBranchActor) GetID() string {
@@ -167,18 +163,16 @@ func (c *CreatePostgresBranchActor) GetID() string {
 	return c.ID
 }
 
-func (c *CreatePostgresBranchActor) GetDisplayName() string {
-	if c == nil {
-		return ""
-	}
-	return c.DisplayName
+type CreatePostgresBranchRegionData struct {
+	// The ID of the region
+	ID string `json:"id"`
 }
 
-func (c *CreatePostgresBranchActor) GetAvatarURL() string {
+func (c *CreatePostgresBranchRegionData) GetID() string {
 	if c == nil {
 		return ""
 	}
-	return c.AvatarURL
+	return c.ID
 }
 
 // CreatePostgresBranchResponseBody - Returns the created branch
@@ -201,7 +195,8 @@ type CreatePostgresBranchResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL string `json:"url"`
+	URL        string                         `json:"url"`
+	RegionData CreatePostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -274,6 +269,13 @@ func (c *CreatePostgresBranchResponseBody) GetURL() string {
 		return ""
 	}
 	return c.URL
+}
+
+func (c *CreatePostgresBranchResponseBody) GetRegionData() CreatePostgresBranchRegionData {
+	if c == nil {
+		return CreatePostgresBranchRegionData{}
+	}
+	return c.RegionData
 }
 
 func (c *CreatePostgresBranchResponseBody) GetParentBranch() string {

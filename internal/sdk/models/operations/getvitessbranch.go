@@ -78,10 +78,6 @@ func (e *GetVitessBranchState) UnmarshalJSON(data []byte) error {
 type GetVitessBranchActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
-	// The name of the actor
-	DisplayName string `json:"display_name"`
-	// The URL of the actor's avatar
-	AvatarURL string `json:"avatar_url"`
 }
 
 func (g *GetVitessBranchActor) GetID() string {
@@ -91,18 +87,16 @@ func (g *GetVitessBranchActor) GetID() string {
 	return g.ID
 }
 
-func (g *GetVitessBranchActor) GetDisplayName() string {
-	if g == nil {
-		return ""
-	}
-	return g.DisplayName
+type GetVitessBranchRegionData struct {
+	// The ID of the region
+	ID string `json:"id"`
 }
 
-func (g *GetVitessBranchActor) GetAvatarURL() string {
+func (g *GetVitessBranchRegionData) GetID() string {
 	if g == nil {
 		return ""
 	}
-	return g.AvatarURL
+	return g.ID
 }
 
 // GetVitessBranchResponseBody - Returns information about a branch
@@ -125,7 +119,8 @@ type GetVitessBranchResponseBody struct {
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL string `json:"url"`
+	URL        string                    `json:"url"`
+	RegionData GetVitessBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 }
@@ -198,6 +193,13 @@ func (g *GetVitessBranchResponseBody) GetURL() string {
 		return ""
 	}
 	return g.URL
+}
+
+func (g *GetVitessBranchResponseBody) GetRegionData() GetVitessBranchRegionData {
+	if g == nil {
+		return GetVitessBranchRegionData{}
+	}
+	return g.RegionData
 }
 
 func (g *GetVitessBranchResponseBody) GetParentBranch() string {
