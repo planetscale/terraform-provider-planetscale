@@ -22,6 +22,7 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HasReadOnlyReplicas = types.BoolValue(resp.HasReadOnlyReplicas)
 		r.HasReplicas = types.BoolValue(resp.HasReplicas)
+		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Metal = types.BoolValue(resp.Metal)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
@@ -55,6 +56,7 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 		r.Sharded = types.BoolValue(resp.Sharded)
 		r.StaleSchema = types.BoolValue(resp.StaleSchema)
 		r.State = types.StringValue(string(resp.State))
+		r.URL = types.StringValue(resp.URL)
 	}
 
 	return diags

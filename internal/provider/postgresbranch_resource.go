@@ -46,6 +46,7 @@ type PostgresBranchResourceModel struct {
 	Database                    types.String                                `tfsdk:"database"`
 	HasReadOnlyReplicas         types.Bool                                  `tfsdk:"has_read_only_replicas"`
 	HasReplicas                 types.Bool                                  `tfsdk:"has_replicas"`
+	HTMLURL                     types.String                                `tfsdk:"html_url"`
 	ID                          types.String                                `tfsdk:"id"`
 	MajorVersion                types.String                                `tfsdk:"major_version"`
 	Metal                       types.Bool                                  `tfsdk:"metal"`
@@ -69,6 +70,7 @@ type PostgresBranchResourceModel struct {
 	Sharded                     types.Bool                                  `tfsdk:"sharded"`
 	StaleSchema                 types.Bool                                  `tfsdk:"stale_schema"`
 	State                       types.String                                `tfsdk:"state"`
+	URL                         types.String                                `tfsdk:"url"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -134,6 +136,10 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"has_replicas": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if the branch has replica servers`,
+			},
+			"html_url": schema.StringAttribute{
+				Computed:    true,
+				Description: `Planetscale app URL for the branch`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -298,6 +304,10 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
+			},
+			"url": schema.StringAttribute{
+				Computed:    true,
+				Description: `Planetscale API URL for the branch`,
 			},
 		},
 	}

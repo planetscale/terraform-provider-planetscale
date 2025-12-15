@@ -269,8 +269,12 @@ type GetPostgresBranchResponseBody struct {
 	// True if the branch has replica servers
 	HasReplicas bool `json:"has_replicas"`
 	// True if the branch has read-only replica servers
-	HasReadOnlyReplicas bool                        `json:"has_read_only_replicas"`
-	RegionData          GetPostgresBranchRegionData `json:"region"`
+	HasReadOnlyReplicas bool `json:"has_read_only_replicas"`
+	// Planetscale app URL for the branch
+	HTMLURL string `json:"html_url"`
+	// Planetscale API URL for the branch
+	URL        string                      `json:"url"`
+	RegionData GetPostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch string `json:"parent_branch"`
 	// Display name for the cluster size
@@ -426,6 +430,20 @@ func (g *GetPostgresBranchResponseBody) GetHasReadOnlyReplicas() bool {
 		return false
 	}
 	return g.HasReadOnlyReplicas
+}
+
+func (g *GetPostgresBranchResponseBody) GetHTMLURL() string {
+	if g == nil {
+		return ""
+	}
+	return g.HTMLURL
+}
+
+func (g *GetPostgresBranchResponseBody) GetURL() string {
+	if g == nil {
+		return ""
+	}
+	return g.URL
 }
 
 func (g *GetPostgresBranchResponseBody) GetRegionData() GetPostgresBranchRegionData {
