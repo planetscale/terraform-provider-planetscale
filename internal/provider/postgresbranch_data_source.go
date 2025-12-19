@@ -29,20 +29,18 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor            tfTypes.GetPostgresBranchActor1     `tfsdk:"actor"`
-	ClusterName      types.String                        `tfsdk:"cluster_name"`
-	Database         types.String                        `tfsdk:"database"`
-	HTMLURL          types.String                        `tfsdk:"html_url"`
-	ID               types.String                        `tfsdk:"id"`
-	MysqlAddress     types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress types.String                        `tfsdk:"mysql_edge_address"`
-	Name             types.String                        `tfsdk:"name"`
-	Organization     types.String                        `tfsdk:"organization"`
-	Ready            types.Bool                          `tfsdk:"ready"`
-	RegionData       tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas         types.Int64                         `tfsdk:"replicas"`
-	State            types.String                        `tfsdk:"state"`
-	URL              types.String                        `tfsdk:"url"`
+	Actor        tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	ClusterName  types.String                        `tfsdk:"cluster_name"`
+	Database     types.String                        `tfsdk:"database"`
+	HTMLURL      types.String                        `tfsdk:"html_url"`
+	ID           types.String                        `tfsdk:"id"`
+	Name         types.String                        `tfsdk:"name"`
+	Organization types.String                        `tfsdk:"organization"`
+	Ready        types.Bool                          `tfsdk:"ready"`
+	RegionData   tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas     types.Int64                         `tfsdk:"replicas"`
+	State        types.String                        `tfsdk:"state"`
+	URL          types.String                        `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -80,14 +78,6 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the branch`,
-			},
-			"mysql_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The MySQL address for the branch`,
-			},
-			"mysql_edge_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The address of the MySQL provider for the branch`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,

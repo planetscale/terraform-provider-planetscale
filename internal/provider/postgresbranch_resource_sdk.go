@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
@@ -14,15 +13,10 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		actorPriorData := r.Actor
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.Actor.AvatarURL = actorPriorData.AvatarURL
-		r.Actor.DisplayName = actorPriorData.DisplayName
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
-		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
-		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
@@ -37,8 +31,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetBranchChangeReques
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ChangeRequestID = types.StringValue(resp.ChangeRequestID)
 		r.ClusterName = types.StringValue(resp.ClusterName)
@@ -52,15 +44,10 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		actorPriorData := r.Actor
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.Actor.AvatarURL = actorPriorData.AvatarURL
-		r.Actor.DisplayName = actorPriorData.DisplayName
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
-		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
-		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
@@ -76,8 +63,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ChangeRequestID = types.StringValue(resp.ChangeRequestID)
 		r.ClusterName = types.StringValue(resp.ClusterName)
@@ -269,22 +254,8 @@ func (r *PostgresBranchResourceModel) ToOperationsUpdateBranchChangeRequestReque
 	} else {
 		clusterSize = nil
 	}
-	replicas := new(int64)
-	if !r.Replicas.IsUnknown() && !r.Replicas.IsNull() {
-		*replicas = r.Replicas.ValueInt64()
-	} else {
-		replicas = nil
-	}
-	parameters := make(map[string]interface{})
-	for parametersKey := range r.Parameters {
-		var parametersInst interface{}
-		_ = json.Unmarshal([]byte(r.Parameters[parametersKey].ValueString()), &parametersInst)
-		parameters[parametersKey] = parametersInst
-	}
 	out := operations.UpdateBranchChangeRequestRequestBody{
 		ClusterSize: clusterSize,
-		Replicas:    replicas,
-		Parameters:  parameters,
 	}
 
 	return &out, diags

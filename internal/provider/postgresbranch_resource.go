@@ -7,21 +7,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
-	"github.com/planetscale/terraform-provider-planetscale/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -40,28 +36,25 @@ type PostgresBranchResource struct {
 
 // PostgresBranchResourceModel describes the resource data model.
 type PostgresBranchResourceModel struct {
-	Actor            tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	BackupID         types.String                        `tfsdk:"backup_id"`
-	ChangeRequestID  types.String                        `tfsdk:"-"`
-	ClusterName      types.String                        `tfsdk:"cluster_name"`
-	ClusterSize      types.String                        `tfsdk:"cluster_size"`
-	Database         types.String                        `tfsdk:"database"`
-	HTMLURL          types.String                        `tfsdk:"html_url"`
-	ID               types.String                        `tfsdk:"id"`
-	MajorVersion     types.String                        `tfsdk:"major_version"`
-	MysqlAddress     types.String                        `tfsdk:"mysql_address"`
-	MysqlEdgeAddress types.String                        `tfsdk:"mysql_edge_address"`
-	Name             types.String                        `tfsdk:"name"`
-	Organization     types.String                        `tfsdk:"organization"`
-	Parameters       map[string]jsontypes.Normalized     `tfsdk:"parameters"`
-	ParentBranch     types.String                        `tfsdk:"parent_branch"`
-	Ready            types.Bool                          `tfsdk:"ready"`
-	Region           types.String                        `tfsdk:"region"`
-	RegionData       tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas         types.Int64                         `tfsdk:"replicas"`
-	RestorePoint     types.String                        `tfsdk:"restore_point"`
-	State            types.String                        `tfsdk:"state"`
-	URL              types.String                        `tfsdk:"url"`
+	Actor           tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	BackupID        types.String                        `tfsdk:"backup_id"`
+	ChangeRequestID types.String                        `tfsdk:"-"`
+	ClusterName     types.String                        `tfsdk:"cluster_name"`
+	ClusterSize     types.String                        `tfsdk:"cluster_size"`
+	Database        types.String                        `tfsdk:"database"`
+	HTMLURL         types.String                        `tfsdk:"html_url"`
+	ID              types.String                        `tfsdk:"id"`
+	MajorVersion    types.String                        `tfsdk:"major_version"`
+	Name            types.String                        `tfsdk:"name"`
+	Organization    types.String                        `tfsdk:"organization"`
+	ParentBranch    types.String                        `tfsdk:"parent_branch"`
+	Ready           types.Bool                          `tfsdk:"ready"`
+	Region          types.String                        `tfsdk:"region"`
+	RegionData      tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas        types.Int64                         `tfsdk:"replicas"`
+	RestorePoint    types.String                        `tfsdk:"restore_point"`
+	State           types.String                        `tfsdk:"state"`
+	URL             types.String                        `tfsdk:"url"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,14 +68,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"actor": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"avatar_url": schema.StringAttribute{
-						Computed:    true,
-						Description: `The URL of the actor's avatar`,
-					},
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `The name of the actor`,
-					},
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `The ID of the actor`,
@@ -123,14 +108,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				},
 				Description: `For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.`,
 			},
-			"mysql_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The MySQL address for the branch`,
-			},
-			"mysql_edge_address": schema.StringAttribute{
-				Computed:    true,
-				Description: `The address of the MySQL provider for the branch`,
-			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
@@ -142,14 +119,6 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization that owns this resource`,
-			},
-			"parameters": schema.MapAttribute{
-				Optional:    true,
-				ElementType: jsontypes.NormalizedType{},
-				Description: `Cluster configuration parameters nested by namespace (e.g., {"pgconf": {"max_connections": "200"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Supported namespaces include 'patroni', 'pgconf', and 'pgbouncer'.`,
-				Validators: []validator.Map{
-					mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-				},
 			},
 			"parent_branch": schema.StringAttribute{
 				Required: true,
@@ -180,8 +149,7 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
-				Optional:    true,
-				Description: `The total number of replicas`,
+				Description: `The number of replicas for the branch`,
 			},
 			"restore_point": schema.StringAttribute{
 				Optional: true,

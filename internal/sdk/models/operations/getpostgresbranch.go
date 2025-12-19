@@ -105,10 +105,6 @@ type GetPostgresBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// The MySQL address for the branch
-	MysqlAddress string `json:"mysql_address"`
-	// The address of the MySQL provider for the branch
-	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State GetPostgresBranchState `json:"state"`
 	// The SKU representing the branch's cluster size
@@ -137,20 +133,6 @@ func (g *GetPostgresBranchResponseBody) GetName() string {
 		return ""
 	}
 	return g.Name
-}
-
-func (g *GetPostgresBranchResponseBody) GetMysqlAddress() string {
-	if g == nil {
-		return ""
-	}
-	return g.MysqlAddress
-}
-
-func (g *GetPostgresBranchResponseBody) GetMysqlEdgeAddress() string {
-	if g == nil {
-		return ""
-	}
-	return g.MysqlEdgeAddress
 }
 
 func (g *GetPostgresBranchResponseBody) GetState() GetPostgresBranchState {

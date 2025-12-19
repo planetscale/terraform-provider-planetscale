@@ -33,8 +33,6 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `cluster_name` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
 - `id` (String) The ID of the branch
-- `mysql_address` (String) The MySQL address for the branch
-- `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `name` (String) The name of the branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
