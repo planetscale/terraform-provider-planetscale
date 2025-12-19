@@ -87,10 +87,6 @@ func (e *GetBranchChangeRequestState) UnmarshalJSON(data []byte) error {
 type GetBranchChangeRequestActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
-	// The name of the actor
-	DisplayName string `json:"display_name"`
-	// The URL of the actor's avatar
-	AvatarURL string `json:"avatar_url"`
 }
 
 func (g *GetBranchChangeRequestActor) GetID() string {
@@ -98,20 +94,6 @@ func (g *GetBranchChangeRequestActor) GetID() string {
 		return ""
 	}
 	return g.ID
-}
-
-func (g *GetBranchChangeRequestActor) GetDisplayName() string {
-	if g == nil {
-		return ""
-	}
-	return g.DisplayName
-}
-
-func (g *GetBranchChangeRequestActor) GetAvatarURL() string {
-	if g == nil {
-		return ""
-	}
-	return g.AvatarURL
 }
 
 // GetBranchChangeRequestResponseBody - Returns a branch change request

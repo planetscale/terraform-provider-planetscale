@@ -695,13 +695,6 @@ paths:
                 cluster_size:
                   type: string
                   description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
-                replicas:
-                  type: integer
-                  description: The total number of replicas
-                parameters:
-                  type: object
-                  additionalProperties: true
-                  description: "Cluster configuration parameters nested by namespace (e.g., {\"pgconf\": {\"max_connections\": \"200\"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Supported namespaces include 'patroni', 'pgconf', and 'pgbouncer'."
               additionalProperties: false
       responses:
         "200":
@@ -732,12 +725,6 @@ paths:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
-                      avatar_url:
-                        type: string
-                        description: The URL of the actor's avatar
                     additionalProperties: false
                     required:
                       - id
@@ -867,12 +854,6 @@ paths:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
-                      avatar_url:
-                        type: string
-                        description: The URL of the actor's avatar
                     additionalProperties: false
                     required:
                       - id
@@ -3258,12 +3239,6 @@ paths:
                   name:
                     type: string
                     description: The name of the branch
-                  mysql_address:
-                    type: string
-                    description: The MySQL address for the branch
-                  mysql_edge_address:
-                    type: string
-                    description: The address of the MySQL provider for the branch
                   state:
                     type: string
                     enum:
@@ -3413,12 +3388,6 @@ paths:
                   name:
                     type: string
                     description: The name of the branch
-                  mysql_address:
-                    type: string
-                    description: The MySQL address for the branch
-                  mysql_edge_address:
-                    type: string
-                    description: The address of the MySQL provider for the branch
                   state:
                     type: string
                     enum:

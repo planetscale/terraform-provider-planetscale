@@ -17,8 +17,6 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
-		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
-		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)

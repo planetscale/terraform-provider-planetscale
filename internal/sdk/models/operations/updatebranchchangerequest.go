@@ -12,21 +12,6 @@ import (
 type UpdateBranchChangeRequestRequestBody struct {
 	// The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 	ClusterSize *string `json:"cluster_size,omitzero"`
-	// The total number of replicas
-	Replicas *int64 `json:"replicas,omitzero"`
-	// Cluster configuration parameters nested by namespace (e.g., {"pgconf": {"max_connections": "200"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Supported namespaces include 'patroni', 'pgconf', and 'pgbouncer'.
-	Parameters map[string]any `json:"parameters,omitzero"`
-}
-
-func (u UpdateBranchChangeRequestRequestBody) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(u, "", false)
-}
-
-func (u *UpdateBranchChangeRequestRequestBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (u *UpdateBranchChangeRequestRequestBody) GetClusterSize() *string {
@@ -34,20 +19,6 @@ func (u *UpdateBranchChangeRequestRequestBody) GetClusterSize() *string {
 		return nil
 	}
 	return u.ClusterSize
-}
-
-func (u *UpdateBranchChangeRequestRequestBody) GetReplicas() *int64 {
-	if u == nil {
-		return nil
-	}
-	return u.Replicas
-}
-
-func (u *UpdateBranchChangeRequestRequestBody) GetParameters() map[string]any {
-	if u == nil {
-		return nil
-	}
-	return u.Parameters
 }
 
 type UpdateBranchChangeRequestRequest struct {
@@ -138,10 +109,6 @@ func (e *UpdateBranchChangeRequestState) UnmarshalJSON(data []byte) error {
 type UpdateBranchChangeRequestActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
-	// The name of the actor
-	DisplayName string `json:"display_name"`
-	// The URL of the actor's avatar
-	AvatarURL string `json:"avatar_url"`
 }
 
 func (u *UpdateBranchChangeRequestActor) GetID() string {
@@ -149,20 +116,6 @@ func (u *UpdateBranchChangeRequestActor) GetID() string {
 		return ""
 	}
 	return u.ID
-}
-
-func (u *UpdateBranchChangeRequestActor) GetDisplayName() string {
-	if u == nil {
-		return ""
-	}
-	return u.DisplayName
-}
-
-func (u *UpdateBranchChangeRequestActor) GetAvatarURL() string {
-	if u == nil {
-		return ""
-	}
-	return u.AvatarURL
 }
 
 // UpdateBranchChangeRequestResponseBody - Returns the branch change request

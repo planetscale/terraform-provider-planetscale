@@ -181,10 +181,6 @@ type CreatePostgresBranchResponseBody struct {
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
-	// The MySQL address for the branch
-	MysqlAddress string `json:"mysql_address"`
-	// The address of the MySQL provider for the branch
-	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreatePostgresBranchState `json:"state"`
 	// The SKU representing the branch's cluster size
@@ -211,20 +207,6 @@ func (c *CreatePostgresBranchResponseBody) GetName() string {
 		return ""
 	}
 	return c.Name
-}
-
-func (c *CreatePostgresBranchResponseBody) GetMysqlAddress() string {
-	if c == nil {
-		return ""
-	}
-	return c.MysqlAddress
-}
-
-func (c *CreatePostgresBranchResponseBody) GetMysqlEdgeAddress() string {
-	if c == nil {
-		return ""
-	}
-	return c.MysqlEdgeAddress
 }
 
 func (c *CreatePostgresBranchResponseBody) GetState() CreatePostgresBranchState {

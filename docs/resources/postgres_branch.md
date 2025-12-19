@@ -20,12 +20,8 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
   major_version = "...my_major_version..."
   name          = "...my_name..."
   organization  = "...my_organization..."
-  parameters = {
-    key = jsonencode("value")
-  }
   parent_branch = "...my_parent_branch..."
   region        = "...my_region..."
-  replicas      = 0
   restore_point = "...my_restore_point..."
 }
 ```
@@ -45,9 +41,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `backup_id` (String) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
 - `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 - `major_version` (String) For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.
-- `parameters` (Map of String) Cluster configuration parameters nested by namespace (e.g., {"pgconf": {"max_connections": "200"}}). Use the 'List cluster parameters' endpoint to retrieve available parameters. Supported namespaces include 'patroni', 'pgconf', and 'pgbouncer'.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
-- `replicas` (Number) The total number of replicas
 - `restore_point` (String) Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.
 
 ### Read-Only
@@ -56,10 +50,9 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `cluster_name` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
 - `id` (String) The ID of the branch
-- `mysql_address` (String) The MySQL address for the branch
-- `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
+- `replicas` (Number) The number of replicas for the branch
 - `state` (String) The current state of the branch
 - `url` (String) Planetscale API URL for the branch
 
@@ -68,8 +61,6 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 
 Read-Only:
 
-- `avatar_url` (String) The URL of the actor's avatar
-- `display_name` (String) The name of the actor
 - `id` (String) The ID of the actor
 
 
