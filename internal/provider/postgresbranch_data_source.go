@@ -29,7 +29,7 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor            tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	Actor            tfTypes.GetPostgresBranchActor1     `tfsdk:"actor"`
 	ClusterName      types.String                        `tfsdk:"cluster_name"`
 	Database         types.String                        `tfsdk:"database"`
 	HTMLURL          types.String                        `tfsdk:"html_url"`

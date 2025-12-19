@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 74c2966bf078388414d6de45d8d00fc4
+  docChecksum: 264a279197975c98e88b2aa5ee13bfd5
   docVersion: v1
   speakeasyVersion: 1.680.3
   generationVersion: 2.788.5
@@ -94,7 +94,7 @@ trackedFiles:
     pristine_git_object: cd24e855212aaf70c29c5a6729c2c2b4f4dc19c1
   examples/resources/planetscale_postgres_branch/resource.tf:
     id: 24beddf6c03b
-    last_write_checksum: sha1:850d6cc080110c3e753b09cf87869bab771619c4
+    last_write_checksum: sha1:08c42d4782118e03eb628925cacb8a329444dc41
     pristine_git_object: 1aaaded84375d807c480d8d164e2077279db6ac0
   examples/resources/planetscale_postgres_branch_role/import-by-string-id.tf:
     id: 481d444b7e2f
@@ -248,7 +248,7 @@ trackedFiles:
     pristine_git_object: a1d710ae3f5869fdb942700e564d26716f5eeb3f
   internal/provider/postgresbranch_data_source.go:
     id: 3d4847eac64b
-    last_write_checksum: sha1:43658afe67e52244fecc0812984bdf24b20b07ed
+    last_write_checksum: sha1:0fb1912b5aa7329f32012ad2f3d7e61dd5d90efd
     pristine_git_object: 8c62e876b56d5f981678f2556da600430340d765
   internal/provider/postgresbranch_data_source_sdk.go:
     id: 65aff8470b2f
@@ -256,11 +256,11 @@ trackedFiles:
     pristine_git_object: ce4a668f6f884d6898c67aae59a7df6d67cd89e4
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:a195673f3007460a59ee718416e78dc3612cd4b1
+    last_write_checksum: sha1:b4cee59e012371ec3e574a35b1d803ebfc74e9b5
     pristine_git_object: 592d4c15815e79e1711aa2bc6a6ede61aec55eee
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:f3113826890b08ef7e49d36326bec6f3b5da1ae0
+    last_write_checksum: sha1:c6fcc88779ca18722f27744ced0e8289500c7308
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
@@ -380,8 +380,10 @@ trackedFiles:
     pristine_git_object: a39fcc64fcd7e41bbe70af9e8e57a4482a37c7c7
   internal/provider/types/get_postgres_branch_actor.go:
     id: 1e422d9ac7a3
-    last_write_checksum: sha1:a421c025e38bcb850f915a23425bfa4e51475ce3
+    last_write_checksum: sha1:e94ccc3fa307f6aef291391a36963c892a643717
     pristine_git_object: 392129986a40f804c18a5fc7ad636d27a17abcb4
+  internal/provider/types/get_postgres_branch_actor1.go:
+    last_write_checksum: sha1:862102114d5876415ad37fd30510be3b488b075a
   internal/provider/types/get_postgres_branch_region_data.go:
     id: 9ca03d131b98
     last_write_checksum: sha1:8850cdb95587771312f610236829a42f2c73cf88
@@ -528,7 +530,7 @@ trackedFiles:
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
   internal/sdk/branchchanges.go:
     id: 8e6302b97003
-    last_write_checksum: sha1:7c6bf60ca55652f0a66ffaca4f8acc597d02e1e8
+    last_write_checksum: sha1:4c868f7cf6662f1eb4ee44af6e3c987b8a06fa18
     pristine_git_object: 3e6e32903988c36678a86aca0e2c0001626c014e
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
@@ -642,6 +644,8 @@ trackedFiles:
     id: d38f63b60ddf
     last_write_checksum: sha1:3971e886e4429dd27ddeecf1ec28f65587840ffc
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
+  internal/sdk/models/operations/getbranchchangerequest.go:
+    last_write_checksum: sha1:c06f4fcc5c118cf051bb1003e35fc0ab0dd2133e
   internal/sdk/models/operations/getcurrentuser.go:
     id: d16c387ed423
     last_write_checksum: sha1:d7b1a8ebaac38f393aab1a3cfe17f3ac59eb1ab6
@@ -696,7 +700,7 @@ trackedFiles:
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
   internal/sdk/models/operations/updatebranchchangerequest.go:
     id: 64fa24c88493
-    last_write_checksum: sha1:a2866c248b9d7d0423ad441cfbfd717071f7dd91
+    last_write_checksum: sha1:425b8b51b949c98debaa7cc069929b3901a72e86
     pristine_git_object: 1527f93bd132964305be0420906dd2cce08c319b
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
@@ -1262,7 +1266,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "restart": [947.74, 8792.74, 2800.5], "state": "completed", "started_at": "<value>", "completed_at": "<value>", "created_at": "1704607400058", "updated_at": "1735610803625", "actor": {"id": "<id>", "display_name": "Herbert.Kutch", "avatar_url": "https://close-numeracy.biz"}, "cluster_name": "<value>", "cluster_display_name": "<value>", "cluster_metal": true, "replicas": 5728.58, "parameters": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "previous_cluster_name": "<value>", "previous_cluster_display_name": "<value>", "previous_cluster_metal": false, "previous_replicas": 6866.18, "previous_parameters": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "minimum_storage_bytes": 2284.9, "maximum_storage_bytes": 9769.02, "storage_autoscaling": true, "storage_shrinking": false, "storage_type": "pd_ssd", "storage_iops": 1729.99, "storage_throughput_mibs": 5728.39, "previous_minimum_storage_bytes": 1018.44, "previous_maximum_storage_bytes": 4749.46, "previous_storage_autoscaling": true, "previous_storage_shrinking": true, "previous_storage_type": "<value>", "previous_storage_iops": 3810.83, "previous_storage_throughput_mibs": 5900.25}
+          application/json: {"id": "<id>", "state": "completed", "actor": {"id": "<id>", "display_name": "Herbert.Kutch", "avatar_url": "https://close-numeracy.biz"}, "cluster_name": "<value>"}
   cancel_branch_change_request:
     speakeasy-default-cancel-branch-change-request:
       parameters:
@@ -2379,7 +2383,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "restart": [467708, 621231, 315762], "state": "canceled", "started_at": "<value>", "completed_at": "<value>", "created_at": "1724106374512", "updated_at": "1735675744897", "actor": {"id": "<id>", "display_name": "Hortense33", "avatar_url": "https://ruddy-sprinkles.com/"}, "cluster_name": "<value>", "cluster_display_name": "<value>", "cluster_metal": false, "replicas": 339817, "parameters": {"key": "<value>"}, "previous_cluster_name": "<value>", "previous_cluster_display_name": "<value>", "previous_cluster_metal": true, "previous_replicas": 948650, "previous_parameters": {}, "minimum_storage_bytes": 366137, "maximum_storage_bytes": 486863, "storage_autoscaling": true, "storage_shrinking": false, "storage_type": "gp3", "storage_iops": 776612, "storage_throughput_mibs": 979664, "previous_minimum_storage_bytes": 684187, "previous_maximum_storage_bytes": 861199, "previous_storage_autoscaling": true, "previous_storage_shrinking": false, "previous_storage_type": "<value>", "previous_storage_iops": 892428, "previous_storage_throughput_mibs": 21847}
+          application/json: {"id": "<id>", "state": "canceled", "actor": {"id": "<id>", "display_name": "Hortense33", "avatar_url": "https://ruddy-sprinkles.com/"}, "cluster_name": "<value>"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

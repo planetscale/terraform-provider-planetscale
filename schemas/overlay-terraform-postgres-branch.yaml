@@ -57,17 +57,169 @@ actions:
       summary: Delete a PostgreSQL branch
       x-speakeasy-entity-operation: PostgresBranch#delete
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
+    update:
+      x-speakeasy-match: id
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter
     update:
       x-speakeasy-match: id
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch
-    description: API operation for managed resource update.
-    update:
-      x-speakeasy-entity-operation: PostgresBranch#update
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.parameters[?@.name == 'id']
+    description: Add x-speakeasy-match to id parameter
+    update:
+      x-speakeasy-name-override: change_request_id
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.id
+    description: Add id name override
+    update:
+      x-speakeasy-name-override: change_request_id
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.id
     description: Add id name override
     update:
       x-speakeasy-name-override: change_request_id
+
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation:
+        - PostgresBranch#create#3
+        - PostgresBranch#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get
+    update:
+      x-speakeasy-entity-operation:
+        - entityOperation: PostgresBranch#create#4
+          options:
+            polling:
+              name: WaitForChangeRequestComplete
+        - entityOperation: PostgresBranch#update#2
+          options:
+            polling:
+              name: WaitForChangeRequestComplete
+      x-speakeasy-polling:
+        - name: WaitForChangeRequestComplete
+          delaySeconds: 30
+          intervalSeconds: 30
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "canceled"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "completed"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.replicas
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.cluster_display_name
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.cluster_metal
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.completed_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.maximum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.minimum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.restart
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.started_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.storage_autoscaling
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.storage_iops
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.storage_shrinking
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.storage_throughput_mibs
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.storage_type
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.updated_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_cluster_name
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_cluster_display_name
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_cluster_metal
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_replicas
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_minimum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_maximum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_storage_autoscaling
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_storage_shrinking
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_storage_type
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_storage_iops
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.previous_storage_throughput_mibs
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.replicas
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.cluster_display_name
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.cluster_metal
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.completed_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.maximum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.minimum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.restart
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.started_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.storage_autoscaling
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.storage_iops
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.storage_shrinking
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.storage_throughput_mibs
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.storage_type
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.updated_at
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_cluster_name
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_cluster_display_name
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_cluster_metal
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_replicas
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_minimum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_maximum_storage_bytes
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_storage_autoscaling
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_storage_shrinking
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_storage_type
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_storage_iops
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.previous_storage_throughput_mibs
+    remove: true
