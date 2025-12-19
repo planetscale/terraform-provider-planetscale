@@ -165,101 +165,15 @@ func (u *UpdateBranchChangeRequestActor) GetAvatarURL() string {
 	return u.AvatarURL
 }
 
-// StorageType - The storage type (gp3 or io2)
-type StorageType string
-
-const (
-	StorageTypeGp3   StorageType = "gp3"
-	StorageTypeIo2   StorageType = "io2"
-	StorageTypePdSsd StorageType = "pd_ssd"
-)
-
-func (e StorageType) ToPointer() *StorageType {
-	return &e
-}
-func (e *StorageType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "gp3":
-		fallthrough
-	case "io2":
-		fallthrough
-	case "pd_ssd":
-		*e = StorageType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for StorageType: %v", v)
-	}
-}
-
 // UpdateBranchChangeRequestResponseBody - Returns the branch change request
 type UpdateBranchChangeRequestResponseBody struct {
 	// The ID of the branch change request
 	ChangeRequestID string `json:"id"`
-	// The ports requiring a restart when changes are applied
-	Restart []int64 `json:"restart"`
 	// The state of the branch change request
 	State UpdateBranchChangeRequestState `json:"state"`
-	// The time the branch change request started
-	StartedAt string `json:"started_at"`
-	// The time the branch change request completed
-	CompletedAt string `json:"completed_at"`
-	// The time the branch change request was created
-	CreatedAt string `json:"created_at"`
-	// The time the branch change request was last updated
-	UpdatedAt string                         `json:"updated_at"`
-	Actor     UpdateBranchChangeRequestActor `json:"actor"`
+	Actor UpdateBranchChangeRequestActor `json:"actor"`
 	// The SKU representing the branch cluster
 	ClusterName string `json:"cluster_name"`
-	// The SKU representing the branch cluster for display
-	ClusterDisplayName string `json:"cluster_display_name"`
-	// Whether or not this is a metal database
-	ClusterMetal bool `json:"cluster_metal"`
-	// The total number of replicas
-	Replicas int64 `json:"replicas"`
-	// The branch parameters
-	Parameters map[string]any `json:"parameters"`
-	// The previous SKU representing the branch cluster
-	PreviousClusterName string `json:"previous_cluster_name"`
-	// The previous SKU representing the branch cluster for display
-	PreviousClusterDisplayName string `json:"previous_cluster_display_name"`
-	// Whether or not the previous SKU was a metal database
-	PreviousClusterMetal bool `json:"previous_cluster_metal"`
-	// The previous total number of replicas
-	PreviousReplicas int64 `json:"previous_replicas"`
-	// The previous branch parameters
-	PreviousParameters map[string]any `json:"previous_parameters"`
-	// The minimum storage size in bytes
-	MinimumStorageBytes int64 `json:"minimum_storage_bytes"`
-	// The maximum storage size in bytes
-	MaximumStorageBytes int64 `json:"maximum_storage_bytes"`
-	// Whether storage autoscaling is enabled
-	StorageAutoscaling bool `json:"storage_autoscaling"`
-	// Whether storage shrinking is enabled when autoscaling is enabled
-	StorageShrinking bool `json:"storage_shrinking"`
-	// The storage type (gp3 or io2)
-	StorageType StorageType `json:"storage_type"`
-	// The storage IOPS
-	StorageIops int64 `json:"storage_iops"`
-	// The storage throughput in MiB/s
-	StorageThroughputMibs int64 `json:"storage_throughput_mibs"`
-	// The previous minimum storage size in bytes
-	PreviousMinimumStorageBytes int64 `json:"previous_minimum_storage_bytes"`
-	// The previous maximum storage size in bytes
-	PreviousMaximumStorageBytes int64 `json:"previous_maximum_storage_bytes"`
-	// Whether storage autoscaling was previously enabled
-	PreviousStorageAutoscaling bool `json:"previous_storage_autoscaling"`
-	// Whether storage shrinking was previously enabled
-	PreviousStorageShrinking bool `json:"previous_storage_shrinking"`
-	// The previous storage type
-	PreviousStorageType string `json:"previous_storage_type"`
-	// The previous storage IOPS
-	PreviousStorageIops int64 `json:"previous_storage_iops"`
-	// The previous storage throughput in MiB/s
-	PreviousStorageThroughputMibs int64 `json:"previous_storage_throughput_mibs"`
 }
 
 func (u *UpdateBranchChangeRequestResponseBody) GetChangeRequestID() string {
@@ -269,46 +183,11 @@ func (u *UpdateBranchChangeRequestResponseBody) GetChangeRequestID() string {
 	return u.ChangeRequestID
 }
 
-func (u *UpdateBranchChangeRequestResponseBody) GetRestart() []int64 {
-	if u == nil {
-		return []int64{}
-	}
-	return u.Restart
-}
-
 func (u *UpdateBranchChangeRequestResponseBody) GetState() UpdateBranchChangeRequestState {
 	if u == nil {
 		return UpdateBranchChangeRequestState("")
 	}
 	return u.State
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetStartedAt() string {
-	if u == nil {
-		return ""
-	}
-	return u.StartedAt
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetCompletedAt() string {
-	if u == nil {
-		return ""
-	}
-	return u.CompletedAt
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetCreatedAt() string {
-	if u == nil {
-		return ""
-	}
-	return u.CreatedAt
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetUpdatedAt() string {
-	if u == nil {
-		return ""
-	}
-	return u.UpdatedAt
 }
 
 func (u *UpdateBranchChangeRequestResponseBody) GetActor() UpdateBranchChangeRequestActor {
@@ -323,167 +202,6 @@ func (u *UpdateBranchChangeRequestResponseBody) GetClusterName() string {
 		return ""
 	}
 	return u.ClusterName
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetClusterDisplayName() string {
-	if u == nil {
-		return ""
-	}
-	return u.ClusterDisplayName
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetClusterMetal() bool {
-	if u == nil {
-		return false
-	}
-	return u.ClusterMetal
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetReplicas() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.Replicas
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetParameters() map[string]any {
-	if u == nil {
-		return map[string]any{}
-	}
-	return u.Parameters
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousClusterName() string {
-	if u == nil {
-		return ""
-	}
-	return u.PreviousClusterName
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousClusterDisplayName() string {
-	if u == nil {
-		return ""
-	}
-	return u.PreviousClusterDisplayName
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousClusterMetal() bool {
-	if u == nil {
-		return false
-	}
-	return u.PreviousClusterMetal
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousReplicas() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.PreviousReplicas
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousParameters() map[string]any {
-	if u == nil {
-		return map[string]any{}
-	}
-	return u.PreviousParameters
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetMinimumStorageBytes() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.MinimumStorageBytes
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetMaximumStorageBytes() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.MaximumStorageBytes
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageAutoscaling() bool {
-	if u == nil {
-		return false
-	}
-	return u.StorageAutoscaling
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageShrinking() bool {
-	if u == nil {
-		return false
-	}
-	return u.StorageShrinking
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageType() StorageType {
-	if u == nil {
-		return StorageType("")
-	}
-	return u.StorageType
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageIops() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.StorageIops
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetStorageThroughputMibs() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.StorageThroughputMibs
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousMinimumStorageBytes() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.PreviousMinimumStorageBytes
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousMaximumStorageBytes() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.PreviousMaximumStorageBytes
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageAutoscaling() bool {
-	if u == nil {
-		return false
-	}
-	return u.PreviousStorageAutoscaling
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageShrinking() bool {
-	if u == nil {
-		return false
-	}
-	return u.PreviousStorageShrinking
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageType() string {
-	if u == nil {
-		return ""
-	}
-	return u.PreviousStorageType
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageIops() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.PreviousStorageIops
-}
-
-func (u *UpdateBranchChangeRequestResponseBody) GetPreviousStorageThroughputMibs() int64 {
-	if u == nil {
-		return 0
-	}
-	return u.PreviousStorageThroughputMibs
 }
 
 type UpdateBranchChangeRequestResponse struct {

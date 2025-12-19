@@ -7,5 +7,7 @@ import (
 )
 
 type GetPostgresBranchActor struct {
-	ID types.String `tfsdk:"id"`
+	AvatarURL   types.String `tfsdk:"avatar_url"`
+	DisplayName types.String `tfsdk:"display_name"`
+	ID          types.String `tfsdk:"id"`
 }

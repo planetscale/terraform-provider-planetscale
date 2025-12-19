@@ -716,11 +716,6 @@ paths:
                     type: string
                     description: The ID of the branch change request
                     x-speakeasy-name-override: change_request_id
-                  restart:
-                    items:
-                      type: integer
-                    type: array
-                    description: The ports requiring a restart when changes are applied
                   state:
                     type: string
                     enum:
@@ -730,18 +725,6 @@ paths:
                       - canceled
                       - completed
                     description: The state of the branch change request
-                  started_at:
-                    type: string
-                    description: The time the branch change request started
-                  completed_at:
-                    type: string
-                    description: The time the branch change request completed
-                  created_at:
-                    type: string
-                    description: The time the branch change request was created
-                  updated_at:
-                    type: string
-                    description: The time the branch change request was last updated
                   actor:
                     type: object
                     properties:
@@ -762,81 +745,6 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch cluster
-                  cluster_display_name:
-                    type: string
-                    description: The SKU representing the branch cluster for display
-                  cluster_metal:
-                    type: boolean
-                    description: Whether or not this is a metal database
-                  replicas:
-                    type: integer
-                    description: The total number of replicas
-                  parameters:
-                    type: object
-                    additionalProperties: true
-                    description: The branch parameters
-                  previous_cluster_name:
-                    type: string
-                    description: The previous SKU representing the branch cluster
-                  previous_cluster_display_name:
-                    type: string
-                    description: The previous SKU representing the branch cluster for display
-                  previous_cluster_metal:
-                    type: boolean
-                    description: Whether or not the previous SKU was a metal database
-                  previous_replicas:
-                    type: integer
-                    description: The previous total number of replicas
-                  previous_parameters:
-                    type: object
-                    additionalProperties: true
-                    description: The previous branch parameters
-                  minimum_storage_bytes:
-                    type: integer
-                    description: The minimum storage size in bytes
-                  maximum_storage_bytes:
-                    type: integer
-                    description: The maximum storage size in bytes
-                  storage_autoscaling:
-                    type: boolean
-                    description: Whether storage autoscaling is enabled
-                  storage_shrinking:
-                    type: boolean
-                    description: Whether storage shrinking is enabled when autoscaling is enabled
-                  storage_type:
-                    type: string
-                    enum:
-                      - gp3
-                      - io2
-                      - pd_ssd
-                    description: The storage type (gp3 or io2)
-                  storage_iops:
-                    type: integer
-                    description: The storage IOPS
-                  storage_throughput_mibs:
-                    type: integer
-                    description: The storage throughput in MiB/s
-                  previous_minimum_storage_bytes:
-                    type: integer
-                    description: The previous minimum storage size in bytes
-                  previous_maximum_storage_bytes:
-                    type: integer
-                    description: The previous maximum storage size in bytes
-                  previous_storage_autoscaling:
-                    type: boolean
-                    description: Whether storage autoscaling was previously enabled
-                  previous_storage_shrinking:
-                    type: boolean
-                    description: Whether storage shrinking was previously enabled
-                  previous_storage_type:
-                    type: string
-                    description: The previous storage type
-                  previous_storage_iops:
-                    type: integer
-                    description: The previous storage IOPS
-                  previous_storage_throughput_mibs:
-                    type: integer
-                    description: The previous storage throughput in MiB/s
                 additionalProperties: false
                 required:
                   - id
@@ -892,8 +800,159 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-      x-speakeasy-entity-operation: PostgresBranch#update
-  /organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}: {}
+      x-speakeasy-entity-operation:
+        - PostgresBranch#create#3
+        - PostgresBranch#update
+  /organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}:
+    get:
+      tags:
+        - Branch changes
+      operationId: get_branch_change_request
+      summary: Get a branch change request
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization that owns this resource
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database that owns this resource
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch that owns this resource
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: id
+          in: path
+          required: true
+          description: The ID of the change request
+          schema:
+            type: string
+          x-speakeasy-name-override: change_request_id
+      responses:
+        "200":
+          description: Returns a branch change request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the branch change request
+                    x-speakeasy-name-override: change_request_id
+                  state:
+                    type: string
+                    enum:
+                      - queued
+                      - pending
+                      - resizing
+                      - canceled
+                      - completed
+                    description: The state of the branch change request
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    additionalProperties: false
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                  cluster_name:
+                    type: string
+                    description: The SKU representing the branch cluster
+                additionalProperties: false
+                required:
+                  - id
+                  - restart
+                  - state
+                  - started_at
+                  - completed_at
+                  - created_at
+                  - updated_at
+                  - actor
+                  - cluster_name
+                  - cluster_display_name
+                  - cluster_metal
+                  - replicas
+                  - parameters
+                  - previous_cluster_name
+                  - previous_cluster_display_name
+                  - previous_cluster_metal
+                  - previous_replicas
+                  - previous_parameters
+                  - minimum_storage_bytes
+                  - maximum_storage_bytes
+                  - storage_autoscaling
+                  - storage_shrinking
+                  - storage_type
+                  - storage_iops
+                  - storage_throughput_mibs
+                  - previous_minimum_storage_bytes
+                  - previous_maximum_storage_bytes
+                  - previous_storage_autoscaling
+                  - previous_storage_shrinking
+                  - previous_storage_type
+                  - previous_storage_iops
+                  - previous_storage_throughput_mibs
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        - entityOperation: PostgresBranch#create#4
+          options:
+            polling:
+              name: WaitForChangeRequestComplete
+        - entityOperation: PostgresBranch#update#2
+          options:
+            polling:
+              name: WaitForChangeRequestComplete
+      x-speakeasy-polling:
+        - name: WaitForChangeRequestComplete
+          delaySeconds: 30
+          intervalSeconds: 30
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "canceled"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "completed"
   /organizations/{organization}/databases/{database}/branches/{branch}/cluster: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/demote: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/extensions: {}

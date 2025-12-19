@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
@@ -13,7 +14,10 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		actorPriorData := r.Actor
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.Actor.AvatarURL = actorPriorData.AvatarURL
+		r.Actor.DisplayName = actorPriorData.DisplayName
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
@@ -29,11 +33,29 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 	return diags
 }
 
+func (r *PostgresBranchResourceModel) RefreshFromOperationsGetBranchChangeRequestResponseBody(ctx context.Context, resp *operations.GetBranchChangeRequestResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ChangeRequestID = types.StringValue(resp.ChangeRequestID)
+		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.State = types.StringValue(string(resp.State))
+	}
+
+	return diags
+}
+
 func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResponseBody(ctx context.Context, resp *operations.GetPostgresBranchResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		actorPriorData := r.Actor
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.Actor.AvatarURL = actorPriorData.AvatarURL
+		r.Actor.DisplayName = actorPriorData.DisplayName
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
@@ -54,9 +76,11 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeReq
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ChangeRequestID = types.StringValue(resp.ChangeRequestID)
 		r.ClusterName = types.StringValue(resp.ClusterName)
-		r.Replicas = types.Int64Value(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
 	}
 
@@ -161,6 +185,31 @@ func (r *PostgresBranchResourceModel) ToOperationsDeletePostgresBranchRequest(ct
 	return &out, diags
 }
 
+func (r *PostgresBranchResourceModel) ToOperationsGetBranchChangeRequestRequest(ctx context.Context) (*operations.GetBranchChangeRequestRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	var changeRequestID string
+	changeRequestID = r.ChangeRequestID.ValueString()
+
+	out := operations.GetBranchChangeRequestRequest{
+		Organization:    organization,
+		Database:        database,
+		Branch:          branch,
+		ChangeRequestID: changeRequestID,
+	}
+
+	return &out, diags
+}
+
 func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx context.Context) (*operations.GetPostgresBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -226,9 +275,16 @@ func (r *PostgresBranchResourceModel) ToOperationsUpdateBranchChangeRequestReque
 	} else {
 		replicas = nil
 	}
+	parameters := make(map[string]interface{})
+	for parametersKey := range r.Parameters {
+		var parametersInst interface{}
+		_ = json.Unmarshal([]byte(r.Parameters[parametersKey].ValueString()), &parametersInst)
+		parameters[parametersKey] = parametersInst
+	}
 	out := operations.UpdateBranchChangeRequestRequestBody{
 		ClusterSize: clusterSize,
 		Replicas:    replicas,
+		Parameters:  parameters,
 	}
 
 	return &out, diags
