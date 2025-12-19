@@ -66,19 +66,21 @@ actions:
     update:
       x-speakeasy-match: id
 
-
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.parameters[?@.name == 'id']
     description: Add x-speakeasy-match to id parameter
     update:
       x-speakeasy-name-override: change_request_id
+      x-speakeasy-terraform-ignore: schema
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.id
     description: Add id name override
     update:
       x-speakeasy-name-override: change_request_id
+      x-speakeasy-terraform-ignore: schema
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.id
     description: Add id name override
     update:
       x-speakeasy-name-override: change_request_id
+      x-speakeasy-terraform-ignore: schema
 
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch

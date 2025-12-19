@@ -716,6 +716,7 @@ paths:
                     type: string
                     description: The ID of the branch change request
                     x-speakeasy-name-override: change_request_id
+                    x-speakeasy-terraform-ignore: schema
                   state:
                     type: string
                     enum:
@@ -836,6 +837,7 @@ paths:
           schema:
             type: string
           x-speakeasy-name-override: change_request_id
+          x-speakeasy-terraform-ignore: schema
       responses:
         "200":
           description: Returns a branch change request
@@ -849,6 +851,7 @@ paths:
                     type: string
                     description: The ID of the branch change request
                     x-speakeasy-name-override: change_request_id
+                    x-speakeasy-terraform-ignore: schema
                   state:
                     type: string
                     enum:
