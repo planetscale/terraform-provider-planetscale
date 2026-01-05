@@ -52,3 +52,20 @@ actions:
         x-speakeasy-name-override: branch_data
       password:
         x-speakeasy-param-sensitive: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties.inherited_roles
+    description: Mark inherited_roles as a set.
+    update:
+      format: set
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.responses["200"].content["application/json"].schema.properties.inherited_roles
+    description: Mark inherited_roles as a set.
+    update:
+      format: set
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.requestBody.content["application/json"].schema.properties.inherited_roles
+    description: Mark inherited_roles as a set.
+    update:
+      format: set
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties.inherited_roles
+    description: Mark inherited_roles as a set.
+    update:
+      format: set

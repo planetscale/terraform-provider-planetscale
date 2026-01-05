@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 3b18a3890fc3a02d8644a035cb8158e8
+  docChecksum: 70851273ebc450578aaece14beadaf15
   docVersion: v1
   speakeasyVersion: 1.680.3
   generationVersion: 2.788.5
@@ -23,6 +23,7 @@ features:
     nameOverrides: 2.81.3
     operationPolling: 0.3.0
     pagination: 2.83.5
+    sets: 0.1.2
 trackedFiles:
   .gitattributes:
     id: 24139dae6567
@@ -264,7 +265,7 @@ trackedFiles:
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
-    last_write_checksum: sha1:4a1c7f458cf831c3a57e234757a0898ac7edb96c
+    last_write_checksum: sha1:c8506ef87aca4412aad0f5f2385cef2c8a750e4f
     pristine_git_object: 90dfa7d37827ae4d9d69ee1b8949f4f64435ec23
   internal/provider/postgresbranchrole_data_source_sdk.go:
     id: d62e34777672
@@ -272,7 +273,7 @@ trackedFiles:
     pristine_git_object: 80848f0b5bdb932ffd1082d8904b61bd67401a7e
   internal/provider/postgresbranchrole_resource.go:
     id: 7ff3a33ddab0
-    last_write_checksum: sha1:6243228ddf7cd4dd21549d57be733e748ca3e07b
+    last_write_checksum: sha1:9a85356624525c2b118dbb65fb652e8f020d992e
     pristine_git_object: 5f7ccbf7d9c14d4e54619ec78ac5f08bd8e40c75
   internal/provider/postgresbranchrole_resource_sdk.go:
     id: 4da918fe90c4
@@ -280,7 +281,7 @@ trackedFiles:
     pristine_git_object: 5246ebe1519b4a0b500dd4b4ff225ab6c6acddad
   internal/provider/postgresbranchroles_data_source.go:
     id: eab053a45f5a
-    last_write_checksum: sha1:2e2bcd228f6a217fa1cd9f3461ef7dd575e81d51
+    last_write_checksum: sha1:7237ac41bb924282a4a1e51c741e3cd6c16420f6
     pristine_git_object: 1bbffd2a483a8124323163c4b58554a23b337a23
   internal/provider/postgresbranchroles_data_source_sdk.go:
     id: 1f5d16bb3dd7

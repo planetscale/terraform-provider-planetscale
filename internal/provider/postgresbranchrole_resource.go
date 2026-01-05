@@ -11,12 +11,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/int64planmodifier"
-	speakeasy_listplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/listplanmodifier"
+	speakeasy_setplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/setplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 )
@@ -166,12 +166,12 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 				Computed:    true,
 				Description: `The ID of the role`,
 			},
-			"inherited_roles": schema.ListAttribute{
+			"inherited_roles": schema.SetAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				PlanModifiers: []planmodifier.Set{
+					setplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_setplanmodifier.SuppressDiff(speakeasy_setplanmodifier.ExplicitSuppress),
 				},
 				ElementType: types.StringType,
 				Description: `Roles to inherit from. Requires replacement if changed.`,

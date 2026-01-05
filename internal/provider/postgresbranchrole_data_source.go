@@ -160,7 +160,7 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 				Required:    true,
 				Description: `The ID of the role`,
 			},
-			"inherited_roles": schema.ListAttribute{
+			"inherited_roles": schema.SetAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `Database roles these credentials inherit`,
