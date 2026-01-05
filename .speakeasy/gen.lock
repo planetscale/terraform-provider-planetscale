@@ -3,8 +3,8 @@ id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
   docChecksum: 70851273ebc450578aaece14beadaf15
   docVersion: v1
-  speakeasyVersion: 1.680.3
-  generationVersion: 2.788.5
+  speakeasyVersion: 1.680.12
+  generationVersion: 2.788.15
   releaseVersion: 1.0.0
   configChecksum: 55cd8c4a8a192aa13f00099613d9e7ce
 persistentEdits:
@@ -727,7 +727,7 @@ trackedFiles:
     pristine_git_object: 482aa982b4571ec54f57707879032cc00c8fe24e
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:be1057f85ca76cd1232c1802677161e64cda3b03
+    last_write_checksum: sha1:93894300dd19bb791f2d3d30eea67eaa55bf8ba7
     pristine_git_object: edd5a04397c8e2e1faa37b1515cc10715653813e
   internal/sdk/polling/config.go:
     id: e14a17f21f84
