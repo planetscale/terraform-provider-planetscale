@@ -2191,6 +2191,7 @@ paths:
                               - postgres
                           type: array
                           description: Database roles these credentials inherit
+                          format: set
                         branch:
                           type: object
                           properties:
@@ -2348,6 +2349,7 @@ paths:
                       - pg_write_all_data
                       - postgres
                   description: Roles to inherit from
+                  format: set
               additionalProperties: false
       responses:
         "200":
@@ -2432,6 +2434,7 @@ paths:
                         - postgres
                     type: array
                     description: Database roles these credentials inherit
+                    format: set
                   branch:
                     type: object
                     properties:
@@ -2637,6 +2640,7 @@ paths:
                         - postgres
                     type: array
                     description: Database roles these credentials inherit
+                    format: set
                   branch:
                     type: object
                     properties:
@@ -2851,6 +2855,7 @@ paths:
                         - postgres
                     type: array
                     description: Database roles these credentials inherit
+                    format: set
                   branch:
                     type: object
                     properties:

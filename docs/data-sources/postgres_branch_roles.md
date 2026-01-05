@@ -51,7 +51,7 @@ Read-Only:
 - `expired` (Boolean) True if the credentials are expired
 - `expires_at` (String) When the role expires
 - `id` (String) The ID of the role
-- `inherited_roles` (List of String) Database roles these credentials inherit
+- `inherited_roles` (Set of String) Database roles these credentials inherit
 - `name` (String) The name of the role
 - `password` (String) The plain text password, available only after create
 - `private_access_host_url` (String) The database connection string for private connections
