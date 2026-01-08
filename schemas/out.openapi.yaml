@@ -937,7 +937,64 @@ paths:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "completed"
-  /organizations/{organization}/databases/{database}/branches/{branch}/cluster: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/cluster:
+    patch:
+      tags:
+        - Database branches
+      operationId: update_branch_cluster_config
+      summary: Change a branch cluster configuration
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch to configure
+          schema:
+            type: string
+          x-speakeasy-match: id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cluster_size:
+                  type: string
+                  description: "The new size of the database cluster: PS_10, PS_20,…"
+              additionalProperties: false
+              required:
+                - cluster_size
+      responses:
+        "204":
+          description: Returns an empty response body
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |+
+        ### Authorization
+        A service token   must have at least one of the following access   in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+      x-speakeasy-entity-operation: VitessBranch#update
   /organizations/{organization}/databases/{database}/branches/{branch}/demote: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/extensions: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces: {}
@@ -3904,6 +3961,7 @@ paths:
           options:
             polling:
               name: WaitForReady
+        - entityOperation: VitessBranch#update#2
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch.
       x-speakeasy-polling:
         - name: WaitForReady

@@ -160,3 +160,45 @@ func (r *VitessBranchResourceModel) ToOperationsGetVitessBranchRequest(ctx conte
 
 	return &out, diags
 }
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateBranchClusterConfigRequest(ctx context.Context) (*operations.UpdateBranchClusterConfigRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsUpdateBranchClusterConfigRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateBranchClusterConfigRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateBranchClusterConfigRequestBody(ctx context.Context) (*operations.UpdateBranchClusterConfigRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var clusterSize string
+	clusterSize = r.ClusterSize.ValueString()
+
+	out := operations.UpdateBranchClusterConfigRequestBody{
+		ClusterSize: clusterSize,
+	}
+
+	return &out, diags
+}

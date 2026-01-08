@@ -30,6 +30,7 @@ actions:
           options:
             polling:
               name: WaitForReady
+        - entityOperation: VitessBranch#update#2
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch.
       x-speakeasy-polling:
         - name: WaitForReady
@@ -44,4 +45,14 @@ actions:
       operationId: delete_vitess_branch
       summary: Delete a Vitess branch
       x-speakeasy-entity-operation: VitessBranch#delete
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/cluster"].patch.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
+    update:
+      x-speakeasy-match: id
+
+  # Note: this API returns an immediate response without waiting for the cluster change to complete.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/cluster"].patch
+    update:
+      x-speakeasy-entity-operation: VitessBranch#update
 

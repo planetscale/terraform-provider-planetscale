@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 70851273ebc450578aaece14beadaf15
+  docChecksum: 44aabd141939ab97d99d98c4cb6e156d
   docVersion: v1
   speakeasyVersion: 1.680.12
   generationVersion: 2.788.15
@@ -493,11 +493,11 @@ trackedFiles:
     pristine_git_object: 2557ef7bbc5e3edd5578829c061609c7b7a02504
   internal/provider/vitessbranch_resource.go:
     id: 253814c7c29a
-    last_write_checksum: sha1:68854006efc09713bbdfe37460562ee65b27f009
+    last_write_checksum: sha1:4d6f48179ed7fcfd474c81d18eda35116011c1c1
     pristine_git_object: 3fa960d342bf6de4878019abd742d68bc1517dba
   internal/provider/vitessbranch_resource_sdk.go:
     id: b7741edc0d6e
-    last_write_checksum: sha1:c67eea07f9b20f9b922466a6dc3e71b246c507c9
+    last_write_checksum: sha1:6653239a1166488f27d9686d53c24fa245e5311e
     pristine_git_object: ae27395a04f18ff08bf466c08de8fd0ec47bd226
   internal/provider/vitessbranchpassword_data_source.go:
     id: e6cd1d778135
@@ -533,7 +533,7 @@ trackedFiles:
     pristine_git_object: 3e6e32903988c36678a86aca0e2c0001626c014e
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
-    last_write_checksum: sha1:045742c709d2bc6dd57f449a6648f282b6777a3c
+    last_write_checksum: sha1:0ad8581f64996212471fa3e3d1cb823548773fb6
     pristine_git_object: fa7fcf53770dfab66ff0b41fb2abc57deae178e0
   internal/sdk/databasebranchpasswords.go:
     id: a545604b52ee
@@ -701,6 +701,8 @@ trackedFiles:
     id: 64fa24c88493
     last_write_checksum: sha1:3e83a83bee9df5ebfcc7698448e9f0ad290b8a90
     pristine_git_object: 1527f93bd132964305be0420906dd2cce08c319b
+  internal/sdk/models/operations/updatebranchclusterconfig.go:
+    last_write_checksum: sha1:3c00d43fceaed27f0b376e125414dbf4370eaddc
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     last_write_checksum: sha1:880b7b7431b0fda3c6d2b21a336a0e7ffb7e6edd
@@ -727,7 +729,7 @@ trackedFiles:
     pristine_git_object: 482aa982b4571ec54f57707879032cc00c8fe24e
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:93894300dd19bb791f2d3d30eea67eaa55bf8ba7
+    last_write_checksum: sha1:7e9c086b309a0319e9b441cf221be888dc750fa5
     pristine_git_object: edd5a04397c8e2e1faa37b1515cc10715653813e
   internal/sdk/polling/config.go:
     id: e14a17f21f84
