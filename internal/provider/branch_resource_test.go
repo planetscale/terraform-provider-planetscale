@@ -55,6 +55,20 @@ func TestAccBranchResource(t *testing.T) {
 					resource.TestCheckResourceAttr("planetscale_branch.test", "production", "true"),
 				),
 			},
+			// Update in-place to production branch
+			{
+				Config: testAccBranchResourceConfigTemplate(map[string]string{
+					"organization":  testAccOrg,
+					"database":      dbName,
+					"name":          branchName,
+					"parent_branch": "main",
+					"production":    "false",
+				}),
+				ConfigPlanChecks: checkExpectUpdate("planetscale_branch.test"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("planetscale_branch.test", "production", "false"),
+				),
+			},
 		},
 	})
 }

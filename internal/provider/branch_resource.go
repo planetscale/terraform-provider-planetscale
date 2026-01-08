@@ -189,17 +189,30 @@ func (r *branchResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	// After branch is ready, check if we need to promote it to a production branch
-	if !data.Production.IsNull() && data.Production.ValueBool() {
-		res, err := r.client.PromoteBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
-		if err != nil {
-			resp.Diagnostics.AddError(
-				"Unable to promote branch during creation",
-				fmt.Sprintf("Branch %s could not be promoted to production: %s", name.ValueString(), err),
-			)
-			return
+	// After the branch is ready, check if we need to promote or demote it
+	if !data.Production.IsNull() {
+		if !branch.Production && data.Production.ValueBool() {
+			res, err := r.client.PromoteBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Unable to promote branch during creation",
+					fmt.Sprintf("Branch %s could not be promoted to production: %s", name.ValueString(), err),
+				)
+				return
+			}
+			branch = res.Branch
 		}
-		branch = res.Branch
+		if branch.Production && !data.Production.ValueBool() {
+			res, err := r.client.DemoteBranch(ctx, org.ValueString(), database.ValueString(), name.ValueString())
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Unable to demote branch during creation",
+					fmt.Sprintf("Branch %s could not be demoted to production: %s", name.ValueString(), err),
+				)
+				return
+			}
+			branch = res.Branch
+		}
 	}
 
 	data = branchResourceFromClient(ctx, &branch, data.Organization, data.Database, data.SeedData, resp.Diagnostics)
