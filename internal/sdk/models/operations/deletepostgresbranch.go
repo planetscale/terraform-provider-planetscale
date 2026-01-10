@@ -3,8 +3,20 @@
 package operations
 
 import (
+	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
+
+type DeletePostgresBranchRequestBody struct {
+	DeletionProtection *bool `json:"deletion_protection,omitzero"`
+}
+
+func (d *DeletePostgresBranchRequestBody) GetDeletionProtection() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.DeletionProtection
+}
 
 type DeletePostgresBranchRequest struct {
 	// The name of the organization the branch belongs to
@@ -12,7 +24,19 @@ type DeletePostgresBranchRequest struct {
 	// The name of the database the branch belongs to
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
-	Branch string `pathParam:"style=simple,explode=false,name=branch"`
+	Branch string                           `pathParam:"style=simple,explode=false,name=branch"`
+	Body   *DeletePostgresBranchRequestBody `request:"mediaType=application/json"`
+}
+
+func (d DeletePostgresBranchRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DeletePostgresBranchRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DeletePostgresBranchRequest) GetOrganization() string {
@@ -34,6 +58,13 @@ func (d *DeletePostgresBranchRequest) GetBranch() string {
 		return ""
 	}
 	return d.Branch
+}
+
+func (d *DeletePostgresBranchRequest) GetBody() *DeletePostgresBranchRequestBody {
+	if d == nil {
+		return nil
+	}
+	return d.Body
 }
 
 type DeletePostgresBranchResponse struct {

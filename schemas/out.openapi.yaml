@@ -3567,6 +3567,16 @@ paths:
         | Database | `delete_branches`, `delete_production_branches` |
         | Branch | `delete_branch` |
       x-speakeasy-entity-operation: PostgresBranch#delete
+      requestBody:
+        required: false
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                deletion_protection:
+                  type: boolean
+                  x-speakeasy-plan-validators: DeletionProtection
   /organizations/{organization}/databases/{database}/branches#vitess:
     post:
       tags:

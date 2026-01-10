@@ -12,12 +12,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	custom_boolvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/boolvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -36,25 +38,26 @@ type PostgresBranchResource struct {
 
 // PostgresBranchResourceModel describes the resource data model.
 type PostgresBranchResourceModel struct {
-	Actor           tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	BackupID        types.String                        `tfsdk:"backup_id"`
-	ChangeRequestID types.String                        `tfsdk:"-"`
-	ClusterName     types.String                        `tfsdk:"cluster_name"`
-	ClusterSize     types.String                        `tfsdk:"cluster_size"`
-	Database        types.String                        `tfsdk:"database"`
-	HTMLURL         types.String                        `tfsdk:"html_url"`
-	ID              types.String                        `tfsdk:"id"`
-	MajorVersion    types.String                        `tfsdk:"major_version"`
-	Name            types.String                        `tfsdk:"name"`
-	Organization    types.String                        `tfsdk:"organization"`
-	ParentBranch    types.String                        `tfsdk:"parent_branch"`
-	Ready           types.Bool                          `tfsdk:"ready"`
-	Region          types.String                        `tfsdk:"region"`
-	RegionData      tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas        types.Int64                         `tfsdk:"replicas"`
-	RestorePoint    types.String                        `tfsdk:"restore_point"`
-	State           types.String                        `tfsdk:"state"`
-	URL             types.String                        `tfsdk:"url"`
+	Actor              tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	BackupID           types.String                        `tfsdk:"backup_id"`
+	ChangeRequestID    types.String                        `tfsdk:"-"`
+	ClusterName        types.String                        `tfsdk:"cluster_name"`
+	ClusterSize        types.String                        `tfsdk:"cluster_size"`
+	Database           types.String                        `tfsdk:"database"`
+	DeletionProtection types.Bool                          `tfsdk:"deletion_protection"`
+	HTMLURL            types.String                        `tfsdk:"html_url"`
+	ID                 types.String                        `tfsdk:"id"`
+	MajorVersion       types.String                        `tfsdk:"major_version"`
+	Name               types.String                        `tfsdk:"name"`
+	Organization       types.String                        `tfsdk:"organization"`
+	ParentBranch       types.String                        `tfsdk:"parent_branch"`
+	Ready              types.Bool                          `tfsdk:"ready"`
+	Region             types.String                        `tfsdk:"region"`
+	RegionData         tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas           types.Int64                         `tfsdk:"replicas"`
+	RestorePoint       types.String                        `tfsdk:"restore_point"`
+	State              types.String                        `tfsdk:"state"`
+	URL                types.String                        `tfsdk:"url"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -92,6 +95,12 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the database that owns this resource`,
+			},
+			"deletion_protection": schema.BoolAttribute{
+				Optional: true,
+				Validators: []validator.Bool{
+					custom_boolvalidators.DeletionProtection(),
+				},
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,

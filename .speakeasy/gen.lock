@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 70851273ebc450578aaece14beadaf15
+  docChecksum: 9c66f872b40c1ef3d03d76c1e26ced55
   docVersion: v1
   speakeasyVersion: 1.680.12
   generationVersion: 2.788.15
@@ -95,7 +95,7 @@ trackedFiles:
     pristine_git_object: cd24e855212aaf70c29c5a6729c2c2b4f4dc19c1
   examples/resources/planetscale_postgres_branch/resource.tf:
     id: 24beddf6c03b
-    last_write_checksum: sha1:850d6cc080110c3e753b09cf87869bab771619c4
+    last_write_checksum: sha1:9ae3705456484ff5d5e77464a23ef89a41aae6db
     pristine_git_object: 1aaaded84375d807c480d8d164e2077279db6ac0
   examples/resources/planetscale_postgres_branch_role/import-by-string-id.tf:
     id: 481d444b7e2f
@@ -257,11 +257,11 @@ trackedFiles:
     pristine_git_object: ce4a668f6f884d6898c67aae59a7df6d67cd89e4
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:7d182297528ac1c4ea6720d021accafd7674dcb7
+    last_write_checksum: sha1:a16cd37dbc46cdf93a99e3d946d9a1edc5676e02
     pristine_git_object: 592d4c15815e79e1711aa2bc6a6ede61aec55eee
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:3b4796960cfdb2eeae65e71e52421a38ced6092d
+    last_write_checksum: sha1:e1cb0f3bed580d2738d010c13a7dc405f7bffe56
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
@@ -533,7 +533,7 @@ trackedFiles:
     pristine_git_object: 3e6e32903988c36678a86aca0e2c0001626c014e
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
-    last_write_checksum: sha1:045742c709d2bc6dd57f449a6648f282b6777a3c
+    last_write_checksum: sha1:a87443dd640f1a17bfa9a62ac230926e13461199
     pristine_git_object: fa7fcf53770dfab66ff0b41fb2abc57deae178e0
   internal/sdk/databasebranchpasswords.go:
     id: a545604b52ee
@@ -633,7 +633,7 @@ trackedFiles:
     pristine_git_object: 00fb90f9f8cb86916ff644e893dc5db362c004cf
   internal/sdk/models/operations/deletepostgresbranch.go:
     id: 556d141a1131
-    last_write_checksum: sha1:6a6d7006864dd96b5eee291224b70d94aa26e362
+    last_write_checksum: sha1:156cd598ff5ccaa769115773248bcbf78d38428e
     pristine_git_object: b8a9f3fe537dea60e156cb97855e3052870be2eb
   internal/sdk/models/operations/deleterole.go:
     id: 63abc80d4993

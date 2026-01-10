@@ -161,10 +161,34 @@ func (r *PostgresBranchResourceModel) ToOperationsDeletePostgresBranchRequest(ct
 	var branch string
 	branch = r.ID.ValueString()
 
+	body, bodyDiags := r.ToOperationsDeletePostgresBranchRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := operations.DeletePostgresBranchRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
+		Body:         body,
+	}
+
+	return &out, diags
+}
+
+func (r *PostgresBranchResourceModel) ToOperationsDeletePostgresBranchRequestBody(ctx context.Context) (*operations.DeletePostgresBranchRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	deletionProtection := new(bool)
+	if !r.DeletionProtection.IsUnknown() && !r.DeletionProtection.IsNull() {
+		*deletionProtection = r.DeletionProtection.ValueBool()
+	} else {
+		deletionProtection = nil
+	}
+	out := operations.DeletePostgresBranchRequestBody{
+		DeletionProtection: deletionProtection,
 	}
 
 	return &out, diags

@@ -65,6 +65,16 @@ actions:
       operationId: delete_postgres_branch
       summary: Delete a PostgreSQL branch
       x-speakeasy-entity-operation: PostgresBranch#delete
+      requestBody:
+        required: false
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                deletion_protection:
+                  type: boolean
+                  x-speakeasy-plan-validators: DeletionProtection
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter
