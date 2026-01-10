@@ -789,8 +789,14 @@ paths:
         | Organization | `write_databases` |
         | Database | `write_database` |
       x-speakeasy-entity-operation:
-        - PostgresBranch#create#3
-        - PostgresBranch#update
+        - entityOperation: PostgresBranch#create#3
+          options:
+            patch:
+              style: only-send-changed-attributes
+        - entityOperation: PostgresBranch#update
+          options:
+            patch:
+              style: only-send-changed-attributes
   /organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}:
     get:
       tags:

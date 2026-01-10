@@ -191,8 +191,21 @@ func (r *PostgresBranchResource) Configure(ctx context.Context, req resource.Con
 }
 
 func (r *PostgresBranchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *PostgresBranchResourceModel
-	var plan types.Object
+	var (
+		configData PostgresBranchResourceModel
+		data       PostgresBranchResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &PostgresBranchResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -208,7 +221,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreatePostgresBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsCreatePostgresBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -245,7 +258,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetPostgresBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -287,7 +300,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request2, request2Diags := data.ToOperationsUpdateBranchChangeRequestRequest(ctx)
+	request2, request2Diags := data.ToOperationsUpdateBranchChangeRequestRequest(ctx, opts)
 	resp.Diagnostics.Append(request2Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -324,7 +337,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request3, request3Diags := data.ToOperationsGetBranchChangeRequestRequest(ctx)
+	request3, request3Diags := data.ToOperationsGetBranchChangeRequestRequest(ctx, opts)
 	resp.Diagnostics.Append(request3Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -366,7 +379,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request4, request4Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	request4, request4Diags := data.ToOperationsGetPostgresBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(request4Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -426,7 +439,7 @@ func (r *PostgresBranchResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPostgresBranchRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -467,8 +480,29 @@ func (r *PostgresBranchResource) Read(ctx context.Context, req resource.ReadRequ
 }
 
 func (r *PostgresBranchResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *PostgresBranchResourceModel
-	var plan types.Object
+	var (
+		configData PostgresBranchResourceModel
+		data       PostgresBranchResourceModel
+		plan       types.Object
+		stateData  PostgresBranchResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &PostgresBranchResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -480,7 +514,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateBranchChangeRequestRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateBranchChangeRequestRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -517,7 +551,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetBranchChangeRequestRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetBranchChangeRequestRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -559,7 +593,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request2, request2Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	request2, request2Diags := data.ToOperationsGetPostgresBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(request2Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -619,7 +653,7 @@ func (r *PostgresBranchResource) Delete(ctx context.Context, req resource.Delete
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeletePostgresBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsDeletePostgresBranchRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

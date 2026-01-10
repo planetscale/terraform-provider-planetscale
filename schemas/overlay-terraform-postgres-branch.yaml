@@ -96,8 +96,14 @@ actions:
     description: API operation for managed resource update.
     update:
       x-speakeasy-entity-operation:
-        - PostgresBranch#create#3
-        - PostgresBranch#update
+        - entityOperation: PostgresBranch#create#3
+          options:
+            patch:
+              style: only-send-changed-attributes
+        - entityOperation: PostgresBranch#update
+          options:
+            patch:
+              style: only-send-changed-attributes
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get
     update:
