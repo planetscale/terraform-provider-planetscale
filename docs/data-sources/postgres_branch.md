@@ -34,6 +34,7 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `html_url` (String) Planetscale app URL for the branch
 - `id` (String) The ID of the branch
 - `name` (String) The name of the branch
+- `parent_branch` (String) The name of the parent branch from which the branch was created
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
 - `replicas` (Number) The number of replicas for the branch

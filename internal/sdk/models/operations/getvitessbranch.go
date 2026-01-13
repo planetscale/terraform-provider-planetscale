@@ -121,6 +121,8 @@ type GetVitessBranchResponseBody struct {
 	// Planetscale API URL for the branch
 	URL        string                    `json:"url"`
 	RegionData GetVitessBranchRegionData `json:"region"`
+	// The name of the parent branch from which the branch was created
+	ParentBranch string `json:"parent_branch"`
 }
 
 func (g *GetVitessBranchResponseBody) GetID() string {
@@ -198,6 +200,13 @@ func (g *GetVitessBranchResponseBody) GetRegionData() GetVitessBranchRegionData 
 		return GetVitessBranchRegionData{}
 	}
 	return g.RegionData
+}
+
+func (g *GetVitessBranchResponseBody) GetParentBranch() string {
+	if g == nil {
+		return ""
+	}
+	return g.ParentBranch
 }
 
 type GetVitessBranchResponse struct {

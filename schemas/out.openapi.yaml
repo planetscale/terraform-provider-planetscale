@@ -3298,6 +3298,9 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
+                  parent_branch:
+                    type: string
+                    description: The name of the parent branch from which the branch was created
                 additionalProperties: false
                 required:
                   - id
@@ -3447,6 +3450,9 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
+                  parent_branch:
+                    type: string
+                    description: The name of the parent branch from which the branch was created
                   replicas:
                     type: integer
                     description: The number of replicas for the branch
@@ -3622,6 +3628,9 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
+                  parent_branch:
+                    type: string
+                    description: The name of the parent branch from which the branch was created
                 additionalProperties: false
                 required:
                   - id
@@ -3851,6 +3860,9 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
+                  parent_branch:
+                    type: string
+                    description: The name of the parent branch from which the branch was created
                 additionalProperties: false
                 required:
                   - id
@@ -4006,6 +4018,9 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
+                  parent_branch:
+                    type: string
+                    description: The name of the parent branch from which the branch was created
                 additionalProperties: false
                 required:
                   - id
@@ -4184,6 +4199,9 @@ paths:
                       - slug
                       - current_default
                     x-speakeasy-name-override: region_data
+                  parent_branch:
+                    type: string
+                    description: The name of the parent branch from which the branch was created
                 additionalProperties: false
                 required:
                   - id

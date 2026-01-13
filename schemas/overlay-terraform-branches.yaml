@@ -85,13 +85,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.metal
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.parent_branch
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.parent_branch
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.parent_branch
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.private_edge_connectivity
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.private_edge_connectivity

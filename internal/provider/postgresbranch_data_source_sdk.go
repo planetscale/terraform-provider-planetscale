@@ -18,6 +18,7 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
+		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
