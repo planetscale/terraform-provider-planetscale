@@ -3520,6 +3520,166 @@ paths:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
+    patch:
+      tags:
+        - Database branches
+      operationId: update_postgres_branch
+      summary: Update a PostgreSQL branch
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+          x-speakeasy-match: id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_name:
+                  type: string
+                  description: The name to update the branch
+                  x-speakeasy-name-override: name
+              additionalProperties: false
+              required:
+                - new_name
+      responses:
+        "200":
+          description: Returns the updated branch
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the branch
+                  name:
+                    type: string
+                    description: The name of the branch
+                  state:
+                    type: string
+                    enum:
+                      - pending
+                      - sleep_in_progress
+                      - sleeping
+                      - awakening
+                      - ready
+                    description: The current state of the branch
+                  cluster_name:
+                    type: string
+                    description: The SKU representing the branch's cluster size
+                  ready:
+                    type: boolean
+                    description: Whether or not the branch is ready to serve queries
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    additionalProperties: false
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                  html_url:
+                    type: string
+                    description: Planetscale app URL for the branch
+                  url:
+                    type: string
+                    description: Planetscale API URL for the branch
+                  region:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the region
+                    additionalProperties: false
+                    required:
+                      - id
+                      - provider
+                      - enabled
+                      - public_ip_addresses
+                      - display_name
+                      - location
+                      - slug
+                      - current_default
+                    x-speakeasy-name-override: region_data
+                additionalProperties: false
+                required:
+                  - id
+                  - name
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - restore_checklist_completed_at
+                  - schema_last_updated_at
+                  - kind
+                  - mysql_address
+                  - mysql_edge_address
+                  - state
+                  - direct_vtgate
+                  - vtgate_size
+                  - vtgate_count
+                  - cluster_name
+                  - cluster_iops
+                  - ready
+                  - schema_ready
+                  - metal
+                  - production
+                  - safe_migrations
+                  - sharded
+                  - shard_count
+                  - stale_schema
+                  - actor
+                  - restored_from_branch
+                  - private_edge_connectivity
+                  - has_replicas
+                  - has_read_only_replicas
+                  - html_url
+                  - url
+                  - region
+                  - parent_branch
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_branches` |
+        | Database | `write_branches` |
+        | Branch | `write_branch` |
+      x-speakeasy-entity-operation: PostgresBranch#update#3
     delete:
       tags:
         - Database branches
@@ -3916,6 +4076,172 @@ paths:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
+    patch:
+      tags:
+        - Database branches
+      operationId: update_vitess_branch
+      summary: Update a Vitess branch
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+          x-speakeasy-match: id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_name:
+                  type: string
+                  description: The name to update the branch
+                  x-speakeasy-name-override: name
+              additionalProperties: false
+              required:
+                - new_name
+      responses:
+        "200":
+          description: Returns the updated branch
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the branch
+                  name:
+                    type: string
+                    description: The name of the branch
+                  mysql_address:
+                    type: string
+                    description: The MySQL address for the branch
+                  mysql_edge_address:
+                    type: string
+                    description: The address of the MySQL provider for the branch
+                  state:
+                    type: string
+                    enum:
+                      - pending
+                      - sleep_in_progress
+                      - sleeping
+                      - awakening
+                      - ready
+                    description: The current state of the branch
+                  cluster_name:
+                    type: string
+                    description: The SKU representing the branch's cluster size
+                  ready:
+                    type: boolean
+                    description: Whether or not the branch is ready to serve queries
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    additionalProperties: false
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                  html_url:
+                    type: string
+                    description: Planetscale app URL for the branch
+                  url:
+                    type: string
+                    description: Planetscale API URL for the branch
+                  region:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the region
+                    additionalProperties: false
+                    required:
+                      - id
+                      - provider
+                      - enabled
+                      - public_ip_addresses
+                      - display_name
+                      - location
+                      - slug
+                      - current_default
+                    x-speakeasy-name-override: region_data
+                additionalProperties: false
+                required:
+                  - id
+                  - name
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - restore_checklist_completed_at
+                  - schema_last_updated_at
+                  - kind
+                  - mysql_address
+                  - mysql_edge_address
+                  - state
+                  - direct_vtgate
+                  - vtgate_size
+                  - vtgate_count
+                  - cluster_name
+                  - cluster_iops
+                  - ready
+                  - schema_ready
+                  - metal
+                  - production
+                  - safe_migrations
+                  - sharded
+                  - shard_count
+                  - stale_schema
+                  - actor
+                  - restored_from_branch
+                  - private_edge_connectivity
+                  - has_replicas
+                  - has_read_only_replicas
+                  - html_url
+                  - url
+                  - region
+                  - parent_branch
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_branches` |
+        | Database | `write_branches` |
+        | Branch | `write_branch` |
+      x-speakeasy-entity-operation: VitessBranch#update
     delete:
       tags:
         - Database branches

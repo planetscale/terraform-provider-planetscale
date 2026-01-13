@@ -49,6 +49,26 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 	return diags
 }
 
+func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateVitessBranchResponseBody(ctx context.Context, resp *operations.UpdateVitessBranchResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.HTMLURL = types.StringValue(resp.HTMLURL)
+		r.ID = types.StringValue(resp.ID)
+		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
+		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
+		r.Name = types.StringValue(resp.Name)
+		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.State = types.StringValue(string(resp.State))
+		r.URL = types.StringValue(resp.URL)
+	}
+
+	return diags
+}
+
 func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequest(ctx context.Context) (*operations.CreateVitessBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -156,6 +176,48 @@ func (r *VitessBranchResourceModel) ToOperationsGetVitessBranchRequest(ctx conte
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateVitessBranchRequest(ctx context.Context) (*operations.UpdateVitessBranchRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsUpdateVitessBranchRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateVitessBranchRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateVitessBranchRequestBody(ctx context.Context) (*operations.UpdateVitessBranchRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var name string
+	name = r.Name.ValueString()
+
+	out := operations.UpdateVitessBranchRequestBody{
+		Name: name,
 	}
 
 	return &out, diags

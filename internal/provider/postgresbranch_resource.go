@@ -14,7 +14,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
@@ -109,12 +108,8 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Description: `For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `The name of the branch to create. Requires replacement if changed.`,
+				Required:    true,
+				Description: `The name of the branch to create`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
@@ -559,13 +554,13 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request2, request2Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	request2, request2Diags := data.ToOperationsUpdatePostgresBranchRequest(ctx)
 	resp.Diagnostics.Append(request2Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res2, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request2)
+	res2, err := r.client.DatabaseBranches.UpdatePostgresBranch(ctx, *request2)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res2 != nil && res2.RawResponse != nil {
@@ -585,7 +580,44 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res2.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePostgresBranchResponseBody(ctx, res2.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request3, request3Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	resp.Diagnostics.Append(request3Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res3, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request3)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res3 != nil && res3.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
+		}
+		return
+	}
+	if res3 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res3))
+		return
+	}
+	if res3.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res3.StatusCode), debugResponse(res3.RawResponse))
+		return
+	}
+	if !(res3.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res3.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res3.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

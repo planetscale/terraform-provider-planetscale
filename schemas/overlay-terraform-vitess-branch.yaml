@@ -38,6 +38,23 @@ actions:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].patch
+    description: Update branch metadata
+    update:
+      operationId: update_vitess_branch
+      summary: Update a Vitess branch
+      x-speakeasy-entity-operation: VitessBranch#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].patch.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].patch.requestBody.content['application/json'].schema.properties.new_name
+    description: Map new_name to name field from GET response
+    update:
+      x-speakeasy-name-override: name
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
     description: Update operation metadata for Vitess
     update:

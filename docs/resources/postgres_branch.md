@@ -32,7 +32,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 ### Required
 
 - `database` (String) The name of the database that owns this resource
-- `name` (String) The name of the branch to create. Requires replacement if changed.
+- `name` (String) The name of the branch to create
 - `organization` (String) The name of the organization that owns this resource
 - `parent_branch` (String) Parent branch. Requires replacement if changed.
 

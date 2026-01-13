@@ -58,6 +58,20 @@ actions:
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.mysql_edge_address
     remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.responses['200'].content['application/json'].schema.properties.mysql_address
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.responses['200'].content['application/json'].schema.properties.mysql_edge_address
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.parameters[?@.name == 'branch']
+    description: Add x-speakeasy-match to branch parameter
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.requestBody.content['application/json'].schema.properties.new_name
+    description: Map new_name to name field from GET response
+    update:
+      x-speakeasy-name-override: name
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].delete
     description: Update operation metadata for PostgreSQL
@@ -120,6 +134,13 @@ actions:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "completed"
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch
+    description: Update branch metadata
+    update:
+      operationId: update_postgres_branch
+      summary: Update a PostgreSQL branch
+      x-speakeasy-entity-operation: PostgresBranch#update#3
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content['application/json'].schema.properties.parameters
     remove: true

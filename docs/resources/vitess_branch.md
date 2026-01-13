@@ -30,9 +30,9 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 
 ### Required
 
-- `database` (String) The name of the database the branch belongs to. Requires replacement if changed.
-- `name` (String) The name of the branch to create. Requires replacement if changed.
-- `organization` (String) The name of the organization the branch belongs to. Requires replacement if changed.
+- `database` (String) The name of the database the branch belongs to
+- `name` (String) The name of the branch to create
+- `organization` (String) The name of the organization the branch belongs to
 - `parent_branch` (String) Parent branch. Requires replacement if changed.
 
 ### Optional
