@@ -91,7 +91,7 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.`,
+				Description: `The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.`,
 			},
 			"database": schema.StringAttribute{
 				Required: true,

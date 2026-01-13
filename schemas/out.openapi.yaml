@@ -4,7 +4,7 @@ info:
   description: |-
     Manage your PlanetScale resources with Terraform
   version: v1
-  x-copyright: "&copy; 2025 PlanetScale, Inc."
+  x-copyright: "&copy; 2026 PlanetScale, Inc."
 paths:
   /organizations:
     get:
@@ -2327,6 +2327,9 @@ paths:
             schema:
               type: object
               properties:
+                name:
+                  type: string
+                  description: The name of the role
                 ttl:
                   type: integer
                   description: Time to live in seconds
@@ -2526,6 +2529,8 @@ paths:
         | Branch | `manage_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRole#create
       x-speakeasy-entity-description: Manage a PlanetScale database role.
+  /organizations/{organization}/databases/{database}/branches/{branch}/roles/default: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/roles/reset-default: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}:
     get:
       tags:
@@ -3221,7 +3226,7 @@ paths:
                   description: Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases.
                 cluster_size:
                   type: string
-                  description: "The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800"
+                  description: "The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800"
                 major_version:
                   type: string
                   description: For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
@@ -3611,7 +3616,7 @@ paths:
                   description: If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
                 cluster_size:
                   type: string
-                  description: "The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800"
+                  description: "The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800"
               additionalProperties: false
               required:
                 - name
@@ -4559,6 +4564,9 @@ tags:
   - name: Cluster extensions
     description: |2
                 Resources for managing cluster extension configuration.
+  - name: Branch log signatures
+    description: |2
+                Resources for retrieving branch log access signatures.
   - name: Cluster parameters
     description: |2
                 Resources for managing cluster configuration parameters.

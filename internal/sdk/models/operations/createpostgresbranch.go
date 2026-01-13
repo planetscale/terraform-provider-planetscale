@@ -20,7 +20,7 @@ type CreatePostgresBranchRequestBody struct {
 	Region *string `json:"region,omitzero"`
 	// Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases.
 	RestorePoint *string `json:"restore_point,omitzero"`
-	// The database cluster size is required if a backup_id is provided. Options: PS_10, PS_20, PS_40, ..., PS_2800
+	// The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800
 	ClusterSize *string `json:"cluster_size,omitzero"`
 	// For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
 	MajorVersion *string `json:"major_version,omitzero"`

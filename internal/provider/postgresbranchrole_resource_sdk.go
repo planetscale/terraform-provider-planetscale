@@ -158,6 +158,12 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequest(ctx cont
 func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx context.Context) (*operations.CreateRoleRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
 	ttl := new(int64)
 	if !r.TTL.IsUnknown() && !r.TTL.IsNull() {
 		*ttl = r.TTL.ValueInt64()
@@ -169,6 +175,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx 
 		inheritedRoles = append(inheritedRoles, operations.InheritedRoleRequest(inheritedRolesItem.ValueString()))
 	}
 	out := operations.CreateRoleRequestBody{
+		Name:           name,
 		TTL:            ttl,
 		InheritedRoles: inheritedRoles,
 	}

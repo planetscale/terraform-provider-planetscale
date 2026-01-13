@@ -69,6 +69,8 @@ func (e *InheritedRoleRequest) UnmarshalJSON(data []byte) error {
 }
 
 type CreateRoleRequestBody struct {
+	// The name of the role
+	Name *string `json:"name,omitzero"`
 	// Time to live in seconds
 	TTL *int64 `json:"ttl,omitzero"`
 	// Roles to inherit from
@@ -84,6 +86,13 @@ func (c *CreateRoleRequestBody) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (c *CreateRoleRequestBody) GetName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Name
 }
 
 func (c *CreateRoleRequestBody) GetTTL() *int64 {

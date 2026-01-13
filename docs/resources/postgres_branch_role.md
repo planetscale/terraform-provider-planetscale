@@ -19,6 +19,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
   inherited_roles = [
     "pg_create_subscription"
   ]
+  name         = "...my_name..."
   organization = "...my_organization..."
   successor    = "...my_successor..."
   ttl          = 1
@@ -37,6 +38,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 ### Optional
 
 - `inherited_roles` (Set of String) Roles to inherit from. Requires replacement if changed.
+- `name` (String) The name of the role
 - `successor` (String) The optional role to reassign ownership to before dropping
 - `ttl` (Number) Time to live in seconds. Requires replacement if changed.
 
@@ -55,7 +57,6 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 - `expired` (Boolean) True if the credentials are expired
 - `expires_at` (String) When the role expires
 - `id` (String) The ID of the role
-- `name` (String) The new name of the role
 - `password` (String, Sensitive) The plain text password, available only after create
 - `private_access_host_url` (String) The database connection string for private connections
 - `private_connection_service_name` (String) The service name to set up private connectivity

@@ -4,6 +4,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
   inherited_roles = [
     "pg_create_subscription"
   ]
+  name         = "...my_name..."
   organization = "...my_organization..."
   successor    = "...my_successor..."
   ttl          = 1
