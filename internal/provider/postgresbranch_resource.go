@@ -12,14 +12,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	custom_boolplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
-	custom_boolvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/boolvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -98,8 +97,8 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"deletion_protection": schema.BoolAttribute{
 				Optional: true,
-				Validators: []validator.Bool{
-					custom_boolvalidators.DeletionProtection(),
+				PlanModifiers: []planmodifier.Bool{
+					custom_boolplanmodifier.DeletionProtection(),
 				},
 			},
 			"html_url": schema.StringAttribute{

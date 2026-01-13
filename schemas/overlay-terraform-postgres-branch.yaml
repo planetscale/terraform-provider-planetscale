@@ -74,7 +74,7 @@ actions:
               properties:
                 deletion_protection:
                   type: boolean
-                  x-speakeasy-plan-validators: DeletionProtection
+                  x-speakeasy-plan-modifiers: DeletionProtection
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter

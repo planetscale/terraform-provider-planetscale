@@ -3576,7 +3576,7 @@ paths:
               properties:
                 deletion_protection:
                   type: boolean
-                  x-speakeasy-plan-validators: DeletionProtection
+                  x-speakeasy-plan-modifiers: DeletionProtection
   /organizations/{organization}/databases/{database}/branches#vitess:
     post:
       tags:
