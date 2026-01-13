@@ -14,15 +14,16 @@ PostgresBranch Resource
 
 ```terraform
 resource "planetscale_postgres_branch" "my_postgresbranch" {
-  backup_id     = "...my_backup_id..."
-  cluster_size  = "...my_cluster_size..."
-  database      = "...my_database..."
-  major_version = "...my_major_version..."
-  name          = "...my_name..."
-  organization  = "...my_organization..."
-  parent_branch = "...my_parent_branch..."
-  region        = "...my_region..."
-  restore_point = "...my_restore_point..."
+  backup_id           = "...my_backup_id..."
+  cluster_size        = "...my_cluster_size..."
+  database            = "...my_database..."
+  deletion_protection = false
+  major_version       = "...my_major_version..."
+  name                = "...my_name..."
+  organization        = "...my_organization..."
+  parent_branch       = "...my_parent_branch..."
+  region              = "...my_region..."
+  restore_point       = "...my_restore_point..."
 }
 ```
 
@@ -40,6 +41,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 
 - `backup_id` (String) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
 - `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+- `deletion_protection` (Boolean)
 - `major_version` (String) For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
 - `restore_point` (String) Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.
