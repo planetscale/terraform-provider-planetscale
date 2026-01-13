@@ -178,7 +178,8 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
-				Description: `The new name of the role`,
+				Optional:    true,
+				Description: `The name of the role`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
