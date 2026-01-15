@@ -49,6 +49,8 @@ terraform:
   enableOperationServers: false
   enableTypeDeduplication: false
   environmentVariables:
+    - env: PLANETSCALE_SERVER_URL
+      providerAttribute: server_url
     - env: PLANETSCALE_SERVICE_TOKEN
       providerAttribute: service_token
     - env: PLANETSCALE_SERVICE_TOKEN_ID
