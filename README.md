@@ -39,7 +39,7 @@ terraform {
 }
 
 provider "planetscale" {
-  # Configuration options
+  server_url = "..." # Optional
 }
 ```
 <!-- End Installation [installation] -->
