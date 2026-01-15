@@ -3214,7 +3214,7 @@ paths:
                   description: The name of the branch to create
                 parent_branch:
                   type: string
-                  description: Parent branch
+                  description: The name of the parent branch. Defaults to the database's default branch if not provided.
                 backup_id:
                   type: string
                   description: If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
@@ -3233,7 +3233,6 @@ paths:
               additionalProperties: false
               required:
                 - name
-                - parent_branch
       responses:
         "201":
           description: Returns the created branch
@@ -3771,7 +3770,7 @@ paths:
                   description: The name of the branch to create
                 parent_branch:
                   type: string
-                  description: Parent branch
+                  description: The name of the parent branch. Defaults to the database's default branch if not provided.
                 backup_id:
                   type: string
                   description: If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
@@ -3789,7 +3788,6 @@ paths:
               additionalProperties: false
               required:
                 - name
-                - parent_branch
       responses:
         "201":
           description: Returns the created branch

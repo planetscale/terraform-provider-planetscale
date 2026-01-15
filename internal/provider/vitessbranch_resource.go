@@ -122,12 +122,13 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `The name of the organization the branch belongs to`,
 			},
 			"parent_branch": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Parent branch. Requires replacement if changed.`,
+				Description: `The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,

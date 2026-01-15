@@ -117,12 +117,13 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Description: `The name of the organization that owns this resource`,
 			},
 			"parent_branch": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Parent branch. Requires replacement if changed.`,
+				Description: `The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
