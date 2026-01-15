@@ -38,6 +38,7 @@ type VitessBranchDataSourceModel struct {
 	MysqlEdgeAddress types.String                      `tfsdk:"mysql_edge_address"`
 	Name             types.String                      `tfsdk:"name"`
 	Organization     types.String                      `tfsdk:"organization"`
+	ParentBranch     types.String                      `tfsdk:"parent_branch"`
 	Ready            types.Bool                        `tfsdk:"ready"`
 	RegionData       tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
 	State            types.String                      `tfsdk:"state"`
@@ -95,6 +96,10 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the branch belongs to`,
+			},
+			"parent_branch": schema.StringAttribute{
+				Computed:    true,
+				Description: `The name of the parent branch from which the branch was created`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,

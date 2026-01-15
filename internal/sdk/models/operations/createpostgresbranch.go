@@ -193,6 +193,8 @@ type CreatePostgresBranchResponseBody struct {
 	// Planetscale API URL for the branch
 	URL        string                         `json:"url"`
 	RegionData CreatePostgresBranchRegionData `json:"region"`
+	// The name of the parent branch from which the branch was created
+	ParentBranch string `json:"parent_branch"`
 }
 
 func (c *CreatePostgresBranchResponseBody) GetID() string {
@@ -256,6 +258,13 @@ func (c *CreatePostgresBranchResponseBody) GetRegionData() CreatePostgresBranchR
 		return CreatePostgresBranchRegionData{}
 	}
 	return c.RegionData
+}
+
+func (c *CreatePostgresBranchResponseBody) GetParentBranch() string {
+	if c == nil {
+		return ""
+	}
+	return c.ParentBranch
 }
 
 type CreatePostgresBranchResponse struct {

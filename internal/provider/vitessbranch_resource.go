@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
@@ -124,6 +125,7 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Parent branch. Requires replacement if changed.`,
 			},

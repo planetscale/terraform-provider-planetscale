@@ -36,6 +36,7 @@ type PostgresBranchDataSourceModel struct {
 	ID           types.String                        `tfsdk:"id"`
 	Name         types.String                        `tfsdk:"name"`
 	Organization types.String                        `tfsdk:"organization"`
+	ParentBranch types.String                        `tfsdk:"parent_branch"`
 	Ready        types.Bool                          `tfsdk:"ready"`
 	RegionData   tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
 	Replicas     types.Int64                         `tfsdk:"replicas"`
@@ -86,6 +87,10 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the branch belongs to`,
+			},
+			"parent_branch": schema.StringAttribute{
+				Computed:    true,
+				Description: `The name of the parent branch from which the branch was created`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,

@@ -36,6 +36,7 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `name` (String) The name of the branch
+- `parent_branch` (String) The name of the parent branch from which the branch was created
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
 - `state` (String) The current state of the branch

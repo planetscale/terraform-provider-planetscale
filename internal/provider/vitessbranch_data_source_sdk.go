@@ -20,6 +20,7 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
+		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
