@@ -13,6 +13,7 @@ generation:
     requestResponseComponentNamesFeb2024: true
     securityFeb2025: true
     sharedErrorComponentsApr2025: true
+    sharedNestedComponentsJan2026: false
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
@@ -34,6 +35,7 @@ terraform:
   additionalDependencies:
     github.com/hashicorp/terraform-plugin-testing: v1.13.3
   additionalEphemeralResources: []
+  additionalListResources: []
   additionalProviderAttributes:
     httpHeaders: ""
     tlsSkipVerify: ""
