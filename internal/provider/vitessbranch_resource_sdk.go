@@ -103,9 +103,12 @@ func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequestBody(ct
 	var name string
 	name = r.Name.ValueString()
 
-	var parentBranch string
-	parentBranch = r.ParentBranch.ValueString()
-
+	parentBranch := new(string)
+	if !r.ParentBranch.IsUnknown() && !r.ParentBranch.IsNull() {
+		*parentBranch = r.ParentBranch.ValueString()
+	} else {
+		parentBranch = nil
+	}
 	backupID := new(string)
 	if !r.BackupID.IsUnknown() && !r.BackupID.IsNull() {
 		*backupID = r.BackupID.ValueString()

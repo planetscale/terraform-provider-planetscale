@@ -12,8 +12,8 @@ import (
 type CreatePostgresBranchRequestBody struct {
 	// The name of the branch to create
 	Name string `json:"name"`
-	// Parent branch
-	ParentBranch string `json:"parent_branch"`
+	// The name of the parent branch. Defaults to the database's default branch if not provided.
+	ParentBranch *string `json:"parent_branch,omitzero"`
 	// If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
 	BackupID *string `json:"backup_id,omitzero"`
 	// The region to create the branch in. If not provided, the branch will be created in the default region for its database.
@@ -33,9 +33,9 @@ func (c *CreatePostgresBranchRequestBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreatePostgresBranchRequestBody) GetParentBranch() string {
+func (c *CreatePostgresBranchRequestBody) GetParentBranch() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ParentBranch
 }

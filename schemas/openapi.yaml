@@ -2357,7 +2357,7 @@ paths:
                   description: The name of the branch to create
                 parent_branch:
                   type: string
-                  description: Parent branch
+                  description: The name of the parent branch. Defaults to the database's default branch if not provided.
                 backup_id:
                   type: string
                   description: If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
@@ -2381,7 +2381,6 @@ paths:
               additionalProperties: false
               required:
                 - name
-                - parent_branch
       responses:
         "201":
           description: Returns the created branch
@@ -32985,6 +32984,9 @@ paths:
                 name:
                   type: string
                   description: The name of the service token
+                ttl:
+                  type: integer
+                  description: Time to live (in seconds) for the service token. The token will be invalid when TTL has passed
               additionalProperties: false
       responses:
         "200":

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 5ff8d9590012a46ed2c5205d5a9cc191
+  docChecksum: e9a697f3c02b7a3f98c86d45ab7099ca
   docVersion: v1
   speakeasyVersion: 1.685.3
   generationVersion: 2.795.8
@@ -257,11 +257,11 @@ trackedFiles:
     pristine_git_object: ce4a668f6f884d6898c67aae59a7df6d67cd89e4
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:126accacf74029357d29027b50af6d23e645c751
+    last_write_checksum: sha1:bd041d7fdba0be26751d706304a870cad58c77d7
     pristine_git_object: 592d4c15815e79e1711aa2bc6a6ede61aec55eee
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:5c869e1276e89a0e4816db7a07067c0033eca05a
+    last_write_checksum: sha1:82815b7cb0b8d1b523fbd734b9ba8b57bc16bbe4
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
@@ -493,11 +493,11 @@ trackedFiles:
     pristine_git_object: 2557ef7bbc5e3edd5578829c061609c7b7a02504
   internal/provider/vitessbranch_resource.go:
     id: 253814c7c29a
-    last_write_checksum: sha1:9903b41c72f3d3ade1d61bb29f40f1c0134b72c6
+    last_write_checksum: sha1:ab2a9bf30910065b7ac401847fa14e9e50e4fadf
     pristine_git_object: 3fa960d342bf6de4878019abd742d68bc1517dba
   internal/provider/vitessbranch_resource_sdk.go:
     id: b7741edc0d6e
-    last_write_checksum: sha1:69c3a18163f077533fba9509d8d1de32c6506686
+    last_write_checksum: sha1:77ab5a7f83336e4e625b610d11d8f67958687e23
     pristine_git_object: ae27395a04f18ff08bf466c08de8fd0ec47bd226
   internal/provider/vitessbranchpassword_data_source.go:
     id: e6cd1d778135
@@ -617,7 +617,7 @@ trackedFiles:
     pristine_git_object: e84cf733d521e8be177285c0496c8540f011c362
   internal/sdk/models/operations/createpostgresbranch.go:
     id: 952731e87008
-    last_write_checksum: sha1:7d9920e592e8504148713da2587bccd0e22a44f7
+    last_write_checksum: sha1:9eb8e80abc7a57ad1b3b9ab23a928d738095551e
     pristine_git_object: 70b0fa5325c1ee8e97b19848d8c365d2b713f0e6
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
@@ -625,7 +625,7 @@ trackedFiles:
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
-    last_write_checksum: sha1:7247ab79a2b7ed3a3af6a01de66b61fc499a3361
+    last_write_checksum: sha1:992bd08e3a5c003889e65f7bcd77ad2d9ed1034e
     pristine_git_object: 4164e962f94db2ef10a0ac3446371930522a0d05
   internal/sdk/models/operations/deletepassword.go:
     id: 491914016b46
