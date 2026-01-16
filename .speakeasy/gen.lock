@@ -6,7 +6,7 @@ management:
   speakeasyVersion: 1.685.3
   generationVersion: 2.795.8
   releaseVersion: 1.0.0
-  configChecksum: 978e758896b76016425fc6769f59af7e
+  configChecksum: 5f868a9908db3890a75ab1559d9a3bd5
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
@@ -83,7 +83,7 @@ trackedFiles:
     pristine_git_object: 7ab5ffb6c575475282a87565f6ee7c8403074b63
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:19698b4a69fcc2d4aed702bb56e8e3f2a8700443
+    last_write_checksum: sha1:f008ea5aeb85e5d9365c8061ced10ebdb48b83d1
     pristine_git_object: 66664be2637146405147ef9bc663d13b453ce3f8
   examples/resources/planetscale_postgres_branch/import-by-string-id.tf:
     id: 84ea6cbb56ce
@@ -289,7 +289,7 @@ trackedFiles:
     pristine_git_object: 742cc9f5207b5c30ed21b0aae674ac8302c237e8
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:cb30f276fc80c93782ae17418b8bf688492cf6dd
+    last_write_checksum: sha1:7f85be884bd143c19cc0ef712cbcef4f1e7d53ba
     pristine_git_object: d5212c5b98f75bdedecef2af4ef7079732ac749d
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2

@@ -39,7 +39,7 @@ terraform {
 }
 
 provider "planetscale" {
-  server_url = "..." # Optional
+  server_url = "..." # Optional - can use PLANETSCALE_SERVER_URL environment variable
 }
 ```
 <!-- End Installation [installation] -->

@@ -72,6 +72,10 @@ func (p *PlanetscaleProvider) Configure(ctx context.Context, req provider.Config
 
 	serverUrl := data.ServerURL.ValueString()
 
+	if serverUrl == "" && os.Getenv("PLANETSCALE_SERVER_URL") != "" {
+		serverUrl = os.Getenv("PLANETSCALE_SERVER_URL")
+	}
+
 	if serverUrl == "" {
 		serverUrl = "https://api.planetscale.com/v1"
 	}
