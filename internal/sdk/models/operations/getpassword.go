@@ -256,6 +256,8 @@ type GetPasswordResponseBody struct {
 	Expired bool `json:"expired"`
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
 	DirectVtgate bool `json:"direct_vtgate"`
+	// The list of hosts in each availability zone providing direct access to a vtgate
+	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
 	TTLSeconds int64 `json:"ttl_seconds"`
 	// The host URL for the password
@@ -268,6 +270,8 @@ type GetPasswordResponseBody struct {
 	Region                 GetPasswordRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
+	// The plain text password, available only after create
+	PlainText string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`
 	// Whether or not the password can be renewed
@@ -345,6 +349,13 @@ func (g *GetPasswordResponseBody) GetDirectVtgate() bool {
 	return g.DirectVtgate
 }
 
+func (g *GetPasswordResponseBody) GetDirectVtgateAddresses() []string {
+	if g == nil {
+		return []string{}
+	}
+	return g.DirectVtgateAddresses
+}
+
 func (g *GetPasswordResponseBody) GetTTLSeconds() int64 {
 	if g == nil {
 		return 0
@@ -392,6 +403,13 @@ func (g *GetPasswordResponseBody) GetUsername() string {
 		return ""
 	}
 	return g.Username
+}
+
+func (g *GetPasswordResponseBody) GetPlainText() string {
+	if g == nil {
+		return ""
+	}
+	return g.PlainText
 }
 
 func (g *GetPasswordResponseBody) GetReplica() bool {

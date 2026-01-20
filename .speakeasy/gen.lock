@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: e9a697f3c02b7a3f98c86d45ab7099ca
+  docChecksum: 1f5d331cadd98efabf45879d5ea9a465
   docVersion: v1
   speakeasyVersion: 1.685.3
   generationVersion: 2.795.8
@@ -19,7 +19,6 @@ features:
     customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
-    ignores: 2.82.0
     nameOverrides: 2.81.3
     operationPolling: 0.3.0
     pagination: 2.83.5
@@ -501,19 +500,19 @@ trackedFiles:
     pristine_git_object: ae27395a04f18ff08bf466c08de8fd0ec47bd226
   internal/provider/vitessbranchpassword_data_source.go:
     id: e6cd1d778135
-    last_write_checksum: sha1:830fef698444e2ab91ad2d2d19979abed54cce30
+    last_write_checksum: sha1:0f8540ba83e74d854990f4990cdb9900f5267792
     pristine_git_object: b53803d419b34e7e8b6a23eb11a26c2e4f1451c8
   internal/provider/vitessbranchpassword_data_source_sdk.go:
     id: 0d1494ca575a
-    last_write_checksum: sha1:33d574058a523259804133e6eb35be2b7776888a
+    last_write_checksum: sha1:c693fe6791abd056305ef9676f3e8a51979b749c
     pristine_git_object: 519fc7aa0a1ea88cfa86f3920d00761f6bb64f34
   internal/provider/vitessbranchpassword_resource.go:
     id: 710ba98102cd
-    last_write_checksum: sha1:b3ff5860ffb3e67ad4657f3ad3a3baf36ccde72c
+    last_write_checksum: sha1:abc8b72aa7faa34fd7fe00a13ee341fb1392702d
     pristine_git_object: fdab6351ed82770730113ba367ed6a710cd6032d
   internal/provider/vitessbranchpassword_resource_sdk.go:
     id: 6c5a3a0b782d
-    last_write_checksum: sha1:2a66898b7575e838265c94257bd3b2b0e69e20db
+    last_write_checksum: sha1:dca09d17c00ac732977c1e96f6cbefcb9b884fac
     pristine_git_object: b2cf7694a3ea9aacd97e42c0ed8cf331d1b234d7
   internal/provider/vitessbranchpasswords_data_source.go:
     id: fd6f3533fe05
@@ -655,7 +654,7 @@ trackedFiles:
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
   internal/sdk/models/operations/getpassword.go:
     id: 4285e7863442
-    last_write_checksum: sha1:9d0084322edbcfedf3ad58ad9f8c9b9521480fc0
+    last_write_checksum: sha1:e7e6f6e6ca4394c2d937d8a9ee6cd1f028a33f84
     pristine_git_object: a4c11b32082c9f2f4f56a644c50a8da506fe64e7
   internal/sdk/models/operations/getpostgresbranch.go:
     id: e4f92de0a1c5
@@ -1420,7 +1419,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>"], "created_at": "1720525255008", "deleted_at": "<value>", "expires_at": "1748232802119", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "ttl_seconds": 8963.89, "access_host_url": "https://athletic-cemetery.name", "access_host_regional_url": "https://young-tributary.com", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Mae.Murray61", "avatar_url": "https://thick-case.com"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Lafayette.Rogahn76", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Burley.Johnston", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>"], "created_at": "1720525255008", "deleted_at": "<value>", "expires_at": "1748232802119", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "direct_vtgate_addresses": ["<value 1>", "<value 2>", "<value 3>"], "ttl_seconds": 8963.89, "access_host_url": "https://athletic-cemetery.name", "access_host_regional_url": "https://young-tributary.com", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Mae.Murray61", "avatar_url": "https://thick-case.com"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Lafayette.Rogahn76", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Burley.Johnston", "plain_text": "<value>", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
   update_password:
     speakeasy-default-update-password:
       parameters:
