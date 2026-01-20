@@ -321,8 +321,6 @@ type UpdatePasswordResponseBody struct {
 	Region                 UpdatePasswordRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
-	// The plain text password, available only after create
-	PlainText string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`
 	// Whether or not the password can be renewed
@@ -454,13 +452,6 @@ func (u *UpdatePasswordResponseBody) GetUsername() string {
 		return ""
 	}
 	return u.Username
-}
-
-func (u *UpdatePasswordResponseBody) GetPlainText() string {
-	if u == nil {
-		return ""
-	}
-	return u.PlainText
 }
 
 func (u *UpdatePasswordResponseBody) GetReplica() bool {

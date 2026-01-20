@@ -43,7 +43,6 @@ func (r *VitessBranchPasswordDataSourceModel) RefreshFromOperationsGetPasswordRe
 		r.ID = types.StringValue(resp.ID)
 		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
-		r.PlainText = types.StringValue(resp.PlainText)
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
 		r.Region.DisplayName = types.StringValue(resp.Region.DisplayName)
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)
