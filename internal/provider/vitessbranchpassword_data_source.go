@@ -40,12 +40,14 @@ type VitessBranchPasswordDataSourceModel struct {
 	DatabaseBranch         tfTypes.GetPasswordDatabaseBranch `tfsdk:"database_branch"`
 	DeletedAt              types.String                      `tfsdk:"deleted_at"`
 	DirectVtgate           types.Bool                        `tfsdk:"direct_vtgate"`
+	DirectVtgateAddresses  []types.String                    `tfsdk:"direct_vtgate_addresses"`
 	Expired                types.Bool                        `tfsdk:"expired"`
 	ExpiresAt              types.String                      `tfsdk:"expires_at"`
 	ID                     types.String                      `tfsdk:"id"`
 	LastUsedAt             types.String                      `tfsdk:"last_used_at"`
 	Name                   types.String                      `tfsdk:"name"`
 	Organization           types.String                      `tfsdk:"organization"`
+	PlainText              types.String                      `tfsdk:"plain_text"`
 	Region                 tfTypes.GetPasswordRegion         `tfsdk:"region"`
 	Renewable              types.Bool                        `tfsdk:"renewable"`
 	Replica                types.Bool                        `tfsdk:"replica"`
@@ -145,6 +147,11 @@ func (r *VitessBranchPasswordDataSource) Schema(ctx context.Context, req datasou
 				Computed:    true,
 				Description: `True if the credentials connect directly to a vtgate, bypassing load balancers`,
 			},
+			"direct_vtgate_addresses": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `The list of hosts in each availability zone providing direct access to a vtgate`,
+			},
 			"expired": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if the credentials are expired`,
@@ -168,6 +175,10 @@ func (r *VitessBranchPasswordDataSource) Schema(ctx context.Context, req datasou
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the password belongs to`,
+			},
+			"plain_text": schema.StringAttribute{
+				Computed:    true,
+				Description: `The plain text password, available only after create`,
 			},
 			"region": schema.SingleNestedAttribute{
 				Computed: true,
