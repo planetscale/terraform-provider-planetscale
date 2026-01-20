@@ -16,6 +16,8 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
 	databaseName := "testacc-vitess"
+	branchNameOriginal := "test"
+	branchNameRenamed := "test-renamed"
 	resourceAddress := "planetscale_vitess_branch.test"
 
 	resource.Test(t, resource.TestCase{
@@ -27,6 +29,7 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"database_name": config.StringVariable(databaseName),
 					"organization":  config.StringVariable(testAccOrg),
+					"branch_name":   config.StringVariable(branchNameOriginal),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -57,7 +60,7 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("name"),
-						knownvalue.StringExact("test"),
+						knownvalue.StringExact(branchNameOriginal),
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
@@ -81,6 +84,22 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"organization":  config.StringVariable(testAccOrg),
 					"database_name": config.StringVariable(databaseName),
+					"branch_name":   config.StringVariable(branchNameRenamed),
+				},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("name"),
+						knownvalue.StringExact(branchNameRenamed),
+					),
+				},
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization":  config.StringVariable(testAccOrg),
+					"database_name": config.StringVariable(databaseName),
+					"branch_name":   config.StringVariable(branchNameRenamed),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
