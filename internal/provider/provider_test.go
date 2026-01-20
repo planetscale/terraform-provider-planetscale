@@ -1,8 +1,6 @@
 package provider
 
 import (
-	"fmt"
-	"math/rand"
 	"os"
 	"testing"
 
@@ -29,9 +27,4 @@ func testAccPreCheck(t *testing.T) {
 	}
 
 	t.Fatal("Both PLANETSCALE_SERVICE_TOKEN and PLANETSCALE_SERVICE_TOKEN_ID must be set for acceptance tests")
-}
-
-// randomWithPrefix generates a random string with the given prefix.
-func randomWithPrefix(prefix string) string {
-	return fmt.Sprintf("%s-%d", prefix, rand.Intn(1000000))
 }
