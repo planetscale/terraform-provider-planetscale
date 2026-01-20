@@ -258,7 +258,7 @@ func (r *DatabaseVitessDataSource) Schema(ctx context.Context, req datasource.Sc
 						Computed:    true,
 						Description: `Provider for the region (ex. AWS)`,
 					},
-					"public_ip_addresses": schema.ListAttribute{
+					"public_ip_addresses": schema.SetAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Public IP addresses for the region`,

@@ -6,6 +6,7 @@ sources:
             - location: schemas/openapi.yaml
         overlays:
             - location: schemas/overlay-terraform.yaml
+            - location: schemas/overlay-terraform-string-arrays-as-sets.yaml
 
             - location: schemas/overlay-terraform-branches.yaml
             - location: schemas/overlay-terraform-postgres-branch.yaml

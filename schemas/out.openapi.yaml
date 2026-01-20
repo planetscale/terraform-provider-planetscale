@@ -466,6 +466,7 @@ paths:
                                 type: string
                               type: array
                               description: Public IP addresses for the region
+                              format: set
                             display_name:
                               type: string
                               description: Name of the region
@@ -1041,6 +1042,7 @@ paths:
                             type: string
                           type: array
                           description: List of IP addresses or CIDR ranges that can use this password
+                          format: set
                         created_at:
                           type: string
                           description: When the password was created
@@ -1064,6 +1066,7 @@ paths:
                             type: string
                           type: array
                           description: The list of hosts in each availability zone providing direct access to a vtgate
+                          format: set
                         ttl_seconds:
                           type: integer
                           description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -1078,6 +1081,7 @@ paths:
                             type: string
                           type: array
                           description: The read-only replica host URLs
+                          format: set
                         actor:
                           type: object
                           properties:
@@ -1112,6 +1116,7 @@ paths:
                                 type: string
                               type: array
                               description: Public IP addresses for the region
+                              format: set
                             display_name:
                               type: string
                               description: Name of the region
@@ -1287,6 +1292,7 @@ paths:
                   items:
                     type: string
                   description: List of IP addresses or CIDR ranges that can use this password
+                  format: set
                 direct_vtgate:
                   type: boolean
                   description: Whether the password connects directly to a VTGate
@@ -1319,6 +1325,7 @@ paths:
                       type: string
                     type: array
                     description: List of IP addresses or CIDR ranges that can use this password
+                    format: set
                   created_at:
                     type: string
                     description: When the password was created
@@ -1342,6 +1349,7 @@ paths:
                       type: string
                     type: array
                     description: The list of hosts in each availability zone providing direct access to a vtgate
+                    format: set
                   ttl_seconds:
                     type: integer
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -1356,6 +1364,7 @@ paths:
                       type: string
                     type: array
                     description: The read-only replica host URLs
+                    format: set
                   actor:
                     type: object
                     properties:
@@ -1390,6 +1399,7 @@ paths:
                           type: string
                         type: array
                         description: Public IP addresses for the region
+                        format: set
                       display_name:
                         type: string
                         description: Name of the region
@@ -1559,6 +1569,7 @@ paths:
                       type: string
                     type: array
                     description: List of IP addresses or CIDR ranges that can use this password
+                    format: set
                   created_at:
                     type: string
                     description: When the password was created
@@ -1582,6 +1593,7 @@ paths:
                       type: string
                     type: array
                     description: The list of hosts in each availability zone providing direct access to a vtgate
+                    format: set
                   ttl_seconds:
                     type: integer
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -1596,6 +1608,7 @@ paths:
                       type: string
                     type: array
                     description: The read-only replica host URLs
+                    format: set
                   actor:
                     type: object
                     properties:
@@ -1630,6 +1643,7 @@ paths:
                           type: string
                         type: array
                         description: Public IP addresses for the region
+                        format: set
                       display_name:
                         type: string
                         description: Name of the region
@@ -1783,6 +1797,7 @@ paths:
                   items:
                     type: string
                   description: List of IP addresses or CIDR ranges that can use this password
+                  format: set
               additionalProperties: false
       responses:
         "200":
@@ -1812,6 +1827,7 @@ paths:
                       type: string
                     type: array
                     description: List of IP addresses or CIDR ranges that can use this password
+                    format: set
                   created_at:
                     type: string
                     description: When the password was created
@@ -1835,6 +1851,7 @@ paths:
                       type: string
                     type: array
                     description: The list of hosts in each availability zone providing direct access to a vtgate
+                    format: set
                   ttl_seconds:
                     type: integer
                     description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -1849,6 +1866,7 @@ paths:
                       type: string
                     type: array
                     description: The read-only replica host URLs
+                    format: set
                   actor:
                     type: object
                     properties:
@@ -1883,6 +1901,7 @@ paths:
                           type: string
                         type: array
                         description: Public IP addresses for the region
+                        format: set
                       display_name:
                         type: string
                         description: Name of the region
@@ -4440,6 +4459,7 @@ paths:
                           type: string
                         type: array
                         description: Public IP addresses for the region
+                        format: set
                       display_name:
                         type: string
                         description: Name of the region
@@ -4740,6 +4760,7 @@ paths:
                           type: string
                         type: array
                         description: Public IP addresses for the region
+                        format: set
                       display_name:
                         type: string
                         description: Name of the region
@@ -6221,6 +6242,7 @@ components:
                       type: string
                     type: array
                     description: Public IP addresses for the region
+                    format: set
                   display_name:
                     type: string
                     description: Name of the region
@@ -6447,6 +6469,7 @@ components:
                 type: string
               type: array
               description: Public IP addresses for the region
+              format: set
             display_name:
               type: string
               description: Name of the region
@@ -6560,11 +6583,13 @@ components:
                   type: string
                 type: array
                 description: A list of invalid foreign key columns in a table
+                format: set
               auto_increment_column_names:
                 items:
                   type: string
                 type: array
                 description: A list of invalid auto-incremented columns
+                format: set
               charset_name:
                 type: string
                 description: The charset of the schema
@@ -6716,6 +6741,7 @@ components:
                   type: string
                 type: array
                 description: Valid options for the parameter value
+                format: set
               actor:
                 type: object
                 properties:
@@ -6844,6 +6870,7 @@ components:
             type: string
           type: array
           description: Valid options for the parameter value
+          format: set
         actor:
           type: object
           properties:
@@ -7164,6 +7191,7 @@ components:
                   type: string
                 type: array
                 description: List of IP addresses or CIDR ranges that can use this password
+                format: set
               created_at:
                 type: string
                 description: When the password was created
@@ -7187,6 +7215,7 @@ components:
                   type: string
                 type: array
                 description: The list of hosts in each availability zone providing direct access to a vtgate
+                format: set
               ttl_seconds:
                 type: integer
                 description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -7201,6 +7230,7 @@ components:
                   type: string
                 type: array
                 description: The read-only replica host URLs
+                format: set
               actor:
                 type: object
                 properties:
@@ -7235,6 +7265,7 @@ components:
                       type: string
                     type: array
                     description: Public IP addresses for the region
+                    format: set
                   display_name:
                     type: string
                     description: Name of the region
@@ -7348,6 +7379,7 @@ components:
             type: string
           type: array
           description: List of IP addresses or CIDR ranges that can use this password
+          format: set
         created_at:
           type: string
           description: When the password was created
@@ -7371,6 +7403,7 @@ components:
             type: string
           type: array
           description: The list of hosts in each availability zone providing direct access to a vtgate
+          format: set
         ttl_seconds:
           type: integer
           description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -7385,6 +7418,7 @@ components:
             type: string
           type: array
           description: The read-only replica host URLs
+          format: set
         actor:
           type: object
           properties:
@@ -7419,6 +7453,7 @@ components:
                 type: string
               type: array
               description: Public IP addresses for the region
+              format: set
             display_name:
               type: string
               description: Name of the region
@@ -7539,6 +7574,7 @@ components:
                   type: string
                 type: array
                 description: List of CIDR ranges
+                format: set
               created_at:
                 type: string
                 description: When the entry was created
@@ -7600,6 +7636,7 @@ components:
             type: string
           type: array
           description: List of CIDR ranges
+          format: set
         created_at:
           type: string
           description: When the entry was created
@@ -7751,6 +7788,7 @@ components:
                       type: string
                     type: array
                     description: Public IP addresses for the region
+                    format: set
                   display_name:
                     type: string
                     description: Name of the region
@@ -8003,6 +8041,7 @@ components:
                 type: string
               type: array
               description: Public IP addresses for the region
+              format: set
             display_name:
               type: string
               description: Name of the region
@@ -8189,6 +8228,7 @@ components:
                   type: string
                 type: array
                 description: Public IP addresses for the region
+                format: set
               display_name:
                 type: string
                 description: Name of the region
@@ -8294,6 +8334,7 @@ components:
                       type: string
                     type: array
                     description: Public IP addresses for the region
+                    format: set
                   display_name:
                     type: string
                     description: Name of the region
@@ -8342,6 +8383,7 @@ components:
             type: string
           type: array
           description: Keyspaces that are eligible for throttler configuration in the configurable resource (database or deploy request)
+          format: set
         configurable:
           type: object
           properties:
@@ -8433,6 +8475,7 @@ components:
                   type: string
                 type: array
                 description: The scopes that the OAuth application requires on a user account
+                format: set
               avatar:
                 type: string
                 description: The image source for the OAuth application's avatar
@@ -8488,6 +8531,7 @@ components:
             type: string
           type: array
           description: The scopes that the OAuth application requires on a user account
+          format: set
         avatar:
           type: string
           description: The image source for the OAuth application's avatar
@@ -10069,6 +10113,7 @@ components:
                         type: string
                       type: array
                       description: Valid options for the parameter value
+                      format: set
                     actor:
                       type: object
                       properties:
@@ -10297,6 +10342,7 @@ components:
                   type: string
                 type: array
                 description: Valid options for the parameter value
+                format: set
               actor:
                 type: object
                 properties:
@@ -10444,6 +10490,7 @@ components:
                     - postgres
                 type: array
                 description: Database roles these credentials inherit
+                format: set
               branch:
                 type: object
                 properties:
@@ -10593,6 +10640,7 @@ components:
               - postgres
           type: array
           description: Database roles these credentials inherit
+          format: set
         branch:
           type: object
           properties:
@@ -10821,6 +10869,7 @@ components:
                   type: string
                 type: array
                 description: List of public IP addresses for the region
+                format: set
               display_name:
                 type: string
                 description: The name of the region
@@ -12213,6 +12262,7 @@ components:
                             type: string
                           type: array
                           description: Names of foreign keys removed by this operation
+                          format: set
                         deploy_errors:
                           type: string
                           description: Deploy errors for the deploy operation
@@ -12292,6 +12342,7 @@ components:
                             type: string
                           type: array
                           description: Names of foreign keys removed by this operation summary
+                          format: set
                         shard_count:
                           type: integer
                           description: The number of shards in the keyspace modified by the deploy operation summary
@@ -12300,6 +12351,7 @@ components:
                             type: string
                           type: array
                           description: Names of shards in the keyspace modified by the deploy operation summary
+                          format: set
                         can_drop_data:
                           type: boolean
                           description: Whether or not the deploy operation summary is capable of dropping data
@@ -12815,6 +12867,7 @@ components:
                       type: string
                     type: array
                     description: Names of foreign keys removed by this operation
+                    format: set
                   deploy_errors:
                     type: string
                     description: Deploy errors for the deploy operation
@@ -12894,6 +12947,7 @@ components:
                       type: string
                     type: array
                     description: Names of foreign keys removed by this operation summary
+                    format: set
                   shard_count:
                     type: integer
                     description: The number of shards in the keyspace modified by the deploy operation summary
@@ -12902,6 +12956,7 @@ components:
                       type: string
                     type: array
                     description: Names of shards in the keyspace modified by the deploy operation summary
+                    format: set
                   can_drop_data:
                     type: boolean
                     description: Whether or not the deploy operation summary is capable of dropping data
@@ -13295,6 +13350,7 @@ components:
                   type: string
                 type: array
                 description: Names of foreign keys removed by this operation
+                format: set
               deploy_errors:
                 type: string
                 description: Deploy errors for the deploy operation
@@ -13374,6 +13430,7 @@ components:
                   type: string
                 type: array
                 description: Names of foreign keys removed by this operation summary
+                format: set
               shard_count:
                 type: integer
                 description: The number of shards in the keyspace modified by the deploy operation summary
@@ -13382,6 +13439,7 @@ components:
                   type: string
                 type: array
                 description: Names of shards in the keyspace modified by the deploy operation summary
+                format: set
               can_drop_data:
                 type: boolean
                 description: Whether or not the deploy operation summary is capable of dropping data
@@ -13662,6 +13720,7 @@ components:
                   type: string
                 type: array
                 description: Names of foreign keys removed by this operation
+                format: set
               deploy_errors:
                 type: string
                 description: Deploy errors for the deploy operation
@@ -13863,6 +13922,7 @@ components:
                         type: string
                       type: array
                       description: Names of foreign keys removed by this operation
+                      format: set
                     deploy_errors:
                       type: string
                       description: Deploy errors for the deploy operation
@@ -13942,6 +14002,7 @@ components:
                         type: string
                       type: array
                       description: Names of foreign keys removed by this operation summary
+                      format: set
                     shard_count:
                       type: integer
                       description: The number of shards in the keyspace modified by the deploy operation summary
@@ -13950,6 +14011,7 @@ components:
                         type: string
                       type: array
                       description: Names of shards in the keyspace modified by the deploy operation summary
+                      format: set
                     can_drop_data:
                       type: boolean
                       description: Whether or not the deploy operation summary is capable of dropping data
@@ -14226,6 +14288,7 @@ components:
                     - webhook.test
                 type: array
                 description: The events this webhook subscribes to
+                format: set
             additionalProperties: false
             required:
               - id
@@ -14300,6 +14363,7 @@ components:
               - webhook.test
           type: array
           description: The events this webhook subscribes to
+          format: set
       additionalProperties: false
       required:
         - id

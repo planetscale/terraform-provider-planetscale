@@ -1,0 +1,23 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Format all string arrays as sets
+  version: 0.0.1
+actions:
+  - target: $.paths[*].parameters[?@.schema.type == 'array' && @.schema.items.type == 'string']
+    update:
+      schema:
+        format: set
+
+  - target: $.paths[*]..requestBody.content[*].schema..properties[?@.type == 'array' && @.items.type == 'string']
+    update:
+      format: set
+
+  - target: $.paths[*]..responses[*].content[*].schema..properties[?@.type == 'array' && @.items.type == 'string']
+    update:
+      format: set
+
+  - target: $.components.schemas[*]..properties[?@.type == 'array' && @.items.type == 'string']
+    update:
+      format: set
+

@@ -80,7 +80,7 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 				Computed:    true,
 				Description: `The regional host URL`,
 			},
-			"access_host_regional_urls": schema.ListAttribute{
+			"access_host_regional_urls": schema.SetAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `The read-only replica host URLs`,
@@ -110,7 +110,7 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 				Required:    true,
 				Description: `The name of the branch the password belongs to`,
 			},
-			"cidrs": schema.ListAttribute{
+			"cidrs": schema.SetAttribute{
 				Computed:    true,
 				Optional:    true,
 				ElementType: types.StringType,
@@ -162,7 +162,7 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 				},
 				Description: `Whether the password connects directly to a VTGate. Requires replacement if changed.`,
 			},
-			"direct_vtgate_addresses": schema.ListAttribute{
+			"direct_vtgate_addresses": schema.SetAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `The list of hosts in each availability zone providing direct access to a vtgate`,
@@ -224,7 +224,7 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 						Computed:    true,
 						Description: `Provider for the region (ex. AWS)`,
 					},
-					"public_ip_addresses": schema.ListAttribute{
+					"public_ip_addresses": schema.SetAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
 						Description: `Public IP addresses for the region`,

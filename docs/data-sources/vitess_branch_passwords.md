@@ -44,15 +44,15 @@ data "planetscale_vitess_branch_passwords" "my_vitessbranchpasswords" {
 Read-Only:
 
 - `access_host_regional_url` (String) The regional host URL
-- `access_host_regional_urls` (List of String) The read-only replica host URLs
+- `access_host_regional_urls` (Set of String) The read-only replica host URLs
 - `access_host_url` (String) The host URL for the password
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--data--actor))
-- `cidrs` (List of String) List of IP addresses or CIDR ranges that can use this password
+- `cidrs` (Set of String) List of IP addresses or CIDR ranges that can use this password
 - `created_at` (String) When the password was created
 - `database_branch` (Attributes) (see [below for nested schema](#nestedatt--data--database_branch))
 - `deleted_at` (String) When the password was deleted
 - `direct_vtgate` (Boolean) True if the credentials connect directly to a vtgate, bypassing load balancers
-- `direct_vtgate_addresses` (List of String) The list of hosts in each availability zone providing direct access to a vtgate
+- `direct_vtgate_addresses` (Set of String) The list of hosts in each availability zone providing direct access to a vtgate
 - `expired` (Boolean) True if the credentials are expired
 - `expires_at` (String) When the password will expire
 - `id` (String) The ID for the password
@@ -99,5 +99,5 @@ Read-Only:
 - `id` (String) The ID of the region
 - `location` (String) Location of the region
 - `provider` (String) Provider for the region (ex. AWS)
-- `public_ip_addresses` (List of String) Public IP addresses for the region
+- `public_ip_addresses` (Set of String) Public IP addresses for the region
 - `slug` (String) The slug of the region

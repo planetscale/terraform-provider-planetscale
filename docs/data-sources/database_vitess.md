@@ -99,5 +99,5 @@ Read-Only:
 - `id` (String) The ID of the region
 - `location` (String) Location of the region
 - `provider` (String) Provider for the region (ex. AWS)
-- `public_ip_addresses` (List of String) Public IP addresses for the region
+- `public_ip_addresses` (Set of String) Public IP addresses for the region
 - `slug` (String) The slug of the region
