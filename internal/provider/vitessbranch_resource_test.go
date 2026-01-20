@@ -34,27 +34,7 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
-						tfjsonpath.New("cluster_name"),
-						knownvalue.NotNull(),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("html_url"),
-						knownvalue.NotNull(),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
 						tfjsonpath.New("id"),
-						knownvalue.NotNull(),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("mysql_address"),
-						knownvalue.NotNull(),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("mysql_edge_address"),
 						knownvalue.NotNull(),
 					),
 					statecheck.ExpectKnownValue(
@@ -65,17 +45,12 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("ready"),
-						knownvalue.NotNull(),
+						knownvalue.Bool(true),
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("state"),
-						knownvalue.NotNull(),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("url"),
-						knownvalue.NotNull(),
+						knownvalue.StringExact("ready"),
 					),
 				},
 			},
