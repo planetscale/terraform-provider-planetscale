@@ -6,8 +6,12 @@ variable "database_name" {
   type = string
 }
 
+variable "branch_name" {
+  type = string
+}
+
 resource "planetscale_vitess_branch" "test" {
   organization  = var.organization
   database      = var.database_name
-  name          = "test"
+  name          = var.branch_name
 }
