@@ -47,7 +47,6 @@ type VitessBranchPasswordDataSourceModel struct {
 	LastUsedAt             types.String                      `tfsdk:"last_used_at"`
 	Name                   types.String                      `tfsdk:"name"`
 	Organization           types.String                      `tfsdk:"organization"`
-	PlainText              types.String                      `tfsdk:"plain_text"`
 	Region                 tfTypes.GetPasswordRegion         `tfsdk:"region"`
 	Renewable              types.Bool                        `tfsdk:"renewable"`
 	Replica                types.Bool                        `tfsdk:"replica"`
@@ -175,10 +174,6 @@ func (r *VitessBranchPasswordDataSource) Schema(ctx context.Context, req datasou
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the password belongs to`,
-			},
-			"plain_text": schema.StringAttribute{
-				Computed:    true,
-				Description: `The plain text password, available only after create`,
 			},
 			"region": schema.SingleNestedAttribute{
 				Computed: true,

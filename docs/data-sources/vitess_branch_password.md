@@ -47,7 +47,6 @@ data "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
 - `expires_at` (String) When the password will expire
 - `last_used_at` (String) When the password was last used to execute a query
 - `name` (String) The display name for the password
-- `plain_text` (String) The plain text password, available only after create
 - `region` (Attributes) (see [below for nested schema](#nestedatt--region))
 - `renewable` (Boolean) Whether or not the password can be renewed
 - `replica` (Boolean) Whether or not the password is for a read replica
