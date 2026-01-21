@@ -17,8 +17,8 @@ func TestAccVitessBranchPasswordResource_Lifecycle(t *testing.T) {
 
 	databaseName := "testacc-vitess"
 	branchName := "main"
-	passwordNameOriginal := "test-password"
-	passwordNameRenamed := "test-password-renamed"
+	passwordNameOriginal := randomWithPrefix("test-password")
+	passwordNameRenamed := randomWithPrefix("test-password-renamed")
 	resourceAddress := "planetscale_vitess_branch_password.test"
 
 	resource.Test(t, resource.TestCase{
