@@ -105,25 +105,25 @@ actions:
       x-speakeasy-name-override: change_request_id
       x-speakeasy-terraform-ignore: schema
 
-
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch
-    description: API operation for managed resource update.
-    update:
-      x-speakeasy-entity-operation:
-        - PostgresBranch#create#3
-        - PostgresBranch#update
+  # The generated provider will attempt to call branch changes when no changes are necessarily, resulting in creations failing
+  # - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch
+  #   description: API operation for managed resource update.
+  #   update:
+      # x-speakeasy-entity-operation:
+        # - PostgresBranch#create#3
+        # - PostgresBranch#update
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get
     update:
-      x-speakeasy-entity-operation:
-        - entityOperation: PostgresBranch#create#4
-          options:
-            polling:
-              name: WaitForChangeRequestComplete
-        - entityOperation: PostgresBranch#update#2
-          options:
-            polling:
-              name: WaitForChangeRequestComplete
+      # x-speakeasy-entity-operation:
+        # - entityOperation: PostgresBranch#create#4
+        #   options:
+        #     polling:
+        #       name: WaitForChangeRequestComplete
+        # - entityOperation: PostgresBranch#update#2
+        #   options:
+        #     polling:
+        #       name: WaitForChangeRequestComplete
       x-speakeasy-polling:
         - name: WaitForChangeRequestComplete
           delaySeconds: 30
