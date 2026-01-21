@@ -33,7 +33,7 @@ func NewVitessBranchResource() resource.Resource {
 // VitessBranchResource defines the resource implementation.
 type VitessBranchResource struct {
 	// Provider configured SDK client.
-	client *sdk.Planetscale
+	client *sdk.PlanetScale
 }
 
 // VitessBranchResourceModel describes the resource data model.
@@ -172,12 +172,12 @@ func (r *VitessBranchResource) Configure(ctx context.Context, req resource.Confi
 		return
 	}
 
-	client, ok := req.ProviderData.(*sdk.Planetscale)
+	client, ok := req.ProviderData.(*sdk.PlanetScale)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.Planetscale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *sdk.PlanetScale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return

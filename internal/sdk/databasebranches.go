@@ -17,12 +17,12 @@ import (
 )
 
 type DatabaseBranches struct {
-	rootSDK          *Planetscale
+	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newDatabaseBranches(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *DatabaseBranches {
+func newDatabaseBranches(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *DatabaseBranches {
 	return &DatabaseBranches{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

@@ -24,7 +24,7 @@ func NewVitessBranchPasswordDataSource() datasource.DataSource {
 // VitessBranchPasswordDataSource is the data source implementation.
 type VitessBranchPasswordDataSource struct {
 	// Provider configured SDK client.
-	client *sdk.Planetscale
+	client *sdk.PlanetScale
 }
 
 // VitessBranchPasswordDataSourceModel describes the data model.
@@ -243,12 +243,12 @@ func (r *VitessBranchPasswordDataSource) Configure(ctx context.Context, req data
 		return
 	}
 
-	client, ok := req.ProviderData.(*sdk.Planetscale)
+	client, ok := req.ProviderData.(*sdk.PlanetScale)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected DataSource Configure Type",
-			fmt.Sprintf("Expected *sdk.Planetscale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *sdk.PlanetScale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return

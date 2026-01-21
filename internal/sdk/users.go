@@ -17,12 +17,12 @@ import (
 
 // Users -           Resources for managing users.
 type Users struct {
-	rootSDK          *Planetscale
+	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newUsers(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Users {
+func newUsers(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Users {
 	return &Users{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

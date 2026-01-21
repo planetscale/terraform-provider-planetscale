@@ -19,12 +19,12 @@ import (
 
 // Databases -             Resources for managing databases within an organization.
 type Databases struct {
-	rootSDK          *Planetscale
+	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newDatabases(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Databases {
+func newDatabases(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Databases {
 	return &Databases{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

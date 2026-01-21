@@ -47,8 +47,8 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// Planetscale - Terraform Provider for PlanetScale: Manage your PlanetScale resources with Terraform
-type Planetscale struct {
+// PlanetScale - Terraform Provider for PlanetScale: Manage your PlanetScale resources with Terraform
+type PlanetScale struct {
 	SDKVersion string
 	//             Resources for managing organizations.
 	//
@@ -71,18 +71,18 @@ type Planetscale struct {
 	hooks            *hooks.Hooks
 }
 
-type SDKOption func(*Planetscale)
+type SDKOption func(*PlanetScale)
 
 // WithServerURL allows the overriding of the default server URL
 func WithServerURL(serverURL string) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 }
 
 // WithTemplatedServerURL allows the overriding of the default server URL with a templated URL populated with the provided parameters
 func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		if params != nil {
 			serverURL = utils.ReplaceParameters(serverURL, params)
 		}
@@ -93,7 +93,7 @@ func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOptio
 
 // WithServerIndex allows the overriding of the default server by index
 func WithServerIndex(serverIndex int) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		if serverIndex < 0 || serverIndex >= len(ServerList) {
 			panic(fmt.Errorf("server index %d out of range", serverIndex))
 		}
@@ -104,21 +104,21 @@ func WithServerIndex(serverIndex int) SDKOption {
 
 // WithClient allows the overriding of the default HTTP client used by the SDK
 func WithClient(client HTTPClient) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		sdk.sdkConfiguration.Client = client
 	}
 }
 
 // WithSecurity configures the SDK to use the provided security details
 func WithSecurity(security shared.Security) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		sdk.sdkConfiguration.Security = utils.AsSecuritySource(security)
 	}
 }
 
 // WithSecuritySource configures the SDK to invoke the Security Source function on each method call to determine authentication
 func WithSecuritySource(security func(context.Context) (shared.Security, error)) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		sdk.sdkConfiguration.Security = func(ctx context.Context) (interface{}, error) {
 			return security(ctx)
 		}
@@ -126,21 +126,21 @@ func WithSecuritySource(security func(context.Context) (shared.Security, error))
 }
 
 func WithRetryConfig(retryConfig retry.Config) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		sdk.sdkConfiguration.RetryConfig = &retryConfig
 	}
 }
 
 // WithTimeout Optional request timeout applied to each operation
 func WithTimeout(timeout time.Duration) SDKOption {
-	return func(sdk *Planetscale) {
+	return func(sdk *PlanetScale) {
 		sdk.sdkConfiguration.Timeout = &timeout
 	}
 }
 
 // New creates a new instance of the SDK with the provided options
-func New(opts ...SDKOption) *Planetscale {
-	sdk := &Planetscale{
+func New(opts ...SDKOption) *PlanetScale {
+	sdk := &PlanetScale{
 		SDKVersion: "1.0.0",
 		sdkConfiguration: config.SDKConfiguration{
 			UserAgent:  "speakeasy-sdk/terraform 1.0.0 2.795.8 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",

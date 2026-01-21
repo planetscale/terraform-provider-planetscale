@@ -35,7 +35,7 @@ func NewVitessBranchPasswordResource() resource.Resource {
 // VitessBranchPasswordResource defines the resource implementation.
 type VitessBranchPasswordResource struct {
 	// Provider configured SDK client.
-	client *sdk.Planetscale
+	client *sdk.PlanetScale
 }
 
 // VitessBranchPasswordResourceModel describes the resource data model.
@@ -290,12 +290,12 @@ func (r *VitessBranchPasswordResource) Configure(ctx context.Context, req resour
 		return
 	}
 
-	client, ok := req.ProviderData.(*sdk.Planetscale)
+	client, ok := req.ProviderData.(*sdk.PlanetScale)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.Planetscale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *sdk.PlanetScale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return

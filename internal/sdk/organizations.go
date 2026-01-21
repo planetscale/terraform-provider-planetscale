@@ -18,12 +18,12 @@ import (
 
 // Organizations -             Resources for managing organizations.
 type Organizations struct {
-	rootSDK          *Planetscale
+	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newOrganizations(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Organizations {
+func newOrganizations(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Organizations {
 	return &Organizations{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

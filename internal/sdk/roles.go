@@ -17,12 +17,12 @@ import (
 
 // Roles -           Resources for managing role credentials.
 type Roles struct {
-	rootSDK          *Planetscale
+	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newRoles(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Roles {
+func newRoles(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Roles {
 	return &Roles{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

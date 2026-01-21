@@ -1,6 +1,6 @@
 configVersion: 2.0.0
 generation:
-  sdkClassName: Planetscale
+  sdkClassName: PlanetScale
   maintainOpenAPIOrder: true
   usageSnippets:
     optionalPropertyRendering: withExample
@@ -41,7 +41,7 @@ terraform:
     tlsSkipVerify: ""
   additionalResources: []
   author: planetscale
-  baseErrorName: PlanetscaleError
+  baseErrorName: PlanetScaleError
   debugLogging: {}
   defaultErrorName: APIError
   enableCustomCodeRegions: false
