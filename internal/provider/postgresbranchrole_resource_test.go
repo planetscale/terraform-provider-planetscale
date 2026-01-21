@@ -17,8 +17,8 @@ func TestAccPostgresBranchRoleResource_Lifecycle(t *testing.T) {
 
 	databaseName := "testacc-postgres"
 	branchName := "main"
-	roleNameOriginal := "test-role"
-	roleNameRenamed := "test-role-renamed"
+	roleNameOriginal := randomWithPrefix("test-role")
+	roleNameRenamed := randomWithPrefix("test-role-renamed")
 	resourceAddress := "planetscale_postgres_branch_role.test"
 
 	resource.Test(t, resource.TestCase{
