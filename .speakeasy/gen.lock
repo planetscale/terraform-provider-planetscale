@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: e9a697f3c02b7a3f98c86d45ab7099ca
+  docChecksum: 961f758798420f24a202fe99b22b0879
   docVersion: v1
   speakeasyVersion: 1.685.3
   generationVersion: 2.795.8
@@ -501,19 +501,19 @@ trackedFiles:
     pristine_git_object: ae27395a04f18ff08bf466c08de8fd0ec47bd226
   internal/provider/vitessbranchpassword_data_source.go:
     id: e6cd1d778135
-    last_write_checksum: sha1:830fef698444e2ab91ad2d2d19979abed54cce30
+    last_write_checksum: sha1:425a0c6eb36e28b413c644fb0226ead21485b974
     pristine_git_object: b53803d419b34e7e8b6a23eb11a26c2e4f1451c8
   internal/provider/vitessbranchpassword_data_source_sdk.go:
     id: 0d1494ca575a
-    last_write_checksum: sha1:33d574058a523259804133e6eb35be2b7776888a
+    last_write_checksum: sha1:dd69ab076b26edf1dc2c43f56ca94bf5c1658b0a
     pristine_git_object: 519fc7aa0a1ea88cfa86f3920d00761f6bb64f34
   internal/provider/vitessbranchpassword_resource.go:
     id: 710ba98102cd
-    last_write_checksum: sha1:b3ff5860ffb3e67ad4657f3ad3a3baf36ccde72c
+    last_write_checksum: sha1:abc8b72aa7faa34fd7fe00a13ee341fb1392702d
     pristine_git_object: fdab6351ed82770730113ba367ed6a710cd6032d
   internal/provider/vitessbranchpassword_resource_sdk.go:
     id: 6c5a3a0b782d
-    last_write_checksum: sha1:2a66898b7575e838265c94257bd3b2b0e69e20db
+    last_write_checksum: sha1:342d84f3256c34786d6361508e3ef9dc95f11b43
     pristine_git_object: b2cf7694a3ea9aacd97e42c0ed8cf331d1b234d7
   internal/provider/vitessbranchpasswords_data_source.go:
     id: fd6f3533fe05
@@ -655,7 +655,7 @@ trackedFiles:
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
   internal/sdk/models/operations/getpassword.go:
     id: 4285e7863442
-    last_write_checksum: sha1:9d0084322edbcfedf3ad58ad9f8c9b9521480fc0
+    last_write_checksum: sha1:e1af6c4a2ef289936d909d678cd3bc92e8155860
     pristine_git_object: a4c11b32082c9f2f4f56a644c50a8da506fe64e7
   internal/sdk/models/operations/getpostgresbranch.go:
     id: e4f92de0a1c5
@@ -703,7 +703,7 @@ trackedFiles:
     pristine_git_object: 1527f93bd132964305be0420906dd2cce08c319b
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
-    last_write_checksum: sha1:880b7b7431b0fda3c6d2b21a336a0e7ffb7e6edd
+    last_write_checksum: sha1:2c280fcf23cae701cf42366d42fb9260fce27036
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
   internal/sdk/models/operations/updatepostgresbranch.go:
     last_write_checksum: sha1:98d586485758f917b21cb0f4a5fd8ce60afc6bfb
@@ -1420,7 +1420,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>"], "created_at": "1720525255008", "deleted_at": "<value>", "expires_at": "1748232802119", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "ttl_seconds": 8963.89, "access_host_url": "https://athletic-cemetery.name", "access_host_regional_url": "https://young-tributary.com", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Mae.Murray61", "avatar_url": "https://thick-case.com"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Lafayette.Rogahn76", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Burley.Johnston", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+          application/json: {"id": "<id>", "name": "<value>", "role": "readwriter", "cidrs": ["<value 1>"], "created_at": "1720525255008", "deleted_at": "<value>", "expires_at": "1748232802119", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "direct_vtgate_addresses": ["<value 1>", "<value 2>", "<value 3>"], "ttl_seconds": 8963.89, "access_host_url": "https://athletic-cemetery.name", "access_host_regional_url": "https://young-tributary.com", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Mae.Murray61", "avatar_url": "https://thick-case.com"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>"], "display_name": "Lafayette.Rogahn76", "location": "<value>", "slug": "<value>", "current_default": false}, "username": "Burley.Johnston", "replica": false, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": false, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
   update_password:
     speakeasy-default-update-password:
       parameters:
@@ -1431,7 +1431,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1712619362352", "deleted_at": "<value>", "expires_at": "1756121263349", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "direct_vtgate_addresses": [], "ttl_seconds": 5524.13, "access_host_url": "https://pessimistic-intervention.org", "access_host_regional_url": "https://dark-citizen.info", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Lee_Spinka21", "avatar_url": "https://miserable-analogy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Madilyn58", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Maryam42", "plain_text": "<value>", "replica": false, "renewable": false, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
+          application/json: {"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1712619362352", "deleted_at": "<value>", "expires_at": "1756121263349", "last_used_at": "<value>", "expired": false, "direct_vtgate": true, "direct_vtgate_addresses": [], "ttl_seconds": 5524.13, "access_host_url": "https://pessimistic-intervention.org", "access_host_regional_url": "https://dark-citizen.info", "access_host_regional_urls": ["<value 1>", "<value 2>"], "actor": {"id": "<id>", "display_name": "Lee_Spinka21", "avatar_url": "https://miserable-analogy.info"}, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Madilyn58", "location": "<value>", "slug": "<value>", "current_default": true}, "username": "Maryam42", "replica": false, "renewable": false, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}
   delete_password:
     speakeasy-default-delete-password:
       parameters:

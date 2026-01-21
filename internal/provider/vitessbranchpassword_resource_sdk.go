@@ -90,6 +90,10 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 		r.DatabaseBranch.Production = types.BoolValue(resp.DatabaseBranch.Production)
 		r.DeletedAt = types.StringValue(resp.DeletedAt)
 		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
+		r.DirectVtgateAddresses = make([]types.String, 0, len(resp.DirectVtgateAddresses))
+		for _, v := range resp.DirectVtgateAddresses {
+			r.DirectVtgateAddresses = append(r.DirectVtgateAddresses, types.StringValue(v))
+		}
 		r.Expired = types.BoolValue(resp.Expired)
 		r.ExpiresAt = types.StringValue(resp.ExpiresAt)
 		r.ID = types.StringValue(resp.ID)
@@ -150,7 +154,6 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 		r.ID = types.StringValue(resp.ID)
 		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
-		r.PlainText = types.StringValue(resp.PlainText)
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
 		r.Region.DisplayName = types.StringValue(resp.Region.DisplayName)
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)

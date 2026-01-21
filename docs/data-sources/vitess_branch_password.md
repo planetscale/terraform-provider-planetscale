@@ -42,6 +42,7 @@ data "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
 - `database_branch` (Attributes) (see [below for nested schema](#nestedatt--database_branch))
 - `deleted_at` (String) When the password was deleted
 - `direct_vtgate` (Boolean) True if the credentials connect directly to a vtgate, bypassing load balancers
+- `direct_vtgate_addresses` (List of String) The list of hosts in each availability zone providing direct access to a vtgate
 - `expired` (Boolean) True if the credentials are expired
 - `expires_at` (String) When the password will expire
 - `last_used_at` (String) When the password was last used to execute a query

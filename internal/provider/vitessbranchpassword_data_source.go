@@ -40,6 +40,7 @@ type VitessBranchPasswordDataSourceModel struct {
 	DatabaseBranch         tfTypes.GetPasswordDatabaseBranch `tfsdk:"database_branch"`
 	DeletedAt              types.String                      `tfsdk:"deleted_at"`
 	DirectVtgate           types.Bool                        `tfsdk:"direct_vtgate"`
+	DirectVtgateAddresses  []types.String                    `tfsdk:"direct_vtgate_addresses"`
 	Expired                types.Bool                        `tfsdk:"expired"`
 	ExpiresAt              types.String                      `tfsdk:"expires_at"`
 	ID                     types.String                      `tfsdk:"id"`
@@ -144,6 +145,11 @@ func (r *VitessBranchPasswordDataSource) Schema(ctx context.Context, req datasou
 			"direct_vtgate": schema.BoolAttribute{
 				Computed:    true,
 				Description: `True if the credentials connect directly to a vtgate, bypassing load balancers`,
+			},
+			"direct_vtgate_addresses": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `The list of hosts in each availability zone providing direct access to a vtgate`,
 			},
 			"expired": schema.BoolAttribute{
 				Computed:    true,
