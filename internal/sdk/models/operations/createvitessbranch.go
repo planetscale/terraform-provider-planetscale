@@ -44,8 +44,6 @@ type CreateVitessBranchRequestBody struct {
 	Region *string `json:"region,omitzero"`
 	// If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
 	SeedData *SeedData `json:"seed_data,omitzero"`
-	// The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800
-	ClusterSize *string `json:"cluster_size,omitzero"`
 }
 
 func (c *CreateVitessBranchRequestBody) GetName() string {
@@ -81,13 +79,6 @@ func (c *CreateVitessBranchRequestBody) GetSeedData() *SeedData {
 		return nil
 	}
 	return c.SeedData
-}
-
-func (c *CreateVitessBranchRequestBody) GetClusterSize() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ClusterSize
 }
 
 type CreateVitessBranchRequest struct {

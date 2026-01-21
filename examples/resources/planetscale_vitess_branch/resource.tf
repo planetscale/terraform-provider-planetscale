@@ -1,6 +1,5 @@
 resource "planetscale_vitess_branch" "my_vitessbranch" {
   backup_id     = "...my_backup_id..."
-  cluster_size  = "...my_cluster_size..."
   database      = "...my_database..."
   name          = "...my_name..."
   organization  = "...my_organization..."

@@ -127,19 +127,12 @@ func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequestBody(ct
 	} else {
 		seedData = nil
 	}
-	clusterSize := new(string)
-	if !r.ClusterSize.IsUnknown() && !r.ClusterSize.IsNull() {
-		*clusterSize = r.ClusterSize.ValueString()
-	} else {
-		clusterSize = nil
-	}
 	out := operations.CreateVitessBranchRequestBody{
 		Name:         name,
 		ParentBranch: parentBranch,
 		BackupID:     backupID,
 		Region:       region,
 		SeedData:     seedData,
-		ClusterSize:  clusterSize,
 	}
 
 	return &out, diags

@@ -41,7 +41,6 @@ type VitessBranchResourceModel struct {
 	Actor            tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
 	BackupID         types.String                      `tfsdk:"backup_id"`
 	ClusterName      types.String                      `tfsdk:"cluster_name"`
-	ClusterSize      types.String                      `tfsdk:"cluster_size"`
 	Database         types.String                      `tfsdk:"database"`
 	HTMLURL          types.String                      `tfsdk:"html_url"`
 	ID               types.String                      `tfsdk:"id"`
@@ -85,13 +84,6 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			"cluster_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
-			},
-			"cluster_size": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.`,
 			},
 			"database": schema.StringAttribute{
 				Required:    true,

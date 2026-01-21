@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: a5d5e50a9b044c3367ac4c5bdfa0fd19
+  docChecksum: 1ed450aa281ce7ebfcc591619c8417d8
   docVersion: v1
   speakeasyVersion: 1.685.3
   generationVersion: 2.795.8
@@ -119,7 +119,7 @@ trackedFiles:
     pristine_git_object: 8175c63771b81e9f6552a7bc43ade3176b8bd9e1
   examples/resources/planetscale_vitess_branch/resource.tf:
     id: ddc419012fce
-    last_write_checksum: sha1:29cef6574c246a0b9cc249b433d2adf96a7e745a
+    last_write_checksum: sha1:cc1f7a25cced05b54007e29238cb62a2524b5d7a
     pristine_git_object: 08518722c0c83b631ca808b9874bb1214ece5860
   examples/resources/planetscale_vitess_branch_password/import-by-string-id.tf:
     id: 91a7081b4213
@@ -493,11 +493,11 @@ trackedFiles:
     pristine_git_object: 2557ef7bbc5e3edd5578829c061609c7b7a02504
   internal/provider/vitessbranch_resource.go:
     id: 253814c7c29a
-    last_write_checksum: sha1:ab2a9bf30910065b7ac401847fa14e9e50e4fadf
+    last_write_checksum: sha1:07b18dd9ebe731c08f3bf23087c1361579b54a60
     pristine_git_object: 3fa960d342bf6de4878019abd742d68bc1517dba
   internal/provider/vitessbranch_resource_sdk.go:
     id: b7741edc0d6e
-    last_write_checksum: sha1:77ab5a7f83336e4e625b610d11d8f67958687e23
+    last_write_checksum: sha1:1cb3a46fcad26fd16694baa4ca99bc46b5f7856e
     pristine_git_object: ae27395a04f18ff08bf466c08de8fd0ec47bd226
   internal/provider/vitessbranchpassword_data_source.go:
     id: e6cd1d778135
@@ -621,7 +621,7 @@ trackedFiles:
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
-    last_write_checksum: sha1:992bd08e3a5c003889e65f7bcd77ad2d9ed1034e
+    last_write_checksum: sha1:5133ce0b3d7bd5a5ff8d48645b3d0a6d187ef024
     pristine_git_object: 4164e962f94db2ef10a0ac3446371930522a0d05
   internal/sdk/models/operations/deletepassword.go:
     id: 491914016b46

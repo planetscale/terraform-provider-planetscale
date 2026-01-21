@@ -18,6 +18,9 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.major_version
     description: Remove major_version (Postgres-only field)
     remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.cluster_size
+    description: Remove cluster_size from creation request
+    remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
     description: Update operation metadata for Vitess
