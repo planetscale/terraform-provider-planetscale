@@ -1,13 +1,7 @@
 resource "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
-  branch = "...my_branch..."
-  cidrs = [
-    "..."
-  ]
-  database      = "...my_database..."
-  direct_vtgate = true
-  name          = "...my_name..."
-  organization  = "...my_organization..."
-  replica       = false
+  organization = "my-organization"
+  database = "ru00w3vqvfr9"
+  branch   = "2474dzfubrf3"
+
   role          = "admin"
-  ttl           = 9
 }

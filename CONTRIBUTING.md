@@ -1,26 +1,19 @@
-# Contributing to This Repository
+# Contributing to the PlanetScale Terraform Provider
 
-Thank you for your interest in contributing to this repository. Please note that this repository contains generated code. As such, we do not accept direct changes or pull requests. Instead, we encourage you to follow the guidelines below to report issues and suggest improvements.
+This provider is generated from the OpenAPI 3.0 spec which can be found at https://planetscale.com/docs/openapi.yaml.
+Changes to that specification to support the Terraform provider should be done via [OpenAPI overlays](./schemas/).
 
-## How to Report Issues
+## Workflow
 
-If you encounter any bugs or have suggestions for improvements, please open an issue on GitHub. When reporting an issue, please provide as much detail as possible to help us reproduce the problem. This includes:
+For all contributors, we recommend the standard [GitHub flow](https://guides.github.com/introduction/flow/)
+based on [forking and pull requests](https://guides.github.com/activities/forking/).
 
-- A clear and descriptive title
-- Steps to reproduce the issue
-- Expected and actual behavior
-- Any relevant logs, screenshots, or error messages
-- Information about your environment (e.g., operating system, software versions)
-    - For example can be collected using the `npx envinfo` command from your terminal if you have Node.js installed
+For significant changes, please [create an issue](https://github.com/planetscale/terraform-provider-planetscale/issues)
+to let everyone know what you're planning to work on, and to track progress and design decisions.
 
-## Issue Triage and Upstream Fixes
+## Testing
 
-We will review and triage issues as quickly as possible. Our goal is to address bugs and incorporate improvements in the upstream source code. Fixes will be included in the next generation of the generated code.
-
-## Contact
-
-If you have any questions or need further assistance, please feel free to reach out by opening an issue.
-
-Thank you for your understanding and cooperation!
-
-The Maintainers
+Acceptance tests create real resources in a PlanetScale organization.
+These tests can be modified to run against your own organization rather than `planetscale-terraform-testing`,
+but it is not required.
+A PlanetScale maintainer can run tests for your changes after they've been reviewed before merging.

@@ -1,9 +1,4 @@
-<div align="center">
-    <img width="200px" src="https://avatars.githubusercontent.com/u/35612527?s=200&v=4">
-    <h1>Terraform Provider</h1>
-    <p>Terraform Provider for the *PlanetScale API*.</p>
-    <a href="https://opensource.org/license/apache-2-0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge" /></a>
-</div>
+# PlanetScale Terraform Provider
 
 <!-- Start Summary [summary] -->
 ## Summary
@@ -14,12 +9,12 @@ Terraform Provider for PlanetScale: Manage your PlanetScale resources with Terra
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
 <!-- $toc-max-depth=2 -->
+* [PlanetScale Terraform Provider](#planetscale-terraform-provider)
   * [Installation](#installation)
   * [Authentication](#authentication)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
   * [Testing the provider locally](#testing-the-provider-locally)
-* [Development](#development)
-  * [Contributions](#contributions)
+* [Contributing](#contributing)
 
 <!-- End Table of Contents [toc] -->
 
@@ -131,11 +126,6 @@ provider_installation {
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 
-# Development
+# Contributing
 
-## Contributions
-
-While we value open-source contributions to this terraform provider, this library is generated programmatically. Any manual changes added to internal files will be overwritten on the next generation.
-We look forward to hearing your feedback. Feel free to open a PR or an issue with a proof of concept and we'll do our best to include it in a future release. 
-
-### SDK Created by [Speakeasy](https://www.speakeasy.com/?utm_source=planetscale&utm_campaign=terraform)
+See [Contributing to the PlanetScale Terraform Provider](./CONTRIBUTING.md)
