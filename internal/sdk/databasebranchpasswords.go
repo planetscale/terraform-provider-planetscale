@@ -17,12 +17,12 @@ import (
 
 // DatabaseBranchPasswords -           Resources for managing database branch passwords.
 type DatabaseBranchPasswords struct {
-	rootSDK          *Planetscale
+	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newDatabaseBranchPasswords(rootSDK *Planetscale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *DatabaseBranchPasswords {
+func newDatabaseBranchPasswords(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *DatabaseBranchPasswords {
 	return &DatabaseBranchPasswords{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

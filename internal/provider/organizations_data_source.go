@@ -25,7 +25,7 @@ func NewOrganizationsDataSource() datasource.DataSource {
 // OrganizationsDataSource is the data source implementation.
 type OrganizationsDataSource struct {
 	// Provider configured SDK client.
-	client *sdk.Planetscale
+	client *sdk.PlanetScale
 }
 
 // OrganizationsDataSourceModel describes the data model.
@@ -142,12 +142,12 @@ func (r *OrganizationsDataSource) Configure(ctx context.Context, req datasource.
 		return
 	}
 
-	client, ok := req.ProviderData.(*sdk.Planetscale)
+	client, ok := req.ProviderData.(*sdk.PlanetScale)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected DataSource Configure Type",
-			fmt.Sprintf("Expected *sdk.Planetscale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *sdk.PlanetScale, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
