@@ -5,13 +5,20 @@ set -eou pipefail
 
 ORG="${ORG:-planetscale-terraform-testing}"
 AGE_SECS="${AGE_SECS:-86400}"
+DRY_RUN="${DRY_RUN:-false}"
 
 pscale database list --org "$ORG" --format json |
-	jq --arg age "$AGE_SECS" \
-		-r '.[] | select(
+  jq --arg age "$AGE_SECS" \
+    -r '.[] | select(
     (.name | startswith("testacc")) and
+    (.name != "testacc-vitess") and
+    (.name != "testacc-postgres") and
     (.created_at | sub("\\.\\d+"; "") | fromdateiso8601 < (now - ($age | tonumber))))
     .name' |
-	while read -r dbname; do
-		pscale database delete "$dbname" --org "$ORG" --force
-	done
+  while read -r dbname; do
+    if [ "$DRY_RUN" = "true" ]; then
+      echo "[DRY RUN] Would delete database: $dbname"
+    else
+      pscale database delete "$dbname" --org "$ORG" --force
+    fi
+  done
