@@ -199,8 +199,6 @@ type GetRoleResponseBody struct {
 	PrivateConnectionServiceName string `json:"private_connection_service_name"`
 	// The database user name
 	Username string `json:"username"`
-	// The plain text password, available only after create
-	Password string `json:"password"`
 	// The database name
 	DatabaseName string `json:"database_name"`
 	// When the role was created
@@ -269,13 +267,6 @@ func (g *GetRoleResponseBody) GetUsername() string {
 		return ""
 	}
 	return g.Username
-}
-
-func (g *GetRoleResponseBody) GetPassword() string {
-	if g == nil {
-		return ""
-	}
-	return g.Password
 }
 
 func (g *GetRoleResponseBody) GetDatabaseName() string {

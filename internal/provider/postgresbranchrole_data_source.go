@@ -47,7 +47,6 @@ type PostgresBranchRoleDataSourceModel struct {
 	InheritedRoles               []types.String            `tfsdk:"inherited_roles"`
 	Name                         types.String              `tfsdk:"name"`
 	Organization                 types.String              `tfsdk:"organization"`
-	Password                     types.String              `tfsdk:"password"`
 	PrivateAccessHostURL         types.String              `tfsdk:"private_access_host_url"`
 	PrivateConnectionServiceName types.String              `tfsdk:"private_connection_service_name"`
 	TTL                          types.Int64               `tfsdk:"ttl"`
@@ -172,11 +171,6 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization that owns this resource`,
-			},
-			"password": schema.StringAttribute{
-				Computed:    true,
-				Sensitive:   true,
-				Description: `The plain text password, available only after create`,
 			},
 			"private_access_host_url": schema.StringAttribute{
 				Computed:    true,

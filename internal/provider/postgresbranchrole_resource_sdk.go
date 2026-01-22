@@ -76,7 +76,6 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 			r.InheritedRoles = append(r.InheritedRoles, types.StringValue(string(v)))
 		}
 		r.Name = types.StringValue(resp.Name)
-		r.Password = types.StringValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
 		r.TTL = types.Int64Value(resp.TTL)
@@ -115,7 +114,6 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 			r.InheritedRoles = append(r.InheritedRoles, types.StringValue(string(v)))
 		}
 		r.Name = types.StringValue(resp.Name)
-		r.Password = types.StringValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
 		r.TTL = types.Int64Value(resp.TTL)
