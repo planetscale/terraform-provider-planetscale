@@ -15,7 +15,6 @@ VitessBranch Resource
 ```terraform
 resource "planetscale_vitess_branch" "my_vitessbranch" {
   backup_id     = "...my_backup_id..."
-  cluster_size  = "...my_cluster_size..."
   database      = "...my_database..."
   name          = "...my_name..."
   organization  = "...my_organization..."
@@ -37,7 +36,6 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 ### Optional
 
 - `backup_id` (String) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
-- `cluster_size` (String) The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
 - `seed_data` (String) If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch. must be "last_successful_backup"; Requires replacement if changed.
