@@ -24,7 +24,7 @@ actions:
       x-speakeasy-entity-operation: PostgresBranchRole#update
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties
-    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    description: Prevent type mismatch between request and response data. Mark sensitive property and ensure reads do not overwrite it.
     update:
       actor:
         x-speakeasy-name-override: actor_data
@@ -32,9 +32,10 @@ actions:
         x-speakeasy-name-override: branch_data
       password:
         x-speakeasy-param-sensitive: true
+        x-speakeasy-ignore: true
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.responses["200"].content["application/json"].schema.properties
-    description: Prevent type mismatch between request and response data. Mark sensitive property.
+    description: Prevent type mismatch between request and response data. Mark sensitive property and ensure reads do not overwrite it.
     update:
       actor:
         x-speakeasy-name-override: actor_data
@@ -42,6 +43,7 @@ actions:
         x-speakeasy-name-override: branch_data
       password:
         x-speakeasy-param-sensitive: true
+        x-speakeasy-ignore: true
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties
     description: Prevent type mismatch between request and response data. Mark sensitive property.

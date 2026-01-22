@@ -47,7 +47,6 @@ data "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 - `expires_at` (String) When the role expires
 - `inherited_roles` (Set of String) Database roles these credentials inherit
 - `name` (String) The name of the role
-- `password` (String, Sensitive) The plain text password, available only after create
 - `private_access_host_url` (String) The database connection string for private connections
 - `private_connection_service_name` (String) The service name to set up private connectivity
 - `ttl` (Number) Number of seconds before the credentials expire

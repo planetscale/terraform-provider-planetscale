@@ -2326,6 +2326,7 @@ paths:
                     type: string
                     description: The plain text password, available only after create
                     x-speakeasy-param-sensitive: true
+                    x-speakeasy-ignore: true
                   database_name:
                     type: string
                     description: The database name
@@ -2541,6 +2542,7 @@ paths:
                     type: string
                     description: The plain text password, available only after create
                     x-speakeasy-param-sensitive: true
+                    x-speakeasy-ignore: true
                   database_name:
                     type: string
                     description: The database name
