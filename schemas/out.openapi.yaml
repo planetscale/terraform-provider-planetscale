@@ -2183,9 +2183,11 @@ paths:
                       created_at:
                         type: string
                         description: When the resource was created
+                        x-speakeasy-ignore: true
                       updated_at:
                         type: string
                         description: When the resource was last updated
+                        x-speakeasy-ignore: true
                       deleted_at:
                         type: string
                         description: When the resource was deleted, if deleted
@@ -2392,9 +2394,11 @@ paths:
                       created_at:
                         type: string
                         description: When the resource was created
+                        x-speakeasy-ignore: true
                       updated_at:
                         type: string
                         description: When the resource was last updated
+                        x-speakeasy-ignore: true
                       deleted_at:
                         type: string
                         description: When the resource was deleted, if deleted
@@ -2608,9 +2612,11 @@ paths:
                       created_at:
                         type: string
                         description: When the resource was created
+                        x-speakeasy-ignore: true
                       updated_at:
                         type: string
                         description: When the resource was last updated
+                        x-speakeasy-ignore: true
                       deleted_at:
                         type: string
                         description: When the resource was deleted, if deleted

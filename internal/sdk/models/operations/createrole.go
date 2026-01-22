@@ -222,10 +222,6 @@ type CreateRoleBranchData struct {
 	ID string `json:"id"`
 	// The name for the resource
 	Name string `json:"name"`
-	// When the resource was created
-	CreatedAt string `json:"created_at"`
-	// When the resource was last updated
-	UpdatedAt string `json:"updated_at"`
 	// When the resource was deleted, if deleted
 	DeletedAt string `json:"deleted_at"`
 }
@@ -242,20 +238,6 @@ func (c *CreateRoleBranchData) GetName() string {
 		return ""
 	}
 	return c.Name
-}
-
-func (c *CreateRoleBranchData) GetCreatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.CreatedAt
-}
-
-func (c *CreateRoleBranchData) GetUpdatedAt() string {
-	if c == nil {
-		return ""
-	}
-	return c.UpdatedAt
 }
 
 func (c *CreateRoleBranchData) GetDeletedAt() string {

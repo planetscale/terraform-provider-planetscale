@@ -71,3 +71,30 @@ actions:
     description: Mark inherited_roles as a set.
     update:
       format: set
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties.branch.properties.created_at
+    description: Remove unnecessary timestamp from branch_data.
+    update:
+      x-speakeasy-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties.branch.properties.updated_at
+    description: Remove unnecessary timestamp from branch_data.
+    update:
+      x-speakeasy-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.responses["200"].content["application/json"].schema.properties.branch.properties.created_at
+    description: Remove unnecessary timestamp from branch_data.
+    update:
+      x-speakeasy-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.responses["200"].content["application/json"].schema.properties.branch.properties.updated_at
+    description: Remove unnecessary timestamp from branch_data.
+    update:
+      x-speakeasy-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties.branch.properties.created_at
+    description: Remove unnecessary timestamp from branch_data.
+    update:
+      x-speakeasy-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties.branch.properties.updated_at
+    description: Remove unnecessary timestamp from branch_data.
+    update:
+      x-speakeasy-ignore: true

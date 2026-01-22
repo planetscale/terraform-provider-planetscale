@@ -7,9 +7,7 @@ import (
 )
 
 type GetRoleBranchData struct {
-	CreatedAt types.String `tfsdk:"created_at"`
 	DeletedAt types.String `tfsdk:"deleted_at"`
 	ID        types.String `tfsdk:"id"`
 	Name      types.String `tfsdk:"name"`
-	UpdatedAt types.String `tfsdk:"updated_at"`
 }

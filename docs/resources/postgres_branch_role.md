@@ -79,11 +79,9 @@ Read-Only:
 
 Read-Only:
 
-- `created_at` (String) When the resource was created
 - `deleted_at` (String) When the resource was deleted, if deleted
 - `id` (String) The ID for the resource
 - `name` (String) The name for the resource
-- `updated_at` (String) When the resource was last updated
 
 ## Import
 
