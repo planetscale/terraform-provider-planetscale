@@ -93,10 +93,6 @@ trackedFiles:
     id: 1a6bd1934470
     last_write_checksum: sha1:df17877677403708f4fec9628aff77475b96c48b
     pristine_git_object: cd24e855212aaf70c29c5a6729c2c2b4f4dc19c1
-  examples/resources/planetscale_postgres_branch/resource.tf:
-    id: 24beddf6c03b
-    last_write_checksum: sha1:850d6cc080110c3e753b09cf87869bab771619c4
-    pristine_git_object: 1aaaded84375d807c480d8d164e2077279db6ac0
   examples/resources/planetscale_postgres_branch_role/import-by-string-id.tf:
     id: 481d444b7e2f
     last_write_checksum: sha1:676079af9eafa455e8c0bf3c9359b3ea390a8130
@@ -105,10 +101,6 @@ trackedFiles:
     id: e56202502423
     last_write_checksum: sha1:4bb0a2816363e404a66fde12cdd33deab712a2e8
     pristine_git_object: 06aae354a87031b23f6da8a3d618711d4412e1cf
-  examples/resources/planetscale_postgres_branch_role/resource.tf:
-    id: 4ef64a9f14aa
-    last_write_checksum: sha1:a8c60dcf84c55d571c296ab10f6bc8a874279e07
-    pristine_git_object: 98012ff162a119d4501c53deb924982fa0ec2d13
   examples/resources/planetscale_vitess_branch/import-by-string-id.tf:
     id: 21f9a606ff1d
     last_write_checksum: sha1:5af428508568dd2fca78f3cb80e32a9456e2ab8a
@@ -117,10 +109,6 @@ trackedFiles:
     id: 600731b24687
     last_write_checksum: sha1:2d980f779c4a689023b96535eb2b0779a7d6807b
     pristine_git_object: 8175c63771b81e9f6552a7bc43ade3176b8bd9e1
-  examples/resources/planetscale_vitess_branch/resource.tf:
-    id: ddc419012fce
-    last_write_checksum: sha1:cc1f7a25cced05b54007e29238cb62a2524b5d7a
-    pristine_git_object: 08518722c0c83b631ca808b9874bb1214ece5860
   examples/resources/planetscale_vitess_branch_password/import-by-string-id.tf:
     id: 91a7081b4213
     last_write_checksum: sha1:64cb5ba9a8fac47b514259403e050133b2d666b2
@@ -129,10 +117,6 @@ trackedFiles:
     id: 33bc70dd4e06
     last_write_checksum: sha1:1671ed62389ce3852ccbddf3ab1c4ddc93623f51
     pristine_git_object: 4a8d92374beb311bf11912bcc446c68961f0ca49
-  examples/resources/planetscale_vitess_branch_password/resource.tf:
-    id: da0554f008b2
-    last_write_checksum: sha1:c7c9bcbfeb064e9734e00952e3800ee3ed4258d1
-    pristine_git_object: 9b97b267a9fa4557ed4d18f9dcce7a2fd29e4f16
   go.mod:
     id: c47645c391ad
     last_write_checksum: sha1:a7dc1a030518f89691073722000cd0d853592832
