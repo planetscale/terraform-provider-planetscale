@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 9af3c8f46257cfb53df3e291e00a179c
+  docChecksum: 3ad01ef62503808ed531005f82c7d480
   docVersion: v1
   speakeasyVersion: 1.685.3
   generationVersion: 2.795.8
@@ -249,19 +249,19 @@ trackedFiles:
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
-    last_write_checksum: sha1:39e12a81573ee2839d34e400207bc6d44828a456
+    last_write_checksum: sha1:d8704fe0590e0f232b518859664f683629c47e8f
     pristine_git_object: 90dfa7d37827ae4d9d69ee1b8949f4f64435ec23
   internal/provider/postgresbranchrole_data_source_sdk.go:
     id: d62e34777672
-    last_write_checksum: sha1:e20f91ab50d269dde0708e4ab216577df7791811
+    last_write_checksum: sha1:6900064b21602af5a1922ce2f8e359726f0b5d92
     pristine_git_object: 80848f0b5bdb932ffd1082d8904b61bd67401a7e
   internal/provider/postgresbranchrole_resource.go:
     id: 7ff3a33ddab0
-    last_write_checksum: sha1:93595db6980f58107c48559272a104893b1db0af
+    last_write_checksum: sha1:9f6d4c7ee06f78b026fdfcc301e4fe1eef25abf5
     pristine_git_object: 5f7ccbf7d9c14d4e54619ec78ac5f08bd8e40c75
   internal/provider/postgresbranchrole_resource_sdk.go:
     id: 4da918fe90c4
-    last_write_checksum: sha1:ff7add677f08d0cfe13a21cd66a68b21207bb5be
+    last_write_checksum: sha1:b71f3da0eed58e19e742532d9864ca8cfb06281e
     pristine_git_object: 5246ebe1519b4a0b500dd4b4ff225ab6c6acddad
   internal/provider/postgresbranchroles_data_source.go:
     id: eab053a45f5a
@@ -389,7 +389,7 @@ trackedFiles:
     pristine_git_object: e19566841f236e76f8563d3abccaa6f8d24c36c3
   internal/provider/types/get_role_branch_data.go:
     id: d6ea4b34b0f1
-    last_write_checksum: sha1:749326d3bb67303da2c8ab7617fa4de0c176fdbd
+    last_write_checksum: sha1:09c03ce782e8d810ce154c56371713bc4fd38a67
     pristine_git_object: 913b4dba50e44d95fdecfc88846848fb73e6e2b7
   internal/provider/types/get_vitess_branch_actor.go:
     id: 91fa249c3825
@@ -601,7 +601,7 @@ trackedFiles:
     pristine_git_object: 70b0fa5325c1ee8e97b19848d8c365d2b713f0e6
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
-    last_write_checksum: sha1:b95fb2952ff2edfa1210b09fa7d56f3ca407fc21
+    last_write_checksum: sha1:e46f467786c42fb42a9174473e54aa2285e03993
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
@@ -645,7 +645,7 @@ trackedFiles:
     pristine_git_object: 7cd4acb7ff08eda01a3578b71067a823d309a8e1
   internal/sdk/models/operations/getrole.go:
     id: a854350465dd
-    last_write_checksum: sha1:88fe42e2d197795b3d8a10be9440e105c8294f54
+    last_write_checksum: sha1:475f7d9b7f430ce4645879d846c9985c3461f275
     pristine_git_object: 019cd3b4fa0b8af2ac8f806b8f0b8ce776a2588e
   internal/sdk/models/operations/getvitessbranch.go:
     id: 91f8cc51ecc6
@@ -683,7 +683,7 @@ trackedFiles:
     last_write_checksum: sha1:98d586485758f917b21cb0f4a5fd8ce60afc6bfb
   internal/sdk/models/operations/updaterole.go:
     id: eaca616a88af
-    last_write_checksum: sha1:4f69464fb19e7a2563e5f386cb519a2f029be432
+    last_write_checksum: sha1:4fd77c69a68f42a75398257b4fe4256a927409f8
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
   internal/sdk/models/operations/updatevitessbranch.go:
     last_write_checksum: sha1:a5358321ec464e80da1de387efafe8eaa732824c
@@ -1497,7 +1497,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://lighthearted-mobility.info/", "private_access_host_url": "https://stylish-masterpiece.org/", "private_connection_service_name": "<value>", "username": "Izaiah_Kemmer86", "password": "qhbyNvp9E6V9SgI", "database_name": "<value>", "created_at": "1723010655179", "updated_at": "1735675605529", "deleted_at": "<value>", "expires_at": "1736013133918", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": true, "default": false, "ttl": 1992.79, "inherited_roles": ["pg_read_all_stats"], "branch": {"id": "<id>", "name": "<value>", "created_at": "1730333069720", "updated_at": "1735620715836", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Kali64", "avatar_url": "https://stupendous-vista.info"}}
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://lighthearted-mobility.info/", "private_access_host_url": "https://stylish-masterpiece.org/", "private_connection_service_name": "<value>", "username": "Izaiah_Kemmer86", "password": "qhbyNvp9E6V9SgI", "database_name": "<value>", "created_at": "1723010655179", "updated_at": "1735675605529", "deleted_at": "<value>", "expires_at": "1736013133918", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": true, "default": false, "ttl": 1992.79, "inherited_roles": ["pg_read_all_stats"], "branch": {"id": "<id>", "name": "<value>", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Kali64", "avatar_url": "https://stupendous-vista.info"}}
   get_role:
     speakeasy-default-get-role:
       parameters:
@@ -1508,7 +1508,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://slimy-circumference.name", "private_access_host_url": "https://pink-fencing.name/", "private_connection_service_name": "<value>", "username": "Erica_Nienow37", "database_name": "<value>", "created_at": "1730844402329", "updated_at": "1735674804099", "deleted_at": "<value>", "expires_at": "1750847327118", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": false, "default": true, "ttl": 8139.26, "inherited_roles": [], "branch": {"id": "<id>", "name": "<value>", "created_at": "1733134521088", "updated_at": "1735675665492", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Adrien.Satterfield", "avatar_url": "https://grandiose-account.biz/"}}
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://slimy-circumference.name", "private_access_host_url": "https://pink-fencing.name/", "private_connection_service_name": "<value>", "username": "Erica_Nienow37", "database_name": "<value>", "created_at": "1730844402329", "updated_at": "1735674804099", "deleted_at": "<value>", "expires_at": "1750847327118", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": false, "default": true, "ttl": 8139.26, "inherited_roles": [], "branch": {"id": "<id>", "name": "<value>", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Adrien.Satterfield", "avatar_url": "https://grandiose-account.biz/"}}
   update_role:
     speakeasy-default-update-role:
       parameters:
@@ -1519,7 +1519,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://reflecting-icebreaker.biz/", "private_access_host_url": "https://exotic-fax.com/", "private_connection_service_name": "<value>", "username": "Conrad18", "database_name": "<value>", "created_at": "1711685701257", "updated_at": "1735667364076", "deleted_at": "<value>", "expires_at": "1736152677000", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": false, "default": false, "ttl": 6787.72, "inherited_roles": [], "branch": {"id": "<id>", "name": "<value>", "created_at": "1724740543867", "updated_at": "1735622979457", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Lottie_Prohaska26", "avatar_url": "https://zany-archaeology.biz/"}}
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://reflecting-icebreaker.biz/", "private_access_host_url": "https://exotic-fax.com/", "private_connection_service_name": "<value>", "username": "Conrad18", "database_name": "<value>", "created_at": "1711685701257", "updated_at": "1735667364076", "deleted_at": "<value>", "expires_at": "1736152677000", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": false, "default": false, "ttl": 6787.72, "inherited_roles": [], "branch": {"id": "<id>", "name": "<value>", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Lottie_Prohaska26", "avatar_url": "https://zany-archaeology.biz/"}}
   delete_role:
     speakeasy-default-delete-role:
       parameters:

@@ -93,10 +93,6 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 			"branch_data": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"created_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was created`,
-					},
 					"deleted_at": schema.StringAttribute{
 						Computed:    true,
 						Description: `When the resource was deleted, if deleted`,
@@ -108,10 +104,6 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 					"name": schema.StringAttribute{
 						Computed:    true,
 						Description: `The name for the resource`,
-					},
-					"updated_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the resource was last updated`,
 					},
 				},
 			},
