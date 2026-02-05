@@ -27,14 +27,14 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 
 ### Required
 
-- `database` (String) The name of the database the branch belongs to
+- `database` (String) The name of the database that owns this resource
 - `name` (String) The name of the branch to create
-- `organization` (String) The name of the organization the branch belongs to
+- `organization` (String) The name of the organization that owns this resource
 
 ### Optional
 
 - `backup_id` (String) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
-- `cluster_size` (String) The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.
+- `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 - `major_version` (String) For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
