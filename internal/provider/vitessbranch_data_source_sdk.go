@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -13,6 +14,7 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Actor = &tfTypes.GetVitessBranchActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
@@ -22,6 +24,7 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 		r.Name = types.StringValue(resp.Name)
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData = &tfTypes.GetVitessBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)

@@ -29,30 +29,30 @@ type VitessBranchPasswordDataSource struct {
 
 // VitessBranchPasswordDataSourceModel describes the data model.
 type VitessBranchPasswordDataSourceModel struct {
-	AccessHostRegionalURL  types.String                      `tfsdk:"access_host_regional_url"`
-	AccessHostRegionalUrls []types.String                    `tfsdk:"access_host_regional_urls"`
-	AccessHostURL          types.String                      `tfsdk:"access_host_url"`
-	Actor                  tfTypes.GetPasswordActor          `tfsdk:"actor"`
-	Branch                 types.String                      `tfsdk:"branch"`
-	Cidrs                  []types.String                    `tfsdk:"cidrs"`
-	CreatedAt              types.String                      `tfsdk:"created_at"`
-	Database               types.String                      `tfsdk:"database"`
-	DatabaseBranch         tfTypes.GetPasswordDatabaseBranch `tfsdk:"database_branch"`
-	DeletedAt              types.String                      `tfsdk:"deleted_at"`
-	DirectVtgate           types.Bool                        `tfsdk:"direct_vtgate"`
-	DirectVtgateAddresses  []types.String                    `tfsdk:"direct_vtgate_addresses"`
-	Expired                types.Bool                        `tfsdk:"expired"`
-	ExpiresAt              types.String                      `tfsdk:"expires_at"`
-	ID                     types.String                      `tfsdk:"id"`
-	LastUsedAt             types.String                      `tfsdk:"last_used_at"`
-	Name                   types.String                      `tfsdk:"name"`
-	Organization           types.String                      `tfsdk:"organization"`
-	Region                 tfTypes.GetPasswordRegion         `tfsdk:"region"`
-	Renewable              types.Bool                        `tfsdk:"renewable"`
-	Replica                types.Bool                        `tfsdk:"replica"`
-	Role                   types.String                      `tfsdk:"role"`
-	TTLSeconds             types.Int64                       `tfsdk:"ttl_seconds"`
-	Username               types.String                      `tfsdk:"username"`
+	AccessHostRegionalURL  types.String                       `tfsdk:"access_host_regional_url"`
+	AccessHostRegionalUrls []types.String                     `tfsdk:"access_host_regional_urls"`
+	AccessHostURL          types.String                       `tfsdk:"access_host_url"`
+	Actor                  *tfTypes.GetPasswordActor          `tfsdk:"actor"`
+	Branch                 types.String                       `tfsdk:"branch"`
+	Cidrs                  []types.String                     `tfsdk:"cidrs"`
+	CreatedAt              types.String                       `tfsdk:"created_at"`
+	Database               types.String                       `tfsdk:"database"`
+	DatabaseBranch         *tfTypes.GetPasswordDatabaseBranch `tfsdk:"database_branch"`
+	DeletedAt              types.String                       `tfsdk:"deleted_at"`
+	DirectVtgate           types.Bool                         `tfsdk:"direct_vtgate"`
+	DirectVtgateAddresses  []types.String                     `tfsdk:"direct_vtgate_addresses"`
+	Expired                types.Bool                         `tfsdk:"expired"`
+	ExpiresAt              types.String                       `tfsdk:"expires_at"`
+	ID                     types.String                       `tfsdk:"id"`
+	LastUsedAt             types.String                       `tfsdk:"last_used_at"`
+	Name                   types.String                       `tfsdk:"name"`
+	Organization           types.String                       `tfsdk:"organization"`
+	Region                 *tfTypes.GetPasswordRegion         `tfsdk:"region"`
+	Renewable              types.Bool                         `tfsdk:"renewable"`
+	Replica                types.Bool                         `tfsdk:"replica"`
+	Role                   types.String                       `tfsdk:"role"`
+	TTLSeconds             types.Int64                        `tfsdk:"ttl_seconds"`
+	Username               types.String                       `tfsdk:"username"`
 }
 
 // Metadata returns the data source type name.

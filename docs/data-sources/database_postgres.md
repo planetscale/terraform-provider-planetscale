@@ -14,6 +14,7 @@ DatabasePostgres DataSource
 
 ```terraform
 data "planetscale_database_postgres" "my_databasepostgres" {
+  id           = "...my_id..."
   organization = "...my_organization..."
 }
 ```
@@ -23,6 +24,7 @@ data "planetscale_database_postgres" "my_databasepostgres" {
 
 ### Required
 
+- `id` (String) The ID of the database
 - `organization` (String) The name of the organization the database belongs to
 
 ### Read-Only
@@ -39,7 +41,6 @@ data "planetscale_database_postgres" "my_databasepostgres" {
 - `default_branch_table_count` (Number) Number of tables in the default branch schema
 - `development_branches_count` (Number) The total number of database development branches
 - `html_url` (String) The URL to see this database's branches in the web UI
-- `id` (String) The ID of the database
 - `insights_enabled` (Boolean) True if query insights is enabled for the database
 - `insights_raw_queries` (Boolean) Whether raw SQL queries are collected
 - `issues_count` (Number) The total number of ongoing issues within a database

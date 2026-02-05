@@ -28,6 +28,8 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 			data.BranchesCount = types.Int64Value(dataItem.BranchesCount)
 			data.BranchesURL = types.StringValue(dataItem.BranchesURL)
 			data.CreatedAt = types.StringValue(dataItem.CreatedAt)
+			data.DataImport = &tfTypes.ListDatabasesDataImport{}
+			data.DataImport.DataSource = &tfTypes.ListDatabasesDataSource{}
 			data.DataImport.DataSource.Database = types.StringValue(dataItem.DataImport.DataSource.Database)
 			data.DataImport.DataSource.Hostname = types.StringValue(dataItem.DataImport.DataSource.Hostname)
 			data.DataImport.DataSource.Port = types.Int64Value(dataItem.DataImport.DataSource.Port)
@@ -56,6 +58,7 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 			data.ProductionBranchWebConsole = types.BoolValue(dataItem.ProductionBranchWebConsole)
 			data.ProductionBranchesCount = types.Int64Value(dataItem.ProductionBranchesCount)
 			data.Ready = types.BoolValue(dataItem.Ready)
+			data.Region = &tfTypes.ListDatabasesRegion{}
 			data.Region.CurrentDefault = types.BoolValue(dataItem.Region.CurrentDefault)
 			data.Region.DisplayName = types.StringValue(dataItem.Region.DisplayName)
 			data.Region.Enabled = types.BoolValue(dataItem.Region.Enabled)

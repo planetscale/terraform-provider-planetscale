@@ -22,9 +22,11 @@ func (r *PostgresBranchRolesDataSourceModel) RefreshFromOperationsListRolesRespo
 			var data tfTypes.ListRolesData
 
 			data.AccessHostURL = types.StringValue(dataItem.AccessHostURL)
+			data.Actor = &tfTypes.ListRolesActor{}
 			data.Actor.AvatarURL = types.StringValue(dataItem.Actor.AvatarURL)
 			data.Actor.DisplayName = types.StringValue(dataItem.Actor.DisplayName)
 			data.Actor.ID = types.StringValue(dataItem.Actor.ID)
+			data.Branch = &tfTypes.Branch{}
 			data.Branch.CreatedAt = types.StringValue(dataItem.Branch.CreatedAt)
 			data.Branch.DeletedAt = types.StringValue(dataItem.Branch.DeletedAt)
 			data.Branch.ID = types.StringValue(dataItem.Branch.ID)

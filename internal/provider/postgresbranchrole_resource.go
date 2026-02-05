@@ -37,31 +37,31 @@ type PostgresBranchRoleResource struct {
 
 // PostgresBranchRoleResourceModel describes the resource data model.
 type PostgresBranchRoleResourceModel struct {
-	AccessHostURL                types.String              `tfsdk:"access_host_url"`
-	ActorData                    tfTypes.GetRoleActorData  `tfsdk:"actor_data"`
-	Branch                       types.String              `tfsdk:"branch"`
-	BranchData                   tfTypes.GetRoleBranchData `tfsdk:"branch_data"`
-	CreatedAt                    types.String              `tfsdk:"created_at"`
-	Database                     types.String              `tfsdk:"database"`
-	DatabaseName                 types.String              `tfsdk:"database_name"`
-	Default                      types.Bool                `tfsdk:"default"`
-	DeletedAt                    types.String              `tfsdk:"deleted_at"`
-	DisabledAt                   types.String              `tfsdk:"disabled_at"`
-	DropFailed                   types.String              `tfsdk:"drop_failed"`
-	DroppedAt                    types.String              `tfsdk:"dropped_at"`
-	Expired                      types.Bool                `tfsdk:"expired"`
-	ExpiresAt                    types.String              `tfsdk:"expires_at"`
-	ID                           types.String              `tfsdk:"id"`
-	InheritedRoles               []types.String            `tfsdk:"inherited_roles"`
-	Name                         types.String              `tfsdk:"name"`
-	Organization                 types.String              `tfsdk:"organization"`
-	Password                     types.String              `tfsdk:"password"`
-	PrivateAccessHostURL         types.String              `tfsdk:"private_access_host_url"`
-	PrivateConnectionServiceName types.String              `tfsdk:"private_connection_service_name"`
-	Successor                    types.String              `tfsdk:"successor"`
-	TTL                          types.Int64               `tfsdk:"ttl"`
-	UpdatedAt                    types.String              `tfsdk:"updated_at"`
-	Username                     types.String              `tfsdk:"username"`
+	AccessHostURL                types.String               `tfsdk:"access_host_url"`
+	ActorData                    *tfTypes.GetRoleActorData  `tfsdk:"actor_data"`
+	Branch                       types.String               `tfsdk:"branch"`
+	BranchData                   *tfTypes.GetRoleBranchData `tfsdk:"branch_data"`
+	CreatedAt                    types.String               `tfsdk:"created_at"`
+	Database                     types.String               `tfsdk:"database"`
+	DatabaseName                 types.String               `tfsdk:"database_name"`
+	Default                      types.Bool                 `tfsdk:"default"`
+	DeletedAt                    types.String               `tfsdk:"deleted_at"`
+	DisabledAt                   types.String               `tfsdk:"disabled_at"`
+	DropFailed                   types.String               `tfsdk:"drop_failed"`
+	DroppedAt                    types.String               `tfsdk:"dropped_at"`
+	Expired                      types.Bool                 `tfsdk:"expired"`
+	ExpiresAt                    types.String               `tfsdk:"expires_at"`
+	ID                           types.String               `tfsdk:"id"`
+	InheritedRoles               []types.String             `tfsdk:"inherited_roles"`
+	Name                         types.String               `tfsdk:"name"`
+	Organization                 types.String               `tfsdk:"organization"`
+	Password                     types.String               `tfsdk:"password"`
+	PrivateAccessHostURL         types.String               `tfsdk:"private_access_host_url"`
+	PrivateConnectionServiceName types.String               `tfsdk:"private_connection_service_name"`
+	Successor                    types.String               `tfsdk:"successor"`
+	TTL                          types.Int64                `tfsdk:"ttl"`
+	UpdatedAt                    types.String               `tfsdk:"updated_at"`
+	Username                     types.String               `tfsdk:"username"`
 }
 
 func (r *PostgresBranchRoleResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -280,43 +280,6 @@ func (r *PostgresBranchRoleResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreateRoleResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetRoleRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Roles.GetRole(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetRoleResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

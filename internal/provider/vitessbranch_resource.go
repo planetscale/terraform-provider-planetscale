@@ -38,23 +38,23 @@ type VitessBranchResource struct {
 
 // VitessBranchResourceModel describes the resource data model.
 type VitessBranchResourceModel struct {
-	Actor            tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
-	BackupID         types.String                      `tfsdk:"backup_id"`
-	ClusterName      types.String                      `tfsdk:"cluster_name"`
-	Database         types.String                      `tfsdk:"database"`
-	HTMLURL          types.String                      `tfsdk:"html_url"`
-	ID               types.String                      `tfsdk:"id"`
-	MysqlAddress     types.String                      `tfsdk:"mysql_address"`
-	MysqlEdgeAddress types.String                      `tfsdk:"mysql_edge_address"`
-	Name             types.String                      `tfsdk:"name"`
-	Organization     types.String                      `tfsdk:"organization"`
-	ParentBranch     types.String                      `tfsdk:"parent_branch"`
-	Ready            types.Bool                        `tfsdk:"ready"`
-	Region           types.String                      `tfsdk:"region"`
-	RegionData       tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
-	SeedData         types.String                      `tfsdk:"seed_data"`
-	State            types.String                      `tfsdk:"state"`
-	URL              types.String                      `tfsdk:"url"`
+	Actor            *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
+	BackupID         types.String                       `tfsdk:"backup_id"`
+	ClusterName      types.String                       `tfsdk:"cluster_name"`
+	Database         types.String                       `tfsdk:"database"`
+	HTMLURL          types.String                       `tfsdk:"html_url"`
+	ID               types.String                       `tfsdk:"id"`
+	MysqlAddress     types.String                       `tfsdk:"mysql_address"`
+	MysqlEdgeAddress types.String                       `tfsdk:"mysql_edge_address"`
+	Name             types.String                       `tfsdk:"name"`
+	Organization     types.String                       `tfsdk:"organization"`
+	ParentBranch     types.String                       `tfsdk:"parent_branch"`
+	Ready            types.Bool                         `tfsdk:"ready"`
+	Region           types.String                       `tfsdk:"region"`
+	RegionData       *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	SeedData         types.String                       `tfsdk:"seed_data"`
+	State            types.String                       `tfsdk:"state"`
+	URL              types.String                       `tfsdk:"url"`
 }
 
 func (r *VitessBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -273,43 +273,6 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessBranchResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request2, request2Diags := data.ToOperationsGetVitessBranchRequest(ctx)
-	resp.Diagnostics.Append(request2Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res2, err := r.client.DatabaseBranches.GetVitessBranch(ctx, *request2)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res2 != nil && res2.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
-		}
-		return
-	}
-	if res2 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
-		return
-	}
-	if res2.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
-		return
-	}
-	if !(res2.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessBranchResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

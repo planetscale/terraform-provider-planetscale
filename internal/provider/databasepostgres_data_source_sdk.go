@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -18,6 +19,8 @@ func (r *DatabasePostgresDataSourceModel) RefreshFromOperationsGetPostgresDataba
 		r.BranchesCount = types.Int64Value(resp.BranchesCount)
 		r.BranchesURL = types.StringValue(resp.BranchesURL)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DataImport = &tfTypes.GetPostgresDatabaseDataImport{}
+		r.DataImport.DataSource = &tfTypes.GetPostgresDatabaseDataSource{}
 		r.DataImport.DataSource.Database = types.StringValue(resp.DataImport.DataSource.Database)
 		r.DataImport.DataSource.Hostname = types.StringValue(resp.DataImport.DataSource.Hostname)
 		r.DataImport.DataSource.Port = types.Int64Value(resp.DataImport.DataSource.Port)
@@ -42,6 +45,7 @@ func (r *DatabasePostgresDataSourceModel) RefreshFromOperationsGetPostgresDataba
 		r.ProductionBranchWebConsole = types.BoolValue(resp.ProductionBranchWebConsole)
 		r.ProductionBranchesCount = types.Int64Value(resp.ProductionBranchesCount)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData = &tfTypes.GetPostgresDatabaseRegionData{}
 		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
 		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
 		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)

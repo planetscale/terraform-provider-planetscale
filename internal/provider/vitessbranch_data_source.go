@@ -29,20 +29,20 @@ type VitessBranchDataSource struct {
 
 // VitessBranchDataSourceModel describes the data model.
 type VitessBranchDataSourceModel struct {
-	Actor            tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
-	ClusterName      types.String                      `tfsdk:"cluster_name"`
-	Database         types.String                      `tfsdk:"database"`
-	HTMLURL          types.String                      `tfsdk:"html_url"`
-	ID               types.String                      `tfsdk:"id"`
-	MysqlAddress     types.String                      `tfsdk:"mysql_address"`
-	MysqlEdgeAddress types.String                      `tfsdk:"mysql_edge_address"`
-	Name             types.String                      `tfsdk:"name"`
-	Organization     types.String                      `tfsdk:"organization"`
-	ParentBranch     types.String                      `tfsdk:"parent_branch"`
-	Ready            types.Bool                        `tfsdk:"ready"`
-	RegionData       tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
-	State            types.String                      `tfsdk:"state"`
-	URL              types.String                      `tfsdk:"url"`
+	Actor            *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
+	ClusterName      types.String                       `tfsdk:"cluster_name"`
+	Database         types.String                       `tfsdk:"database"`
+	HTMLURL          types.String                       `tfsdk:"html_url"`
+	ID               types.String                       `tfsdk:"id"`
+	MysqlAddress     types.String                       `tfsdk:"mysql_address"`
+	MysqlEdgeAddress types.String                       `tfsdk:"mysql_edge_address"`
+	Name             types.String                       `tfsdk:"name"`
+	Organization     types.String                       `tfsdk:"organization"`
+	ParentBranch     types.String                       `tfsdk:"parent_branch"`
+	Ready            types.Bool                         `tfsdk:"ready"`
+	RegionData       *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	State            types.String                       `tfsdk:"state"`
+	URL              types.String                       `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -78,7 +78,7 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 				Description: `Planetscale app URL for the branch`,
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `The ID of the branch`,
 			},
 			"mysql_address": schema.StringAttribute{

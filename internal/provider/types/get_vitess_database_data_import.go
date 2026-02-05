@@ -7,9 +7,9 @@ import (
 )
 
 type GetVitessDatabaseDataImport struct {
-	DataSource        GetVitessDatabaseDataSource `tfsdk:"data_source"`
-	FinishedAt        types.String                `tfsdk:"finished_at"`
-	ImportCheckErrors types.String                `tfsdk:"import_check_errors"`
-	StartedAt         types.String                `tfsdk:"started_at"`
-	State             types.String                `tfsdk:"state"`
+	DataSource        *GetVitessDatabaseDataSource `tfsdk:"data_source"`
+	FinishedAt        types.String                 `tfsdk:"finished_at"`
+	ImportCheckErrors types.String                 `tfsdk:"import_check_errors"`
+	StartedAt         types.String                 `tfsdk:"started_at"`
+	State             types.String                 `tfsdk:"state"`
 }

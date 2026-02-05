@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -20,6 +21,8 @@ func (r *DatabaseVitessDataSourceModel) RefreshFromOperationsGetVitessDatabaseRe
 		r.BranchesCount = types.Int64Value(resp.BranchesCount)
 		r.BranchesURL = types.StringValue(resp.BranchesURL)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DataImport = &tfTypes.GetVitessDatabaseDataImport{}
+		r.DataImport.DataSource = &tfTypes.GetVitessDatabaseDataSource{}
 		r.DataImport.DataSource.Database = types.StringValue(resp.DataImport.DataSource.Database)
 		r.DataImport.DataSource.Hostname = types.StringValue(resp.DataImport.DataSource.Hostname)
 		r.DataImport.DataSource.Port = types.Int64Value(resp.DataImport.DataSource.Port)
@@ -47,6 +50,7 @@ func (r *DatabaseVitessDataSourceModel) RefreshFromOperationsGetVitessDatabaseRe
 		r.ProductionBranchWebConsole = types.BoolValue(resp.ProductionBranchWebConsole)
 		r.ProductionBranchesCount = types.Int64Value(resp.ProductionBranchesCount)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData = &tfTypes.GetVitessDatabaseRegionData{}
 		r.RegionData.CurrentDefault = types.BoolValue(resp.RegionData.CurrentDefault)
 		r.RegionData.DisplayName = types.StringValue(resp.RegionData.DisplayName)
 		r.RegionData.Enabled = types.BoolValue(resp.RegionData.Enabled)
