@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -19,6 +20,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsCreatePasswordR
 			r.AccessHostRegionalUrls = append(r.AccessHostRegionalUrls, types.StringValue(v))
 		}
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
+		r.Actor = &tfTypes.GetPasswordActor{}
 		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
 		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
@@ -27,6 +29,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsCreatePasswordR
 			r.Cidrs = append(r.Cidrs, types.StringValue(v))
 		}
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DatabaseBranch = &tfTypes.GetPasswordDatabaseBranch{}
 		r.DatabaseBranch.ID = types.StringValue(resp.DatabaseBranch.ID)
 		r.DatabaseBranch.MysqlEdgeAddress = types.StringValue(resp.DatabaseBranch.MysqlEdgeAddress)
 		r.DatabaseBranch.Name = types.StringValue(resp.DatabaseBranch.Name)
@@ -44,6 +47,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsCreatePasswordR
 		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
 		r.PlainText = types.StringValue(resp.PlainText)
+		r.Region = &tfTypes.GetPasswordRegion{}
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
 		r.Region.DisplayName = types.StringValue(resp.Region.DisplayName)
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)
@@ -75,6 +79,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 			r.AccessHostRegionalUrls = append(r.AccessHostRegionalUrls, types.StringValue(v))
 		}
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
+		r.Actor = &tfTypes.GetPasswordActor{}
 		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
 		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
@@ -83,6 +88,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 			r.Cidrs = append(r.Cidrs, types.StringValue(v))
 		}
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DatabaseBranch = &tfTypes.GetPasswordDatabaseBranch{}
 		r.DatabaseBranch.ID = types.StringValue(resp.DatabaseBranch.ID)
 		r.DatabaseBranch.MysqlEdgeAddress = types.StringValue(resp.DatabaseBranch.MysqlEdgeAddress)
 		r.DatabaseBranch.Name = types.StringValue(resp.DatabaseBranch.Name)
@@ -99,6 +105,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 		r.ID = types.StringValue(resp.ID)
 		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
+		r.Region = &tfTypes.GetPasswordRegion{}
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
 		r.Region.DisplayName = types.StringValue(resp.Region.DisplayName)
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)
@@ -130,6 +137,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 			r.AccessHostRegionalUrls = append(r.AccessHostRegionalUrls, types.StringValue(v))
 		}
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
+		r.Actor = &tfTypes.GetPasswordActor{}
 		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
 		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
@@ -138,6 +146,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 			r.Cidrs = append(r.Cidrs, types.StringValue(v))
 		}
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DatabaseBranch = &tfTypes.GetPasswordDatabaseBranch{}
 		r.DatabaseBranch.ID = types.StringValue(resp.DatabaseBranch.ID)
 		r.DatabaseBranch.MysqlEdgeAddress = types.StringValue(resp.DatabaseBranch.MysqlEdgeAddress)
 		r.DatabaseBranch.Name = types.StringValue(resp.DatabaseBranch.Name)
@@ -154,6 +163,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 		r.ID = types.StringValue(resp.ID)
 		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
+		r.Region = &tfTypes.GetPasswordRegion{}
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
 		r.Region.DisplayName = types.StringValue(resp.Region.DisplayName)
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)

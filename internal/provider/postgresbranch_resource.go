@@ -36,24 +36,24 @@ type PostgresBranchResource struct {
 
 // PostgresBranchResourceModel describes the resource data model.
 type PostgresBranchResourceModel struct {
-	Actor        tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	BackupID     types.String                        `tfsdk:"backup_id"`
-	ClusterName  types.String                        `tfsdk:"cluster_name"`
-	ClusterSize  types.String                        `tfsdk:"cluster_size"`
-	Database     types.String                        `tfsdk:"database"`
-	HTMLURL      types.String                        `tfsdk:"html_url"`
-	ID           types.String                        `tfsdk:"id"`
-	MajorVersion types.String                        `tfsdk:"major_version"`
-	Name         types.String                        `tfsdk:"name"`
-	Organization types.String                        `tfsdk:"organization"`
-	ParentBranch types.String                        `tfsdk:"parent_branch"`
-	Ready        types.Bool                          `tfsdk:"ready"`
-	Region       types.String                        `tfsdk:"region"`
-	RegionData   tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas     types.Int64                         `tfsdk:"replicas"`
-	RestorePoint types.String                        `tfsdk:"restore_point"`
-	State        types.String                        `tfsdk:"state"`
-	URL          types.String                        `tfsdk:"url"`
+	Actor        *tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	BackupID     types.String                         `tfsdk:"backup_id"`
+	ClusterName  types.String                         `tfsdk:"cluster_name"`
+	ClusterSize  types.String                         `tfsdk:"cluster_size"`
+	Database     types.String                         `tfsdk:"database"`
+	HTMLURL      types.String                         `tfsdk:"html_url"`
+	ID           types.String                         `tfsdk:"id"`
+	MajorVersion types.String                         `tfsdk:"major_version"`
+	Name         types.String                         `tfsdk:"name"`
+	Organization types.String                         `tfsdk:"organization"`
+	ParentBranch types.String                         `tfsdk:"parent_branch"`
+	Ready        types.Bool                           `tfsdk:"ready"`
+	Region       types.String                         `tfsdk:"region"`
+	RegionData   *tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas     types.Int64                          `tfsdk:"replicas"`
+	RestorePoint types.String                         `tfsdk:"restore_point"`
+	State        types.String                         `tfsdk:"state"`
+	URL          types.String                         `tfsdk:"url"`
 }
 
 func (r *PostgresBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -287,43 +287,6 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request2, request2Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
-	resp.Diagnostics.Append(request2Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res2, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request2)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res2 != nil && res2.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
-		}
-		return
-	}
-	if res2 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
-		return
-	}
-	if res2.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
-		return
-	}
-	if !(res2.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res2.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -428,6 +391,43 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdatePostgresBranchResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

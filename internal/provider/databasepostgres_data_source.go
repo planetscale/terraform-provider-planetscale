@@ -29,39 +29,39 @@ type DatabasePostgresDataSource struct {
 
 // DatabasePostgresDataSourceModel describes the data model.
 type DatabasePostgresDataSourceModel struct {
-	AtBackupRestoreBranchesLimit      types.Bool                            `tfsdk:"at_backup_restore_branches_limit"`
-	AtDevelopmentBranchUsageLimit     types.Bool                            `tfsdk:"at_development_branch_usage_limit"`
-	BranchesCount                     types.Int64                           `tfsdk:"branches_count"`
-	BranchesURL                       types.String                          `tfsdk:"branches_url"`
-	CreatedAt                         types.String                          `tfsdk:"created_at"`
-	DataImport                        tfTypes.GetPostgresDatabaseDataImport `tfsdk:"data_import"`
-	DefaultBranch                     types.String                          `tfsdk:"default_branch"`
-	DefaultBranchReadOnlyRegionsCount types.Int64                           `tfsdk:"default_branch_read_only_regions_count"`
-	DefaultBranchShardCount           types.Int64                           `tfsdk:"default_branch_shard_count"`
-	DefaultBranchTableCount           types.Int64                           `tfsdk:"default_branch_table_count"`
-	DevelopmentBranchesCount          types.Int64                           `tfsdk:"development_branches_count"`
-	HTMLURL                           types.String                          `tfsdk:"html_url"`
-	ID                                types.String                          `tfsdk:"id"`
-	InsightsEnabled                   types.Bool                            `tfsdk:"insights_enabled"`
-	InsightsRawQueries                types.Bool                            `tfsdk:"insights_raw_queries"`
-	IssuesCount                       types.Int64                           `tfsdk:"issues_count"`
-	MultipleAdminsRequiredForDeletion types.Bool                            `tfsdk:"multiple_admins_required_for_deletion"`
-	Name                              types.String                          `tfsdk:"name"`
-	OpenSchemaRecommendationsCount    types.Int64                           `tfsdk:"open_schema_recommendations_count"`
-	Organization                      types.String                          `tfsdk:"organization"`
-	Plan                              types.String                          `tfsdk:"plan"`
-	ProductionBranchesCount           types.Int64                           `tfsdk:"production_branches_count"`
-	ProductionBranchWebConsole        types.Bool                            `tfsdk:"production_branch_web_console"`
-	Ready                             types.Bool                            `tfsdk:"ready"`
-	RegionData                        tfTypes.GetPostgresDatabaseRegionData `tfsdk:"region_data"`
-	RequireApprovalForDeploy          types.Bool                            `tfsdk:"require_approval_for_deploy"`
-	ResizeQueued                      types.Bool                            `tfsdk:"resize_queued"`
-	Resizing                          types.Bool                            `tfsdk:"resizing"`
-	RestrictBranchRegion              types.Bool                            `tfsdk:"restrict_branch_region"`
-	SchemaLastUpdatedAt               types.String                          `tfsdk:"schema_last_updated_at"`
-	State                             types.String                          `tfsdk:"state"`
-	UpdatedAt                         types.String                          `tfsdk:"updated_at"`
-	URL                               types.String                          `tfsdk:"url"`
+	AtBackupRestoreBranchesLimit      types.Bool                             `tfsdk:"at_backup_restore_branches_limit"`
+	AtDevelopmentBranchUsageLimit     types.Bool                             `tfsdk:"at_development_branch_usage_limit"`
+	BranchesCount                     types.Int64                            `tfsdk:"branches_count"`
+	BranchesURL                       types.String                           `tfsdk:"branches_url"`
+	CreatedAt                         types.String                           `tfsdk:"created_at"`
+	DataImport                        *tfTypes.GetPostgresDatabaseDataImport `tfsdk:"data_import"`
+	DefaultBranch                     types.String                           `tfsdk:"default_branch"`
+	DefaultBranchReadOnlyRegionsCount types.Int64                            `tfsdk:"default_branch_read_only_regions_count"`
+	DefaultBranchShardCount           types.Int64                            `tfsdk:"default_branch_shard_count"`
+	DefaultBranchTableCount           types.Int64                            `tfsdk:"default_branch_table_count"`
+	DevelopmentBranchesCount          types.Int64                            `tfsdk:"development_branches_count"`
+	HTMLURL                           types.String                           `tfsdk:"html_url"`
+	ID                                types.String                           `tfsdk:"id"`
+	InsightsEnabled                   types.Bool                             `tfsdk:"insights_enabled"`
+	InsightsRawQueries                types.Bool                             `tfsdk:"insights_raw_queries"`
+	IssuesCount                       types.Int64                            `tfsdk:"issues_count"`
+	MultipleAdminsRequiredForDeletion types.Bool                             `tfsdk:"multiple_admins_required_for_deletion"`
+	Name                              types.String                           `tfsdk:"name"`
+	OpenSchemaRecommendationsCount    types.Int64                            `tfsdk:"open_schema_recommendations_count"`
+	Organization                      types.String                           `tfsdk:"organization"`
+	Plan                              types.String                           `tfsdk:"plan"`
+	ProductionBranchesCount           types.Int64                            `tfsdk:"production_branches_count"`
+	ProductionBranchWebConsole        types.Bool                             `tfsdk:"production_branch_web_console"`
+	Ready                             types.Bool                             `tfsdk:"ready"`
+	RegionData                        *tfTypes.GetPostgresDatabaseRegionData `tfsdk:"region_data"`
+	RequireApprovalForDeploy          types.Bool                             `tfsdk:"require_approval_for_deploy"`
+	ResizeQueued                      types.Bool                             `tfsdk:"resize_queued"`
+	Resizing                          types.Bool                             `tfsdk:"resizing"`
+	RestrictBranchRegion              types.Bool                             `tfsdk:"restrict_branch_region"`
+	SchemaLastUpdatedAt               types.String                           `tfsdk:"schema_last_updated_at"`
+	State                             types.String                           `tfsdk:"state"`
+	UpdatedAt                         types.String                           `tfsdk:"updated_at"`
+	URL                               types.String                           `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -158,7 +158,7 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 				Description: `The URL to see this database's branches in the web UI`,
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `The ID of the database`,
 			},
 			"insights_enabled": schema.BoolAttribute{

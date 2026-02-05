@@ -15,6 +15,7 @@ VitessBranch DataSource
 ```terraform
 data "planetscale_vitess_branch" "my_vitessbranch" {
   database     = "...my_database..."
+  id           = "...my_id..."
   organization = "...my_organization..."
 }
 ```
@@ -25,6 +26,7 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 ### Required
 
 - `database` (String) The name of the database the branch belongs to
+- `id` (String) The ID of the branch
 - `organization` (String) The name of the organization the branch belongs to
 
 ### Read-Only
@@ -32,7 +34,6 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `cluster_name` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
-- `id` (String) The ID of the branch
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `name` (String) The name of the branch

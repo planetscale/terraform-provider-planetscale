@@ -29,29 +29,29 @@ type PostgresBranchRoleDataSource struct {
 
 // PostgresBranchRoleDataSourceModel describes the data model.
 type PostgresBranchRoleDataSourceModel struct {
-	AccessHostURL                types.String              `tfsdk:"access_host_url"`
-	ActorData                    tfTypes.GetRoleActorData  `tfsdk:"actor_data"`
-	Branch                       types.String              `tfsdk:"branch"`
-	BranchData                   tfTypes.GetRoleBranchData `tfsdk:"branch_data"`
-	CreatedAt                    types.String              `tfsdk:"created_at"`
-	Database                     types.String              `tfsdk:"database"`
-	DatabaseName                 types.String              `tfsdk:"database_name"`
-	Default                      types.Bool                `tfsdk:"default"`
-	DeletedAt                    types.String              `tfsdk:"deleted_at"`
-	DisabledAt                   types.String              `tfsdk:"disabled_at"`
-	DropFailed                   types.String              `tfsdk:"drop_failed"`
-	DroppedAt                    types.String              `tfsdk:"dropped_at"`
-	Expired                      types.Bool                `tfsdk:"expired"`
-	ExpiresAt                    types.String              `tfsdk:"expires_at"`
-	ID                           types.String              `tfsdk:"id"`
-	InheritedRoles               []types.String            `tfsdk:"inherited_roles"`
-	Name                         types.String              `tfsdk:"name"`
-	Organization                 types.String              `tfsdk:"organization"`
-	PrivateAccessHostURL         types.String              `tfsdk:"private_access_host_url"`
-	PrivateConnectionServiceName types.String              `tfsdk:"private_connection_service_name"`
-	TTL                          types.Int64               `tfsdk:"ttl"`
-	UpdatedAt                    types.String              `tfsdk:"updated_at"`
-	Username                     types.String              `tfsdk:"username"`
+	AccessHostURL                types.String               `tfsdk:"access_host_url"`
+	ActorData                    *tfTypes.GetRoleActorData  `tfsdk:"actor_data"`
+	Branch                       types.String               `tfsdk:"branch"`
+	BranchData                   *tfTypes.GetRoleBranchData `tfsdk:"branch_data"`
+	CreatedAt                    types.String               `tfsdk:"created_at"`
+	Database                     types.String               `tfsdk:"database"`
+	DatabaseName                 types.String               `tfsdk:"database_name"`
+	Default                      types.Bool                 `tfsdk:"default"`
+	DeletedAt                    types.String               `tfsdk:"deleted_at"`
+	DisabledAt                   types.String               `tfsdk:"disabled_at"`
+	DropFailed                   types.String               `tfsdk:"drop_failed"`
+	DroppedAt                    types.String               `tfsdk:"dropped_at"`
+	Expired                      types.Bool                 `tfsdk:"expired"`
+	ExpiresAt                    types.String               `tfsdk:"expires_at"`
+	ID                           types.String               `tfsdk:"id"`
+	InheritedRoles               []types.String             `tfsdk:"inherited_roles"`
+	Name                         types.String               `tfsdk:"name"`
+	Organization                 types.String               `tfsdk:"organization"`
+	PrivateAccessHostURL         types.String               `tfsdk:"private_access_host_url"`
+	PrivateConnectionServiceName types.String               `tfsdk:"private_connection_service_name"`
+	TTL                          types.Int64                `tfsdk:"ttl"`
+	UpdatedAt                    types.String               `tfsdk:"updated_at"`
+	Username                     types.String               `tfsdk:"username"`
 }
 
 // Metadata returns the data source type name.

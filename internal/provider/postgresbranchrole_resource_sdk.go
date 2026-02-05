@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -14,9 +15,11 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsCreateRoleRespons
 
 	if resp != nil {
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
+		r.ActorData = &tfTypes.GetRoleActorData{}
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
+		r.BranchData = &tfTypes.GetRoleBranchData{}
 		r.BranchData.DeletedAt = types.StringValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
@@ -51,9 +54,11 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 
 	if resp != nil {
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
+		r.ActorData = &tfTypes.GetRoleActorData{}
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
+		r.BranchData = &tfTypes.GetRoleBranchData{}
 		r.BranchData.DeletedAt = types.StringValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
@@ -87,9 +92,11 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 
 	if resp != nil {
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
+		r.ActorData = &tfTypes.GetRoleActorData{}
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
+		r.BranchData = &tfTypes.GetRoleBranchData{}
 		r.BranchData.DeletedAt = types.StringValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)

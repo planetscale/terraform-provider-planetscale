@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -15,6 +16,7 @@ func (r *UserDataSourceModel) RefreshFromOperationsGetCurrentUserResponseBody(ct
 	if resp != nil {
 		r.AvatarURL = types.StringValue(resp.AvatarURL)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DefaultOrganization = &tfTypes.DefaultOrganization{}
 		r.DefaultOrganization.CreatedAt = types.StringValue(resp.DefaultOrganization.CreatedAt)
 		r.DefaultOrganization.DeletedAt = types.StringValue(resp.DefaultOrganization.DeletedAt)
 		r.DefaultOrganization.ID = types.StringValue(resp.DefaultOrganization.ID)

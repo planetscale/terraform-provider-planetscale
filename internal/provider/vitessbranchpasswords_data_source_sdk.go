@@ -29,6 +29,7 @@ func (r *VitessBranchPasswordsDataSourceModel) RefreshFromOperationsListPassword
 				data.AccessHostRegionalUrls = append(data.AccessHostRegionalUrls, types.StringValue(v))
 			}
 			data.AccessHostURL = types.StringValue(dataItem.AccessHostURL)
+			data.Actor = &tfTypes.ListPasswordsActor{}
 			data.Actor.AvatarURL = types.StringValue(dataItem.Actor.AvatarURL)
 			data.Actor.DisplayName = types.StringValue(dataItem.Actor.DisplayName)
 			data.Actor.ID = types.StringValue(dataItem.Actor.ID)
@@ -39,6 +40,7 @@ func (r *VitessBranchPasswordsDataSourceModel) RefreshFromOperationsListPassword
 				data.Cidrs = append(data.Cidrs, types.StringValue(v))
 			}
 			data.CreatedAt = types.StringValue(dataItem.CreatedAt)
+			data.DatabaseBranch = &tfTypes.ListPasswordsDatabaseBranch{}
 			data.DatabaseBranch.ID = types.StringValue(dataItem.DatabaseBranch.ID)
 			data.DatabaseBranch.MysqlEdgeAddress = types.StringValue(dataItem.DatabaseBranch.MysqlEdgeAddress)
 			data.DatabaseBranch.Name = types.StringValue(dataItem.DatabaseBranch.Name)
@@ -58,6 +60,7 @@ func (r *VitessBranchPasswordsDataSourceModel) RefreshFromOperationsListPassword
 			data.LastUsedAt = types.StringValue(dataItem.LastUsedAt)
 			data.Name = types.StringValue(dataItem.Name)
 			data.PlainText = types.StringValue(dataItem.PlainText)
+			data.Region = &tfTypes.ListPasswordsRegion{}
 			data.Region.CurrentDefault = types.BoolValue(dataItem.Region.CurrentDefault)
 			data.Region.DisplayName = types.StringValue(dataItem.Region.DisplayName)
 			data.Region.Enabled = types.BoolValue(dataItem.Region.Enabled)

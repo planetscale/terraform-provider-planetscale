@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
@@ -13,6 +14,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Actor = &tfTypes.GetPostgresBranchActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
@@ -20,6 +22,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 		r.Name = types.StringValue(resp.Name)
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
@@ -32,6 +35,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Actor = &tfTypes.GetPostgresBranchActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
@@ -39,6 +43,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.Name = types.StringValue(resp.Name)
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
@@ -52,6 +57,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdatePostgresBranchR
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Actor = &tfTypes.GetPostgresBranchActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.ClusterName = types.StringValue(resp.ClusterName)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
@@ -59,6 +65,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdatePostgresBranchR
 		r.Name = types.StringValue(resp.Name)
 		r.ParentBranch = types.StringValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)

@@ -40,32 +40,32 @@ type VitessBranchPasswordResource struct {
 
 // VitessBranchPasswordResourceModel describes the resource data model.
 type VitessBranchPasswordResourceModel struct {
-	AccessHostRegionalURL  types.String                      `tfsdk:"access_host_regional_url"`
-	AccessHostRegionalUrls []types.String                    `tfsdk:"access_host_regional_urls"`
-	AccessHostURL          types.String                      `tfsdk:"access_host_url"`
-	Actor                  tfTypes.GetPasswordActor          `tfsdk:"actor"`
-	Branch                 types.String                      `tfsdk:"branch"`
-	Cidrs                  []types.String                    `tfsdk:"cidrs"`
-	CreatedAt              types.String                      `tfsdk:"created_at"`
-	Database               types.String                      `tfsdk:"database"`
-	DatabaseBranch         tfTypes.GetPasswordDatabaseBranch `tfsdk:"database_branch"`
-	DeletedAt              types.String                      `tfsdk:"deleted_at"`
-	DirectVtgate           types.Bool                        `tfsdk:"direct_vtgate"`
-	DirectVtgateAddresses  []types.String                    `tfsdk:"direct_vtgate_addresses"`
-	Expired                types.Bool                        `tfsdk:"expired"`
-	ExpiresAt              types.String                      `tfsdk:"expires_at"`
-	ID                     types.String                      `tfsdk:"id"`
-	LastUsedAt             types.String                      `tfsdk:"last_used_at"`
-	Name                   types.String                      `tfsdk:"name"`
-	Organization           types.String                      `tfsdk:"organization"`
-	PlainText              types.String                      `tfsdk:"plain_text"`
-	Region                 tfTypes.GetPasswordRegion         `tfsdk:"region"`
-	Renewable              types.Bool                        `tfsdk:"renewable"`
-	Replica                types.Bool                        `tfsdk:"replica"`
-	Role                   types.String                      `tfsdk:"role"`
-	TTL                    types.Int64                       `tfsdk:"ttl"`
-	TTLSeconds             types.Int64                       `tfsdk:"ttl_seconds"`
-	Username               types.String                      `tfsdk:"username"`
+	AccessHostRegionalURL  types.String                       `tfsdk:"access_host_regional_url"`
+	AccessHostRegionalUrls []types.String                     `tfsdk:"access_host_regional_urls"`
+	AccessHostURL          types.String                       `tfsdk:"access_host_url"`
+	Actor                  *tfTypes.GetPasswordActor          `tfsdk:"actor"`
+	Branch                 types.String                       `tfsdk:"branch"`
+	Cidrs                  []types.String                     `tfsdk:"cidrs"`
+	CreatedAt              types.String                       `tfsdk:"created_at"`
+	Database               types.String                       `tfsdk:"database"`
+	DatabaseBranch         *tfTypes.GetPasswordDatabaseBranch `tfsdk:"database_branch"`
+	DeletedAt              types.String                       `tfsdk:"deleted_at"`
+	DirectVtgate           types.Bool                         `tfsdk:"direct_vtgate"`
+	DirectVtgateAddresses  []types.String                     `tfsdk:"direct_vtgate_addresses"`
+	Expired                types.Bool                         `tfsdk:"expired"`
+	ExpiresAt              types.String                       `tfsdk:"expires_at"`
+	ID                     types.String                       `tfsdk:"id"`
+	LastUsedAt             types.String                       `tfsdk:"last_used_at"`
+	Name                   types.String                       `tfsdk:"name"`
+	Organization           types.String                       `tfsdk:"organization"`
+	PlainText              types.String                       `tfsdk:"plain_text"`
+	Region                 *tfTypes.GetPasswordRegion         `tfsdk:"region"`
+	Renewable              types.Bool                         `tfsdk:"renewable"`
+	Replica                types.Bool                         `tfsdk:"replica"`
+	Role                   types.String                       `tfsdk:"role"`
+	TTL                    types.Int64                        `tfsdk:"ttl"`
+	TTLSeconds             types.Int64                        `tfsdk:"ttl_seconds"`
+	Username               types.String                       `tfsdk:"username"`
 }
 
 func (r *VitessBranchPasswordResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -349,43 +349,6 @@ func (r *VitessBranchPasswordResource) Create(ctx context.Context, req resource.
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsCreatePasswordResponseBody(ctx, res.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsGetPasswordRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.DatabaseBranchPasswords.GetPassword(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPasswordResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

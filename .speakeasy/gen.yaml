@@ -23,6 +23,7 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: body
+  versioningStrategy: automatic
   persistentEdits:
     enabled: never
   tests:
@@ -31,10 +32,12 @@ generation:
     skipResponseBodyAssertions: false
 terraform:
   version: 1.0.0-rc1
+  additionalActions: []
   additionalDataSources: []
   additionalDependencies:
     github.com/hashicorp/terraform-plugin-testing: v1.13.3
   additionalEphemeralResources: []
+  additionalFunctions: []
   additionalListResources: []
   additionalProviderAttributes:
     httpHeaders: ""
@@ -60,4 +63,5 @@ terraform:
   inferUnionDiscriminators: false
   packageName: planetscale
   respectRequiredFields: false
+  respectTitlesForPrimitiveUnionMembers: false
   unionStrategy: populated-fields

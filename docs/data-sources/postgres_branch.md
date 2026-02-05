@@ -15,6 +15,7 @@ PostgresBranch DataSource
 ```terraform
 data "planetscale_postgres_branch" "my_postgresbranch" {
   database     = "...my_database..."
+  id           = "...my_id..."
   organization = "...my_organization..."
 }
 ```
@@ -25,6 +26,7 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 ### Required
 
 - `database` (String) The name of the database the branch belongs to
+- `id` (String) The ID of the branch
 - `organization` (String) The name of the organization the branch belongs to
 
 ### Read-Only
@@ -32,7 +34,6 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `cluster_name` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
-- `id` (String) The ID of the branch
 - `name` (String) The name of the branch
 - `parent_branch` (String) The name of the parent branch from which the branch was created
 - `ready` (Boolean) Whether or not the branch is ready to serve queries

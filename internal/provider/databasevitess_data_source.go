@@ -29,45 +29,45 @@ type DatabaseVitessDataSource struct {
 
 // DatabaseVitessDataSourceModel describes the data model.
 type DatabaseVitessDataSourceModel struct {
-	AllowDataBranching                types.Bool                          `tfsdk:"allow_data_branching"`
-	AtBackupRestoreBranchesLimit      types.Bool                          `tfsdk:"at_backup_restore_branches_limit"`
-	AtDevelopmentBranchUsageLimit     types.Bool                          `tfsdk:"at_development_branch_usage_limit"`
-	AutomaticMigrations               types.Bool                          `tfsdk:"automatic_migrations"`
-	BranchesCount                     types.Int64                         `tfsdk:"branches_count"`
-	BranchesURL                       types.String                        `tfsdk:"branches_url"`
-	CreatedAt                         types.String                        `tfsdk:"created_at"`
-	DataImport                        tfTypes.GetVitessDatabaseDataImport `tfsdk:"data_import"`
-	DefaultBranch                     types.String                        `tfsdk:"default_branch"`
-	DefaultBranchReadOnlyRegionsCount types.Int64                         `tfsdk:"default_branch_read_only_regions_count"`
-	DefaultBranchShardCount           types.Int64                         `tfsdk:"default_branch_shard_count"`
-	DefaultBranchTableCount           types.Int64                         `tfsdk:"default_branch_table_count"`
-	DevelopmentBranchesCount          types.Int64                         `tfsdk:"development_branches_count"`
-	ForeignKeysEnabled                types.Bool                          `tfsdk:"foreign_keys_enabled"`
-	HTMLURL                           types.String                        `tfsdk:"html_url"`
-	ID                                types.String                        `tfsdk:"id"`
-	InsightsEnabled                   types.Bool                          `tfsdk:"insights_enabled"`
-	InsightsRawQueries                types.Bool                          `tfsdk:"insights_raw_queries"`
-	IssuesCount                       types.Int64                         `tfsdk:"issues_count"`
-	MigrationFramework                types.String                        `tfsdk:"migration_framework"`
-	MigrationTableName                types.String                        `tfsdk:"migration_table_name"`
-	MultipleAdminsRequiredForDeletion types.Bool                          `tfsdk:"multiple_admins_required_for_deletion"`
-	Name                              types.String                        `tfsdk:"name"`
-	OpenSchemaRecommendationsCount    types.Int64                         `tfsdk:"open_schema_recommendations_count"`
-	Organization                      types.String                        `tfsdk:"organization"`
-	Plan                              types.String                        `tfsdk:"plan"`
-	ProductionBranchesCount           types.Int64                         `tfsdk:"production_branches_count"`
-	ProductionBranchWebConsole        types.Bool                          `tfsdk:"production_branch_web_console"`
-	Ready                             types.Bool                          `tfsdk:"ready"`
-	RegionData                        tfTypes.GetVitessDatabaseRegionData `tfsdk:"region_data"`
-	RequireApprovalForDeploy          types.Bool                          `tfsdk:"require_approval_for_deploy"`
-	ResizeQueued                      types.Bool                          `tfsdk:"resize_queued"`
-	Resizing                          types.Bool                          `tfsdk:"resizing"`
-	RestrictBranchRegion              types.Bool                          `tfsdk:"restrict_branch_region"`
-	SchemaLastUpdatedAt               types.String                        `tfsdk:"schema_last_updated_at"`
-	Sharded                           types.Bool                          `tfsdk:"sharded"`
-	State                             types.String                        `tfsdk:"state"`
-	UpdatedAt                         types.String                        `tfsdk:"updated_at"`
-	URL                               types.String                        `tfsdk:"url"`
+	AllowDataBranching                types.Bool                           `tfsdk:"allow_data_branching"`
+	AtBackupRestoreBranchesLimit      types.Bool                           `tfsdk:"at_backup_restore_branches_limit"`
+	AtDevelopmentBranchUsageLimit     types.Bool                           `tfsdk:"at_development_branch_usage_limit"`
+	AutomaticMigrations               types.Bool                           `tfsdk:"automatic_migrations"`
+	BranchesCount                     types.Int64                          `tfsdk:"branches_count"`
+	BranchesURL                       types.String                         `tfsdk:"branches_url"`
+	CreatedAt                         types.String                         `tfsdk:"created_at"`
+	DataImport                        *tfTypes.GetVitessDatabaseDataImport `tfsdk:"data_import"`
+	DefaultBranch                     types.String                         `tfsdk:"default_branch"`
+	DefaultBranchReadOnlyRegionsCount types.Int64                          `tfsdk:"default_branch_read_only_regions_count"`
+	DefaultBranchShardCount           types.Int64                          `tfsdk:"default_branch_shard_count"`
+	DefaultBranchTableCount           types.Int64                          `tfsdk:"default_branch_table_count"`
+	DevelopmentBranchesCount          types.Int64                          `tfsdk:"development_branches_count"`
+	ForeignKeysEnabled                types.Bool                           `tfsdk:"foreign_keys_enabled"`
+	HTMLURL                           types.String                         `tfsdk:"html_url"`
+	ID                                types.String                         `tfsdk:"id"`
+	InsightsEnabled                   types.Bool                           `tfsdk:"insights_enabled"`
+	InsightsRawQueries                types.Bool                           `tfsdk:"insights_raw_queries"`
+	IssuesCount                       types.Int64                          `tfsdk:"issues_count"`
+	MigrationFramework                types.String                         `tfsdk:"migration_framework"`
+	MigrationTableName                types.String                         `tfsdk:"migration_table_name"`
+	MultipleAdminsRequiredForDeletion types.Bool                           `tfsdk:"multiple_admins_required_for_deletion"`
+	Name                              types.String                         `tfsdk:"name"`
+	OpenSchemaRecommendationsCount    types.Int64                          `tfsdk:"open_schema_recommendations_count"`
+	Organization                      types.String                         `tfsdk:"organization"`
+	Plan                              types.String                         `tfsdk:"plan"`
+	ProductionBranchesCount           types.Int64                          `tfsdk:"production_branches_count"`
+	ProductionBranchWebConsole        types.Bool                           `tfsdk:"production_branch_web_console"`
+	Ready                             types.Bool                           `tfsdk:"ready"`
+	RegionData                        *tfTypes.GetVitessDatabaseRegionData `tfsdk:"region_data"`
+	RequireApprovalForDeploy          types.Bool                           `tfsdk:"require_approval_for_deploy"`
+	ResizeQueued                      types.Bool                           `tfsdk:"resize_queued"`
+	Resizing                          types.Bool                           `tfsdk:"resizing"`
+	RestrictBranchRegion              types.Bool                           `tfsdk:"restrict_branch_region"`
+	SchemaLastUpdatedAt               types.String                         `tfsdk:"schema_last_updated_at"`
+	Sharded                           types.Bool                           `tfsdk:"sharded"`
+	State                             types.String                         `tfsdk:"state"`
+	UpdatedAt                         types.String                         `tfsdk:"updated_at"`
+	URL                               types.String                         `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -176,7 +176,7 @@ func (r *DatabaseVitessDataSource) Schema(ctx context.Context, req datasource.Sc
 				Description: `The URL to see this database's branches in the web UI`,
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `The ID of the database`,
 			},
 			"insights_enabled": schema.BoolAttribute{
