@@ -165,7 +165,6 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewPostgresBranchDataSource,
 		NewPostgresBranchRoleDataSource,
 		NewPostgresBranchRolesDataSource,
-		NewUserDataSource,
 		NewVitessBranchDataSource,
 		NewVitessBranchPasswordDataSource,
 		NewVitessBranchPasswordsDataSource,

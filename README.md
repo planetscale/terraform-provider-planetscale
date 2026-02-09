@@ -76,7 +76,6 @@ Available configuration:
 * [planetscale_postgres_branch](docs/data-sources/postgres_branch.md)
 * [planetscale_postgres_branch_role](docs/data-sources/postgres_branch_role.md)
 * [planetscale_postgres_branch_roles](docs/data-sources/postgres_branch_roles.md)
-* [planetscale_user](docs/data-sources/user.md)
 * [planetscale_vitess_branch](docs/data-sources/vitess_branch.md)
 * [planetscale_vitess_branch_password](docs/data-sources/vitess_branch_password.md)
 * [planetscale_vitess_branch_passwords](docs/data-sources/vitess_branch_passwords.md)
