@@ -36,16 +36,16 @@ func newDatabaseBranchPasswords(rootSDK *PlanetScale, sdkConfig config.SDKConfig
 //
 // **Service Token Accesses**
 //
-//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 //
 // **OAuth Scopes**
 //
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-// | Database | `manage_passwords`, `manage_production_branch_passwords` |
-// | Branch | `manage_passwords` |
+// | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Branch | `manage_passwords`, `manage_read_only_passwords` |
 func (s *DatabaseBranchPasswords) ListPasswords(ctx context.Context, request operations.ListPasswordsRequest, opts ...operations.Option) (*operations.ListPasswordsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -232,16 +232,16 @@ func (s *DatabaseBranchPasswords) ListPasswords(ctx context.Context, request ope
 //
 // **Service Token Accesses**
 //
-//	`connect_production_branch`, `connect_branch`
+//	`connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 //
 // **OAuth Scopes**
 //
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-// | Database | `manage_passwords`, `manage_production_branch_passwords` |
-// | Branch | `manage_passwords` |
+// | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Branch | `manage_passwords`, `manage_read_only_passwords` |
 func (s *DatabaseBranchPasswords) CreatePassword(ctx context.Context, request operations.CreatePasswordRequest, opts ...operations.Option) (*operations.CreatePasswordResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -391,16 +391,16 @@ func (s *DatabaseBranchPasswords) CreatePassword(ctx context.Context, request op
 //
 // **Service Token Accesses**
 //
-//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 //
 // **OAuth Scopes**
 //
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-// | Database | `manage_passwords`, `manage_production_branch_passwords` |
-// | Branch | `manage_passwords` |
+// | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Branch | `manage_passwords`, `manage_read_only_passwords` |
 func (s *DatabaseBranchPasswords) GetPassword(ctx context.Context, request operations.GetPasswordRequest, opts ...operations.Option) (*operations.GetPasswordResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -541,16 +541,16 @@ func (s *DatabaseBranchPasswords) GetPassword(ctx context.Context, request opera
 //
 // **Service Token Accesses**
 //
-//	`connect_production_branch`, `connect_branch`
+//	`connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 //
 // **OAuth Scopes**
 //
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-// | Database | `manage_passwords`, `manage_production_branch_passwords` |
-// | Branch | `manage_passwords` |
+// | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Branch | `manage_passwords`, `manage_read_only_passwords` |
 func (s *DatabaseBranchPasswords) UpdatePassword(ctx context.Context, request operations.UpdatePasswordRequest, opts ...operations.Option) (*operations.UpdatePasswordResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -698,16 +698,16 @@ func (s *DatabaseBranchPasswords) UpdatePassword(ctx context.Context, request op
 //
 // **Service Token Accesses**
 //
-//	`delete_production_branch_password`, `delete_branch_password`
+//	`delete_production_branch_password`, `delete_production_read_only_branch_password`, `delete_branch_password`
 //
 // **OAuth Scopes**
 //
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-// | Database | `manage_passwords`, `manage_production_branch_passwords` |
-// | Branch | `manage_passwords` |
+// | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+// | Branch | `manage_passwords`, `manage_read_only_passwords` |
 func (s *DatabaseBranchPasswords) DeletePassword(ctx context.Context, request operations.DeletePasswordRequest, opts ...operations.Option) (*operations.DeletePasswordResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

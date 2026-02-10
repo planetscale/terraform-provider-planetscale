@@ -49,6 +49,7 @@ data "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 - `name` (String) The name of the role
 - `private_access_host_url` (String) The database connection string for private connections
 - `private_connection_service_name` (String) The service name to set up private connectivity
+- `query_safety_settings` (Attributes) (see [below for nested schema](#nestedatt--query_safety_settings))
 - `ttl` (Number) Number of seconds before the credentials expire
 - `updated_at` (String) When the role was updated
 - `username` (String) The database user name
@@ -71,3 +72,12 @@ Read-Only:
 - `deleted_at` (String) When the resource was deleted, if deleted
 - `id` (String) The ID for the resource
 - `name` (String) The name for the resource
+
+
+<a id="nestedatt--query_safety_settings"></a>
+### Nested Schema for `query_safety_settings`
+
+Read-Only:
+
+- `require_where_on_delete` (String) Require WHERE clause on DELETE statements
+- `require_where_on_update` (String) Require WHERE clause on UPDATE statements
