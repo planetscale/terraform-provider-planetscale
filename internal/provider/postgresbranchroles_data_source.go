@@ -161,6 +161,19 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 							Computed:    true,
 							Description: `The service name to set up private connectivity`,
 						},
+						"query_safety_settings": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"require_where_on_delete": schema.StringAttribute{
+									Computed:    true,
+									Description: `Require WHERE clause on DELETE statements`,
+								},
+								"require_where_on_update": schema.StringAttribute{
+									Computed:    true,
+									Description: `Require WHERE clause on UPDATE statements`,
+								},
+							},
+						},
 						"ttl": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Number of seconds before the credentials expire`,

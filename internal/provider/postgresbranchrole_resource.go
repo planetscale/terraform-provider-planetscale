@@ -37,31 +37,34 @@ type PostgresBranchRoleResource struct {
 
 // PostgresBranchRoleResourceModel describes the resource data model.
 type PostgresBranchRoleResourceModel struct {
-	AccessHostURL                types.String               `tfsdk:"access_host_url"`
-	ActorData                    *tfTypes.GetRoleActorData  `tfsdk:"actor_data"`
-	Branch                       types.String               `tfsdk:"branch"`
-	BranchData                   *tfTypes.GetRoleBranchData `tfsdk:"branch_data"`
-	CreatedAt                    types.String               `tfsdk:"created_at"`
-	Database                     types.String               `tfsdk:"database"`
-	DatabaseName                 types.String               `tfsdk:"database_name"`
-	Default                      types.Bool                 `tfsdk:"default"`
-	DeletedAt                    types.String               `tfsdk:"deleted_at"`
-	DisabledAt                   types.String               `tfsdk:"disabled_at"`
-	DropFailed                   types.String               `tfsdk:"drop_failed"`
-	DroppedAt                    types.String               `tfsdk:"dropped_at"`
-	Expired                      types.Bool                 `tfsdk:"expired"`
-	ExpiresAt                    types.String               `tfsdk:"expires_at"`
-	ID                           types.String               `tfsdk:"id"`
-	InheritedRoles               []types.String             `tfsdk:"inherited_roles"`
-	Name                         types.String               `tfsdk:"name"`
-	Organization                 types.String               `tfsdk:"organization"`
-	Password                     types.String               `tfsdk:"password"`
-	PrivateAccessHostURL         types.String               `tfsdk:"private_access_host_url"`
-	PrivateConnectionServiceName types.String               `tfsdk:"private_connection_service_name"`
-	Successor                    types.String               `tfsdk:"successor"`
-	TTL                          types.Int64                `tfsdk:"ttl"`
-	UpdatedAt                    types.String               `tfsdk:"updated_at"`
-	Username                     types.String               `tfsdk:"username"`
+	AccessHostURL                types.String                        `tfsdk:"access_host_url"`
+	ActorData                    *tfTypes.GetRoleActorData           `tfsdk:"actor_data"`
+	Branch                       types.String                        `tfsdk:"branch"`
+	BranchData                   *tfTypes.GetRoleBranchData          `tfsdk:"branch_data"`
+	CreatedAt                    types.String                        `tfsdk:"created_at"`
+	Database                     types.String                        `tfsdk:"database"`
+	DatabaseName                 types.String                        `tfsdk:"database_name"`
+	Default                      types.Bool                          `tfsdk:"default"`
+	DeletedAt                    types.String                        `tfsdk:"deleted_at"`
+	DisabledAt                   types.String                        `tfsdk:"disabled_at"`
+	DropFailed                   types.String                        `tfsdk:"drop_failed"`
+	DroppedAt                    types.String                        `tfsdk:"dropped_at"`
+	Expired                      types.Bool                          `tfsdk:"expired"`
+	ExpiresAt                    types.String                        `tfsdk:"expires_at"`
+	ID                           types.String                        `tfsdk:"id"`
+	InheritedRoles               []types.String                      `tfsdk:"inherited_roles"`
+	Name                         types.String                        `tfsdk:"name"`
+	Organization                 types.String                        `tfsdk:"organization"`
+	Password                     types.String                        `tfsdk:"password"`
+	PrivateAccessHostURL         types.String                        `tfsdk:"private_access_host_url"`
+	PrivateConnectionServiceName types.String                        `tfsdk:"private_connection_service_name"`
+	QuerySafetySettings          *tfTypes.GetRoleQuerySafetySettings `tfsdk:"query_safety_settings"`
+	RequireWhereOnDelete         types.String                        `tfsdk:"require_where_on_delete"`
+	RequireWhereOnUpdate         types.String                        `tfsdk:"require_where_on_update"`
+	Successor                    types.String                        `tfsdk:"successor"`
+	TTL                          types.Int64                         `tfsdk:"ttl"`
+	UpdatedAt                    types.String                        `tfsdk:"updated_at"`
+	Username                     types.String                        `tfsdk:"username"`
 }
 
 func (r *PostgresBranchRoleResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -189,6 +192,27 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 			"private_connection_service_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The service name to set up private connectivity`,
+			},
+			"query_safety_settings": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"require_where_on_delete": schema.StringAttribute{
+						Computed:    true,
+						Description: `Require WHERE clause on DELETE statements`,
+					},
+					"require_where_on_update": schema.StringAttribute{
+						Computed:    true,
+						Description: `Require WHERE clause on UPDATE statements`,
+					},
+				},
+			},
+			"require_where_on_delete": schema.StringAttribute{
+				Optional:    true,
+				Description: `Require WHERE clause on DELETE statements`,
+			},
+			"require_where_on_update": schema.StringAttribute{
+				Optional:    true,
+				Description: `Require WHERE clause on UPDATE statements`,
 			},
 			"successor": schema.StringAttribute{
 				Optional:    true,

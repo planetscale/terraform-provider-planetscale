@@ -636,7 +636,7 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
+         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
 
         **OAuth Scopes**
 
@@ -941,15 +941,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: VitessBranchPasswords#read
       x-speakeasy-entity-description: Returns information about PlanetScale database branch passwords.
       x-speakeasy-pagination:
@@ -1214,15 +1214,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `connect_production_branch`, `connect_branch`
+         `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: VitessBranchPassword#create
       x-speakeasy-entity-description: Manage a PlanetScale database branch password.
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}:
@@ -1453,15 +1453,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: VitessBranchPassword#read
       x-speakeasy-entity-description: Returns information about a PlanetScale database branch password.
     patch:
@@ -1706,15 +1706,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `connect_production_branch`, `connect_branch`
+         `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: VitessBranchPassword#update
     delete:
       tags:
@@ -1763,15 +1763,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `delete_production_branch_password`, `delete_branch_password`
+         `delete_production_branch_password`, `delete_production_read_only_branch_password`, `delete_branch_password`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: VitessBranchPassword#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords/{id}/renew: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/promote: {}
@@ -1967,6 +1967,27 @@ paths:
                             - id
                             - display_name
                             - avatar_url
+                        query_safety_settings:
+                          type: object
+                          properties:
+                            require_where_on_delete:
+                              type: string
+                              enum:
+                                - off
+                                - warn
+                                - on
+                              description: Require WHERE clause on DELETE statements
+                            require_where_on_update:
+                              type: string
+                              enum:
+                                - off
+                                - warn
+                                - on
+                              description: Require WHERE clause on UPDATE statements
+                          additionalProperties: false
+                          required:
+                            - require_where_on_delete
+                            - require_where_on_update
                       additionalProperties: false
                       required:
                         - id
@@ -1990,6 +2011,7 @@ paths:
                         - inherited_roles
                         - branch
                         - actor
+                        - query_safety_settings
                 additionalProperties: false
                 required:
                   - current_page
@@ -2011,15 +2033,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRoles#read
       x-speakeasy-entity-description: Returns information about PlanetScale database branch roles.
       x-speakeasy-pagination:
@@ -2086,6 +2108,12 @@ paths:
                       - postgres
                   description: Roles to inherit from
                   format: set
+                require_where_on_delete:
+                  type: string
+                  description: Require WHERE clause on DELETE statements
+                require_where_on_update:
+                  type: string
+                  description: Require WHERE clause on UPDATE statements
               additionalProperties: false
       responses:
         "200":
@@ -2217,6 +2245,27 @@ paths:
                       - display_name
                       - avatar_url
                     x-speakeasy-name-override: actor_data
+                  query_safety_settings:
+                    type: object
+                    properties:
+                      require_where_on_delete:
+                        type: string
+                        enum:
+                          - off
+                          - warn
+                          - on
+                        description: Require WHERE clause on DELETE statements
+                      require_where_on_update:
+                        type: string
+                        enum:
+                          - off
+                          - warn
+                          - on
+                        description: Require WHERE clause on UPDATE statements
+                    additionalProperties: false
+                    required:
+                      - require_where_on_delete
+                      - require_where_on_update
                 additionalProperties: false
                 required:
                   - id
@@ -2240,6 +2289,7 @@ paths:
                   - inherited_roles
                   - branch
                   - actor
+                  - query_safety_settings
         "401":
           description: Unauthorized
         "403":
@@ -2253,15 +2303,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `create_production_branch_password`, `create_branch_password`
+         `create_production_branch_password`, `create_production_read_only_branch_password`, `create_branch_password`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRole#create
       x-speakeasy-entity-description: Manage a PlanetScale database role.
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/default: {}
@@ -2428,6 +2478,27 @@ paths:
                       - display_name
                       - avatar_url
                     x-speakeasy-name-override: actor_data
+                  query_safety_settings:
+                    type: object
+                    properties:
+                      require_where_on_delete:
+                        type: string
+                        enum:
+                          - off
+                          - warn
+                          - on
+                        description: Require WHERE clause on DELETE statements
+                      require_where_on_update:
+                        type: string
+                        enum:
+                          - off
+                          - warn
+                          - on
+                        description: Require WHERE clause on UPDATE statements
+                    additionalProperties: false
+                    required:
+                      - require_where_on_delete
+                      - require_where_on_update
                 additionalProperties: false
                 required:
                   - id
@@ -2451,6 +2522,7 @@ paths:
                   - inherited_roles
                   - branch
                   - actor
+                  - query_safety_settings
         "401":
           description: Unauthorized
         "403":
@@ -2464,15 +2536,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRole#read
       x-speakeasy-entity-description: Returns information about a PlanetScale database role.
     patch:
@@ -2514,6 +2586,12 @@ paths:
                 name:
                   type: string
                   description: The new name of the role
+                require_where_on_delete:
+                  type: string
+                  description: Require WHERE clause on DELETE statements
+                require_where_on_update:
+                  type: string
+                  description: Require WHERE clause on UPDATE statements
               additionalProperties: false
       responses:
         "200":
@@ -2646,6 +2724,27 @@ paths:
                       - display_name
                       - avatar_url
                     x-speakeasy-name-override: actor_data
+                  query_safety_settings:
+                    type: object
+                    properties:
+                      require_where_on_delete:
+                        type: string
+                        enum:
+                          - off
+                          - warn
+                          - on
+                        description: Require WHERE clause on DELETE statements
+                      require_where_on_update:
+                        type: string
+                        enum:
+                          - off
+                          - warn
+                          - on
+                        description: Require WHERE clause on UPDATE statements
+                    additionalProperties: false
+                    required:
+                      - require_where_on_delete
+                      - require_where_on_update
                 additionalProperties: false
                 required:
                   - id
@@ -2669,6 +2768,7 @@ paths:
                   - inherited_roles
                   - branch
                   - actor
+                  - query_safety_settings
         "401":
           description: Unauthorized
         "403":
@@ -2682,15 +2782,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `create_production_branch_password`, `create_branch_password`
+         `create_production_branch_password`, `create_production_read_only_branch_password`, `create_branch_password`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRole#update
     delete:
       tags:
@@ -2749,15 +2849,15 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `delete_production_branch_password`, `delete_branch_password`
+         `delete_production_branch_password`, `delete_production_read_only_branch_password`, `delete_branch_password`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
-        | Organization | `manage_passwords`, `manage_production_branch_passwords` |
-        | Database | `manage_passwords`, `manage_production_branch_passwords` |
-        | Branch | `manage_passwords` |
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRole#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}/reassign: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}/renew: {}
@@ -2784,6 +2884,9 @@ paths:
   /organizations/{organization}/databases/{database}/deploy-requests/{number}/throttler: {}
   /organizations/{organization}/databases/{database}/read-only-regions: {}
   /organizations/{organization}/databases/{database}/regions: {}
+  /organizations/{organization}/databases/{database}/schema-recommendations: {}
+  /organizations/{organization}/databases/{database}/schema-recommendations/{number}: {}
+  /organizations/{organization}/databases/{database}/schema-recommendations/{number}/dismiss: {}
   /organizations/{organization}/databases/{database}/throttler: {}
   /organizations/{organization}/databases/{database}/webhooks: {}
   /organizations/{organization}/databases/{database}/webhooks/{id}: {}
@@ -2813,6 +2916,8 @@ paths:
   /organizations/{organization}/service-tokens/{id}: {}
   /organizations/{organization}/teams: {}
   /organizations/{organization}/teams/{team}: {}
+  /organizations/{organization}/teams/{team}/members: {}
+  /organizations/{organization}/teams/{team}/members/{id}: {}
   /regions: {}
   /user: {}
   /organizations/{organization}/databases/{database}/branches#postgres:
@@ -4221,7 +4326,7 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
+         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
 
         **OAuth Scopes**
 
@@ -4503,7 +4608,7 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `delete_branch_password`, `delete_production_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_schema_recommendations`, `close_schema_recommendations`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
+         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
 
         **OAuth Scopes**
 
@@ -4581,6 +4686,9 @@ tags:
   - name: Query Insights reports
     description: |2
                 Resources for downloading query insights data.
+  - name: Schema recommendations
+    description: |2
+                Resources for managing schema recommendations within a database.
   - name: Service tokens
     description: |2
                 API endpoints for managing service tokens within an organization.
@@ -4599,6 +4707,11 @@ tags:
   - name: Invoices
     description: |2
                   Resources for managing invoices.
+  - name: Team members
+    description: |2
+                  Resources for managing team memberships within an organization. Team members inherit access to databases assigned to their team.
+
+                  Note: Teams managed through SSO/directory services cannot have members added or removed via API.
   - name: Organization teams
     description: |2
                   Resources for managing teams within an organization. Teams allow you to group members and grant them access to specific databases.
@@ -4610,10 +4723,94 @@ servers:
   - url: https://api.planetscale.com/v1
 components:
   securitySchemes:
-    ApiKeyHeader:
-      type: apiKey
-      in: header
-      name: Authorization
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.planetscale.com/oauth/authorize
+          tokenUrl: https://auth.planetscale.com/oauth/token
+          scopes:
+            email: Read user email
+            openid: OpenID Connect scope
+            profile: Read user profile
+            read_databases: Read organization databases
+            read_user: Read user
+            read_organization: Read organization
+            write_databases: Write organization databases
+            write_user: Write user
+            write_organization: Write organization
+            branch:delete_backups: Delete backups
+            branch:delete_branch: Delete a database branch
+            branch:manage_passwords: Read, write, and delete branch passwords
+            branch:manage_read_only_passwords: Read, write, and delete read only branch passwords
+            branch:read_backups: Read backups
+            branch:read_branch: Read a database branch
+            branch:restore_backups: Restore this branch's backups to new branches
+            branch:write_backups: Create and update backups
+            branch:write_branch: Write a database branch
+            database:approve_deploy_requests: Approve deploy requests in a database
+            database:delete_backups: Delete backups
+            database:delete_branches: Delete database branches
+            database:delete_database: Delete a database
+            database:delete_members: Delete members
+            database:delete_production_branch_backups: Delete production backups
+            database:delete_production_branches: Delete a production database branch
+            database:demote_branches: Demote production database branches
+            database:deploy_deploy_requests: Deploy deploy requests in a database
+            database:manage_passwords: Read, write, and delete database branch passwords
+            database:manage_production_branch_passwords: Read, write, and delete production branch passwords
+            database:manage_production_read_only_passwords: Read, write, and delete production read only branch passwords in an organization
+            database:manage_read_only_passwords: Read, write, and delete read only branch passwords in an organization
+            database:promote_branches: Promote database branches
+            database:read_backups: Read backups
+            database:read_branches: Read database branches
+            database:read_comments: Read deploy request comments in a database
+            database:read_database: Read database information
+            database:read_deploy_requests: Read deploy requests in a database
+            database:read_members: Read members
+            database:restore_backups: Restore backups to new branches
+            database:restore_production_branch_backups: Restore production branch backups to new branches
+            database:write_backups: Create and update backups
+            database:write_branches: Write database branches
+            database:write_comments: Create deploy request comments in a database
+            database:write_database: Write database
+            database:write_deploy_requests: Create and update deploy requests in a database
+            database:write_members: Write members
+            organization:approve_deploy_requests: Approve deploy requests in an organization
+            organization:create_databases: Create organization databases
+            organization:delete_backups: Delete backups in an organization
+            organization:delete_branches: Delete branches in an organization
+            organization:delete_databases: Delete organization databases
+            organization:delete_members: Delete members in an organization
+            organization:delete_organization: Delete organization
+            organization:delete_production_branch_backups: Delete production backups in an organization
+            organization:delete_production_branches: Delete a production branch in an organization
+            organization:deploy_deploy_requests: Deploy deploy requests in an organization
+            organization:manage_passwords: Read, write, and delete branch passwords in an organization
+            organization:manage_production_branch_passwords: Read, write, and delete production branch passwords in an organization
+            organization:manage_production_read_only_passwords: Read, write, and delete production read only branch passwords in an organization
+            organization:manage_read_only_passwords: Read, write, and delete read only branch passwords in an organization
+            organization:promote_branches: Promote branches in an organization
+            organization:read_backups: Read backups in an organization
+            organization:read_branches: Read branches in an organization
+            organization:read_comments: Read deploy request comments in an organization
+            organization:read_databases: Read organization databases
+            organization:read_deploy_requests: Read deploy requests in an organization
+            organization:read_invoices: Read organization invoices
+            organization:read_members: Read members in an organization
+            organization:read_organization: Read organization
+            organization:restore_backups: Restore backups to new branches in an organization
+            organization:restore_production_branch_backups: Restore production branch backups to new branches in an organization
+            organization:write_backups: Create and update backups in an organization
+            organization:write_branches: Write branches in an organization
+            organization:write_comments: Create deploy request comments in an organization
+            organization:write_databases: Write organization databases
+            organization:write_deploy_requests: Create and update deploy requests in an organization
+            organization:write_members: Write members in an organization
+            organization:write_organization: Write organization
+            user:read_organizations: Read a user's organizations
+            user:read_user: Read user
+            user:write_user: Write user
     ServiceToken:
       type: http
       scheme: custom
@@ -6251,9 +6448,18 @@ components:
         internal:
           type: boolean
           description: The internal state of the extension
+        shared_preload_allowed:
+          type: boolean
+          description: Whether the extension can be added to shared_preload_libraries
         url:
           type: string
           description: The URL of the extension
+        available:
+          type: boolean
+          description: Whether the extension is available on the current cluster image
+        unavailable_reason:
+          type: string
+          description: The reason the extension is unavailable (e.g., 'container_upgrade_required')
         parameters:
           type: array
           items:
@@ -6382,7 +6588,10 @@ components:
         - name
         - description
         - internal
+        - shared_preload_allowed
         - url
+        - available
+        - unavailable_reason
         - parameters
     PostgresClusterParameter:
       type: object
@@ -6608,6 +6817,15 @@ components:
                   - optimize_inserts
                   - allow_no_blob_binlog_row_image
                   - vplayer_batching
+              mysqld_options:
+                type: object
+                properties:
+                  binlog_row_value_options:
+                    type: string
+                    description: Binlog row value options (e.g., PARTIAL_JSON)
+                additionalProperties: false
+                required:
+                  - binlog_row_value_options
             additionalProperties: false
             required:
               - id
@@ -6629,6 +6847,7 @@ components:
               - vector_pool_allocation
               - replication_durability_constraints
               - vreplication_flags
+              - mysqld_options
       additionalProperties: false
       required:
         - current_page
@@ -6721,6 +6940,15 @@ components:
             - optimize_inserts
             - allow_no_blob_binlog_row_image
             - vplayer_batching
+        mysqld_options:
+          type: object
+          properties:
+            binlog_row_value_options:
+              type: string
+              description: Binlog row value options (e.g., PARTIAL_JSON)
+          additionalProperties: false
+          required:
+            - binlog_row_value_options
       additionalProperties: false
       required:
         - id
@@ -6742,6 +6970,7 @@ components:
         - vector_pool_allocation
         - replication_durability_constraints
         - vreplication_flags
+        - mysqld_options
     PaginatedDatabaseBranchPassword:
       type: object
       properties:
@@ -8062,6 +8291,17 @@ components:
               tokens:
                 type: integer
                 description: The number of tokens issued by the OAuth application
+              dcr:
+                type: boolean
+                description: Whether the OAuth application was created via Dynamic Client Registration
+              scopes_by_resource:
+                type: object
+                additionalProperties: true
+                description: Scopes grouped by resource type (database, organization, branch, user) with scope, description, and admin flag
+              all_scopes_by_resource:
+                type: object
+                additionalProperties: true
+                description: All available scopes grouped by resource type with scope, description, selected, and admin flags
             additionalProperties: false
             required:
               - id
@@ -8074,6 +8314,9 @@ components:
               - avatar
               - client_id
               - tokens
+              - dcr
+              - scopes_by_resource
+              - all_scopes_by_resource
       additionalProperties: false
       required:
         - current_page
@@ -8117,6 +8360,17 @@ components:
         tokens:
           type: integer
           description: The number of tokens issued by the OAuth application
+        dcr:
+          type: boolean
+          description: Whether the OAuth application was created via Dynamic Client Registration
+        scopes_by_resource:
+          type: object
+          additionalProperties: true
+          description: Scopes grouped by resource type (database, organization, branch, user) with scope, description, and admin flag
+        all_scopes_by_resource:
+          type: object
+          additionalProperties: true
+          description: All available scopes grouped by resource type with scope, description, selected, and admin flags
       additionalProperties: false
       required:
         - id
@@ -8129,6 +8383,9 @@ components:
         - avatar
         - client_id
         - tokens
+        - dcr
+        - scopes_by_resource
+        - all_scopes_by_resource
     PaginatedServiceToken:
       type: object
       properties:
@@ -9644,15 +9901,10 @@ components:
                       type: string
                       enum:
                         - array
-                        - boolean
-                        - bytes
-                        - float
                         - integer
                         - internal
                         - seconds
                         - select
-                        - string
-                        - time
                       description: The type of the parameter
                     default_value:
                       type: string
@@ -9872,15 +10124,10 @@ components:
                 type: string
                 enum:
                   - array
-                  - boolean
-                  - bytes
-                  - float
                   - integer
                   - internal
                   - seconds
                   - select
-                  - string
-                  - time
                 description: The type of the parameter
               default_value:
                 type: string
@@ -10106,6 +10353,27 @@ components:
                   - id
                   - display_name
                   - avatar_url
+              query_safety_settings:
+                type: object
+                properties:
+                  require_where_on_delete:
+                    type: string
+                    enum:
+                      - off
+                      - warn
+                      - on
+                    description: Require WHERE clause on DELETE statements
+                  require_where_on_update:
+                    type: string
+                    enum:
+                      - off
+                      - warn
+                      - on
+                    description: Require WHERE clause on UPDATE statements
+                additionalProperties: false
+                required:
+                  - require_where_on_delete
+                  - require_where_on_update
             additionalProperties: false
             required:
               - id
@@ -10129,6 +10397,7 @@ components:
               - inherited_roles
               - branch
               - actor
+              - query_safety_settings
       additionalProperties: false
       required:
         - current_page
@@ -10255,6 +10524,27 @@ components:
             - id
             - display_name
             - avatar_url
+        query_safety_settings:
+          type: object
+          properties:
+            require_where_on_delete:
+              type: string
+              enum:
+                - off
+                - warn
+                - on
+              description: Require WHERE clause on DELETE statements
+            require_where_on_update:
+              type: string
+              enum:
+                - off
+                - warn
+                - on
+              description: Require WHERE clause on UPDATE statements
+          additionalProperties: false
+          required:
+            - require_where_on_delete
+            - require_where_on_update
       additionalProperties: false
       required:
         - id
@@ -10278,6 +10568,7 @@ components:
         - inherited_roles
         - branch
         - actor
+        - query_safety_settings
     PaginatedQueryPatternsDownload:
       type: object
       properties:
@@ -10467,6 +10758,250 @@ components:
         - prev_page
         - prev_page_url
         - data
+    PaginatedSchemaRecommendation:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          description: The current page number
+        next_page:
+          type: integer
+          description: The next page number
+        next_page_url:
+          type: string
+          description: The next page of results
+        prev_page:
+          type: integer
+          description: The previous page number
+        prev_page_url:
+          type: string
+          description: The previous page of results
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the schema recommendation
+              html_url:
+                type: string
+                description: The URL to the schema recommendation in the app
+              title:
+                type: string
+                description: The title of the schema recommendation
+              table_name:
+                type: string
+                description: The name of the table the recommendation applies to
+              keyspace:
+                type: string
+                description: The keyspace the recommendation applies to
+              ddl_statement:
+                type: string
+                description: The DDL statement to apply the recommendation
+              number:
+                type: integer
+                description: The number of the schema recommendation
+              state:
+                type: string
+                enum:
+                  - open
+                  - applied
+                  - dismissed
+                  - stale
+                description: The state of the recommendation
+              recommendation_type:
+                type: string
+                enum:
+                  - unused_table
+                  - unused_index
+                  - duplicate_index
+                  - sequence_overflow
+                  - sequence_overflow_foreign_key
+                  - new_index
+                  - encoding_upgrade
+                  - bloated_table
+                  - bloated_index
+                description: The type of recommendation
+              created_at:
+                type: string
+                description: When the recommendation was created
+              updated_at:
+                type: string
+                description: When the recommendation was last updated
+              applied_at:
+                type: string
+                description: When the recommendation was applied
+              dismissed_at:
+                type: string
+                description: When the recommendation was dismissed
+              closed_by_deploy_request:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the deploy request
+                  branch_id:
+                    type: string
+                    description: The ID of the branch
+                  number:
+                    type: integer
+                    description: The number of the deploy request
+                additionalProperties: false
+                required:
+                  - id
+                  - branch_id
+                  - number
+              dismissed_by:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the actor
+                  display_name:
+                    type: string
+                    description: The name of the actor
+                  avatar_url:
+                    type: string
+                    description: The URL of the actor's avatar
+                additionalProperties: false
+                required:
+                  - id
+                  - display_name
+                  - avatar_url
+            additionalProperties: false
+            required:
+              - id
+              - html_url
+              - title
+              - table_name
+              - keyspace
+              - ddl_statement
+              - number
+              - state
+              - recommendation_type
+              - created_at
+              - updated_at
+              - applied_at
+              - dismissed_at
+              - closed_by_deploy_request
+              - dismissed_by
+      additionalProperties: false
+      required:
+        - current_page
+        - next_page
+        - next_page_url
+        - prev_page
+        - prev_page_url
+        - data
+    SchemaRecommendation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the schema recommendation
+        html_url:
+          type: string
+          description: The URL to the schema recommendation in the app
+        title:
+          type: string
+          description: The title of the schema recommendation
+        table_name:
+          type: string
+          description: The name of the table the recommendation applies to
+        keyspace:
+          type: string
+          description: The keyspace the recommendation applies to
+        ddl_statement:
+          type: string
+          description: The DDL statement to apply the recommendation
+        number:
+          type: integer
+          description: The number of the schema recommendation
+        state:
+          type: string
+          enum:
+            - open
+            - applied
+            - dismissed
+            - stale
+          description: The state of the recommendation
+        recommendation_type:
+          type: string
+          enum:
+            - unused_table
+            - unused_index
+            - duplicate_index
+            - sequence_overflow
+            - sequence_overflow_foreign_key
+            - new_index
+            - encoding_upgrade
+            - bloated_table
+            - bloated_index
+          description: The type of recommendation
+        created_at:
+          type: string
+          description: When the recommendation was created
+        updated_at:
+          type: string
+          description: When the recommendation was last updated
+        applied_at:
+          type: string
+          description: When the recommendation was applied
+        dismissed_at:
+          type: string
+          description: When the recommendation was dismissed
+        closed_by_deploy_request:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID of the deploy request
+            branch_id:
+              type: string
+              description: The ID of the branch
+            number:
+              type: integer
+              description: The number of the deploy request
+          additionalProperties: false
+          required:
+            - id
+            - branch_id
+            - number
+        dismissed_by:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID of the actor
+            display_name:
+              type: string
+              description: The name of the actor
+            avatar_url:
+              type: string
+              description: The URL of the actor's avatar
+          additionalProperties: false
+          required:
+            - id
+            - display_name
+            - avatar_url
+      additionalProperties: false
+      required:
+        - id
+        - html_url
+        - title
+        - table_name
+        - keyspace
+        - ddl_statement
+        - number
+        - state
+        - recommendation_type
+        - created_at
+        - updated_at
+        - applied_at
+        - dismissed_at
+        - closed_by_deploy_request
+        - dismissed_by
     User:
       type: object
       properties:
@@ -14050,12 +14585,20 @@ components:
               billing_period_end:
                 type: string
                 description: End of the billing period
+              paid:
+                type: boolean
+                description: Whether the invoice has been paid
+              overdue:
+                type: boolean
+                description: Whether the invoice is past due and unpaid
             additionalProperties: false
             required:
               - id
               - total
               - billing_period_start
               - billing_period_end
+              - paid
+              - overdue
       additionalProperties: false
       required:
         - current_page
@@ -14079,12 +14622,636 @@ components:
         billing_period_end:
           type: string
           description: End of the billing period
+        paid:
+          type: boolean
+          description: Whether the invoice has been paid
+        overdue:
+          type: boolean
+          description: Whether the invoice is past due and unpaid
       additionalProperties: false
       required:
         - id
         - total
         - billing_period_start
         - billing_period_end
+        - paid
+        - overdue
+    PaginatedOrganizationTeamMembership:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          description: The current page number
+        next_page:
+          type: integer
+          description: The next page number
+        next_page_url:
+          type: string
+          description: The next page of results
+        prev_page:
+          type: integer
+          description: The previous page number
+        prev_page_url:
+          type: string
+          description: The previous page of results
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the team membership
+              user:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the user
+                  display_name:
+                    type: string
+                    description: The display name of the user
+                  name:
+                    type: string
+                    description: The name of the user
+                  email:
+                    type: string
+                    description: The email of the user
+                  avatar_url:
+                    type: string
+                    description: The URL source of the user's avatar
+                  created_at:
+                    type: string
+                    description: When the user was created
+                  updated_at:
+                    type: string
+                    description: When the user was last updated
+                  two_factor_auth_configured:
+                    type: boolean
+                    description: Whether or not the user has configured two factor authentication
+                  default_organization:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                      created_at:
+                        type: string
+                        description: When the resource was created
+                      updated_at:
+                        type: string
+                        description: When the resource was last updated
+                      deleted_at:
+                        type: string
+                        description: When the resource was deleted, if deleted
+                    additionalProperties: false
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                  sso:
+                    type: boolean
+                    description: Whether or not the user is managed by SSO
+                  managed:
+                    type: boolean
+                    description: Whether or not the user is managed by an authentication provider
+                  directory_managed:
+                    type: boolean
+                    description: Whether or not the user is managed by a SSO directory
+                  email_verified:
+                    type: boolean
+                    description: Whether or not the user is verified by email
+                additionalProperties: false
+                required:
+                  - id
+                  - display_name
+                  - name
+                  - email
+                  - avatar_url
+                  - created_at
+                  - updated_at
+                  - two_factor_auth_configured
+                  - default_organization
+                  - sso
+                  - managed
+                  - directory_managed
+                  - email_verified
+              actor:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the actor
+                  display_name:
+                    type: string
+                    description: The name of the actor
+                  avatar_url:
+                    type: string
+                    description: The URL of the actor's avatar
+                additionalProperties: false
+                required:
+                  - id
+                  - display_name
+                  - avatar_url
+              created_at:
+                type: string
+                description: When the membership was created
+              updated_at:
+                type: string
+                description: When the membership was last updated
+              passwords:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The ID for the password
+                    name:
+                      type: string
+                      description: The display name for the password
+                    role:
+                      type: string
+                      enum:
+                        - reader
+                        - writer
+                        - admin
+                        - readwriter
+                      description: The role for the password
+                    cidrs:
+                      items:
+                        type: string
+                      type: array
+                      description: List of IP addresses or CIDR ranges that can use this password
+                    created_at:
+                      type: string
+                      description: When the password was created
+                    deleted_at:
+                      type: string
+                      description: When the password was deleted
+                    expires_at:
+                      type: string
+                      description: When the password will expire
+                    last_used_at:
+                      type: string
+                      description: When the password was last used to execute a query
+                    expired:
+                      type: boolean
+                      description: True if the credentials are expired
+                    direct_vtgate:
+                      type: boolean
+                      description: True if the credentials connect directly to a vtgate, bypassing load balancers
+                    direct_vtgate_addresses:
+                      items:
+                        type: string
+                      type: array
+                      description: The list of hosts in each availability zone providing direct access to a vtgate
+                    ttl_seconds:
+                      type: integer
+                      description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
+                    access_host_url:
+                      type: string
+                      description: The host URL for the password
+                    access_host_regional_url:
+                      type: string
+                      description: The regional host URL
+                    access_host_regional_urls:
+                      items:
+                        type: string
+                      type: array
+                      description: The read-only replica host URLs
+                    actor:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the actor
+                        display_name:
+                          type: string
+                          description: The name of the actor
+                        avatar_url:
+                          type: string
+                          description: The URL of the actor's avatar
+                      additionalProperties: false
+                      required:
+                        - id
+                        - display_name
+                        - avatar_url
+                    region:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the region
+                        provider:
+                          type: string
+                          description: Provider for the region (ex. AWS)
+                        enabled:
+                          type: boolean
+                          description: Whether or not the region is currently active
+                        public_ip_addresses:
+                          items:
+                            type: string
+                          type: array
+                          description: Public IP addresses for the region
+                        display_name:
+                          type: string
+                          description: Name of the region
+                        location:
+                          type: string
+                          description: Location of the region
+                        slug:
+                          type: string
+                          description: The slug of the region
+                        current_default:
+                          type: boolean
+                          description: True if the region is the default for new branch creation
+                      additionalProperties: false
+                      required:
+                        - id
+                        - provider
+                        - enabled
+                        - public_ip_addresses
+                        - display_name
+                        - location
+                        - slug
+                        - current_default
+                    username:
+                      type: string
+                      description: The username for the password
+                    plain_text:
+                      type: string
+                      description: The plain text password, available only after create
+                    replica:
+                      type: boolean
+                      description: Whether or not the password is for a read replica
+                    renewable:
+                      type: boolean
+                      description: Whether or not the password can be renewed
+                    database_branch:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name for the branch
+                        id:
+                          type: string
+                          description: The ID for the branch
+                        production:
+                          type: boolean
+                          description: Whether or not the branch is a production branch
+                        mysql_edge_address:
+                          type: string
+                          description: The address of the MySQL provider for the branch
+                        private_edge_connectivity:
+                          type: boolean
+                          description: True if private connectivity is enabled
+                      additionalProperties: false
+                      required:
+                        - name
+                        - id
+                        - production
+                        - mysql_edge_address
+                        - private_edge_connectivity
+                  additionalProperties: false
+                  required:
+                    - id
+                    - name
+                    - role
+                    - cidrs
+                    - created_at
+                    - deleted_at
+                    - expires_at
+                    - last_used_at
+                    - expired
+                    - direct_vtgate
+                    - direct_vtgate_addresses
+                    - ttl_seconds
+                    - access_host_url
+                    - access_host_regional_url
+                    - access_host_regional_urls
+                    - actor
+                    - region
+                    - username
+                    - plain_text
+                    - replica
+                    - renewable
+                    - database_branch
+            additionalProperties: false
+            required:
+              - id
+              - user
+              - actor
+              - created_at
+              - updated_at
+              - passwords
+      additionalProperties: false
+      required:
+        - current_page
+        - next_page
+        - next_page_url
+        - prev_page
+        - prev_page_url
+        - data
+    OrganizationTeamMembership:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the team membership
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID of the user
+            display_name:
+              type: string
+              description: The display name of the user
+            name:
+              type: string
+              description: The name of the user
+            email:
+              type: string
+              description: The email of the user
+            avatar_url:
+              type: string
+              description: The URL source of the user's avatar
+            created_at:
+              type: string
+              description: When the user was created
+            updated_at:
+              type: string
+              description: When the user was last updated
+            two_factor_auth_configured:
+              type: boolean
+              description: Whether or not the user has configured two factor authentication
+            default_organization:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: The ID for the resource
+                name:
+                  type: string
+                  description: The name for the resource
+                created_at:
+                  type: string
+                  description: When the resource was created
+                updated_at:
+                  type: string
+                  description: When the resource was last updated
+                deleted_at:
+                  type: string
+                  description: When the resource was deleted, if deleted
+              additionalProperties: false
+              required:
+                - id
+                - name
+                - created_at
+                - updated_at
+                - deleted_at
+            sso:
+              type: boolean
+              description: Whether or not the user is managed by SSO
+            managed:
+              type: boolean
+              description: Whether or not the user is managed by an authentication provider
+            directory_managed:
+              type: boolean
+              description: Whether or not the user is managed by a SSO directory
+            email_verified:
+              type: boolean
+              description: Whether or not the user is verified by email
+          additionalProperties: false
+          required:
+            - id
+            - display_name
+            - name
+            - email
+            - avatar_url
+            - created_at
+            - updated_at
+            - two_factor_auth_configured
+            - default_organization
+            - sso
+            - managed
+            - directory_managed
+            - email_verified
+        actor:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID of the actor
+            display_name:
+              type: string
+              description: The name of the actor
+            avatar_url:
+              type: string
+              description: The URL of the actor's avatar
+          additionalProperties: false
+          required:
+            - id
+            - display_name
+            - avatar_url
+        created_at:
+          type: string
+          description: When the membership was created
+        updated_at:
+          type: string
+          description: When the membership was last updated
+        passwords:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID for the password
+              name:
+                type: string
+                description: The display name for the password
+              role:
+                type: string
+                enum:
+                  - reader
+                  - writer
+                  - admin
+                  - readwriter
+                description: The role for the password
+              cidrs:
+                items:
+                  type: string
+                type: array
+                description: List of IP addresses or CIDR ranges that can use this password
+              created_at:
+                type: string
+                description: When the password was created
+              deleted_at:
+                type: string
+                description: When the password was deleted
+              expires_at:
+                type: string
+                description: When the password will expire
+              last_used_at:
+                type: string
+                description: When the password was last used to execute a query
+              expired:
+                type: boolean
+                description: True if the credentials are expired
+              direct_vtgate:
+                type: boolean
+                description: True if the credentials connect directly to a vtgate, bypassing load balancers
+              direct_vtgate_addresses:
+                items:
+                  type: string
+                type: array
+                description: The list of hosts in each availability zone providing direct access to a vtgate
+              ttl_seconds:
+                type: integer
+                description: Time to live (in seconds) for the password. The password will be invalid when TTL has passed
+              access_host_url:
+                type: string
+                description: The host URL for the password
+              access_host_regional_url:
+                type: string
+                description: The regional host URL
+              access_host_regional_urls:
+                items:
+                  type: string
+                type: array
+                description: The read-only replica host URLs
+              actor:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the actor
+                  display_name:
+                    type: string
+                    description: The name of the actor
+                  avatar_url:
+                    type: string
+                    description: The URL of the actor's avatar
+                additionalProperties: false
+                required:
+                  - id
+                  - display_name
+                  - avatar_url
+              region:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the region
+                  provider:
+                    type: string
+                    description: Provider for the region (ex. AWS)
+                  enabled:
+                    type: boolean
+                    description: Whether or not the region is currently active
+                  public_ip_addresses:
+                    items:
+                      type: string
+                    type: array
+                    description: Public IP addresses for the region
+                  display_name:
+                    type: string
+                    description: Name of the region
+                  location:
+                    type: string
+                    description: Location of the region
+                  slug:
+                    type: string
+                    description: The slug of the region
+                  current_default:
+                    type: boolean
+                    description: True if the region is the default for new branch creation
+                additionalProperties: false
+                required:
+                  - id
+                  - provider
+                  - enabled
+                  - public_ip_addresses
+                  - display_name
+                  - location
+                  - slug
+                  - current_default
+              username:
+                type: string
+                description: The username for the password
+              plain_text:
+                type: string
+                description: The plain text password, available only after create
+              replica:
+                type: boolean
+                description: Whether or not the password is for a read replica
+              renewable:
+                type: boolean
+                description: Whether or not the password can be renewed
+              database_branch:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name for the branch
+                  id:
+                    type: string
+                    description: The ID for the branch
+                  production:
+                    type: boolean
+                    description: Whether or not the branch is a production branch
+                  mysql_edge_address:
+                    type: string
+                    description: The address of the MySQL provider for the branch
+                  private_edge_connectivity:
+                    type: boolean
+                    description: True if private connectivity is enabled
+                additionalProperties: false
+                required:
+                  - name
+                  - id
+                  - production
+                  - mysql_edge_address
+                  - private_edge_connectivity
+            additionalProperties: false
+            required:
+              - id
+              - name
+              - role
+              - cidrs
+              - created_at
+              - deleted_at
+              - expires_at
+              - last_used_at
+              - expired
+              - direct_vtgate
+              - direct_vtgate_addresses
+              - ttl_seconds
+              - access_host_url
+              - access_host_regional_url
+              - access_host_regional_urls
+              - actor
+              - region
+              - username
+              - plain_text
+              - replica
+              - renewable
+              - database_branch
+      additionalProperties: false
+      required:
+        - id
+        - user
+        - actor
+        - created_at
+        - updated_at
+        - passwords
     PaginatedOrganizationTeam:
       type: object
       properties:

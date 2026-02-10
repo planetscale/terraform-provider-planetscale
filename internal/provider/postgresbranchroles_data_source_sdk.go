@@ -52,6 +52,9 @@ func (r *PostgresBranchRolesDataSourceModel) RefreshFromOperationsListRolesRespo
 			data.Password = types.StringValue(dataItem.Password)
 			data.PrivateAccessHostURL = types.StringValue(dataItem.PrivateAccessHostURL)
 			data.PrivateConnectionServiceName = types.StringValue(dataItem.PrivateConnectionServiceName)
+			data.QuerySafetySettings = &tfTypes.ListRolesQuerySafetySettings{}
+			data.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(dataItem.QuerySafetySettings.RequireWhereOnDelete))
+			data.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(dataItem.QuerySafetySettings.RequireWhereOnUpdate))
 			data.TTL = types.Int64Value(dataItem.TTL)
 			data.UpdatedAt = types.StringValue(dataItem.UpdatedAt)
 			data.Username = types.StringValue(dataItem.Username)

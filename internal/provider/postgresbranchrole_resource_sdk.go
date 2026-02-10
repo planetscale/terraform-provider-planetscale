@@ -41,6 +41,9 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsCreateRoleRespons
 		r.Password = types.StringValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
+		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
+		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
@@ -79,6 +82,9 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
+		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
+		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
@@ -117,6 +123,9 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
+		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
+		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
@@ -173,10 +182,24 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx 
 	for _, inheritedRolesItem := range r.InheritedRoles {
 		inheritedRoles = append(inheritedRoles, operations.InheritedRoleRequest(inheritedRolesItem.ValueString()))
 	}
+	requireWhereOnDelete := new(string)
+	if !r.RequireWhereOnDelete.IsUnknown() && !r.RequireWhereOnDelete.IsNull() {
+		*requireWhereOnDelete = r.RequireWhereOnDelete.ValueString()
+	} else {
+		requireWhereOnDelete = nil
+	}
+	requireWhereOnUpdate := new(string)
+	if !r.RequireWhereOnUpdate.IsUnknown() && !r.RequireWhereOnUpdate.IsNull() {
+		*requireWhereOnUpdate = r.RequireWhereOnUpdate.ValueString()
+	} else {
+		requireWhereOnUpdate = nil
+	}
 	out := operations.CreateRoleRequestBody{
-		Name:           name,
-		TTL:            ttl,
-		InheritedRoles: inheritedRoles,
+		Name:                 name,
+		TTL:                  ttl,
+		InheritedRoles:       inheritedRoles,
+		RequireWhereOnDelete: requireWhereOnDelete,
+		RequireWhereOnUpdate: requireWhereOnUpdate,
 	}
 
 	return &out, diags
@@ -298,8 +321,22 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequestBody(ctx 
 	} else {
 		name = nil
 	}
+	requireWhereOnDelete := new(string)
+	if !r.RequireWhereOnDelete.IsUnknown() && !r.RequireWhereOnDelete.IsNull() {
+		*requireWhereOnDelete = r.RequireWhereOnDelete.ValueString()
+	} else {
+		requireWhereOnDelete = nil
+	}
+	requireWhereOnUpdate := new(string)
+	if !r.RequireWhereOnUpdate.IsUnknown() && !r.RequireWhereOnUpdate.IsNull() {
+		*requireWhereOnUpdate = r.RequireWhereOnUpdate.ValueString()
+	} else {
+		requireWhereOnUpdate = nil
+	}
 	out := operations.UpdateRoleRequestBody{
-		Name: name,
+		Name:                 name,
+		RequireWhereOnDelete: requireWhereOnDelete,
+		RequireWhereOnUpdate: requireWhereOnUpdate,
 	}
 
 	return &out, diags
