@@ -22,11 +22,11 @@ func (u *UpdateRoleRequestBody) GetName() *string {
 }
 
 type UpdateRoleRequest struct {
-	// The name of the organization that owns this resource
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database that owns this resource
+	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
-	// The name of the branch that owns this resource
+	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The ID of the role
 	ID   string                 `pathParam:"style=simple,explode=false,name=id"`
@@ -198,6 +198,87 @@ func (u *UpdateRoleActorData) GetAvatarURL() string {
 	return u.AvatarURL
 }
 
+// UpdateRoleRequireWhereOnDelete - Require WHERE clause on DELETE statements
+type UpdateRoleRequireWhereOnDelete string
+
+const (
+	UpdateRoleRequireWhereOnDeleteOff  UpdateRoleRequireWhereOnDelete = "off"
+	UpdateRoleRequireWhereOnDeleteWarn UpdateRoleRequireWhereOnDelete = "warn"
+	UpdateRoleRequireWhereOnDeleteOn   UpdateRoleRequireWhereOnDelete = "on"
+)
+
+func (e UpdateRoleRequireWhereOnDelete) ToPointer() *UpdateRoleRequireWhereOnDelete {
+	return &e
+}
+func (e *UpdateRoleRequireWhereOnDelete) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "off":
+		fallthrough
+	case "warn":
+		fallthrough
+	case "on":
+		*e = UpdateRoleRequireWhereOnDelete(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for UpdateRoleRequireWhereOnDelete: %v", v)
+	}
+}
+
+// UpdateRoleRequireWhereOnUpdate - Require WHERE clause on UPDATE statements
+type UpdateRoleRequireWhereOnUpdate string
+
+const (
+	UpdateRoleRequireWhereOnUpdateOff  UpdateRoleRequireWhereOnUpdate = "off"
+	UpdateRoleRequireWhereOnUpdateWarn UpdateRoleRequireWhereOnUpdate = "warn"
+	UpdateRoleRequireWhereOnUpdateOn   UpdateRoleRequireWhereOnUpdate = "on"
+)
+
+func (e UpdateRoleRequireWhereOnUpdate) ToPointer() *UpdateRoleRequireWhereOnUpdate {
+	return &e
+}
+func (e *UpdateRoleRequireWhereOnUpdate) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "off":
+		fallthrough
+	case "warn":
+		fallthrough
+	case "on":
+		*e = UpdateRoleRequireWhereOnUpdate(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for UpdateRoleRequireWhereOnUpdate: %v", v)
+	}
+}
+
+type UpdateRoleQuerySafetySettings struct {
+	// Require WHERE clause on DELETE statements
+	RequireWhereOnDelete UpdateRoleRequireWhereOnDelete `json:"require_where_on_delete"`
+	// Require WHERE clause on UPDATE statements
+	RequireWhereOnUpdate UpdateRoleRequireWhereOnUpdate `json:"require_where_on_update"`
+}
+
+func (u *UpdateRoleQuerySafetySettings) GetRequireWhereOnDelete() UpdateRoleRequireWhereOnDelete {
+	if u == nil {
+		return UpdateRoleRequireWhereOnDelete("")
+	}
+	return u.RequireWhereOnDelete
+}
+
+func (u *UpdateRoleQuerySafetySettings) GetRequireWhereOnUpdate() UpdateRoleRequireWhereOnUpdate {
+	if u == nil {
+		return UpdateRoleRequireWhereOnUpdate("")
+	}
+	return u.RequireWhereOnUpdate
+}
+
 // UpdateRoleResponseBody - Returns the updated role
 type UpdateRoleResponseBody struct {
 	// The ID of the role
@@ -235,9 +316,10 @@ type UpdateRoleResponseBody struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles []UpdateRoleInheritedRole `json:"inherited_roles"`
-	BranchData     UpdateRoleBranchData      `json:"branch"`
-	ActorData      UpdateRoleActorData       `json:"actor"`
+	InheritedRoles      []UpdateRoleInheritedRole     `json:"inherited_roles"`
+	BranchData          UpdateRoleBranchData          `json:"branch"`
+	ActorData           UpdateRoleActorData           `json:"actor"`
+	QuerySafetySettings UpdateRoleQuerySafetySettings `json:"query_safety_settings"`
 }
 
 func (u *UpdateRoleResponseBody) GetID() string {
@@ -378,6 +460,13 @@ func (u *UpdateRoleResponseBody) GetActorData() UpdateRoleActorData {
 		return UpdateRoleActorData{}
 	}
 	return u.ActorData
+}
+
+func (u *UpdateRoleResponseBody) GetQuerySafetySettings() UpdateRoleQuerySafetySettings {
+	if u == nil {
+		return UpdateRoleQuerySafetySettings{}
+	}
+	return u.QuerySafetySettings
 }
 
 type UpdateRoleResponse struct {

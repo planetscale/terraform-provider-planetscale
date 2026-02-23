@@ -25,9 +25,9 @@ data "planetscale_postgres_branch_roles" "my_postgresbranchroles" {
 
 ### Required
 
-- `branch` (String) The name of the branch that owns this resource
-- `database` (String) The name of the database that owns this resource
-- `organization` (String) The name of the organization that owns this resource
+- `branch` (String) Branch name from `list_branches`. Example: `main`.
+- `database` (String) Database name slug from `list_databases`. Example: `app-db`.
+- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Read-Only
 
@@ -56,6 +56,7 @@ Read-Only:
 - `password` (String) The plain text password, available only after create
 - `private_access_host_url` (String) The database connection string for private connections
 - `private_connection_service_name` (String) The service name to set up private connectivity
+- `query_safety_settings` (Attributes) (see [below for nested schema](#nestedatt--data--query_safety_settings))
 - `ttl` (Number) Number of seconds before the credentials expire
 - `updated_at` (String) When the role was updated
 - `username` (String) The database user name
@@ -80,3 +81,12 @@ Read-Only:
 - `id` (String) The ID for the resource
 - `name` (String) The name for the resource
 - `updated_at` (String) When the resource was last updated
+
+
+<a id="nestedatt--data--query_safety_settings"></a>
+### Nested Schema for `data.query_safety_settings`
+
+Read-Only:
+
+- `require_where_on_delete` (String) Require WHERE clause on DELETE statements
+- `require_where_on_update` (String) Require WHERE clause on UPDATE statements

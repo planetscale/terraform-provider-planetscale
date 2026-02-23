@@ -98,3 +98,21 @@ actions:
     description: Remove unnecessary timestamp from branch_data.
     update:
       x-speakeasy-ignore: true
+
+  # These need to map to the nested query_safety_settings block
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.requestBody.content['application/json'].schema.properties.require_where_on_delete
+    remove: true
+    # update:
+    #   x-speakeasy-match: query_safety_settings.properties.require_where_on_delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.requestBody.content['application/json'].schema.properties.require_where_on_delete
+    remove: true
+    # update:
+    #   x-speakeasy-match: query_safety_settings.properties.require_where_on_delete
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.requestBody.content['application/json'].schema.properties.require_where_on_update
+    remove: true
+    # update:
+    #   x-speakeasy-match: query_safety_settings.properties.require_where_on_update
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.requestBody.content['application/json'].schema.properties.require_where_on_update
+    remove: true
+    # update:
+    #   x-speakeasy-match: query_safety_settings.properties.require_where_on_update

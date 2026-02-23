@@ -8,7 +8,7 @@ import (
 )
 
 type GetOrganizationRequest struct {
-	// The name of the organization
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 }
 

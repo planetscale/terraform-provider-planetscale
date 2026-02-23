@@ -41,6 +41,9 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsCreateRoleRespons
 		r.Password = types.StringValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
+		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
+		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
@@ -79,6 +82,9 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
+		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
+		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
@@ -117,6 +123,9 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
+		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
+		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)

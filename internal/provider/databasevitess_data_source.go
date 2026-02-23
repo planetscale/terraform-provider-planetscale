@@ -213,7 +213,7 @@ func (r *DatabaseVitessDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization the database belongs to`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 			"plan": schema.StringAttribute{
 				Computed:    true,

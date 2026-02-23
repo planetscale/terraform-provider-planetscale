@@ -10,11 +10,11 @@ import (
 )
 
 type ListRolesRequest struct {
-	// The name of the organization that owns this resource
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database that owns this resource
+	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
-	// The name of the branch that owns this resource
+	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// If provided, specifies the page offset of returned results
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
@@ -205,6 +205,87 @@ func (l *ListRolesActor) GetAvatarURL() string {
 	return l.AvatarURL
 }
 
+// ListRolesRequireWhereOnDelete - Require WHERE clause on DELETE statements
+type ListRolesRequireWhereOnDelete string
+
+const (
+	ListRolesRequireWhereOnDeleteOff  ListRolesRequireWhereOnDelete = "off"
+	ListRolesRequireWhereOnDeleteWarn ListRolesRequireWhereOnDelete = "warn"
+	ListRolesRequireWhereOnDeleteOn   ListRolesRequireWhereOnDelete = "on"
+)
+
+func (e ListRolesRequireWhereOnDelete) ToPointer() *ListRolesRequireWhereOnDelete {
+	return &e
+}
+func (e *ListRolesRequireWhereOnDelete) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "off":
+		fallthrough
+	case "warn":
+		fallthrough
+	case "on":
+		*e = ListRolesRequireWhereOnDelete(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListRolesRequireWhereOnDelete: %v", v)
+	}
+}
+
+// ListRolesRequireWhereOnUpdate - Require WHERE clause on UPDATE statements
+type ListRolesRequireWhereOnUpdate string
+
+const (
+	ListRolesRequireWhereOnUpdateOff  ListRolesRequireWhereOnUpdate = "off"
+	ListRolesRequireWhereOnUpdateWarn ListRolesRequireWhereOnUpdate = "warn"
+	ListRolesRequireWhereOnUpdateOn   ListRolesRequireWhereOnUpdate = "on"
+)
+
+func (e ListRolesRequireWhereOnUpdate) ToPointer() *ListRolesRequireWhereOnUpdate {
+	return &e
+}
+func (e *ListRolesRequireWhereOnUpdate) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "off":
+		fallthrough
+	case "warn":
+		fallthrough
+	case "on":
+		*e = ListRolesRequireWhereOnUpdate(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListRolesRequireWhereOnUpdate: %v", v)
+	}
+}
+
+type ListRolesQuerySafetySettings struct {
+	// Require WHERE clause on DELETE statements
+	RequireWhereOnDelete ListRolesRequireWhereOnDelete `json:"require_where_on_delete"`
+	// Require WHERE clause on UPDATE statements
+	RequireWhereOnUpdate ListRolesRequireWhereOnUpdate `json:"require_where_on_update"`
+}
+
+func (l *ListRolesQuerySafetySettings) GetRequireWhereOnDelete() ListRolesRequireWhereOnDelete {
+	if l == nil {
+		return ListRolesRequireWhereOnDelete("")
+	}
+	return l.RequireWhereOnDelete
+}
+
+func (l *ListRolesQuerySafetySettings) GetRequireWhereOnUpdate() ListRolesRequireWhereOnUpdate {
+	if l == nil {
+		return ListRolesRequireWhereOnUpdate("")
+	}
+	return l.RequireWhereOnUpdate
+}
+
 type ListRolesData struct {
 	// The ID of the role
 	ID string `json:"id"`
@@ -243,9 +324,10 @@ type ListRolesData struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles []ListRolesInheritedRole `json:"inherited_roles"`
-	Branch         Branch                   `json:"branch"`
-	Actor          ListRolesActor           `json:"actor"`
+	InheritedRoles      []ListRolesInheritedRole     `json:"inherited_roles"`
+	Branch              Branch                       `json:"branch"`
+	Actor               ListRolesActor               `json:"actor"`
+	QuerySafetySettings ListRolesQuerySafetySettings `json:"query_safety_settings"`
 }
 
 func (l *ListRolesData) GetID() string {
@@ -393,6 +475,13 @@ func (l *ListRolesData) GetActor() ListRolesActor {
 		return ListRolesActor{}
 	}
 	return l.Actor
+}
+
+func (l *ListRolesData) GetQuerySafetySettings() ListRolesQuerySafetySettings {
+	if l == nil {
+		return ListRolesQuerySafetySettings{}
+	}
+	return l.QuerySafetySettings
 }
 
 // ListRolesResponseBody - Returns roles

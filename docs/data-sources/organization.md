@@ -23,7 +23,7 @@ data "planetscale_organization" "my_organization" {
 
 ### Required
 
-- `organization` (String) The name of the organization
+- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Read-Only
 

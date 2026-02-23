@@ -48,7 +48,7 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 		Attributes: map[string]schema.Attribute{
 			"branch": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the branch that owns this resource`,
+				Description: `Branch name from ` + "`" + `list_branches` + "`" + `. Example: ` + "`" + `main` + "`" + `.`,
 			},
 			"data": schema.ListNestedAttribute{
 				Computed: true,
@@ -161,6 +161,19 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 							Computed:    true,
 							Description: `The service name to set up private connectivity`,
 						},
+						"query_safety_settings": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"require_where_on_delete": schema.StringAttribute{
+									Computed:    true,
+									Description: `Require WHERE clause on DELETE statements`,
+								},
+								"require_where_on_update": schema.StringAttribute{
+									Computed:    true,
+									Description: `Require WHERE clause on UPDATE statements`,
+								},
+							},
+						},
 						"ttl": schema.Int64Attribute{
 							Computed:    true,
 							Description: `Number of seconds before the credentials expire`,
@@ -178,11 +191,11 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the database that owns this resource`,
+				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization that owns this resource`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 		},
 	}

@@ -110,11 +110,11 @@ func (c *CreateRoleRequestBody) GetInheritedRoles() []InheritedRoleRequest {
 }
 
 type CreateRoleRequest struct {
-	// The name of the organization that owns this resource
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database that owns this resource
+	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
-	// The name of the branch that owns this resource
+	// Branch name from `list_branches`. Example: `main`.
 	Branch string                 `pathParam:"style=simple,explode=false,name=branch"`
 	Body   *CreateRoleRequestBody `request:"mediaType=application/json"`
 }
@@ -277,6 +277,87 @@ func (c *CreateRoleActorData) GetAvatarURL() string {
 	return c.AvatarURL
 }
 
+// CreateRoleRequireWhereOnDelete - Require WHERE clause on DELETE statements
+type CreateRoleRequireWhereOnDelete string
+
+const (
+	CreateRoleRequireWhereOnDeleteOff  CreateRoleRequireWhereOnDelete = "off"
+	CreateRoleRequireWhereOnDeleteWarn CreateRoleRequireWhereOnDelete = "warn"
+	CreateRoleRequireWhereOnDeleteOn   CreateRoleRequireWhereOnDelete = "on"
+)
+
+func (e CreateRoleRequireWhereOnDelete) ToPointer() *CreateRoleRequireWhereOnDelete {
+	return &e
+}
+func (e *CreateRoleRequireWhereOnDelete) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "off":
+		fallthrough
+	case "warn":
+		fallthrough
+	case "on":
+		*e = CreateRoleRequireWhereOnDelete(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for CreateRoleRequireWhereOnDelete: %v", v)
+	}
+}
+
+// CreateRoleRequireWhereOnUpdate - Require WHERE clause on UPDATE statements
+type CreateRoleRequireWhereOnUpdate string
+
+const (
+	CreateRoleRequireWhereOnUpdateOff  CreateRoleRequireWhereOnUpdate = "off"
+	CreateRoleRequireWhereOnUpdateWarn CreateRoleRequireWhereOnUpdate = "warn"
+	CreateRoleRequireWhereOnUpdateOn   CreateRoleRequireWhereOnUpdate = "on"
+)
+
+func (e CreateRoleRequireWhereOnUpdate) ToPointer() *CreateRoleRequireWhereOnUpdate {
+	return &e
+}
+func (e *CreateRoleRequireWhereOnUpdate) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "off":
+		fallthrough
+	case "warn":
+		fallthrough
+	case "on":
+		*e = CreateRoleRequireWhereOnUpdate(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for CreateRoleRequireWhereOnUpdate: %v", v)
+	}
+}
+
+type CreateRoleQuerySafetySettings struct {
+	// Require WHERE clause on DELETE statements
+	RequireWhereOnDelete CreateRoleRequireWhereOnDelete `json:"require_where_on_delete"`
+	// Require WHERE clause on UPDATE statements
+	RequireWhereOnUpdate CreateRoleRequireWhereOnUpdate `json:"require_where_on_update"`
+}
+
+func (c *CreateRoleQuerySafetySettings) GetRequireWhereOnDelete() CreateRoleRequireWhereOnDelete {
+	if c == nil {
+		return CreateRoleRequireWhereOnDelete("")
+	}
+	return c.RequireWhereOnDelete
+}
+
+func (c *CreateRoleQuerySafetySettings) GetRequireWhereOnUpdate() CreateRoleRequireWhereOnUpdate {
+	if c == nil {
+		return CreateRoleRequireWhereOnUpdate("")
+	}
+	return c.RequireWhereOnUpdate
+}
+
 // CreateRoleResponseBody - Returns the new credentials
 type CreateRoleResponseBody struct {
 	// The ID of the role
@@ -316,9 +397,10 @@ type CreateRoleResponseBody struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles []CreateRoleInheritedRoleResponse `json:"inherited_roles"`
-	BranchData     CreateRoleBranchData              `json:"branch"`
-	ActorData      CreateRoleActorData               `json:"actor"`
+	InheritedRoles      []CreateRoleInheritedRoleResponse `json:"inherited_roles"`
+	BranchData          CreateRoleBranchData              `json:"branch"`
+	ActorData           CreateRoleActorData               `json:"actor"`
+	QuerySafetySettings CreateRoleQuerySafetySettings     `json:"query_safety_settings"`
 }
 
 func (c *CreateRoleResponseBody) GetID() string {
@@ -466,6 +548,13 @@ func (c *CreateRoleResponseBody) GetActorData() CreateRoleActorData {
 		return CreateRoleActorData{}
 	}
 	return c.ActorData
+}
+
+func (c *CreateRoleResponseBody) GetQuerySafetySettings() CreateRoleQuerySafetySettings {
+	if c == nil {
+		return CreateRoleQuerySafetySettings{}
+	}
+	return c.QuerySafetySettings
 }
 
 type CreateRoleResponse struct {
