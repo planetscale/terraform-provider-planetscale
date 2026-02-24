@@ -60,12 +60,13 @@ Available configuration:
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
 
-### Resources
+### Managed Resources
 
 * [planetscale_postgres_branch](docs/resources/postgres_branch.md)
 * [planetscale_postgres_branch_role](docs/resources/postgres_branch_role.md)
 * [planetscale_vitess_branch](docs/resources/vitess_branch.md)
 * [planetscale_vitess_branch_password](docs/resources/vitess_branch_password.md)
+
 ### Data Sources
 
 * [planetscale_database_postgres](docs/data-sources/database_postgres.md)
