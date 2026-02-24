@@ -213,7 +213,9 @@ func (s *DatabaseBranchPasswords) ListPasswords(ctx context.Context, request ope
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -372,7 +374,9 @@ func (s *DatabaseBranchPasswords) CreatePassword(ctx context.Context, request op
 	case httpRes.StatusCode == 404:
 		fallthrough
 	case httpRes.StatusCode == 422:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -522,7 +526,9 @@ func (s *DatabaseBranchPasswords) GetPassword(ctx context.Context, request opera
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -679,7 +685,9 @@ func (s *DatabaseBranchPasswords) UpdatePassword(ctx context.Context, request op
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -804,12 +812,15 @@ func (s *DatabaseBranchPasswords) DeletePassword(ctx context.Context, request op
 
 	switch {
 	case httpRes.StatusCode == 204:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
