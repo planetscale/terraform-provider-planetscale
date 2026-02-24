@@ -37,7 +37,7 @@ type OrganizationDataSourceModel struct {
 	HasPastDueInvoices  types.Bool                      `tfsdk:"has_past_due_invoices"`
 	ID                  types.String                    `tfsdk:"id"`
 	IdpManagedRoles     types.Bool                      `tfsdk:"idp_managed_roles"`
-	InvoiceBudgetAmount types.Float64                   `tfsdk:"invoice_budget_amount"`
+	InvoiceBudgetAmount types.String                    `tfsdk:"invoice_budget_amount"`
 	KeyspaceShardLimit  types.Int64                     `tfsdk:"keyspace_shard_limit"`
 	ManagedTenancy      types.Bool                      `tfsdk:"managed_tenancy"`
 	Name                types.String                    `tfsdk:"name"`
@@ -96,7 +96,7 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:    true,
 				Description: `Whether or not the IdP provider is be responsible for managing roles in PlanetScale`,
 			},
-			"invoice_budget_amount": schema.Float64Attribute{
+			"invoice_budget_amount": schema.StringAttribute{
 				Computed:    true,
 				Description: `The expected monthly budget for the organization`,
 			},

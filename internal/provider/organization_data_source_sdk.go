@@ -29,7 +29,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 		r.HasPastDueInvoices = types.BoolValue(resp.HasPastDueInvoices)
 		r.ID = types.StringValue(resp.ID)
 		r.IdpManagedRoles = types.BoolValue(resp.IdpManagedRoles)
-		r.InvoiceBudgetAmount = types.Float64Value(resp.InvoiceBudgetAmount)
+		r.InvoiceBudgetAmount = types.StringValue(resp.InvoiceBudgetAmount)
 		r.KeyspaceShardLimit = types.Int64Value(resp.KeyspaceShardLimit)
 		r.ManagedTenancy = types.BoolValue(resp.ManagedTenancy)
 		r.Name = types.StringValue(resp.Name)

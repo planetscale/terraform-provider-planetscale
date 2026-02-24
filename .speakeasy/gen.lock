@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: b97c726b8ba7c08686fcfde9d553d810
+  docChecksum: e06e1589896c6985213dfc7da17524c4
   docVersion: v1
   speakeasyVersion: 1.725.0
   generationVersion: 2.836.5
@@ -237,11 +237,11 @@ trackedFiles:
     pristine_git_object: c078ca2e83ba8a926f395997aa4daee4ddc9d637
   internal/provider/organization_data_source.go:
     id: d22d005e3012
-    last_write_checksum: sha1:b8588386e5fc987981a67a765f616c6ca82b18cc
+    last_write_checksum: sha1:f8cdd45cf9935fa533225f5af9b5659f27de060f
     pristine_git_object: 82a33d8488b23f60aa73688e445ce1e5c225c871
   internal/provider/organization_data_source_sdk.go:
     id: 6e6df8bfb732
-    last_write_checksum: sha1:9a8c9f5cf6429427aa88c366b99bf0739bd16310
+    last_write_checksum: sha1:bed9e227e7a1cbac32600e8013bfc4f393688380
     pristine_git_object: 3e3c31d90b1c32b82a5d8aa14c07de4858d21447
   internal/provider/organizations_data_source.go:
     id: a0d140df6eca
@@ -637,7 +637,7 @@ trackedFiles:
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
   internal/sdk/models/operations/getorganization.go:
     id: ebae13951225
-    last_write_checksum: sha1:cd2ef3f146257dc4ff283b42f9ad770a170cc957
+    last_write_checksum: sha1:fd785dc5d844e60c3dd0325026c9861e5802dc73
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
   internal/sdk/models/operations/getpassword.go:
     id: 4285e7863442
@@ -841,7 +841,7 @@ examples:
           organization: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": false, "database_count": 1578.34, "sso_portal_url": "https://defenseless-circumference.name/", "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": 9516.88, "keyspace_shard_limit": 6999.24, "has_card": false, "payment_info_required": true}
+          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": false, "database_count": 1578.34, "sso_portal_url": "https://defenseless-circumference.name/", "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": "9516.88", "keyspace_shard_limit": 6999.24, "has_card": false, "payment_info_required": true}
   update_organization:
     speakeasy-default-update-organization:
       parameters:
