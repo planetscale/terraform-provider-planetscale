@@ -37,6 +37,7 @@ terraform:
   additionalDataSources: []
   additionalDependencies:
     github.com/hashicorp/terraform-plugin-testing: v1.13.3
+    golang.org/x/crypto: v0.48.0
   additionalEphemeralResources: []
   additionalFunctions: []
   additionalListResources: []
