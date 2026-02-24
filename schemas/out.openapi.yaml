@@ -251,7 +251,7 @@ paths:
                     type: boolean
                     description: Whether or not the IdP provider is be responsible for managing roles in PlanetScale
                   invoice_budget_amount:
-                    type: number
+                    type: string
                     description: The expected monthly budget for the organization
                   keyspace_shard_limit:
                     type: integer
@@ -9348,7 +9348,7 @@ components:
                 type: boolean
                 description: Whether or not the IdP provider is be responsible for managing roles in PlanetScale
               invoice_budget_amount:
-                type: number
+                type: string
                 description: The expected monthly budget for the organization
               keyspace_shard_limit:
                 type: integer
@@ -9442,7 +9442,7 @@ components:
           type: boolean
           description: Whether or not the IdP provider is be responsible for managing roles in PlanetScale
         invoice_budget_amount:
-          type: number
+          type: string
           description: The expected monthly budget for the organization
         keyspace_shard_limit:
           type: integer
