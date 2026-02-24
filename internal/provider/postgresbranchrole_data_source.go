@@ -89,7 +89,7 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 			},
 			"branch": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the branch that owns this resource`,
+				Description: `Branch name from ` + "`" + `list_branches` + "`" + `. Example: ` + "`" + `main` + "`" + `.`,
 			},
 			"branch_data": schema.SingleNestedAttribute{
 				Computed: true,
@@ -114,7 +114,7 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the database that owns this resource`,
+				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
 			},
 			"database_name": schema.StringAttribute{
 				Computed:    true,
@@ -163,7 +163,7 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization that owns this resource`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 			"private_access_host_url": schema.StringAttribute{
 				Computed:    true,

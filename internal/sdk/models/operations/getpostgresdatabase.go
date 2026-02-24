@@ -10,9 +10,9 @@ import (
 )
 
 type GetPostgresDatabaseRequest struct {
-	// The name of the organization the database belongs to
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database
+	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 }
 

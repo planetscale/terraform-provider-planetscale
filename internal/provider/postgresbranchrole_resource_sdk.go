@@ -182,24 +182,10 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx 
 	for _, inheritedRolesItem := range r.InheritedRoles {
 		inheritedRoles = append(inheritedRoles, operations.InheritedRoleRequest(inheritedRolesItem.ValueString()))
 	}
-	requireWhereOnDelete := new(string)
-	if !r.RequireWhereOnDelete.IsUnknown() && !r.RequireWhereOnDelete.IsNull() {
-		*requireWhereOnDelete = r.RequireWhereOnDelete.ValueString()
-	} else {
-		requireWhereOnDelete = nil
-	}
-	requireWhereOnUpdate := new(string)
-	if !r.RequireWhereOnUpdate.IsUnknown() && !r.RequireWhereOnUpdate.IsNull() {
-		*requireWhereOnUpdate = r.RequireWhereOnUpdate.ValueString()
-	} else {
-		requireWhereOnUpdate = nil
-	}
 	out := operations.CreateRoleRequestBody{
-		Name:                 name,
-		TTL:                  ttl,
-		InheritedRoles:       inheritedRoles,
-		RequireWhereOnDelete: requireWhereOnDelete,
-		RequireWhereOnUpdate: requireWhereOnUpdate,
+		Name:           name,
+		TTL:            ttl,
+		InheritedRoles: inheritedRoles,
 	}
 
 	return &out, diags
@@ -321,22 +307,8 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequestBody(ctx 
 	} else {
 		name = nil
 	}
-	requireWhereOnDelete := new(string)
-	if !r.RequireWhereOnDelete.IsUnknown() && !r.RequireWhereOnDelete.IsNull() {
-		*requireWhereOnDelete = r.RequireWhereOnDelete.ValueString()
-	} else {
-		requireWhereOnDelete = nil
-	}
-	requireWhereOnUpdate := new(string)
-	if !r.RequireWhereOnUpdate.IsUnknown() && !r.RequireWhereOnUpdate.IsNull() {
-		*requireWhereOnUpdate = r.RequireWhereOnUpdate.ValueString()
-	} else {
-		requireWhereOnUpdate = nil
-	}
 	out := operations.UpdateRoleRequestBody{
-		Name:                 name,
-		RequireWhereOnDelete: requireWhereOnDelete,
-		RequireWhereOnUpdate: requireWhereOnUpdate,
+		Name: name,
 	}
 
 	return &out, diags

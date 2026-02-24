@@ -48,7 +48,7 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 		Attributes: map[string]schema.Attribute{
 			"branch": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the branch that owns this resource`,
+				Description: `Branch name from ` + "`" + `list_branches` + "`" + `. Example: ` + "`" + `main` + "`" + `.`,
 			},
 			"data": schema.ListNestedAttribute{
 				Computed: true,
@@ -191,11 +191,11 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the database that owns this resource`,
+				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization that owns this resource`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 		},
 	}

@@ -59,8 +59,6 @@ type PostgresBranchRoleResourceModel struct {
 	PrivateAccessHostURL         types.String                        `tfsdk:"private_access_host_url"`
 	PrivateConnectionServiceName types.String                        `tfsdk:"private_connection_service_name"`
 	QuerySafetySettings          *tfTypes.GetRoleQuerySafetySettings `tfsdk:"query_safety_settings"`
-	RequireWhereOnDelete         types.String                        `tfsdk:"require_where_on_delete"`
-	RequireWhereOnUpdate         types.String                        `tfsdk:"require_where_on_update"`
 	Successor                    types.String                        `tfsdk:"successor"`
 	TTL                          types.Int64                         `tfsdk:"ttl"`
 	UpdatedAt                    types.String                        `tfsdk:"updated_at"`
@@ -98,7 +96,7 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 			},
 			"branch": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the branch that owns this resource`,
+				Description: `Branch name from ` + "`" + `list_branches` + "`" + `. Example: ` + "`" + `main` + "`" + `.`,
 			},
 			"branch_data": schema.SingleNestedAttribute{
 				Computed: true,
@@ -123,7 +121,7 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the database that owns this resource`,
+				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
 			},
 			"database_name": schema.StringAttribute{
 				Computed:    true,
@@ -178,7 +176,7 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization that owns this resource`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 			"password": schema.StringAttribute{
 				Computed:    true,
@@ -205,14 +203,6 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 						Description: `Require WHERE clause on UPDATE statements`,
 					},
 				},
-			},
-			"require_where_on_delete": schema.StringAttribute{
-				Optional:    true,
-				Description: `Require WHERE clause on DELETE statements`,
-			},
-			"require_where_on_update": schema.StringAttribute{
-				Optional:    true,
-				Description: `Require WHERE clause on UPDATE statements`,
 			},
 			"successor": schema.StringAttribute{
 				Optional:    true,

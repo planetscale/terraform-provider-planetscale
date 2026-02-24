@@ -187,7 +187,7 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization the database belongs to`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 			"plan": schema.StringAttribute{
 				Computed:    true,

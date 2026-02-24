@@ -75,10 +75,6 @@ type CreateRoleRequestBody struct {
 	TTL *int64 `json:"ttl,omitzero"`
 	// Roles to inherit from
 	InheritedRoles []InheritedRoleRequest `json:"inherited_roles,omitzero"`
-	// Require WHERE clause on DELETE statements
-	RequireWhereOnDelete *string `json:"require_where_on_delete,omitzero"`
-	// Require WHERE clause on UPDATE statements
-	RequireWhereOnUpdate *string `json:"require_where_on_update,omitzero"`
 }
 
 func (c CreateRoleRequestBody) MarshalJSON() ([]byte, error) {
@@ -113,26 +109,12 @@ func (c *CreateRoleRequestBody) GetInheritedRoles() []InheritedRoleRequest {
 	return c.InheritedRoles
 }
 
-func (c *CreateRoleRequestBody) GetRequireWhereOnDelete() *string {
-	if c == nil {
-		return nil
-	}
-	return c.RequireWhereOnDelete
-}
-
-func (c *CreateRoleRequestBody) GetRequireWhereOnUpdate() *string {
-	if c == nil {
-		return nil
-	}
-	return c.RequireWhereOnUpdate
-}
-
 type CreateRoleRequest struct {
-	// The name of the organization that owns this resource
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database that owns this resource
+	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
-	// The name of the branch that owns this resource
+	// Branch name from `list_branches`. Example: `main`.
 	Branch string                 `pathParam:"style=simple,explode=false,name=branch"`
 	Body   *CreateRoleRequestBody `request:"mediaType=application/json"`
 }

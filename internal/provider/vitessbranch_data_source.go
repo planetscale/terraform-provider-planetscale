@@ -71,7 +71,7 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the database the branch belongs to`,
+				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
@@ -95,7 +95,7 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization the branch belongs to`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 			"parent_branch": schema.StringAttribute{
 				Computed:    true,

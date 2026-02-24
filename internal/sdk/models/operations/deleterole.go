@@ -20,11 +20,11 @@ func (d *DeleteRoleRequestBody) GetSuccessor() *string {
 }
 
 type DeleteRoleRequest struct {
-	// The name of the organization that owns this resource
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database that owns this resource
+	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
-	// The name of the branch that owns this resource
+	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The ID of the role
 	ID   string                 `pathParam:"style=simple,explode=false,name=id"`

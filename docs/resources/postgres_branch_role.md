@@ -32,16 +32,14 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 
 ### Required
 
-- `branch` (String) The name of the branch that owns this resource
-- `database` (String) The name of the database that owns this resource
-- `organization` (String) The name of the organization that owns this resource
+- `branch` (String) Branch name from `list_branches`. Example: `main`.
+- `database` (String) Database name slug from `list_databases`. Example: `app-db`.
+- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Optional
 
 - `inherited_roles` (Set of String) Roles to inherit from. Requires replacement if changed.
 - `name` (String) The name of the role
-- `require_where_on_delete` (String) Require WHERE clause on DELETE statements
-- `require_where_on_update` (String) Require WHERE clause on UPDATE statements
 - `successor` (String) The optional role to reassign ownership to before dropping
 - `ttl` (Number) Time to live in seconds. Requires replacement if changed.
 
