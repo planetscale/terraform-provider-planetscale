@@ -10,11 +10,11 @@ import (
 )
 
 type ListRolesRequest struct {
-	// The name of the organization that owns this resource
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
-	// The name of the database that owns this resource
+	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
-	// The name of the branch that owns this resource
+	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// If provided, specifies the page offset of returned results
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`

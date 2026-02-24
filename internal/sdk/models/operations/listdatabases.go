@@ -10,7 +10,7 @@ import (
 )
 
 type ListDatabasesRequest struct {
-	// The name of the organization the database belongs to
+	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// Search term to filter databases by name
 	Q *string `queryParam:"style=form,explode=true,name=q"`

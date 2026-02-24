@@ -231,6 +231,13 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_count
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_options
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_options
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_options
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_size
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_size

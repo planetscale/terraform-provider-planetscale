@@ -24,7 +24,7 @@ data "planetscale_databases" "my_databases" {
 
 ### Required
 
-- `organization` (String) The name of the organization the database belongs to
+- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Optional
 

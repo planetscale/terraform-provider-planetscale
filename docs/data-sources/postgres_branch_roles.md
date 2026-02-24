@@ -25,9 +25,9 @@ data "planetscale_postgres_branch_roles" "my_postgresbranchroles" {
 
 ### Required
 
-- `branch` (String) The name of the branch that owns this resource
-- `database` (String) The name of the database that owns this resource
-- `organization` (String) The name of the organization that owns this resource
+- `branch` (String) Branch name from `list_branches`. Example: `main`.
+- `database` (String) Database name slug from `list_databases`. Example: `app-db`.
+- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Read-Only
 

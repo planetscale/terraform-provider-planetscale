@@ -26,9 +26,9 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 
 ### Required
 
-- `database` (String) The name of the database the branch belongs to
+- `database` (String) Database name slug from `list_databases`. Example: `app-db`.
 - `name` (String) The name of the branch to create
-- `organization` (String) The name of the organization the branch belongs to
+- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Optional
 

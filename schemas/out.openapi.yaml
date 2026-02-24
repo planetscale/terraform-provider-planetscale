@@ -189,7 +189,7 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
       responses:
@@ -319,7 +319,7 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization the database belongs to
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: q
@@ -1789,19 +1789,19 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization that owns this resource
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database that owns this resource
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
         - name: branch
           in: path
           required: true
-          description: The name of the branch that owns this resource
+          description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
         - name: page
@@ -2061,19 +2061,19 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization that owns this resource
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database that owns this resource
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
         - name: branch
           in: path
           required: true
-          description: The name of the branch that owns this resource
+          description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
       requestBody:
@@ -2108,12 +2108,6 @@ paths:
                       - postgres
                   description: Roles to inherit from
                   format: set
-                require_where_on_delete:
-                  type: string
-                  description: Require WHERE clause on DELETE statements
-                require_where_on_update:
-                  type: string
-                  description: Require WHERE clause on UPDATE statements
               additionalProperties: false
       responses:
         "200":
@@ -2326,19 +2320,19 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization that owns this resource
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database that owns this resource
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
         - name: branch
           in: path
           required: true
-          description: The name of the branch that owns this resource
+          description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
         - name: id
@@ -2556,19 +2550,19 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization that owns this resource
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database that owns this resource
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
         - name: branch
           in: path
           required: true
-          description: The name of the branch that owns this resource
+          description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
         - name: id
@@ -2586,12 +2580,6 @@ paths:
                 name:
                   type: string
                   description: The new name of the role
-                require_where_on_delete:
-                  type: string
-                  description: Require WHERE clause on DELETE statements
-                require_where_on_update:
-                  type: string
-                  description: Require WHERE clause on UPDATE statements
               additionalProperties: false
       responses:
         "200":
@@ -2801,19 +2789,19 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization that owns this resource
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database that owns this resource
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
         - name: branch
           in: path
           required: true
-          description: The name of the branch that owns this resource
+          description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
         - name: id
@@ -3071,6 +3059,7 @@ paths:
                   - url
                   - region
                   - parent_branch
+                  - vtgate_options
         "401":
           description: Unauthorized
         "403":
@@ -3105,19 +3094,19 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization the branch belongs to
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database the branch belongs to
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
         - name: branch
           in: path
           required: true
-          description: The name of the branch
+          description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
           x-speakeasy-match: id
@@ -3226,6 +3215,7 @@ paths:
                   - url
                   - region
                   - parent_branch
+                  - vtgate_options
         "401":
           description: Unauthorized
         "403":
@@ -3401,6 +3391,7 @@ paths:
                   - url
                   - region
                   - parent_branch
+                  - vtgate_options
         "401":
           description: Unauthorized
         "403":
@@ -3629,6 +3620,7 @@ paths:
                   - url
                   - region
                   - parent_branch
+                  - vtgate_options
         "401":
           description: Unauthorized
         "403":
@@ -3663,19 +3655,19 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization the branch belongs to
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database the branch belongs to
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
         - name: branch
           in: path
           required: true
-          description: The name of the branch
+          description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
           x-speakeasy-match: id
@@ -3787,6 +3779,7 @@ paths:
                   - url
                   - region
                   - parent_branch
+                  - vtgate_options
         "401":
           description: Unauthorized
         "403":
@@ -3968,6 +3961,7 @@ paths:
                   - url
                   - region
                   - parent_branch
+                  - vtgate_options
         "401":
           description: Unauthorized
         "403":
@@ -4054,13 +4048,13 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization the database belongs to
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
           x-speakeasy-match: id
@@ -4354,13 +4348,13 @@ paths:
         - name: organization
           in: path
           required: true
-          description: The name of the organization the database belongs to
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
           schema:
             type: string
         - name: database
           in: path
           required: true
-          description: The name of the database
+          description: "Database name slug from `list_databases`. Example: `app-db`."
           schema:
             type: string
           x-speakeasy-match: id
@@ -4636,6 +4630,9 @@ tags:
   - name: Branch changes
     description: |2
                 Resources for managing cluster changes.
+  - name: Branch config changes
+    description: |2
+                Resources for managing branch-level configuration change requests.
   - name: Cluster extensions
     description: |2
                 Resources for managing cluster extension configuration.
@@ -4659,6 +4656,9 @@ tags:
   - name: Databases
     description: |2
                   Resources for managing databases within an organization.
+  - name: Keyspace config changes
+    description: |2
+                Resources for managing keyspace-level configuration change requests.
   - name: Keyspace VSchemas
     description: |2
                 Resources for managing VSchemas within a keyspace.
@@ -4692,6 +4692,13 @@ tags:
   - name: Service tokens
     description: |2
                 API endpoints for managing service tokens within an organization.
+  - name: Shard config changes
+    description: |2
+                Resources for managing shard-level configuration change requests.
+                Only available for custom-sharded keyspaces.
+  - name: Traffic budgets
+    description: |2
+                Resources for managing traffic budgets.
   - name: Users
     description: |2
                 Resources for managing users.
@@ -6063,6 +6070,10 @@ components:
               parent_branch:
                 type: string
                 description: The name of the parent branch from which the branch was created
+              vtgate_options:
+                type: object
+                additionalProperties: true
+                description: VTGate configuration options
             additionalProperties: false
             required:
               - id
@@ -6098,6 +6109,7 @@ components:
               - url
               - region
               - parent_branch
+              - vtgate_options
       additionalProperties: false
       required:
         - current_page
@@ -6289,6 +6301,10 @@ components:
         parent_branch:
           type: string
           description: The name of the parent branch from which the branch was created
+        vtgate_options:
+          type: object
+          additionalProperties: true
+          description: VTGate configuration options
       additionalProperties: false
       required:
         - id
@@ -6324,6 +6340,7 @@ components:
         - url
         - region
         - parent_branch
+        - vtgate_options
     PaginatedSchemaLintError:
       type: object
       properties:
@@ -6490,9 +6507,9 @@ components:
               extension:
                 type: boolean
                 description: Configures an extension
-              internal:
+              immutable:
                 type: boolean
-                description: The internal state of the parameter
+                description: Whether the parameter can be changed
               parameter_type:
                 type: string
                 enum:
@@ -6501,7 +6518,6 @@ components:
                   - bytes
                   - float
                   - integer
-                  - internal
                   - seconds
                   - select
                   - string
@@ -6568,7 +6584,7 @@ components:
               - category
               - description
               - extension
-              - internal
+              - immutable
               - parameter_type
               - default_value
               - value
@@ -6621,9 +6637,9 @@ components:
         extension:
           type: boolean
           description: Configures an extension
-        internal:
+        immutable:
           type: boolean
-          description: The internal state of the parameter
+          description: Whether the parameter can be changed
         parameter_type:
           type: string
           enum:
@@ -6632,7 +6648,6 @@ components:
             - bytes
             - float
             - integer
-            - internal
             - seconds
             - select
             - string
@@ -6699,7 +6714,7 @@ components:
         - category
         - description
         - extension
-        - internal
+        - immutable
         - parameter_type
         - default_value
         - value
@@ -6787,6 +6802,13 @@ components:
               vector_pool_allocation:
                 type: number
                 description: Percentage of buffer pool memory allocated to vector indexes
+              node_ttl_strategy:
+                type: string
+                enum:
+                  - node_ttl_follow_maintenance
+                  - node_ttl_always
+                  - node_ttl_off
+                description: Controls when node TTL drains are allowed
               replication_durability_constraints:
                 type: object
                 properties:
@@ -6819,13 +6841,12 @@ components:
                   - vplayer_batching
               mysqld_options:
                 type: object
-                properties:
-                  binlog_row_value_options:
-                    type: string
-                    description: Binlog row value options (e.g., PARTIAL_JSON)
-                additionalProperties: false
-                required:
-                  - binlog_row_value_options
+                additionalProperties: true
+                description: MySQL daemon configuration options
+              vttablet_options:
+                type: object
+                additionalProperties: true
+                description: VTTablet configuration options
             additionalProperties: false
             required:
               - id
@@ -6845,9 +6866,11 @@ components:
               - default
               - imported
               - vector_pool_allocation
+              - node_ttl_strategy
               - replication_durability_constraints
               - vreplication_flags
               - mysqld_options
+              - vttablet_options
       additionalProperties: false
       required:
         - current_page
@@ -6910,6 +6933,13 @@ components:
         vector_pool_allocation:
           type: number
           description: Percentage of buffer pool memory allocated to vector indexes
+        node_ttl_strategy:
+          type: string
+          enum:
+            - node_ttl_follow_maintenance
+            - node_ttl_always
+            - node_ttl_off
+          description: Controls when node TTL drains are allowed
         replication_durability_constraints:
           type: object
           properties:
@@ -6942,13 +6972,12 @@ components:
             - vplayer_batching
         mysqld_options:
           type: object
-          properties:
-            binlog_row_value_options:
-              type: string
-              description: Binlog row value options (e.g., PARTIAL_JSON)
-          additionalProperties: false
-          required:
-            - binlog_row_value_options
+          additionalProperties: true
+          description: MySQL daemon configuration options
+        vttablet_options:
+          type: object
+          additionalProperties: true
+          description: VTTablet configuration options
       additionalProperties: false
       required:
         - id
@@ -6968,9 +6997,11 @@ components:
         - default
         - imported
         - vector_pool_allocation
+        - node_ttl_strategy
         - replication_durability_constraints
         - vreplication_flags
         - mysqld_options
+        - vttablet_options
     PaginatedDatabaseBranchPassword:
       type: object
       properties:
@@ -9897,14 +9928,17 @@ components:
                     description:
                       type: string
                       description: The description of the parameter
+                    immutable:
+                      type: boolean
+                      description: Whether the parameter can be changed
                     parameter_type:
                       type: string
                       enum:
                         - array
                         - integer
-                        - internal
                         - seconds
                         - select
+                        - string
                       description: The type of the parameter
                     default_value:
                       type: string
@@ -9966,6 +10000,7 @@ components:
                     - display_name
                     - category
                     - description
+                    - immutable
                     - parameter_type
                     - default_value
                     - value
@@ -10120,14 +10155,17 @@ components:
               description:
                 type: string
                 description: The description of the parameter
+              immutable:
+                type: boolean
+                description: Whether the parameter can be changed
               parameter_type:
                 type: string
                 enum:
                   - array
                   - integer
-                  - internal
                   - seconds
                   - select
+                  - string
                 description: The type of the parameter
               default_value:
                 type: string
@@ -10189,6 +10227,7 @@ components:
               - display_name
               - category
               - description
+              - immutable
               - parameter_type
               - default_value
               - value
@@ -14363,6 +14402,7 @@ components:
                   enum:
                     - branch.ready
                     - branch.anomaly
+                    - branch.out_of_memory
                     - branch.primary_promoted
                     - branch.schema_recommendation
                     - branch.sleeping
@@ -14437,6 +14477,7 @@ components:
             enum:
               - branch.ready
               - branch.anomaly
+              - branch.out_of_memory
               - branch.primary_promoted
               - branch.schema_recommendation
               - branch.sleeping

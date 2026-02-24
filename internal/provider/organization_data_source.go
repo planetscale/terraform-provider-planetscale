@@ -114,7 +114,7 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the organization`,
+				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
 			"payment_info_required": schema.BoolAttribute{
 				Computed:    true,

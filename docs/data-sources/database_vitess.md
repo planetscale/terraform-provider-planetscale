@@ -25,7 +25,7 @@ data "planetscale_database_vitess" "my_databasevitess" {
 ### Required
 
 - `id` (String) The ID of the database
-- `organization` (String) The name of the organization the database belongs to
+- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Read-Only
 
