@@ -54,11 +54,13 @@ jobs:
     timeout-minutes: 30
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 2
       matrix:
         terraform:
-          - "1.6.*"
+          - "1.5.7" # Last MPL version - https://github.com/hashicorp/terraform/blob/v1.5.7/LICENSE
           - "1.9.*"
+          - "1.10.*"
+          - "1.11.*"
           - latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -75,7 +77,7 @@ jobs:
         env:
           PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
           PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
-        timeout-minutes: 10
+        timeout-minutes: 15
 
   test-tofu:
     name: integration-tofu
@@ -83,13 +85,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
-      max-parallel: 1
+      max-parallel: 2
       fail-fast: false
       matrix:
         tofu:
-          - "1.6.*"
-          - "1.7.*"
-          - "1.8.*"
+          - "1.9.*"
+          - "1.10.*"
+          - "1.11.*"
           - latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -106,4 +108,4 @@ jobs:
         env:
           PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
           PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
-        timeout-minutes: 10
+        timeout-minutes: 15
