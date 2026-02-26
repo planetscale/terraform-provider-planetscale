@@ -6780,6 +6780,9 @@ paths:
                   - previous_storage_type
                   - previous_storage_iops
                   - previous_storage_throughput_mibs
+        "204":
+          description: No changes to apply
+          headers: {}
         "401":
           description: Unauthorized
         "403":
@@ -32079,6 +32082,9 @@ paths:
                         dcr:
                           type: boolean
                           description: Whether the OAuth application was created via Dynamic Client Registration
+                        single_org_authorization:
+                          type: boolean
+                          description: Whether the OAuth application is limited to authorizing a single organization
                         scopes_by_resource:
                           type: object
                           additionalProperties: true
@@ -32100,6 +32106,7 @@ paths:
                         - client_id
                         - tokens
                         - dcr
+                        - single_org_authorization
                         - scopes_by_resource
                         - all_scopes_by_resource
                 additionalProperties: false
@@ -32189,6 +32196,9 @@ paths:
                   dcr:
                     type: boolean
                     description: Whether the OAuth application was created via Dynamic Client Registration
+                  single_org_authorization:
+                    type: boolean
+                    description: Whether the OAuth application is limited to authorizing a single organization
                   scopes_by_resource:
                     type: object
                     additionalProperties: true
@@ -32210,6 +32220,7 @@ paths:
                   - client_id
                   - tokens
                   - dcr
+                  - single_org_authorization
                   - scopes_by_resource
                   - all_scopes_by_resource
         "401":
@@ -40549,6 +40560,9 @@ components:
               dcr:
                 type: boolean
                 description: Whether the OAuth application was created via Dynamic Client Registration
+              single_org_authorization:
+                type: boolean
+                description: Whether the OAuth application is limited to authorizing a single organization
               scopes_by_resource:
                 type: object
                 additionalProperties: true
@@ -40570,6 +40584,7 @@ components:
               - client_id
               - tokens
               - dcr
+              - single_org_authorization
               - scopes_by_resource
               - all_scopes_by_resource
       additionalProperties: false
@@ -40618,6 +40633,9 @@ components:
         dcr:
           type: boolean
           description: Whether the OAuth application was created via Dynamic Client Registration
+        single_org_authorization:
+          type: boolean
+          description: Whether the OAuth application is limited to authorizing a single organization
         scopes_by_resource:
           type: object
           additionalProperties: true
@@ -40639,6 +40657,7 @@ components:
         - client_id
         - tokens
         - dcr
+        - single_org_authorization
         - scopes_by_resource
         - all_scopes_by_resource
     PaginatedServiceToken:

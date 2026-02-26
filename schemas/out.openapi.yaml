@@ -660,8 +660,246 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/resizes: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/changes: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/changes:
+    patch:
+      tags:
+        - Branch changes
+      operationId: update_branch_change_request
+      summary: Upsert a change request
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+          x-speakeasy-match: id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cluster_size:
+                  type: string
+                  description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+              additionalProperties: false
+      responses:
+        "200":
+          description: Returns the branch change request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: change_request_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: change_request_state
+                    x-speakeasy-terraform-ignore: schema
+                additionalProperties: false
+                required:
+                  - id
+                  - restart
+                  - state
+                  - started_at
+                  - completed_at
+                  - created_at
+                  - updated_at
+                  - actor
+                  - cluster_name
+                  - cluster_display_name
+                  - cluster_metal
+                  - replicas
+                  - parameters
+                  - previous_cluster_name
+                  - previous_cluster_display_name
+                  - previous_cluster_metal
+                  - previous_replicas
+                  - previous_parameters
+                  - minimum_storage_bytes
+                  - maximum_storage_bytes
+                  - storage_autoscaling
+                  - storage_shrinking
+                  - storage_type
+                  - storage_iops
+                  - storage_throughput_mibs
+                  - previous_minimum_storage_bytes
+                  - previous_maximum_storage_bytes
+                  - previous_storage_autoscaling
+                  - previous_storage_shrinking
+                  - previous_storage_type
+                  - previous_storage_iops
+                  - previous_storage_throughput_mibs
+        "204":
+          description: No changes to apply
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation:
+        - PostgresBranch#create#3
+        - PostgresBranch#update
+  /organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}:
+    get:
+      tags:
+        - Branch changes
+      operationId: get_branch_change_request
+      summary: Get a branch change request
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: id
+          in: path
+          required: true
+          description: The ID of the change request
+          schema:
+            type: string
+          x-speakeasy-name-override: change_request_id
+          x-speakeasy-terraform-ignore: schema
+      responses:
+        "200":
+          description: Returns a branch change request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: change_request_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: change_request_state
+                    x-speakeasy-terraform-ignore: schema
+                additionalProperties: false
+                required:
+                  - id
+                  - restart
+                  - state
+                  - started_at
+                  - completed_at
+                  - created_at
+                  - updated_at
+                  - actor
+                  - cluster_name
+                  - cluster_display_name
+                  - cluster_metal
+                  - replicas
+                  - parameters
+                  - previous_cluster_name
+                  - previous_cluster_display_name
+                  - previous_cluster_metal
+                  - previous_replicas
+                  - previous_parameters
+                  - minimum_storage_bytes
+                  - maximum_storage_bytes
+                  - storage_autoscaling
+                  - storage_shrinking
+                  - storage_type
+                  - storage_iops
+                  - storage_throughput_mibs
+                  - previous_minimum_storage_bytes
+                  - previous_maximum_storage_bytes
+                  - previous_storage_autoscaling
+                  - previous_storage_shrinking
+                  - previous_storage_type
+                  - previous_storage_iops
+                  - previous_storage_throughput_mibs
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        - entityOperation: PostgresBranch#create#4
+          options:
+            polling:
+              name: WaitForChangeRequestComplete
+        - entityOperation: PostgresBranch#update#2
+          options:
+            polling:
+              name: WaitForChangeRequestComplete
+      x-speakeasy-polling:
+        - name: WaitForChangeRequestComplete
+          delaySeconds: 10
+          intervalSeconds: 10
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/change_request_state == "canceled"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/change_request_state == "completed"
   /organizations/{organization}/databases/{database}/branches/{branch}/cluster: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/demote: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/extensions: {}
@@ -8325,6 +8563,9 @@ components:
               dcr:
                 type: boolean
                 description: Whether the OAuth application was created via Dynamic Client Registration
+              single_org_authorization:
+                type: boolean
+                description: Whether the OAuth application is limited to authorizing a single organization
               scopes_by_resource:
                 type: object
                 additionalProperties: true
@@ -8346,6 +8587,7 @@ components:
               - client_id
               - tokens
               - dcr
+              - single_org_authorization
               - scopes_by_resource
               - all_scopes_by_resource
       additionalProperties: false
@@ -8394,6 +8636,9 @@ components:
         dcr:
           type: boolean
           description: Whether the OAuth application was created via Dynamic Client Registration
+        single_org_authorization:
+          type: boolean
+          description: Whether the OAuth application is limited to authorizing a single organization
         scopes_by_resource:
           type: object
           additionalProperties: true
@@ -8415,6 +8660,7 @@ components:
         - client_id
         - tokens
         - dcr
+        - single_org_authorization
         - scopes_by_resource
         - all_scopes_by_resource
     PaginatedServiceToken:

@@ -11,7 +11,7 @@ package hooks
 func initHooks(h *Hooks) {
 	customSecurityHook := &CustomSecurityHook{}
 
-	// h.registerSDKInitHook(exampleHook)
+	h.registerSDKInitHook(NewPostgresBranchNoContentSkipHook())
 	h.registerBeforeRequestHook(customSecurityHook)
 	// h.registerAfterErrorHook(exampleHook)
 	// h.registerAfterSuccessHook(exampleHook)
