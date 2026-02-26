@@ -19,8 +19,8 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 	branchNameOriginal := randomWithPrefix("test")
 	branchNameRenamed := randomWithPrefix("test-renamed")
 	resourceAddress := "planetscale_postgres_branch.test"
-	clusterSize := "PS_10_AWS_X86"
-	newClusterSize := "PS_5_AWS_X86"
+	clusterSize := "PS_10_ARM_X86"
+	newClusterSize := "PS_5_ARM_X86"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
