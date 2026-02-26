@@ -2108,6 +2108,14 @@ paths:
                       - postgres
                   description: Roles to inherit from
                   format: set
+                require_where_on_delete:
+                  type: string
+                  description: Require WHERE clause on DELETE statements
+                  x-speakeasy-match: query_safety_settings.require_where_on_delete
+                require_where_on_update:
+                  type: string
+                  description: Require WHERE clause on UPDATE statements
+                  x-speakeasy-match: query_safety_settings.require_where_on_update
               additionalProperties: false
       responses:
         "200":
@@ -2580,6 +2588,14 @@ paths:
                 name:
                   type: string
                   description: The new name of the role
+                require_where_on_delete:
+                  type: string
+                  description: Require WHERE clause on DELETE statements
+                  x-speakeasy-match: query_safety_settings.require_where_on_delete
+                require_where_on_update:
+                  type: string
+                  description: Require WHERE clause on UPDATE statements
+                  x-speakeasy-match: query_safety_settings.require_where_on_update
               additionalProperties: false
       responses:
         "200":

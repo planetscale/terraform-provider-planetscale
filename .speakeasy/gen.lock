@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: e06e1589896c6985213dfc7da17524c4
+  docChecksum: 62393387ac67b7e38637da2d5b12320d
   docVersion: v1
   speakeasyVersion: 1.731.1
   generationVersion: 2.844.3
@@ -281,7 +281,7 @@ trackedFiles:
     pristine_git_object: 5f7ccbf7d9c14d4e54619ec78ac5f08bd8e40c75
   internal/provider/postgresbranchrole_resource_sdk.go:
     id: 4da918fe90c4
-    last_write_checksum: sha1:b68a033a7c94dc2f98d3e55089a0538f33622dcf
+    last_write_checksum: sha1:b4ab3480b16f0fec0901c4a8148b5fc1e98c0feb
     pristine_git_object: 5246ebe1519b4a0b500dd4b4ff225ab6c6acddad
   internal/provider/postgresbranchroles_data_source.go:
     id: eab053a45f5a
@@ -613,7 +613,7 @@ trackedFiles:
     pristine_git_object: 70b0fa5325c1ee8e97b19848d8c365d2b713f0e6
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
-    last_write_checksum: sha1:8994cf36806483ef96360b84c77215acb19978ac
+    last_write_checksum: sha1:fe8c8af3bc8ebe5e45cbb3ec182e6809e87452b3
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
@@ -691,7 +691,7 @@ trackedFiles:
     last_write_checksum: sha1:98d586485758f917b21cb0f4a5fd8ce60afc6bfb
   internal/sdk/models/operations/updaterole.go:
     id: eaca616a88af
-    last_write_checksum: sha1:c898fb7b411d0f58c24f8a0e716bbd819687c009
+    last_write_checksum: sha1:f751712124bf52a5bd43e461a80a06df192e783d
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
   internal/sdk/models/operations/updatevitessbranch.go:
     last_write_checksum: sha1:a5358321ec464e80da1de387efafe8eaa732824c

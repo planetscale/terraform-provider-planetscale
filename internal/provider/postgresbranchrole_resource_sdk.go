@@ -182,10 +182,24 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx 
 	for _, inheritedRolesItem := range r.InheritedRoles {
 		inheritedRoles = append(inheritedRoles, operations.InheritedRoleRequest(inheritedRolesItem.ValueString()))
 	}
+	requireWhereOnDelete := new(string)
+	if !r.QuerySafetySettings.RequireWhereOnDelete.IsUnknown() && !r.QuerySafetySettings.RequireWhereOnDelete.IsNull() {
+		*requireWhereOnDelete = r.QuerySafetySettings.RequireWhereOnDelete.ValueString()
+	} else {
+		requireWhereOnDelete = nil
+	}
+	requireWhereOnUpdate := new(string)
+	if !r.QuerySafetySettings.RequireWhereOnUpdate.IsUnknown() && !r.QuerySafetySettings.RequireWhereOnUpdate.IsNull() {
+		*requireWhereOnUpdate = r.QuerySafetySettings.RequireWhereOnUpdate.ValueString()
+	} else {
+		requireWhereOnUpdate = nil
+	}
 	out := operations.CreateRoleRequestBody{
-		Name:           name,
-		TTL:            ttl,
-		InheritedRoles: inheritedRoles,
+		Name:                 name,
+		TTL:                  ttl,
+		InheritedRoles:       inheritedRoles,
+		RequireWhereOnDelete: requireWhereOnDelete,
+		RequireWhereOnUpdate: requireWhereOnUpdate,
 	}
 
 	return &out, diags
@@ -307,8 +321,22 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequestBody(ctx 
 	} else {
 		name = nil
 	}
+	requireWhereOnDelete := new(string)
+	if !r.QuerySafetySettings.RequireWhereOnDelete.IsUnknown() && !r.QuerySafetySettings.RequireWhereOnDelete.IsNull() {
+		*requireWhereOnDelete = r.QuerySafetySettings.RequireWhereOnDelete.ValueString()
+	} else {
+		requireWhereOnDelete = nil
+	}
+	requireWhereOnUpdate := new(string)
+	if !r.QuerySafetySettings.RequireWhereOnUpdate.IsUnknown() && !r.QuerySafetySettings.RequireWhereOnUpdate.IsNull() {
+		*requireWhereOnUpdate = r.QuerySafetySettings.RequireWhereOnUpdate.ValueString()
+	} else {
+		requireWhereOnUpdate = nil
+	}
 	out := operations.UpdateRoleRequestBody{
-		Name: name,
+		Name:                 name,
+		RequireWhereOnDelete: requireWhereOnDelete,
+		RequireWhereOnUpdate: requireWhereOnUpdate,
 	}
 
 	return &out, diags
