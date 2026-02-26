@@ -12,5 +12,11 @@
       "matchManagers": ["gomod"],
       "enabled": false
     }
-  ]
+  ],
+  // Vulnerability alerts can bypass packageRules, so disable them explicitly.
+  // Go deps (the only packages in this repo) are fully managed by speakeasy.
+  "vulnerabilityAlerts": {
+    "enabled": false
+  },
+  "osvVulnerabilityAlerts": false
 }
