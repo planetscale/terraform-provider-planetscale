@@ -2,7 +2,7 @@ terraform {
   required_providers {
     planetscale = {
       source  = "planetscale/planetscale"
-      version = "1.0.0-rc1"
+      version = "1.0.0-rc2"
     }
   }
 }
