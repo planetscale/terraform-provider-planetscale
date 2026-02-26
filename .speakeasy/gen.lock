@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: e06e1589896c6985213dfc7da17524c4
+  docChecksum: 52cf9e72d9f54612a4ca1e054cc85415
   docVersion: v1
   speakeasyVersion: 1.731.1
   generationVersion: 2.844.3
@@ -261,11 +261,11 @@ trackedFiles:
     pristine_git_object: ce4a668f6f884d6898c67aae59a7df6d67cd89e4
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:124d2d9ce4279346032b74282416ef8f7fd7b942
+    last_write_checksum: sha1:63f050f7e4fd97896151804aae7758f4254149e8
     pristine_git_object: 592d4c15815e79e1711aa2bc6a6ede61aec55eee
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:6b95f1137dbf8fe2e3c578a3b103d812dbf2c683
+    last_write_checksum: sha1:04d46802dc12dcb6543cc25524563fdfe7745e6d
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
@@ -523,6 +523,8 @@ trackedFiles:
     id: 1ea4c4e0a39d
     last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
+  internal/sdk/branchchanges.go:
+    last_write_checksum: sha1:8a0b5c28e35564bc522073f87ba564f5b3e1eaf7
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
     last_write_checksum: sha1:2c6373ddb82698327913371528d330d63266d801
@@ -635,6 +637,8 @@ trackedFiles:
     id: d38f63b60ddf
     last_write_checksum: sha1:3971e886e4429dd27ddeecf1ec28f65587840ffc
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
+  internal/sdk/models/operations/getbranchchangerequest.go:
+    last_write_checksum: sha1:211d4629f1a9fc65e1c8f96177ec3e3a867d27b9
   internal/sdk/models/operations/getorganization.go:
     id: ebae13951225
     last_write_checksum: sha1:fd785dc5d844e60c3dd0325026c9861e5802dc73
@@ -683,6 +687,8 @@ trackedFiles:
     id: 6d0d29414e00
     last_write_checksum: sha1:6af734f59773c359e9dfd9b7b0547df38e436581
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
+  internal/sdk/models/operations/updatebranchchangerequest.go:
+    last_write_checksum: sha1:1cd6ee5685076175bf081bc06ef4514e51f6973f
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     last_write_checksum: sha1:2c280fcf23cae701cf42366d42fb9260fce27036
@@ -713,7 +719,7 @@ trackedFiles:
     pristine_git_object: 482aa982b4571ec54f57707879032cc00c8fe24e
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:ff313ce1c58e59a4bb3e14177c4496bacb1a601e
+    last_write_checksum: sha1:bdc9d5597066a19e6369960e068f4581a5d1d8d4
     pristine_git_object: edd5a04397c8e2e1faa37b1515cc10715653813e
   internal/sdk/polling/config.go:
     id: e14a17f21f84
@@ -1247,7 +1253,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "state": "completed", "actor": {"id": "<id>"}, "cluster_name": "<value>"}
+          application/json: {"id": "<id>", "state": "completed"}
   cancel_branch_change_request:
     speakeasy-default-cancel-branch-change-request:
       parameters:
@@ -2364,7 +2370,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"id": "<id>", "state": "canceled", "actor": {"id": "<id>"}, "cluster_name": "<value>"}
+          application/json: {"id": "<id>", "state": "canceled"}
   update_postgres_branch:
     speakeasy-default-update-postgres-branch:
       parameters:
