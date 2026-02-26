@@ -1,5 +1,5 @@
 workflowVersion: 1.0.0
-speakeasyVersion: 1.725.0
+speakeasyVersion: 1.731.1
 sources:
     PlanetScale API:
         inputs:

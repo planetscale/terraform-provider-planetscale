@@ -3,8 +3,8 @@ id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
   docChecksum: e06e1589896c6985213dfc7da17524c4
   docVersion: v1
-  speakeasyVersion: 1.725.0
-  generationVersion: 2.836.5
+  speakeasyVersion: 1.731.1
+  generationVersion: 2.844.3
   releaseVersion: 1.0.0-rc1
   configChecksum: c82ec95f85841738c86625a72005ea43
 persistentEdits:
@@ -14,14 +14,14 @@ persistentEdits:
 features:
   terraform:
     additionalDependencies: 0.1.0
-    constsAndDefaults: 0.3.1
-    core: 3.46.41
+    constsAndDefaults: 0.3.2
+    core: 3.46.45
     customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.2
     globalServerURLs: 2.83.1
     ignores: 2.82.0
     nameOverrides: 2.81.5
-    operationPolling: 0.3.0
+    operationPolling: 0.3.1
     pagination: 2.83.5
     sets: 0.1.2
 trackedFiles:
@@ -713,7 +713,7 @@ trackedFiles:
     pristine_git_object: 482aa982b4571ec54f57707879032cc00c8fe24e
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:d58f301452bf8763e9d227367e9fba86f6e7ca73
+    last_write_checksum: sha1:ff313ce1c58e59a4bb3e14177c4496bacb1a601e
     pristine_git_object: edd5a04397c8e2e1faa37b1515cc10715653813e
   internal/sdk/polling/config.go:
     id: e14a17f21f84
