@@ -3223,6 +3223,7 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
+                    x-speakeasy-name-override: cluster_size
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
@@ -3376,6 +3377,7 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
+                    x-speakeasy-name-override: cluster_size
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
@@ -3555,6 +3557,7 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
+                    x-speakeasy-name-override: cluster_size
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
@@ -3784,6 +3787,7 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
+                    x-speakeasy-name-override: cluster_size
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
@@ -3943,6 +3947,7 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
+                    x-speakeasy-name-override: cluster_size
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries
@@ -4125,6 +4130,7 @@ paths:
                   cluster_name:
                     type: string
                     description: The SKU representing the branch's cluster size
+                    x-speakeasy-name-override: cluster_size
                   ready:
                     type: boolean
                     description: Whether or not the branch is ready to serve queries

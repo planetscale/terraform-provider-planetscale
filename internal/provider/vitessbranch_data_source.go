@@ -30,7 +30,7 @@ type VitessBranchDataSource struct {
 // VitessBranchDataSourceModel describes the data model.
 type VitessBranchDataSourceModel struct {
 	Actor            *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
-	ClusterName      types.String                       `tfsdk:"cluster_name"`
+	ClusterSize      types.String                       `tfsdk:"cluster_size"`
 	Database         types.String                       `tfsdk:"database"`
 	HTMLURL          types.String                       `tfsdk:"html_url"`
 	ID               types.String                       `tfsdk:"id"`
@@ -65,7 +65,7 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 					},
 				},
 			},
-			"cluster_name": schema.StringAttribute{
+			"cluster_size": schema.StringAttribute{
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
 			},

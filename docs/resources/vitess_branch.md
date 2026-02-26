@@ -40,7 +40,7 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 ### Read-Only
 
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
-- `cluster_name` (String) The SKU representing the branch's cluster size
+- `cluster_size` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
 - `id` (String) The ID of the branch
 - `mysql_address` (String) The MySQL address for the branch

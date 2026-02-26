@@ -43,7 +43,6 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 ### Read-Only
 
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
-- `cluster_name` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
 - `id` (String) The ID of the branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
