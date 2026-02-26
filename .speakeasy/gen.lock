@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 52cf9e72d9f54612a4ca1e054cc85415
+  docChecksum: 00b8a203ec6150c9fc7e7655aeadc98a
   docVersion: v1
   speakeasyVersion: 1.731.1
   generationVersion: 2.844.3
@@ -261,7 +261,7 @@ trackedFiles:
     pristine_git_object: ce4a668f6f884d6898c67aae59a7df6d67cd89e4
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:63f050f7e4fd97896151804aae7758f4254149e8
+    last_write_checksum: sha1:74dd67cbd9fd54f2bd2e608fcbe718af2864f2aa
     pristine_git_object: 592d4c15815e79e1711aa2bc6a6ede61aec55eee
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
