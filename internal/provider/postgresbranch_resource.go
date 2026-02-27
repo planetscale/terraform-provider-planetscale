@@ -12,12 +12,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	custom_stringvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -89,6 +91,9 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"cluster_size": schema.StringAttribute{
 				Optional:    true,
 				Description: `The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.`,
+				Validators: []validator.String{
+					custom_stringvalidators.ClusterSizeValidator(),
+				},
 			},
 			"database": schema.StringAttribute{
 				Required:    true,

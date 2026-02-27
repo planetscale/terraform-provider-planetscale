@@ -3189,6 +3189,7 @@ paths:
                 cluster_size:
                   type: string
                   description: "The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800"
+                  x-speakeasy-plan-validators: ClusterSizeValidator
                 major_version:
                   type: string
                   description: For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.

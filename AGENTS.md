@@ -11,3 +11,4 @@
 * Acceptance tests use Terraform configs from `internal/provider/testdata/`
 * Each test function has a matching directory: `TestAccFoo` → `testdata/TestAccFoo/`
 * Tests use `config.TestNameDirectory()` to automatically load the matching testdata directory
+* Prefer testify `require` over explicit checks and `t.Fatalf` in unit tests

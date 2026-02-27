@@ -16,6 +16,10 @@ actions:
     description: Remove seed_data (Vitess-only field)
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties.cluster_size
+    update:
+      x-speakeasy-plan-validators: ClusterSizeValidator
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].post.responses['201'].content['application/json'].schema.properties
     description: Add Postgres response fields
     update:
