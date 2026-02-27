@@ -42,7 +42,6 @@ type PostgresBranchResourceModel struct {
 	BackupID           types.String                         `tfsdk:"backup_id"`
 	ChangeRequestID    types.String                         `tfsdk:"-"`
 	ChangeRequestState types.String                         `tfsdk:"-"`
-	ClusterName        types.String                         `tfsdk:"cluster_name"`
 	ClusterSize        types.String                         `tfsdk:"cluster_size"`
 	Database           types.String                         `tfsdk:"database"`
 	HTMLURL            types.String                         `tfsdk:"html_url"`
@@ -84,11 +83,8 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				},
 				Description: `If provided, restores the backup's schema and data to the new branch. Must have ` + "`" + `restore_production_branch_backup(s)` + "`" + ` or ` + "`" + `restore_backup(s)` + "`" + ` access to do this. Requires replacement if changed.`,
 			},
-			"cluster_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `The SKU representing the branch's cluster size`,
-			},
 			"cluster_size": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.`,
 				Validators: []validator.String{

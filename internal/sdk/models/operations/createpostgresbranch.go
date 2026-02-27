@@ -184,7 +184,7 @@ type CreatePostgresBranchResponseBody struct {
 	// The current state of the branch
 	State CreatePostgresBranchState `json:"state"`
 	// The SKU representing the branch's cluster size
-	ClusterName string `json:"cluster_name"`
+	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool                      `json:"ready"`
 	Actor CreatePostgresBranchActor `json:"actor"`
@@ -218,11 +218,11 @@ func (c *CreatePostgresBranchResponseBody) GetState() CreatePostgresBranchState 
 	return c.State
 }
 
-func (c *CreatePostgresBranchResponseBody) GetClusterName() string {
+func (c *CreatePostgresBranchResponseBody) GetClusterSize() string {
 	if c == nil {
 		return ""
 	}
-	return c.ClusterName
+	return c.ClusterSize
 }
 
 func (c *CreatePostgresBranchResponseBody) GetReady() bool {

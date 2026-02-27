@@ -143,7 +143,7 @@ type UpdateVitessBranchResponseBody struct {
 	// The current state of the branch
 	State UpdateVitessBranchState `json:"state"`
 	// The SKU representing the branch's cluster size
-	ClusterName string `json:"cluster_name"`
+	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool                    `json:"ready"`
 	Actor UpdateVitessBranchActor `json:"actor"`
@@ -191,11 +191,11 @@ func (u *UpdateVitessBranchResponseBody) GetState() UpdateVitessBranchState {
 	return u.State
 }
 
-func (u *UpdateVitessBranchResponseBody) GetClusterName() string {
+func (u *UpdateVitessBranchResponseBody) GetClusterSize() string {
 	if u == nil {
 		return ""
 	}
-	return u.ClusterName
+	return u.ClusterSize
 }
 
 func (u *UpdateVitessBranchResponseBody) GetReady() bool {

@@ -32,7 +32,7 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 ### Read-Only
 
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
-- `cluster_name` (String) The SKU representing the branch's cluster size
+- `cluster_size` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
 - `name` (String) The name of the branch
 - `parent_branch` (String) The name of the parent branch from which the branch was created

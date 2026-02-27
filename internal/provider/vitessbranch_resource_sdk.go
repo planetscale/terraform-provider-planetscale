@@ -16,7 +16,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 	if resp != nil {
 		r.Actor = &tfTypes.GetVitessBranchActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
@@ -39,7 +39,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 	if resp != nil {
 		r.Actor = &tfTypes.GetVitessBranchActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
@@ -62,7 +62,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateVitessBranchRespo
 	if resp != nil {
 		r.Actor = &tfTypes.GetVitessBranchActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.ClusterName = types.StringValue(resp.ClusterName)
+		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
