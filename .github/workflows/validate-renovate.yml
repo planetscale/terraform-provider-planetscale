@@ -6,6 +6,9 @@ on:
 env:
   LOG_LEVEL: debug
 
+permissions:
+  contents: read
+
 jobs:
   renovate-config-validator:
     runs-on: ubuntu-latest
