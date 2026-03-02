@@ -6,7 +6,7 @@ management:
   speakeasyVersion: 1.731.1
   generationVersion: 2.844.3
   releaseVersion: 1.0.0-rc2
-  configChecksum: 4e2efc49b053a757a1dcc9d6768d7283
+  configChecksum: 6d51309ed0eb431aa2614fc862b509d4
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
@@ -115,7 +115,7 @@ trackedFiles:
     pristine_git_object: 4a8d92374beb311bf11912bcc446c68961f0ca49
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:a97de3cabfa4a8212cc9a257e928aff4f44128b0
+    last_write_checksum: sha1:27c63023f2253f36de3676eced885fcb442d08b2
     pristine_git_object: 4df25b7df884a56bc731483888f5d1dd3185ffa6
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
