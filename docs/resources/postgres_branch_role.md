@@ -40,6 +40,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 
 - `inherited_roles` (Set of String) Roles to inherit from. Requires replacement if changed.
 - `name` (String) The name of the role
+- `query_safety_settings` (Attributes) (see [below for nested schema](#nestedatt--query_safety_settings))
 - `successor` (String) The optional role to reassign ownership to before dropping
 - `ttl` (Number) Time to live in seconds. Requires replacement if changed.
 
@@ -61,9 +62,17 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 - `password` (String, Sensitive) The plain text password, available only after create
 - `private_access_host_url` (String) The database connection string for private connections
 - `private_connection_service_name` (String) The service name to set up private connectivity
-- `query_safety_settings` (Attributes) (see [below for nested schema](#nestedatt--query_safety_settings))
 - `updated_at` (String) When the role was updated
 - `username` (String) The database user name
+
+<a id="nestedatt--query_safety_settings"></a>
+### Nested Schema for `query_safety_settings`
+
+Required:
+
+- `require_where_on_delete` (String) Require WHERE clause on DELETE statements. must be one of ["off", "warn", "on"]
+- `require_where_on_update` (String) Require WHERE clause on UPDATE statements. must be one of ["off", "warn", "on"]
+
 
 <a id="nestedatt--actor_data"></a>
 ### Nested Schema for `actor_data`
@@ -83,15 +92,6 @@ Read-Only:
 - `deleted_at` (String) When the resource was deleted, if deleted
 - `id` (String) The ID for the resource
 - `name` (String) The name for the resource
-
-
-<a id="nestedatt--query_safety_settings"></a>
-### Nested Schema for `query_safety_settings`
-
-Read-Only:
-
-- `require_where_on_delete` (String) Require WHERE clause on DELETE statements
-- `require_where_on_update` (String) Require WHERE clause on UPDATE statements
 
 ## Import
 

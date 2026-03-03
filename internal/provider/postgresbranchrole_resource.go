@@ -7,12 +7,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/int64planmodifier"
@@ -193,14 +195,29 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 			},
 			"query_safety_settings": schema.SingleNestedAttribute{
 				Computed: true,
+				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"require_where_on_delete": schema.StringAttribute{
-						Computed:    true,
-						Description: `Require WHERE clause on DELETE statements`,
+						Required:    true,
+						Description: `Require WHERE clause on DELETE statements. must be one of ["off", "warn", "on"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"off",
+								"warn",
+								"on",
+							),
+						},
 					},
 					"require_where_on_update": schema.StringAttribute{
-						Computed:    true,
-						Description: `Require WHERE clause on UPDATE statements`,
+						Required:    true,
+						Description: `Require WHERE clause on UPDATE statements. must be one of ["off", "warn", "on"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"off",
+								"warn",
+								"on",
+							),
+						},
 					},
 				},
 			},
