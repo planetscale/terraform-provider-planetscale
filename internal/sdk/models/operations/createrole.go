@@ -75,6 +75,10 @@ type CreateRoleRequestBody struct {
 	TTL *int64 `json:"ttl,omitzero"`
 	// Roles to inherit from
 	InheritedRoles []InheritedRoleRequest `json:"inherited_roles,omitzero"`
+	// Require WHERE clause on DELETE statements
+	RequireWhereOnDelete *string `json:"require_where_on_delete,omitzero"`
+	// Require WHERE clause on UPDATE statements
+	RequireWhereOnUpdate *string `json:"require_where_on_update,omitzero"`
 }
 
 func (c CreateRoleRequestBody) MarshalJSON() ([]byte, error) {
@@ -107,6 +111,20 @@ func (c *CreateRoleRequestBody) GetInheritedRoles() []InheritedRoleRequest {
 		return nil
 	}
 	return c.InheritedRoles
+}
+
+func (c *CreateRoleRequestBody) GetRequireWhereOnDelete() *string {
+	if c == nil {
+		return nil
+	}
+	return c.RequireWhereOnDelete
+}
+
+func (c *CreateRoleRequestBody) GetRequireWhereOnUpdate() *string {
+	if c == nil {
+		return nil
+	}
+	return c.RequireWhereOnUpdate
 }
 
 type CreateRoleRequest struct {

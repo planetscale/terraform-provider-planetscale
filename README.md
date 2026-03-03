@@ -70,8 +70,8 @@ Available configuration:
 ### Data Sources
 
 * [planetscale_database_postgres](docs/data-sources/database_postgres.md)
-* [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_database_vitess](docs/data-sources/database_vitess.md)
+* [planetscale_databases](docs/data-sources/databases.md)
 * [planetscale_organization](docs/data-sources/organization.md)
 * [planetscale_organizations](docs/data-sources/organizations.md)
 * [planetscale_postgres_branch](docs/data-sources/postgres_branch.md)

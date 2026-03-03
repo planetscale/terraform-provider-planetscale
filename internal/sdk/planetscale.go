@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version v1 and generator version 2.844.3
+// Generated from OpenAPI doc version v1 and generator version 2.846.1
 
 import (
 	"context"
@@ -73,7 +73,7 @@ type PlanetScale struct {
 
 type SDKOption func(*PlanetScale)
 
-// WithServerURL allows the overriding of the default server URL
+// WithServerURL allows providing an alternative server URL
 func WithServerURL(serverURL string) SDKOption {
 	return func(sdk *PlanetScale) {
 		sdk.sdkConfiguration.ServerURL = serverURL
@@ -143,7 +143,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk := &PlanetScale{
 		SDKVersion: "1.0.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.0.0 2.844.3 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.0.0 2.846.1 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
