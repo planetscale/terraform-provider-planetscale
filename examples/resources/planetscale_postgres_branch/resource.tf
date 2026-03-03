@@ -3,5 +3,5 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
   database      = "ru00w3vqvfr9"
 
   name          = "my-branch"
-  cluster_size  = "PS-10"
+  cluster_size  = "PS_10_AWS_ARM"
 }

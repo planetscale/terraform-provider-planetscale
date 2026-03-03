@@ -56,6 +56,9 @@ type PlanetScale struct {
 	//             Resources for managing databases within an organization.
 	//
 	Databases *Databases
+	//           Resources for managing cluster changes.
+	//
+	BranchChanges *BranchChanges
 	//           Resources for managing database branch passwords.
 	//
 	DatabaseBranchPasswords *DatabaseBranchPasswords
@@ -138,9 +141,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *PlanetScale {
 	sdk := &PlanetScale{
-		SDKVersion: "1.0.0-rc1",
+		SDKVersion: "1.0.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.0.0-rc1 2.844.3 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.0.0 2.844.3 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -163,6 +166,7 @@ func New(opts ...SDKOption) *PlanetScale {
 
 	sdk.Organizations = newOrganizations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)

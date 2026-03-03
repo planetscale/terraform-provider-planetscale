@@ -40,7 +40,7 @@ type VitessBranchResource struct {
 type VitessBranchResourceModel struct {
 	Actor            *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
 	BackupID         types.String                       `tfsdk:"backup_id"`
-	ClusterName      types.String                       `tfsdk:"cluster_name"`
+	ClusterSize      types.String                       `tfsdk:"cluster_size"`
 	Database         types.String                       `tfsdk:"database"`
 	HTMLURL          types.String                       `tfsdk:"html_url"`
 	ID               types.String                       `tfsdk:"id"`
@@ -81,7 +81,7 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `If provided, restores the backup's schema and data to the new branch. Must have ` + "`" + `restore_production_branch_backup(s)` + "`" + ` or ` + "`" + `restore_backup(s)` + "`" + ` access to do this. Requires replacement if changed.`,
 			},
-			"cluster_name": schema.StringAttribute{
+			"cluster_size": schema.StringAttribute{
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
 			},

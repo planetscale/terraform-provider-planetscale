@@ -15,6 +15,16 @@ actions:
     update:
       x-speakeasy-match: id
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.actor.properties.avatar_url
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.actor.properties.avatar_url

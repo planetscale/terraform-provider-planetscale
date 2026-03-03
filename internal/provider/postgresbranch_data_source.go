@@ -30,7 +30,7 @@ type PostgresBranchDataSource struct {
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
 	Actor        *tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	ClusterName  types.String                         `tfsdk:"cluster_name"`
+	ClusterSize  types.String                         `tfsdk:"cluster_size"`
 	Database     types.String                         `tfsdk:"database"`
 	HTMLURL      types.String                         `tfsdk:"html_url"`
 	ID           types.String                         `tfsdk:"id"`
@@ -64,7 +64,7 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 					},
 				},
 			},
-			"cluster_name": schema.StringAttribute{
+			"cluster_size": schema.StringAttribute{
 				Computed:    true,
 				Description: `The SKU representing the branch's cluster size`,
 			},
