@@ -168,13 +168,11 @@ func (s *Organizations) ListOrganizations(ctx context.Context, request operation
 		if len(arr) == 0 {
 			return nil, nil
 		}
+		request.Page = &nP
 
 		return s.ListOrganizations(
 			ctx,
-			operations.ListOrganizationsRequest{
-				Page:    &nP,
-				PerPage: request.PerPage,
-			},
+			request,
 		)
 	}
 

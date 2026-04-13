@@ -172,16 +172,11 @@ func (s *Roles) ListRoles(ctx context.Context, request operations.ListRolesReque
 		if len(arr) == 0 {
 			return nil, nil
 		}
+		request.Page = &nP
 
 		return s.ListRoles(
 			ctx,
-			operations.ListRolesRequest{
-				Organization: request.Organization,
-				Database:     request.Database,
-				Branch:       request.Branch,
-				Page:         &nP,
-				PerPage:      request.PerPage,
-			},
+			request,
 		)
 	}
 
