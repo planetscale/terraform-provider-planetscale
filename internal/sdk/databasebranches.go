@@ -366,8 +366,8 @@ func (s *DatabaseBranches) getPostgresBranch(ctx context.Context, hookCtx hooks.
 func (s *DatabaseBranches) GetPostgresBranchWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 1
-		defaultIntervalSeconds := 1
-		defaultLimitCount := 300
+		defaultIntervalSeconds := 5
+		defaultLimitCount := 150
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
