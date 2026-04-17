@@ -41,11 +41,11 @@ actions:
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
       x-speakeasy-polling:
         - name: WaitForReady
-          limitCount: 300
+          limitCount: 150
+          intervalSeconds: 5
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
-
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties
     description: Add Postgres response fields
