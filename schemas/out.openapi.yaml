@@ -3500,7 +3500,7 @@ paths:
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
       x-speakeasy-polling:
         - name: WaitForReady
-          limitCount: 600
+          limitCount: 900
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
@@ -4082,7 +4082,7 @@ paths:
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch.
       x-speakeasy-polling:
         - name: WaitForReady
-          limitCount: 600
+          limitCount: 900
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
@@ -4605,7 +4605,7 @@ paths:
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database.
       x-speakeasy-polling:
         - name: WaitForReady
-          limitCount: 600
+          limitCount: 900
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
@@ -4891,7 +4891,7 @@ paths:
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database.
       x-speakeasy-polling:
         - name: WaitForReady
-          limitCount: 600
+          limitCount: 900
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"

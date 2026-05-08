@@ -57,7 +57,7 @@ actions:
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
       x-speakeasy-polling:
         - name: WaitForReady
-          limitCount: 600
+          limitCount: 900
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"

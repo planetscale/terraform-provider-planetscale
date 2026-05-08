@@ -367,7 +367,7 @@ func (s *DatabaseBranches) GetPostgresBranchWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 1
 		defaultIntervalSeconds := 1
-		defaultLimitCount := 600
+		defaultLimitCount := 900
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
@@ -1067,7 +1067,7 @@ func (s *DatabaseBranches) GetVitessBranchWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 1
 		defaultIntervalSeconds := 1
-		defaultLimitCount := 600
+		defaultLimitCount := 900
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
