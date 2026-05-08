@@ -58,9 +58,6 @@ jobs:
       matrix:
         terraform:
           - "1.5.7" # Last MPL version - https://github.com/hashicorp/terraform/blob/v1.5.7/LICENSE
-          - "1.9.*"
-          - "1.10.*"
-          - "1.11.*"
           - latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -89,9 +86,6 @@ jobs:
       fail-fast: false
       matrix:
         tofu:
-          - "1.9.*"
-          - "1.10.*"
-          - "1.11.*"
           - latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
