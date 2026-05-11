@@ -3766,6 +3766,7 @@ paths:
                 cluster_size:
                   type: string
                   description: "The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800"
+                  x-speakeasy-plan-validators: ClusterSizeValidator
                 create_database_if_missing:
                   type: boolean
                   const: true

@@ -12,6 +12,10 @@ actions:
       x-speakeasy-entity-operation: VitessBranch#create
       x-speakeasy-entity-description: Manage a PlanetScale Vitess database branch.
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.cluster_size
+    update:
+      x-speakeasy-plan-validators: ClusterSizeValidator
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.restore_point
     description: Remove restore_point (Postgres-only field)
     remove: true

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 55b6a13ea0df1ecba720b270f9b5122b
+  docChecksum: 8ebe30a35518de1fbe91193c377f2211
   docVersion: v1
   speakeasyVersion: 1.731.1
   generationVersion: 2.844.3
@@ -489,7 +489,7 @@ trackedFiles:
     pristine_git_object: 2557ef7bbc5e3edd5578829c061609c7b7a02504
   internal/provider/vitessbranch_resource.go:
     id: 253814c7c29a
-    last_write_checksum: sha1:bd8f228bc082f0b14a39dc1ffd31da915dc81d00
+    last_write_checksum: sha1:152dc62cd96311439b63b1bb09d47aa85e3070f2
     pristine_git_object: 3fa960d342bf6de4878019abd742d68bc1517dba
   internal/provider/vitessbranch_resource_sdk.go:
     id: b7741edc0d6e
