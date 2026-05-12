@@ -14,7 +14,7 @@ actions:
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.cluster_size
     update:
-      x-speakeasy-plan-validators: ClusterSizeValidator
+      x-speakeasy-plan-validators: VitessClusterSizeValidator
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.restore_point
     description: Remove restore_point (Postgres-only field)
