@@ -62,9 +62,12 @@ terraform:
     - env: PLANETSCALE_SERVICE_TOKEN_ID
       providerAttribute: service_token_id
   excludeEmptyObjectSchemas: false
+  forwardCompatibleEnumsByDefault: false
   includeEmptyObjects: true
   inferUnionDiscriminators: false
   packageName: planetscale
+  preApplyUnionDiscriminators: false
+  providerTypeNameOverride: ""
   respectRequiredFields: false
   respectTitlesForPrimitiveUnionMembers: false
   unionStrategy: populated-fields

@@ -289,6 +289,7 @@ type GetPostgresDatabaseResponseBody struct {
 	// When the default branch schema was last changed.
 	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
 	// The kind of database
+	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	kind string `const:"postgresql" json:"kind"`
 }
 

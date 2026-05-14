@@ -158,8 +158,8 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewDatabasePostgresDataSource,
-		NewDatabasesDataSource,
 		NewDatabaseVitessDataSource,
+		NewDatabasesDataSource,
 		NewOrganizationDataSource,
 		NewOrganizationsDataSource,
 		NewPostgresBranchDataSource,

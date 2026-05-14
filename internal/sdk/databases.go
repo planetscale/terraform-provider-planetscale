@@ -170,15 +170,11 @@ func (s *Databases) ListDatabases(ctx context.Context, request operations.ListDa
 		if len(arr) == 0 {
 			return nil, nil
 		}
+		request.Page = &nP
 
 		return s.ListDatabases(
 			ctx,
-			operations.ListDatabasesRequest{
-				Organization: request.Organization,
-				Q:            request.Q,
-				Page:         &nP,
-				PerPage:      request.PerPage,
-			},
+			request,
 		)
 	}
 
