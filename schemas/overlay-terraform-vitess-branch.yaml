@@ -36,7 +36,9 @@ actions:
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch.
       x-speakeasy-polling:
         - name: WaitForReady
-          limitCount: 300
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 90 # 15 minutes at a 10 second interval, plus initial 30 second delay
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
@@ -64,4 +66,3 @@ actions:
       operationId: delete_vitess_branch
       summary: Delete a Vitess branch
       x-speakeasy-entity-operation: VitessBranch#delete
-

@@ -84,12 +84,6 @@ actions:
       x-speakeasy-entity-operation:
         - DatabaseVitess#read
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database.
-      x-speakeasy-polling:
-        - name: WaitForReady
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "ready"
 
   - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.parameters[?@.name == 'database']
     update:
