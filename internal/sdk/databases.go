@@ -11,10 +11,8 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
-	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/polling"
 	"github.com/spyzhov/ajson"
 	"net/http"
-	"time"
 )
 
 // Databases -             Resources for managing databases within an organization.
@@ -172,15 +170,11 @@ func (s *Databases) ListDatabases(ctx context.Context, request operations.ListDa
 		if len(arr) == 0 {
 			return nil, nil
 		}
+		request.Page = &nP
 
 		return s.ListDatabases(
 			ctx,
-			operations.ListDatabasesRequest{
-				Organization: request.Organization,
-				Q:            request.Q,
-				Page:         &nP,
-				PerPage:      request.PerPage,
-			},
+			request,
 		)
 	}
 
@@ -244,7 +238,6 @@ func (s *Databases) ListDatabases(ctx context.Context, request operations.ListDa
 func (s *Databases) GetVitessDatabase(ctx context.Context, request operations.GetVitessDatabaseRequest, opts ...operations.Option) (*operations.GetVitessDatabaseResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
-		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -300,19 +293,6 @@ func (s *Databases) GetVitessDatabase(ctx context.Context, request operations.Ge
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
-
-	if o.Polling != nil {
-		switch o.Polling.Name {
-		case "WaitForReady":
-			return s.getVitessDatabaseWaitForReady(ctx, hookCtx, req, o)
-		}
-	}
-
-	return s.getVitessDatabase(ctx, hookCtx, req, o)
-}
-
-func (s *Databases) getVitessDatabase(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessDatabaseResponse, error) {
-	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -391,89 +371,6 @@ func (s *Databases) getVitessDatabase(ctx context.Context, hookCtx hooks.HookCon
 
 }
 
-// Use with GetVitessDatabase by adding the operations.WithPolling option.
-// Responses are returned when enabling polling, however additional errors may
-// be returned:
-//   - polling.FailureCriteriaError: If the polling option has explicit failure
-//     criteria defined, polling will immediately stop and return this error.
-//   - polling.LimitCountError: When polling has reached the maximum number of
-//     attempts. Use the polling.WithLimitCountOverride polling option to
-//     override the predefined limit.
-func (s *Databases) GetVitessDatabaseWaitForReady() polling.ConfigFunc {
-	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 1
-		defaultIntervalSeconds := 1
-		defaultLimitCount := 300
-		result := &polling.Config{
-			DelaySeconds:    &defaultDelaySeconds,
-			IntervalSeconds: &defaultIntervalSeconds,
-			LimitCount:      &defaultLimitCount,
-			Name:            "WaitForReady",
-		}
-
-		for _, pollingOpt := range pollingOpts {
-			if err := pollingOpt(result); err != nil {
-				return nil, err
-			}
-		}
-
-		return result, nil
-	}
-}
-
-func (s *Databases) getVitessDatabaseWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessDatabaseResponse, error) {
-	if o.Polling == nil || o.Polling.LimitCount == nil {
-		return s.getVitessDatabase(ctx, hookCtx, req, o)
-	}
-
-	if o.Polling.DelaySeconds != nil {
-		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
-	}
-
-	var res *operations.GetVitessDatabaseResponse
-
-	for i := 1; i <= *o.Polling.LimitCount; i++ {
-		// Ensure request body, if exists, is not empty on subsequent requests.
-		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-			copyBody, err := req.GetBody()
-
-			if err != nil {
-				return nil, err
-			}
-
-			req.Body = copyBody
-		}
-
-		var err error
-
-		res, err = s.getVitessDatabase(ctx, hookCtx, req, o)
-
-		if err != nil {
-			return res, err
-		}
-
-		successCriteriaMet := true
-
-		if successCriteriaMet {
-			successCriteriaMet = res.StatusCode == 200
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = res.Object.State == "ready"
-		}
-
-		if successCriteriaMet {
-			return res, nil
-		}
-
-		if o.Polling.IntervalSeconds != nil {
-			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
-		}
-	}
-
-	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
-}
-
 // GetPostgresDatabase - Get a PostgreSQL database
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
@@ -492,7 +389,6 @@ func (s *Databases) getVitessDatabaseWaitForReady(ctx context.Context, hookCtx h
 func (s *Databases) GetPostgresDatabase(ctx context.Context, request operations.GetPostgresDatabaseRequest, opts ...operations.Option) (*operations.GetPostgresDatabaseResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
-		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -548,19 +444,6 @@ func (s *Databases) GetPostgresDatabase(ctx context.Context, request operations.
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
-
-	if o.Polling != nil {
-		switch o.Polling.Name {
-		case "WaitForReady":
-			return s.getPostgresDatabaseWaitForReady(ctx, hookCtx, req, o)
-		}
-	}
-
-	return s.getPostgresDatabase(ctx, hookCtx, req, o)
-}
-
-func (s *Databases) getPostgresDatabase(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresDatabaseResponse, error) {
-	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -637,87 +520,4 @@ func (s *Databases) getPostgresDatabase(ctx context.Context, hookCtx hooks.HookC
 
 	return res, nil
 
-}
-
-// Use with GetPostgresDatabase by adding the operations.WithPolling option.
-// Responses are returned when enabling polling, however additional errors may
-// be returned:
-//   - polling.FailureCriteriaError: If the polling option has explicit failure
-//     criteria defined, polling will immediately stop and return this error.
-//   - polling.LimitCountError: When polling has reached the maximum number of
-//     attempts. Use the polling.WithLimitCountOverride polling option to
-//     override the predefined limit.
-func (s *Databases) GetPostgresDatabaseWaitForReady() polling.ConfigFunc {
-	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 1
-		defaultIntervalSeconds := 1
-		defaultLimitCount := 300
-		result := &polling.Config{
-			DelaySeconds:    &defaultDelaySeconds,
-			IntervalSeconds: &defaultIntervalSeconds,
-			LimitCount:      &defaultLimitCount,
-			Name:            "WaitForReady",
-		}
-
-		for _, pollingOpt := range pollingOpts {
-			if err := pollingOpt(result); err != nil {
-				return nil, err
-			}
-		}
-
-		return result, nil
-	}
-}
-
-func (s *Databases) getPostgresDatabaseWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresDatabaseResponse, error) {
-	if o.Polling == nil || o.Polling.LimitCount == nil {
-		return s.getPostgresDatabase(ctx, hookCtx, req, o)
-	}
-
-	if o.Polling.DelaySeconds != nil {
-		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
-	}
-
-	var res *operations.GetPostgresDatabaseResponse
-
-	for i := 1; i <= *o.Polling.LimitCount; i++ {
-		// Ensure request body, if exists, is not empty on subsequent requests.
-		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-			copyBody, err := req.GetBody()
-
-			if err != nil {
-				return nil, err
-			}
-
-			req.Body = copyBody
-		}
-
-		var err error
-
-		res, err = s.getPostgresDatabase(ctx, hookCtx, req, o)
-
-		if err != nil {
-			return res, err
-		}
-
-		successCriteriaMet := true
-
-		if successCriteriaMet {
-			successCriteriaMet = res.StatusCode == 200
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = res.Object.State == "ready"
-		}
-
-		if successCriteriaMet {
-			return res, nil
-		}
-
-		if o.Polling.IntervalSeconds != nil {
-			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
-		}
-	}
-
-	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }

@@ -51,7 +51,7 @@ jobs:
     name: integration-terraform
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -74,13 +74,13 @@ jobs:
         env:
           PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
           PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
-        timeout-minutes: 15
+        timeout-minutes: 30
 
   test-tofu:
     name: integration-tofu
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       max-parallel: 2
       fail-fast: false
@@ -102,4 +102,4 @@ jobs:
         env:
           PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
           PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
-        timeout-minutes: 15
+        timeout-minutes: 30

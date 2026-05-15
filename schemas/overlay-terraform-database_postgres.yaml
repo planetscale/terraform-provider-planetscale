@@ -98,17 +98,7 @@ actions:
       summary: Get a PostgreSQL database
       x-speakeasy-entity-operation:
         - DatabasePostgres#read
-          #   - entityOperation: DatabasePostgres#create#2
-          #     options:
-          #       polling:
-          #         name: WaitForReady
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database.
-      x-speakeasy-polling:
-        - name: WaitForReady
-          limitCount: 300
-          successCriteria:
-            - condition: $statusCode == 200
-            - condition: $response.body#/state == "ready"
 
   - target: $.paths['/organizations/{organization}/databases/{database}#postgres'].get.parameters[?@.name == 'database']
     update:
