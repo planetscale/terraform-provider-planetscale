@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 15d15750aa302cae8899135d6c6a077f
+  docChecksum: 29c901ba3333989ac8e830dc819cd22a
   docVersion: v1
   speakeasyVersion: 1.763.1
   generationVersion: 2.884.4
@@ -524,7 +524,7 @@ trackedFiles:
     last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
   internal/sdk/branchchanges.go:
-    last_write_checksum: sha1:8a0b5c28e35564bc522073f87ba564f5b3e1eaf7
+    last_write_checksum: sha1:f3e6d0eefca1d9340cee2ee976628619e7869022
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
     last_write_checksum: sha1:9f62d726af262332eb0af7978181eee001816c41
