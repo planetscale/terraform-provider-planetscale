@@ -10,7 +10,23 @@ import (
 
 var _ validator.String = StringClusterSizeValidatorValidator{}
 
-var clusterSizePattern = regexp.MustCompile(`^(?:PS_(?:[0-9]+|DEV)_(?:AWS|GCP)_(?:ARM|X86|AMD)|M[0-9]+_[0-9]+_(?:AWS|GCP)_(?:ARM|X86|AMD)_D_METAL_[0-9]+)$`)
+const (
+	psNumericSizePattern  = `(?:5|[1-9][0-9]*0)`
+	psSizePattern         = `(?:` + psNumericSizePattern + `|DEV)`
+	qualifiedPSPattern    = `PS_` + psSizePattern + `_(?:AWS|GCP)_(?:ARM|X86|AMD)`
+	vitessPSPattern       = `PS_` + psSizePattern
+	instancePSPattern     = `PS_(?:(?:AWS|GCP)_)?[A-Z][0-9][A-Z0-9]*(?:_[A-Z0-9]+)+`
+	qualifiedMetalPattern = `M[0-9]+_[0-9]+_(?:AWS|GCP)_(?:ARM|X86|AMD)_D_METAL_[0-9]+`
+	vitessMetalPattern    = `M[0-9]*_[0-9]+(?:_(?:AWS|GCP)_(?:AMD|INTEL|X86))?_D_METAL_[0-9]+`
+)
+
+var clusterSizePattern = regexp.MustCompile(
+	`^(?:` + qualifiedPSPattern + `|` + qualifiedMetalPattern + `)$`,
+)
+
+var vitessClusterSizePattern = regexp.MustCompile(
+	`^(?:` + qualifiedPSPattern + `|` + qualifiedMetalPattern + `|` + vitessPSPattern + `|` + instancePSPattern + `|` + vitessMetalPattern + `)$`,
+)
 
 type StringClusterSizeValidatorValidator struct{}
 
@@ -26,12 +42,16 @@ func (v StringClusterSizeValidatorValidator) MarkdownDescription(ctx context.Con
 
 // Validate performs the validation.
 func (v StringClusterSizeValidatorValidator) ValidateString(ctx context.Context, req validator.StringRequest, resp *validator.StringResponse) {
+	validateClusterSize(req, resp, clusterSizePattern, "PS_10_AWS_ARM, PS_10_GCP_X86, or M1_10_AWS_AMD_D_METAL_10")
+}
+
+func validateClusterSize(req validator.StringRequest, resp *validator.StringResponse, pattern *regexp.Regexp, examples string) {
 	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
 		return
 	}
 
 	value := req.ConfigValue.ValueString()
-	if clusterSizePattern.MatchString(value) {
+	if pattern.MatchString(value) {
 		return
 	}
 
@@ -39,9 +59,9 @@ func (v StringClusterSizeValidatorValidator) ValidateString(ctx context.Context,
 		req.Path,
 		"Invalid cluster_size value",
 		fmt.Sprintf(
-			"%q is not a valid cluster_size. Use a fully qualified cluster size such as "+
-				"PS_10_AWS_ARM, PS_10_GCP_X86, or M1_10_AWS_AMD_D_METAL_10. ",
+			"%q is not a valid cluster_size. Use a valid cluster size such as %s. ",
 			value,
+			examples,
 		),
 	)
 }

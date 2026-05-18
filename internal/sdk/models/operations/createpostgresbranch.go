@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
+	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/types"
 	"net/http"
 )
 
@@ -24,6 +25,23 @@ type CreatePostgresBranchRequestBody struct {
 	ClusterSize *string `json:"cluster_size,omitzero"`
 	// For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
 	MajorVersion *string `json:"major_version,omitzero"`
+	// Create the database if it does not already exist. The Terraform provider always sends this so that branch resources transparently provision the database on first apply.
+	//lint:ignore U1000 accessed via reflection for JSON marshaling
+	createDatabaseIfMissing *bool `const:"true" json:"create_database_if_missing"`
+	// The kind of database. Always postgresql for planetscale_postgres_branch.
+	//lint:ignore U1000 accessed via reflection for JSON marshaling
+	kind *string `const:"postgresql" json:"kind"`
+}
+
+func (c CreatePostgresBranchRequestBody) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreatePostgresBranchRequestBody) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreatePostgresBranchRequestBody) GetName() string {
@@ -73,6 +91,14 @@ func (c *CreatePostgresBranchRequestBody) GetMajorVersion() *string {
 		return nil
 	}
 	return c.MajorVersion
+}
+
+func (c *CreatePostgresBranchRequestBody) GetCreateDatabaseIfMissing() *bool {
+	return types.Pointer(true)
+}
+
+func (c *CreatePostgresBranchRequestBody) GetKind() *string {
+	return types.Pointer("postgresql")
 }
 
 type CreatePostgresBranchRequest struct {

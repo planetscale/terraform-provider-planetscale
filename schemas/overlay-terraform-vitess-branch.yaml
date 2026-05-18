@@ -12,15 +12,32 @@ actions:
       x-speakeasy-entity-operation: VitessBranch#create
       x-speakeasy-entity-description: Manage a PlanetScale Vitess database branch.
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.cluster_size
+    update:
+      x-speakeasy-plan-validators: VitessClusterSizeValidator
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.restore_point
     description: Remove restore_point (Postgres-only field)
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.major_version
     description: Remove major_version (Postgres-only field)
     remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.cluster_size
-    description: Remove cluster_size from creation request
-    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties
+    description: Always send create_database_if_missing=true and kind=mysql so the branch resource transparently creates the database when it does not already exist.
+    update:
+      create_database_if_missing:
+        type: boolean
+        const: true
+        default: true
+        description: Create the database if it does not already exist. The Terraform provider always sends this so that branch resources transparently provision the database on first apply.
+        x-speakeasy-terraform-ignore: schema
+      kind:
+        type: string
+        const: mysql
+        default: mysql
+        description: The kind of database. Always mysql for planetscale_vitess_branch.
+        x-speakeasy-terraform-ignore: schema
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
     description: Update operation metadata for Vitess

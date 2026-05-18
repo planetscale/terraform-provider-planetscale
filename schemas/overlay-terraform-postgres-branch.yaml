@@ -20,6 +20,22 @@ actions:
     update:
       x-speakeasy-plan-validators: ClusterSizeValidator
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties
+    description: Always send create_database_if_missing=true and kind=postgresql so the branch resource transparently creates the database when it does not already exist.
+    update:
+      create_database_if_missing:
+        type: boolean
+        const: true
+        default: true
+        description: Create the database if it does not already exist. The Terraform provider always sends this so that branch resources transparently provision the database on first apply.
+        x-speakeasy-terraform-ignore: schema
+      kind:
+        type: string
+        const: postgresql
+        default: postgresql
+        description: The kind of database. Always postgresql for planetscale_postgres_branch.
+        x-speakeasy-terraform-ignore: schema
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].post.responses['201'].content['application/json'].schema.properties
     description: Add Postgres response fields
     update:

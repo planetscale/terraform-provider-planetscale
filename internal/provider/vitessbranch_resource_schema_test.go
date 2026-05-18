@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestPostgresBranchResource_ClusterSizeValidation(t *testing.T) {
+func TestVitessBranchResource_ClusterSizeValidation(t *testing.T) {
 	t.Parallel()
 
-	r := NewPostgresBranchResource()
+	r := NewVitessBranchResource()
 	var schemaResp resource.SchemaResponse
 	r.Schema(context.Background(), resource.SchemaRequest{}, &schemaResp)
 
@@ -35,12 +35,13 @@ func TestPostgresBranchResource_ClusterSizeValidation(t *testing.T) {
 		{value: "PS_5_GCP_ARM", valid: true},
 		{value: "PS_DEV_AWS_X86", valid: true},
 		{value: "M1_10_AWS_AMD_D_METAL_10", valid: true},
-		{value: "M4_160_D_METAL_460", valid: false},
-		{value: "M_160_GCP_AMD_D_METAL_742", valid: false},
-		{value: "M_160_GCP_INTEL_D_METAL_742", valid: false},
-		{value: "PS_AWS_R6I_2XLARGE", valid: false},
-		{value: "PS_1400", valid: false},
-		{value: "PS_DEV", valid: false},
+		{value: "M4_160_D_METAL_460", valid: true},
+		{value: "M_160_GCP_AMD_D_METAL_742", valid: true},
+		{value: "M_160_GCP_INTEL_D_METAL_742", valid: true},
+		{value: "PS_AWS_R6I_2XLARGE", valid: true},
+		{value: "PS_1400", valid: true},
+		{value: "PS_DEV", valid: true},
+		{value: "PS_99", valid: false},
 		{value: "PS-5", valid: false},
 		{value: "PS-5-AWS-X86", valid: false},
 		{value: "PS_5_GCP", valid: false},

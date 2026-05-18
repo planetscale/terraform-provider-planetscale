@@ -92,3 +92,50 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 		},
 	})
 }
+
+func TestAccVitessBranchResource_CreatesAndDeletesDatabase(t *testing.T) {
+	t.Parallel()
+
+	databaseName := randomWithPrefix("testacc-vitess-lifecycle")
+	branchName := "main"
+	resourceAddress := "planetscale_vitess_branch.test"
+	clusterSize := "PS_10"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:                 func() { testAccPreCheck(t) },
+		ProtoV6ProviderFactories: testAccProviders(),
+		Steps: []resource.TestStep{
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization":  config.StringVariable(testAccOrg),
+					"database_name": config.StringVariable(databaseName),
+					"branch_name":   config.StringVariable(branchName),
+					"cluster_size":  config.StringVariable(clusterSize),
+				},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("id"),
+						knownvalue.NotNull(),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("name"),
+						knownvalue.StringExact(branchName),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("ready"),
+						knownvalue.Bool(true),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("state"),
+						knownvalue.StringExact("ready"),
+					),
+				},
+			},
+		},
+	})
+}
