@@ -3194,6 +3194,18 @@ paths:
                 major_version:
                   type: string
                   description: For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
+                create_database_if_missing:
+                  type: boolean
+                  const: true
+                  default: true
+                  description: Create the database if it does not already exist. The Terraform provider always sends this so that branch resources transparently provision the database on first apply.
+                  x-speakeasy-terraform-ignore: schema
+                kind:
+                  type: string
+                  const: postgresql
+                  default: postgresql
+                  description: The kind of database. Always postgresql for planetscale_postgres_branch.
+                  x-speakeasy-terraform-ignore: schema
               additionalProperties: false
               required:
                 - name
@@ -3754,6 +3766,22 @@ paths:
                   enum:
                     - last_successful_backup
                   description: If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
+                cluster_size:
+                  type: string
+                  description: "The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800"
+                  x-speakeasy-plan-validators: VitessClusterSizeValidator
+                create_database_if_missing:
+                  type: boolean
+                  const: true
+                  default: true
+                  description: Create the database if it does not already exist. The Terraform provider always sends this so that branch resources transparently provision the database on first apply.
+                  x-speakeasy-terraform-ignore: schema
+                kind:
+                  type: string
+                  const: mysql
+                  default: mysql
+                  description: The kind of database. Always mysql for planetscale_vitess_branch.
+                  x-speakeasy-terraform-ignore: schema
               additionalProperties: false
               required:
                 - name

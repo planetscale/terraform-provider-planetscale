@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
+	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/types"
 	"net/http"
 )
 
@@ -44,6 +45,25 @@ type CreateVitessBranchRequestBody struct {
 	Region *string `json:"region,omitzero"`
 	// If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch.
 	SeedData *SeedData `json:"seed_data,omitzero"`
+	// The database cluster size. Required if a backup_id is provided, optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800
+	ClusterSize *string `json:"cluster_size,omitzero"`
+	// Create the database if it does not already exist. The Terraform provider always sends this so that branch resources transparently provision the database on first apply.
+	//lint:ignore U1000 accessed via reflection for JSON marshaling
+	createDatabaseIfMissing *bool `const:"true" json:"create_database_if_missing"`
+	// The kind of database. Always mysql for planetscale_vitess_branch.
+	//lint:ignore U1000 accessed via reflection for JSON marshaling
+	kind *string `const:"mysql" json:"kind"`
+}
+
+func (c CreateVitessBranchRequestBody) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateVitessBranchRequestBody) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreateVitessBranchRequestBody) GetName() string {
@@ -79,6 +99,21 @@ func (c *CreateVitessBranchRequestBody) GetSeedData() *SeedData {
 		return nil
 	}
 	return c.SeedData
+}
+
+func (c *CreateVitessBranchRequestBody) GetClusterSize() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ClusterSize
+}
+
+func (c *CreateVitessBranchRequestBody) GetCreateDatabaseIfMissing() *bool {
+	return types.Pointer(true)
+}
+
+func (c *CreateVitessBranchRequestBody) GetKind() *string {
+	return types.Pointer("mysql")
 }
 
 type CreateVitessBranchRequest struct {
