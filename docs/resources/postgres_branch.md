@@ -76,8 +76,8 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = planetscale_postgres_branch.my_planetscale_postgres_branch
   id = jsonencode({
-    database = "..."
-    id = "..."
+    database     = "..."
+    id           = "..."
     organization = "..."
   })
 }

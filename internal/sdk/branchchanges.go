@@ -368,9 +368,9 @@ func (s *BranchChanges) getBranchChangeRequest(ctx context.Context, hookCtx hook
 //     override the predefined limit.
 func (s *BranchChanges) GetBranchChangeRequestWaitForChangeRequestComplete() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 10
+		defaultDelaySeconds := 30
 		defaultIntervalSeconds := 10
-		defaultLimitCount := 60
+		defaultLimitCount := 90
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,

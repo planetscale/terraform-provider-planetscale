@@ -172,17 +172,11 @@ func (s *DatabaseBranchPasswords) ListPasswords(ctx context.Context, request ope
 		if len(arr) == 0 {
 			return nil, nil
 		}
+		request.Page = &nP
 
 		return s.ListPasswords(
 			ctx,
-			operations.ListPasswordsRequest{
-				Organization:     request.Organization,
-				Database:         request.Database,
-				Branch:           request.Branch,
-				ReadOnlyRegionID: request.ReadOnlyRegionID,
-				Page:             &nP,
-				PerPage:          request.PerPage,
-			},
+			request,
 		)
 	}
 

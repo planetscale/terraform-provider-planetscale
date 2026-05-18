@@ -37,7 +37,6 @@ terraform:
   additionalDataSources: []
   additionalDependencies:
     github.com/cloudflare/circl: v1.6.3
-    github.com/hashicorp/terraform-plugin-framework: v1.19.0
     github.com/hashicorp/terraform-plugin-testing: v1.16.0
     golang.org/x/crypto: v0.48.0
   additionalEphemeralResources: []
@@ -63,9 +62,12 @@ terraform:
     - env: PLANETSCALE_SERVICE_TOKEN_ID
       providerAttribute: service_token_id
   excludeEmptyObjectSchemas: false
+  forwardCompatibleEnumsByDefault: false
   includeEmptyObjects: true
   inferUnionDiscriminators: false
   packageName: planetscale
+  preApplyUnionDiscriminators: false
+  providerTypeNameOverride: ""
   respectRequiredFields: false
   respectTitlesForPrimitiveUnionMembers: false
   unionStrategy: populated-fields

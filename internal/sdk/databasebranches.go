@@ -365,9 +365,9 @@ func (s *DatabaseBranches) getPostgresBranch(ctx context.Context, hookCtx hooks.
 //     override the predefined limit.
 func (s *DatabaseBranches) GetPostgresBranchWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 1
-		defaultIntervalSeconds := 1
-		defaultLimitCount := 900
+		defaultDelaySeconds := 30
+		defaultIntervalSeconds := 10
+		defaultLimitCount := 90
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
@@ -1065,9 +1065,9 @@ func (s *DatabaseBranches) getVitessBranch(ctx context.Context, hookCtx hooks.Ho
 //     override the predefined limit.
 func (s *DatabaseBranches) GetVitessBranchWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 1
-		defaultIntervalSeconds := 1
-		defaultLimitCount := 900
+		defaultDelaySeconds := 30
+		defaultIntervalSeconds := 10
+		defaultLimitCount := 90
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
