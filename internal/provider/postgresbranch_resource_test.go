@@ -19,7 +19,7 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 	branchNameOriginal := randomWithPrefix("test")
 	branchNameRenamed := randomWithPrefix("test-renamed")
 	resourceAddress := "planetscale_postgres_branch.test"
-	clusterSize := "PS_10_AWS_ARM"
+	clusterSize := "PS_DEV_AWS_ARM"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -104,7 +104,7 @@ func TestAccPostgresBranchResource_CreatesAndDeletesDatabase(t *testing.T) {
 	databaseName := randomWithPrefix("testacc-pg-lifecycle")
 	branchName := "main"
 	resourceAddress := "planetscale_postgres_branch.test"
-	clusterSize := "PS_10_AWS_ARM"
+	clusterSize := "PS_DEV_AWS_ARM"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
