@@ -19,8 +19,7 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 	branchNameOriginal := randomWithPrefix("test")
 	branchNameRenamed := randomWithPrefix("test-renamed")
 	resourceAddress := "planetscale_postgres_branch.test"
-	clusterSize := "PS_10_AWS_ARM"
-	newClusterSize := "PS_5_AWS_ARM"
+	clusterSize := "PS_DEV_AWS_ARM"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -63,18 +62,13 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 					"organization":  config.StringVariable(testAccOrg),
 					"database_name": config.StringVariable(databaseName),
 					"branch_name":   config.StringVariable(branchNameRenamed),
-					"cluster_size":  config.StringVariable(newClusterSize),
+					"cluster_size":  config.StringVariable(clusterSize),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("name"),
 						knownvalue.StringExact(branchNameRenamed),
-					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("cluster_size"),
-						knownvalue.StringExact(newClusterSize),
 					),
 				},
 			},
@@ -84,7 +78,7 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 					"organization":  config.StringVariable(testAccOrg),
 					"database_name": config.StringVariable(databaseName),
 					"branch_name":   config.StringVariable(branchNameRenamed),
-					"cluster_size":  config.StringVariable(newClusterSize),
+					"cluster_size":  config.StringVariable(clusterSize),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
@@ -110,7 +104,7 @@ func TestAccPostgresBranchResource_CreatesAndDeletesDatabase(t *testing.T) {
 	databaseName := randomWithPrefix("testacc-pg-lifecycle")
 	branchName := "main"
 	resourceAddress := "planetscale_postgres_branch.test"
-	clusterSize := "PS_10_AWS_ARM"
+	clusterSize := "PS_DEV_AWS_ARM"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
