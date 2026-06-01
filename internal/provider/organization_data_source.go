@@ -86,7 +86,7 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"has_past_due_invoices": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether or not the organization has past due billing invoices`,
+				Description: `Whether or not the organization has past due billing invoices.`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -138,7 +138,7 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"sso_portal_url": schema.StringAttribute{
 				Computed:    true,
-				Description: `The URL of the organization's SSO portal`,
+				Description: `The URL of the organization's SSO portal.`,
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,

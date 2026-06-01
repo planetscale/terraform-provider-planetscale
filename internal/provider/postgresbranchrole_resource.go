@@ -39,6 +39,7 @@ type PostgresBranchRoleResource struct {
 type PostgresBranchRoleResourceModel struct {
 	AccessHostURL                types.String                        `tfsdk:"access_host_url"`
 	ActorData                    *tfTypes.GetRoleActorData           `tfsdk:"actor_data"`
+	BaseUsername                 types.String                        `tfsdk:"base_username"`
 	Branch                       types.String                        `tfsdk:"branch"`
 	BranchData                   *tfTypes.GetRoleBranchData          `tfsdk:"branch_data"`
 	CreatedAt                    types.String                        `tfsdk:"created_at"`
@@ -59,7 +60,7 @@ type PostgresBranchRoleResourceModel struct {
 	PrivateAccessHostURL         types.String                        `tfsdk:"private_access_host_url"`
 	PrivateConnectionServiceName types.String                        `tfsdk:"private_connection_service_name"`
 	QuerySafetySettings          *tfTypes.GetRoleQuerySafetySettings `tfsdk:"query_safety_settings"`
-	Successor                    types.String                        `tfsdk:"successor"`
+	Successor                    types.String                        `queryParam:"style=form,explode=true,name=successor" tfsdk:"successor"`
 	TTL                          types.Int64                         `tfsdk:"ttl"`
 	UpdatedAt                    types.String                        `tfsdk:"updated_at"`
 	Username                     types.String                        `tfsdk:"username"`
@@ -93,6 +94,10 @@ func (r *PostgresBranchRoleResource) Schema(ctx context.Context, req resource.Sc
 						Description: `The ID of the actor`,
 					},
 				},
+			},
+			"base_username": schema.StringAttribute{
+				Computed:    true,
+				Description: `The base username without branch routing suffix`,
 			},
 			"branch": schema.StringAttribute{
 				Required:    true,

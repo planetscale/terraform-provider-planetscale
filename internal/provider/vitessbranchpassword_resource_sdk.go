@@ -20,10 +20,14 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsCreatePasswordR
 			r.AccessHostRegionalUrls = append(r.AccessHostRegionalUrls, types.StringValue(v))
 		}
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
-		r.Actor = &tfTypes.GetPasswordActor{}
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
-		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		if resp.Actor == nil {
+			r.Actor = nil
+		} else {
+			r.Actor = &tfTypes.GetPasswordActor{}
+			r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+			r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+			r.Actor.ID = types.StringValue(resp.Actor.ID)
+		}
 		r.Cidrs = make([]types.String, 0, len(resp.Cidrs))
 		for _, v := range resp.Cidrs {
 			r.Cidrs = append(r.Cidrs, types.StringValue(v))
@@ -35,24 +39,26 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsCreatePasswordR
 		r.DatabaseBranch.Name = types.StringValue(resp.DatabaseBranch.Name)
 		r.DatabaseBranch.PrivateEdgeConnectivity = types.BoolValue(resp.DatabaseBranch.PrivateEdgeConnectivity)
 		r.DatabaseBranch.Production = types.BoolValue(resp.DatabaseBranch.Production)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
 		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
 		r.DirectVtgateAddresses = make([]types.String, 0, len(resp.DirectVtgateAddresses))
 		for _, v := range resp.DirectVtgateAddresses {
 			r.DirectVtgateAddresses = append(r.DirectVtgateAddresses, types.StringValue(v))
 		}
 		r.Expired = types.BoolValue(resp.Expired)
-		r.ExpiresAt = types.StringValue(resp.ExpiresAt)
+		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
 		r.ID = types.StringValue(resp.ID)
-		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
+		r.LastUsedAt = types.StringPointerValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
-		r.PlainText = types.StringValue(resp.PlainText)
+		r.PlainText = types.StringPointerValue(resp.PlainText)
 		r.Region = &tfTypes.GetPasswordRegion{}
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
 		r.Region.DisplayName = types.StringValue(resp.Region.DisplayName)
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)
 		r.Region.ID = types.StringValue(resp.Region.ID)
 		r.Region.Location = types.StringValue(resp.Region.Location)
+		r.Region.MysqlSupported = types.BoolValue(resp.Region.MysqlSupported)
+		r.Region.PostgresqlSupported = types.BoolValue(resp.Region.PostgresqlSupported)
 		r.Region.Provider = types.StringValue(resp.Region.Provider)
 		r.Region.PublicIPAddresses = make([]types.String, 0, len(resp.Region.PublicIPAddresses))
 		for _, v := range resp.Region.PublicIPAddresses {
@@ -62,7 +68,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsCreatePasswordR
 		r.Renewable = types.BoolValue(resp.Renewable)
 		r.Replica = types.BoolValue(resp.Replica)
 		r.Role = types.StringValue(string(resp.Role))
-		r.TTLSeconds = types.Int64Value(resp.TTLSeconds)
+		r.TTLSeconds = types.Int64PointerValue(resp.TTLSeconds)
 		r.Username = types.StringValue(resp.Username)
 	}
 
@@ -79,10 +85,14 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 			r.AccessHostRegionalUrls = append(r.AccessHostRegionalUrls, types.StringValue(v))
 		}
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
-		r.Actor = &tfTypes.GetPasswordActor{}
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
-		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		if resp.Actor == nil {
+			r.Actor = nil
+		} else {
+			r.Actor = &tfTypes.GetPasswordActor{}
+			r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+			r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+			r.Actor.ID = types.StringValue(resp.Actor.ID)
+		}
 		r.Cidrs = make([]types.String, 0, len(resp.Cidrs))
 		for _, v := range resp.Cidrs {
 			r.Cidrs = append(r.Cidrs, types.StringValue(v))
@@ -94,16 +104,16 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 		r.DatabaseBranch.Name = types.StringValue(resp.DatabaseBranch.Name)
 		r.DatabaseBranch.PrivateEdgeConnectivity = types.BoolValue(resp.DatabaseBranch.PrivateEdgeConnectivity)
 		r.DatabaseBranch.Production = types.BoolValue(resp.DatabaseBranch.Production)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
 		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
 		r.DirectVtgateAddresses = make([]types.String, 0, len(resp.DirectVtgateAddresses))
 		for _, v := range resp.DirectVtgateAddresses {
 			r.DirectVtgateAddresses = append(r.DirectVtgateAddresses, types.StringValue(v))
 		}
 		r.Expired = types.BoolValue(resp.Expired)
-		r.ExpiresAt = types.StringValue(resp.ExpiresAt)
+		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
 		r.ID = types.StringValue(resp.ID)
-		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
+		r.LastUsedAt = types.StringPointerValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
 		r.Region = &tfTypes.GetPasswordRegion{}
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
@@ -111,6 +121,8 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)
 		r.Region.ID = types.StringValue(resp.Region.ID)
 		r.Region.Location = types.StringValue(resp.Region.Location)
+		r.Region.MysqlSupported = types.BoolValue(resp.Region.MysqlSupported)
+		r.Region.PostgresqlSupported = types.BoolValue(resp.Region.PostgresqlSupported)
 		r.Region.Provider = types.StringValue(resp.Region.Provider)
 		r.Region.PublicIPAddresses = make([]types.String, 0, len(resp.Region.PublicIPAddresses))
 		for _, v := range resp.Region.PublicIPAddresses {
@@ -120,7 +132,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsGetPasswordResp
 		r.Renewable = types.BoolValue(resp.Renewable)
 		r.Replica = types.BoolValue(resp.Replica)
 		r.Role = types.StringValue(string(resp.Role))
-		r.TTLSeconds = types.Int64Value(resp.TTLSeconds)
+		r.TTLSeconds = types.Int64PointerValue(resp.TTLSeconds)
 		r.Username = types.StringValue(resp.Username)
 	}
 
@@ -137,10 +149,14 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 			r.AccessHostRegionalUrls = append(r.AccessHostRegionalUrls, types.StringValue(v))
 		}
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
-		r.Actor = &tfTypes.GetPasswordActor{}
-		r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
-		r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
-		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		if resp.Actor == nil {
+			r.Actor = nil
+		} else {
+			r.Actor = &tfTypes.GetPasswordActor{}
+			r.Actor.AvatarURL = types.StringValue(resp.Actor.AvatarURL)
+			r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
+			r.Actor.ID = types.StringValue(resp.Actor.ID)
+		}
 		r.Cidrs = make([]types.String, 0, len(resp.Cidrs))
 		for _, v := range resp.Cidrs {
 			r.Cidrs = append(r.Cidrs, types.StringValue(v))
@@ -152,16 +168,16 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 		r.DatabaseBranch.Name = types.StringValue(resp.DatabaseBranch.Name)
 		r.DatabaseBranch.PrivateEdgeConnectivity = types.BoolValue(resp.DatabaseBranch.PrivateEdgeConnectivity)
 		r.DatabaseBranch.Production = types.BoolValue(resp.DatabaseBranch.Production)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
+		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
 		r.DirectVtgate = types.BoolValue(resp.DirectVtgate)
 		r.DirectVtgateAddresses = make([]types.String, 0, len(resp.DirectVtgateAddresses))
 		for _, v := range resp.DirectVtgateAddresses {
 			r.DirectVtgateAddresses = append(r.DirectVtgateAddresses, types.StringValue(v))
 		}
 		r.Expired = types.BoolValue(resp.Expired)
-		r.ExpiresAt = types.StringValue(resp.ExpiresAt)
+		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
 		r.ID = types.StringValue(resp.ID)
-		r.LastUsedAt = types.StringValue(resp.LastUsedAt)
+		r.LastUsedAt = types.StringPointerValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
 		r.Region = &tfTypes.GetPasswordRegion{}
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
@@ -169,6 +185,8 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 		r.Region.Enabled = types.BoolValue(resp.Region.Enabled)
 		r.Region.ID = types.StringValue(resp.Region.ID)
 		r.Region.Location = types.StringValue(resp.Region.Location)
+		r.Region.MysqlSupported = types.BoolValue(resp.Region.MysqlSupported)
+		r.Region.PostgresqlSupported = types.BoolValue(resp.Region.PostgresqlSupported)
 		r.Region.Provider = types.StringValue(resp.Region.Provider)
 		r.Region.PublicIPAddresses = make([]types.String, 0, len(resp.Region.PublicIPAddresses))
 		for _, v := range resp.Region.PublicIPAddresses {
@@ -178,7 +196,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsUpdatePasswordR
 		r.Renewable = types.BoolValue(resp.Renewable)
 		r.Replica = types.BoolValue(resp.Replica)
 		r.Role = types.StringValue(string(resp.Role))
-		r.TTLSeconds = types.Int64Value(resp.TTLSeconds)
+		r.TTLSeconds = types.Int64PointerValue(resp.TTLSeconds)
 		r.Username = types.StringValue(resp.Username)
 	}
 

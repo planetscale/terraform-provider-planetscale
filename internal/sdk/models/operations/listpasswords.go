@@ -157,6 +157,10 @@ type ListPasswordsRegion struct {
 	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
 	CurrentDefault bool `json:"current_default"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (l *ListPasswordsRegion) GetID() string {
@@ -213,6 +217,20 @@ func (l *ListPasswordsRegion) GetCurrentDefault() bool {
 		return false
 	}
 	return l.CurrentDefault
+}
+
+func (l *ListPasswordsRegion) GetMysqlSupported() bool {
+	if l == nil {
+		return false
+	}
+	return l.MysqlSupported
+}
+
+func (l *ListPasswordsRegion) GetPostgresqlSupported() bool {
+	if l == nil {
+		return false
+	}
+	return l.PostgresqlSupported
 }
 
 type ListPasswordsDatabaseBranch struct {
@@ -275,11 +293,11 @@ type ListPasswordsData struct {
 	// When the password was created
 	CreatedAt string `json:"created_at"`
 	// When the password was deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 	// When the password will expire
-	ExpiresAt string `json:"expires_at"`
+	ExpiresAt *string `json:"expires_at"`
 	// When the password was last used to execute a query
-	LastUsedAt string `json:"last_used_at"`
+	LastUsedAt *string `json:"last_used_at"`
 	// True if the credentials are expired
 	Expired bool `json:"expired"`
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
@@ -287,19 +305,19 @@ type ListPasswordsData struct {
 	// The list of hosts in each availability zone providing direct access to a vtgate
 	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTLSeconds int64 `json:"ttl_seconds"`
+	TTLSeconds *int64 `json:"ttl_seconds"`
 	// The host URL for the password
 	AccessHostURL string `json:"access_host_url"`
 	// The regional host URL
 	AccessHostRegionalURL string `json:"access_host_regional_url"`
 	// The read-only replica host URLs
 	AccessHostRegionalUrls []string            `json:"access_host_regional_urls"`
-	Actor                  ListPasswordsActor  `json:"actor"`
+	Actor                  *ListPasswordsActor `json:"actor"`
 	Region                 ListPasswordsRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
-	// The plain text password, available only after create
-	PlainText string `json:"plain_text"`
+	// The plain text password. Null except in the response from the create endpoint.
+	PlainText *string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`
 	// Whether or not the password can be renewed
@@ -330,7 +348,7 @@ func (l *ListPasswordsData) GetRole() ListPasswordsRole {
 
 func (l *ListPasswordsData) GetCidrs() []string {
 	if l == nil {
-		return []string{}
+		return nil
 	}
 	return l.Cidrs
 }
@@ -342,23 +360,23 @@ func (l *ListPasswordsData) GetCreatedAt() string {
 	return l.CreatedAt
 }
 
-func (l *ListPasswordsData) GetDeletedAt() string {
+func (l *ListPasswordsData) GetDeletedAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.DeletedAt
 }
 
-func (l *ListPasswordsData) GetExpiresAt() string {
+func (l *ListPasswordsData) GetExpiresAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.ExpiresAt
 }
 
-func (l *ListPasswordsData) GetLastUsedAt() string {
+func (l *ListPasswordsData) GetLastUsedAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.LastUsedAt
 }
@@ -384,9 +402,9 @@ func (l *ListPasswordsData) GetDirectVtgateAddresses() []string {
 	return l.DirectVtgateAddresses
 }
 
-func (l *ListPasswordsData) GetTTLSeconds() int64 {
+func (l *ListPasswordsData) GetTTLSeconds() *int64 {
 	if l == nil {
-		return 0
+		return nil
 	}
 	return l.TTLSeconds
 }
@@ -412,9 +430,9 @@ func (l *ListPasswordsData) GetAccessHostRegionalUrls() []string {
 	return l.AccessHostRegionalUrls
 }
 
-func (l *ListPasswordsData) GetActor() ListPasswordsActor {
+func (l *ListPasswordsData) GetActor() *ListPasswordsActor {
 	if l == nil {
-		return ListPasswordsActor{}
+		return nil
 	}
 	return l.Actor
 }
@@ -433,9 +451,9 @@ func (l *ListPasswordsData) GetUsername() string {
 	return l.Username
 }
 
-func (l *ListPasswordsData) GetPlainText() string {
+func (l *ListPasswordsData) GetPlainText() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.PlainText
 }
@@ -463,17 +481,26 @@ func (l *ListPasswordsData) GetDatabaseBranch() ListPasswordsDatabaseBranch {
 
 // ListPasswordsResponseBody - Returns passwords for the branch
 type ListPasswordsResponseBody struct {
+	// The response type. Always "list" for paginated responses.
+	Type string `json:"type"`
 	// The current page number
 	CurrentPage int64 `json:"current_page"`
-	// The next page number
-	NextPage int64 `json:"next_page"`
-	// The next page of results
-	NextPageURL string `json:"next_page_url"`
-	// The previous page number
-	PrevPage int64 `json:"prev_page"`
-	// The previous page of results
-	PrevPageURL string              `json:"prev_page_url"`
+	// The next page number, or null when this is the last page
+	NextPage *int64 `json:"next_page"`
+	// The next page of results, or null when this is the last page
+	NextPageURL *string `json:"next_page_url"`
+	// The previous page number, or null when this is the first page
+	PrevPage *int64 `json:"prev_page"`
+	// The previous page of results, or null when this is the first page
+	PrevPageURL *string             `json:"prev_page_url"`
 	Data        []ListPasswordsData `json:"data"`
+}
+
+func (l *ListPasswordsResponseBody) GetType() string {
+	if l == nil {
+		return ""
+	}
+	return l.Type
 }
 
 func (l *ListPasswordsResponseBody) GetCurrentPage() int64 {
@@ -483,30 +510,30 @@ func (l *ListPasswordsResponseBody) GetCurrentPage() int64 {
 	return l.CurrentPage
 }
 
-func (l *ListPasswordsResponseBody) GetNextPage() int64 {
+func (l *ListPasswordsResponseBody) GetNextPage() *int64 {
 	if l == nil {
-		return 0
+		return nil
 	}
 	return l.NextPage
 }
 
-func (l *ListPasswordsResponseBody) GetNextPageURL() string {
+func (l *ListPasswordsResponseBody) GetNextPageURL() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.NextPageURL
 }
 
-func (l *ListPasswordsResponseBody) GetPrevPage() int64 {
+func (l *ListPasswordsResponseBody) GetPrevPage() *int64 {
 	if l == nil {
-		return 0
+		return nil
 	}
 	return l.PrevPage
 }
 
-func (l *ListPasswordsResponseBody) GetPrevPageURL() string {
+func (l *ListPasswordsResponseBody) GetPrevPageURL() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.PrevPageURL
 }

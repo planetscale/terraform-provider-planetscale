@@ -100,6 +100,16 @@ actions:
     update:
       x-speakeasy-name-override: region_data
 
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.responses['200'].content['application/json'].schema.properties.config_change_queued
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.responses['200'].content['application/json'].schema.properties.config_changing
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.config_change_queued
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.config_changing
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].patch
     update:
       operationId: update_vitess_database

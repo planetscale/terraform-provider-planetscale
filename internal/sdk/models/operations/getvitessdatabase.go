@@ -66,9 +66,9 @@ type GetVitessDatabaseDataImport struct {
 	// Errors encountered during the import check
 	ImportCheckErrors string `json:"import_check_errors"`
 	// When the import started
-	StartedAt string `json:"started_at"`
+	StartedAt *string `json:"started_at"`
 	// When the import finished
-	FinishedAt string                      `json:"finished_at"`
+	FinishedAt *string                     `json:"finished_at"`
 	DataSource GetVitessDatabaseDataSource `json:"data_source"`
 }
 
@@ -86,16 +86,16 @@ func (g *GetVitessDatabaseDataImport) GetImportCheckErrors() string {
 	return g.ImportCheckErrors
 }
 
-func (g *GetVitessDatabaseDataImport) GetStartedAt() string {
+func (g *GetVitessDatabaseDataImport) GetStartedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.StartedAt
 }
 
-func (g *GetVitessDatabaseDataImport) GetFinishedAt() string {
+func (g *GetVitessDatabaseDataImport) GetFinishedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.FinishedAt
 }
@@ -124,6 +124,10 @@ type GetVitessDatabaseRegionData struct {
 	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
 	CurrentDefault bool `json:"current_default"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (g *GetVitessDatabaseRegionData) GetID() string {
@@ -180,6 +184,20 @@ func (g *GetVitessDatabaseRegionData) GetCurrentDefault() bool {
 		return false
 	}
 	return g.CurrentDefault
+}
+
+func (g *GetVitessDatabaseRegionData) GetMysqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.MysqlSupported
+}
+
+func (g *GetVitessDatabaseRegionData) GetPostgresqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.PostgresqlSupported
 }
 
 // GetVitessDatabaseState - State of the database
@@ -241,7 +259,7 @@ type GetVitessDatabaseResponseBody struct {
 	// The total number of database production branches
 	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
-	IssuesCount int64 `json:"issues_count"`
+	IssuesCount *int64 `json:"issues_count,omitzero"`
 	// If the database requires multiple admins for deletion
 	MultipleAdminsRequiredForDeletion bool `json:"multiple_admins_required_for_deletion"`
 	// If the database is ready to be used
@@ -249,9 +267,9 @@ type GetVitessDatabaseResponseBody struct {
 	// If the database has reached its backup restored branch limit
 	AtBackupRestoreBranchesLimit bool `json:"at_backup_restore_branches_limit"`
 	// If the database has reached its development branch limit
-	AtDevelopmentBranchUsageLimit bool                        `json:"at_development_branch_usage_limit"`
-	DataImport                    GetVitessDatabaseDataImport `json:"data_import"`
-	RegionData                    GetVitessDatabaseRegionData `json:"region"`
+	AtDevelopmentBranchUsageLimit bool                         `json:"at_development_branch_usage_limit"`
+	DataImport                    *GetVitessDatabaseDataImport `json:"data_import,omitzero"`
+	RegionData                    GetVitessDatabaseRegionData  `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -278,8 +296,8 @@ type GetVitessDatabaseResponseBody struct {
 	AllowDataBranching bool `json:"allow_data_branching"`
 	// Whether foreign key constraints are enabled
 	ForeignKeysEnabled bool `json:"foreign_keys_enabled"`
-	// Whether to automatically manage Rails migrations during deploy requests
-	AutomaticMigrations bool `json:"automatic_migrations"`
+	// Whether to automatically manage Rails migrations during deploy requests.
+	AutomaticMigrations *bool `json:"automatic_migrations,omitzero"`
 	// Whether to restrict branch creation to one region
 	RestrictBranchRegion bool `json:"restrict_branch_region"`
 	// Whether raw SQL queries are collected
@@ -290,16 +308,16 @@ type GetVitessDatabaseResponseBody struct {
 	InsightsEnabled bool `json:"insights_enabled"`
 	// Whether web console is enabled for production branches
 	ProductionBranchWebConsole bool `json:"production_branch_web_console"`
-	// Table name to use for copying schema migration data
-	MigrationTableName string `json:"migration_table_name"`
-	// Framework used for applying migrations
-	MigrationFramework string `json:"migration_framework"`
+	// Table name to use for copying schema migration data.
+	MigrationTableName *string `json:"migration_table_name,omitzero"`
+	// Framework used for applying migrations.
+	MigrationFramework *string `json:"migration_framework,omitzero"`
 	// When the database was created
 	CreatedAt string `json:"created_at"`
 	// When the database was last updated
 	UpdatedAt string `json:"updated_at"`
 	// When the default branch schema was last changed.
-	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
+	SchemaLastUpdatedAt *string `json:"schema_last_updated_at"`
 	// The kind of database
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	kind string `const:"mysql" json:"kind"`
@@ -365,9 +383,9 @@ func (g *GetVitessDatabaseResponseBody) GetProductionBranchesCount() int64 {
 	return g.ProductionBranchesCount
 }
 
-func (g *GetVitessDatabaseResponseBody) GetIssuesCount() int64 {
+func (g *GetVitessDatabaseResponseBody) GetIssuesCount() *int64 {
 	if g == nil {
-		return 0
+		return nil
 	}
 	return g.IssuesCount
 }
@@ -400,9 +418,9 @@ func (g *GetVitessDatabaseResponseBody) GetAtDevelopmentBranchUsageLimit() bool 
 	return g.AtDevelopmentBranchUsageLimit
 }
 
-func (g *GetVitessDatabaseResponseBody) GetDataImport() GetVitessDatabaseDataImport {
+func (g *GetVitessDatabaseResponseBody) GetDataImport() *GetVitessDatabaseDataImport {
 	if g == nil {
-		return GetVitessDatabaseDataImport{}
+		return nil
 	}
 	return g.DataImport
 }
@@ -505,9 +523,9 @@ func (g *GetVitessDatabaseResponseBody) GetForeignKeysEnabled() bool {
 	return g.ForeignKeysEnabled
 }
 
-func (g *GetVitessDatabaseResponseBody) GetAutomaticMigrations() bool {
+func (g *GetVitessDatabaseResponseBody) GetAutomaticMigrations() *bool {
 	if g == nil {
-		return false
+		return nil
 	}
 	return g.AutomaticMigrations
 }
@@ -547,16 +565,16 @@ func (g *GetVitessDatabaseResponseBody) GetProductionBranchWebConsole() bool {
 	return g.ProductionBranchWebConsole
 }
 
-func (g *GetVitessDatabaseResponseBody) GetMigrationTableName() string {
+func (g *GetVitessDatabaseResponseBody) GetMigrationTableName() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.MigrationTableName
 }
 
-func (g *GetVitessDatabaseResponseBody) GetMigrationFramework() string {
+func (g *GetVitessDatabaseResponseBody) GetMigrationFramework() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.MigrationFramework
 }
@@ -575,9 +593,9 @@ func (g *GetVitessDatabaseResponseBody) GetUpdatedAt() string {
 	return g.UpdatedAt
 }
 
-func (g *GetVitessDatabaseResponseBody) GetSchemaLastUpdatedAt() string {
+func (g *GetVitessDatabaseResponseBody) GetSchemaLastUpdatedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.SchemaLastUpdatedAt
 }

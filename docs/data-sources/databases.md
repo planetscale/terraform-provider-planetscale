@@ -33,6 +33,7 @@ data "planetscale_databases" "my_databases" {
 ### Read-Only
 
 - `data` (Attributes List) (see [below for nested schema](#nestedatt--data))
+- `type` (String) The response type. Always "list" for paginated responses.
 
 <a id="nestedatt--data"></a>
 ### Nested Schema for `data`
@@ -42,7 +43,7 @@ Read-Only:
 - `allow_data_branching` (Boolean) Whether seeding branches with data is enabled for all branches
 - `at_backup_restore_branches_limit` (Boolean) If the database has reached its backup restored branch limit
 - `at_development_branch_usage_limit` (Boolean) If the database has reached its development branch limit
-- `automatic_migrations` (Boolean) Whether to automatically manage Rails migrations during deploy requests
+- `automatic_migrations` (Boolean) Whether to automatically manage Rails migrations during deploy requests.
 - `branches_count` (Number) The total number of database branches
 - `branches_url` (String) The URL to retrieve this database's branches via the API
 - `created_at` (String) When the database was created
@@ -59,8 +60,8 @@ Read-Only:
 - `insights_raw_queries` (Boolean) Whether raw SQL queries are collected
 - `issues_count` (Number) The total number of ongoing issues within a database
 - `kind` (String) The kind of database
-- `migration_framework` (String) Framework used for applying migrations
-- `migration_table_name` (String) Table name to use for copying schema migration data
+- `migration_framework` (String) Framework used for applying migrations.
+- `migration_table_name` (String) Table name to use for copying schema migration data.
 - `multiple_admins_required_for_deletion` (Boolean) If the database requires multiple admins for deletion
 - `name` (String) Name of the database
 - `open_schema_recommendations_count` (Number) The total number of schema recommendations
@@ -111,6 +112,8 @@ Read-Only:
 - `enabled` (Boolean) Whether or not the region is currently active
 - `id` (String) The ID of the region
 - `location` (String) Location of the region
+- `mysql_supported` (Boolean) Whether the region supports MySQL/Vitess databases
+- `postgresql_supported` (Boolean) Whether the region supports PostgreSQL databases
 - `provider` (String) Provider for the region (ex. AWS)
 - `public_ip_addresses` (List of String) Public IP addresses for the region
 - `slug` (String) The slug of the region

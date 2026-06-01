@@ -57,3 +57,5 @@ Read-Only:
 Read-Only:
 
 - `id` (String) The ID of the region
+- `mysql_supported` (Boolean) Whether the region supports MySQL/Vitess databases
+- `postgresql_supported` (Boolean) Whether the region supports PostgreSQL databases

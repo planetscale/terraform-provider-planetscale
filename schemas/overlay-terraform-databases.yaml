@@ -35,3 +35,8 @@ actions:
         x-speakeasy-terraform-ignore: true
       prev_page_url:
         x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.config_change_queued
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.config_changing
+    remove: true

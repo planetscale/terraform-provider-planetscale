@@ -103,6 +103,14 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 						Computed:    true,
 						Description: `The ID of the region`,
 					},
+					"mysql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports MySQL/Vitess databases`,
+					},
+					"postgresql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports PostgreSQL databases`,
+					},
 				},
 			},
 			"replicas": schema.Int64Attribute{

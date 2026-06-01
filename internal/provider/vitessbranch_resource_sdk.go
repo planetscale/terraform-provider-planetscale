@@ -14,18 +14,24 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor = &tfTypes.GetVitessBranchActor{}
-		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		if resp.Actor == nil {
+			r.Actor = nil
+		} else {
+			r.Actor = &tfTypes.GetVitessBranchActor{}
+			r.Actor.ID = types.StringValue(resp.Actor.ID)
+		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
+		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData = &tfTypes.GetVitessBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
+		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -37,18 +43,24 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor = &tfTypes.GetVitessBranchActor{}
-		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		if resp.Actor == nil {
+			r.Actor = nil
+		} else {
+			r.Actor = &tfTypes.GetVitessBranchActor{}
+			r.Actor.ID = types.StringValue(resp.Actor.ID)
+		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
+		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData = &tfTypes.GetVitessBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
+		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -60,18 +72,24 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateVitessBranchRespo
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor = &tfTypes.GetVitessBranchActor{}
-		r.Actor.ID = types.StringValue(resp.Actor.ID)
+		if resp.Actor == nil {
+			r.Actor = nil
+		} else {
+			r.Actor = &tfTypes.GetVitessBranchActor{}
+			r.Actor.ID = types.StringValue(resp.Actor.ID)
+		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)
-		r.ParentBranch = types.StringValue(resp.ParentBranch)
+		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData = &tfTypes.GetVitessBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
+		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
+		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -164,10 +182,17 @@ func (r *VitessBranchResourceModel) ToOperationsDeleteVitessBranchRequest(ctx co
 	var branch string
 	branch = r.ID.ValueString()
 
+	deleteDescendants := new(bool)
+	if !r.DeleteDescendants.IsUnknown() && !r.DeleteDescendants.IsNull() {
+		*deleteDescendants = r.DeleteDescendants.ValueBool()
+	} else {
+		deleteDescendants = nil
+	}
 	out := operations.DeleteVitessBranchRequest{
-		Organization: organization,
-		Database:     database,
-		Branch:       branch,
+		Organization:      organization,
+		Database:          database,
+		Branch:            branch,
+		DeleteDescendants: deleteDescendants,
 	}
 
 	return &out, diags

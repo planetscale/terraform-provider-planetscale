@@ -113,7 +113,7 @@ type GetRoleBranchData struct {
 	// The name for the resource
 	Name string `json:"name"`
 	// When the resource was deleted, if deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 }
 
 func (g *GetRoleBranchData) GetID() string {
@@ -130,9 +130,9 @@ func (g *GetRoleBranchData) GetName() string {
 	return g.Name
 }
 
-func (g *GetRoleBranchData) GetDeletedAt() string {
+func (g *GetRoleBranchData) GetDeletedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.DeletedAt
 }
@@ -262,6 +262,8 @@ type GetRoleResponseBody struct {
 	PrivateConnectionServiceName string `json:"private_connection_service_name"`
 	// The database user name
 	Username string `json:"username"`
+	// The base username without branch routing suffix
+	BaseUsername string `json:"base_username"`
 	// The database name
 	DatabaseName string `json:"database_name"`
 	// When the role was created
@@ -269,13 +271,13 @@ type GetRoleResponseBody struct {
 	// When the role was updated
 	UpdatedAt string `json:"updated_at"`
 	// When the role was deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 	// When the role expires
-	ExpiresAt string `json:"expires_at"`
+	ExpiresAt *string `json:"expires_at"`
 	// When the role was dropped
-	DroppedAt string `json:"dropped_at"`
+	DroppedAt *string `json:"dropped_at"`
 	// When the role was disabled
-	DisabledAt string `json:"disabled_at"`
+	DisabledAt *string `json:"disabled_at"`
 	// Error message available when dropping the role fails
 	DropFailed string `json:"drop_failed"`
 	// True if the credentials are expired
@@ -333,6 +335,13 @@ func (g *GetRoleResponseBody) GetUsername() string {
 	return g.Username
 }
 
+func (g *GetRoleResponseBody) GetBaseUsername() string {
+	if g == nil {
+		return ""
+	}
+	return g.BaseUsername
+}
+
 func (g *GetRoleResponseBody) GetDatabaseName() string {
 	if g == nil {
 		return ""
@@ -354,30 +363,30 @@ func (g *GetRoleResponseBody) GetUpdatedAt() string {
 	return g.UpdatedAt
 }
 
-func (g *GetRoleResponseBody) GetDeletedAt() string {
+func (g *GetRoleResponseBody) GetDeletedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.DeletedAt
 }
 
-func (g *GetRoleResponseBody) GetExpiresAt() string {
+func (g *GetRoleResponseBody) GetExpiresAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.ExpiresAt
 }
 
-func (g *GetRoleResponseBody) GetDroppedAt() string {
+func (g *GetRoleResponseBody) GetDroppedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.DroppedAt
 }
 
-func (g *GetRoleResponseBody) GetDisabledAt() string {
+func (g *GetRoleResponseBody) GetDisabledAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.DisabledAt
 }

@@ -13,6 +13,8 @@ type DeleteVitessBranchRequest struct {
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// The name of the branch
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
+	// If true, recursively delete all descendant branches along with this branch
+	DeleteDescendants *bool `queryParam:"style=form,explode=true,name=delete_descendants"`
 }
 
 func (d *DeleteVitessBranchRequest) GetOrganization() string {
@@ -34,6 +36,13 @@ func (d *DeleteVitessBranchRequest) GetBranch() string {
 		return ""
 	}
 	return d.Branch
+}
+
+func (d *DeleteVitessBranchRequest) GetDeleteDescendants() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.DeleteDescendants
 }
 
 type DeleteVitessBranchResponse struct {

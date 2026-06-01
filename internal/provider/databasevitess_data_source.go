@@ -95,7 +95,7 @@ func (r *DatabaseVitessDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"automatic_migrations": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether to automatically manage Rails migrations during deploy requests`,
+				Description: `Whether to automatically manage Rails migrations during deploy requests.`,
 			},
 			"branches_count": schema.Int64Attribute{
 				Computed:    true,
@@ -193,11 +193,11 @@ func (r *DatabaseVitessDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"migration_framework": schema.StringAttribute{
 				Computed:    true,
-				Description: `Framework used for applying migrations`,
+				Description: `Framework used for applying migrations.`,
 			},
 			"migration_table_name": schema.StringAttribute{
 				Computed:    true,
-				Description: `Table name to use for copying schema migration data`,
+				Description: `Table name to use for copying schema migration data.`,
 			},
 			"multiple_admins_required_for_deletion": schema.BoolAttribute{
 				Computed:    true,
@@ -253,6 +253,14 @@ func (r *DatabaseVitessDataSource) Schema(ctx context.Context, req datasource.Sc
 					"location": schema.StringAttribute{
 						Computed:    true,
 						Description: `Location of the region`,
+					},
+					"mysql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports MySQL/Vitess databases`,
+					},
+					"postgresql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports PostgreSQL databases`,
 					},
 					"provider": schema.StringAttribute{
 						Computed:    true,

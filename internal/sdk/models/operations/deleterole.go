@@ -3,21 +3,8 @@
 package operations
 
 import (
-	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
-
-type DeleteRoleRequestBody struct {
-	// The optional role to reassign ownership to before dropping
-	Successor *string `json:"successor,omitzero"`
-}
-
-func (d *DeleteRoleRequestBody) GetSuccessor() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Successor
-}
 
 type DeleteRoleRequest struct {
 	// Organization name slug from `list_organizations`. Example: `acme`.
@@ -27,19 +14,9 @@ type DeleteRoleRequest struct {
 	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The ID of the role
-	ID   string                 `pathParam:"style=simple,explode=false,name=id"`
-	Body *DeleteRoleRequestBody `request:"mediaType=application/json"`
-}
-
-func (d DeleteRoleRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(d, "", false)
-}
-
-func (d *DeleteRoleRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// The optional role to reassign ownership to before dropping
+	Successor *string `queryParam:"style=form,explode=true,name=successor"`
 }
 
 func (d *DeleteRoleRequest) GetOrganization() string {
@@ -70,11 +47,11 @@ func (d *DeleteRoleRequest) GetID() string {
 	return d.ID
 }
 
-func (d *DeleteRoleRequest) GetBody() *DeleteRoleRequestBody {
+func (d *DeleteRoleRequest) GetSuccessor() *string {
 	if d == nil {
 		return nil
 	}
-	return d.Body
+	return d.Successor
 }
 
 type DeleteRoleResponse struct {

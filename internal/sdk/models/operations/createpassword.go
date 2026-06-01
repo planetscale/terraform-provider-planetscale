@@ -239,6 +239,10 @@ type CreatePasswordRegion struct {
 	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
 	CurrentDefault bool `json:"current_default"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (c *CreatePasswordRegion) GetID() string {
@@ -295,6 +299,20 @@ func (c *CreatePasswordRegion) GetCurrentDefault() bool {
 		return false
 	}
 	return c.CurrentDefault
+}
+
+func (c *CreatePasswordRegion) GetMysqlSupported() bool {
+	if c == nil {
+		return false
+	}
+	return c.MysqlSupported
+}
+
+func (c *CreatePasswordRegion) GetPostgresqlSupported() bool {
+	if c == nil {
+		return false
+	}
+	return c.PostgresqlSupported
 }
 
 type CreatePasswordDatabaseBranch struct {
@@ -358,11 +376,11 @@ type CreatePasswordResponseBody struct {
 	// When the password was created
 	CreatedAt string `json:"created_at"`
 	// When the password was deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 	// When the password will expire
-	ExpiresAt string `json:"expires_at"`
+	ExpiresAt *string `json:"expires_at"`
 	// When the password was last used to execute a query
-	LastUsedAt string `json:"last_used_at"`
+	LastUsedAt *string `json:"last_used_at"`
 	// True if the credentials are expired
 	Expired bool `json:"expired"`
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
@@ -370,19 +388,19 @@ type CreatePasswordResponseBody struct {
 	// The list of hosts in each availability zone providing direct access to a vtgate
 	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTLSeconds int64 `json:"ttl_seconds"`
+	TTLSeconds *int64 `json:"ttl_seconds"`
 	// The host URL for the password
 	AccessHostURL string `json:"access_host_url"`
 	// The regional host URL
 	AccessHostRegionalURL string `json:"access_host_regional_url"`
 	// The read-only replica host URLs
 	AccessHostRegionalUrls []string             `json:"access_host_regional_urls"`
-	Actor                  CreatePasswordActor  `json:"actor"`
+	Actor                  *CreatePasswordActor `json:"actor"`
 	Region                 CreatePasswordRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
-	// The plain text password, available only after create
-	PlainText string `json:"plain_text"`
+	// The plain text password. Null except in the response from the create endpoint.
+	PlainText *string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`
 	// Whether or not the password can be renewed
@@ -413,7 +431,7 @@ func (c *CreatePasswordResponseBody) GetRole() CreatePasswordRoleResponse {
 
 func (c *CreatePasswordResponseBody) GetCidrs() []string {
 	if c == nil {
-		return []string{}
+		return nil
 	}
 	return c.Cidrs
 }
@@ -425,23 +443,23 @@ func (c *CreatePasswordResponseBody) GetCreatedAt() string {
 	return c.CreatedAt
 }
 
-func (c *CreatePasswordResponseBody) GetDeletedAt() string {
+func (c *CreatePasswordResponseBody) GetDeletedAt() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.DeletedAt
 }
 
-func (c *CreatePasswordResponseBody) GetExpiresAt() string {
+func (c *CreatePasswordResponseBody) GetExpiresAt() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ExpiresAt
 }
 
-func (c *CreatePasswordResponseBody) GetLastUsedAt() string {
+func (c *CreatePasswordResponseBody) GetLastUsedAt() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.LastUsedAt
 }
@@ -467,9 +485,9 @@ func (c *CreatePasswordResponseBody) GetDirectVtgateAddresses() []string {
 	return c.DirectVtgateAddresses
 }
 
-func (c *CreatePasswordResponseBody) GetTTLSeconds() int64 {
+func (c *CreatePasswordResponseBody) GetTTLSeconds() *int64 {
 	if c == nil {
-		return 0
+		return nil
 	}
 	return c.TTLSeconds
 }
@@ -495,9 +513,9 @@ func (c *CreatePasswordResponseBody) GetAccessHostRegionalUrls() []string {
 	return c.AccessHostRegionalUrls
 }
 
-func (c *CreatePasswordResponseBody) GetActor() CreatePasswordActor {
+func (c *CreatePasswordResponseBody) GetActor() *CreatePasswordActor {
 	if c == nil {
-		return CreatePasswordActor{}
+		return nil
 	}
 	return c.Actor
 }
@@ -516,9 +534,9 @@ func (c *CreatePasswordResponseBody) GetUsername() string {
 	return c.Username
 }
 
-func (c *CreatePasswordResponseBody) GetPlainText() string {
+func (c *CreatePasswordResponseBody) GetPlainText() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.PlainText
 }

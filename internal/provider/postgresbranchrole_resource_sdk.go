@@ -19,19 +19,20 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsCreateRoleRespons
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
+		r.BaseUsername = types.StringValue(resp.BaseUsername)
 		r.BranchData = &tfTypes.GetRoleBranchData{}
-		r.BranchData.DeletedAt = types.StringValue(resp.BranchData.DeletedAt)
+		r.BranchData.DeletedAt = types.StringPointerValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.DatabaseName = types.StringValue(resp.DatabaseName)
 		r.Default = types.BoolValue(resp.Default)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
-		r.DisabledAt = types.StringValue(resp.DisabledAt)
+		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
+		r.DisabledAt = types.StringPointerValue(resp.DisabledAt)
 		r.DropFailed = types.StringValue(resp.DropFailed)
-		r.DroppedAt = types.StringValue(resp.DroppedAt)
+		r.DroppedAt = types.StringPointerValue(resp.DroppedAt)
 		r.Expired = types.BoolValue(resp.Expired)
-		r.ExpiresAt = types.StringValue(resp.ExpiresAt)
+		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
 		r.ID = types.StringValue(resp.ID)
 		r.InheritedRoles = make([]types.String, 0, len(resp.InheritedRoles))
 		for _, v := range resp.InheritedRoles {
@@ -61,19 +62,20 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
+		r.BaseUsername = types.StringValue(resp.BaseUsername)
 		r.BranchData = &tfTypes.GetRoleBranchData{}
-		r.BranchData.DeletedAt = types.StringValue(resp.BranchData.DeletedAt)
+		r.BranchData.DeletedAt = types.StringPointerValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.DatabaseName = types.StringValue(resp.DatabaseName)
 		r.Default = types.BoolValue(resp.Default)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
-		r.DisabledAt = types.StringValue(resp.DisabledAt)
+		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
+		r.DisabledAt = types.StringPointerValue(resp.DisabledAt)
 		r.DropFailed = types.StringValue(resp.DropFailed)
-		r.DroppedAt = types.StringValue(resp.DroppedAt)
+		r.DroppedAt = types.StringPointerValue(resp.DroppedAt)
 		r.Expired = types.BoolValue(resp.Expired)
-		r.ExpiresAt = types.StringValue(resp.ExpiresAt)
+		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
 		r.ID = types.StringValue(resp.ID)
 		r.InheritedRoles = make([]types.String, 0, len(resp.InheritedRoles))
 		for _, v := range resp.InheritedRoles {
@@ -102,19 +104,20 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
+		r.BaseUsername = types.StringValue(resp.BaseUsername)
 		r.BranchData = &tfTypes.GetRoleBranchData{}
-		r.BranchData.DeletedAt = types.StringValue(resp.BranchData.DeletedAt)
+		r.BranchData.DeletedAt = types.StringPointerValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.DatabaseName = types.StringValue(resp.DatabaseName)
 		r.Default = types.BoolValue(resp.Default)
-		r.DeletedAt = types.StringValue(resp.DeletedAt)
-		r.DisabledAt = types.StringValue(resp.DisabledAt)
+		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
+		r.DisabledAt = types.StringPointerValue(resp.DisabledAt)
 		r.DropFailed = types.StringValue(resp.DropFailed)
-		r.DroppedAt = types.StringValue(resp.DroppedAt)
+		r.DroppedAt = types.StringPointerValue(resp.DroppedAt)
 		r.Expired = types.BoolValue(resp.Expired)
-		r.ExpiresAt = types.StringValue(resp.ExpiresAt)
+		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
 		r.ID = types.StringValue(resp.ID)
 		r.InheritedRoles = make([]types.String, 0, len(resp.InheritedRoles))
 		for _, v := range resp.InheritedRoles {
@@ -206,35 +209,18 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsDeleteRoleRequest(ctx cont
 	var id string
 	id = r.ID.ValueString()
 
-	body, bodyDiags := r.ToOperationsDeleteRoleRequestBody(ctx)
-	diags.Append(bodyDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.DeleteRoleRequest{
-		Organization: organization,
-		Database:     database,
-		Branch:       branch,
-		ID:           id,
-		Body:         body,
-	}
-
-	return &out, diags
-}
-
-func (r *PostgresBranchRoleResourceModel) ToOperationsDeleteRoleRequestBody(ctx context.Context) (*operations.DeleteRoleRequestBody, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	successor := new(string)
 	if !r.Successor.IsUnknown() && !r.Successor.IsNull() {
 		*successor = r.Successor.ValueString()
 	} else {
 		successor = nil
 	}
-	out := operations.DeleteRoleRequestBody{
-		Successor: successor,
+	out := operations.DeleteRoleRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		ID:           id,
+		Successor:    successor,
 	}
 
 	return &out, diags

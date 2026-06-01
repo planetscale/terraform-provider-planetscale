@@ -24,19 +24,23 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 			data.AllowDataBranching = types.BoolValue(dataItem.AllowDataBranching)
 			data.AtBackupRestoreBranchesLimit = types.BoolValue(dataItem.AtBackupRestoreBranchesLimit)
 			data.AtDevelopmentBranchUsageLimit = types.BoolValue(dataItem.AtDevelopmentBranchUsageLimit)
-			data.AutomaticMigrations = types.BoolValue(dataItem.AutomaticMigrations)
+			data.AutomaticMigrations = types.BoolPointerValue(dataItem.AutomaticMigrations)
 			data.BranchesCount = types.Int64Value(dataItem.BranchesCount)
 			data.BranchesURL = types.StringValue(dataItem.BranchesURL)
 			data.CreatedAt = types.StringValue(dataItem.CreatedAt)
-			data.DataImport = &tfTypes.ListDatabasesDataImport{}
-			data.DataImport.DataSource = &tfTypes.ListDatabasesDataSource{}
-			data.DataImport.DataSource.Database = types.StringValue(dataItem.DataImport.DataSource.Database)
-			data.DataImport.DataSource.Hostname = types.StringValue(dataItem.DataImport.DataSource.Hostname)
-			data.DataImport.DataSource.Port = types.Int64Value(dataItem.DataImport.DataSource.Port)
-			data.DataImport.FinishedAt = types.StringValue(dataItem.DataImport.FinishedAt)
-			data.DataImport.ImportCheckErrors = types.StringValue(dataItem.DataImport.ImportCheckErrors)
-			data.DataImport.StartedAt = types.StringValue(dataItem.DataImport.StartedAt)
-			data.DataImport.State = types.StringValue(dataItem.DataImport.State)
+			if dataItem.DataImport == nil {
+				data.DataImport = nil
+			} else {
+				data.DataImport = &tfTypes.ListDatabasesDataImport{}
+				data.DataImport.DataSource = &tfTypes.ListDatabasesDataSource{}
+				data.DataImport.DataSource.Database = types.StringValue(dataItem.DataImport.DataSource.Database)
+				data.DataImport.DataSource.Hostname = types.StringValue(dataItem.DataImport.DataSource.Hostname)
+				data.DataImport.DataSource.Port = types.Int64Value(dataItem.DataImport.DataSource.Port)
+				data.DataImport.FinishedAt = types.StringPointerValue(dataItem.DataImport.FinishedAt)
+				data.DataImport.ImportCheckErrors = types.StringValue(dataItem.DataImport.ImportCheckErrors)
+				data.DataImport.StartedAt = types.StringPointerValue(dataItem.DataImport.StartedAt)
+				data.DataImport.State = types.StringValue(dataItem.DataImport.State)
+			}
 			data.DefaultBranch = types.StringValue(dataItem.DefaultBranch)
 			data.DefaultBranchReadOnlyRegionsCount = types.Int64Value(dataItem.DefaultBranchReadOnlyRegionsCount)
 			data.DefaultBranchShardCount = types.Int64Value(dataItem.DefaultBranchShardCount)
@@ -47,10 +51,10 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 			data.ID = types.StringValue(dataItem.ID)
 			data.InsightsEnabled = types.BoolValue(dataItem.InsightsEnabled)
 			data.InsightsRawQueries = types.BoolValue(dataItem.InsightsRawQueries)
-			data.IssuesCount = types.Int64Value(dataItem.IssuesCount)
+			data.IssuesCount = types.Int64PointerValue(dataItem.IssuesCount)
 			data.Kind = types.StringValue(string(dataItem.Kind))
-			data.MigrationFramework = types.StringValue(dataItem.MigrationFramework)
-			data.MigrationTableName = types.StringValue(dataItem.MigrationTableName)
+			data.MigrationFramework = types.StringPointerValue(dataItem.MigrationFramework)
+			data.MigrationTableName = types.StringPointerValue(dataItem.MigrationTableName)
 			data.MultipleAdminsRequiredForDeletion = types.BoolValue(dataItem.MultipleAdminsRequiredForDeletion)
 			data.Name = types.StringValue(dataItem.Name)
 			data.OpenSchemaRecommendationsCount = types.Int64Value(dataItem.OpenSchemaRecommendationsCount)
@@ -64,6 +68,8 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 			data.Region.Enabled = types.BoolValue(dataItem.Region.Enabled)
 			data.Region.ID = types.StringValue(dataItem.Region.ID)
 			data.Region.Location = types.StringValue(dataItem.Region.Location)
+			data.Region.MysqlSupported = types.BoolValue(dataItem.Region.MysqlSupported)
+			data.Region.PostgresqlSupported = types.BoolValue(dataItem.Region.PostgresqlSupported)
 			data.Region.Provider = types.StringValue(dataItem.Region.Provider)
 			if data.Region.PublicIPAddresses == nil {
 				data.Region.PublicIPAddresses = make([]types.String, 0, len(dataItem.Region.PublicIPAddresses))
@@ -76,7 +82,7 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 			data.ResizeQueued = types.BoolValue(dataItem.ResizeQueued)
 			data.Resizing = types.BoolValue(dataItem.Resizing)
 			data.RestrictBranchRegion = types.BoolValue(dataItem.RestrictBranchRegion)
-			data.SchemaLastUpdatedAt = types.StringValue(dataItem.SchemaLastUpdatedAt)
+			data.SchemaLastUpdatedAt = types.StringPointerValue(dataItem.SchemaLastUpdatedAt)
 			data.Sharded = types.BoolValue(dataItem.Sharded)
 			data.State = types.StringValue(string(dataItem.State))
 			data.UpdatedAt = types.StringValue(dataItem.UpdatedAt)
@@ -84,6 +90,7 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 
 			r.Data = append(r.Data, data)
 		}
+		r.Type = types.StringValue(resp.Type)
 	}
 
 	return diags

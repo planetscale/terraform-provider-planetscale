@@ -7,12 +7,14 @@ import (
 )
 
 type GetPasswordRegion struct {
-	CurrentDefault    types.Bool     `tfsdk:"current_default"`
-	DisplayName       types.String   `tfsdk:"display_name"`
-	Enabled           types.Bool     `tfsdk:"enabled"`
-	ID                types.String   `tfsdk:"id"`
-	Location          types.String   `tfsdk:"location"`
-	Provider          types.String   `tfsdk:"provider"`
-	PublicIPAddresses []types.String `tfsdk:"public_ip_addresses"`
-	Slug              types.String   `tfsdk:"slug"`
+	CurrentDefault      types.Bool     `tfsdk:"current_default"`
+	DisplayName         types.String   `tfsdk:"display_name"`
+	Enabled             types.Bool     `tfsdk:"enabled"`
+	ID                  types.String   `tfsdk:"id"`
+	Location            types.String   `tfsdk:"location"`
+	MysqlSupported      types.Bool     `tfsdk:"mysql_supported"`
+	PostgresqlSupported types.Bool     `tfsdk:"postgresql_supported"`
+	Provider            types.String   `tfsdk:"provider"`
+	PublicIPAddresses   []types.String `tfsdk:"public_ip_addresses"`
+	Slug                types.String   `tfsdk:"slug"`
 }

@@ -198,6 +198,14 @@ func (r *VitessBranchPasswordDataSource) Schema(ctx context.Context, req datasou
 						Computed:    true,
 						Description: `Location of the region`,
 					},
+					"mysql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports MySQL/Vitess databases`,
+					},
+					"postgresql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports PostgreSQL databases`,
+					},
 					"provider": schema.StringAttribute{
 						Computed:    true,
 						Description: `Provider for the region (ex. AWS)`,

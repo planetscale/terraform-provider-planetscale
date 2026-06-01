@@ -195,7 +195,7 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 			"plain_text": schema.StringAttribute{
 				Computed:    true,
 				Sensitive:   true,
-				Description: `The plain text password, available only after create`,
+				Description: `The plain text password. Null except in the response from the create endpoint.`,
 			},
 			"region": schema.SingleNestedAttribute{
 				Computed: true,
@@ -219,6 +219,14 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 					"location": schema.StringAttribute{
 						Computed:    true,
 						Description: `Location of the region`,
+					},
+					"mysql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports MySQL/Vitess databases`,
+					},
+					"postgresql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports PostgreSQL databases`,
 					},
 					"provider": schema.StringAttribute{
 						Computed:    true,

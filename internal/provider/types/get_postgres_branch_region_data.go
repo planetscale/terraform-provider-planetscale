@@ -7,5 +7,7 @@ import (
 )
 
 type GetPostgresBranchRegionData struct {
-	ID types.String `tfsdk:"id"`
+	ID                  types.String `tfsdk:"id"`
+	MysqlSupported      types.Bool   `tfsdk:"mysql_supported"`
+	PostgresqlSupported types.Bool   `tfsdk:"postgresql_supported"`
 }

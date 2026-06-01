@@ -26,7 +26,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 			}
 		}
 		r.HasCard = types.BoolValue(resp.HasCard)
-		r.HasPastDueInvoices = types.BoolValue(resp.HasPastDueInvoices)
+		r.HasPastDueInvoices = types.BoolPointerValue(resp.HasPastDueInvoices)
 		r.ID = types.StringValue(resp.ID)
 		r.IdpManagedRoles = types.BoolValue(resp.IdpManagedRoles)
 		r.InvoiceBudgetAmount = types.StringValue(resp.InvoiceBudgetAmount)
@@ -38,7 +38,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 		r.SingleTenancy = types.BoolValue(resp.SingleTenancy)
 		r.Sso = types.BoolValue(resp.Sso)
 		r.SsoDirectory = types.BoolValue(resp.SsoDirectory)
-		r.SsoPortalURL = types.StringValue(resp.SsoPortalURL)
+		r.SsoPortalURL = types.StringPointerValue(resp.SsoPortalURL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.ValidBillingInfo = types.BoolValue(resp.ValidBillingInfo)
 	}

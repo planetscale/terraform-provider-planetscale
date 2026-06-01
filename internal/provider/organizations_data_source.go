@@ -31,6 +31,7 @@ type OrganizationsDataSource struct {
 // OrganizationsDataSourceModel describes the data model.
 type OrganizationsDataSourceModel struct {
 	Data []tfTypes.ListOrganizationsData `tfsdk:"data"`
+	Type types.String                    `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -71,7 +72,7 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 						},
 						"has_past_due_invoices": schema.BoolAttribute{
 							Computed:    true,
-							Description: `Whether or not the organization has past due billing invoices`,
+							Description: `Whether or not the organization has past due billing invoices.`,
 						},
 						"id": schema.StringAttribute{
 							Computed:    true,
@@ -119,7 +120,7 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 						},
 						"sso_portal_url": schema.StringAttribute{
 							Computed:    true,
-							Description: `The URL of the organization's SSO portal`,
+							Description: `The URL of the organization's SSO portal.`,
 						},
 						"updated_at": schema.StringAttribute{
 							Computed:    true,
@@ -131,6 +132,10 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 						},
 					},
 				},
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `The response type. Always "list" for paginated responses.`,
 			},
 		},
 	}

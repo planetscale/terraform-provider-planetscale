@@ -34,7 +34,7 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 				}
 			}
 			data.HasCard = types.BoolValue(dataItem.HasCard)
-			data.HasPastDueInvoices = types.BoolValue(dataItem.HasPastDueInvoices)
+			data.HasPastDueInvoices = types.BoolPointerValue(dataItem.HasPastDueInvoices)
 			data.ID = types.StringValue(dataItem.ID)
 			data.IdpManagedRoles = types.BoolValue(dataItem.IdpManagedRoles)
 			data.InvoiceBudgetAmount = types.StringValue(dataItem.InvoiceBudgetAmount)
@@ -46,12 +46,13 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 			data.SingleTenancy = types.BoolValue(dataItem.SingleTenancy)
 			data.Sso = types.BoolValue(dataItem.Sso)
 			data.SsoDirectory = types.BoolValue(dataItem.SsoDirectory)
-			data.SsoPortalURL = types.StringValue(dataItem.SsoPortalURL)
+			data.SsoPortalURL = types.StringPointerValue(dataItem.SsoPortalURL)
 			data.UpdatedAt = types.StringValue(dataItem.UpdatedAt)
 			data.ValidBillingInfo = types.BoolValue(dataItem.ValidBillingInfo)
 
 			r.Data = append(r.Data, data)
 		}
+		r.Type = types.StringValue(resp.Type)
 	}
 
 	return diags

@@ -179,6 +179,10 @@ type UpdatePasswordRegion struct {
 	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
 	CurrentDefault bool `json:"current_default"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (u *UpdatePasswordRegion) GetID() string {
@@ -235,6 +239,20 @@ func (u *UpdatePasswordRegion) GetCurrentDefault() bool {
 		return false
 	}
 	return u.CurrentDefault
+}
+
+func (u *UpdatePasswordRegion) GetMysqlSupported() bool {
+	if u == nil {
+		return false
+	}
+	return u.MysqlSupported
+}
+
+func (u *UpdatePasswordRegion) GetPostgresqlSupported() bool {
+	if u == nil {
+		return false
+	}
+	return u.PostgresqlSupported
 }
 
 type UpdatePasswordDatabaseBranch struct {
@@ -298,11 +316,11 @@ type UpdatePasswordResponseBody struct {
 	// When the password was created
 	CreatedAt string `json:"created_at"`
 	// When the password was deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 	// When the password will expire
-	ExpiresAt string `json:"expires_at"`
+	ExpiresAt *string `json:"expires_at"`
 	// When the password was last used to execute a query
-	LastUsedAt string `json:"last_used_at"`
+	LastUsedAt *string `json:"last_used_at"`
 	// True if the credentials are expired
 	Expired bool `json:"expired"`
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
@@ -310,14 +328,14 @@ type UpdatePasswordResponseBody struct {
 	// The list of hosts in each availability zone providing direct access to a vtgate
 	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTLSeconds int64 `json:"ttl_seconds"`
+	TTLSeconds *int64 `json:"ttl_seconds"`
 	// The host URL for the password
 	AccessHostURL string `json:"access_host_url"`
 	// The regional host URL
 	AccessHostRegionalURL string `json:"access_host_regional_url"`
 	// The read-only replica host URLs
 	AccessHostRegionalUrls []string             `json:"access_host_regional_urls"`
-	Actor                  UpdatePasswordActor  `json:"actor"`
+	Actor                  *UpdatePasswordActor `json:"actor"`
 	Region                 UpdatePasswordRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
@@ -351,7 +369,7 @@ func (u *UpdatePasswordResponseBody) GetRole() UpdatePasswordRole {
 
 func (u *UpdatePasswordResponseBody) GetCidrs() []string {
 	if u == nil {
-		return []string{}
+		return nil
 	}
 	return u.Cidrs
 }
@@ -363,23 +381,23 @@ func (u *UpdatePasswordResponseBody) GetCreatedAt() string {
 	return u.CreatedAt
 }
 
-func (u *UpdatePasswordResponseBody) GetDeletedAt() string {
+func (u *UpdatePasswordResponseBody) GetDeletedAt() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
 	return u.DeletedAt
 }
 
-func (u *UpdatePasswordResponseBody) GetExpiresAt() string {
+func (u *UpdatePasswordResponseBody) GetExpiresAt() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
 	return u.ExpiresAt
 }
 
-func (u *UpdatePasswordResponseBody) GetLastUsedAt() string {
+func (u *UpdatePasswordResponseBody) GetLastUsedAt() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
 	return u.LastUsedAt
 }
@@ -405,9 +423,9 @@ func (u *UpdatePasswordResponseBody) GetDirectVtgateAddresses() []string {
 	return u.DirectVtgateAddresses
 }
 
-func (u *UpdatePasswordResponseBody) GetTTLSeconds() int64 {
+func (u *UpdatePasswordResponseBody) GetTTLSeconds() *int64 {
 	if u == nil {
-		return 0
+		return nil
 	}
 	return u.TTLSeconds
 }
@@ -433,9 +451,9 @@ func (u *UpdatePasswordResponseBody) GetAccessHostRegionalUrls() []string {
 	return u.AccessHostRegionalUrls
 }
 
-func (u *UpdatePasswordResponseBody) GetActor() UpdatePasswordActor {
+func (u *UpdatePasswordResponseBody) GetActor() *UpdatePasswordActor {
 	if u == nil {
-		return UpdatePasswordActor{}
+		return nil
 	}
 	return u.Actor
 }

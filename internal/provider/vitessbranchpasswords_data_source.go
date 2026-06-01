@@ -34,6 +34,7 @@ type VitessBranchPasswordsDataSourceModel struct {
 	Database         types.String                `tfsdk:"database"`
 	Organization     types.String                `tfsdk:"organization"`
 	ReadOnlyRegionID types.String                `queryParam:"style=form,explode=true,name=read_only_region_id" tfsdk:"read_only_region_id"`
+	Type             types.String                `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -154,7 +155,7 @@ func (r *VitessBranchPasswordsDataSource) Schema(ctx context.Context, req dataso
 						},
 						"plain_text": schema.StringAttribute{
 							Computed:    true,
-							Description: `The plain text password, available only after create`,
+							Description: `The plain text password. Null except in the response from the create endpoint.`,
 						},
 						"region": schema.SingleNestedAttribute{
 							Computed: true,
@@ -178,6 +179,14 @@ func (r *VitessBranchPasswordsDataSource) Schema(ctx context.Context, req dataso
 								"location": schema.StringAttribute{
 									Computed:    true,
 									Description: `Location of the region`,
+								},
+								"mysql_supported": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether the region supports MySQL/Vitess databases`,
+								},
+								"postgresql_supported": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether the region supports PostgreSQL databases`,
 								},
 								"provider": schema.StringAttribute{
 									Computed:    true,
@@ -228,6 +237,10 @@ func (r *VitessBranchPasswordsDataSource) Schema(ctx context.Context, req dataso
 			"read_only_region_id": schema.StringAttribute{
 				Optional:    true,
 				Description: `A read-only region of the database branch. If present, the password results will be filtered to only those in the region`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `The response type. Always "list" for paginated responses.`,
 			},
 		},
 	}
