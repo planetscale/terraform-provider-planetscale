@@ -35,10 +35,7 @@ terraform:
   version: 1.1.0
   additionalActions: []
   additionalDataSources: []
-  additionalDependencies:
-    github.com/cloudflare/circl: v1.6.3
-    github.com/hashicorp/terraform-plugin-testing: v1.16.0
-    golang.org/x/crypto: v0.48.0
+  additionalDependencies: []
   additionalEphemeralResources: []
   additionalFunctions: []
   additionalListResources: []

@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version v1 and generator version 2.884.4
+// Generated from OpenAPI doc version v1 and generator version 2.892.1
 
 import (
 	"context"
@@ -143,7 +143,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk := &PlanetScale{
 		SDKVersion: "1.1.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 1.1.0 2.884.4 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.1.0 2.892.1 v1 github.com/planetscale/terraform-provider-planetscale/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

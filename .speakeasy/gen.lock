@@ -3,10 +3,10 @@ id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
   docChecksum: 9f56ab09bb646b3d098cba1cb9c37898
   docVersion: v1
-  speakeasyVersion: 1.763.1
-  generationVersion: 2.884.4
+  speakeasyVersion: 1.769.1
+  generationVersion: 2.892.1
   releaseVersion: 1.1.0
-  configChecksum: 03f848e9c0c17f874cc7ad0bbf7f5b55
+  configChecksum: 806ec28226461e1024bbc1f470263808
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.47.4
+    core: 3.47.7
     customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
@@ -115,7 +115,7 @@ trackedFiles:
     pristine_git_object: 4a8d92374beb311bf11912bcc446c68961f0ca49
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:d96bff5be1d51f431d32d51d8fefd32092d9400b
+    last_write_checksum: sha1:c96d822fce75029530d5c9786a1e28959cee040e
     pristine_git_object: 4df25b7df884a56bc731483888f5d1dd3185ffa6
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
@@ -567,7 +567,7 @@ trackedFiles:
     pristine_git_object: edfe0ecbf2f0184097e615b7c0f6df457c12e379
   internal/sdk/internal/utils/json.go:
     id: 2231afac3add
-    last_write_checksum: sha1:b690a9ec0ca0475d726d81aaa5e5a6fd4e36f706
+    last_write_checksum: sha1:b3f3854556a907c30dfc8a0e050636447c9ecda8
     pristine_git_object: a085c0c66f6a4723924ba123cdb39e43a2cd98b6
   internal/sdk/internal/utils/pathparams.go:
     id: e7fec2afe4a6
@@ -719,7 +719,7 @@ trackedFiles:
     pristine_git_object: 482aa982b4571ec54f57707879032cc00c8fe24e
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:e157ce0e691f81e5e15a3876c90abc2cbdbd960a
+    last_write_checksum: sha1:778ab727f58183ba4e121d6fdefc97c142594d1a
     pristine_git_object: edd5a04397c8e2e1faa37b1515cc10715653813e
   internal/sdk/polling/config.go:
     id: e14a17f21f84
