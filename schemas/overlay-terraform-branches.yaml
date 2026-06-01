@@ -5,6 +5,9 @@ info:
   version: 0.0.1
 actions:
   # Modifications
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.requestBody.content['application/json'].schema.properties.storage
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter
     update:

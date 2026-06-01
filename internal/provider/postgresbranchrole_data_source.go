@@ -31,6 +31,7 @@ type PostgresBranchRoleDataSource struct {
 type PostgresBranchRoleDataSourceModel struct {
 	AccessHostURL                types.String                        `tfsdk:"access_host_url"`
 	ActorData                    *tfTypes.GetRoleActorData           `tfsdk:"actor_data"`
+	BaseUsername                 types.String                        `tfsdk:"base_username"`
 	Branch                       types.String                        `tfsdk:"branch"`
 	BranchData                   *tfTypes.GetRoleBranchData          `tfsdk:"branch_data"`
 	CreatedAt                    types.String                        `tfsdk:"created_at"`
@@ -86,6 +87,10 @@ func (r *PostgresBranchRoleDataSource) Schema(ctx context.Context, req datasourc
 						Description: `The ID of the actor`,
 					},
 				},
+			},
+			"base_username": schema.StringAttribute{
+				Computed:    true,
+				Description: `The base username without branch routing suffix`,
 			},
 			"branch": schema.StringAttribute{
 				Required:    true,

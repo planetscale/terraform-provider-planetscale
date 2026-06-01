@@ -128,6 +128,10 @@ type GetPasswordRegion struct {
 	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
 	CurrentDefault bool `json:"current_default"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (g *GetPasswordRegion) GetID() string {
@@ -184,6 +188,20 @@ func (g *GetPasswordRegion) GetCurrentDefault() bool {
 		return false
 	}
 	return g.CurrentDefault
+}
+
+func (g *GetPasswordRegion) GetMysqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.MysqlSupported
+}
+
+func (g *GetPasswordRegion) GetPostgresqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.PostgresqlSupported
 }
 
 type GetPasswordDatabaseBranch struct {
@@ -247,11 +265,11 @@ type GetPasswordResponseBody struct {
 	// When the password was created
 	CreatedAt string `json:"created_at"`
 	// When the password was deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 	// When the password will expire
-	ExpiresAt string `json:"expires_at"`
+	ExpiresAt *string `json:"expires_at"`
 	// When the password was last used to execute a query
-	LastUsedAt string `json:"last_used_at"`
+	LastUsedAt *string `json:"last_used_at"`
 	// True if the credentials are expired
 	Expired bool `json:"expired"`
 	// True if the credentials connect directly to a vtgate, bypassing load balancers
@@ -259,14 +277,14 @@ type GetPasswordResponseBody struct {
 	// The list of hosts in each availability zone providing direct access to a vtgate
 	DirectVtgateAddresses []string `json:"direct_vtgate_addresses"`
 	// Time to live (in seconds) for the password. The password will be invalid when TTL has passed
-	TTLSeconds int64 `json:"ttl_seconds"`
+	TTLSeconds *int64 `json:"ttl_seconds"`
 	// The host URL for the password
 	AccessHostURL string `json:"access_host_url"`
 	// The regional host URL
 	AccessHostRegionalURL string `json:"access_host_regional_url"`
 	// The read-only replica host URLs
 	AccessHostRegionalUrls []string          `json:"access_host_regional_urls"`
-	Actor                  GetPasswordActor  `json:"actor"`
+	Actor                  *GetPasswordActor `json:"actor"`
 	Region                 GetPasswordRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
@@ -300,7 +318,7 @@ func (g *GetPasswordResponseBody) GetRole() GetPasswordRole {
 
 func (g *GetPasswordResponseBody) GetCidrs() []string {
 	if g == nil {
-		return []string{}
+		return nil
 	}
 	return g.Cidrs
 }
@@ -312,23 +330,23 @@ func (g *GetPasswordResponseBody) GetCreatedAt() string {
 	return g.CreatedAt
 }
 
-func (g *GetPasswordResponseBody) GetDeletedAt() string {
+func (g *GetPasswordResponseBody) GetDeletedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.DeletedAt
 }
 
-func (g *GetPasswordResponseBody) GetExpiresAt() string {
+func (g *GetPasswordResponseBody) GetExpiresAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.ExpiresAt
 }
 
-func (g *GetPasswordResponseBody) GetLastUsedAt() string {
+func (g *GetPasswordResponseBody) GetLastUsedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.LastUsedAt
 }
@@ -354,9 +372,9 @@ func (g *GetPasswordResponseBody) GetDirectVtgateAddresses() []string {
 	return g.DirectVtgateAddresses
 }
 
-func (g *GetPasswordResponseBody) GetTTLSeconds() int64 {
+func (g *GetPasswordResponseBody) GetTTLSeconds() *int64 {
 	if g == nil {
-		return 0
+		return nil
 	}
 	return g.TTLSeconds
 }
@@ -382,9 +400,9 @@ func (g *GetPasswordResponseBody) GetAccessHostRegionalUrls() []string {
 	return g.AccessHostRegionalUrls
 }
 
-func (g *GetPasswordResponseBody) GetActor() GetPasswordActor {
+func (g *GetPasswordResponseBody) GetActor() *GetPasswordActor {
 	if g == nil {
-		return GetPasswordActor{}
+		return nil
 	}
 	return g.Actor
 }

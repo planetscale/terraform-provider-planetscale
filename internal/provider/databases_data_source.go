@@ -32,6 +32,7 @@ type DatabasesDataSourceModel struct {
 	Data         []tfTypes.ListDatabasesData `tfsdk:"data"`
 	Organization types.String                `tfsdk:"organization"`
 	Q            types.String                `queryParam:"style=form,explode=true,name=q" tfsdk:"q"`
+	Type         types.String                `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -63,7 +64,7 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						},
 						"automatic_migrations": schema.BoolAttribute{
 							Computed:    true,
-							Description: `Whether to automatically manage Rails migrations during deploy requests`,
+							Description: `Whether to automatically manage Rails migrations during deploy requests.`,
 						},
 						"branches_count": schema.Int64Attribute{
 							Computed:    true,
@@ -165,11 +166,11 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						},
 						"migration_framework": schema.StringAttribute{
 							Computed:    true,
-							Description: `Framework used for applying migrations`,
+							Description: `Framework used for applying migrations.`,
 						},
 						"migration_table_name": schema.StringAttribute{
 							Computed:    true,
-							Description: `Table name to use for copying schema migration data`,
+							Description: `Table name to use for copying schema migration data.`,
 						},
 						"multiple_admins_required_for_deletion": schema.BoolAttribute{
 							Computed:    true,
@@ -221,6 +222,14 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 								"location": schema.StringAttribute{
 									Computed:    true,
 									Description: `Location of the region`,
+								},
+								"mysql_supported": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether the region supports MySQL/Vitess databases`,
+								},
+								"postgresql_supported": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether the region supports PostgreSQL databases`,
 								},
 								"provider": schema.StringAttribute{
 									Computed:    true,
@@ -283,6 +292,10 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"q": schema.StringAttribute{
 				Optional:    true,
 				Description: `Search term to filter databases by name`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `The response type. Always "list" for paginated responses.`,
 			},
 		},
 	}

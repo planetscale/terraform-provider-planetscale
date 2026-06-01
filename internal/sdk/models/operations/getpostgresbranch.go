@@ -90,6 +90,10 @@ func (g *GetPostgresBranchActor) GetID() string {
 type GetPostgresBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (g *GetPostgresBranchRegionData) GetID() string {
@@ -97,6 +101,20 @@ func (g *GetPostgresBranchRegionData) GetID() string {
 		return ""
 	}
 	return g.ID
+}
+
+func (g *GetPostgresBranchRegionData) GetMysqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.MysqlSupported
+}
+
+func (g *GetPostgresBranchRegionData) GetPostgresqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.PostgresqlSupported
 }
 
 // GetPostgresBranchResponseBody - Returns information about a branch
@@ -110,15 +128,15 @@ type GetPostgresBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                   `json:"ready"`
-	Actor GetPostgresBranchActor `json:"actor"`
+	Ready bool                    `json:"ready"`
+	Actor *GetPostgresBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
 	URL        string                      `json:"url"`
 	RegionData GetPostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
+	ParentBranch *string `json:"parent_branch"`
 	// The number of replicas for the branch
 	Replicas *int64 `json:"replicas,omitzero"`
 }
@@ -158,9 +176,9 @@ func (g *GetPostgresBranchResponseBody) GetReady() bool {
 	return g.Ready
 }
 
-func (g *GetPostgresBranchResponseBody) GetActor() GetPostgresBranchActor {
+func (g *GetPostgresBranchResponseBody) GetActor() *GetPostgresBranchActor {
 	if g == nil {
-		return GetPostgresBranchActor{}
+		return nil
 	}
 	return g.Actor
 }
@@ -186,9 +204,9 @@ func (g *GetPostgresBranchResponseBody) GetRegionData() GetPostgresBranchRegionD
 	return g.RegionData
 }
 
-func (g *GetPostgresBranchResponseBody) GetParentBranch() string {
+func (g *GetPostgresBranchResponseBody) GetParentBranch() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.ParentBranch
 }

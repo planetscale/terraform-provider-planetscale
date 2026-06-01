@@ -33,6 +33,7 @@ type PostgresBranchRolesDataSourceModel struct {
 	Data         []tfTypes.ListRolesData `tfsdk:"data"`
 	Database     types.String            `tfsdk:"database"`
 	Organization types.String            `tfsdk:"organization"`
+	Type         types.String            `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -74,6 +75,10 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 									Description: `The ID of the actor`,
 								},
 							},
+						},
+						"base_username": schema.StringAttribute{
+							Computed:    true,
+							Description: `The base username without branch routing suffix`,
 						},
 						"branch": schema.SingleNestedAttribute{
 							Computed: true,
@@ -196,6 +201,10 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `The response type. Always "list" for paginated responses.`,
 			},
 		},
 	}

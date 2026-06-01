@@ -32,6 +32,7 @@ data "planetscale_postgres_branch_roles" "my_postgresbranchroles" {
 ### Read-Only
 
 - `data` (Attributes List) (see [below for nested schema](#nestedatt--data))
+- `type` (String) The response type. Always "list" for paginated responses.
 
 <a id="nestedatt--data"></a>
 ### Nested Schema for `data`
@@ -40,6 +41,7 @@ Read-Only:
 
 - `access_host_url` (String) The database connection string
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--data--actor))
+- `base_username` (String) The base username without branch routing suffix
 - `branch` (Attributes) (see [below for nested schema](#nestedatt--data--branch))
 - `created_at` (String) When the role was created
 - `database_name` (String) The database name

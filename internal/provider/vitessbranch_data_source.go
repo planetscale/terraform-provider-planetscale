@@ -112,6 +112,14 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 						Computed:    true,
 						Description: `The ID of the region`,
 					},
+					"mysql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports MySQL/Vitess databases`,
+					},
+					"postgresql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports PostgreSQL databases`,
+					},
 				},
 			},
 			"state": schema.StringAttribute{

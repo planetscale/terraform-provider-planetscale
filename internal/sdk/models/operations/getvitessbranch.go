@@ -90,6 +90,10 @@ func (g *GetVitessBranchActor) GetID() string {
 type GetVitessBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (g *GetVitessBranchRegionData) GetID() string {
@@ -97,6 +101,20 @@ func (g *GetVitessBranchRegionData) GetID() string {
 		return ""
 	}
 	return g.ID
+}
+
+func (g *GetVitessBranchRegionData) GetMysqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.MysqlSupported
+}
+
+func (g *GetVitessBranchRegionData) GetPostgresqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.PostgresqlSupported
 }
 
 // GetVitessBranchResponseBody - Returns information about a branch
@@ -114,15 +132,15 @@ type GetVitessBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                 `json:"ready"`
-	Actor GetVitessBranchActor `json:"actor"`
+	Ready bool                  `json:"ready"`
+	Actor *GetVitessBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
 	URL        string                    `json:"url"`
 	RegionData GetVitessBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
+	ParentBranch *string `json:"parent_branch"`
 }
 
 func (g *GetVitessBranchResponseBody) GetID() string {
@@ -174,9 +192,9 @@ func (g *GetVitessBranchResponseBody) GetReady() bool {
 	return g.Ready
 }
 
-func (g *GetVitessBranchResponseBody) GetActor() GetVitessBranchActor {
+func (g *GetVitessBranchResponseBody) GetActor() *GetVitessBranchActor {
 	if g == nil {
-		return GetVitessBranchActor{}
+		return nil
 	}
 	return g.Actor
 }
@@ -202,9 +220,9 @@ func (g *GetVitessBranchResponseBody) GetRegionData() GetVitessBranchRegionData 
 	return g.RegionData
 }
 
-func (g *GetVitessBranchResponseBody) GetParentBranch() string {
+func (g *GetVitessBranchResponseBody) GetParentBranch() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.ParentBranch
 }

@@ -37,6 +37,7 @@ data "planetscale_vitess_branch_passwords" "my_vitessbranchpasswords" {
 ### Read-Only
 
 - `data` (Attributes List) (see [below for nested schema](#nestedatt--data))
+- `type` (String) The response type. Always "list" for paginated responses.
 
 <a id="nestedatt--data"></a>
 ### Nested Schema for `data`
@@ -58,7 +59,7 @@ Read-Only:
 - `id` (String) The ID for the password
 - `last_used_at` (String) When the password was last used to execute a query
 - `name` (String) The display name for the password
-- `plain_text` (String) The plain text password, available only after create
+- `plain_text` (String) The plain text password. Null except in the response from the create endpoint.
 - `region` (Attributes) (see [below for nested schema](#nestedatt--data--region))
 - `renewable` (Boolean) Whether or not the password can be renewed
 - `replica` (Boolean) Whether or not the password is for a read replica
@@ -98,6 +99,8 @@ Read-Only:
 - `enabled` (Boolean) Whether or not the region is currently active
 - `id` (String) The ID of the region
 - `location` (String) Location of the region
+- `mysql_supported` (Boolean) Whether the region supports MySQL/Vitess databases
+- `postgresql_supported` (Boolean) Whether the region supports PostgreSQL databases
 - `provider` (String) Provider for the region (ex. AWS)
 - `public_ip_addresses` (List of String) Public IP addresses for the region
 - `slug` (String) The slug of the region

@@ -43,12 +43,12 @@ type GetOrganizationResponseBody struct {
 	SingleTenancy bool `json:"single_tenancy"`
 	// Whether or not the organization has managed tenancy enabled
 	ManagedTenancy bool `json:"managed_tenancy"`
-	// Whether or not the organization has past due billing invoices
-	HasPastDueInvoices bool `json:"has_past_due_invoices"`
+	// Whether or not the organization has past due billing invoices.
+	HasPastDueInvoices *bool `json:"has_past_due_invoices,omitzero"`
 	// The number of databases in the organization
 	DatabaseCount int64 `json:"database_count"`
-	// The URL of the organization's SSO portal
-	SsoPortalURL string `json:"sso_portal_url"`
+	// The URL of the organization's SSO portal.
+	SsoPortalURL *string `json:"sso_portal_url,omitzero"`
 	// Features that can be enabled on the organization
 	Features map[string]any `json:"features"`
 	// Whether or not the IdP provider is be responsible for managing roles in PlanetScale
@@ -140,9 +140,9 @@ func (g *GetOrganizationResponseBody) GetManagedTenancy() bool {
 	return g.ManagedTenancy
 }
 
-func (g *GetOrganizationResponseBody) GetHasPastDueInvoices() bool {
+func (g *GetOrganizationResponseBody) GetHasPastDueInvoices() *bool {
 	if g == nil {
-		return false
+		return nil
 	}
 	return g.HasPastDueInvoices
 }
@@ -154,9 +154,9 @@ func (g *GetOrganizationResponseBody) GetDatabaseCount() int64 {
 	return g.DatabaseCount
 }
 
-func (g *GetOrganizationResponseBody) GetSsoPortalURL() string {
+func (g *GetOrganizationResponseBody) GetSsoPortalURL() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.SsoPortalURL
 }

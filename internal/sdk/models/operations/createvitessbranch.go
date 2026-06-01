@@ -34,6 +34,33 @@ func (e *SeedData) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// CreateVitessBranchKind - The kind of database. Always mysql for planetscale_vitess_branch.
+type CreateVitessBranchKind string
+
+const (
+	CreateVitessBranchKindMysql      CreateVitessBranchKind = "mysql"
+	CreateVitessBranchKindPostgresql CreateVitessBranchKind = "postgresql"
+)
+
+func (e CreateVitessBranchKind) ToPointer() *CreateVitessBranchKind {
+	return &e
+}
+func (e *CreateVitessBranchKind) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "mysql":
+		fallthrough
+	case "postgresql":
+		*e = CreateVitessBranchKind(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for CreateVitessBranchKind: %v", v)
+	}
+}
+
 type CreateVitessBranchRequestBody struct {
 	// The name of the branch to create
 	Name string `json:"name"`
@@ -52,7 +79,7 @@ type CreateVitessBranchRequestBody struct {
 	createDatabaseIfMissing *bool `const:"true" json:"create_database_if_missing"`
 	// The kind of database. Always mysql for planetscale_vitess_branch.
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
-	kind *string `const:"mysql" json:"kind"`
+	kind *CreateVitessBranchKind `const:"mysql" json:"kind"`
 }
 
 func (c CreateVitessBranchRequestBody) MarshalJSON() ([]byte, error) {
@@ -112,8 +139,8 @@ func (c *CreateVitessBranchRequestBody) GetCreateDatabaseIfMissing() *bool {
 	return types.Pointer(true)
 }
 
-func (c *CreateVitessBranchRequestBody) GetKind() *string {
-	return types.Pointer("mysql")
+func (c *CreateVitessBranchRequestBody) GetKind() *CreateVitessBranchKind {
+	return CreateVitessBranchKindMysql.ToPointer()
 }
 
 type CreateVitessBranchRequest struct {
@@ -207,6 +234,10 @@ func (c *CreateVitessBranchActor) GetID() string {
 type CreateVitessBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (c *CreateVitessBranchRegionData) GetID() string {
@@ -214,6 +245,20 @@ func (c *CreateVitessBranchRegionData) GetID() string {
 		return ""
 	}
 	return c.ID
+}
+
+func (c *CreateVitessBranchRegionData) GetMysqlSupported() bool {
+	if c == nil {
+		return false
+	}
+	return c.MysqlSupported
+}
+
+func (c *CreateVitessBranchRegionData) GetPostgresqlSupported() bool {
+	if c == nil {
+		return false
+	}
+	return c.PostgresqlSupported
 }
 
 // CreateVitessBranchResponseBody - Returns the created branch
@@ -231,15 +276,15 @@ type CreateVitessBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                    `json:"ready"`
-	Actor CreateVitessBranchActor `json:"actor"`
+	Ready bool                     `json:"ready"`
+	Actor *CreateVitessBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
 	URL        string                       `json:"url"`
 	RegionData CreateVitessBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
+	ParentBranch *string `json:"parent_branch"`
 }
 
 func (c *CreateVitessBranchResponseBody) GetID() string {
@@ -291,9 +336,9 @@ func (c *CreateVitessBranchResponseBody) GetReady() bool {
 	return c.Ready
 }
 
-func (c *CreateVitessBranchResponseBody) GetActor() CreateVitessBranchActor {
+func (c *CreateVitessBranchResponseBody) GetActor() *CreateVitessBranchActor {
 	if c == nil {
-		return CreateVitessBranchActor{}
+		return nil
 	}
 	return c.Actor
 }
@@ -319,9 +364,9 @@ func (c *CreateVitessBranchResponseBody) GetRegionData() CreateVitessBranchRegio
 	return c.RegionData
 }
 
-func (c *CreateVitessBranchResponseBody) GetParentBranch() string {
+func (c *CreateVitessBranchResponseBody) GetParentBranch() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ParentBranch
 }

@@ -47,6 +47,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 
 - `access_host_url` (String) The database connection string
 - `actor_data` (Attributes) (see [below for nested schema](#nestedatt--actor_data))
+- `base_username` (String) The base username without branch routing suffix
 - `branch_data` (Attributes) (see [below for nested schema](#nestedatt--branch_data))
 - `created_at` (String) When the role was created
 - `database_name` (String) The database name

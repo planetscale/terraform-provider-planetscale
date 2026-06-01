@@ -66,9 +66,9 @@ type GetPostgresDatabaseDataImport struct {
 	// Errors encountered during the import check
 	ImportCheckErrors string `json:"import_check_errors"`
 	// When the import started
-	StartedAt string `json:"started_at"`
+	StartedAt *string `json:"started_at"`
 	// When the import finished
-	FinishedAt string                        `json:"finished_at"`
+	FinishedAt *string                       `json:"finished_at"`
 	DataSource GetPostgresDatabaseDataSource `json:"data_source"`
 }
 
@@ -86,16 +86,16 @@ func (g *GetPostgresDatabaseDataImport) GetImportCheckErrors() string {
 	return g.ImportCheckErrors
 }
 
-func (g *GetPostgresDatabaseDataImport) GetStartedAt() string {
+func (g *GetPostgresDatabaseDataImport) GetStartedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.StartedAt
 }
 
-func (g *GetPostgresDatabaseDataImport) GetFinishedAt() string {
+func (g *GetPostgresDatabaseDataImport) GetFinishedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.FinishedAt
 }
@@ -124,6 +124,10 @@ type GetPostgresDatabaseRegionData struct {
 	Slug string `json:"slug"`
 	// True if the region is the default for new branch creation
 	CurrentDefault bool `json:"current_default"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (g *GetPostgresDatabaseRegionData) GetID() string {
@@ -180,6 +184,20 @@ func (g *GetPostgresDatabaseRegionData) GetCurrentDefault() bool {
 		return false
 	}
 	return g.CurrentDefault
+}
+
+func (g *GetPostgresDatabaseRegionData) GetMysqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.MysqlSupported
+}
+
+func (g *GetPostgresDatabaseRegionData) GetPostgresqlSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.PostgresqlSupported
 }
 
 // GetPostgresDatabaseState - State of the database
@@ -241,7 +259,7 @@ type GetPostgresDatabaseResponseBody struct {
 	// The total number of database production branches
 	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
-	IssuesCount int64 `json:"issues_count"`
+	IssuesCount *int64 `json:"issues_count,omitzero"`
 	// If the database requires multiple admins for deletion
 	MultipleAdminsRequiredForDeletion bool `json:"multiple_admins_required_for_deletion"`
 	// If the database is ready to be used
@@ -249,9 +267,9 @@ type GetPostgresDatabaseResponseBody struct {
 	// If the database has reached its backup restored branch limit
 	AtBackupRestoreBranchesLimit bool `json:"at_backup_restore_branches_limit"`
 	// If the database has reached its development branch limit
-	AtDevelopmentBranchUsageLimit bool                          `json:"at_development_branch_usage_limit"`
-	DataImport                    GetPostgresDatabaseDataImport `json:"data_import"`
-	RegionData                    GetPostgresDatabaseRegionData `json:"region"`
+	AtDevelopmentBranchUsageLimit bool                           `json:"at_development_branch_usage_limit"`
+	DataImport                    *GetPostgresDatabaseDataImport `json:"data_import,omitzero"`
+	RegionData                    GetPostgresDatabaseRegionData  `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -287,7 +305,7 @@ type GetPostgresDatabaseResponseBody struct {
 	// When the database was last updated
 	UpdatedAt string `json:"updated_at"`
 	// When the default branch schema was last changed.
-	SchemaLastUpdatedAt string `json:"schema_last_updated_at"`
+	SchemaLastUpdatedAt *string `json:"schema_last_updated_at"`
 	// The kind of database
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	kind string `const:"postgresql" json:"kind"`
@@ -353,9 +371,9 @@ func (g *GetPostgresDatabaseResponseBody) GetProductionBranchesCount() int64 {
 	return g.ProductionBranchesCount
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetIssuesCount() int64 {
+func (g *GetPostgresDatabaseResponseBody) GetIssuesCount() *int64 {
 	if g == nil {
-		return 0
+		return nil
 	}
 	return g.IssuesCount
 }
@@ -388,9 +406,9 @@ func (g *GetPostgresDatabaseResponseBody) GetAtDevelopmentBranchUsageLimit() boo
 	return g.AtDevelopmentBranchUsageLimit
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetDataImport() GetPostgresDatabaseDataImport {
+func (g *GetPostgresDatabaseResponseBody) GetDataImport() *GetPostgresDatabaseDataImport {
 	if g == nil {
-		return GetPostgresDatabaseDataImport{}
+		return nil
 	}
 	return g.DataImport
 }
@@ -521,9 +539,9 @@ func (g *GetPostgresDatabaseResponseBody) GetUpdatedAt() string {
 	return g.UpdatedAt
 }
 
-func (g *GetPostgresDatabaseResponseBody) GetSchemaLastUpdatedAt() string {
+func (g *GetPostgresDatabaseResponseBody) GetSchemaLastUpdatedAt() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.SchemaLastUpdatedAt
 }

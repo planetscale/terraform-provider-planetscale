@@ -23,6 +23,7 @@ data "planetscale_organizations" "my_organizations" {
 ### Read-Only
 
 - `data` (Attributes List) (see [below for nested schema](#nestedatt--data))
+- `type` (String) The response type. Always "list" for paginated responses.
 
 <a id="nestedatt--data"></a>
 ### Nested Schema for `data`
@@ -34,7 +35,7 @@ Read-Only:
 - `database_count` (Number) The number of databases in the organization
 - `features` (Map of String) Features that can be enabled on the organization
 - `has_card` (Boolean) Whether or not the organization has a payment method on file
-- `has_past_due_invoices` (Boolean) Whether or not the organization has past due billing invoices
+- `has_past_due_invoices` (Boolean) Whether or not the organization has past due billing invoices.
 - `id` (String) The ID for the organization
 - `idp_managed_roles` (Boolean) Whether or not the IdP provider is be responsible for managing roles in PlanetScale
 - `invoice_budget_amount` (String) The expected monthly budget for the organization
@@ -46,6 +47,6 @@ Read-Only:
 - `single_tenancy` (Boolean) Whether or not the organization has single tenancy enabled
 - `sso` (Boolean) Whether or not SSO is enabled on the organization
 - `sso_directory` (Boolean) Whether or not the organization uses an SSO directory
-- `sso_portal_url` (String) The URL of the organization's SSO portal
+- `sso_portal_url` (String) The URL of the organization's SSO portal.
 - `updated_at` (String) When the organization was last updated
 - `valid_billing_info` (Boolean) Whether or not the organization's billing information is valid

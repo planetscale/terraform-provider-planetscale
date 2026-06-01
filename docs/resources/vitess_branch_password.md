@@ -54,7 +54,7 @@ resource "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
 - `expires_at` (String) When the password will expire
 - `id` (String) The ID of the password
 - `last_used_at` (String) When the password was last used to execute a query
-- `plain_text` (String, Sensitive) The plain text password, available only after create
+- `plain_text` (String, Sensitive) The plain text password. Null except in the response from the create endpoint.
 - `region` (Attributes) (see [below for nested schema](#nestedatt--region))
 - `renewable` (Boolean) Whether or not the password can be renewed
 - `ttl_seconds` (Number) Time to live (in seconds) for the password. The password will be invalid when TTL has passed
@@ -92,6 +92,8 @@ Read-Only:
 - `enabled` (Boolean) Whether or not the region is currently active
 - `id` (String) The ID of the region
 - `location` (String) Location of the region
+- `mysql_supported` (Boolean) Whether the region supports MySQL/Vitess databases
+- `postgresql_supported` (Boolean) Whether the region supports PostgreSQL databases
 - `provider` (String) Provider for the region (ex. AWS)
 - `public_ip_addresses` (List of String) Public IP addresses for the region
 - `slug` (String) The slug of the region

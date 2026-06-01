@@ -93,6 +93,8 @@ Read-Only:
 - `enabled` (Boolean) Whether or not the region is currently active
 - `id` (String) The ID of the region
 - `location` (String) Location of the region
+- `mysql_supported` (Boolean) Whether the region supports MySQL/Vitess databases
+- `postgresql_supported` (Boolean) Whether the region supports PostgreSQL databases
 - `provider` (String) Provider for the region (ex. AWS)
 - `public_ip_addresses` (List of String) Public IP addresses for the region
 - `slug` (String) The slug of the region

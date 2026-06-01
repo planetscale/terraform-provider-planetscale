@@ -26,21 +26,22 @@ func (r *PostgresBranchRolesDataSourceModel) RefreshFromOperationsListRolesRespo
 			data.Actor.AvatarURL = types.StringValue(dataItem.Actor.AvatarURL)
 			data.Actor.DisplayName = types.StringValue(dataItem.Actor.DisplayName)
 			data.Actor.ID = types.StringValue(dataItem.Actor.ID)
+			data.BaseUsername = types.StringValue(dataItem.BaseUsername)
 			data.Branch = &tfTypes.Branch{}
 			data.Branch.CreatedAt = types.StringValue(dataItem.Branch.CreatedAt)
-			data.Branch.DeletedAt = types.StringValue(dataItem.Branch.DeletedAt)
+			data.Branch.DeletedAt = types.StringPointerValue(dataItem.Branch.DeletedAt)
 			data.Branch.ID = types.StringValue(dataItem.Branch.ID)
 			data.Branch.Name = types.StringValue(dataItem.Branch.Name)
 			data.Branch.UpdatedAt = types.StringValue(dataItem.Branch.UpdatedAt)
 			data.CreatedAt = types.StringValue(dataItem.CreatedAt)
 			data.DatabaseName = types.StringValue(dataItem.DatabaseName)
 			data.Default = types.BoolValue(dataItem.Default)
-			data.DeletedAt = types.StringValue(dataItem.DeletedAt)
-			data.DisabledAt = types.StringValue(dataItem.DisabledAt)
+			data.DeletedAt = types.StringPointerValue(dataItem.DeletedAt)
+			data.DisabledAt = types.StringPointerValue(dataItem.DisabledAt)
 			data.DropFailed = types.StringValue(dataItem.DropFailed)
-			data.DroppedAt = types.StringValue(dataItem.DroppedAt)
+			data.DroppedAt = types.StringPointerValue(dataItem.DroppedAt)
 			data.Expired = types.BoolValue(dataItem.Expired)
-			data.ExpiresAt = types.StringValue(dataItem.ExpiresAt)
+			data.ExpiresAt = types.StringPointerValue(dataItem.ExpiresAt)
 			data.ID = types.StringValue(dataItem.ID)
 			if data.InheritedRoles == nil {
 				data.InheritedRoles = make([]types.String, 0, len(dataItem.InheritedRoles))
@@ -61,6 +62,7 @@ func (r *PostgresBranchRolesDataSourceModel) RefreshFromOperationsListRolesRespo
 
 			r.Data = append(r.Data, data)
 		}
+		r.Type = types.StringValue(resp.Type)
 	}
 
 	return diags

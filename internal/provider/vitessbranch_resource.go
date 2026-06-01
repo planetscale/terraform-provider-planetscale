@@ -39,23 +39,24 @@ type VitessBranchResource struct {
 
 // VitessBranchResourceModel describes the resource data model.
 type VitessBranchResourceModel struct {
-	Actor            *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
-	BackupID         types.String                       `tfsdk:"backup_id"`
-	ClusterSize      types.String                       `tfsdk:"cluster_size"`
-	Database         types.String                       `tfsdk:"database"`
-	HTMLURL          types.String                       `tfsdk:"html_url"`
-	ID               types.String                       `tfsdk:"id"`
-	MysqlAddress     types.String                       `tfsdk:"mysql_address"`
-	MysqlEdgeAddress types.String                       `tfsdk:"mysql_edge_address"`
-	Name             types.String                       `tfsdk:"name"`
-	Organization     types.String                       `tfsdk:"organization"`
-	ParentBranch     types.String                       `tfsdk:"parent_branch"`
-	Ready            types.Bool                         `tfsdk:"ready"`
-	Region           types.String                       `tfsdk:"region"`
-	RegionData       *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
-	SeedData         types.String                       `tfsdk:"seed_data"`
-	State            types.String                       `tfsdk:"state"`
-	URL              types.String                       `tfsdk:"url"`
+	Actor             *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
+	BackupID          types.String                       `tfsdk:"backup_id"`
+	ClusterSize       types.String                       `tfsdk:"cluster_size"`
+	Database          types.String                       `tfsdk:"database"`
+	DeleteDescendants types.Bool                         `queryParam:"style=form,explode=true,name=delete_descendants" tfsdk:"delete_descendants"`
+	HTMLURL           types.String                       `tfsdk:"html_url"`
+	ID                types.String                       `tfsdk:"id"`
+	MysqlAddress      types.String                       `tfsdk:"mysql_address"`
+	MysqlEdgeAddress  types.String                       `tfsdk:"mysql_edge_address"`
+	Name              types.String                       `tfsdk:"name"`
+	Organization      types.String                       `tfsdk:"organization"`
+	ParentBranch      types.String                       `tfsdk:"parent_branch"`
+	Ready             types.Bool                         `tfsdk:"ready"`
+	Region            types.String                       `tfsdk:"region"`
+	RegionData        *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	SeedData          types.String                       `tfsdk:"seed_data"`
+	State             types.String                       `tfsdk:"state"`
+	URL               types.String                       `tfsdk:"url"`
 }
 
 func (r *VitessBranchResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -97,6 +98,10 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
+			},
+			"delete_descendants": schema.BoolAttribute{
+				Optional:    true,
+				Description: `If true, recursively delete all descendant branches along with this branch`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
@@ -148,6 +153,14 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `The ID of the region`,
+					},
+					"mysql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports MySQL/Vitess databases`,
+					},
+					"postgresql_supported": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the region supports PostgreSQL databases`,
 					},
 				},
 			},

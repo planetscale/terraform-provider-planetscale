@@ -137,7 +137,7 @@ type Branch struct {
 	// When the resource was last updated
 	UpdatedAt string `json:"updated_at"`
 	// When the resource was deleted, if deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 }
 
 func (b *Branch) GetID() string {
@@ -168,9 +168,9 @@ func (b *Branch) GetUpdatedAt() string {
 	return b.UpdatedAt
 }
 
-func (b *Branch) GetDeletedAt() string {
+func (b *Branch) GetDeletedAt() *string {
 	if b == nil {
-		return ""
+		return nil
 	}
 	return b.DeletedAt
 }
@@ -299,6 +299,8 @@ type ListRolesData struct {
 	PrivateConnectionServiceName string `json:"private_connection_service_name"`
 	// The database user name
 	Username string `json:"username"`
+	// The base username without branch routing suffix
+	BaseUsername string `json:"base_username"`
 	// The plain text password, available only after create
 	Password string `json:"password"`
 	// The database name
@@ -308,13 +310,13 @@ type ListRolesData struct {
 	// When the role was updated
 	UpdatedAt string `json:"updated_at"`
 	// When the role was deleted
-	DeletedAt string `json:"deleted_at"`
+	DeletedAt *string `json:"deleted_at"`
 	// When the role expires
-	ExpiresAt string `json:"expires_at"`
+	ExpiresAt *string `json:"expires_at"`
 	// When the role was dropped
-	DroppedAt string `json:"dropped_at"`
+	DroppedAt *string `json:"dropped_at"`
 	// When the role was disabled
-	DisabledAt string `json:"disabled_at"`
+	DisabledAt *string `json:"disabled_at"`
 	// Error message available when dropping the role fails
 	DropFailed string `json:"drop_failed"`
 	// True if the credentials are expired
@@ -372,6 +374,13 @@ func (l *ListRolesData) GetUsername() string {
 	return l.Username
 }
 
+func (l *ListRolesData) GetBaseUsername() string {
+	if l == nil {
+		return ""
+	}
+	return l.BaseUsername
+}
+
 func (l *ListRolesData) GetPassword() string {
 	if l == nil {
 		return ""
@@ -400,30 +409,30 @@ func (l *ListRolesData) GetUpdatedAt() string {
 	return l.UpdatedAt
 }
 
-func (l *ListRolesData) GetDeletedAt() string {
+func (l *ListRolesData) GetDeletedAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.DeletedAt
 }
 
-func (l *ListRolesData) GetExpiresAt() string {
+func (l *ListRolesData) GetExpiresAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.ExpiresAt
 }
 
-func (l *ListRolesData) GetDroppedAt() string {
+func (l *ListRolesData) GetDroppedAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.DroppedAt
 }
 
-func (l *ListRolesData) GetDisabledAt() string {
+func (l *ListRolesData) GetDisabledAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.DisabledAt
 }
@@ -486,17 +495,26 @@ func (l *ListRolesData) GetQuerySafetySettings() ListRolesQuerySafetySettings {
 
 // ListRolesResponseBody - Returns roles
 type ListRolesResponseBody struct {
+	// The response type. Always "list" for paginated responses.
+	Type string `json:"type"`
 	// The current page number
 	CurrentPage int64 `json:"current_page"`
-	// The next page number
-	NextPage int64 `json:"next_page"`
-	// The next page of results
-	NextPageURL string `json:"next_page_url"`
-	// The previous page number
-	PrevPage int64 `json:"prev_page"`
-	// The previous page of results
-	PrevPageURL string          `json:"prev_page_url"`
+	// The next page number, or null when this is the last page
+	NextPage *int64 `json:"next_page"`
+	// The next page of results, or null when this is the last page
+	NextPageURL *string `json:"next_page_url"`
+	// The previous page number, or null when this is the first page
+	PrevPage *int64 `json:"prev_page"`
+	// The previous page of results, or null when this is the first page
+	PrevPageURL *string         `json:"prev_page_url"`
 	Data        []ListRolesData `json:"data"`
+}
+
+func (l *ListRolesResponseBody) GetType() string {
+	if l == nil {
+		return ""
+	}
+	return l.Type
 }
 
 func (l *ListRolesResponseBody) GetCurrentPage() int64 {
@@ -506,30 +524,30 @@ func (l *ListRolesResponseBody) GetCurrentPage() int64 {
 	return l.CurrentPage
 }
 
-func (l *ListRolesResponseBody) GetNextPage() int64 {
+func (l *ListRolesResponseBody) GetNextPage() *int64 {
 	if l == nil {
-		return 0
+		return nil
 	}
 	return l.NextPage
 }
 
-func (l *ListRolesResponseBody) GetNextPageURL() string {
+func (l *ListRolesResponseBody) GetNextPageURL() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.NextPageURL
 }
 
-func (l *ListRolesResponseBody) GetPrevPage() int64 {
+func (l *ListRolesResponseBody) GetPrevPage() *int64 {
 	if l == nil {
-		return 0
+		return nil
 	}
 	return l.PrevPage
 }
 
-func (l *ListRolesResponseBody) GetPrevPageURL() string {
+func (l *ListRolesResponseBody) GetPrevPageURL() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.PrevPageURL
 }

@@ -121,6 +121,10 @@ func (u *UpdatePostgresBranchActor) GetID() string {
 type UpdatePostgresBranchRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
+	// Whether the region supports MySQL/Vitess databases
+	MysqlSupported bool `json:"mysql_supported"`
+	// Whether the region supports PostgreSQL databases
+	PostgresqlSupported bool `json:"postgresql_supported"`
 }
 
 func (u *UpdatePostgresBranchRegionData) GetID() string {
@@ -128,6 +132,20 @@ func (u *UpdatePostgresBranchRegionData) GetID() string {
 		return ""
 	}
 	return u.ID
+}
+
+func (u *UpdatePostgresBranchRegionData) GetMysqlSupported() bool {
+	if u == nil {
+		return false
+	}
+	return u.MysqlSupported
+}
+
+func (u *UpdatePostgresBranchRegionData) GetPostgresqlSupported() bool {
+	if u == nil {
+		return false
+	}
+	return u.PostgresqlSupported
 }
 
 // UpdatePostgresBranchResponseBody - Returns the updated branch
@@ -141,15 +159,15 @@ type UpdatePostgresBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                      `json:"ready"`
-	Actor UpdatePostgresBranchActor `json:"actor"`
+	Ready bool                       `json:"ready"`
+	Actor *UpdatePostgresBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
 	URL        string                         `json:"url"`
 	RegionData UpdatePostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
-	ParentBranch string `json:"parent_branch"`
+	ParentBranch *string `json:"parent_branch"`
 }
 
 func (u *UpdatePostgresBranchResponseBody) GetID() string {
@@ -187,9 +205,9 @@ func (u *UpdatePostgresBranchResponseBody) GetReady() bool {
 	return u.Ready
 }
 
-func (u *UpdatePostgresBranchResponseBody) GetActor() UpdatePostgresBranchActor {
+func (u *UpdatePostgresBranchResponseBody) GetActor() *UpdatePostgresBranchActor {
 	if u == nil {
-		return UpdatePostgresBranchActor{}
+		return nil
 	}
 	return u.Actor
 }
@@ -215,9 +233,9 @@ func (u *UpdatePostgresBranchResponseBody) GetRegionData() UpdatePostgresBranchR
 	return u.RegionData
 }
 
-func (u *UpdatePostgresBranchResponseBody) GetParentBranch() string {
+func (u *UpdatePostgresBranchResponseBody) GetParentBranch() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
 	return u.ParentBranch
 }
