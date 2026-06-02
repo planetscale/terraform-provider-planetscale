@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 81b69c778daffc9835195865b8ce013c
+  docChecksum: d064f9b2667c44afbb0919958bf92042
   docVersion: v1
   speakeasyVersion: 1.769.1
   generationVersion: 2.892.1
@@ -90,6 +90,10 @@ trackedFiles:
     id: 954e955c0240
     last_write_checksum: sha1:0ad0f7a48b453ed2885b147299b3bcf6122ff4e5
     pristine_git_object: 66664be2637146405147ef9bc663d13b453ce3f8
+  examples/resources/planetscale_postgres_backup_policy/import-by-string-id.tf:
+    last_write_checksum: sha1:898e41884b689e8b155d6fbdaef64ac5487d6217
+  examples/resources/planetscale_postgres_backup_policy/import.sh:
+    last_write_checksum: sha1:7551aed4289fae524465487109840a0668bcb8a6
   examples/resources/planetscale_postgres_branch/import-by-string-id.tf:
     id: 84ea6cbb56ce
     last_write_checksum: sha1:01a3b5907c372a5e73e1f83e7d0f1afd7d19ea12
@@ -106,6 +110,10 @@ trackedFiles:
     id: e56202502423
     last_write_checksum: sha1:4bb0a2816363e404a66fde12cdd33deab712a2e8
     pristine_git_object: 06aae354a87031b23f6da8a3d618711d4412e1cf
+  examples/resources/planetscale_vitess_backup_policy/import-by-string-id.tf:
+    last_write_checksum: sha1:c38828097906908b883d778e6f67fdad6e81ec01
+  examples/resources/planetscale_vitess_backup_policy/import.sh:
+    last_write_checksum: sha1:49cfe80ee5d1b8ee5d6d62d19a91b306b9792703
   examples/resources/planetscale_vitess_branch/import-by-string-id.tf:
     id: 21f9a606ff1d
     last_write_checksum: sha1:997b4c9137d6574b9d62548c4ee67375c65ca4cb
@@ -261,13 +269,17 @@ trackedFiles:
     last_write_checksum: sha1:ba4f367f26942a534ae21b0ea4c55ac67a643a78
     pristine_git_object: a1d710ae3f5869fdb942700e564d26716f5eeb3f
   internal/provider/postgresbackuppolicies_data_source.go:
-    last_write_checksum: sha1:b2a5d752a5d95657f47f4072e5344382100d9237
+    last_write_checksum: sha1:1db21804589d23c8a094ba1503f7886edd1d623b
   internal/provider/postgresbackuppolicies_data_source_sdk.go:
-    last_write_checksum: sha1:83f10e464eb67fd2e07ceb94d1b171f2bb05bdb0
+    last_write_checksum: sha1:3e9e7f046fb1edae735c97229a6ab53062d7d237
   internal/provider/postgresbackuppolicy_data_source.go:
-    last_write_checksum: sha1:adc30356f32ab1383ed6f5ab4c8704f7c7252353
+    last_write_checksum: sha1:e31599088b2252ed9ab2d44e77a0a4ab023fec97
   internal/provider/postgresbackuppolicy_data_source_sdk.go:
-    last_write_checksum: sha1:5ad7e8f0738de641402cf3f5816adaba33cb26bb
+    last_write_checksum: sha1:6c583fe4df3d9ec490ebafeb673a2c092e0a4f56
+  internal/provider/postgresbackuppolicy_resource.go:
+    last_write_checksum: sha1:4649580beb1d715b203b867817c2a3970740884f
+  internal/provider/postgresbackuppolicy_resource_sdk.go:
+    last_write_checksum: sha1:b38256e8bce7919d2527aa47ef83351face30d03
   internal/provider/postgresbranch_data_source.go:
     id: 3d4847eac64b
     last_write_checksum: sha1:52057dd73680e2d57a7605e85bdac901452a39ba
@@ -310,7 +322,7 @@ trackedFiles:
     pristine_git_object: 742cc9f5207b5c30ed21b0aae674ac8302c237e8
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:4f19a0fc26ef39f5d7fd53562e1b9459260150a8
+    last_write_checksum: sha1:eb8ee864fc7f818884346b16d459a41a661c644d
     pristine_git_object: d5212c5b98f75bdedecef2af4ef7079732ac749d
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -483,7 +495,7 @@ trackedFiles:
     last_write_checksum: sha1:41a2cdf6cd52c723e9c5883f81bb8b177178e44a
     pristine_git_object: 1aa2a745a37d7255a61a772319991d2dad50a76f
   internal/provider/types/list_postgres_backup_policies_data.go:
-    last_write_checksum: sha1:4dad1033bd1df00abe11de53c5e97af0483ae2a9
+    last_write_checksum: sha1:7a318169bd3757896837220eb7b3a33d3768c5a1
   internal/provider/types/list_roles_actor.go:
     id: 34a6e1993469
     last_write_checksum: sha1:843040e557d810db6fa718ad259c940d75c964d1
@@ -495,19 +507,23 @@ trackedFiles:
   internal/provider/types/list_roles_query_safety_settings.go:
     last_write_checksum: sha1:7edaece7446c6bbf2d8bce4316edc860a5398ee7
   internal/provider/types/list_vitess_backup_policies_data.go:
-    last_write_checksum: sha1:0733774e39ac2f35450085da33b8aed61a1c765a
+    last_write_checksum: sha1:ea761e1b38a8d46d1c906115092cf6000cd2d6e1
   internal/provider/utils.go:
     id: 312d50f148af
     last_write_checksum: sha1:35cfbc55bcb517f3cea914367e2792234343bc52
     pristine_git_object: 2b167edfe9b7df08d35bacb896143fd8c6e3bf8c
   internal/provider/vitessbackuppolicies_data_source.go:
-    last_write_checksum: sha1:a9c0f2c4629929915debb773fb745628514a41da
+    last_write_checksum: sha1:89d57e51702e46c412978a5c9be2ac0dffb09a94
   internal/provider/vitessbackuppolicies_data_source_sdk.go:
-    last_write_checksum: sha1:cc34caf06993c0f055b7c155d2a2c1616952e831
+    last_write_checksum: sha1:ee8dfba31adbc177cb79a9a620f54c989b4bb0d0
   internal/provider/vitessbackuppolicy_data_source.go:
-    last_write_checksum: sha1:5e5a05894062dc1238ebfee3826367c00678c644
+    last_write_checksum: sha1:e8be56f814c2d2d61efd6b58e3a15c96eb50189e
   internal/provider/vitessbackuppolicy_data_source_sdk.go:
-    last_write_checksum: sha1:a62b4ca600f347da479ad275df009c9cd4b5e70a
+    last_write_checksum: sha1:2e56103b8421aeb308ea1159d72d06bf03be2815
+  internal/provider/vitessbackuppolicy_resource.go:
+    last_write_checksum: sha1:dde3c2a5285846930b2110d05bf5581f29c1b325
+  internal/provider/vitessbackuppolicy_resource_sdk.go:
+    last_write_checksum: sha1:acb5f599eba200eda44d61c40d9cc8609702ff1a
   internal/provider/vitessbranch_data_source.go:
     id: 4ef7739d6663
     last_write_checksum: sha1:f2b669c928f38318357237f3b9895b3e6b56adbd
@@ -553,7 +569,7 @@ trackedFiles:
     last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
   internal/sdk/backuppolicies.go:
-    last_write_checksum: sha1:8f21867f4b777a098270c04b48a9cb19f22e5ab5
+    last_write_checksum: sha1:de9f729a4f62ab554657442244923bfa227c9ef4
   internal/sdk/branchchanges.go:
     last_write_checksum: sha1:f3e6d0eefca1d9340cee2ee976628619e7869022
   internal/sdk/databasebranches.go:
@@ -640,6 +656,8 @@ trackedFiles:
     id: 9f61008ec29b
     last_write_checksum: sha1:b32e9ad276ce29e0aabd2803b652b84a395522ed
     pristine_git_object: e84cf733d521e8be177285c0496c8540f011c362
+  internal/sdk/models/operations/createpostgresbackuppolicy.go:
+    last_write_checksum: sha1:d737c8f5f4672671f66911b7a42112d44dd82a95
   internal/sdk/models/operations/createpostgresbranch.go:
     id: 952731e87008
     last_write_checksum: sha1:99be76733879b5f0f1be902f0edbf5bf7d5d51ce
@@ -648,6 +666,8 @@ trackedFiles:
     id: c1b593dedb4d
     last_write_checksum: sha1:1ca2992790c08bd27654401016c3b0f16ae54800
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
+  internal/sdk/models/operations/createvitessbackuppolicy.go:
+    last_write_checksum: sha1:4014318c9b60d1dcc3a34c13e9f77137b92d5ac9
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
     last_write_checksum: sha1:4a34e34c1b4482cc59068a7fc29c47a68b4134f8
@@ -656,6 +676,8 @@ trackedFiles:
     id: 491914016b46
     last_write_checksum: sha1:7cda022c4378b37caab734de44dad29ca170c4ed
     pristine_git_object: 00fb90f9f8cb86916ff644e893dc5db362c004cf
+  internal/sdk/models/operations/deletepostgresbackuppolicy.go:
+    last_write_checksum: sha1:1426e9e12be9c33917a27d12f93e5c62bd7e6d23
   internal/sdk/models/operations/deletepostgresbranch.go:
     id: 556d141a1131
     last_write_checksum: sha1:3f6f2c2a5f5a5c415f62080b873a6c28ddb7f793
@@ -664,6 +686,8 @@ trackedFiles:
     id: 63abc80d4993
     last_write_checksum: sha1:da3f62610bb80cd0de0c3e3b0242926a6a151ca1
     pristine_git_object: 26de167508a6ba14741fd13262ec8137c8d70023
+  internal/sdk/models/operations/deletevitessbackuppolicy.go:
+    last_write_checksum: sha1:72813baf46131bf241c5af489202d3a62114e318
   internal/sdk/models/operations/deletevitessbranch.go:
     id: d38f63b60ddf
     last_write_checksum: sha1:b71841cdf4a80c42fda8f9e32b22fee2fcba7a83
@@ -679,7 +703,7 @@ trackedFiles:
     last_write_checksum: sha1:9521b0f962dfa6cbab5e9665812e365462dc824f
     pristine_git_object: a4c11b32082c9f2f4f56a644c50a8da506fe64e7
   internal/sdk/models/operations/getpostgresbackuppolicy.go:
-    last_write_checksum: sha1:1ae1e6c92e4edbe339a07d163d4947f978f00efa
+    last_write_checksum: sha1:d73ada12a6237fb6f716e184a46aa83e6331a01b
   internal/sdk/models/operations/getpostgresbranch.go:
     id: e4f92de0a1c5
     last_write_checksum: sha1:a79806315b5a9fd25088946620dccb557f7de8cb
@@ -693,7 +717,7 @@ trackedFiles:
     last_write_checksum: sha1:f8e89aaba1abed93fc3b9a237f78b8caa549a9e9
     pristine_git_object: 019cd3b4fa0b8af2ac8f806b8f0b8ce776a2588e
   internal/sdk/models/operations/getvitessbackuppolicy.go:
-    last_write_checksum: sha1:dd1b88afcce6ef0814b8a6ea7028a341c1a67e60
+    last_write_checksum: sha1:c7d6b268693f1a7790bb55db9ad50c879e901346
   internal/sdk/models/operations/getvitessbranch.go:
     id: 91f8cc51ecc6
     last_write_checksum: sha1:4556591d1aabf65a9008d2857285c66411c19c65
@@ -715,13 +739,13 @@ trackedFiles:
     last_write_checksum: sha1:4daa2e1ed7913fc64bed7d1e61ebcb561dfa234d
     pristine_git_object: 9671f2dd9a77b1d0045665c26e0aa2f66aa8fcd4
   internal/sdk/models/operations/listpostgresbackuppolicies.go:
-    last_write_checksum: sha1:2d679b7cc9654a686746c5cfefc279b0cb2616e3
+    last_write_checksum: sha1:371b5a2a03078ef435da97e88be8996f15401561
   internal/sdk/models/operations/listroles.go:
     id: ba1976927ea8
     last_write_checksum: sha1:31153a3f3d5355f3071e34220e3d20a0938a6b18
     pristine_git_object: 2759d9ffe5333235ea0787dc880ea888ed739c68
   internal/sdk/models/operations/listvitessbackuppolicies.go:
-    last_write_checksum: sha1:d8f72f8b0d66c2a9860e39e53a056855abe352d1
+    last_write_checksum: sha1:bab6385f83583a3d5a884559a340fd84196bb136
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
     last_write_checksum: sha1:6af734f59773c359e9dfd9b7b0547df38e436581
@@ -732,12 +756,16 @@ trackedFiles:
     id: ec303a6a3bd2
     last_write_checksum: sha1:54da4ea20c1dfbb193d128c690b6a2050e9898ca
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
+  internal/sdk/models/operations/updatepostgresbackuppolicy.go:
+    last_write_checksum: sha1:7bb8cc62a79f2f34b1c57b8cf2cfa0a87e22ab46
   internal/sdk/models/operations/updatepostgresbranch.go:
     last_write_checksum: sha1:dd3fef51590fa7fbdb2bb12611275a7d5fb058ff
   internal/sdk/models/operations/updaterole.go:
     id: eaca616a88af
     last_write_checksum: sha1:1074fad44f2fb20046db7209931f6c146f094430
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
+  internal/sdk/models/operations/updatevitessbackuppolicy.go:
+    last_write_checksum: sha1:14ce98a76dedd3b97d91a3a13259be8263574317
   internal/sdk/models/operations/updatevitessbranch.go:
     last_write_checksum: sha1:a59e2f859611d8a39679a1cd6c553ecb0f4528ca
   internal/sdk/models/shared/security.go:
@@ -2451,7 +2479,7 @@ examples:
           database: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "display_name": "Mallie.Stroman64", "name": "<value>", "target": "production", "retention_value": 242783, "retention_unit": "<value>", "frequency_value": 680544, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 772709, "schedule_week": 317066, "last_ran_at": null, "next_run_at": "<value>", "required": true}
+          application/json: {"id": "<id>", "display_name": "Mallie.Stroman64", "name": "<value>", "target": "production", "retention_value": 242783, "retention_unit": "<value>", "frequency_value": 680544, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 772709, "schedule_week": 317066}
   list_postgres_backup_policies:
     speakeasy-default-list-postgres-backup-policies:
       parameters:
@@ -2473,7 +2501,59 @@ examples:
           database: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "display_name": "Bria.Pouros31", "name": "<value>", "target": "development", "retention_value": 835899, "retention_unit": "<value>", "frequency_value": 602317, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 216905, "schedule_week": 615517, "last_ran_at": "<value>", "next_run_at": "<value>", "required": false}
+          application/json: {"id": "<id>", "display_name": "Bria.Pouros31", "name": "<value>", "target": "development", "retention_value": 835899, "retention_unit": "<value>", "frequency_value": 602317, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 216905, "schedule_week": 615517}
+  create_vitess_backup_policy:
+    speakeasy-default-create-vitess-backup-policy:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "display_name": "Coy.Wuckert", "name": "<value>", "target": "production", "retention_value": 209992, "retention_unit": "<value>", "frequency_value": 986789, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 105419, "schedule_week": 754237}
+  update_vitess_backup_policy:
+    speakeasy-default-update-vitess-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Naomie_Fritsch", "name": "<value>", "target": "production", "retention_value": 144042, "retention_unit": "<value>", "frequency_value": 258466, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 347256, "schedule_week": null}
+  delete_vitess_backup_policy:
+    speakeasy-default-delete-vitess-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+  create_postgres_backup_policy:
+    speakeasy-default-create-postgres-backup-policy:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "display_name": "Katarina7", "name": "<value>", "target": "development", "retention_value": 735625, "retention_unit": "<value>", "frequency_value": 629978, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 198337, "schedule_week": 114014}
+  update_postgres_backup_policy:
+    speakeasy-default-update-postgres-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Laurine74", "name": "<value>", "target": "development", "retention_value": 241310, "retention_unit": "<value>", "frequency_value": 514024, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 359947, "schedule_week": 84132}
+  delete_postgres_backup_policy:
+    speakeasy-default-delete-postgres-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

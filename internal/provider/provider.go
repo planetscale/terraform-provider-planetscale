@@ -148,8 +148,10 @@ func (p *PlanetscaleProvider) Actions(_ context.Context) []func() action.Action 
 
 func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
+		NewPostgresBackupPolicyResource,
 		NewPostgresBranchResource,
 		NewPostgresBranchRoleResource,
+		NewVitessBackupPolicyResource,
 		NewVitessBranchResource,
 		NewVitessBranchPasswordResource,
 	}

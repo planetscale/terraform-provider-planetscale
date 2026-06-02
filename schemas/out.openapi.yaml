@@ -5162,17 +5162,6 @@ paths:
                           type: integer
                           description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                           nullable: true
-                        last_ran_at:
-                          type: string
-                          description: When the backup was last run
-                          nullable: true
-                        next_run_at:
-                          type: string
-                          description: When the backup will next run
-                          nullable: true
-                        required:
-                          type: boolean
-                          description: Whether the policy is a required system backup
                       required:
                         - id
                         - display_name
@@ -5229,6 +5218,158 @@ paths:
             type: page
         outputs:
           results: $.data
+    post:
+      tags:
+        - BackupPolicies
+      operationId: create_vitess_backup_policy
+      summary: Create a Vitess backup policy
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the backup policy
+                target:
+                  type: string
+                  enum:
+                    - production
+                    - development
+                  description: Whether the policy is for production or development branches
+                retention_value:
+                  type: integer
+                  description: A number value for the retention period of the backup policy
+                retention_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                    - year
+                  description: The unit for the retention period of the backup policy
+                frequency_value:
+                  type: integer
+                  description: A number value for the frequency of the backup policy
+                frequency_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                  description: The unit for the frequency of the backup policy
+                schedule_time:
+                  type: string
+                  description: The time of day that the backup is scheduled, in HH:MM format
+                schedule_day:
+                  type: integer
+                  description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                schedule_week:
+                  type: integer
+                  description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+      responses:
+        "201":
+          description: Returns the created backup policy
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup policy
+                  display_name:
+                    type: string
+                    description: The display name of the backup policy
+                  name:
+                    type: string
+                    description: The name of the backup policy
+                  target:
+                    type: string
+                    enum:
+                      - production
+                      - development
+                    description: Whether the policy is for production or development branches
+                  retention_value:
+                    type: integer
+                    description: A number value for the retention period of the backup policy
+                  retention_unit:
+                    type: string
+                    description: The unit for the retention period of the backup policy
+                  frequency_value:
+                    type: integer
+                    description: A number value for the frequency of the backup policy
+                  frequency_unit:
+                    type: string
+                    description: The unit for the frequency of the backup policy
+                  schedule_time:
+                    type: string
+                    description: The time of day that the backup is scheduled, in HH:MM format
+                  schedule_day:
+                    type: integer
+                    description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                    nullable: true
+                  schedule_week:
+                    type: integer
+                    description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                    nullable: true
+                required:
+                  - id
+                  - display_name
+                  - name
+                  - target
+                  - retention_value
+                  - retention_unit
+                  - frequency_value
+                  - frequency_unit
+                  - schedule_time
+                  - schedule_day
+                  - schedule_week
+                  - created_at
+                  - updated_at
+                  - last_ran_at
+                  - next_run_at
+                  - required
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+      x-speakeasy-entity-operation: VitessBackupPolicy#create
+      x-speakeasy-entity-description: Manage a PlanetScale Vitess database backup policy.
   /organizations/{organization}/databases/{database}/backup-policies/{id}#vitess:
     get:
       tags:
@@ -5301,17 +5442,6 @@ paths:
                     type: integer
                     description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                     nullable: true
-                  last_ran_at:
-                    type: string
-                    description: When the backup was last run
-                    nullable: true
-                  next_run_at:
-                    type: string
-                    description: When the backup will next run
-                    nullable: true
-                  required:
-                    type: boolean
-                    description: Whether the policy is a required system backup
                 required:
                   - id
                   - display_name
@@ -5352,6 +5482,213 @@ paths:
         | Database | `read_backups` |
       x-speakeasy-entity-operation: VitessBackupPolicy#read
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database backup policy.
+    patch:
+      tags:
+        - BackupPolicies
+      operationId: update_vitess_backup_policy
+      summary: Update a Vitess backup policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup policy
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the backup policy
+                target:
+                  type: string
+                  enum:
+                    - production
+                    - development
+                  description: Whether the policy is for production or development branches
+                retention_value:
+                  type: integer
+                  description: A number value for the retention period of the backup policy
+                retention_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                    - year
+                  description: The unit for the retention period of the backup policy
+                frequency_value:
+                  type: integer
+                  description: A number value for the frequency of the backup policy
+                frequency_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                  description: The unit for the frequency of the backup policy
+                schedule_time:
+                  type: string
+                  description: The time of day that the backup is scheduled, in HH:MM format
+                schedule_day:
+                  type: integer
+                  description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                schedule_week:
+                  type: integer
+                  description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+      responses:
+        "200":
+          description: Returns the updated backup policy
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup policy
+                  display_name:
+                    type: string
+                    description: The display name of the backup policy
+                  name:
+                    type: string
+                    description: The name of the backup policy
+                  target:
+                    type: string
+                    enum:
+                      - production
+                      - development
+                    description: Whether the policy is for production or development branches
+                  retention_value:
+                    type: integer
+                    description: A number value for the retention period of the backup policy
+                  retention_unit:
+                    type: string
+                    description: The unit for the retention period of the backup policy
+                  frequency_value:
+                    type: integer
+                    description: A number value for the frequency of the backup policy
+                  frequency_unit:
+                    type: string
+                    description: The unit for the frequency of the backup policy
+                  schedule_time:
+                    type: string
+                    description: The time of day that the backup is scheduled, in HH:MM format
+                  schedule_day:
+                    type: integer
+                    description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                    nullable: true
+                  schedule_week:
+                    type: integer
+                    description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                    nullable: true
+                required:
+                  - id
+                  - display_name
+                  - name
+                  - target
+                  - retention_value
+                  - retention_unit
+                  - frequency_value
+                  - frequency_unit
+                  - schedule_time
+                  - schedule_day
+                  - schedule_week
+                  - created_at
+                  - updated_at
+                  - last_ran_at
+                  - next_run_at
+                  - required
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+      x-speakeasy-entity-operation: VitessBackupPolicy#update
+    delete:
+      tags:
+        - BackupPolicies
+      operationId: delete_vitess_backup_policy
+      summary: Delete a Vitess backup policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup policy
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Returns no content
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+      x-speakeasy-entity-operation: VitessBackupPolicy#delete
   /organizations/{organization}/databases/{database}/backup-policies#postgres:
     get:
       tags:
@@ -5464,17 +5801,6 @@ paths:
                           type: integer
                           description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                           nullable: true
-                        last_ran_at:
-                          type: string
-                          description: When the backup was last run
-                          nullable: true
-                        next_run_at:
-                          type: string
-                          description: When the backup will next run
-                          nullable: true
-                        required:
-                          type: boolean
-                          description: Whether the policy is a required system backup
                       required:
                         - id
                         - display_name
@@ -5531,6 +5857,158 @@ paths:
             type: page
         outputs:
           results: $.data
+    post:
+      tags:
+        - BackupPolicies
+      operationId: create_postgres_backup_policy
+      summary: Create a Postgres backup policy
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the backup policy
+                target:
+                  type: string
+                  enum:
+                    - production
+                    - development
+                  description: Whether the policy is for production or development branches
+                retention_value:
+                  type: integer
+                  description: A number value for the retention period of the backup policy
+                retention_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                    - year
+                  description: The unit for the retention period of the backup policy
+                frequency_value:
+                  type: integer
+                  description: A number value for the frequency of the backup policy
+                frequency_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                  description: The unit for the frequency of the backup policy
+                schedule_time:
+                  type: string
+                  description: The time of day that the backup is scheduled, in HH:MM format
+                schedule_day:
+                  type: integer
+                  description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                schedule_week:
+                  type: integer
+                  description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+      responses:
+        "201":
+          description: Returns the created backup policy
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup policy
+                  display_name:
+                    type: string
+                    description: The display name of the backup policy
+                  name:
+                    type: string
+                    description: The name of the backup policy
+                  target:
+                    type: string
+                    enum:
+                      - production
+                      - development
+                    description: Whether the policy is for production or development branches
+                  retention_value:
+                    type: integer
+                    description: A number value for the retention period of the backup policy
+                  retention_unit:
+                    type: string
+                    description: The unit for the retention period of the backup policy
+                  frequency_value:
+                    type: integer
+                    description: A number value for the frequency of the backup policy
+                  frequency_unit:
+                    type: string
+                    description: The unit for the frequency of the backup policy
+                  schedule_time:
+                    type: string
+                    description: The time of day that the backup is scheduled, in HH:MM format
+                  schedule_day:
+                    type: integer
+                    description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                    nullable: true
+                  schedule_week:
+                    type: integer
+                    description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                    nullable: true
+                required:
+                  - id
+                  - display_name
+                  - name
+                  - target
+                  - retention_value
+                  - retention_unit
+                  - frequency_value
+                  - frequency_unit
+                  - schedule_time
+                  - schedule_day
+                  - schedule_week
+                  - created_at
+                  - updated_at
+                  - last_ran_at
+                  - next_run_at
+                  - required
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+      x-speakeasy-entity-operation: PostgresBackupPolicy#create
+      x-speakeasy-entity-description: Manage a PlanetScale Postgres database backup policy.
   /organizations/{organization}/databases/{database}/backup-policies/{id}#postgres:
     get:
       tags:
@@ -5603,17 +6081,6 @@ paths:
                     type: integer
                     description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
                     nullable: true
-                  last_ran_at:
-                    type: string
-                    description: When the backup was last run
-                    nullable: true
-                  next_run_at:
-                    type: string
-                    description: When the backup will next run
-                    nullable: true
-                  required:
-                    type: boolean
-                    description: Whether the policy is a required system backup
                 required:
                   - id
                   - display_name
@@ -5654,6 +6121,213 @@ paths:
         | Database | `read_backups` |
       x-speakeasy-entity-operation: PostgresBackupPolicy#read
       x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database backup policy.
+    patch:
+      tags:
+        - BackupPolicies
+      operationId: update_postgres_backup_policy
+      summary: Update a Postgres backup policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup policy
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the backup policy
+                target:
+                  type: string
+                  enum:
+                    - production
+                    - development
+                  description: Whether the policy is for production or development branches
+                retention_value:
+                  type: integer
+                  description: A number value for the retention period of the backup policy
+                retention_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                    - year
+                  description: The unit for the retention period of the backup policy
+                frequency_value:
+                  type: integer
+                  description: A number value for the frequency of the backup policy
+                frequency_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                  description: The unit for the frequency of the backup policy
+                schedule_time:
+                  type: string
+                  description: The time of day that the backup is scheduled, in HH:MM format
+                schedule_day:
+                  type: integer
+                  description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                schedule_week:
+                  type: integer
+                  description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+      responses:
+        "200":
+          description: Returns the updated backup policy
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup policy
+                  display_name:
+                    type: string
+                    description: The display name of the backup policy
+                  name:
+                    type: string
+                    description: The name of the backup policy
+                  target:
+                    type: string
+                    enum:
+                      - production
+                      - development
+                    description: Whether the policy is for production or development branches
+                  retention_value:
+                    type: integer
+                    description: A number value for the retention period of the backup policy
+                  retention_unit:
+                    type: string
+                    description: The unit for the retention period of the backup policy
+                  frequency_value:
+                    type: integer
+                    description: A number value for the frequency of the backup policy
+                  frequency_unit:
+                    type: string
+                    description: The unit for the frequency of the backup policy
+                  schedule_time:
+                    type: string
+                    description: The time of day that the backup is scheduled, in HH:MM format
+                  schedule_day:
+                    type: integer
+                    description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                    nullable: true
+                  schedule_week:
+                    type: integer
+                    description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                    nullable: true
+                required:
+                  - id
+                  - display_name
+                  - name
+                  - target
+                  - retention_value
+                  - retention_unit
+                  - frequency_value
+                  - frequency_unit
+                  - schedule_time
+                  - schedule_day
+                  - schedule_week
+                  - created_at
+                  - updated_at
+                  - last_ran_at
+                  - next_run_at
+                  - required
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+      x-speakeasy-entity-operation: PostgresBackupPolicy#update
+    delete:
+      tags:
+        - BackupPolicies
+      operationId: delete_postgres_backup_policy
+      summary: Delete a Postgres backup policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup policy
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Returns no content
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+      x-speakeasy-entity-operation: PostgresBackupPolicy#delete
 tags:
   - name: BackupPolicies
     description: |2

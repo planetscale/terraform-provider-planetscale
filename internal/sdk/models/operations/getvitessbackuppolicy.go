@@ -90,12 +90,6 @@ type GetVitessBackupPolicyResponseBody struct {
 	ScheduleDay *int64 `json:"schedule_day"`
 	// Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
 	ScheduleWeek *int64 `json:"schedule_week"`
-	// When the backup was last run
-	LastRanAt *string `json:"last_ran_at"`
-	// When the backup will next run
-	NextRunAt *string `json:"next_run_at"`
-	// Whether the policy is a required system backup
-	Required bool `json:"required"`
 }
 
 func (g *GetVitessBackupPolicyResponseBody) GetID() string {
@@ -173,27 +167,6 @@ func (g *GetVitessBackupPolicyResponseBody) GetScheduleWeek() *int64 {
 		return nil
 	}
 	return g.ScheduleWeek
-}
-
-func (g *GetVitessBackupPolicyResponseBody) GetLastRanAt() *string {
-	if g == nil {
-		return nil
-	}
-	return g.LastRanAt
-}
-
-func (g *GetVitessBackupPolicyResponseBody) GetNextRunAt() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NextRunAt
-}
-
-func (g *GetVitessBackupPolicyResponseBody) GetRequired() bool {
-	if g == nil {
-		return false
-	}
-	return g.Required
 }
 
 type GetVitessBackupPolicyResponse struct {
