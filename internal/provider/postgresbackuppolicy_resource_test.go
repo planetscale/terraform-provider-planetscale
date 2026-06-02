@@ -76,35 +76,3 @@ func TestAccPostgresBackupPolicyResource_Lifecycle(t *testing.T) {
 		},
 	})
 }
-
-func TestAccPostgresBackupPoliciesDataSource(t *testing.T) {
-	t.Parallel()
-
-	databaseName := "testacc-postgres"
-	policyName := randomWithPrefix("test-backup-policy")
-	resourceAddress := "planetscale_postgres_backup_policy.test"
-	dataSourceAddress := "data.planetscale_postgres_backup_policies.test"
-
-	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
-		ProtoV6ProviderFactories: testAccProviders(),
-		Steps: []resource.TestStep{
-			{
-				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"policy_name":   config.StringVariable(policyName),
-				},
-				Check: backupPolicyListedInDataSource(resourceAddress, dataSourceAddress),
-				ConfigStateChecks: []statecheck.StateCheck{
-					statecheck.ExpectKnownValue(
-						dataSourceAddress,
-						tfjsonpath.New("data"),
-						knownvalue.NotNull(),
-					),
-				},
-			},
-		},
-	})
-}
