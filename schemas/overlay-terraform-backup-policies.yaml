@@ -38,6 +38,30 @@ actions:
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema.properties.updated_at
     remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].post.responses['201'].content['application/json'].schema.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].post.responses['201'].content['application/json'].schema.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].post.responses['201'].content['application/json'].schema.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].get.responses['200'].content['application/json'].schema.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].get.responses['200'].content['application/json'].schema.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].get.responses['200'].content['application/json'].schema.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema.properties.required
+    remove: true
 
   # Copy and split backup policy paths for Vitess and Postgres resources
   - target: $.paths

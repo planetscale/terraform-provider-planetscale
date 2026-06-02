@@ -1,13 +1,32 @@
 overlay: 1.1.0
 x-speakeasy-jsonpath: rfc9535
 info:
-  title: Terraform generation overlay for planetscale_vitess_backup_policy data resource.
+  title: Terraform generation overlay for planetscale_vitess_backup_policy managed resource.
   version: 0.0.1
 actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#vitess'].post
+    description: API operation for managed resource create
+    update:
+      operationId: create_vitess_backup_policy
+      summary: Create a Vitess backup policy
+      x-speakeasy-entity-operation: VitessBackupPolicy#create
+      x-speakeasy-entity-description: Manage a PlanetScale Vitess database backup policy.
   - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#vitess'].get
-    description: API operation for data resource read
+    description: API operation for managed resource read
     update:
       operationId: get_vitess_backup_policy
       summary: Get a Vitess backup policy
       x-speakeasy-entity-operation: VitessBackupPolicy#read
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database backup policy.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#vitess'].patch
+    description: API operation for managed resource update
+    update:
+      operationId: update_vitess_backup_policy
+      summary: Update a Vitess backup policy
+      x-speakeasy-entity-operation: VitessBackupPolicy#update
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#vitess'].delete
+    description: API operation for managed resource delete
+    update:
+      operationId: delete_vitess_backup_policy
+      summary: Delete a Vitess backup policy
+      x-speakeasy-entity-operation: VitessBackupPolicy#delete

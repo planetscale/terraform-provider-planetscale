@@ -1,13 +1,32 @@
 overlay: 1.1.0
 x-speakeasy-jsonpath: rfc9535
 info:
-  title: Terraform generation overlay for planetscale_postgres_backup_policy data resource.
+  title: Terraform generation overlay for planetscale_postgres_backup_policy managed resource.
   version: 0.0.1
 actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#postgres'].post
+    description: API operation for managed resource create
+    update:
+      operationId: create_postgres_backup_policy
+      summary: Create a Postgres backup policy
+      x-speakeasy-entity-operation: PostgresBackupPolicy#create
+      x-speakeasy-entity-description: Manage a PlanetScale Postgres database backup policy.
   - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#postgres'].get
-    description: API operation for data resource read
+    description: API operation for managed resource read
     update:
       operationId: get_postgres_backup_policy
       summary: Get a Postgres backup policy
       x-speakeasy-entity-operation: PostgresBackupPolicy#read
       x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database backup policy.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#postgres'].patch
+    description: API operation for managed resource update
+    update:
+      operationId: update_postgres_backup_policy
+      summary: Update a Postgres backup policy
+      x-speakeasy-entity-operation: PostgresBackupPolicy#update
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#postgres'].delete
+    description: API operation for managed resource delete
+    update:
+      operationId: delete_postgres_backup_policy
+      summary: Delete a Postgres backup policy
+      x-speakeasy-entity-operation: PostgresBackupPolicy#delete

@@ -65,21 +65,9 @@ func (r *PostgresBackupPoliciesDataSource) Schema(ctx context.Context, req datas
 							Computed:    true,
 							Description: `The ID of the backup policy`,
 						},
-						"last_ran_at": schema.StringAttribute{
-							Computed:    true,
-							Description: `When the backup was last run`,
-						},
 						"name": schema.StringAttribute{
 							Computed:    true,
 							Description: `The name of the backup policy`,
-						},
-						"next_run_at": schema.StringAttribute{
-							Computed:    true,
-							Description: `When the backup will next run`,
-						},
-						"required": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Whether the policy is a required system backup`,
 						},
 						"retention_unit": schema.StringAttribute{
 							Computed:    true,

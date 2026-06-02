@@ -11,10 +11,7 @@ type ListVitessBackupPoliciesData struct {
 	FrequencyUnit  types.String `tfsdk:"frequency_unit"`
 	FrequencyValue types.Int64  `tfsdk:"frequency_value"`
 	ID             types.String `tfsdk:"id"`
-	LastRanAt      types.String `tfsdk:"last_ran_at"`
 	Name           types.String `tfsdk:"name"`
-	NextRunAt      types.String `tfsdk:"next_run_at"`
-	Required       types.Bool   `tfsdk:"required"`
 	RetentionUnit  types.String `tfsdk:"retention_unit"`
 	RetentionValue types.Int64  `tfsdk:"retention_value"`
 	ScheduleDay    types.Int64  `tfsdk:"schedule_day"`

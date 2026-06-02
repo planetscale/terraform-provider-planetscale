@@ -33,11 +33,8 @@ type PostgresBackupPolicyDataSourceModel struct {
 	FrequencyUnit  types.String `tfsdk:"frequency_unit"`
 	FrequencyValue types.Int64  `tfsdk:"frequency_value"`
 	ID             types.String `tfsdk:"id"`
-	LastRanAt      types.String `tfsdk:"last_ran_at"`
 	Name           types.String `tfsdk:"name"`
-	NextRunAt      types.String `tfsdk:"next_run_at"`
 	Organization   types.String `tfsdk:"organization"`
-	Required       types.Bool   `tfsdk:"required"`
 	RetentionUnit  types.String `tfsdk:"retention_unit"`
 	RetentionValue types.Int64  `tfsdk:"retention_value"`
 	ScheduleDay    types.Int64  `tfsdk:"schedule_day"`
@@ -77,25 +74,13 @@ func (r *PostgresBackupPolicyDataSource) Schema(ctx context.Context, req datasou
 				Required:    true,
 				Description: `The ID of the backup policy`,
 			},
-			"last_ran_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the backup was last run`,
-			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The name of the backup policy`,
 			},
-			"next_run_at": schema.StringAttribute{
-				Computed:    true,
-				Description: `When the backup will next run`,
-			},
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
-			},
-			"required": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether the policy is a required system backup`,
 			},
 			"retention_unit": schema.StringAttribute{
 				Computed:    true,
