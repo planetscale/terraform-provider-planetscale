@@ -21,6 +21,12 @@ sources:
             - location: schemas/overlay-terraform-vitess-branch-password.yaml
             - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
 
+            - location: schemas/overlay-terraform-backup-policies.yaml
+            - location: schemas/overlay-terraform-vitess-backup-policy.yaml
+            - location: schemas/overlay-terraform-postgres-backup-policy.yaml
+            - location: schemas/overlay-terraform-vitess-backup-policies.yaml
+            - location: schemas/overlay-terraform-postgres-backup-policies.yaml
+
             - location: schemas/overlay-terraform-cleanup.yaml
         output: schemas/out.openapi.yaml
         registry:

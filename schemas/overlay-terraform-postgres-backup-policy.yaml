@@ -1,0 +1,13 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_backup_policy data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#postgres'].get
+    description: API operation for data resource read
+    update:
+      operationId: get_postgres_backup_policy
+      summary: Get a Postgres backup policy
+      x-speakeasy-entity-operation: PostgresBackupPolicy#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database backup policy.

@@ -1,0 +1,21 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_vitess_backup_policies data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#vitess'].get
+    description: API operation for read and enable pagination
+    update:
+      operationId: list_vitess_backup_policies
+      summary: List Vitess backup policies
+      x-speakeasy-entity-operation: VitessBackupPolicies#read
+      x-speakeasy-entity-description: Returns information about PlanetScale Vitess database backup policies.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
