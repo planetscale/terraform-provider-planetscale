@@ -1,0 +1,81 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for backup policy path split
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.parameters[?@.name == 'per_page']
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.responses['200'].content['application/json'].schema.properties
+    update:
+      type:
+        x-speakeasy-terraform-ignore: true
+      current_page:
+        x-speakeasy-terraform-ignore: true
+      next_page:
+        x-speakeasy-terraform-ignore: true
+      next_page_url:
+        x-speakeasy-terraform-ignore: true
+      prev_page:
+        x-speakeasy-terraform-ignore: true
+      prev_page_url:
+        x-speakeasy-terraform-ignore: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].post.responses['201'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].post.responses['201'].content['application/json'].schema.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].get.responses['200'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].get.responses['200'].content['application/json'].schema.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema.properties.updated_at
+    remove: true
+
+  # Copy and split backup policy paths for Vitess and Postgres resources
+  - target: $.paths
+    description: Add Vitess backup policy path entries
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies#vitess: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#vitess']
+    description: Copy backup policies collection path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies/{id}#vitess: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#vitess']
+    description: Copy backup policy item path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}']
+
+  - target: $.paths
+    description: Add Postgres backup policy path entries
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies#postgres: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#postgres']
+    description: Copy backup policies collection path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies/{id}#postgres: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#postgres']
+    description: Copy backup policy item path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}']
+
+  # Remove copied base backup policy paths
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}']
+    remove: true

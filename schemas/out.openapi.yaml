@@ -675,8 +675,6 @@ paths:
         outputs:
           results: $.data
   /organizations/{organization}/databases/{database}: {}
-  /organizations/{organization}/databases/{database}/backup-policies: {}
-  /organizations/{organization}/databases/{database}/backup-policies/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/backups: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncer-resizes: {}
@@ -5052,6 +5050,610 @@ paths:
       x-speakeasy-entity-operation:
         - DatabasePostgres#read
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database.
+  /organizations/{organization}/databases/{database}/backup-policies#vitess:
+    get:
+      tags:
+        - BackupPolicies
+      operationId: list_vitess_backup_policies
+      summary: List Vitess backup policies
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: If provided, specifies the page offset of returned results
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: If provided, specifies the number of returned results
+          schema:
+            type: integer
+            default: 25
+          x-speakeasy-terraform-ignore: true
+      responses:
+        "200":
+          description: Returns backup policies for the database
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The response type. Always "list" for paginated responses.
+                    x-speakeasy-terraform-ignore: true
+                  current_page:
+                    type: integer
+                    description: The current page number
+                    x-speakeasy-terraform-ignore: true
+                  next_page:
+                    type: integer
+                    description: The next page number, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  next_page_url:
+                    type: string
+                    description: The next page of results, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page:
+                    type: integer
+                    description: The previous page number, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the backup policy
+                        display_name:
+                          type: string
+                          description: The display name of the backup policy
+                        name:
+                          type: string
+                          description: The name of the backup policy
+                        target:
+                          type: string
+                          enum:
+                            - production
+                            - development
+                          description: Whether the policy is for production or development branches
+                        retention_value:
+                          type: integer
+                          description: A number value for the retention period of the backup policy
+                        retention_unit:
+                          type: string
+                          description: The unit for the retention period of the backup policy
+                        frequency_value:
+                          type: integer
+                          description: A number value for the frequency of the backup policy
+                        frequency_unit:
+                          type: string
+                          description: The unit for the frequency of the backup policy
+                        schedule_time:
+                          type: string
+                          description: The time of day that the backup is scheduled, in HH:MM format
+                        schedule_day:
+                          type: integer
+                          description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                          nullable: true
+                        schedule_week:
+                          type: integer
+                          description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                          nullable: true
+                        last_ran_at:
+                          type: string
+                          description: When the backup was last run
+                          nullable: true
+                        next_run_at:
+                          type: string
+                          description: When the backup will next run
+                          nullable: true
+                        required:
+                          type: boolean
+                          description: Whether the policy is a required system backup
+                      required:
+                        - id
+                        - display_name
+                        - name
+                        - target
+                        - retention_value
+                        - retention_unit
+                        - frequency_value
+                        - frequency_unit
+                        - schedule_time
+                        - schedule_day
+                        - schedule_week
+                        - created_at
+                        - updated_at
+                        - last_ran_at
+                        - next_run_at
+                        - required
+                required:
+                  - type
+                  - current_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+      x-speakeasy-entity-operation: VitessBackupPolicies#read
+      x-speakeasy-entity-description: Returns information about PlanetScale Vitess database backup policies.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+  /organizations/{organization}/databases/{database}/backup-policies/{id}#vitess:
+    get:
+      tags:
+        - BackupPolicies
+      operationId: get_vitess_backup_policy
+      summary: Get a Vitess backup policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup policy
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a backup policy
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup policy
+                  display_name:
+                    type: string
+                    description: The display name of the backup policy
+                  name:
+                    type: string
+                    description: The name of the backup policy
+                  target:
+                    type: string
+                    enum:
+                      - production
+                      - development
+                    description: Whether the policy is for production or development branches
+                  retention_value:
+                    type: integer
+                    description: A number value for the retention period of the backup policy
+                  retention_unit:
+                    type: string
+                    description: The unit for the retention period of the backup policy
+                  frequency_value:
+                    type: integer
+                    description: A number value for the frequency of the backup policy
+                  frequency_unit:
+                    type: string
+                    description: The unit for the frequency of the backup policy
+                  schedule_time:
+                    type: string
+                    description: The time of day that the backup is scheduled, in HH:MM format
+                  schedule_day:
+                    type: integer
+                    description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                    nullable: true
+                  schedule_week:
+                    type: integer
+                    description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                    nullable: true
+                  last_ran_at:
+                    type: string
+                    description: When the backup was last run
+                    nullable: true
+                  next_run_at:
+                    type: string
+                    description: When the backup will next run
+                    nullable: true
+                  required:
+                    type: boolean
+                    description: Whether the policy is a required system backup
+                required:
+                  - id
+                  - display_name
+                  - name
+                  - target
+                  - retention_value
+                  - retention_unit
+                  - frequency_value
+                  - frequency_unit
+                  - schedule_time
+                  - schedule_day
+                  - schedule_week
+                  - created_at
+                  - updated_at
+                  - last_ran_at
+                  - next_run_at
+                  - required
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+      x-speakeasy-entity-operation: VitessBackupPolicy#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database backup policy.
+  /organizations/{organization}/databases/{database}/backup-policies#postgres:
+    get:
+      tags:
+        - BackupPolicies
+      operationId: list_postgres_backup_policies
+      summary: List Postgres backup policies
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: If provided, specifies the page offset of returned results
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: If provided, specifies the number of returned results
+          schema:
+            type: integer
+            default: 25
+          x-speakeasy-terraform-ignore: true
+      responses:
+        "200":
+          description: Returns backup policies for the database
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The response type. Always "list" for paginated responses.
+                    x-speakeasy-terraform-ignore: true
+                  current_page:
+                    type: integer
+                    description: The current page number
+                    x-speakeasy-terraform-ignore: true
+                  next_page:
+                    type: integer
+                    description: The next page number, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  next_page_url:
+                    type: string
+                    description: The next page of results, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page:
+                    type: integer
+                    description: The previous page number, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the backup policy
+                        display_name:
+                          type: string
+                          description: The display name of the backup policy
+                        name:
+                          type: string
+                          description: The name of the backup policy
+                        target:
+                          type: string
+                          enum:
+                            - production
+                            - development
+                          description: Whether the policy is for production or development branches
+                        retention_value:
+                          type: integer
+                          description: A number value for the retention period of the backup policy
+                        retention_unit:
+                          type: string
+                          description: The unit for the retention period of the backup policy
+                        frequency_value:
+                          type: integer
+                          description: A number value for the frequency of the backup policy
+                        frequency_unit:
+                          type: string
+                          description: The unit for the frequency of the backup policy
+                        schedule_time:
+                          type: string
+                          description: The time of day that the backup is scheduled, in HH:MM format
+                        schedule_day:
+                          type: integer
+                          description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                          nullable: true
+                        schedule_week:
+                          type: integer
+                          description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                          nullable: true
+                        last_ran_at:
+                          type: string
+                          description: When the backup was last run
+                          nullable: true
+                        next_run_at:
+                          type: string
+                          description: When the backup will next run
+                          nullable: true
+                        required:
+                          type: boolean
+                          description: Whether the policy is a required system backup
+                      required:
+                        - id
+                        - display_name
+                        - name
+                        - target
+                        - retention_value
+                        - retention_unit
+                        - frequency_value
+                        - frequency_unit
+                        - schedule_time
+                        - schedule_day
+                        - schedule_week
+                        - created_at
+                        - updated_at
+                        - last_ran_at
+                        - next_run_at
+                        - required
+                required:
+                  - type
+                  - current_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+      x-speakeasy-entity-operation: PostgresBackupPolicies#read
+      x-speakeasy-entity-description: Returns information about PlanetScale Postgres database backup policies.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+  /organizations/{organization}/databases/{database}/backup-policies/{id}#postgres:
+    get:
+      tags:
+        - BackupPolicies
+      operationId: get_postgres_backup_policy
+      summary: Get a Postgres backup policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup policy
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a backup policy
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup policy
+                  display_name:
+                    type: string
+                    description: The display name of the backup policy
+                  name:
+                    type: string
+                    description: The name of the backup policy
+                  target:
+                    type: string
+                    enum:
+                      - production
+                      - development
+                    description: Whether the policy is for production or development branches
+                  retention_value:
+                    type: integer
+                    description: A number value for the retention period of the backup policy
+                  retention_unit:
+                    type: string
+                    description: The unit for the retention period of the backup policy
+                  frequency_value:
+                    type: integer
+                    description: A number value for the frequency of the backup policy
+                  frequency_unit:
+                    type: string
+                    description: The unit for the frequency of the backup policy
+                  schedule_time:
+                    type: string
+                    description: The time of day that the backup is scheduled, in HH:MM format
+                  schedule_day:
+                    type: integer
+                    description: Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
+                    nullable: true
+                  schedule_week:
+                    type: integer
+                    description: Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
+                    nullable: true
+                  last_ran_at:
+                    type: string
+                    description: When the backup was last run
+                    nullable: true
+                  next_run_at:
+                    type: string
+                    description: When the backup will next run
+                    nullable: true
+                  required:
+                    type: boolean
+                    description: Whether the policy is a required system backup
+                required:
+                  - id
+                  - display_name
+                  - name
+                  - target
+                  - retention_value
+                  - retention_unit
+                  - frequency_value
+                  - frequency_unit
+                  - schedule_time
+                  - schedule_day
+                  - schedule_week
+                  - created_at
+                  - updated_at
+                  - last_ran_at
+                  - next_run_at
+                  - required
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+      x-speakeasy-entity-operation: PostgresBackupPolicy#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database backup policy.
 tags:
   - name: BackupPolicies
     description: |2
