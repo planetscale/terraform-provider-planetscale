@@ -69,6 +69,9 @@ type PlanetScale struct {
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
+	//           Resources for managing database branch backups.
+	//
+	Backups *Backups
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -174,6 +177,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

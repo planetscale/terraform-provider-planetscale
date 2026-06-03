@@ -675,8 +675,6 @@ paths:
         outputs:
           results: $.data
   /organizations/{organization}/databases/{database}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/backups: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncer-resizes: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}: {}
@@ -6328,6 +6326,990 @@ paths:
         | Organization | `write_backups` |
         | Database | `write_backups` |
       x-speakeasy-entity-operation: PostgresBackupPolicy#delete
+  /organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess:
+    get:
+      tags:
+        - Backups
+      operationId: list_vitess_branch_backups
+      summary: List Vitess branch backups
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: all
+          in: query
+          description: Whether to include all backups, including deleted ones
+          schema:
+            type: boolean
+        - name: state
+          in: query
+          description: Filter backups by state
+          schema:
+            type: string
+            enum:
+              - pending
+              - running
+              - success
+              - failed
+              - canceled
+              - ignored
+        - name: policy
+          in: query
+          description: Filter backups by backup policy ID
+          schema:
+            type: string
+        - name: from
+          in: query
+          description: Filter backups started after this date (e.g. 2023-01-01T00:00:00Z)
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: Filter backups started before this date (e.g. 2023-01-31T23:59:59Z)
+          schema:
+            type: string
+        - name: running_at
+          in: query
+          description: Filter backups that are running during a specific time (e.g. 2023-01-01T00:00:00Z..2023-01-01T23:59:59Z)
+          schema:
+            type: string
+        - name: production
+          in: query
+          description: Filter backups by production branch
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          description: If provided, specifies the page offset of returned results
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: If provided, specifies the number of returned results
+          schema:
+            type: integer
+            default: 25
+          x-speakeasy-terraform-ignore: true
+      responses:
+        "200":
+          description: Returns database branch backups
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The response type. Always "list" for paginated responses.
+                    x-speakeasy-terraform-ignore: true
+                  current_page:
+                    type: integer
+                    description: The current page number
+                    x-speakeasy-terraform-ignore: true
+                  next_page:
+                    type: integer
+                    description: The next page number, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  next_page_url:
+                    type: string
+                    description: The next page of results, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page:
+                    type: integer
+                    description: The previous page number, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the backup
+                        name:
+                          type: string
+                          description: The name of the backup
+                        state:
+                          type: string
+                          enum:
+                            - pending
+                            - running
+                            - success
+                            - failed
+                            - canceled
+                            - ignored
+                          description: The current state of the backup
+                        size:
+                          type: integer
+                          description: The size of the backup in bytes
+                        estimated_storage_cost:
+                          type: number
+                          description: The estimated storage cost of the backup
+                        started_at:
+                          type: string
+                          description: When the backup started
+                          nullable: true
+                        expires_at:
+                          type: string
+                          description: When the backup expires
+                          nullable: true
+                        completed_at:
+                          type: string
+                          description: When the backup completed
+                          nullable: true
+                        deleted_at:
+                          type: string
+                          description: When the backup was deleted
+                          nullable: true
+                        pvc_size:
+                          type: integer
+                          description: Size of the PVC used for the backup
+                        protected:
+                          type: boolean
+                          description: Whether or not the backup is protected from deletion
+                        actor:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the actor
+                            display_name:
+                              type: string
+                              description: The name of the actor
+                          required:
+                            - id
+                            - display_name
+                            - avatar_url
+                          nullable: true
+                        backup_policy:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the backup policy
+                          required:
+                            - id
+                            - display_name
+                            - name
+                            - target
+                            - retention_value
+                            - retention_unit
+                            - frequency_value
+                            - frequency_unit
+                            - schedule_time
+                            - schedule_day
+                            - schedule_week
+                            - created_at
+                            - updated_at
+                            - last_ran_at
+                            - next_run_at
+                            - required
+                            - id
+                          nullable: true
+                        database_branch:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID for the resource
+                            name:
+                              type: string
+                              description: The name for the resource
+                          required:
+                            - id
+                            - name
+                            - created_at
+                            - updated_at
+                            - deleted_at
+                            - id
+                            - name
+                          nullable: true
+                      required:
+                        - id
+                        - name
+                        - state
+                        - size
+                        - estimated_storage_cost
+                        - created_at
+                        - updated_at
+                        - started_at
+                        - expires_at
+                        - completed_at
+                        - deleted_at
+                        - pvc_size
+                        - protected
+                        - required
+                        - restored_branches
+                        - actor
+                        - id
+                        - name
+                        - state
+                        - size
+                        - estimated_storage_cost
+                        - created_at
+                        - updated_at
+                        - started_at
+                        - expires_at
+                        - completed_at
+                        - deleted_at
+                        - pvc_size
+                        - protected
+                        - required
+                        - actor
+                required:
+                  - type
+                  - current_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+        | Branch | `read_backups` |
+      x-speakeasy-entity-operation: VitessBranchBackups#read
+      x-speakeasy-entity-description: Returns information about PlanetScale Vitess database branch backups.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+  /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess:
+    get:
+      tags:
+        - Backups
+      operationId: get_vitess_branch_backup
+      summary: Get a Vitess branch backup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID for the backup
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a database branch backup
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup
+                  name:
+                    type: string
+                    description: The name of the backup
+                  state:
+                    type: string
+                    enum:
+                      - pending
+                      - running
+                      - success
+                      - failed
+                      - canceled
+                      - ignored
+                    description: The current state of the backup
+                  size:
+                    type: integer
+                    description: The size of the backup in bytes
+                  estimated_storage_cost:
+                    type: number
+                    description: The estimated storage cost of the backup
+                  started_at:
+                    type: string
+                    description: When the backup started
+                    nullable: true
+                  expires_at:
+                    type: string
+                    description: When the backup expires
+                    nullable: true
+                  completed_at:
+                    type: string
+                    description: When the backup completed
+                    nullable: true
+                  deleted_at:
+                    type: string
+                    description: When the backup was deleted
+                    nullable: true
+                  pvc_size:
+                    type: integer
+                    description: Size of the PVC used for the backup
+                  protected:
+                    type: boolean
+                    description: Whether or not the backup is protected from deletion
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                    nullable: true
+                  backup_policy:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the backup policy
+                    required:
+                      - id
+                      - display_name
+                      - name
+                      - target
+                      - retention_value
+                      - retention_unit
+                      - frequency_value
+                      - frequency_unit
+                      - schedule_time
+                      - schedule_day
+                      - schedule_week
+                      - created_at
+                      - updated_at
+                      - last_ran_at
+                      - next_run_at
+                      - required
+                      - id
+                    nullable: true
+                  database_branch:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                      - id
+                      - name
+                    nullable: true
+                required:
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - restored_branches
+                  - actor
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+        | Branch | `read_backups` |
+      x-speakeasy-entity-operation: VitessBranchBackup#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch backup.
+  /organizations/{organization}/databases/{database}/branches/{branch}/backups#postgres:
+    get:
+      tags:
+        - Backups
+      operationId: list_postgres_branch_backups
+      summary: List Postgres branch backups
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: all
+          in: query
+          description: Whether to include all backups, including deleted ones
+          schema:
+            type: boolean
+        - name: state
+          in: query
+          description: Filter backups by state
+          schema:
+            type: string
+            enum:
+              - pending
+              - running
+              - success
+              - failed
+              - canceled
+              - ignored
+        - name: policy
+          in: query
+          description: Filter backups by backup policy ID
+          schema:
+            type: string
+        - name: from
+          in: query
+          description: Filter backups started after this date (e.g. 2023-01-01T00:00:00Z)
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: Filter backups started before this date (e.g. 2023-01-31T23:59:59Z)
+          schema:
+            type: string
+        - name: running_at
+          in: query
+          description: Filter backups that are running during a specific time (e.g. 2023-01-01T00:00:00Z..2023-01-01T23:59:59Z)
+          schema:
+            type: string
+        - name: production
+          in: query
+          description: Filter backups by production branch
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          description: If provided, specifies the page offset of returned results
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: If provided, specifies the number of returned results
+          schema:
+            type: integer
+            default: 25
+          x-speakeasy-terraform-ignore: true
+      responses:
+        "200":
+          description: Returns database branch backups
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The response type. Always "list" for paginated responses.
+                    x-speakeasy-terraform-ignore: true
+                  current_page:
+                    type: integer
+                    description: The current page number
+                    x-speakeasy-terraform-ignore: true
+                  next_page:
+                    type: integer
+                    description: The next page number, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  next_page_url:
+                    type: string
+                    description: The next page of results, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page:
+                    type: integer
+                    description: The previous page number, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the backup
+                        name:
+                          type: string
+                          description: The name of the backup
+                        state:
+                          type: string
+                          enum:
+                            - pending
+                            - running
+                            - success
+                            - failed
+                            - canceled
+                            - ignored
+                          description: The current state of the backup
+                        size:
+                          type: integer
+                          description: The size of the backup in bytes
+                        estimated_storage_cost:
+                          type: number
+                          description: The estimated storage cost of the backup
+                        started_at:
+                          type: string
+                          description: When the backup started
+                          nullable: true
+                        expires_at:
+                          type: string
+                          description: When the backup expires
+                          nullable: true
+                        completed_at:
+                          type: string
+                          description: When the backup completed
+                          nullable: true
+                        deleted_at:
+                          type: string
+                          description: When the backup was deleted
+                          nullable: true
+                        pvc_size:
+                          type: integer
+                          description: Size of the PVC used for the backup
+                        protected:
+                          type: boolean
+                          description: Whether or not the backup is protected from deletion
+                        actor:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the actor
+                            display_name:
+                              type: string
+                              description: The name of the actor
+                          required:
+                            - id
+                            - display_name
+                            - avatar_url
+                          nullable: true
+                        backup_policy:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the backup policy
+                          required:
+                            - id
+                            - display_name
+                            - name
+                            - target
+                            - retention_value
+                            - retention_unit
+                            - frequency_value
+                            - frequency_unit
+                            - schedule_time
+                            - schedule_day
+                            - schedule_week
+                            - created_at
+                            - updated_at
+                            - last_ran_at
+                            - next_run_at
+                            - required
+                            - id
+                          nullable: true
+                        database_branch:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID for the resource
+                            name:
+                              type: string
+                              description: The name for the resource
+                          required:
+                            - id
+                            - name
+                            - created_at
+                            - updated_at
+                            - deleted_at
+                            - id
+                            - name
+                          nullable: true
+                      required:
+                        - id
+                        - name
+                        - state
+                        - size
+                        - estimated_storage_cost
+                        - created_at
+                        - updated_at
+                        - started_at
+                        - expires_at
+                        - completed_at
+                        - deleted_at
+                        - pvc_size
+                        - protected
+                        - required
+                        - restored_branches
+                        - actor
+                        - id
+                        - name
+                        - state
+                        - size
+                        - estimated_storage_cost
+                        - created_at
+                        - updated_at
+                        - started_at
+                        - expires_at
+                        - completed_at
+                        - deleted_at
+                        - pvc_size
+                        - protected
+                        - required
+                        - actor
+                required:
+                  - type
+                  - current_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+        | Branch | `read_backups` |
+      x-speakeasy-entity-operation: PostgresBranchBackups#read
+      x-speakeasy-entity-description: Returns information about PlanetScale Postgres database branch backups.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+  /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres:
+    get:
+      tags:
+        - Backups
+      operationId: get_postgres_branch_backup
+      summary: Get a Postgres branch backup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID for the backup
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a database branch backup
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup
+                  name:
+                    type: string
+                    description: The name of the backup
+                  state:
+                    type: string
+                    enum:
+                      - pending
+                      - running
+                      - success
+                      - failed
+                      - canceled
+                      - ignored
+                    description: The current state of the backup
+                  size:
+                    type: integer
+                    description: The size of the backup in bytes
+                  estimated_storage_cost:
+                    type: number
+                    description: The estimated storage cost of the backup
+                  started_at:
+                    type: string
+                    description: When the backup started
+                    nullable: true
+                  expires_at:
+                    type: string
+                    description: When the backup expires
+                    nullable: true
+                  completed_at:
+                    type: string
+                    description: When the backup completed
+                    nullable: true
+                  deleted_at:
+                    type: string
+                    description: When the backup was deleted
+                    nullable: true
+                  pvc_size:
+                    type: integer
+                    description: Size of the PVC used for the backup
+                  protected:
+                    type: boolean
+                    description: Whether or not the backup is protected from deletion
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                    nullable: true
+                  backup_policy:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the backup policy
+                    required:
+                      - id
+                      - display_name
+                      - name
+                      - target
+                      - retention_value
+                      - retention_unit
+                      - frequency_value
+                      - frequency_unit
+                      - schedule_time
+                      - schedule_day
+                      - schedule_week
+                      - created_at
+                      - updated_at
+                      - last_ran_at
+                      - next_run_at
+                      - required
+                      - id
+                    nullable: true
+                  database_branch:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                      - id
+                      - name
+                    nullable: true
+                required:
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - restored_branches
+                  - actor
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_backups` |
+        | Database | `read_backups` |
+        | Branch | `read_backups` |
+      x-speakeasy-entity-operation: PostgresBranchBackup#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database branch backup.
 tags:
   - name: BackupPolicies
     description: |2

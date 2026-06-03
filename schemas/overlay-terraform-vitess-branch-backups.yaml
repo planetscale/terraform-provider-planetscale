@@ -1,0 +1,83 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_vitess_branch_backups data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get
+    description: API operation for read and enable pagination
+    update:
+      operationId: list_vitess_branch_backups
+      summary: List Vitess branch backups
+      x-speakeasy-entity-operation: VitessBranchBackups#read
+      x-speakeasy-entity-description: Returns information about PlanetScale Vitess database branch backups.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.database_branch.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.database_branch.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.database_branch.properties.deleted_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.database_branch
+    update:
+      required:
+        - id
+        - name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.restored_branches
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.schema_snapshot
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.display_name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.target
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.retention_value
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.retention_unit
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.frequency_value
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.frequency_unit
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.schedule_time
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.schedule_day
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.schedule_week
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy
+    update:
+      required:
+        - id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items
+    update:
+      required:
+        - id
+        - name
+        - state
+        - size
+        - estimated_storage_cost
+        - created_at
+        - updated_at
+        - started_at
+        - expires_at
+        - completed_at
+        - deleted_at
+        - pvc_size
+        - protected
+        - required
+        - actor

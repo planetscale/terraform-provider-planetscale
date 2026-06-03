@@ -1,0 +1,75 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_vitess_branch_backup managed resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get
+    description: API operation for managed resource read
+    update:
+      operationId: get_vitess_branch_backup
+      summary: Get a Vitess branch backup
+      x-speakeasy-entity-operation: VitessBranchBackup#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch backup.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.database_branch.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.database_branch.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.database_branch.properties.deleted_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.database_branch
+    update:
+      required:
+        - id
+        - name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.restored_branches
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.schema_snapshot
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.display_name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.target
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.retention_value
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.retention_unit
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.frequency_value
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.frequency_unit
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.schedule_time
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.schedule_day
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.schedule_week
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema.properties.backup_policy
+    update:
+      required:
+        - id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess'].get.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - id
+        - name
+        - state
+        - size
+        - estimated_storage_cost
+        - created_at
+        - updated_at
+        - started_at
+        - expires_at
+        - completed_at
+        - deleted_at
+        - pvc_size
+        - protected
+        - required
+        - actor
