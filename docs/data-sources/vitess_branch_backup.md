@@ -52,7 +52,6 @@ data "planetscale_vitess_branch_backup" "my_vitessbranchbackup" {
 
 Read-Only:
 
-- `display_name` (String) The name of the actor
 - `id` (String) The ID of the actor
 
 

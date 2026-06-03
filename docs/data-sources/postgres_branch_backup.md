@@ -52,7 +52,6 @@ data "planetscale_postgres_branch_backup" "my_postgresbranchbackup" {
 
 Read-Only:
 
-- `display_name` (String) The name of the actor
 - `id` (String) The ID of the actor
 
 

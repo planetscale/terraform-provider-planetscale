@@ -90,8 +90,6 @@ func (e *GetVitessBranchBackupState) UnmarshalJSON(data []byte) error {
 type GetVitessBranchBackupActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
-	// The name of the actor
-	DisplayName string `json:"display_name"`
 }
 
 func (g *GetVitessBranchBackupActor) GetID() string {
@@ -99,13 +97,6 @@ func (g *GetVitessBranchBackupActor) GetID() string {
 		return ""
 	}
 	return g.ID
-}
-
-func (g *GetVitessBranchBackupActor) GetDisplayName() string {
-	if g == nil {
-		return ""
-	}
-	return g.DisplayName
 }
 
 type GetVitessBranchBackupBackupPolicy struct {

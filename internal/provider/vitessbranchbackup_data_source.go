@@ -62,10 +62,6 @@ func (r *VitessBranchBackupDataSource) Schema(ctx context.Context, req datasourc
 			"actor": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `The name of the actor`,
-					},
 					"id": schema.StringAttribute{
 						Computed:    true,
 						Description: `The ID of the actor`,

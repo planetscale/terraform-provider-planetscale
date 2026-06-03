@@ -75,7 +75,6 @@ Read-Only:
 
 Read-Only:
 
-- `display_name` (String) The name of the actor
 - `id` (String) The ID of the actor
 
 

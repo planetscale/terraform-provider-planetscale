@@ -30,6 +30,13 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres'].get.responses['200'].content['application/json'].schema.properties.schema_snapshot
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres'].get.responses['200'].content['application/json'].schema.properties.actor.properties.display_name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres'].get.responses['200'].content['application/json'].schema.properties.actor
+    update:
+      required:
+        - id
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.display_name
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.name

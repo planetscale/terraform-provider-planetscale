@@ -25,7 +25,6 @@ func (r *VitessBranchBackupsDataSourceModel) RefreshFromOperationsListVitessBran
 				data.Actor = nil
 			} else {
 				data.Actor = &tfTypes.ListVitessBranchBackupsActor{}
-				data.Actor.DisplayName = types.StringValue(dataItem.Actor.DisplayName)
 				data.Actor.ID = types.StringValue(dataItem.Actor.ID)
 			}
 			if dataItem.BackupPolicy == nil {

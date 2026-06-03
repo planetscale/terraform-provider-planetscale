@@ -25,7 +25,6 @@ func (r *PostgresBranchBackupsDataSourceModel) RefreshFromOperationsListPostgres
 				data.Actor = nil
 			} else {
 				data.Actor = &tfTypes.ListPostgresBranchBackupsActor{}
-				data.Actor.DisplayName = types.StringValue(dataItem.Actor.DisplayName)
 				data.Actor.ID = types.StringValue(dataItem.Actor.ID)
 			}
 			if dataItem.BackupPolicy == nil {

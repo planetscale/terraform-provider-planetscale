@@ -7,6 +7,5 @@ import (
 )
 
 type ListPostgresBranchBackupsActor struct {
-	DisplayName types.String `tfsdk:"display_name"`
-	ID          types.String `tfsdk:"id"`
+	ID types.String `tfsdk:"id"`
 }

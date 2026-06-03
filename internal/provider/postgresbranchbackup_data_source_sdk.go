@@ -18,7 +18,6 @@ func (r *PostgresBranchBackupDataSourceModel) RefreshFromOperationsGetPostgresBr
 			r.Actor = nil
 		} else {
 			r.Actor = &tfTypes.GetPostgresBranchBackupActor{}
-			r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		if resp.BackupPolicy == nil {

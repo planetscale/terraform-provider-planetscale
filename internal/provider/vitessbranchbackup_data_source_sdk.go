@@ -18,7 +18,6 @@ func (r *VitessBranchBackupDataSourceModel) RefreshFromOperationsGetVitessBranch
 			r.Actor = nil
 		} else {
 			r.Actor = &tfTypes.GetVitessBranchBackupActor{}
-			r.Actor.DisplayName = types.StringValue(resp.Actor.DisplayName)
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		if resp.BackupPolicy == nil {

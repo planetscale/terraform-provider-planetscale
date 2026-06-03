@@ -6498,13 +6498,11 @@ paths:
                             id:
                               type: string
                               description: The ID of the actor
-                            display_name:
-                              type: string
-                              description: The name of the actor
                           required:
                             - id
                             - display_name
                             - avatar_url
+                            - id
                           nullable: true
                         backup_policy:
                           type: object
@@ -6711,13 +6709,11 @@ paths:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
                     required:
                       - id
                       - display_name
                       - avatar_url
+                      - id
                     nullable: true
                   backup_policy:
                     type: object
@@ -6990,13 +6986,11 @@ paths:
                             id:
                               type: string
                               description: The ID of the actor
-                            display_name:
-                              type: string
-                              description: The name of the actor
                           required:
                             - id
                             - display_name
                             - avatar_url
+                            - id
                           nullable: true
                         backup_policy:
                           type: object
@@ -7203,13 +7197,11 @@ paths:
                       id:
                         type: string
                         description: The ID of the actor
-                      display_name:
-                        type: string
-                        description: The name of the actor
                     required:
                       - id
                       - display_name
                       - avatar_url
+                      - id
                     nullable: true
                   backup_policy:
                     type: object

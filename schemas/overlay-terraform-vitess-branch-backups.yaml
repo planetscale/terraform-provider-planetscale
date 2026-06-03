@@ -38,6 +38,13 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.schema_snapshot
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.actor.properties.display_name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.actor
+    update:
+      required:
+        - id
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.display_name
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.name

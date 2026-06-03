@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 7b99d9fdc766a82a9306c548e1cc0661
+  docChecksum: be7dc61ed087080ca5503012af7f870e
   docVersion: v1
   speakeasyVersion: 1.769.1
   generationVersion: 2.892.1
@@ -305,13 +305,13 @@ trackedFiles:
     last_write_checksum: sha1:8b7c21549482f94cf6a4234cd542993d2084022e
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchbackup_data_source.go:
-    last_write_checksum: sha1:93d8b23ee97703d5e1e6430942466828c2fbbd0d
+    last_write_checksum: sha1:a7d91d685570436d253d051636b54b3e45aaed23
   internal/provider/postgresbranchbackup_data_source_sdk.go:
-    last_write_checksum: sha1:5da16de57bed1cb095dda3b6f7e85841986e35e1
+    last_write_checksum: sha1:b05855fc70b885a9e3a8e066830993b65d9e50c4
   internal/provider/postgresbranchbackups_data_source.go:
-    last_write_checksum: sha1:5f8b9c46995df6bc7ad16a158c29e4bd43378cd6
+    last_write_checksum: sha1:7742d7fbff9d13b641395ff555106001f0ff1234
   internal/provider/postgresbranchbackups_data_source_sdk.go:
-    last_write_checksum: sha1:edfb5c96aa1de2f03b4489719b4b77c1f4a57b48
+    last_write_checksum: sha1:bc3aff2ca051aa68cef4ad5c613f0f9f70a00017
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
     last_write_checksum: sha1:6b7a223a86fe4fcb75e11613cb3fc8c81e502bd2
@@ -429,7 +429,7 @@ trackedFiles:
     last_write_checksum: sha1:a421c025e38bcb850f915a23425bfa4e51475ce3
     pristine_git_object: 392129986a40f804c18a5fc7ad636d27a17abcb4
   internal/provider/types/get_postgres_branch_backup_actor.go:
-    last_write_checksum: sha1:b426efb3ad7b4fc02a1e1b8135228f8d123c9abe
+    last_write_checksum: sha1:381176da4af5764c68e4d55b742039dce09eb968
   internal/provider/types/get_postgres_branch_backup_backup_policy.go:
     last_write_checksum: sha1:cb832caadef9d55deea6665460abcc30eaec4a73
   internal/provider/types/get_postgres_branch_backup_database_branch.go:
@@ -465,7 +465,7 @@ trackedFiles:
     last_write_checksum: sha1:3a2764c5299c9124b3e4695c2ce0964ec4677b22
     pristine_git_object: 102cd49547cf1f38f0d184f56aa4dbb2a12b700c
   internal/provider/types/get_vitess_branch_backup_actor.go:
-    last_write_checksum: sha1:cb7649eee64e9ac749344d2e52e2cac14be6e7bb
+    last_write_checksum: sha1:92ff1c2ec562f7e99eff25be63a303bb0cf42de9
   internal/provider/types/get_vitess_branch_backup_backup_policy.go:
     last_write_checksum: sha1:7f239358acf279e16b8a6fde8de7f835765836a3
   internal/provider/types/get_vitess_branch_backup_database_branch.go:
@@ -525,7 +525,7 @@ trackedFiles:
   internal/provider/types/list_postgres_backup_policies_data.go:
     last_write_checksum: sha1:7a318169bd3757896837220eb7b3a33d3768c5a1
   internal/provider/types/list_postgres_branch_backups_actor.go:
-    last_write_checksum: sha1:466b0c1e318c90f2cae6866253982ee2d8ff93fb
+    last_write_checksum: sha1:334763c0095b68a88ba64438c551e0f1d42dd666
   internal/provider/types/list_postgres_branch_backups_backup_policy.go:
     last_write_checksum: sha1:df53ac2616e03680c69e6fb1fa1df3db53fbce26
   internal/provider/types/list_postgres_branch_backups_data.go:
@@ -545,7 +545,7 @@ trackedFiles:
   internal/provider/types/list_vitess_backup_policies_data.go:
     last_write_checksum: sha1:ea761e1b38a8d46d1c906115092cf6000cd2d6e1
   internal/provider/types/list_vitess_branch_backups_actor.go:
-    last_write_checksum: sha1:16bb05e70b18a6019c2e3373c36835715dcc1aab
+    last_write_checksum: sha1:f85d68ec3a16c11ece9e9952bccdc43f8b378f18
   internal/provider/types/list_vitess_branch_backups_backup_policy.go:
     last_write_checksum: sha1:ebff3a5af817c43a3d92992ee6b4d3e51ea0252c
   internal/provider/types/list_vitess_branch_backups_data.go:
@@ -585,13 +585,13 @@ trackedFiles:
     last_write_checksum: sha1:e7831c9038bb0e9bfa40274629f7a30476c8e2fe
     pristine_git_object: ae27395a04f18ff08bf466c08de8fd0ec47bd226
   internal/provider/vitessbranchbackup_data_source.go:
-    last_write_checksum: sha1:284f178649abd109169e58b1e7a4c2434cf1b3c3
+    last_write_checksum: sha1:97437bb617e2ff6ba6a854b949488b4c5fa2e0f6
   internal/provider/vitessbranchbackup_data_source_sdk.go:
-    last_write_checksum: sha1:91ec4d2bae397d5af414d94646b39c109d6b4038
+    last_write_checksum: sha1:77bf4045bb5127830100f1deb28f4bc0ce86ee55
   internal/provider/vitessbranchbackups_data_source.go:
-    last_write_checksum: sha1:1d2e30052ee5742b7b979ceaf0c28b294fd25bd4
+    last_write_checksum: sha1:65d59883127ca72c7136e1c62e614bfe7c531c35
   internal/provider/vitessbranchbackups_data_source_sdk.go:
-    last_write_checksum: sha1:7f58eeb5349e9853c367cd259ed58d9fc69e008e
+    last_write_checksum: sha1:e2d3a7139a3edafb481238424707a9ddc773cd9d
   internal/provider/vitessbranchpassword_data_source.go:
     id: e6cd1d778135
     last_write_checksum: sha1:97966fc44ab7a20c129986ec7e54f10bed0fddcd
@@ -763,7 +763,7 @@ trackedFiles:
     last_write_checksum: sha1:a79806315b5a9fd25088946620dccb557f7de8cb
     pristine_git_object: 4029ccd13069ed892087aa806e0f167d8744c1db
   internal/sdk/models/operations/getpostgresbranchbackup.go:
-    last_write_checksum: sha1:b4f010a35a035e5c05aaaee9576c844324bb290f
+    last_write_checksum: sha1:184a539741e27e4a5a803ba5a4544318cf0b0317
   internal/sdk/models/operations/getpostgresdatabase.go:
     id: 71f9d1711996
     last_write_checksum: sha1:8c36733371a7de64712461644c138f7cf8c2e2fc
@@ -779,7 +779,7 @@ trackedFiles:
     last_write_checksum: sha1:4556591d1aabf65a9008d2857285c66411c19c65
     pristine_git_object: 05e715d265afc7f9237fb7ff92f378e221a4491a
   internal/sdk/models/operations/getvitessbranchbackup.go:
-    last_write_checksum: sha1:85f07a9358a64227a629a644e8a0280c920cc3b1
+    last_write_checksum: sha1:0c16f1c0fc978fda132a450e7e85a0d27d03fbcb
   internal/sdk/models/operations/getvitessdatabase.go:
     id: c46fe7ab51ba
     last_write_checksum: sha1:45a55d593fcac53c27cd9aa32589ca44e4508172
@@ -799,7 +799,7 @@ trackedFiles:
   internal/sdk/models/operations/listpostgresbackuppolicies.go:
     last_write_checksum: sha1:371b5a2a03078ef435da97e88be8996f15401561
   internal/sdk/models/operations/listpostgresbranchbackups.go:
-    last_write_checksum: sha1:8d3d308cd70906dc39464bafc53bbf775fbe7783
+    last_write_checksum: sha1:198d0c3032ca4359e3ba26f75b1519b70e443284
   internal/sdk/models/operations/listroles.go:
     id: ba1976927ea8
     last_write_checksum: sha1:31153a3f3d5355f3071e34220e3d20a0938a6b18
@@ -807,7 +807,7 @@ trackedFiles:
   internal/sdk/models/operations/listvitessbackuppolicies.go:
     last_write_checksum: sha1:bab6385f83583a3d5a884559a340fd84196bb136
   internal/sdk/models/operations/listvitessbranchbackups.go:
-    last_write_checksum: sha1:12bceaf7befdad65a29f5456b7112b83c38a3257
+    last_write_checksum: sha1:12d848c8943dd33aae19b81ad6bdfff73093022f
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
     last_write_checksum: sha1:6af734f59773c359e9dfd9b7b0547df38e436581
@@ -2628,7 +2628,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 829720, "next_page": 74909, "next_page_url": null, "prev_page": 81756, "prev_page_url": "https://reasonable-carnival.biz/", "data": [{"id": "<id>", "name": "<value>", "state": "running", "size": 261258, "estimated_storage_cost": 6380.68, "started_at": "<value>", "expires_at": "1752161474661", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 656671, "protected": true, "actor": {"id": "<id>", "display_name": "Shane_Herzog55"}}]}
+          application/json: {"type": "<value>", "current_page": 829720, "next_page": 74909, "next_page_url": null, "prev_page": 81756, "prev_page_url": "https://reasonable-carnival.biz/", "data": [{"id": "<id>", "name": "<value>", "state": "running", "size": 261258, "estimated_storage_cost": 6380.68, "started_at": "<value>", "expires_at": "1752161474661", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 656671, "protected": true, "actor": {"id": "<id>"}}]}
   create_vitess_branch_backup:
     speakeasy-default-create-vitess-branch-backup:
       parameters:
@@ -2649,7 +2649,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "state": "pending", "size": 469417, "estimated_storage_cost": 4490.4, "started_at": "<value>", "expires_at": "1745585989215", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 617629, "protected": true, "actor": {"id": "<id>", "display_name": "Tyree_Green50"}}
+          application/json: {"id": "<id>", "name": "<value>", "state": "pending", "size": 469417, "estimated_storage_cost": 4490.4, "started_at": "<value>", "expires_at": "1745585989215", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 617629, "protected": true, "actor": {"id": "<id>"}}
   update_vitess_branch_backup:
     speakeasy-default-update-vitess-branch-backup:
       parameters:
@@ -2681,7 +2681,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 44803, "next_page": 324233, "next_page_url": "https://well-made-soup.net/", "prev_page": 702590, "prev_page_url": "https://outstanding-mentor.biz", "data": [{"id": "<id>", "name": "<value>", "state": "canceled", "size": 237432, "estimated_storage_cost": 8030.96, "started_at": "<value>", "expires_at": "1738680984512", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 629514, "protected": true, "actor": {"id": "<id>", "display_name": "Seth_Schmidt97"}}]}
+          application/json: {"type": "<value>", "current_page": 44803, "next_page": 324233, "next_page_url": "https://well-made-soup.net/", "prev_page": 702590, "prev_page_url": "https://outstanding-mentor.biz", "data": [{"id": "<id>", "name": "<value>", "state": "canceled", "size": 237432, "estimated_storage_cost": 8030.96, "started_at": "<value>", "expires_at": "1738680984512", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 629514, "protected": true, "actor": {"id": "<id>"}}]}
   create_postgres_branch_backup:
     speakeasy-default-create-postgres-branch-backup:
       parameters:
@@ -2702,7 +2702,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "state": "canceled", "size": 768314, "estimated_storage_cost": 387.94, "started_at": "<value>", "expires_at": "1737595351560", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 65234, "protected": true, "actor": {"id": "<id>", "display_name": "Van.Weimann"}}
+          application/json: {"id": "<id>", "name": "<value>", "state": "canceled", "size": 768314, "estimated_storage_cost": 387.94, "started_at": "<value>", "expires_at": "1737595351560", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 65234, "protected": true, "actor": {"id": "<id>"}}
   update_postgres_branch_backup:
     speakeasy-default-update-postgres-branch-backup:
       parameters:

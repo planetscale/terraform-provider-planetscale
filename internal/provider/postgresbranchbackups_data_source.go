@@ -70,10 +70,6 @@ func (r *PostgresBranchBackupsDataSource) Schema(ctx context.Context, req dataso
 						"actor": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
-								"display_name": schema.StringAttribute{
-									Computed:    true,
-									Description: `The name of the actor`,
-								},
 								"id": schema.StringAttribute{
 									Computed:    true,
 									Description: `The ID of the actor`,

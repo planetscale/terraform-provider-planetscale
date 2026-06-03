@@ -90,8 +90,6 @@ func (e *GetPostgresBranchBackupState) UnmarshalJSON(data []byte) error {
 type GetPostgresBranchBackupActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
-	// The name of the actor
-	DisplayName string `json:"display_name"`
 }
 
 func (g *GetPostgresBranchBackupActor) GetID() string {
@@ -99,13 +97,6 @@ func (g *GetPostgresBranchBackupActor) GetID() string {
 		return ""
 	}
 	return g.ID
-}
-
-func (g *GetPostgresBranchBackupActor) GetDisplayName() string {
-	if g == nil {
-		return ""
-	}
-	return g.DisplayName
 }
 
 type GetPostgresBranchBackupBackupPolicy struct {
