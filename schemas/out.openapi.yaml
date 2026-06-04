@@ -6814,6 +6814,63 @@ paths:
         | Branch | `read_backups` |
       x-speakeasy-entity-operation: VitessBranchBackup#read
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch backup.
+    delete:
+      tags:
+        - Backups
+      operationId: delete_vitess_branch_backup
+      summary: Delete a Vitess branch backup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Delete a backup
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `delete_backups`, `delete_production_branch_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `delete_backups`, `delete_production_branch_backups` |
+        | Database | `delete_backups`, `delete_production_branch_backups` |
+        | Branch | `delete_backups` |
+      x-speakeasy-entity-operation: VitessBranchBackup#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/backups#postgres:
     get:
       tags:
@@ -7302,6 +7359,63 @@ paths:
         | Branch | `read_backups` |
       x-speakeasy-entity-operation: PostgresBranchBackup#read
       x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database branch backup.
+    delete:
+      tags:
+        - Backups
+      operationId: delete_postgres_branch_backup
+      summary: Delete a Postgres branch backup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the backup
+          schema:
+            type: string
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Delete a backup
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `delete_backups`, `delete_production_branch_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `delete_backups`, `delete_production_branch_backups` |
+        | Database | `delete_backups`, `delete_production_branch_backups` |
+        | Branch | `delete_backups` |
+      x-speakeasy-entity-operation: PostgresBranchBackup#delete
 tags:
   - name: BackupPolicies
     description: |2

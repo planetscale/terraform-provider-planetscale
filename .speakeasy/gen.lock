@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: be7dc61ed087080ca5503012af7f870e
+  docChecksum: b9b995f51234a0687505abc949a86b4a
   docVersion: v1
   speakeasyVersion: 1.769.1
   generationVersion: 2.892.1
@@ -623,7 +623,7 @@ trackedFiles:
   internal/sdk/backuppolicies.go:
     last_write_checksum: sha1:de9f729a4f62ab554657442244923bfa227c9ef4
   internal/sdk/backups.go:
-    last_write_checksum: sha1:54018d2e22537f92b9d56aa6602735f01bebd786
+    last_write_checksum: sha1:724589c10972bf05868c2c6d877c91d5ab6224d1
   internal/sdk/branchchanges.go:
     last_write_checksum: sha1:f3e6d0eefca1d9340cee2ee976628619e7869022
   internal/sdk/databasebranches.go:
@@ -736,6 +736,8 @@ trackedFiles:
     id: 556d141a1131
     last_write_checksum: sha1:3f6f2c2a5f5a5c415f62080b873a6c28ddb7f793
     pristine_git_object: b8a9f3fe537dea60e156cb97855e3052870be2eb
+  internal/sdk/models/operations/deletepostgresbranchbackup.go:
+    last_write_checksum: sha1:4e753bf5395a391f52184466d6a4f246736f01a8
   internal/sdk/models/operations/deleterole.go:
     id: 63abc80d4993
     last_write_checksum: sha1:da3f62610bb80cd0de0c3e3b0242926a6a151ca1
@@ -746,6 +748,8 @@ trackedFiles:
     id: d38f63b60ddf
     last_write_checksum: sha1:b71841cdf4a80c42fda8f9e32b22fee2fcba7a83
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
+  internal/sdk/models/operations/deletevitessbranchbackup.go:
+    last_write_checksum: sha1:baebdbea776e7f3cd696030cf0ffd4a734b36514
   internal/sdk/models/operations/getbranchchangerequest.go:
     last_write_checksum: sha1:211d4629f1a9fc65e1c8f96177ec3e3a867d27b9
   internal/sdk/models/operations/getorganization.go:
@@ -2638,7 +2642,7 @@ examples:
           branch: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "state": "running", "size": 603559, "estimated_storage_cost": 3256.09, "started_at": null, "expires_at": "1741191325564", "completed_at": "<value>", "deleted_at": null, "pvc_size": 304083, "protected": false, "restored_branches": [], "actor": {"id": "<id>", "display_name": "Ike34"}}
+          application/json: {"id": "<id>", "name": "<value>", "state": "running", "size": 603559, "estimated_storage_cost": 3256.09, "started_at": null, "expires_at": "1741191325564", "completed_at": "<value>", "deleted_at": null, "pvc_size": 304083, "protected": false, "actor": {"id": "<id>"}}
   get_vitess_branch_backup:
     speakeasy-default-get-vitess-branch-backup:
       parameters:
@@ -2691,7 +2695,7 @@ examples:
           branch: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "state": "success", "size": 728455, "estimated_storage_cost": 8084.92, "started_at": "<value>", "expires_at": null, "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 457523, "protected": true, "restored_branches": [], "actor": null}
+          application/json: {"id": "<id>", "name": "<value>", "state": "success", "size": 728455, "estimated_storage_cost": 8084.92, "started_at": "<value>", "expires_at": null, "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 457523, "protected": true, "actor": null}
   get_postgres_branch_backup:
     speakeasy-default-get-postgres-branch-backup:
       parameters:
