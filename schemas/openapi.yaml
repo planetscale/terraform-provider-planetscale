@@ -12000,6 +12000,16 @@ paths:
           schema:
             type: integer
             default: 25
+        - name: status
+          in: query
+          description: Filter roles by status
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Search roles by name or username
+          schema:
+            type: string
       responses:
         "200":
           description: Returns roles
