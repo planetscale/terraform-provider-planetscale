@@ -41,8 +41,9 @@ jobs:
           git commit -m "Update PlanetScale OpenAPI schema"
           git push --force-with-lease origin "$branch"
 
-          if gh pr view "$branch" >/dev/null 2>&1; then
-            echo "Updated existing pull request for $branch"
+          pr_state="$(gh pr view "$branch" --json state -q '.state' 2>/dev/null || true)"
+          if [ "$pr_state" = "OPEN" ]; then
+            echo "Updated existing open pull request for $branch"
             exit 0
           fi
 
