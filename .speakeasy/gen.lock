@@ -26,10 +26,6 @@ features:
     pagination: 2.83.5
     sets: 0.1.2
 trackedFiles:
-  .gitattributes:
-    id: 24139dae6567
-    last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
-    pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
   USAGE.md:
     id: 3aed33ce6e6f
     last_write_checksum: sha1:02c32c9430f37507b3eacd41cdc36f080809e92d
@@ -616,10 +612,6 @@ trackedFiles:
     id: f217ab3e870d
     last_write_checksum: sha1:f737e9cf88ca787d3c6b7e43a528d906c392425d
     pristine_git_object: 0afc249db96660a552cc00c4dcd7d1675b0be1fb
-  internal/sdk/.gitattributes:
-    id: 1ea4c4e0a39d
-    last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
-    pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
   internal/sdk/backuppolicies.go:
     last_write_checksum: sha1:de9f729a4f62ab554657442244923bfa227c9ef4
   internal/sdk/backups.go:

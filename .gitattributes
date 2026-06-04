@@ -1,2 +1,13 @@
-# This allows generated code to be indexed correctly
-*.go linguist-generated=false
+.speakeasy/**                  linguist-generated=true
+docs/**                        linguist-generated=true
+examples/**                    linguist-generated=true
+internal/planmodifiers/**      linguist-generated=true
+internal/provider/**           linguist-generated=true
+internal/sdk/*.go              linguist-generated=true
+internal/validators/**         linguist-generated=true
+main.go                        linguist-generated=true
+schemas/out.openapi.yaml       linguist-generated=true
+tools/tools.go                 linguist-generated=true
+
+internal/provider/**/*_test.go linguist-generated=false
+internal/provider/testdata/**  linguist-generated=false
