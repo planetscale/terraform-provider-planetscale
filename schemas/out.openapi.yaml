@@ -7032,7 +7032,7 @@ paths:
         - name: WaitForComplete
           delaySeconds: 30
           intervalSeconds: 30
-          limitCount: 24 # 12 hours at a 30 second interval, plus initial 30 second delay
+          limitCount: 1440 # 12 hours at a 30 second interval, plus initial 30 second delay
           failureCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "failed"
@@ -7805,7 +7805,7 @@ paths:
         - name: WaitForComplete
           delaySeconds: 30
           intervalSeconds: 30
-          limitCount: 24 # 12 hours at a 30 second interval, plus initial 30 second delay
+          limitCount: 1440 # 12 hours at a 30 second interval, plus initial 30 second delay
           failureCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "failed"

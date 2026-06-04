@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 20e883bf4643f73c4fe99ad8645f22a2
+  docChecksum: 2ddf4a9abce6dd4cc153298d8843290d
   docVersion: v1
   speakeasyVersion: 1.769.1
   generationVersion: 2.892.1
@@ -631,7 +631,7 @@ trackedFiles:
   internal/sdk/backuppolicies.go:
     last_write_checksum: sha1:de9f729a4f62ab554657442244923bfa227c9ef4
   internal/sdk/backups.go:
-    last_write_checksum: sha1:298998f466665e09072d77e981ea3e783c47f267
+    last_write_checksum: sha1:5fc0fbd63976dd29c73327581cbde44d3fd93dc1
   internal/sdk/branchchanges.go:
     last_write_checksum: sha1:f3e6d0eefca1d9340cee2ee976628619e7869022
   internal/sdk/databasebranches.go:

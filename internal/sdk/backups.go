@@ -562,7 +562,7 @@ func (s *Backups) GetVitessBranchBackupWaitForComplete() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 30
 		defaultIntervalSeconds := 30
-		defaultLimitCount := 24
+		defaultLimitCount := 1440
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
@@ -1312,7 +1312,7 @@ func (s *Backups) GetPostgresBranchBackupWaitForComplete() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 30
 		defaultIntervalSeconds := 30
-		defaultLimitCount := 24
+		defaultLimitCount := 1440
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
