@@ -1,0 +1,143 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for backup path split
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.parameters[?@.name == 'per_page']
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties
+    update:
+      type:
+        x-speakeasy-terraform-ignore: true
+      current_page:
+        x-speakeasy-terraform-ignore: true
+      next_page:
+        x-speakeasy-terraform-ignore: true
+      next_page_url:
+        x-speakeasy-terraform-ignore: true
+      prev_page:
+        x-speakeasy-terraform-ignore: true
+      prev_page_url:
+        x-speakeasy-terraform-ignore: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.updated_at
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.required
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.actor.properties.avatar_url
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.actor.properties.avatar_url
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.actor.properties.avatar_url
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.actor.properties.avatar_url
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.backup_policy.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.backup_policy.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.backup_policy.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.backup_policy.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.backup_policy.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.backup_policy.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.backup_policy.properties.required
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.backup_policy.properties.created_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.backup_policy.properties.updated_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.backup_policy.properties.last_ran_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.backup_policy.properties.next_run_at
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.backup_policy.properties.required
+    remove: true
+
+  # Copy and split backup paths for Vitess and Postgres resources
+  - target: $.paths
+    description: Add Vitess backup path entries
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess']
+    description: Copy backups collection path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess']
+    description: Copy backup item path as base for vitess
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].post.requestBody.content['application/json'].schema.properties.emergency
+    remove: true
+
+  - target: $.paths
+    description: Add Postgres backup path entries
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/backups#postgres: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#postgres']
+    description: Copy backups collection path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres']
+    description: Copy backup item path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}']
+
+  # Remove copied base backup paths
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}']
+    remove: true

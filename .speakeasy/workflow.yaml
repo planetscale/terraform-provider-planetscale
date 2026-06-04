@@ -27,6 +27,12 @@ sources:
             - location: schemas/overlay-terraform-vitess-backup-policies.yaml
             - location: schemas/overlay-terraform-postgres-backup-policies.yaml
 
+            - location: schemas/overlay-terraform-backups.yaml
+            - location: schemas/overlay-terraform-vitess-branch-backup.yaml
+            - location: schemas/overlay-terraform-postgres-branch-backup.yaml
+            - location: schemas/overlay-terraform-vitess-branch-backups.yaml
+            - location: schemas/overlay-terraform-postgres-branch-backups.yaml
+
             - location: schemas/overlay-terraform-cleanup.yaml
         output: schemas/out.openapi.yaml
         registry:
