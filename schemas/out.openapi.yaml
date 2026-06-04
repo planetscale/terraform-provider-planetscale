@@ -6619,6 +6619,215 @@ paths:
             type: page
         outputs:
           results: $.data
+    post:
+      tags:
+        - Backups
+      operationId: create_vitess_branch_backup
+      summary: Create a Vitess branch backup
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name for the backup
+                retention_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                    - year
+                  description: Unit for the retention period of the backup
+                retention_value:
+                  type: integer
+                  description: Value between `1` and `1000` for the retention period of the backup (i.e retention_value `6` and retention_unit `hour` means 6 hours)
+      responses:
+        "201":
+          description: Returns the created database branch backup
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup
+                  name:
+                    type: string
+                    description: The name of the backup
+                  state:
+                    type: string
+                    enum:
+                      - pending
+                      - running
+                      - success
+                      - failed
+                      - canceled
+                      - ignored
+                    description: The current state of the backup
+                  size:
+                    type: integer
+                    description: The size of the backup in bytes
+                  estimated_storage_cost:
+                    type: number
+                    description: The estimated storage cost of the backup
+                  started_at:
+                    type: string
+                    description: When the backup started
+                    nullable: true
+                  expires_at:
+                    type: string
+                    description: When the backup expires
+                    nullable: true
+                  completed_at:
+                    type: string
+                    description: When the backup completed
+                    nullable: true
+                  deleted_at:
+                    type: string
+                    description: When the backup was deleted
+                    nullable: true
+                  pvc_size:
+                    type: integer
+                    description: Size of the PVC used for the backup
+                  protected:
+                    type: boolean
+                    description: Whether or not the backup is protected from deletion
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                      - id
+                    nullable: true
+                  backup_policy:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the backup policy
+                    required:
+                      - id
+                      - display_name
+                      - name
+                      - target
+                      - retention_value
+                      - retention_unit
+                      - frequency_value
+                      - frequency_unit
+                      - schedule_time
+                      - schedule_day
+                      - schedule_week
+                      - created_at
+                      - updated_at
+                      - last_ran_at
+                      - next_run_at
+                      - required
+                      - id
+                    nullable: true
+                  database_branch:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                      - id
+                      - name
+                    nullable: true
+                required:
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - restored_branches
+                  - actor
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+        | Branch | `write_backups` |
+      x-speakeasy-entity-operation: VitessBranchBackup#create
+      x-speakeasy-entity-description: Manage a PlanetScale Vitess database branch backup.
   /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#vitess:
     get:
       tags:
@@ -6812,8 +7021,24 @@ paths:
         | Organization | `read_backups` |
         | Database | `read_backups` |
         | Branch | `read_backups` |
-      x-speakeasy-entity-operation: VitessBranchBackup#read
+      x-speakeasy-entity-operation:
+        - VitessBranchBackup#read
+        - entityOperation: VitessBranchBackup#create#2
+          options:
+            polling:
+              name: WaitForComplete
       x-speakeasy-entity-description: Returns information about a PlanetScale Vitess database branch backup.
+      x-speakeasy-polling:
+        - name: WaitForComplete
+          delaySeconds: 30
+          intervalSeconds: 30
+          limitCount: 24 # 12 hours at a 30 second interval, plus initial 30 second delay
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "failed"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "success"
     delete:
       tags:
         - Backups
@@ -7164,6 +7389,218 @@ paths:
             type: page
         outputs:
           results: $.data
+    post:
+      tags:
+        - Backups
+      operationId: create_postgres_branch_backup
+      summary: Create a Postgres branch backup
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name for the backup
+                retention_unit:
+                  type: string
+                  enum:
+                    - hour
+                    - day
+                    - week
+                    - month
+                    - year
+                  description: Unit for the retention period of the backup
+                retention_value:
+                  type: integer
+                  description: Value between `1` and `1000` for the retention period of the backup (i.e retention_value `6` and retention_unit `hour` means 6 hours)
+                emergency:
+                  type: boolean
+                  description: Whether the backup is an immediate backup that may affect database performance. Emergency backups are only supported for PostgreSQL databases.
+      responses:
+        "201":
+          description: Returns the created database branch backup
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the backup
+                  name:
+                    type: string
+                    description: The name of the backup
+                  state:
+                    type: string
+                    enum:
+                      - pending
+                      - running
+                      - success
+                      - failed
+                      - canceled
+                      - ignored
+                    description: The current state of the backup
+                  size:
+                    type: integer
+                    description: The size of the backup in bytes
+                  estimated_storage_cost:
+                    type: number
+                    description: The estimated storage cost of the backup
+                  started_at:
+                    type: string
+                    description: When the backup started
+                    nullable: true
+                  expires_at:
+                    type: string
+                    description: When the backup expires
+                    nullable: true
+                  completed_at:
+                    type: string
+                    description: When the backup completed
+                    nullable: true
+                  deleted_at:
+                    type: string
+                    description: When the backup was deleted
+                    nullable: true
+                  pvc_size:
+                    type: integer
+                    description: Size of the PVC used for the backup
+                  protected:
+                    type: boolean
+                    description: Whether or not the backup is protected from deletion
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                      - id
+                    nullable: true
+                  backup_policy:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the backup policy
+                    required:
+                      - id
+                      - display_name
+                      - name
+                      - target
+                      - retention_value
+                      - retention_unit
+                      - frequency_value
+                      - frequency_unit
+                      - schedule_time
+                      - schedule_day
+                      - schedule_week
+                      - created_at
+                      - updated_at
+                      - last_ran_at
+                      - next_run_at
+                      - required
+                      - id
+                    nullable: true
+                  database_branch:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                      - id
+                      - name
+                    nullable: true
+                required:
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - restored_branches
+                  - actor
+                  - id
+                  - name
+                  - state
+                  - size
+                  - estimated_storage_cost
+                  - created_at
+                  - updated_at
+                  - started_at
+                  - expires_at
+                  - completed_at
+                  - deleted_at
+                  - pvc_size
+                  - protected
+                  - required
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_backups`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_backups` |
+        | Database | `write_backups` |
+        | Branch | `write_backups` |
+      x-speakeasy-entity-operation: PostgresBranchBackup#create
+      x-speakeasy-entity-description: Manage a PlanetScale Postgres database branch backup.
   /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres:
     get:
       tags:
@@ -7357,8 +7794,24 @@ paths:
         | Organization | `read_backups` |
         | Database | `read_backups` |
         | Branch | `read_backups` |
-      x-speakeasy-entity-operation: PostgresBranchBackup#read
+      x-speakeasy-entity-operation:
+        - PostgresBranchBackup#read
+        - entityOperation: PostgresBranchBackup#create#2
+          options:
+            polling:
+              name: WaitForComplete
       x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database branch backup.
+      x-speakeasy-polling:
+        - name: WaitForComplete
+          delaySeconds: 30
+          intervalSeconds: 30
+          limitCount: 24 # 12 hours at a 30 second interval, plus initial 30 second delay
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "failed"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "success"
     delete:
       tags:
         - Backups

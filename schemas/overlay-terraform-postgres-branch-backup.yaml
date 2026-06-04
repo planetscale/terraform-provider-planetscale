@@ -9,15 +9,31 @@ actions:
     update:
       operationId: create_postgres_branch_backup
       summary: Create a Postgres branch backup
-      # x-speakeasy-entity-operation: PostgresBranchBackup#create
+      x-speakeasy-entity-operation: PostgresBranchBackup#create
       x-speakeasy-entity-description: Manage a PlanetScale Postgres database branch backup.
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres'].get
     description: API operation for managed resource read
     update:
       operationId: get_postgres_branch_backup
       summary: Get a Postgres branch backup
-      x-speakeasy-entity-operation: PostgresBranchBackup#read
+      x-speakeasy-entity-operation:
+        - PostgresBranchBackup#read
+        - entityOperation: PostgresBranchBackup#create#2
+          options:
+            polling:
+              name: WaitForComplete
       x-speakeasy-entity-description: Returns information about a PlanetScale Postgres database branch backup.
+      x-speakeasy-polling:
+        - name: WaitForComplete
+          delaySeconds: 30
+          intervalSeconds: 30
+          limitCount: 24 # 12 hours at a 30 second interval, plus initial 30 second delay
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "failed"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "success"
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#postgres'].delete
     description: API operation for managed resource delete
     update:
