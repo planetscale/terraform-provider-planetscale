@@ -1,0 +1,92 @@
+name: Update OpenAPI Schema
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-openapi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Download latest OpenAPI schema
+        run: make download-openapi
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- schemas/openapi.yaml; then
+            echo "OpenAPI schema is up to date; no PR needed."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git
+
+          branch=openapi/update
+          git checkout -B "$branch"
+          git add schemas/openapi.yaml
+          git commit -m "Update PlanetScale OpenAPI schema"
+          git push --force-with-lease origin "$branch"
+
+          if gh pr view "$branch" >/dev/null 2>&1; then
+            echo "Updated existing pull request for $branch"
+            exit 0
+          fi
+
+          body_file="$(mktemp)"
+          cat >"$body_file" <<'EOF'
+          ## Summary
+
+          This automated PR updates [`schemas/openapi.yaml`](schemas/openapi.yaml) to the latest version published by PlanetScale.
+
+          **This PR does not run Speakeasy generation.** Provider code changes are intentionally left for a maintainer to produce and validate locally.
+
+          ## Required follow-up
+
+          Before merging, a maintainer should:
+
+          1. Check out this branch locally
+          1. Run `make generate` to regenerate the Terraform provider from the updated schema and overlays
+          1. Review and validate all generated changes
+          1. Commit any overlay adjustments and generated code to this branch
+
+          ## Review checklist
+
+          ### Existing resources and data sources
+
+          Carefully review any changes that affect **existing** Terraform resources or data sources.
+          Schema changes such as new required fields, removed attributes, or type changes may require:
+
+          - Overlay updates in [`schemas/overlay-terraform-*.yaml`](schemas/)
+          - Migration notes or a provider version bump
+          - Acceptance test updates in [`internal/provider/testdata/`](internal/provider/testdata/)
+
+          ### Remove superfluous API fields via overlays
+
+          The raw OpenAPI schema includes many fields that are not useful in Terraform (timestamps, display names, actor metadata, and similar UI-only values). Remove them using overlay `remove: true` actions in [`schemas/`](schemas/).
+
+          Examples of fields that should typically be stripped:
+
+          - `created_at`, `updated_at`, `deleted_at`
+          - `display_name` on nested objects
+          - `actor`, `avatar_url`, and similar metadata
+
+          See existing overlays such as [`schemas/overlay-terraform-vitess-branch-backup.yaml`](schemas/overlay-terraform-vitess-branch-backup.yaml) for patterns.
+          EOF
+
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "Update PlanetScale OpenAPI schema" \
+            --body-file "$body_file"
