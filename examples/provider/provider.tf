@@ -2,11 +2,11 @@ terraform {
   required_providers {
     planetscale = {
       source  = "planetscale/planetscale"
-      version = "1.0.0"
+      version = "1.1.0"
     }
   }
 }
 
 provider "planetscale" {
-  # Configuration options
+  server_url = "..." # Optional - can use PLANETSCALE_SERVER_URL environment variable
 }
