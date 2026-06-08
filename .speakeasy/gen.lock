@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: b9b995f51234a0687505abc949a86b4a
+  docChecksum: 2ddf4a9abce6dd4cc153298d8843290d
   docVersion: v1
   speakeasyVersion: 1.769.1
   generationVersion: 2.892.1
@@ -106,6 +106,10 @@ trackedFiles:
     id: 1a6bd1934470
     last_write_checksum: sha1:df17877677403708f4fec9628aff77475b96c48b
     pristine_git_object: cd24e855212aaf70c29c5a6729c2c2b4f4dc19c1
+  examples/resources/planetscale_postgres_branch_backup/import-by-string-id.tf:
+    last_write_checksum: sha1:6f8a5ac0424c9e13cef7d0e74cf0d80b04848a93
+  examples/resources/planetscale_postgres_branch_backup/import.sh:
+    last_write_checksum: sha1:325f4461e58b9dd139f2822530376d3838c42ee6
   examples/resources/planetscale_postgres_branch_role/import-by-string-id.tf:
     id: 481d444b7e2f
     last_write_checksum: sha1:fcc145b259f465d88873396cbbcbcfda54176b42
@@ -126,6 +130,10 @@ trackedFiles:
     id: 600731b24687
     last_write_checksum: sha1:2d980f779c4a689023b96535eb2b0779a7d6807b
     pristine_git_object: 8175c63771b81e9f6552a7bc43ade3176b8bd9e1
+  examples/resources/planetscale_vitess_branch_backup/import-by-string-id.tf:
+    last_write_checksum: sha1:b6f2ffb5ee6acae28f4487351f800677e587ff05
+  examples/resources/planetscale_vitess_branch_backup/import.sh:
+    last_write_checksum: sha1:2a46c944c7efcef26680eb088e384583cbf4fba1
   examples/resources/planetscale_vitess_branch_password/import-by-string-id.tf:
     id: 91a7081b4213
     last_write_checksum: sha1:5fcfc1b9f25c9b2b043c65974b69d5c98989d585
@@ -304,6 +312,10 @@ trackedFiles:
     last_write_checksum: sha1:a7d91d685570436d253d051636b54b3e45aaed23
   internal/provider/postgresbranchbackup_data_source_sdk.go:
     last_write_checksum: sha1:b05855fc70b885a9e3a8e066830993b65d9e50c4
+  internal/provider/postgresbranchbackup_resource.go:
+    last_write_checksum: sha1:594c6f7715c6231d0ee6f006db062ab2c848e1d6
+  internal/provider/postgresbranchbackup_resource_sdk.go:
+    last_write_checksum: sha1:e4756a7dc97bb5e6eb7bc56ac9f8a9b45c6ee651
   internal/provider/postgresbranchbackups_data_source.go:
     last_write_checksum: sha1:7742d7fbff9d13b641395ff555106001f0ff1234
   internal/provider/postgresbranchbackups_data_source_sdk.go:
@@ -334,7 +346,7 @@ trackedFiles:
     pristine_git_object: 742cc9f5207b5c30ed21b0aae674ac8302c237e8
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:180e0cf3dac3c7320abe4cd5f513672e70d7e715
+    last_write_checksum: sha1:51def4839af1f731d69050b9666217dc64612444
     pristine_git_object: d5212c5b98f75bdedecef2af4ef7079732ac749d
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -584,6 +596,10 @@ trackedFiles:
     last_write_checksum: sha1:97437bb617e2ff6ba6a854b949488b4c5fa2e0f6
   internal/provider/vitessbranchbackup_data_source_sdk.go:
     last_write_checksum: sha1:77bf4045bb5127830100f1deb28f4bc0ce86ee55
+  internal/provider/vitessbranchbackup_resource.go:
+    last_write_checksum: sha1:7bea1069c8681ee2f01d334a02ca023ce448feb0
+  internal/provider/vitessbranchbackup_resource_sdk.go:
+    last_write_checksum: sha1:4dd5b8f5398efef77b3d22ff63f60d2a2b23b4fd
   internal/provider/vitessbranchbackups_data_source.go:
     last_write_checksum: sha1:65d59883127ca72c7136e1c62e614bfe7c531c35
   internal/provider/vitessbranchbackups_data_source_sdk.go:
@@ -615,7 +631,7 @@ trackedFiles:
   internal/sdk/backuppolicies.go:
     last_write_checksum: sha1:de9f729a4f62ab554657442244923bfa227c9ef4
   internal/sdk/backups.go:
-    last_write_checksum: sha1:724589c10972bf05868c2c6d877c91d5ab6224d1
+    last_write_checksum: sha1:5fc0fbd63976dd29c73327581cbde44d3fd93dc1
   internal/sdk/branchchanges.go:
     last_write_checksum: sha1:f3e6d0eefca1d9340cee2ee976628619e7869022
   internal/sdk/databasebranches.go:
@@ -708,6 +724,8 @@ trackedFiles:
     id: 952731e87008
     last_write_checksum: sha1:99be76733879b5f0f1be902f0edbf5bf7d5d51ce
     pristine_git_object: 70b0fa5325c1ee8e97b19848d8c365d2b713f0e6
+  internal/sdk/models/operations/createpostgresbranchbackup.go:
+    last_write_checksum: sha1:fba408c91c84d9f2423cba23aa01e102becbc927
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
     last_write_checksum: sha1:1ca2992790c08bd27654401016c3b0f16ae54800
@@ -718,6 +736,8 @@ trackedFiles:
     id: 25d25805a79a
     last_write_checksum: sha1:4a34e34c1b4482cc59068a7fc29c47a68b4134f8
     pristine_git_object: 4164e962f94db2ef10a0ac3446371930522a0d05
+  internal/sdk/models/operations/createvitessbranchbackup.go:
+    last_write_checksum: sha1:acc470f47389459c8e24498e09b893fbcdc63020
   internal/sdk/models/operations/deletepassword.go:
     id: 491914016b46
     last_write_checksum: sha1:7cda022c4378b37caab734de44dad29ca170c4ed

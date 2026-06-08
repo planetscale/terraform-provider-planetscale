@@ -11,8 +11,11 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/polling"
 	"github.com/spyzhov/ajson"
 	"net/http"
+	"strings"
+	"time"
 )
 
 // Backups -           Resources for managing database branch backups.
@@ -222,6 +225,165 @@ func (s *Backups) ListVitessBranchBackups(ctx context.Context, request operation
 
 }
 
+// CreateVitessBranchBackup - Create a Vitess branch backup
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`write_backups`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `write_backups` |
+// | Database | `write_backups` |
+// | Branch | `write_backups` |
+func (s *Backups) CreateVitessBranchBackup(ctx context.Context, request operations.CreateVitessBranchBackupRequest, opts ...operations.Option) (*operations.CreateVitessBranchBackupResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/backups", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "create_vitess_branch_backup",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.CreateVitessBranchBackupResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 201:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out operations.CreateVitessBranchBackupResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Object = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
 // GetVitessBranchBackup - Get a Vitess branch backup
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
@@ -241,6 +403,7 @@ func (s *Backups) ListVitessBranchBackups(ctx context.Context, request operation
 func (s *Backups) GetVitessBranchBackup(ctx context.Context, request operations.GetVitessBranchBackupRequest, opts ...operations.Option) (*operations.GetVitessBranchBackupResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -296,6 +459,19 @@ func (s *Backups) GetVitessBranchBackup(ctx context.Context, request operations.
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
+
+	if o.Polling != nil {
+		switch o.Polling.Name {
+		case "WaitForComplete":
+			return s.getVitessBranchBackupWaitForComplete(ctx, hookCtx, req, o)
+		}
+	}
+
+	return s.getVitessBranchBackup(ctx, hookCtx, req, o)
+}
+
+func (s *Backups) getVitessBranchBackup(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessBranchBackupResponse, error) {
+	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -372,6 +548,106 @@ func (s *Backups) GetVitessBranchBackup(ctx context.Context, request operations.
 
 	return res, nil
 
+}
+
+// Use with GetVitessBranchBackup by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *Backups) GetVitessBranchBackupWaitForComplete() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 30
+		defaultIntervalSeconds := 30
+		defaultLimitCount := 1440
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForComplete",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *Backups) getVitessBranchBackupWaitForComplete(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessBranchBackupResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getVitessBranchBackup(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetVitessBranchBackupResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getVitessBranchBackup(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		failureCriteriaMessage := make([]string, 0, 2)
+		failureCriteriaMet := true
+
+		if failureCriteriaMet {
+			failureCriteriaMet = res.StatusCode == 200
+			failureCriteriaMessage = append(failureCriteriaMessage, "HTTP status code was 200")
+		}
+
+		if failureCriteriaMet {
+			failureCriteriaMet = res.Object.State == "failed"
+			failureCriteriaMessage = append(failureCriteriaMessage, "Response body at /state was \"failed\"")
+		}
+
+		if failureCriteriaMet {
+			return res, &polling.FailureCriteriaError{Message: strings.Join(failureCriteriaMessage, " and ")}
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 200
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = res.Object.State == "success"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
 // DeleteVitessBranchBackup - Delete a Vitess branch backup
@@ -699,6 +975,165 @@ func (s *Backups) ListPostgresBranchBackups(ctx context.Context, request operati
 
 }
 
+// CreatePostgresBranchBackup - Create a Postgres branch backup
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`write_backups`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `write_backups` |
+// | Database | `write_backups` |
+// | Branch | `write_backups` |
+func (s *Backups) CreatePostgresBranchBackup(ctx context.Context, request operations.CreatePostgresBranchBackupRequest, opts ...operations.Option) (*operations.CreatePostgresBranchBackupResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/backups", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "create_postgres_branch_backup",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.CreatePostgresBranchBackupResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 201:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out operations.CreatePostgresBranchBackupResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Object = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
 // GetPostgresBranchBackup - Get a Postgres branch backup
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
@@ -718,6 +1153,7 @@ func (s *Backups) ListPostgresBranchBackups(ctx context.Context, request operati
 func (s *Backups) GetPostgresBranchBackup(ctx context.Context, request operations.GetPostgresBranchBackupRequest, opts ...operations.Option) (*operations.GetPostgresBranchBackupResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -773,6 +1209,19 @@ func (s *Backups) GetPostgresBranchBackup(ctx context.Context, request operation
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
+
+	if o.Polling != nil {
+		switch o.Polling.Name {
+		case "WaitForComplete":
+			return s.getPostgresBranchBackupWaitForComplete(ctx, hookCtx, req, o)
+		}
+	}
+
+	return s.getPostgresBranchBackup(ctx, hookCtx, req, o)
+}
+
+func (s *Backups) getPostgresBranchBackup(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchBackupResponse, error) {
+	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -849,6 +1298,106 @@ func (s *Backups) GetPostgresBranchBackup(ctx context.Context, request operation
 
 	return res, nil
 
+}
+
+// Use with GetPostgresBranchBackup by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *Backups) GetPostgresBranchBackupWaitForComplete() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 30
+		defaultIntervalSeconds := 30
+		defaultLimitCount := 1440
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForComplete",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *Backups) getPostgresBranchBackupWaitForComplete(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchBackupResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getPostgresBranchBackup(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetPostgresBranchBackupResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getPostgresBranchBackup(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		failureCriteriaMessage := make([]string, 0, 2)
+		failureCriteriaMet := true
+
+		if failureCriteriaMet {
+			failureCriteriaMet = res.StatusCode == 200
+			failureCriteriaMessage = append(failureCriteriaMessage, "HTTP status code was 200")
+		}
+
+		if failureCriteriaMet {
+			failureCriteriaMet = res.Object.State == "failed"
+			failureCriteriaMessage = append(failureCriteriaMessage, "Response body at /state was \"failed\"")
+		}
+
+		if failureCriteriaMet {
+			return res, &polling.FailureCriteriaError{Message: strings.Join(failureCriteriaMessage, " and ")}
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 200
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = res.Object.State == "success"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
 // DeletePostgresBranchBackup - Delete a Postgres branch backup

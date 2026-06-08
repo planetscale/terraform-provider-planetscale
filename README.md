@@ -64,9 +64,11 @@ Available configuration:
 
 * [planetscale_postgres_backup_policy](docs/resources/postgres_backup_policy.md)
 * [planetscale_postgres_branch](docs/resources/postgres_branch.md)
+* [planetscale_postgres_branch_backup](docs/resources/postgres_branch_backup.md)
 * [planetscale_postgres_branch_role](docs/resources/postgres_branch_role.md)
 * [planetscale_vitess_backup_policy](docs/resources/vitess_backup_policy.md)
 * [planetscale_vitess_branch](docs/resources/vitess_branch.md)
+* [planetscale_vitess_branch_backup](docs/resources/vitess_branch_backup.md)
 * [planetscale_vitess_branch_password](docs/resources/vitess_branch_password.md)
 
 ### Data Sources
