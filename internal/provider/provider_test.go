@@ -35,3 +35,10 @@ func testAccPreCheck(t *testing.T) {
 func randomWithPrefix(prefix string) string {
 	return fmt.Sprintf("%s-%d", prefix, rand.Intn(1000000))
 }
+
+func testAccBackupBranch() string {
+	if branch := os.Getenv("PLANETSCALE_TEST_BRANCH"); branch != "" {
+		return branch
+	}
+	return "main"
+}

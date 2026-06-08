@@ -16,7 +16,7 @@ func TestAccPostgresBranchBackupResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
 	databaseName := "testacc-postgres"
-	branchName := "main"
+	branchName := testAccBackupBranch()
 	backupName := randomWithPrefix("test-backup")
 	resourceAddress := "planetscale_postgres_branch_backup.test"
 

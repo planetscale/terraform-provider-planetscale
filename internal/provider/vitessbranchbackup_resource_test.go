@@ -16,7 +16,7 @@ func TestAccVitessBranchBackupResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
 	databaseName := "testacc-vitess"
-	branchName := "main"
+	branchName := testAccBackupBranch()
 	backupName := randomWithPrefix("test-backup")
 	resourceAddress := "planetscale_vitess_branch_backup.test"
 

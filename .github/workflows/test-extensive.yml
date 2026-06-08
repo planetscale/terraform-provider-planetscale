@@ -56,9 +56,11 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        terraform:
-          - "1.5.7" # Last MPL version - https://github.com/hashicorp/terraform/blob/v1.5.7/LICENSE
-          - latest
+        include:
+          - terraform: "1.5.7" # Last MPL version - https://github.com/hashicorp/terraform/blob/v1.5.7/LICENSE
+            branch: terraform-157
+          - terraform: latest
+            branch: terraform-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -74,6 +76,9 @@ jobs:
         env:
           PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
           PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+          # Dedicated backup branch so concurrent jobs don't contend for the
+          # API's single in-flight manual backup per branch.
+          PLANETSCALE_TEST_BRANCH: ${{ matrix.branch }}
         timeout-minutes: 30
 
   test-tofu:
@@ -85,8 +90,9 @@ jobs:
       max-parallel: 2
       fail-fast: false
       matrix:
-        tofu:
-          - latest
+        include:
+          - tofu: latest
+            branch: tofu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -102,4 +108,7 @@ jobs:
         env:
           PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
           PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+          # Dedicated backup branch so concurrent jobs don't contend for the
+          # API's single in-flight manual backup per branch.
+          PLANETSCALE_TEST_BRANCH: ${{ matrix.branch }}
         timeout-minutes: 30
