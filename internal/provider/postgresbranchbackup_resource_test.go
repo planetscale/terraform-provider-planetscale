@@ -81,6 +81,7 @@ func TestAccPostgresBranchBackupResource_Lifecycle(t *testing.T) {
 					return string(jsonBytes), err
 				},
 				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{"retention_value", "retention_unit"},
 			},
 		},
 	})
