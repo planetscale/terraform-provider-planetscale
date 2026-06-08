@@ -25,7 +25,10 @@ pscale database list --org "$ORG" --format json |
 
 for dbname in testacc-vitess testacc-postgres; do
   pscale branch list "$dbname" --org "$ORG" --format json |
-    jq -r '.[] | select(.name != "main") | .name' |
+    jq -r '.[] | select(.name != "main"
+      and .name != "terraform-157"
+      and .name != "terraform-latest"
+      and .name != "tofu-latest") | .name' |
     while read -r branch; do
       if [ "$DRY_RUN" = "true" ]; then
         echo "[DRY RUN] Would delete branch: $dbname/$branch"
