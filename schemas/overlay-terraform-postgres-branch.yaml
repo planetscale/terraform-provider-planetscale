@@ -71,6 +71,16 @@ actions:
       replicas:
         type: integer
         description: The number of replicas for the branch
+      parameters:
+        type: object
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: string
+        description: >-
+          Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
+          patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted
+          parameters are reset to their defaults.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.mysql_address
     remove: true
@@ -106,29 +116,12 @@ actions:
     description: Add x-speakeasy-match to branch parameter
     update:
       x-speakeasy-match: id
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.parameters[?@.name == 'branch']
-    description: Add x-speakeasy-match to branch parameter
-    update:
-      x-speakeasy-match: id
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.parameters[?@.name == 'id']
     description: Add x-speakeasy-match to id parameter
     update:
       x-speakeasy-name-override: change_request_id
       x-speakeasy-terraform-ignore: schema
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties.*
-    description: Keep only id and state for branch change response
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses['200'].content['application/json'].schema.properties
-    update:
-      id:
-        type: string
-        x-speakeasy-name-override: change_request_id
-        x-speakeasy-terraform-ignore: schema
-      state:
-        type: string
-        x-speakeasy-name-override: change_request_state
-        x-speakeasy-terraform-ignore: schema
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get.responses['200'].content['application/json'].schema.properties.*
     description: Keep only id and state for branch change response
     remove: true
@@ -142,12 +135,6 @@ actions:
         type: string
         x-speakeasy-name-override: change_request_state
         x-speakeasy-terraform-ignore: schema
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch
-    description: API operation for managed resource update.
-    update:
-      x-speakeasy-entity-operation:
-        - PostgresBranch#create#3
-        - PostgresBranch#update
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}"].get
     update:
@@ -156,7 +143,7 @@ actions:
           options:
             polling:
               name: WaitForChangeRequestComplete
-        - entityOperation: PostgresBranch#update#2
+        - entityOperation: PostgresBranch#update#3
           options:
             polling:
               name: WaitForChangeRequestComplete
@@ -177,9 +164,80 @@ actions:
     update:
       operationId: update_postgres_branch
       summary: Update a PostgreSQL branch
-      x-speakeasy-entity-operation: PostgresBranch#update#3
+      x-speakeasy-entity-operation: PostgresBranch#update
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content['application/json'].schema.properties.parameters
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content['application/json'].schema.properties.replicas
-    remove: true
+  - target: $.paths
+    description: Add the undocumented terraform-changes endpoint, which applies cluster_size and parameters with replace semantics and returns a change request to poll.
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/terraform-changes:
+        put:
+          operationId: apply_postgres_branch_terraform_changes
+          summary: Apply a PostgreSQL branch's cluster size and parameters
+          tags:
+            - Branch changes
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              description: "Organization name slug from `list_organizations`. Example: `acme`."
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              description: "Database name slug from `list_databases`. Example: `app-db`."
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              description: "Branch name from `list_branches`. Example: `main`."
+              x-speakeasy-match: id
+              schema:
+                type: string
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    cluster_size:
+                      type: string
+                      description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+                    parameters:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        additionalProperties:
+                          type: string
+                      description: >-
+                        Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
+                        patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted
+                        parameters are reset to their defaults.
+          responses:
+            "200":
+              description: Returns the resulting change request
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      id:
+                        type: string
+                        x-speakeasy-name-override: change_request_id
+                        x-speakeasy-terraform-ignore: schema
+                      state:
+                        type: string
+                        x-speakeasy-name-override: change_request_state
+                        x-speakeasy-terraform-ignore: schema
+                    required:
+                      - id
+                      - state
+            "204":
+              description: No changes to apply
+          x-speakeasy-entity-operation:
+            - PostgresBranch#create#3
+            - PostgresBranch#update#2

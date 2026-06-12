@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 2ddf4a9abce6dd4cc153298d8843290d
+  docChecksum: d6ddd901a9df82433f64432dcb15c071
   docVersion: v1
   speakeasyVersion: 1.769.1
   generationVersion: 2.892.1
@@ -294,19 +294,19 @@ trackedFiles:
     last_write_checksum: sha1:b38256e8bce7919d2527aa47ef83351face30d03
   internal/provider/postgresbranch_data_source.go:
     id: 3d4847eac64b
-    last_write_checksum: sha1:52057dd73680e2d57a7605e85bdac901452a39ba
+    last_write_checksum: sha1:97bf2e2fc190cc8d1e204c5b77fa2c01bdfbf7f5
     pristine_git_object: 8c62e876b56d5f981678f2556da600430340d765
   internal/provider/postgresbranch_data_source_sdk.go:
     id: 65aff8470b2f
-    last_write_checksum: sha1:8dede7eb02602834b6f3bab1fb4bd98aa59d7a26
+    last_write_checksum: sha1:df224656eaff938b90b2e56e430233eecc95bb8a
     pristine_git_object: ce4a668f6f884d6898c67aae59a7df6d67cd89e4
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
-    last_write_checksum: sha1:fe632bd61ef012a4333ba428c66176911364d71b
+    last_write_checksum: sha1:86bfcc6d0bcded31931a5a055f271a7eab073dd8
     pristine_git_object: 592d4c15815e79e1711aa2bc6a6ede61aec55eee
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:8b7c21549482f94cf6a4234cd542993d2084022e
+    last_write_checksum: sha1:f8fa6ce30f7e59f4ff62a23d2533f5bdca5fb1eb
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchbackup_data_source.go:
     last_write_checksum: sha1:a7d91d685570436d253d051636b54b3e45aaed23
@@ -633,7 +633,7 @@ trackedFiles:
   internal/sdk/backups.go:
     last_write_checksum: sha1:5fc0fbd63976dd29c73327581cbde44d3fd93dc1
   internal/sdk/branchchanges.go:
-    last_write_checksum: sha1:f3e6d0eefca1d9340cee2ee976628619e7869022
+    last_write_checksum: sha1:a0aad526bed875b307bd45833c28aa2f6ee2b18a
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
     last_write_checksum: sha1:62f4cffc67c4fa72f1f916b07f29b2fabd170b20
@@ -714,6 +714,8 @@ trackedFiles:
     id: bf281d768352
     last_write_checksum: sha1:f8493be1606361ffba9bf77d77ede209acc0f562
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
+  internal/sdk/models/operations/applypostgresbranchterraformchanges.go:
+    last_write_checksum: sha1:c9bbd023d1a0e3c31f08f4cf36f2bab9f6772789
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     last_write_checksum: sha1:b32e9ad276ce29e0aabd2803b652b84a395522ed
@@ -776,7 +778,7 @@ trackedFiles:
     last_write_checksum: sha1:d73ada12a6237fb6f716e184a46aa83e6331a01b
   internal/sdk/models/operations/getpostgresbranch.go:
     id: e4f92de0a1c5
-    last_write_checksum: sha1:a79806315b5a9fd25088946620dccb557f7de8cb
+    last_write_checksum: sha1:d4f258d96cdb5b8b4ec914cc525cfc8b8bce0de1
     pristine_git_object: 4029ccd13069ed892087aa806e0f167d8744c1db
   internal/sdk/models/operations/getpostgresbranchbackup.go:
     last_write_checksum: sha1:184a539741e27e4a5a803ba5a4544318cf0b0317
@@ -828,8 +830,6 @@ trackedFiles:
     id: 6d0d29414e00
     last_write_checksum: sha1:6af734f59773c359e9dfd9b7b0547df38e436581
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
-  internal/sdk/models/operations/updatebranchchangerequest.go:
-    last_write_checksum: sha1:1cd6ee5685076175bf081bc06ef4514e51f6973f
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     last_write_checksum: sha1:54da4ea20c1dfbb193d128c690b6a2050e9898ca
@@ -2738,6 +2738,18 @@ examples:
           organization: "<value>"
           database: "<value>"
           branch: "<value>"
+  apply_postgres_branch_terraform_changes:
+    speakeasy-default-apply-postgres-branch-terraform-changes:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "<value>"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

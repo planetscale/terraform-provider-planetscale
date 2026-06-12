@@ -679,118 +679,7 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/resizes: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/changes:
-    patch:
-      tags:
-        - Branch changes
-      operationId: update_branch_change_request
-      summary: Upsert a change request
-      parameters:
-        - name: organization
-          in: path
-          required: true
-          description: "Organization name slug from `list_organizations`. Example: `acme`."
-          schema:
-            type: string
-        - name: database
-          in: path
-          required: true
-          description: "Database name slug from `list_databases`. Example: `app-db`."
-          schema:
-            type: string
-        - name: branch
-          in: path
-          required: true
-          description: "Branch name from `list_branches`. Example: `main`."
-          schema:
-            type: string
-          x-speakeasy-match: id
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                cluster_size:
-                  type: string
-                  description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
-      responses:
-        "200":
-          description: Returns the branch change request
-          headers: {}
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    x-speakeasy-name-override: change_request_id
-                    x-speakeasy-terraform-ignore: schema
-                  state:
-                    type: string
-                    x-speakeasy-name-override: change_request_state
-                    x-speakeasy-terraform-ignore: schema
-                required:
-                  - id
-                  - restart
-                  - state
-                  - started_at
-                  - completed_at
-                  - created_at
-                  - updated_at
-                  - actor
-                  - cluster_name
-                  - cluster_display_name
-                  - cluster_metal
-                  - replicas
-                  - parameters
-                  - previous_cluster_name
-                  - previous_cluster_display_name
-                  - previous_cluster_metal
-                  - previous_replicas
-                  - previous_parameters
-                  - minimum_storage_bytes
-                  - maximum_storage_bytes
-                  - storage_autoscaling
-                  - storage_shrinking
-                  - storage_type
-                  - storage_iops
-                  - storage_throughput_mibs
-                  - previous_minimum_storage_bytes
-                  - previous_maximum_storage_bytes
-                  - previous_storage_autoscaling
-                  - previous_storage_shrinking
-                  - previous_storage_type
-                  - previous_storage_iops
-                  - previous_storage_throughput_mibs
-        "204":
-          description: No changes to apply
-          headers: {}
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "500":
-          description: Internal Server Error
-      description: |-
-        ### Authorization
-        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
-
-        **Service Token Accesses**
-         `write_database`
-
-        **OAuth Scopes**
-
-         | Resource | Scopes |
-        | :------- | :---------- |
-        | Organization | `write_databases` |
-        | Database | `write_database` |
-      x-speakeasy-entity-operation:
-        - PostgresBranch#create#3
-        - PostgresBranch#update
+  /organizations/{organization}/databases/{database}/branches/{branch}/changes: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}:
     get:
       tags:
@@ -902,7 +791,7 @@ paths:
           options:
             polling:
               name: WaitForChangeRequestComplete
-        - entityOperation: PostgresBranch#update#2
+        - entityOperation: PostgresBranch#update#3
           options:
             polling:
               name: WaitForChangeRequestComplete
@@ -3545,6 +3434,14 @@ paths:
                   replicas:
                     type: integer
                     description: The number of replicas for the branch
+                  parameters:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
                 required:
                   - id
                   - name
@@ -3787,7 +3684,7 @@ paths:
         | Organization | `write_branches` |
         | Database | `write_branches` |
         | Branch | `write_branch` |
-      x-speakeasy-entity-operation: PostgresBranch#update#3
+      x-speakeasy-entity-operation: PostgresBranch#update
     delete:
       tags:
         - Database branches
@@ -4463,6 +4360,76 @@ paths:
         | Database | `delete_branches`, `delete_production_branches` |
         | Branch | `delete_branch` |
       x-speakeasy-entity-operation: VitessBranch#delete
+  /organizations/{organization}/databases/{database}/branches/{branch}/terraform-changes:
+    put:
+      operationId: apply_postgres_branch_terraform_changes
+      summary: Apply a PostgreSQL branch's cluster size and parameters
+      tags:
+        - Branch changes
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          x-speakeasy-match: id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                cluster_size:
+                  type: string
+                  description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+                parameters:
+                  type: object
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  description: >-
+                    Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
+      responses:
+        "200":
+          description: Returns the resulting change request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: change_request_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: change_request_state
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - id
+                  - state
+        "204":
+          description: No changes to apply
+      x-speakeasy-entity-operation:
+        - PostgresBranch#create#3
+        - PostgresBranch#update#2
   /organizations/{organization}/databases#vitess: {}
   /organizations/{organization}/databases/{database}#vitess:
     get:

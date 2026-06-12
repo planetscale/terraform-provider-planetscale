@@ -24,6 +24,20 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
+		if len(resp.Parameters) > 0 {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
 		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}

@@ -139,6 +139,19 @@ type GetPostgresBranchResponseBody struct {
 	ParentBranch *string `json:"parent_branch"`
 	// The number of replicas for the branch
 	Replicas *int64 `json:"replicas,omitzero"`
+	// Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
+	Parameters map[string]map[string]string `json:"parameters,omitzero"`
+}
+
+func (g GetPostgresBranchResponseBody) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GetPostgresBranchResponseBody) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (g *GetPostgresBranchResponseBody) GetID() string {
@@ -216,6 +229,13 @@ func (g *GetPostgresBranchResponseBody) GetReplicas() *int64 {
 		return nil
 	}
 	return g.Replicas
+}
+
+func (g *GetPostgresBranchResponseBody) GetParameters() map[string]map[string]string {
+	if g == nil {
+		return nil
+	}
+	return g.Parameters
 }
 
 type GetPostgresBranchResponse struct {
