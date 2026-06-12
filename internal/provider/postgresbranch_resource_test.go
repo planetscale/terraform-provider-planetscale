@@ -22,7 +22,7 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 	clusterSize := "PS_DEV_AWS_ARM"
 	parameters := config.MapVariable(map[string]config.Variable{
 		"pgconf": config.MapVariable(map[string]config.Variable{
-			"max_connections": config.StringVariable("200"),
+			"max_connections": config.StringVariable("50"),
 		}),
 	})
 
@@ -50,7 +50,7 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("parameters"),
 						knownvalue.MapExact(map[string]knownvalue.Check{
 							"pgconf": knownvalue.MapExact(map[string]knownvalue.Check{
-								"max_connections": knownvalue.StringExact("200"),
+								"max_connections": knownvalue.StringExact("50"),
 							}),
 						}),
 					),
@@ -91,7 +91,7 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("parameters"),
 						knownvalue.MapExact(map[string]knownvalue.Check{
 							"pgconf": knownvalue.MapExact(map[string]knownvalue.Check{
-								"max_connections": knownvalue.StringExact("200"),
+								"max_connections": knownvalue.StringExact("50"),
 							}),
 						}),
 					),
