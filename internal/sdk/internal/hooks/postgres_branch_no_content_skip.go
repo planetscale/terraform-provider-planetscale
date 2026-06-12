@@ -10,12 +10,12 @@ import (
 )
 
 var (
-	branchChangePatchPathPattern = regexp.MustCompile(`^/v1/organizations/([^/]+)/databases/([^/]+)/branches/([^/]+)/changes$`)
-	branchChangeGetPathPattern   = regexp.MustCompile(`^/v1/organizations/([^/]+)/databases/([^/]+)/branches/([^/]+)/changes/([^/]+)$`)
+	terraformChangesPutPathPattern = regexp.MustCompile(`^/v1/organizations/([^/]+)/databases/([^/]+)/branches/([^/]+)/terraform-changes$`)
+	branchChangeGetPathPattern     = regexp.MustCompile(`^/v1/organizations/([^/]+)/databases/([^/]+)/branches/([^/]+)/changes/([^/]+)$`)
 )
 
 // PostgresBranchNoContentSkipHook wraps the SDK HTTP client and short-circuits
-// branch change polling when the previous PATCH /changes call returns 204.
+// branch change polling when the previous PUT /terraform-changes call returns 204.
 type PostgresBranchNoContentSkipHook struct {
 	mu           sync.Mutex
 	pendingSkips map[string]struct{}
@@ -82,11 +82,11 @@ func (c *postgresBranchNoContentSkipClient) Do(req *http.Request) (*http.Respons
 		return res, err
 	}
 
-	if req.Method != http.MethodPatch {
+	if req.Method != http.MethodPut {
 		return res, nil
 	}
 
-	organization, database, branch, ok := parseBranchChangePatchPath(req.URL.Path)
+	organization, database, branch, ok := parseTerraformChangesPutPath(req.URL.Path)
 	if !ok || res.StatusCode != http.StatusNoContent {
 		return res, nil
 	}
@@ -97,8 +97,8 @@ func (c *postgresBranchNoContentSkipClient) Do(req *http.Request) (*http.Respons
 	return syntheticBranchChangeResponse(req), nil
 }
 
-func parseBranchChangePatchPath(path string) (string, string, string, bool) {
-	matches := branchChangePatchPathPattern.FindStringSubmatch(path)
+func parseTerraformChangesPutPath(path string) (string, string, string, bool) {
+	matches := terraformChangesPutPathPattern.FindStringSubmatch(path)
 	if len(matches) != 4 {
 		return "", "", "", false
 	}

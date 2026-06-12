@@ -19,6 +19,14 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 
   name          = "my-branch"
   cluster_size  = "PS_10_AWS_ARM"
+
+  # Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
+  # patroni). Omitted parameters are reset to their defaults.
+  parameters = {
+    pgconf = {
+      max_connections = "200"
+    }
+  }
 }
 ```
 
@@ -37,6 +45,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 - `delete_descendants` (Boolean) If true, recursively delete all descendant branches along with this branch
 - `major_version` (String) For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.
+- `parameters` (Map of Map of String) Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
 - `restore_point` (String) Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.

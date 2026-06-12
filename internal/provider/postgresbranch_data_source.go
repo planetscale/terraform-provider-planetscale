@@ -36,6 +36,7 @@ type PostgresBranchDataSourceModel struct {
 	ID           types.String                         `tfsdk:"id"`
 	Name         types.String                         `tfsdk:"name"`
 	Organization types.String                         `tfsdk:"organization"`
+	Parameters   map[string]map[string]types.String   `tfsdk:"parameters"`
 	ParentBranch types.String                         `tfsdk:"parent_branch"`
 	Ready        types.Bool                           `tfsdk:"ready"`
 	RegionData   *tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
@@ -87,6 +88,13 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
+			},
+			"parameters": schema.MapAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: types.StringType,
+				},
+				Description: `Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.`,
 			},
 			"parent_branch": schema.StringAttribute{
 				Computed:    true,

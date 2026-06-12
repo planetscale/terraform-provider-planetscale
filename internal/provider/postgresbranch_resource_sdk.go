@@ -10,6 +10,17 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
+func (r *PostgresBranchResourceModel) RefreshFromOperationsApplyPostgresBranchTerraformChangesResponseBody(ctx context.Context, resp *operations.ApplyPostgresBranchTerraformChangesResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ChangeRequestID = types.StringValue(resp.ChangeRequestID)
+		r.ChangeRequestState = types.StringValue(resp.ChangeRequestState)
+	}
+
+	return diags
+}
+
 func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchResponseBody(ctx context.Context, resp *operations.CreatePostgresBranchResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -62,6 +73,20 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
+		if len(resp.Parameters) > 0 {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
 		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
@@ -71,17 +96,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
-	}
-
-	return diags
-}
-
-func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdateBranchChangeRequestResponseBody(ctx context.Context, resp *operations.UpdateBranchChangeRequestResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.ChangeRequestID = types.StringValue(resp.ChangeRequestID)
-		r.ChangeRequestState = types.StringValue(resp.ChangeRequestState)
 	}
 
 	return diags
@@ -112,6 +126,63 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdatePostgresBranchR
 	}
 
 	return diags
+}
+
+func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequest(ctx context.Context) (*operations.ApplyPostgresBranchTerraformChangesRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.ApplyPostgresBranchTerraformChangesRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx context.Context) (*operations.ApplyPostgresBranchTerraformChangesRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	clusterSize := new(string)
+	if !r.ClusterSize.IsUnknown() && !r.ClusterSize.IsNull() {
+		*clusterSize = r.ClusterSize.ValueString()
+	} else {
+		clusterSize = nil
+	}
+	parameters := make(map[string]map[string]string)
+	for parametersKey := range r.Parameters {
+		parametersInst := make(map[string]string)
+		for key := range r.Parameters[parametersKey] {
+			var inst string
+			inst = r.Parameters[parametersKey][key].ValueString()
+
+			parametersInst[key] = inst
+		}
+		parameters[parametersKey] = parametersInst
+	}
+	out := operations.ApplyPostgresBranchTerraformChangesRequestBody{
+		ClusterSize: clusterSize,
+		Parameters:  parameters,
+	}
+
+	return &out, diags
 }
 
 func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequest(ctx context.Context) (*operations.CreatePostgresBranchRequest, diag.Diagnostics) {
@@ -263,51 +334,6 @@ func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx c
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
-	}
-
-	return &out, diags
-}
-
-func (r *PostgresBranchResourceModel) ToOperationsUpdateBranchChangeRequestRequest(ctx context.Context) (*operations.UpdateBranchChangeRequestRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var organization string
-	organization = r.Organization.ValueString()
-
-	var database string
-	database = r.Database.ValueString()
-
-	var branch string
-	branch = r.ID.ValueString()
-
-	body, bodyDiags := r.ToOperationsUpdateBranchChangeRequestRequestBody(ctx)
-	diags.Append(bodyDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateBranchChangeRequestRequest{
-		Organization: organization,
-		Database:     database,
-		Branch:       branch,
-		Body:         body,
-	}
-
-	return &out, diags
-}
-
-func (r *PostgresBranchResourceModel) ToOperationsUpdateBranchChangeRequestRequestBody(ctx context.Context) (*operations.UpdateBranchChangeRequestRequestBody, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	clusterSize := new(string)
-	if !r.ClusterSize.IsUnknown() && !r.ClusterSize.IsNull() {
-		*clusterSize = r.ClusterSize.ValueString()
-	} else {
-		clusterSize = nil
-	}
-	out := operations.UpdateBranchChangeRequestRequestBody{
-		ClusterSize: clusterSize,
 	}
 
 	return &out, diags

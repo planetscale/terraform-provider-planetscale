@@ -16,13 +16,13 @@ func (t testHTTPClient) Do(req *http.Request) (*http.Response, error) {
 	return t(req)
 }
 
-func TestPostgresBranchNoContentSkipHookSkipsNextGetAfterPatch204(t *testing.T) {
+func TestPostgresBranchNoContentSkipHookSkipsNextGetAfterPut204(t *testing.T) {
 	var getCalls int
 
 	hook := NewPostgresBranchNoContentSkipHook()
 	_, wrappedClient := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
 		switch req.Method {
-		case http.MethodPatch:
+		case http.MethodPut:
 			return &http.Response{
 				StatusCode: http.StatusNoContent,
 				Header:     make(http.Header),
@@ -31,17 +31,17 @@ func TestPostgresBranchNoContentSkipHookSkipsNextGetAfterPatch204(t *testing.T) 
 			}, nil
 		case http.MethodGet:
 			getCalls++
-			require.FailNow(t, "wrapped client should skip outbound GET after PATCH 204")
+			require.FailNow(t, "wrapped client should skip outbound GET after PUT 204")
 		}
 		return nil, nil
 	}))
 
-	patchReq, err := http.NewRequest(http.MethodPatch, "https://api.planetscale.com/v1/organizations/org/databases/db/branches/br/changes", strings.NewReader(`{"cluster_size":"PS_20_AWS_X86"}`))
-	require.NoError(t, err, "failed to build patch request")
+	putReq, err := http.NewRequest(http.MethodPut, "https://api.planetscale.com/v1/organizations/org/databases/db/branches/br/terraform-changes", strings.NewReader(`{"cluster_size":"PS_20_AWS_X86"}`))
+	require.NoError(t, err, "failed to build put request")
 
-	patchRes, err := wrappedClient.Do(patchReq)
-	require.NoError(t, err, "patch request failed")
-	require.Equal(t, http.StatusOK, patchRes.StatusCode, "expected transformed patch response status 200")
+	putRes, err := wrappedClient.Do(putReq)
+	require.NoError(t, err, "put request failed")
+	require.Equal(t, http.StatusOK, putRes.StatusCode, "expected transformed put response status 200")
 
 	getReq, err := http.NewRequest(http.MethodGet, "https://api.planetscale.com/v1/organizations/org/databases/db/branches/br/changes/oq4hzhavm3um", nil)
 	require.NoError(t, err, "failed to build get request")
@@ -88,4 +88,23 @@ func TestPostgresBranchNoContentSkipHookPassesThroughGetWithoutMarker(t *testing
 	require.NoError(t, err, "get request failed")
 	require.Equal(t, http.StatusOK, getRes.StatusCode, "expected passthrough status 200")
 	require.Equal(t, 1, getCalls, "expected base client to be called once")
+}
+
+func TestPostgresBranchNoContentSkipHookPassesThrough204OnOtherPaths(t *testing.T) {
+	hook := NewPostgresBranchNoContentSkipHook()
+	_, wrappedClient := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusNoContent,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("")),
+			Request:    req,
+		}, nil
+	}))
+
+	patchReq, err := http.NewRequest(http.MethodPatch, "https://api.planetscale.com/v1/organizations/org/databases/db/branches/br/changes", strings.NewReader(`{"cluster_size":"PS_20_AWS_X86"}`))
+	require.NoError(t, err, "failed to build patch request")
+
+	patchRes, err := wrappedClient.Do(patchReq)
+	require.NoError(t, err, "patch request failed")
+	require.Equal(t, http.StatusNoContent, patchRes.StatusCode, "expected 204 on a non-terraform-changes path to pass through unmodified")
 }

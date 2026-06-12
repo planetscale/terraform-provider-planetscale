@@ -20,6 +20,11 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 	branchNameRenamed := randomWithPrefix("test-renamed")
 	resourceAddress := "planetscale_postgres_branch.test"
 	clusterSize := "PS_DEV_AWS_ARM"
+	parameters := config.MapVariable(map[string]config.Variable{
+		"pgconf": config.MapVariable(map[string]config.Variable{
+			"max_connections": config.StringVariable("200"),
+		}),
+	})
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -32,12 +37,22 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 					"organization":  config.StringVariable(testAccOrg),
 					"branch_name":   config.StringVariable(branchNameOriginal),
 					"cluster_size":  config.StringVariable(clusterSize),
+					"parameters":    parameters,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("id"),
 						knownvalue.NotNull(),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("parameters"),
+						knownvalue.MapExact(map[string]knownvalue.Check{
+							"pgconf": knownvalue.MapExact(map[string]knownvalue.Check{
+								"max_connections": knownvalue.StringExact("200"),
+							}),
+						}),
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
@@ -63,12 +78,22 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 					"database_name": config.StringVariable(databaseName),
 					"branch_name":   config.StringVariable(branchNameRenamed),
 					"cluster_size":  config.StringVariable(clusterSize),
+					"parameters":    parameters,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("name"),
 						knownvalue.StringExact(branchNameRenamed),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("parameters"),
+						knownvalue.MapExact(map[string]knownvalue.Check{
+							"pgconf": knownvalue.MapExact(map[string]knownvalue.Check{
+								"max_connections": knownvalue.StringExact("200"),
+							}),
+						}),
 					),
 				},
 			},
@@ -79,6 +104,7 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 					"database_name": config.StringVariable(databaseName),
 					"branch_name":   config.StringVariable(branchNameRenamed),
 					"cluster_size":  config.StringVariable(clusterSize),
+					"parameters":    parameters,
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
