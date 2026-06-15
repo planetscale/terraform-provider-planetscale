@@ -17,6 +17,8 @@ data "planetscale_postgres_branch_roles" "my_postgresbranchroles" {
   branch       = "...my_branch..."
   database     = "...my_database..."
   organization = "...my_organization..."
+  q            = "...my_q..."
+  status       = "...my_status..."
 }
 ```
 
@@ -28,6 +30,11 @@ data "planetscale_postgres_branch_roles" "my_postgresbranchroles" {
 - `branch` (String) Branch name from `list_branches`. Example: `main`.
 - `database` (String) Database name slug from `list_databases`. Example: `app-db`.
 - `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
+
+### Optional
+
+- `q` (String) Search roles by name or username
+- `status` (String) Filter roles by status
 
 ### Read-Only
 

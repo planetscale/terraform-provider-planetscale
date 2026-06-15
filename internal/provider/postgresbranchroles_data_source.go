@@ -33,6 +33,8 @@ type PostgresBranchRolesDataSourceModel struct {
 	Data         []tfTypes.ListRolesData `tfsdk:"data"`
 	Database     types.String            `tfsdk:"database"`
 	Organization types.String            `tfsdk:"organization"`
+	Q            types.String            `queryParam:"style=form,explode=true,name=q" tfsdk:"q"`
+	Status       types.String            `queryParam:"style=form,explode=true,name=status" tfsdk:"status"`
 	Type         types.String            `tfsdk:"type"`
 }
 
@@ -202,6 +204,14 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 				Required:    true,
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
 			},
+			"q": schema.StringAttribute{
+				Optional:    true,
+				Description: `Search roles by name or username`,
+			},
+			"status": schema.StringAttribute{
+				Optional:    true,
+				Description: `Filter roles by status`,
+			},
 			"type": schema.StringAttribute{
 				Computed:    true,
 				Description: `The response type. Always "list" for paginated responses.`,
@@ -286,7 +296,10 @@ func (r *PostgresBranchRolesDataSource) Read(ctx context.Context, req datasource
 		res, err = res.Next()
 
 		if err != nil {
-			resp.Diagnostics.AddError(fmt.Sprintf("failed to retrieve next page of results: %v", err), debugResponse(res.RawResponse))
+			resp.Diagnostics.AddError("failed to retrieve next page of results", err.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
 			return
 		}
 

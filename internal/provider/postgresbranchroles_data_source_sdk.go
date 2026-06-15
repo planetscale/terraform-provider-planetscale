@@ -80,10 +80,24 @@ func (r *PostgresBranchRolesDataSourceModel) ToOperationsListRolesRequest(ctx co
 	var branch string
 	branch = r.Branch.ValueString()
 
+	status := new(string)
+	if !r.Status.IsUnknown() && !r.Status.IsNull() {
+		*status = r.Status.ValueString()
+	} else {
+		status = nil
+	}
+	q := new(string)
+	if !r.Q.IsUnknown() && !r.Q.IsNull() {
+		*q = r.Q.ValueString()
+	} else {
+		q = nil
+	}
 	out := operations.ListRolesRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
+		Status:       status,
+		Q:            q,
 	}
 
 	return &out, diags
