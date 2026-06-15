@@ -33,6 +33,8 @@ type PostgresBranchRolesDataSourceModel struct {
 	Data         []tfTypes.ListRolesData `tfsdk:"data"`
 	Database     types.String            `tfsdk:"database"`
 	Organization types.String            `tfsdk:"organization"`
+	Q            types.String            `queryParam:"style=form,explode=true,name=q" tfsdk:"q"`
+	Status       types.String            `queryParam:"style=form,explode=true,name=status" tfsdk:"status"`
 	Type         types.String            `tfsdk:"type"`
 }
 
@@ -201,6 +203,14 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
+			},
+			"q": schema.StringAttribute{
+				Optional:    true,
+				Description: `Search roles by name or username`,
+			},
+			"status": schema.StringAttribute{
+				Optional:    true,
+				Description: `Filter roles by status`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: d6ddd901a9df82433f64432dcb15c071
+  docChecksum: 8dbffa51aee0f7284be655216c8479ee
   docVersion: v1
   speakeasyVersion: 1.769.1
   generationVersion: 2.892.1
@@ -68,7 +68,7 @@ trackedFiles:
     pristine_git_object: a056b4a391124bf64b8f31d57ae298336be026c9
   examples/data-sources/planetscale_postgres_branch_roles/data-source.tf:
     id: b0a7630c0f80
-    last_write_checksum: sha1:dab1dc5abc1ec47a27694bea47adaf52e2aabe1e
+    last_write_checksum: sha1:e2ab4d831cda4bd4e88cdfd0e70895cd537a4b28
     pristine_git_object: db4928f864e1065b1079b9ab9b87536cbec6c41f
   examples/data-sources/planetscale_vitess_backup_policies/data-source.tf:
     last_write_checksum: sha1:37f4772e91f51c20b900898ecb91df82388241db
@@ -338,11 +338,11 @@ trackedFiles:
     pristine_git_object: 5246ebe1519b4a0b500dd4b4ff225ab6c6acddad
   internal/provider/postgresbranchroles_data_source.go:
     id: eab053a45f5a
-    last_write_checksum: sha1:8f7da969ad5ddd539c8bfff1aa9dd16286556bdf
+    last_write_checksum: sha1:fd1be6ec7cff5496a974d847228538420fb5744d
     pristine_git_object: 1bbffd2a483a8124323163c4b58554a23b337a23
   internal/provider/postgresbranchroles_data_source_sdk.go:
     id: 1f5d16bb3dd7
-    last_write_checksum: sha1:7955a4afe7728fb9fa3b9a9736b392ef72a6d897
+    last_write_checksum: sha1:d8cc31b391ca8b5f53b9c335a6c846bf78fd43d9
     pristine_git_object: 742cc9f5207b5c30ed21b0aae674ac8302c237e8
   internal/provider/provider.go:
     id: 1e7e86841cf3
@@ -820,7 +820,7 @@ trackedFiles:
     last_write_checksum: sha1:198d0c3032ca4359e3ba26f75b1519b70e443284
   internal/sdk/models/operations/listroles.go:
     id: ba1976927ea8
-    last_write_checksum: sha1:31153a3f3d5355f3071e34220e3d20a0938a6b18
+    last_write_checksum: sha1:080b29718f0554e26e6a5ef828f49fe4240a92bc
     pristine_git_object: 2759d9ffe5333235ea0787dc880ea888ed739c68
   internal/sdk/models/operations/listvitessbackuppolicies.go:
     last_write_checksum: sha1:bab6385f83583a3d5a884559a340fd84196bb136

@@ -20,6 +20,10 @@ type ListRolesRequest struct {
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
 	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
+	// Filter roles by status
+	Status *string `queryParam:"style=form,explode=true,name=status"`
+	// Search roles by name or username
+	Q *string `queryParam:"style=form,explode=true,name=q"`
 }
 
 func (l ListRolesRequest) MarshalJSON() ([]byte, error) {
@@ -66,6 +70,20 @@ func (l *ListRolesRequest) GetPerPage() *int64 {
 		return nil
 	}
 	return l.PerPage
+}
+
+func (l *ListRolesRequest) GetStatus() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Status
+}
+
+func (l *ListRolesRequest) GetQ() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Q
 }
 
 type ListRolesInheritedRole string
