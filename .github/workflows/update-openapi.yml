@@ -22,24 +22,44 @@ jobs:
       - name: Download latest OpenAPI schema
         run: make download-openapi
 
-      - name: Create pull request
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - id: changes
         run: |
           if git diff --quiet -- schemas/openapi.yaml; then
             echo "OpenAPI schema is up to date; no PR needed."
-            exit 0
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          gh auth setup-git
-
+      - name: Reset target branch
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha="$(git rev-parse HEAD)"
           branch=openapi/update
-          git checkout -B "$branch"
-          git add schemas/openapi.yaml
-          git commit -m "Update PlanetScale OpenAPI schema"
-          git push --force-with-lease origin "$branch"
+          gh api --method PATCH "repos/${{ github.repository }}/git/refs/heads/$branch" \
+            -f sha="$sha" -F force=true \
+            || gh api --method POST "repos/${{ github.repository }}/git/refs" \
+              -f ref="refs/heads/$branch" -f sha="$sha"
+
+      - name: Commit and push OpenAPI schema
+        if: steps.changes.outputs.changed == 'true'
+        uses: planetscale/ghcommit-action@a6b150b81dca5dd027baa898604418eec9e11465 # v0.2.22
+        with:
+          commit_message: "Update PlanetScale OpenAPI schema"
+          repo: ${{ github.repository }}
+          branch: openapi/update
+          file_pattern: schemas/openapi.yaml
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Create pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch=openapi/update
 
           pr_state="$(gh pr view "$branch" --json state -q '.state' 2>/dev/null || true)"
           if [ "$pr_state" = "OPEN" ]; then
