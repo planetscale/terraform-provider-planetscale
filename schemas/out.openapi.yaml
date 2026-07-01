@@ -210,6 +210,7 @@ paths:
 
 
 
+
          | Resource | Scopes |
         | :------- | :---------- |
 
@@ -373,9 +374,11 @@ paths:
 
 
 
+
          `read_organization`
 
         **OAuth Scopes**
+
 
 
 
@@ -794,9 +797,11 @@ paths:
 
 
 
+
          `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
 
         **OAuth Scopes**
+
 
 
 
@@ -965,9 +970,11 @@ paths:
 
 
 
+
          `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -1355,9 +1362,11 @@ paths:
 
 
 
+
          `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -1699,9 +1708,11 @@ paths:
 
 
 
+
          `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -2008,9 +2019,11 @@ paths:
 
 
 
+
          `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -2331,9 +2344,11 @@ paths:
 
 
 
+
          `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -2441,9 +2456,11 @@ paths:
 
 
 
+
          `delete_production_branch_password`, `delete_production_read_only_branch_password`, `delete_branch_password`
 
         **OAuth Scopes**
+
 
 
 
@@ -2790,9 +2807,11 @@ paths:
 
 
 
+
          `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -3111,9 +3130,11 @@ paths:
 
 
 
+
          `create_production_branch_password`, `create_production_read_only_branch_password`, `create_branch_password`
 
         **OAuth Scopes**
+
 
 
 
@@ -3148,7 +3169,7 @@ paths:
 
         | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRole#create
-      x-speakeasy-entity-description: Manage a PlanetScale database role.
+      x-speakeasy-entity-description: Manage a PlanetScale Postgres branch role.
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/default: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/reset-default: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}:
@@ -3402,9 +3423,11 @@ paths:
 
 
 
+
          `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -3439,7 +3462,7 @@ paths:
 
         | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: PostgresBranchRole#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database role.
+      x-speakeasy-entity-description: Returns information about a PlanetScale Postgres branch role.
     patch:
       tags:
         - Roles
@@ -3699,9 +3722,11 @@ paths:
 
 
 
+
          `create_production_branch_password`, `create_production_read_only_branch_password`, `create_branch_password`
 
         **OAuth Scopes**
+
 
 
 
@@ -3814,9 +3839,11 @@ paths:
 
 
 
+
          `delete_production_branch_password`, `delete_production_read_only_branch_password`, `delete_branch_password`
 
         **OAuth Scopes**
+
 
 
 
@@ -4144,9 +4171,11 @@ paths:
 
 
 
+
          `create_branch`, `restore_production_branch_backup`, `restore_backup`
 
         **OAuth Scopes**
+
 
 
 
@@ -4370,9 +4399,11 @@ paths:
 
 
 
+
          `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -4609,9 +4640,11 @@ paths:
 
 
 
+
          `write_database`
 
         **OAuth Scopes**
+
 
 
 
@@ -4720,9 +4753,11 @@ paths:
 
 
 
+
          `delete_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -4984,9 +5019,11 @@ paths:
 
 
 
+
          `create_branch`, `restore_production_branch_backup`, `restore_backup`
 
         **OAuth Scopes**
+
 
 
 
@@ -5205,9 +5242,11 @@ paths:
 
 
 
+
          `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -5450,9 +5489,11 @@ paths:
 
 
 
+
          `write_database`
 
         **OAuth Scopes**
+
 
 
 
@@ -5561,9 +5602,11 @@ paths:
 
 
 
+
          `delete_branch`
 
         **OAuth Scopes**
+
 
 
 
@@ -5991,9 +6034,11 @@ paths:
 
 
 
+
          `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
 
         **OAuth Scopes**
+
 
 
 
@@ -6328,9 +6373,11 @@ paths:
 
 
 
+
          `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
 
         **OAuth Scopes**
+
 
 
 
@@ -6365,6 +6412,1031 @@ paths:
       x-speakeasy-entity-operation:
         - DatabasePostgres#read
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database.
+  /organizations/{organization}/databases/{database}/branches/{branch}/roles#redacted:
+    post:
+      tags:
+        - Roles
+      operationId: create_redacted_role
+      summary: Create a Postgres role without a password
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: 'Organization name slug from `list_organizations`. Example: `acme`.'
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: 'Database name slug from `list_databases`. Example: `app-db`.'
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: 'Branch name from `list_branches`. Example: `main`.'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the role
+                ttl:
+                  type: integer
+                  description: Time to live in seconds
+                inherited_roles:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - pscale_managed
+                      - pg_checkpoint
+                      - pg_create_subscription
+                      - pg_maintain
+                      - pg_monitor
+                      - pg_read_all_data
+                      - pg_read_all_settings
+                      - pg_read_all_stats
+                      - pg_signal_backend
+                      - pg_stat_scan_tables
+                      - pg_use_reserved_connections
+                      - pg_write_all_data
+                      - postgres
+                  description: Roles to inherit from
+                  format: set
+      responses:
+        '200':
+          description: Returns the new credentials
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the role
+                  name:
+                    type: string
+                    description: The name of the role
+                  access_host_url:
+                    type: string
+                    description: The database connection string
+                  private_access_host_url:
+                    type: string
+                    description: The database connection string for private connections
+                  private_connection_service_name:
+                    type: string
+                    description: The service name to set up private connectivity
+                  username:
+                    type: string
+                    description: The database user name
+                  base_username:
+                    type: string
+                    description: The base username without branch routing suffix
+                  password:
+                    type: string
+                    description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
+                    x-speakeasy-terraform-ignore: true
+                  database_name:
+                    type: string
+                    description: The database name
+                  created_at:
+                    type: string
+                    description: When the role was created
+                  updated_at:
+                    type: string
+                    description: When the role was updated
+                  deleted_at:
+                    type: string
+                    description: When the role was deleted
+                    nullable: true
+                  expires_at:
+                    type: string
+                    description: When the role expires
+                    nullable: true
+                  dropped_at:
+                    type: string
+                    description: When the role was dropped
+                    nullable: true
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
+                    nullable: true
+                  drop_failed:
+                    type: string
+                    description: Error message available when dropping the role fails
+                  expired:
+                    type: boolean
+                    description: True if the credentials are expired
+                  default:
+                    type: boolean
+                    description: Whether the role is the default postgres user
+                  ttl:
+                    type: integer
+                    description: Number of seconds before the credentials expire
+                  inherited_roles:
+                    items:
+                      type: string
+                      enum:
+                        - pscale_managed
+                        - pg_checkpoint
+                        - pg_create_subscription
+                        - pg_maintain
+                        - pg_monitor
+                        - pg_read_all_data
+                        - pg_read_all_settings
+                        - pg_read_all_stats
+                        - pg_signal_backend
+                        - pg_stat_scan_tables
+                        - pg_use_reserved_connections
+                        - pg_write_all_data
+                        - postgres
+                    type: array
+                    description: Database roles these credentials inherit
+                    format: set
+                  branch:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                      created_at:
+                        type: string
+                        description: When the resource was created
+                        x-speakeasy-ignore: true
+                      updated_at:
+                        type: string
+                        description: When the resource was last updated
+                        x-speakeasy-ignore: true
+                      deleted_at:
+                        type: string
+                        description: When the resource was deleted, if deleted
+                        nullable: true
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                    x-speakeasy-name-override: branch_data
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                    x-speakeasy-name-override: actor_data
+                  query_safety_settings:
+                    type: object
+                    properties:
+                      require_where_on_delete:
+                        type: string
+                        enum:
+                          - 'off'
+                          - warn
+                          - 'on'
+                        description: Require WHERE clause on DELETE statements
+                      require_where_on_update:
+                        type: string
+                        enum:
+                          - 'off'
+                          - warn
+                          - 'on'
+                        description: Require WHERE clause on UPDATE statements
+                    required:
+                      - require_where_on_delete
+                      - require_where_on_update
+                required:
+                  - id
+                  - name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+                  - username
+                  - base_username
+                  - password
+                  - database_name
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - expires_at
+                  - dropped_at
+                  - disabled_at
+                  - drop_failed
+                  - expired
+                  - default
+                  - ttl
+                  - inherited_roles
+                  - branch
+                  - actor
+                  - query_safety_settings
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: >-
+        ### Authorization
+
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+
+        **Service Token Accesses**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         `create_production_branch_password`, `create_production_read_only_branch_password`, `create_branch_password`
+
+        **OAuth Scopes**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#create
+      x-speakeasy-entity-description: Manage a PlanetScale Postgres branch role without storing the password in Terraform state.
+  /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted:
+    get:
+      tags:
+        - Roles
+      operationId: get_redacted_role
+      summary: Get a Postgres role without a password
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: 'Organization name slug from `list_organizations`. Example: `acme`.'
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: 'Database name slug from `list_databases`. Example: `app-db`.'
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: 'Branch name from `list_branches`. Example: `main`.'
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the role
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a role
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the role
+                  name:
+                    type: string
+                    description: The name of the role
+                  access_host_url:
+                    type: string
+                    description: The database connection string
+                  private_access_host_url:
+                    type: string
+                    description: The database connection string for private connections
+                  private_connection_service_name:
+                    type: string
+                    description: The service name to set up private connectivity
+                  username:
+                    type: string
+                    description: The database user name
+                  base_username:
+                    type: string
+                    description: The base username without branch routing suffix
+                  password:
+                    type: string
+                    description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
+                    x-speakeasy-ignore: true
+                    x-speakeasy-terraform-ignore: true
+                  database_name:
+                    type: string
+                    description: The database name
+                  created_at:
+                    type: string
+                    description: When the role was created
+                  updated_at:
+                    type: string
+                    description: When the role was updated
+                  deleted_at:
+                    type: string
+                    description: When the role was deleted
+                    nullable: true
+                  expires_at:
+                    type: string
+                    description: When the role expires
+                    nullable: true
+                  dropped_at:
+                    type: string
+                    description: When the role was dropped
+                    nullable: true
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
+                    nullable: true
+                  drop_failed:
+                    type: string
+                    description: Error message available when dropping the role fails
+                  expired:
+                    type: boolean
+                    description: True if the credentials are expired
+                  default:
+                    type: boolean
+                    description: Whether the role is the default postgres user
+                  ttl:
+                    type: integer
+                    description: Number of seconds before the credentials expire
+                  inherited_roles:
+                    items:
+                      type: string
+                      enum:
+                        - pscale_managed
+                        - pg_checkpoint
+                        - pg_create_subscription
+                        - pg_maintain
+                        - pg_monitor
+                        - pg_read_all_data
+                        - pg_read_all_settings
+                        - pg_read_all_stats
+                        - pg_signal_backend
+                        - pg_stat_scan_tables
+                        - pg_use_reserved_connections
+                        - pg_write_all_data
+                        - postgres
+                    type: array
+                    description: Database roles these credentials inherit
+                    format: set
+                  branch:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                      created_at:
+                        type: string
+                        description: When the resource was created
+                        x-speakeasy-ignore: true
+                      updated_at:
+                        type: string
+                        description: When the resource was last updated
+                        x-speakeasy-ignore: true
+                      deleted_at:
+                        type: string
+                        description: When the resource was deleted, if deleted
+                        nullable: true
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                    x-speakeasy-name-override: branch_data
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                    x-speakeasy-name-override: actor_data
+                  query_safety_settings:
+                    type: object
+                    properties:
+                      require_where_on_delete:
+                        type: string
+                        enum:
+                          - 'off'
+                          - warn
+                          - 'on'
+                        description: Require WHERE clause on DELETE statements
+                      require_where_on_update:
+                        type: string
+                        enum:
+                          - 'off'
+                          - warn
+                          - 'on'
+                        description: Require WHERE clause on UPDATE statements
+                    required:
+                      - require_where_on_delete
+                      - require_where_on_update
+                required:
+                  - id
+                  - name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+                  - username
+                  - base_username
+                  - password
+                  - database_name
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - expires_at
+                  - dropped_at
+                  - disabled_at
+                  - drop_failed
+                  - expired
+                  - default
+                  - ttl
+                  - inherited_roles
+                  - branch
+                  - actor
+                  - query_safety_settings
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: >-
+        ### Authorization
+
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+
+        **Service Token Accesses**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Postgres branch role.
+    patch:
+      tags:
+        - Roles
+      operationId: update_redacted_role
+      summary: Update a Postgres role
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: 'Organization name slug from `list_organizations`. Example: `acme`.'
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: 'Database name slug from `list_databases`. Example: `app-db`.'
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: 'Branch name from `list_branches`. Example: `main`.'
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the role
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name of the role
+      responses:
+        '200':
+          description: Returns the updated role
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the role
+                  name:
+                    type: string
+                    description: The name of the role
+                  access_host_url:
+                    type: string
+                    description: The database connection string
+                  private_access_host_url:
+                    type: string
+                    description: The database connection string for private connections
+                  private_connection_service_name:
+                    type: string
+                    description: The service name to set up private connectivity
+                  username:
+                    type: string
+                    description: The database user name
+                  base_username:
+                    type: string
+                    description: The base username without branch routing suffix
+                  password:
+                    type: string
+                    description: The plain text password, available only after create
+                    x-speakeasy-param-sensitive: true
+                    x-speakeasy-ignore: true
+                    x-speakeasy-terraform-ignore: true
+                  database_name:
+                    type: string
+                    description: The database name
+                  created_at:
+                    type: string
+                    description: When the role was created
+                  updated_at:
+                    type: string
+                    description: When the role was updated
+                  deleted_at:
+                    type: string
+                    description: When the role was deleted
+                    nullable: true
+                  expires_at:
+                    type: string
+                    description: When the role expires
+                    nullable: true
+                  dropped_at:
+                    type: string
+                    description: When the role was dropped
+                    nullable: true
+                  disabled_at:
+                    type: string
+                    description: When the role was disabled
+                    nullable: true
+                  drop_failed:
+                    type: string
+                    description: Error message available when dropping the role fails
+                  expired:
+                    type: boolean
+                    description: True if the credentials are expired
+                  default:
+                    type: boolean
+                    description: Whether the role is the default postgres user
+                  ttl:
+                    type: integer
+                    description: Number of seconds before the credentials expire
+                  inherited_roles:
+                    items:
+                      type: string
+                      enum:
+                        - pscale_managed
+                        - pg_checkpoint
+                        - pg_create_subscription
+                        - pg_maintain
+                        - pg_monitor
+                        - pg_read_all_data
+                        - pg_read_all_settings
+                        - pg_read_all_stats
+                        - pg_signal_backend
+                        - pg_stat_scan_tables
+                        - pg_use_reserved_connections
+                        - pg_write_all_data
+                        - postgres
+                    type: array
+                    description: Database roles these credentials inherit
+                    format: set
+                  branch:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID for the resource
+                      name:
+                        type: string
+                        description: The name for the resource
+                      created_at:
+                        type: string
+                        description: When the resource was created
+                        x-speakeasy-ignore: true
+                      updated_at:
+                        type: string
+                        description: When the resource was last updated
+                        x-speakeasy-ignore: true
+                      deleted_at:
+                        type: string
+                        description: When the resource was deleted, if deleted
+                        nullable: true
+                    required:
+                      - id
+                      - name
+                      - created_at
+                      - updated_at
+                      - deleted_at
+                    x-speakeasy-name-override: branch_data
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                    x-speakeasy-name-override: actor_data
+                  query_safety_settings:
+                    type: object
+                    properties:
+                      require_where_on_delete:
+                        type: string
+                        enum:
+                          - 'off'
+                          - warn
+                          - 'on'
+                        description: Require WHERE clause on DELETE statements
+                      require_where_on_update:
+                        type: string
+                        enum:
+                          - 'off'
+                          - warn
+                          - 'on'
+                        description: Require WHERE clause on UPDATE statements
+                    required:
+                      - require_where_on_delete
+                      - require_where_on_update
+                required:
+                  - id
+                  - name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+                  - username
+                  - base_username
+                  - password
+                  - database_name
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - expires_at
+                  - dropped_at
+                  - disabled_at
+                  - drop_failed
+                  - expired
+                  - default
+                  - ttl
+                  - inherited_roles
+                  - branch
+                  - actor
+                  - query_safety_settings
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: >-
+        ### Authorization
+
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+
+        **Service Token Accesses**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         `create_production_branch_password`, `create_production_read_only_branch_password`, `create_branch_password`
+
+        **OAuth Scopes**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#update
+    delete:
+      tags:
+        - Roles
+      operationId: delete_redacted_role
+      summary: Delete a redacted role
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: 'Organization name slug from `list_organizations`. Example: `acme`.'
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: 'Database name slug from `list_databases`. Example: `app-db`.'
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: 'Branch name from `list_branches`. Example: `main`.'
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the role
+          schema:
+            type: string
+        - name: successor
+          in: query
+          description: The optional role to reassign ownership to before dropping
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deletes the role credentials
+          headers: {}
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: >-
+        ### Authorization
+
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+
+        **Service Token Accesses**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         `delete_production_branch_password`, `delete_production_read_only_branch_password`, `delete_branch_password`
+
+        **OAuth Scopes**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+
+        | Organization | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
+
+        | Branch | `manage_passwords`, `manage_read_only_passwords` |
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#delete
   /organizations/{organization}/databases/{database}/backup-policies#vitess:
     get:
       tags:
@@ -6551,9 +7623,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -6771,9 +7845,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -6940,9 +8016,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -7158,9 +8236,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -7260,9 +8340,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -7481,9 +8563,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -7701,9 +8785,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -7870,9 +8956,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -8088,9 +9176,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -8190,9 +9280,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -8529,9 +9621,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -8800,9 +9894,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -9048,9 +10144,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -9175,9 +10273,11 @@ paths:
 
 
 
+
          `delete_backups`, `delete_production_branch_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -9516,9 +10616,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -9791,9 +10893,11 @@ paths:
 
 
 
+
          `write_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -10039,9 +11143,11 @@ paths:
 
 
 
+
          `read_backups`
 
         **OAuth Scopes**
+
 
 
 
@@ -10166,9 +11272,11 @@ paths:
 
 
 
+
          `delete_backups`, `delete_production_branch_backups`
 
         **OAuth Scopes**
+
 
 
 

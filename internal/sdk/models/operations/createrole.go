@@ -9,28 +9,28 @@ import (
 	"net/http"
 )
 
-type InheritedRoleRequest string
+type CreateRoleInheritedRoleRequest string
 
 const (
-	InheritedRoleRequestPscaleManaged            InheritedRoleRequest = "pscale_managed"
-	InheritedRoleRequestPgCheckpoint             InheritedRoleRequest = "pg_checkpoint"
-	InheritedRoleRequestPgCreateSubscription     InheritedRoleRequest = "pg_create_subscription"
-	InheritedRoleRequestPgMaintain               InheritedRoleRequest = "pg_maintain"
-	InheritedRoleRequestPgMonitor                InheritedRoleRequest = "pg_monitor"
-	InheritedRoleRequestPgReadAllData            InheritedRoleRequest = "pg_read_all_data"
-	InheritedRoleRequestPgReadAllSettings        InheritedRoleRequest = "pg_read_all_settings"
-	InheritedRoleRequestPgReadAllStats           InheritedRoleRequest = "pg_read_all_stats"
-	InheritedRoleRequestPgSignalBackend          InheritedRoleRequest = "pg_signal_backend"
-	InheritedRoleRequestPgStatScanTables         InheritedRoleRequest = "pg_stat_scan_tables"
-	InheritedRoleRequestPgUseReservedConnections InheritedRoleRequest = "pg_use_reserved_connections"
-	InheritedRoleRequestPgWriteAllData           InheritedRoleRequest = "pg_write_all_data"
-	InheritedRoleRequestPostgres                 InheritedRoleRequest = "postgres"
+	CreateRoleInheritedRoleRequestPscaleManaged            CreateRoleInheritedRoleRequest = "pscale_managed"
+	CreateRoleInheritedRoleRequestPgCheckpoint             CreateRoleInheritedRoleRequest = "pg_checkpoint"
+	CreateRoleInheritedRoleRequestPgCreateSubscription     CreateRoleInheritedRoleRequest = "pg_create_subscription"
+	CreateRoleInheritedRoleRequestPgMaintain               CreateRoleInheritedRoleRequest = "pg_maintain"
+	CreateRoleInheritedRoleRequestPgMonitor                CreateRoleInheritedRoleRequest = "pg_monitor"
+	CreateRoleInheritedRoleRequestPgReadAllData            CreateRoleInheritedRoleRequest = "pg_read_all_data"
+	CreateRoleInheritedRoleRequestPgReadAllSettings        CreateRoleInheritedRoleRequest = "pg_read_all_settings"
+	CreateRoleInheritedRoleRequestPgReadAllStats           CreateRoleInheritedRoleRequest = "pg_read_all_stats"
+	CreateRoleInheritedRoleRequestPgSignalBackend          CreateRoleInheritedRoleRequest = "pg_signal_backend"
+	CreateRoleInheritedRoleRequestPgStatScanTables         CreateRoleInheritedRoleRequest = "pg_stat_scan_tables"
+	CreateRoleInheritedRoleRequestPgUseReservedConnections CreateRoleInheritedRoleRequest = "pg_use_reserved_connections"
+	CreateRoleInheritedRoleRequestPgWriteAllData           CreateRoleInheritedRoleRequest = "pg_write_all_data"
+	CreateRoleInheritedRoleRequestPostgres                 CreateRoleInheritedRoleRequest = "postgres"
 )
 
-func (e InheritedRoleRequest) ToPointer() *InheritedRoleRequest {
+func (e CreateRoleInheritedRoleRequest) ToPointer() *CreateRoleInheritedRoleRequest {
 	return &e
 }
-func (e *InheritedRoleRequest) UnmarshalJSON(data []byte) error {
+func (e *CreateRoleInheritedRoleRequest) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -61,10 +61,10 @@ func (e *InheritedRoleRequest) UnmarshalJSON(data []byte) error {
 	case "pg_write_all_data":
 		fallthrough
 	case "postgres":
-		*e = InheritedRoleRequest(v)
+		*e = CreateRoleInheritedRoleRequest(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for InheritedRoleRequest: %v", v)
+		return fmt.Errorf("invalid value for CreateRoleInheritedRoleRequest: %v", v)
 	}
 }
 
@@ -74,7 +74,7 @@ type CreateRoleRequestBody struct {
 	// Time to live in seconds
 	TTL *int64 `json:"ttl,omitzero"`
 	// Roles to inherit from
-	InheritedRoles []InheritedRoleRequest `json:"inherited_roles,omitzero"`
+	InheritedRoles []CreateRoleInheritedRoleRequest `json:"inherited_roles,omitzero"`
 }
 
 func (c CreateRoleRequestBody) MarshalJSON() ([]byte, error) {
@@ -102,7 +102,7 @@ func (c *CreateRoleRequestBody) GetTTL() *int64 {
 	return c.TTL
 }
 
-func (c *CreateRoleRequestBody) GetInheritedRoles() []InheritedRoleRequest {
+func (c *CreateRoleRequestBody) GetInheritedRoles() []CreateRoleInheritedRoleRequest {
 	if c == nil {
 		return nil
 	}
