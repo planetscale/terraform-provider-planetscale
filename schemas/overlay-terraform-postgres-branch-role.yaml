@@ -8,7 +8,7 @@ actions:
     description: API operation for managed resource create.
     update:
       x-speakeasy-entity-operation: PostgresBranchRole#create
-      x-speakeasy-entity-description: Manage a PlanetScale database role.
+      x-speakeasy-entity-description: Manage a PlanetScale Postgres branch role.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].delete
     description: API operation for managed resource delete.
     update:
@@ -17,7 +17,7 @@ actions:
     description: API operation for data and managed resource read.
     update:
       x-speakeasy-entity-operation: PostgresBranchRole#read
-      x-speakeasy-entity-description: Returns information about a PlanetScale database role.
+      x-speakeasy-entity-description: Returns information about a PlanetScale Postgres branch role.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch
     description: API operation for managed resource update.
     update:

@@ -10,60 +10,17 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsCreateRoleResponseBody(ctx context.Context, resp *operations.CreateRoleResponseBody) diag.Diagnostics {
+func (r *PostgresRedactedBranchRoleResourceModel) RefreshFromOperationsCreateRedactedRoleResponseBody(ctx context.Context, resp *operations.CreateRedactedRoleResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
-		r.ActorData = &tfTypes.GetRoleActorData{}
+		r.ActorData = &tfTypes.GetRedactedRoleActorData{}
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
 		r.BaseUsername = types.StringValue(resp.BaseUsername)
-		r.BranchData = &tfTypes.GetRoleBranchData{}
-		r.BranchData.DeletedAt = types.StringPointerValue(resp.BranchData.DeletedAt)
-		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
-		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
-		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		r.DatabaseName = types.StringValue(resp.DatabaseName)
-		r.Default = types.BoolValue(resp.Default)
-		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
-		r.DisabledAt = types.StringPointerValue(resp.DisabledAt)
-		r.DropFailed = types.StringValue(resp.DropFailed)
-		r.DroppedAt = types.StringPointerValue(resp.DroppedAt)
-		r.Expired = types.BoolValue(resp.Expired)
-		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
-		r.ID = types.StringValue(resp.ID)
-		r.InheritedRoles = make([]types.String, 0, len(resp.InheritedRoles))
-		for _, v := range resp.InheritedRoles {
-			r.InheritedRoles = append(r.InheritedRoles, types.StringValue(string(v)))
-		}
-		r.Name = types.StringValue(resp.Name)
-		r.Password = types.StringValue(resp.Password)
-		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
-		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
-		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
-		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
-		r.TTL = types.Int64Value(resp.TTL)
-		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
-		r.Username = types.StringValue(resp.Username)
-	}
-
-	return diags
-}
-
-func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBody(ctx context.Context, resp *operations.GetRoleResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
-		r.ActorData = &tfTypes.GetRoleActorData{}
-		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
-		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
-		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
-		r.BaseUsername = types.StringValue(resp.BaseUsername)
-		r.BranchData = &tfTypes.GetRoleBranchData{}
+		r.BranchData = &tfTypes.GetRedactedRoleBranchData{}
 		r.BranchData.DeletedAt = types.StringPointerValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
@@ -84,7 +41,7 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings = &tfTypes.GetRedactedRoleQuerySafetySettings{}
 		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
 		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
@@ -95,17 +52,17 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 	return diags
 }
 
-func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleResponseBody(ctx context.Context, resp *operations.UpdateRoleResponseBody) diag.Diagnostics {
+func (r *PostgresRedactedBranchRoleResourceModel) RefreshFromOperationsGetRedactedRoleResponseBody(ctx context.Context, resp *operations.GetRedactedRoleResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
-		r.ActorData = &tfTypes.GetRoleActorData{}
+		r.ActorData = &tfTypes.GetRedactedRoleActorData{}
 		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
 		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
 		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
 		r.BaseUsername = types.StringValue(resp.BaseUsername)
-		r.BranchData = &tfTypes.GetRoleBranchData{}
+		r.BranchData = &tfTypes.GetRedactedRoleBranchData{}
 		r.BranchData.DeletedAt = types.StringPointerValue(resp.BranchData.DeletedAt)
 		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
 		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
@@ -126,7 +83,7 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
+		r.QuerySafetySettings = &tfTypes.GetRedactedRoleQuerySafetySettings{}
 		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
 		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
 		r.TTL = types.Int64Value(resp.TTL)
@@ -137,7 +94,49 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 	return diags
 }
 
-func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequest(ctx context.Context) (*operations.CreateRoleRequest, diag.Diagnostics) {
+func (r *PostgresRedactedBranchRoleResourceModel) RefreshFromOperationsUpdateRedactedRoleResponseBody(ctx context.Context, resp *operations.UpdateRedactedRoleResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.AccessHostURL = types.StringValue(resp.AccessHostURL)
+		r.ActorData = &tfTypes.GetRedactedRoleActorData{}
+		r.ActorData.AvatarURL = types.StringValue(resp.ActorData.AvatarURL)
+		r.ActorData.DisplayName = types.StringValue(resp.ActorData.DisplayName)
+		r.ActorData.ID = types.StringValue(resp.ActorData.ID)
+		r.BaseUsername = types.StringValue(resp.BaseUsername)
+		r.BranchData = &tfTypes.GetRedactedRoleBranchData{}
+		r.BranchData.DeletedAt = types.StringPointerValue(resp.BranchData.DeletedAt)
+		r.BranchData.ID = types.StringValue(resp.BranchData.ID)
+		r.BranchData.Name = types.StringValue(resp.BranchData.Name)
+		r.CreatedAt = types.StringValue(resp.CreatedAt)
+		r.DatabaseName = types.StringValue(resp.DatabaseName)
+		r.Default = types.BoolValue(resp.Default)
+		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
+		r.DisabledAt = types.StringPointerValue(resp.DisabledAt)
+		r.DropFailed = types.StringValue(resp.DropFailed)
+		r.DroppedAt = types.StringPointerValue(resp.DroppedAt)
+		r.Expired = types.BoolValue(resp.Expired)
+		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
+		r.ID = types.StringValue(resp.ID)
+		r.InheritedRoles = make([]types.String, 0, len(resp.InheritedRoles))
+		for _, v := range resp.InheritedRoles {
+			r.InheritedRoles = append(r.InheritedRoles, types.StringValue(string(v)))
+		}
+		r.Name = types.StringValue(resp.Name)
+		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
+		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
+		r.QuerySafetySettings = &tfTypes.GetRedactedRoleQuerySafetySettings{}
+		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
+		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
+		r.TTL = types.Int64Value(resp.TTL)
+		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
+		r.Username = types.StringValue(resp.Username)
+	}
+
+	return diags
+}
+
+func (r *PostgresRedactedBranchRoleResourceModel) ToOperationsCreateRedactedRoleRequest(ctx context.Context) (*operations.CreateRedactedRoleRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -149,14 +148,14 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequest(ctx cont
 	var branch string
 	branch = r.Branch.ValueString()
 
-	body, bodyDiags := r.ToOperationsCreateRoleRequestBody(ctx)
+	body, bodyDiags := r.ToOperationsCreateRedactedRoleRequestBody(ctx)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.CreateRoleRequest{
+	out := operations.CreateRedactedRoleRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
@@ -166,7 +165,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequest(ctx cont
 	return &out, diags
 }
 
-func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx context.Context) (*operations.CreateRoleRequestBody, diag.Diagnostics) {
+func (r *PostgresRedactedBranchRoleResourceModel) ToOperationsCreateRedactedRoleRequestBody(ctx context.Context) (*operations.CreateRedactedRoleRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	name := new(string)
@@ -181,11 +180,11 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx 
 	} else {
 		ttl = nil
 	}
-	inheritedRoles := make([]operations.CreateRoleInheritedRoleRequest, 0, len(r.InheritedRoles))
+	inheritedRoles := make([]operations.CreateRedactedRoleInheritedRoleRequest, 0, len(r.InheritedRoles))
 	for _, inheritedRolesItem := range r.InheritedRoles {
-		inheritedRoles = append(inheritedRoles, operations.CreateRoleInheritedRoleRequest(inheritedRolesItem.ValueString()))
+		inheritedRoles = append(inheritedRoles, operations.CreateRedactedRoleInheritedRoleRequest(inheritedRolesItem.ValueString()))
 	}
-	out := operations.CreateRoleRequestBody{
+	out := operations.CreateRedactedRoleRequestBody{
 		Name:           name,
 		TTL:            ttl,
 		InheritedRoles: inheritedRoles,
@@ -194,7 +193,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx 
 	return &out, diags
 }
 
-func (r *PostgresBranchRoleResourceModel) ToOperationsDeleteRoleRequest(ctx context.Context) (*operations.DeleteRoleRequest, diag.Diagnostics) {
+func (r *PostgresRedactedBranchRoleResourceModel) ToOperationsDeleteRedactedRoleRequest(ctx context.Context) (*operations.DeleteRedactedRoleRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -215,7 +214,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsDeleteRoleRequest(ctx cont
 	} else {
 		successor = nil
 	}
-	out := operations.DeleteRoleRequest{
+	out := operations.DeleteRedactedRoleRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
@@ -226,7 +225,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsDeleteRoleRequest(ctx cont
 	return &out, diags
 }
 
-func (r *PostgresBranchRoleResourceModel) ToOperationsGetRoleRequest(ctx context.Context) (*operations.GetRoleRequest, diag.Diagnostics) {
+func (r *PostgresRedactedBranchRoleResourceModel) ToOperationsGetRedactedRoleRequest(ctx context.Context) (*operations.GetRedactedRoleRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -241,7 +240,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsGetRoleRequest(ctx context
 	var id string
 	id = r.ID.ValueString()
 
-	out := operations.GetRoleRequest{
+	out := operations.GetRedactedRoleRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
@@ -251,7 +250,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsGetRoleRequest(ctx context
 	return &out, diags
 }
 
-func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequest(ctx context.Context) (*operations.UpdateRoleRequest, diag.Diagnostics) {
+func (r *PostgresRedactedBranchRoleResourceModel) ToOperationsUpdateRedactedRoleRequest(ctx context.Context) (*operations.UpdateRedactedRoleRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -266,14 +265,14 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequest(ctx cont
 	var id string
 	id = r.ID.ValueString()
 
-	body, bodyDiags := r.ToOperationsUpdateRoleRequestBody(ctx)
+	body, bodyDiags := r.ToOperationsUpdateRedactedRoleRequestBody(ctx)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.UpdateRoleRequest{
+	out := operations.UpdateRedactedRoleRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
@@ -284,7 +283,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequest(ctx cont
 	return &out, diags
 }
 
-func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequestBody(ctx context.Context) (*operations.UpdateRoleRequestBody, diag.Diagnostics) {
+func (r *PostgresRedactedBranchRoleResourceModel) ToOperationsUpdateRedactedRoleRequestBody(ctx context.Context) (*operations.UpdateRedactedRoleRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	name := new(string)
@@ -293,7 +292,7 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsUpdateRoleRequestBody(ctx 
 	} else {
 		name = nil
 	}
-	out := operations.UpdateRoleRequestBody{
+	out := operations.UpdateRedactedRoleRequestBody{
 		Name: name,
 	}
 

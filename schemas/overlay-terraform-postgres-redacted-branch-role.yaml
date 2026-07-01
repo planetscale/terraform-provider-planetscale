@@ -1,0 +1,62 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_redacted_branch_role managed resource.
+  version: 0.0.1
+actions:
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles#redacted: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#redacted']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#redacted'].get
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#redacted'].post
+    description: API operation for managed resource create.
+    update:
+      operationId: create_redacted_role
+      summary: Create a Postgres role without a password
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#create
+      x-speakeasy-entity-description: Manage a PlanetScale Postgres branch role without storing the password in Terraform state.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted'].delete
+    description: API operation for managed resource delete.
+    update:
+      operationId: delete_redacted_role
+      summary: Delete a redacted role
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#delete
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted'].get
+    description: API operation for managed resource read.
+    update:
+      operationId: get_redacted_role
+      summary: Get a Postgres role without a password
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Postgres branch role.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted'].patch
+    description: API operation for managed resource update.
+    update:
+      operationId: update_redacted_role
+      summary: Update a Postgres role
+      x-speakeasy-entity-operation: PostgresRedactedBranchRole#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted'].get.responses["200"].content["application/json"].schema.properties.password
+    description: Omit password from Terraform state.
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#redacted'].patch.responses["200"].content["application/json"].schema.properties.password
+    description: Omit password from Terraform state.
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#redacted'].post.responses["200"].content["application/json"].schema.properties.password
+    description: Omit password from Terraform state.
+    update:
+      x-speakeasy-terraform-ignore: true

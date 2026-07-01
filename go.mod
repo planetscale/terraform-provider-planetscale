@@ -1,6 +1,6 @@
 module github.com/planetscale/terraform-provider-planetscale
 
-go 1.26
+go 1.25.10
 
 require (
 	github.com/hashicorp/go-uuid v1.0.3
