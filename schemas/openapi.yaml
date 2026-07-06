@@ -708,6 +708,13 @@ paths:
             organization's default region.
           schema:
             type: string
+        - name: database
+          in: query
+          description: >-
+            The database name to resolve rates for. When specified,
+            database-level custom rates take precedence over organization rates.
+          schema:
+            type: string
       responses:
         '200':
           description: Returns available cluster sizes with optional pricing rates
@@ -3271,6 +3278,9 @@ paths:
                         shard_count:
                           type: integer
                           description: The number of shards in the branch
+                        keyspace_count:
+                          type: integer
+                          description: The number of keyspaces in the branch
                         stale_schema:
                           type: boolean
                           description: Whether or not the branch has a stale schema
@@ -3416,6 +3426,7 @@ paths:
                         - safe_migrations
                         - sharded
                         - shard_count
+                        - keyspace_count
                         - stale_schema
                         - actor
                         - restored_from_branch
@@ -3656,6 +3667,9 @@ paths:
                   shard_count:
                     type: integer
                     description: The number of shards in the branch
+                  keyspace_count:
+                    type: integer
+                    description: The number of keyspaces in the branch
                   stale_schema:
                     type: boolean
                     description: Whether or not the branch has a stale schema
@@ -3799,6 +3813,7 @@ paths:
                   - safe_migrations
                   - sharded
                   - shard_count
+                  - keyspace_count
                   - stale_schema
                   - actor
                   - restored_from_branch
@@ -3961,6 +3976,9 @@ paths:
                   shard_count:
                     type: integer
                     description: The number of shards in the branch
+                  keyspace_count:
+                    type: integer
+                    description: The number of keyspaces in the branch
                   stale_schema:
                     type: boolean
                     description: Whether or not the branch has a stale schema
@@ -4104,6 +4122,7 @@ paths:
                   - safe_migrations
                   - sharded
                   - shard_count
+                  - keyspace_count
                   - stale_schema
                   - actor
                   - restored_from_branch
@@ -4274,6 +4293,9 @@ paths:
                   shard_count:
                     type: integer
                     description: The number of shards in the branch
+                  keyspace_count:
+                    type: integer
+                    description: The number of keyspaces in the branch
                   stale_schema:
                     type: boolean
                     description: Whether or not the branch has a stale schema
@@ -4417,6 +4439,7 @@ paths:
                   - safe_migrations
                   - sharded
                   - shard_count
+                  - keyspace_count
                   - stale_schema
                   - actor
                   - restored_from_branch
@@ -4691,6 +4714,11 @@ paths:
                         pvc_size:
                           type: integer
                           description: Size of the PVC used for the backup
+                        uncompressed_size:
+                          type: integer
+                          description: >-
+                            The uncompressed (logical) size of the backup in
+                            bytes
                         protected:
                           type: boolean
                           description: Whether or not the backup is protected from deletion
@@ -4902,6 +4930,7 @@ paths:
                         - completed_at
                         - deleted_at
                         - pvc_size
+                        - uncompressed_size
                         - protected
                         - required
                         - restored_branches
@@ -5053,6 +5082,9 @@ paths:
                   pvc_size:
                     type: integer
                     description: Size of the PVC used for the backup
+                  uncompressed_size:
+                    type: integer
+                    description: The uncompressed (logical) size of the backup in bytes
                   protected:
                     type: boolean
                     description: Whether or not the backup is protected from deletion
@@ -5258,6 +5290,7 @@ paths:
                   - completed_at
                   - deleted_at
                   - pvc_size
+                  - uncompressed_size
                   - protected
                   - required
                   - restored_branches
@@ -5378,6 +5411,9 @@ paths:
                   pvc_size:
                     type: integer
                     description: Size of the PVC used for the backup
+                  uncompressed_size:
+                    type: integer
+                    description: The uncompressed (logical) size of the backup in bytes
                   protected:
                     type: boolean
                     description: Whether or not the backup is protected from deletion
@@ -5583,6 +5619,7 @@ paths:
                   - completed_at
                   - deleted_at
                   - pvc_size
+                  - uncompressed_size
                   - protected
                   - required
                   - restored_branches
@@ -5711,6 +5748,9 @@ paths:
                   pvc_size:
                     type: integer
                     description: Size of the PVC used for the backup
+                  uncompressed_size:
+                    type: integer
+                    description: The uncompressed (logical) size of the backup in bytes
                   protected:
                     type: boolean
                     description: Whether or not the backup is protected from deletion
@@ -5916,6 +5956,7 @@ paths:
                   - completed_at
                   - deleted_at
                   - pvc_size
+                  - uncompressed_size
                   - protected
                   - required
                   - restored_branches
@@ -8744,6 +8785,9 @@ paths:
                   shard_count:
                     type: integer
                     description: The number of shards in the branch
+                  keyspace_count:
+                    type: integer
+                    description: The number of keyspaces in the branch
                   stale_schema:
                     type: boolean
                     description: Whether or not the branch has a stale schema
@@ -8887,6 +8931,7 @@ paths:
                   - safe_migrations
                   - sharded
                   - shard_count
+                  - keyspace_count
                   - stale_schema
                   - actor
                   - restored_from_branch
@@ -8974,11 +9019,13 @@ paths:
                     internal:
                       type: boolean
                       description: The internal state of the extension
-                    shared_preload_allowed:
-                      type: boolean
-                      description: >-
-                        Whether the extension can be added to
-                        shared_preload_libraries
+                    loader:
+                      type: string
+                      enum:
+                        - shared_preload_libraries
+                        - session_preload_libraries
+                        - create_extension
+                      description: How the extension is loaded
                     url:
                       type: string
                       description: The URL of the extension
@@ -9118,7 +9165,7 @@ paths:
                     - name
                     - description
                     - internal
-                    - shared_preload_allowed
+                    - loader
                     - url
                     - available
                     - unavailable_reason
@@ -10444,6 +10491,16 @@ paths:
             results will be filtered to only those in the region
           schema:
             type: string
+        - name: status
+          in: query
+          description: Filter passwords by status
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Search passwords by name
+          schema:
+            type: string
         - name: page
           in: query
           description: If provided, specifies the page offset of returned results
@@ -10640,7 +10697,7 @@ paths:
                         plain_text:
                           type: string
                           description: >-
-                            The plain text password. Null except in the response
+                            The plaintext password. Null except in the response
                             from the create endpoint.
                           nullable: true
                         replica:
@@ -10944,7 +11001,7 @@ paths:
                   plain_text:
                     type: string
                     description: >-
-                      The plain text password. Null except in the response from
+                      The plaintext password. Null except in the response from
                       the create endpoint.
                     nullable: true
                   replica:
@@ -11214,7 +11271,7 @@ paths:
                   plain_text:
                     type: string
                     description: >-
-                      The plain text password. Null except in the response from
+                      The plaintext password. Null except in the response from
                       the create endpoint.
                     nullable: true
                   replica:
@@ -11497,7 +11554,7 @@ paths:
                   plain_text:
                     type: string
                     description: >-
-                      The plain text password. Null except in the response from
+                      The plaintext password. Null except in the response from
                       the create endpoint.
                     nullable: true
                   replica:
@@ -11831,7 +11888,7 @@ paths:
                   plain_text:
                     type: string
                     description: >-
-                      The plain text password. Null except in the response from
+                      The plaintext password. Null except in the response from
                       the create endpoint.
                     nullable: true
                   replica:
@@ -12039,6 +12096,9 @@ paths:
                   shard_count:
                     type: integer
                     description: The number of shards in the branch
+                  keyspace_count:
+                    type: integer
+                    description: The number of keyspaces in the branch
                   stale_schema:
                     type: boolean
                     description: Whether or not the branch has a stale schema
@@ -12182,6 +12242,7 @@ paths:
                   - safe_migrations
                   - sharded
                   - shard_count
+                  - keyspace_count
                   - stale_schema
                   - actor
                   - restored_from_branch
@@ -12954,7 +13015,7 @@ paths:
                           description: The base username without branch routing suffix
                         password:
                           type: string
-                          description: The plain text password, available only after create
+                          description: The plaintext password, available only after create
                         database_name:
                           type: string
                           description: The database name
@@ -13229,7 +13290,7 @@ paths:
                     description: The base username without branch routing suffix
                   password:
                     type: string
-                    description: The plain text password, available only after create
+                    description: The plaintext password, available only after create
                   database_name:
                     type: string
                     description: The database name
@@ -13460,7 +13521,7 @@ paths:
                     description: The base username without branch routing suffix
                   password:
                     type: string
-                    description: The plain text password, available only after create
+                    description: The plaintext password, available only after create
                   database_name:
                     type: string
                     description: The database name
@@ -13691,7 +13752,7 @@ paths:
                     description: The base username without branch routing suffix
                   password:
                     type: string
-                    description: The plain text password, available only after create
+                    description: The plaintext password, available only after create
                   database_name:
                     type: string
                     description: The database name
@@ -13928,7 +13989,7 @@ paths:
                     description: The base username without branch routing suffix
                   password:
                     type: string
-                    description: The plain text password, available only after create
+                    description: The plaintext password, available only after create
                   database_name:
                     type: string
                     description: The database name
@@ -14179,7 +14240,7 @@ paths:
                     description: The base username without branch routing suffix
                   password:
                     type: string
-                    description: The plain text password, available only after create
+                    description: The plaintext password, available only after create
                   database_name:
                     type: string
                     description: The database name
@@ -14565,7 +14626,7 @@ paths:
                     description: The base username without branch routing suffix
                   password:
                     type: string
-                    description: The plain text password, available only after create
+                    description: The plaintext password, available only after create
                   database_name:
                     type: string
                     description: The database name
@@ -14802,7 +14863,7 @@ paths:
                     description: The base username without branch routing suffix
                   password:
                     type: string
-                    description: The plain text password, available only after create
+                    description: The plaintext password, available only after create
                   database_name:
                     type: string
                     description: The database name
@@ -15096,6 +15157,9 @@ paths:
                   shard_count:
                     type: integer
                     description: The number of shards in the branch
+                  keyspace_count:
+                    type: integer
+                    description: The number of keyspaces in the branch
                   stale_schema:
                     type: boolean
                     description: Whether or not the branch has a stale schema
@@ -15239,6 +15303,7 @@ paths:
                   - safe_migrations
                   - sharded
                   - shard_count
+                  - keyspace_count
                   - stale_schema
                   - actor
                   - restored_from_branch
@@ -15379,6 +15444,9 @@ paths:
                   shard_count:
                     type: integer
                     description: The number of shards in the branch
+                  keyspace_count:
+                    type: integer
+                    description: The number of keyspaces in the branch
                   stale_schema:
                     type: boolean
                     description: Whether or not the branch has a stale schema
@@ -15522,6 +15590,7 @@ paths:
                   - safe_migrations
                   - sharded
                   - shard_count
+                  - keyspace_count
                   - stale_schema
                   - actor
                   - restored_from_branch
@@ -15999,6 +16068,7 @@ paths:
                                 type: string
                                 enum:
                                   - match
+                                  - each
                                 description: The kind of rule
                               tags:
                                 type: array
@@ -16271,6 +16341,7 @@ paths:
                           type: string
                           enum:
                             - match
+                            - each
                           description: The kind of rule
                         tags:
                           type: array
@@ -16369,18 +16440,16 @@ paths:
 
 
         **Service Token Accesses**
-         `create_branch`
+         `write_database`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
 
-        | Organization | `write_branches` |
+        | Organization | `write_databases` |
 
-        | Database | `write_branches` |
-
-        | Branch | `write_branch` |
+        | Database | `write_database` |
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{budget_id}/rules:
     post:
       tags:
@@ -16422,6 +16491,7 @@ paths:
                   type: string
                   enum:
                     - match
+                    - each
                   description: Kind of rule
                 keyspace:
                   type: string
@@ -16433,7 +16503,9 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: Optional array of tags for this rule
+                  description: >-
+                    Optional array of tags for this rule. Each rules take
+                    exactly one tag.
       responses:
         '201':
           description: Returns the created traffic rule
@@ -16450,6 +16522,7 @@ paths:
                     type: string
                     enum:
                       - match
+                      - each
                     description: The kind of rule
                   tags:
                     type: array
@@ -16534,18 +16607,16 @@ paths:
 
 
         **Service Token Accesses**
-         `create_branch`
+         `write_database`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
 
-        | Organization | `write_branches` |
+        | Organization | `write_databases` |
 
-        | Database | `write_branches` |
-
-        | Branch | `write_branch` |
+        | Database | `write_database` |
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{budget_id}/rules/{id}:
     delete:
       tags:
@@ -16604,18 +16675,16 @@ paths:
 
 
         **Service Token Accesses**
-         `delete_branch`
+         `write_database`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
 
-        | Organization | `delete_branches`, `delete_production_branches` |
+        | Organization | `write_databases` |
 
-        | Database | `delete_branches`, `delete_production_branches` |
-
-        | Branch | `delete_branch` |
+        | Database | `write_database` |
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{id}:
     get:
       tags:
@@ -16729,6 +16798,7 @@ paths:
                           type: string
                           enum:
                             - match
+                            - each
                           description: The kind of rule
                         tags:
                           type: array
@@ -16999,6 +17069,7 @@ paths:
                           type: string
                           enum:
                             - match
+                            - each
                           description: The kind of rule
                         tags:
                           type: array
@@ -17097,18 +17168,16 @@ paths:
 
 
         **Service Token Accesses**
-         `create_branch`
+         `write_database`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
 
-        | Organization | `write_branches` |
+        | Organization | `write_databases` |
 
-        | Database | `write_branches` |
-
-        | Branch | `write_branch` |
+        | Database | `write_database` |
     delete:
       tags:
         - Traffic budgets
@@ -17160,18 +17229,16 @@ paths:
 
 
         **Service Token Accesses**
-         `delete_branch`
+         `write_database`
 
         **OAuth Scopes**
 
          | Resource | Scopes |
         | :------- | :---------- |
 
-        | Organization | `delete_branches`, `delete_production_branches` |
+        | Organization | `write_databases` |
 
-        | Database | `delete_branches`, `delete_production_branches` |
-
-        | Branch | `delete_branch` |
+        | Database | `write_database` |
   /organizations/{organization}/databases/{database}/cidrs:
     get:
       tags:
@@ -18580,6 +18647,11 @@ paths:
                           description: >-
                             The number of shards the branch the deploy request
                             will be merged into has
+                        into_branch_keyspace_count:
+                          type: integer
+                          description: >-
+                            The number of keyspaces the branch the deploy
+                            request will be merged into has
                         approved:
                           type: boolean
                           description: Whether or not the deploy request is approved
@@ -19196,6 +19268,7 @@ paths:
                         - into_branch
                         - into_branch_sharded
                         - into_branch_shard_count
+                        - into_branch_keyspace_count
                         - approved
                         - state
                         - deployment_state
@@ -19387,6 +19460,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -19983,6 +20061,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -20140,6 +20219,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -20736,6 +20820,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -20903,6 +20988,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -21499,6 +21589,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -21656,6 +21747,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -22252,6 +22348,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -22418,6 +22515,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -23014,6 +23116,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -23185,6 +23288,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -23781,6 +23889,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -23939,6 +24048,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -24535,6 +24649,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -24692,6 +24807,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -25288,6 +25408,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -25456,6 +25577,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -26052,6 +26178,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -26782,6 +26909,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -27378,6 +27510,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -27759,6 +27892,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -28355,6 +28493,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -28796,6 +28935,11 @@ paths:
                     description: >-
                       The number of shards the branch the deploy request will be
                       merged into has
+                  into_branch_keyspace_count:
+                    type: integer
+                    description: >-
+                      The number of keyspaces the branch the deploy request will
+                      be merged into has
                   approved:
                     type: boolean
                     description: Whether or not the deploy request is approved
@@ -29392,6 +29536,7 @@ paths:
                   - into_branch
                   - into_branch_sharded
                   - into_branch_shard_count
+                  - into_branch_keyspace_count
                   - approved
                   - state
                   - deployment_state
@@ -38080,6 +38225,9 @@ paths:
                         metric_name:
                           type: string
                           description: The name of the billable item
+                        cloudflare_billed:
+                          type: boolean
+                          description: Whether the line item is billed through Cloudflare
                         database_id:
                           type: string
                           description: The ID for the billed database
@@ -38116,6 +38264,7 @@ paths:
                         - subtotal
                         - description
                         - metric_name
+                        - cloudflare_billed
                         - database_id
                         - database_name
                         - resource
@@ -38862,6 +39011,11 @@ paths:
                           description: >-
                             Whether the OAuth application is limited to
                             authorizing a single organization
+                        requires_org_scope:
+                          type: boolean
+                          description: >-
+                            Whether the OAuth application requires at least one
+                            organization to be authorized
                         scopes_by_resource:
                           type: object
                           additionalProperties: true
@@ -38888,6 +39042,7 @@ paths:
                         - tokens
                         - dcr
                         - single_org_authorization
+                        - requires_org_scope
                         - scopes_by_resource
                         - all_scopes_by_resource
                 required:
@@ -38989,6 +39144,11 @@ paths:
                     description: >-
                       Whether the OAuth application is limited to authorizing a
                       single organization
+                  requires_org_scope:
+                    type: boolean
+                    description: >-
+                      Whether the OAuth application requires at least one
+                      organization to be authorized
                   scopes_by_resource:
                     type: object
                     additionalProperties: true
@@ -39014,6 +39174,7 @@ paths:
                   - tokens
                   - dcr
                   - single_org_authorization
+                  - requires_org_scope
                   - scopes_by_resource
                   - all_scopes_by_resource
         '401':
@@ -42992,7 +43153,7 @@ paths:
                               plain_text:
                                 type: string
                                 description: >-
-                                  The plain text password. Null except in the
+                                  The plaintext password. Null except in the
                                   response from the create endpoint.
                                 nullable: true
                               replica:
@@ -43390,7 +43551,7 @@ paths:
                         plain_text:
                           type: string
                           description: >-
-                            The plain text password. Null except in the response
+                            The plaintext password. Null except in the response
                             from the create endpoint.
                           nullable: true
                         replica:
@@ -43770,7 +43931,7 @@ paths:
                         plain_text:
                           type: string
                           description: >-
-                            The plain text password. Null except in the response
+                            The plaintext password. Null except in the response
                             from the create endpoint.
                           nullable: true
                         replica:
@@ -44745,6 +44906,9 @@ components:
               pvc_size:
                 type: integer
                 description: Size of the PVC used for the backup
+              uncompressed_size:
+                type: integer
+                description: The uncompressed (logical) size of the backup in bytes
               protected:
                 type: boolean
                 description: Whether or not the backup is protected from deletion
@@ -44950,6 +45114,7 @@ components:
               - completed_at
               - deleted_at
               - pvc_size
+              - uncompressed_size
               - protected
               - required
               - restored_branches
@@ -45012,6 +45177,9 @@ components:
         pvc_size:
           type: integer
           description: Size of the PVC used for the backup
+        uncompressed_size:
+          type: integer
+          description: The uncompressed (logical) size of the backup in bytes
         protected:
           type: boolean
           description: Whether or not the backup is protected from deletion
@@ -45211,6 +45379,7 @@ components:
         - completed_at
         - deleted_at
         - pvc_size
+        - uncompressed_size
         - protected
         - required
         - restored_branches
@@ -45875,6 +46044,9 @@ components:
               shard_count:
                 type: integer
                 description: The number of shards in the branch
+              keyspace_count:
+                type: integer
+                description: The number of keyspaces in the branch
               stale_schema:
                 type: boolean
                 description: Whether or not the branch has a stale schema
@@ -46016,6 +46188,7 @@ components:
               - safe_migrations
               - sharded
               - shard_count
+              - keyspace_count
               - stale_schema
               - actor
               - restored_from_branch
@@ -46122,6 +46295,9 @@ components:
         shard_count:
           type: integer
           description: The number of shards in the branch
+        keyspace_count:
+          type: integer
+          description: The number of keyspaces in the branch
         stale_schema:
           type: boolean
           description: Whether or not the branch has a stale schema
@@ -46261,6 +46437,7 @@ components:
         - safe_migrations
         - sharded
         - shard_count
+        - keyspace_count
         - stale_schema
         - actor
         - restored_from_branch
@@ -46402,9 +46579,13 @@ components:
         internal:
           type: boolean
           description: The internal state of the extension
-        shared_preload_allowed:
-          type: boolean
-          description: Whether the extension can be added to shared_preload_libraries
+        loader:
+          type: string
+          enum:
+            - shared_preload_libraries
+            - session_preload_libraries
+            - create_extension
+          description: How the extension is loaded
         url:
           type: string
           description: The URL of the extension
@@ -46540,7 +46721,7 @@ components:
         - name
         - description
         - internal
-        - shared_preload_allowed
+        - loader
         - url
         - available
         - unavailable_reason
@@ -47111,7 +47292,7 @@ components:
               plain_text:
                 type: string
                 description: >-
-                  The plain text password. Null except in the response from the
+                  The plaintext password. Null except in the response from the
                   create endpoint.
                 nullable: true
               replica:
@@ -47314,7 +47495,7 @@ components:
         plain_text:
           type: string
           description: >-
-            The plain text password. Null except in the response from the create
+            The plaintext password. Null except in the response from the create
             endpoint.
           nullable: true
         replica:
@@ -48690,6 +48871,11 @@ components:
                 description: >-
                   Whether the OAuth application is limited to authorizing a
                   single organization
+              requires_org_scope:
+                type: boolean
+                description: >-
+                  Whether the OAuth application requires at least one
+                  organization to be authorized
               scopes_by_resource:
                 type: object
                 additionalProperties: true
@@ -48715,6 +48901,7 @@ components:
               - tokens
               - dcr
               - single_org_authorization
+              - requires_org_scope
               - scopes_by_resource
               - all_scopes_by_resource
       required:
@@ -48772,6 +48959,11 @@ components:
           description: >-
             Whether the OAuth application is limited to authorizing a single
             organization
+        requires_org_scope:
+          type: boolean
+          description: >-
+            Whether the OAuth application requires at least one organization to
+            be authorized
         scopes_by_resource:
           type: object
           additionalProperties: true
@@ -48797,6 +48989,7 @@ components:
         - tokens
         - dcr
         - single_org_authorization
+        - requires_org_scope
         - scopes_by_resource
         - all_scopes_by_resource
     PaginatedServiceToken:
@@ -50739,7 +50932,7 @@ components:
                 description: The base username without branch routing suffix
               password:
                 type: string
-                description: The plain text password, available only after create
+                description: The plaintext password, available only after create
               database_name:
                 type: string
                 description: The database name
@@ -50915,7 +51108,7 @@ components:
           description: The base username without branch routing suffix
         password:
           type: string
-          description: The plain text password, available only after create
+          description: The plaintext password, available only after create
         database_name:
           type: string
           description: The database name
@@ -51615,6 +51808,7 @@ components:
                       type: string
                       enum:
                         - match
+                        - each
                       description: The kind of rule
                     tags:
                       type: array
@@ -51779,6 +51973,7 @@ components:
                 type: string
                 enum:
                   - match
+                  - each
                 description: The kind of rule
               tags:
                 type: array
@@ -51870,6 +52065,7 @@ components:
           type: string
           enum:
             - match
+            - each
           description: The kind of rule
         tags:
           type: array
@@ -53139,6 +53335,11 @@ components:
                 description: >-
                   The number of shards the branch the deploy request will be
                   merged into has
+              into_branch_keyspace_count:
+                type: integer
+                description: >-
+                  The number of keyspaces the branch the deploy request will be
+                  merged into has
               approved:
                 type: boolean
                 description: Whether or not the deploy request is approved
@@ -53723,6 +53924,7 @@ components:
               - into_branch
               - into_branch_sharded
               - into_branch_shard_count
+              - into_branch_keyspace_count
               - approved
               - state
               - deployment_state
@@ -53827,6 +54029,11 @@ components:
           type: integer
           description: >-
             The number of shards the branch the deploy request will be merged
+            into has
+        into_branch_keyspace_count:
+          type: integer
+          description: >-
+            The number of keyspaces the branch the deploy request will be merged
             into has
         approved:
           type: boolean
@@ -54390,6 +54597,7 @@ components:
         - into_branch
         - into_branch_sharded
         - into_branch_shard_count
+        - into_branch_keyspace_count
         - approved
         - state
         - deployment_state
@@ -55767,6 +55975,9 @@ components:
               metric_name:
                 type: string
                 description: The name of the billable item
+              cloudflare_billed:
+                type: boolean
+                description: Whether the line item is billed through Cloudflare
               database_id:
                 type: string
                 description: The ID for the billed database
@@ -55803,6 +56014,7 @@ components:
               - subtotal
               - description
               - metric_name
+              - cloudflare_billed
               - database_id
               - database_name
               - resource
@@ -56191,8 +56403,8 @@ components:
                     plain_text:
                       type: string
                       description: >-
-                        The plain text password. Null except in the response
-                        from the create endpoint.
+                        The plaintext password. Null except in the response from
+                        the create endpoint.
                       nullable: true
                     replica:
                       type: boolean
@@ -56511,7 +56723,7 @@ components:
               plain_text:
                 type: string
                 description: >-
-                  The plain text password. Null except in the response from the
+                  The plaintext password. Null except in the response from the
                   create endpoint.
                 nullable: true
               replica:
