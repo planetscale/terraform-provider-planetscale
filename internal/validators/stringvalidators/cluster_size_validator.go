@@ -16,7 +16,7 @@ const (
 	qualifiedPSPattern    = `PS_` + psSizePattern + `_(?:AWS|GCP)_(?:ARM|X86|AMD)`
 	vitessPSPattern       = `PS_` + psSizePattern
 	instancePSPattern     = `PS_(?:(?:AWS|GCP)_)?[A-Z][0-9][A-Z0-9]*(?:_[A-Z0-9]+)+`
-	qualifiedMetalPattern = `M[0-9]+_[0-9]+_(?:AWS|GCP)_(?:ARM|X86|AMD)_D_METAL_[0-9]+`
+	qualifiedMetalPattern = `M[0-9]+_[0-9]+_(?:AWS|GCP)_(?:ARM|X86|AMD|INTEL)_D_METAL_[0-9]+`
 	vitessMetalPattern    = `M[0-9]*_[0-9]+(?:_(?:AWS|GCP)_(?:AMD|INTEL|X86))?_D_METAL_[0-9]+`
 )
 
