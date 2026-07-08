@@ -5,8 +5,8 @@ management:
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
-  releaseVersion: 1.3.0
-  configChecksum: af35ba1da5635c40db8cdedf8b0c7963
+  releaseVersion: 1.3.1
+  configChecksum: adb91166dd2ce58158d7dbdfcff558c0
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
@@ -94,7 +94,7 @@ trackedFiles:
     pristine_git_object: 7ab5ffb6c575475282a87565f6ee7c8403074b63
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:01e4a44a39a27d8b971f3a1da930556e664ae0f4
+    last_write_checksum: sha1:4493080cb76d25cd2222f24780920396a39b7bf4
     pristine_git_object: 66664be2637146405147ef9bc663d13b453ce3f8
   examples/resources/planetscale_postgres_backup_policy/import-by-string-id.tf:
     last_write_checksum: sha1:898e41884b689e8b155d6fbdaef64ac5487d6217
@@ -892,7 +892,7 @@ trackedFiles:
     pristine_git_object: 482aa982b4571ec54f57707879032cc00c8fe24e
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:e83bf4e7c163818ccb42f0a4a70964030a428535
+    last_write_checksum: sha1:8d8bd798635d961541ddf9c3965f6713b14d503b
     pristine_git_object: edd5a04397c8e2e1faa37b1515cc10715653813e
   internal/sdk/polling/config.go:
     id: e14a17f21f84
