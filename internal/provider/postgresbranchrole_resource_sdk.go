@@ -48,6 +48,7 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsCreateRoleRespons
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
+		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}
 
 	return diags
@@ -90,6 +91,7 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsGetRoleResponseBo
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
+		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}
 
 	return diags
@@ -132,6 +134,7 @@ func (r *PostgresBranchRoleResourceModel) RefreshFromOperationsUpdateRoleRespons
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
+		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}
 
 	return diags
@@ -185,10 +188,17 @@ func (r *PostgresBranchRoleResourceModel) ToOperationsCreateRoleRequestBody(ctx 
 	for _, inheritedRolesItem := range r.InheritedRoles {
 		inheritedRoles = append(inheritedRoles, operations.CreateRoleInheritedRoleRequest(inheritedRolesItem.ValueString()))
 	}
+	withReplication := new(bool)
+	if !r.WithReplication.IsUnknown() && !r.WithReplication.IsNull() {
+		*withReplication = r.WithReplication.ValueBool()
+	} else {
+		withReplication = nil
+	}
 	out := operations.CreateRoleRequestBody{
-		Name:           name,
-		TTL:            ttl,
-		InheritedRoles: inheritedRoles,
+		Name:            name,
+		TTL:             ttl,
+		InheritedRoles:  inheritedRoles,
+		WithReplication: withReplication,
 	}
 
 	return &out, diags

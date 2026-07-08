@@ -18,6 +18,10 @@ type ListPasswordsRequest struct {
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// A read-only region of the database branch. If present, the password results will be filtered to only those in the region
 	ReadOnlyRegionID *string `queryParam:"style=form,explode=true,name=read_only_region_id"`
+	// Filter passwords by status
+	Status *string `queryParam:"style=form,explode=true,name=status"`
+	// Search passwords by name
+	Q *string `queryParam:"style=form,explode=true,name=q"`
 	// If provided, specifies the page offset of returned results
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -61,6 +65,20 @@ func (l *ListPasswordsRequest) GetReadOnlyRegionID() *string {
 		return nil
 	}
 	return l.ReadOnlyRegionID
+}
+
+func (l *ListPasswordsRequest) GetStatus() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Status
+}
+
+func (l *ListPasswordsRequest) GetQ() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Q
 }
 
 func (l *ListPasswordsRequest) GetPage() *int64 {
@@ -316,7 +334,7 @@ type ListPasswordsData struct {
 	Region                 ListPasswordsRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
-	// The plain text password. Null except in the response from the create endpoint.
+	// The plaintext password. Null except in the response from the create endpoint.
 	PlainText *string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`

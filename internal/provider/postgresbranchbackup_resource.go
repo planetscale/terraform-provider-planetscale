@@ -60,6 +60,7 @@ type PostgresBranchBackupResourceModel struct {
 	Size                 types.Int64                                    `tfsdk:"size"`
 	StartedAt            types.String                                   `tfsdk:"started_at"`
 	State                types.String                                   `tfsdk:"state"`
+	UncompressedSize     types.Int64                                    `tfsdk:"uncompressed_size"`
 }
 
 func (r *PostgresBranchBackupResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -203,6 +204,10 @@ func (r *PostgresBranchBackupResource) Schema(ctx context.Context, req resource.
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the backup`,
+			},
+			"uncompressed_size": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The uncompressed (logical) size of the backup in bytes`,
 			},
 		},
 	}

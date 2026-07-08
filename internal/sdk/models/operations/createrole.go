@@ -75,6 +75,8 @@ type CreateRoleRequestBody struct {
 	TTL *int64 `json:"ttl,omitzero"`
 	// Roles to inherit from
 	InheritedRoles []CreateRoleInheritedRoleRequest `json:"inherited_roles,omitzero"`
+	// Whether the role should have the REPLICATION attribute
+	WithReplication *bool `json:"with_replication,omitzero"`
 }
 
 func (c CreateRoleRequestBody) MarshalJSON() ([]byte, error) {
@@ -107,6 +109,13 @@ func (c *CreateRoleRequestBody) GetInheritedRoles() []CreateRoleInheritedRoleReq
 		return nil
 	}
 	return c.InheritedRoles
+}
+
+func (c *CreateRoleRequestBody) GetWithReplication() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.WithReplication
 }
 
 type CreateRoleRequest struct {
@@ -374,7 +383,7 @@ type CreateRoleResponseBody struct {
 	Username string `json:"username"`
 	// The base username without branch routing suffix
 	BaseUsername string `json:"base_username"`
-	// The plain text password, available only after create
+	// The plaintext password, available only after create
 	Password string `json:"password"`
 	// The database name
 	DatabaseName string `json:"database_name"`
@@ -399,10 +408,12 @@ type CreateRoleResponseBody struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles      []CreateRoleInheritedRoleResponse `json:"inherited_roles"`
-	BranchData          CreateRoleBranchData              `json:"branch"`
-	ActorData           CreateRoleActorData               `json:"actor"`
-	QuerySafetySettings CreateRoleQuerySafetySettings     `json:"query_safety_settings"`
+	InheritedRoles []CreateRoleInheritedRoleResponse `json:"inherited_roles"`
+	// Whether the role has the REPLICATION attribute
+	WithReplication     bool                          `json:"with_replication"`
+	BranchData          CreateRoleBranchData          `json:"branch"`
+	ActorData           CreateRoleActorData           `json:"actor"`
+	QuerySafetySettings CreateRoleQuerySafetySettings `json:"query_safety_settings"`
 }
 
 func (c *CreateRoleResponseBody) GetID() string {
@@ -543,6 +554,13 @@ func (c *CreateRoleResponseBody) GetInheritedRoles() []CreateRoleInheritedRoleRe
 		return []CreateRoleInheritedRoleResponse{}
 	}
 	return c.InheritedRoles
+}
+
+func (c *CreateRoleResponseBody) GetWithReplication() bool {
+	if c == nil {
+		return false
+	}
+	return c.WithReplication
 }
 
 func (c *CreateRoleResponseBody) GetBranchData() CreateRoleBranchData {

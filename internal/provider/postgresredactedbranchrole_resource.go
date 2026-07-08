@@ -10,11 +10,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/setplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_boolplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/boolplanmodifier"
 	speakeasy_int64planmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/int64planmodifier"
 	speakeasy_setplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/setplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
@@ -63,6 +65,7 @@ type PostgresRedactedBranchRoleResourceModel struct {
 	TTL                          types.Int64                                 `tfsdk:"ttl"`
 	UpdatedAt                    types.String                                `tfsdk:"updated_at"`
 	Username                     types.String                                `tfsdk:"username"`
+	WithReplication              types.Bool                                  `tfsdk:"with_replication"`
 }
 
 func (r *PostgresRedactedBranchRoleResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -223,6 +226,15 @@ func (r *PostgresRedactedBranchRoleResource) Schema(ctx context.Context, req res
 			"username": schema.StringAttribute{
 				Computed:    true,
 				Description: `The database user name`,
+			},
+			"with_replication": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+				},
+				Description: `Whether the role should have the REPLICATION attribute. Requires replacement if changed.`,
 			},
 		},
 	}

@@ -287,7 +287,9 @@ type GetRoleResponseBody struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles      []GetRoleInheritedRole     `json:"inherited_roles"`
+	InheritedRoles []GetRoleInheritedRole `json:"inherited_roles"`
+	// Whether the role has the REPLICATION attribute
+	WithReplication     bool                       `json:"with_replication"`
 	BranchData          GetRoleBranchData          `json:"branch"`
 	ActorData           GetRoleActorData           `json:"actor"`
 	QuerySafetySettings GetRoleQuerySafetySettings `json:"query_safety_settings"`
@@ -424,6 +426,13 @@ func (g *GetRoleResponseBody) GetInheritedRoles() []GetRoleInheritedRole {
 		return []GetRoleInheritedRole{}
 	}
 	return g.InheritedRoles
+}
+
+func (g *GetRoleResponseBody) GetWithReplication() bool {
+	if g == nil {
+		return false
+	}
+	return g.WithReplication
 }
 
 func (g *GetRoleResponseBody) GetBranchData() GetRoleBranchData {

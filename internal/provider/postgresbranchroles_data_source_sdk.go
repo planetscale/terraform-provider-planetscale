@@ -59,6 +59,7 @@ func (r *PostgresBranchRolesDataSourceModel) RefreshFromOperationsListRolesRespo
 			data.TTL = types.Int64Value(dataItem.TTL)
 			data.UpdatedAt = types.StringValue(dataItem.UpdatedAt)
 			data.Username = types.StringValue(dataItem.Username)
+			data.WithReplication = types.BoolValue(dataItem.WithReplication)
 
 			r.Data = append(r.Data, data)
 		}

@@ -275,6 +275,8 @@ type ListVitessBranchBackupsData struct {
 	DeletedAt *string `json:"deleted_at"`
 	// Size of the PVC used for the backup
 	PvcSize int64 `json:"pvc_size"`
+	// The uncompressed (logical) size of the backup in bytes
+	UncompressedSize int64 `json:"uncompressed_size"`
 	// Whether or not the backup is protected from deletion
 	Protected      bool                                   `json:"protected"`
 	Actor          *ListVitessBranchBackupsActor          `json:"actor"`
@@ -361,6 +363,13 @@ func (l *ListVitessBranchBackupsData) GetPvcSize() int64 {
 		return 0
 	}
 	return l.PvcSize
+}
+
+func (l *ListVitessBranchBackupsData) GetUncompressedSize() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.UncompressedSize
 }
 
 func (l *ListVitessBranchBackupsData) GetProtected() bool {

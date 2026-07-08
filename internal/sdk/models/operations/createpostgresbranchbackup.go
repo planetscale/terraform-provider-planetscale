@@ -239,6 +239,8 @@ type CreatePostgresBranchBackupResponseBody struct {
 	DeletedAt *string `json:"deleted_at"`
 	// Size of the PVC used for the backup
 	PvcSize int64 `json:"pvc_size"`
+	// The uncompressed (logical) size of the backup in bytes
+	UncompressedSize int64 `json:"uncompressed_size"`
 	// Whether or not the backup is protected from deletion
 	Protected      bool                                      `json:"protected"`
 	Actor          *CreatePostgresBranchBackupActor          `json:"actor"`
@@ -325,6 +327,13 @@ func (c *CreatePostgresBranchBackupResponseBody) GetPvcSize() int64 {
 		return 0
 	}
 	return c.PvcSize
+}
+
+func (c *CreatePostgresBranchBackupResponseBody) GetUncompressedSize() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.UncompressedSize
 }
 
 func (c *CreatePostgresBranchBackupResponseBody) GetProtected() bool {

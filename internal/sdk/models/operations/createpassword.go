@@ -399,7 +399,7 @@ type CreatePasswordResponseBody struct {
 	Region                 CreatePasswordRegion `json:"region"`
 	// The username for the password
 	Username string `json:"username"`
-	// The plain text password. Null except in the response from the create endpoint.
+	// The plaintext password. Null except in the response from the create endpoint.
 	PlainText *string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`

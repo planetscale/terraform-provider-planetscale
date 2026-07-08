@@ -44,6 +44,7 @@ func (r *VitessBranchBackupResourceModel) RefreshFromOperationsCreateVitessBranc
 		r.Size = types.Int64Value(resp.Size)
 		r.StartedAt = types.StringPointerValue(resp.StartedAt)
 		r.State = types.StringValue(string(resp.State))
+		r.UncompressedSize = types.Int64Value(resp.UncompressedSize)
 	}
 
 	return diags
@@ -83,6 +84,7 @@ func (r *VitessBranchBackupResourceModel) RefreshFromOperationsGetVitessBranchBa
 		r.Size = types.Int64Value(resp.Size)
 		r.StartedAt = types.StringPointerValue(resp.StartedAt)
 		r.State = types.StringValue(string(resp.State))
+		r.UncompressedSize = types.Int64Value(resp.UncompressedSize)
 	}
 
 	return diags

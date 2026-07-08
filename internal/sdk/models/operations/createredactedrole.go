@@ -75,6 +75,8 @@ type CreateRedactedRoleRequestBody struct {
 	TTL *int64 `json:"ttl,omitzero"`
 	// Roles to inherit from
 	InheritedRoles []CreateRedactedRoleInheritedRoleRequest `json:"inherited_roles,omitzero"`
+	// Whether the role should have the REPLICATION attribute
+	WithReplication *bool `json:"with_replication,omitzero"`
 }
 
 func (c CreateRedactedRoleRequestBody) MarshalJSON() ([]byte, error) {
@@ -107,6 +109,13 @@ func (c *CreateRedactedRoleRequestBody) GetInheritedRoles() []CreateRedactedRole
 		return nil
 	}
 	return c.InheritedRoles
+}
+
+func (c *CreateRedactedRoleRequestBody) GetWithReplication() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.WithReplication
 }
 
 type CreateRedactedRoleRequest struct {
@@ -374,7 +383,7 @@ type CreateRedactedRoleResponseBody struct {
 	Username string `json:"username"`
 	// The base username without branch routing suffix
 	BaseUsername string `json:"base_username"`
-	// The plain text password, available only after create
+	// The plaintext password, available only after create
 	Password string `json:"password"`
 	// The database name
 	DatabaseName string `json:"database_name"`
@@ -399,10 +408,12 @@ type CreateRedactedRoleResponseBody struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles      []CreateRedactedRoleInheritedRoleResponse `json:"inherited_roles"`
-	BranchData          CreateRedactedRoleBranchData              `json:"branch"`
-	ActorData           CreateRedactedRoleActorData               `json:"actor"`
-	QuerySafetySettings CreateRedactedRoleQuerySafetySettings     `json:"query_safety_settings"`
+	InheritedRoles []CreateRedactedRoleInheritedRoleResponse `json:"inherited_roles"`
+	// Whether the role has the REPLICATION attribute
+	WithReplication     bool                                  `json:"with_replication"`
+	BranchData          CreateRedactedRoleBranchData          `json:"branch"`
+	ActorData           CreateRedactedRoleActorData           `json:"actor"`
+	QuerySafetySettings CreateRedactedRoleQuerySafetySettings `json:"query_safety_settings"`
 }
 
 func (c *CreateRedactedRoleResponseBody) GetID() string {
@@ -543,6 +554,13 @@ func (c *CreateRedactedRoleResponseBody) GetInheritedRoles() []CreateRedactedRol
 		return []CreateRedactedRoleInheritedRoleResponse{}
 	}
 	return c.InheritedRoles
+}
+
+func (c *CreateRedactedRoleResponseBody) GetWithReplication() bool {
+	if c == nil {
+		return false
+	}
+	return c.WithReplication
 }
 
 func (c *CreateRedactedRoleResponseBody) GetBranchData() CreateRedactedRoleBranchData {

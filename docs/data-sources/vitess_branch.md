@@ -34,6 +34,7 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `cluster_size` (String) The SKU representing the branch's cluster size
 - `html_url` (String) Planetscale app URL for the branch
+- `keyspace_count` (Number) The number of keyspaces in the branch
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `name` (String) The name of the branch

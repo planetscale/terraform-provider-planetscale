@@ -47,6 +47,7 @@ func (r *PostgresBranchRoleDataSourceModel) RefreshFromOperationsGetRoleResponse
 		r.TTL = types.Int64Value(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
+		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}
 
 	return diags

@@ -30,4 +30,5 @@ type ListRolesData struct {
 	TTL                          types.Int64                   `tfsdk:"ttl"`
 	UpdatedAt                    types.String                  `tfsdk:"updated_at"`
 	Username                     types.String                  `tfsdk:"username"`
+	WithReplication              types.Bool                    `tfsdk:"with_replication"`
 }

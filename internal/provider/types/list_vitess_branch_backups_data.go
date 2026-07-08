@@ -21,4 +21,5 @@ type ListVitessBranchBackupsData struct {
 	Size                 types.Int64                            `tfsdk:"size"`
 	StartedAt            types.String                           `tfsdk:"started_at"`
 	State                types.String                           `tfsdk:"state"`
+	UncompressedSize     types.Int64                            `tfsdk:"uncompressed_size"`
 }

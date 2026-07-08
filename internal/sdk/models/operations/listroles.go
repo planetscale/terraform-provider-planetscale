@@ -319,7 +319,7 @@ type ListRolesData struct {
 	Username string `json:"username"`
 	// The base username without branch routing suffix
 	BaseUsername string `json:"base_username"`
-	// The plain text password, available only after create
+	// The plaintext password, available only after create
 	Password string `json:"password"`
 	// The database name
 	DatabaseName string `json:"database_name"`
@@ -344,7 +344,9 @@ type ListRolesData struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles      []ListRolesInheritedRole     `json:"inherited_roles"`
+	InheritedRoles []ListRolesInheritedRole `json:"inherited_roles"`
+	// Whether the role has the REPLICATION attribute
+	WithReplication     bool                         `json:"with_replication"`
 	Branch              Branch                       `json:"branch"`
 	Actor               ListRolesActor               `json:"actor"`
 	QuerySafetySettings ListRolesQuerySafetySettings `json:"query_safety_settings"`
@@ -488,6 +490,13 @@ func (l *ListRolesData) GetInheritedRoles() []ListRolesInheritedRole {
 		return []ListRolesInheritedRole{}
 	}
 	return l.InheritedRoles
+}
+
+func (l *ListRolesData) GetWithReplication() bool {
+	if l == nil {
+		return false
+	}
+	return l.WithReplication
 }
 
 func (l *ListRolesData) GetBranch() Branch {

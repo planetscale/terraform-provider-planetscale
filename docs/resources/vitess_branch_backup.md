@@ -42,6 +42,7 @@ VitessBranchBackup Resource
 - `size` (Number) The size of the backup in bytes
 - `started_at` (String) When the backup started
 - `state` (String) The current state of the backup
+- `uncompressed_size` (Number) The uncompressed (logical) size of the backup in bytes
 
 <a id="nestedatt--actor"></a>
 ### Nested Schema for `actor`

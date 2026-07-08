@@ -17,7 +17,9 @@ data "planetscale_vitess_branch_passwords" "my_vitessbranchpasswords" {
   branch              = "...my_branch..."
   database            = "...my_database..."
   organization        = "...my_organization..."
+  q                   = "...my_q..."
   read_only_region_id = "...my_read_only_region_id..."
+  status              = "...my_status..."
 }
 ```
 
@@ -32,7 +34,9 @@ data "planetscale_vitess_branch_passwords" "my_vitessbranchpasswords" {
 
 ### Optional
 
+- `q` (String) Search passwords by name
 - `read_only_region_id` (String) A read-only region of the database branch. If present, the password results will be filtered to only those in the region
+- `status` (String) Filter passwords by status
 
 ### Read-Only
 
@@ -59,7 +63,7 @@ Read-Only:
 - `id` (String) The ID for the password
 - `last_used_at` (String) When the password was last used to execute a query
 - `name` (String) The display name for the password
-- `plain_text` (String) The plain text password. Null except in the response from the create endpoint.
+- `plain_text` (String) The plaintext password. Null except in the response from the create endpoint.
 - `region` (Attributes) (see [below for nested schema](#nestedatt--data--region))
 - `renewable` (Boolean) Whether or not the password can be renewed
 - `replica` (Boolean) Whether or not the password is for a read replica

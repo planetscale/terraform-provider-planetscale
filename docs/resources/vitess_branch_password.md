@@ -54,7 +54,7 @@ resource "planetscale_vitess_branch_password" "my_vitessbranchpassword" {
 - `expires_at` (String) When the password will expire
 - `id` (String) The ID of the password
 - `last_used_at` (String) When the password was last used to execute a query
-- `plain_text` (String, Sensitive) The plain text password. Null except in the response from the create endpoint.
+- `plain_text` (String, Sensitive) The plaintext password. Null except in the response from the create endpoint.
 - `region` (Attributes) (see [below for nested schema](#nestedatt--region))
 - `renewable` (Boolean) Whether or not the password can be renewed
 - `ttl_seconds` (Number) Time to live (in seconds) for the password. The password will be invalid when TTL has passed

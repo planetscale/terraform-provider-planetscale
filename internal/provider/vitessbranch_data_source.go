@@ -34,6 +34,7 @@ type VitessBranchDataSourceModel struct {
 	Database         types.String                       `tfsdk:"database"`
 	HTMLURL          types.String                       `tfsdk:"html_url"`
 	ID               types.String                       `tfsdk:"id"`
+	KeyspaceCount    types.Int64                        `tfsdk:"keyspace_count"`
 	MysqlAddress     types.String                       `tfsdk:"mysql_address"`
 	MysqlEdgeAddress types.String                       `tfsdk:"mysql_edge_address"`
 	Name             types.String                       `tfsdk:"name"`
@@ -80,6 +81,10 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"id": schema.StringAttribute{
 				Required:    true,
 				Description: `The ID of the branch`,
+			},
+			"keyspace_count": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The number of keyspaces in the branch`,
 			},
 			"mysql_address": schema.StringAttribute{
 				Computed:    true,

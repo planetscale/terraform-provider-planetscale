@@ -46,6 +46,7 @@ type VitessBranchBackupDataSourceModel struct {
 	Size                 types.Int64                                  `tfsdk:"size"`
 	StartedAt            types.String                                 `tfsdk:"started_at"`
 	State                types.String                                 `tfsdk:"state"`
+	UncompressedSize     types.Int64                                  `tfsdk:"uncompressed_size"`
 }
 
 // Metadata returns the data source type name.
@@ -145,6 +146,10 @@ func (r *VitessBranchBackupDataSource) Schema(ctx context.Context, req datasourc
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the backup`,
+			},
+			"uncompressed_size": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The uncompressed (logical) size of the backup in bytes`,
 			},
 		},
 	}

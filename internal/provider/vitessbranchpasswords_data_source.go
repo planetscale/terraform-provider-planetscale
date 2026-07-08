@@ -33,7 +33,9 @@ type VitessBranchPasswordsDataSourceModel struct {
 	Data             []tfTypes.ListPasswordsData `tfsdk:"data"`
 	Database         types.String                `tfsdk:"database"`
 	Organization     types.String                `tfsdk:"organization"`
+	Q                types.String                `queryParam:"style=form,explode=true,name=q" tfsdk:"q"`
 	ReadOnlyRegionID types.String                `queryParam:"style=form,explode=true,name=read_only_region_id" tfsdk:"read_only_region_id"`
+	Status           types.String                `queryParam:"style=form,explode=true,name=status" tfsdk:"status"`
 	Type             types.String                `tfsdk:"type"`
 }
 
@@ -155,7 +157,7 @@ func (r *VitessBranchPasswordsDataSource) Schema(ctx context.Context, req dataso
 						},
 						"plain_text": schema.StringAttribute{
 							Computed:    true,
-							Description: `The plain text password. Null except in the response from the create endpoint.`,
+							Description: `The plaintext password. Null except in the response from the create endpoint.`,
 						},
 						"region": schema.SingleNestedAttribute{
 							Computed: true,
@@ -234,9 +236,17 @@ func (r *VitessBranchPasswordsDataSource) Schema(ctx context.Context, req dataso
 				Required:    true,
 				Description: `The name of the organization the password belongs to`,
 			},
+			"q": schema.StringAttribute{
+				Optional:    true,
+				Description: `Search passwords by name`,
+			},
 			"read_only_region_id": schema.StringAttribute{
 				Optional:    true,
 				Description: `A read-only region of the database branch. If present, the password results will be filtered to only those in the region`,
+			},
+			"status": schema.StringAttribute{
+				Optional:    true,
+				Description: `Filter passwords by status`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
