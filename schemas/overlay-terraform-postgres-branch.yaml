@@ -86,13 +86,22 @@ actions:
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.mysql_edge_address
     remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.keyspace_count
+    description: Remove keyspace_count (Vitess-only field)
+    remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.mysql_address
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.mysql_edge_address
     remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties.keyspace_count
+    description: Remove keyspace_count (Vitess-only field)
+    remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.responses['200'].content['application/json'].schema.properties.mysql_address
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.responses['200'].content['application/json'].schema.properties.mysql_edge_address
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.responses['200'].content['application/json'].schema.properties.keyspace_count
+    description: Remove keyspace_count (Vitess-only field)
     remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.parameters[?@.name == 'branch']

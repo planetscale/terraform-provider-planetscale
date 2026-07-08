@@ -142,6 +142,10 @@ func (r *VitessBranchBackupsDataSource) Schema(ctx context.Context, req datasour
 							Computed:    true,
 							Description: `The current state of the backup`,
 						},
+						"uncompressed_size": schema.Int64Attribute{
+							Computed:    true,
+							Description: `The uncompressed (logical) size of the backup in bytes`,
+						},
 					},
 				},
 			},

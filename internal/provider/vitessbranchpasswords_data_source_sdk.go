@@ -116,11 +116,25 @@ func (r *VitessBranchPasswordsDataSourceModel) ToOperationsListPasswordsRequest(
 	} else {
 		readOnlyRegionID = nil
 	}
+	status := new(string)
+	if !r.Status.IsUnknown() && !r.Status.IsNull() {
+		*status = r.Status.ValueString()
+	} else {
+		status = nil
+	}
+	q := new(string)
+	if !r.Q.IsUnknown() && !r.Q.IsNull() {
+		*q = r.Q.ValueString()
+	} else {
+		q = nil
+	}
 	out := operations.ListPasswordsRequest{
 		Organization:     organization,
 		Database:         database,
 		Branch:           branch,
 		ReadOnlyRegionID: readOnlyRegionID,
+		Status:           status,
+		Q:                q,
 	}
 
 	return &out, diags

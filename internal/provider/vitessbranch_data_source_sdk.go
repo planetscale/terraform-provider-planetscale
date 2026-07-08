@@ -23,6 +23,7 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
+		r.KeyspaceCount = types.Int64Value(resp.KeyspaceCount)
 		r.MysqlAddress = types.StringValue(resp.MysqlAddress)
 		r.MysqlEdgeAddress = types.StringValue(resp.MysqlEdgeAddress)
 		r.Name = types.StringValue(resp.Name)

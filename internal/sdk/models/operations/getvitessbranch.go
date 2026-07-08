@@ -132,8 +132,10 @@ type GetVitessBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                  `json:"ready"`
-	Actor *GetVitessBranchActor `json:"actor"`
+	Ready bool `json:"ready"`
+	// The number of keyspaces in the branch
+	KeyspaceCount int64                 `json:"keyspace_count"`
+	Actor         *GetVitessBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -190,6 +192,13 @@ func (g *GetVitessBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return g.Ready
+}
+
+func (g *GetVitessBranchResponseBody) GetKeyspaceCount() int64 {
+	if g == nil {
+		return 0
+	}
+	return g.KeyspaceCount
 }
 
 func (g *GetVitessBranchResponseBody) GetActor() *GetVitessBranchActor {

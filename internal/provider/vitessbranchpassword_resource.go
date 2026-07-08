@@ -195,7 +195,7 @@ func (r *VitessBranchPasswordResource) Schema(ctx context.Context, req resource.
 			"plain_text": schema.StringAttribute{
 				Computed:    true,
 				Sensitive:   true,
-				Description: `The plain text password. Null except in the response from the create endpoint.`,
+				Description: `The plaintext password. Null except in the response from the create endpoint.`,
 			},
 			"region": schema.SingleNestedAttribute{
 				Computed: true,

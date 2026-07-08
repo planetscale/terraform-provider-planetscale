@@ -287,7 +287,9 @@ type GetRedactedRoleResponseBody struct {
 	// Number of seconds before the credentials expire
 	TTL int64 `json:"ttl"`
 	// Database roles these credentials inherit
-	InheritedRoles      []GetRedactedRoleInheritedRole     `json:"inherited_roles"`
+	InheritedRoles []GetRedactedRoleInheritedRole `json:"inherited_roles"`
+	// Whether the role has the REPLICATION attribute
+	WithReplication     bool                               `json:"with_replication"`
 	BranchData          GetRedactedRoleBranchData          `json:"branch"`
 	ActorData           GetRedactedRoleActorData           `json:"actor"`
 	QuerySafetySettings GetRedactedRoleQuerySafetySettings `json:"query_safety_settings"`
@@ -424,6 +426,13 @@ func (g *GetRedactedRoleResponseBody) GetInheritedRoles() []GetRedactedRoleInher
 		return []GetRedactedRoleInheritedRole{}
 	}
 	return g.InheritedRoles
+}
+
+func (g *GetRedactedRoleResponseBody) GetWithReplication() bool {
+	if g == nil {
+		return false
+	}
+	return g.WithReplication
 }
 
 func (g *GetRedactedRoleResponseBody) GetBranchData() GetRedactedRoleBranchData {

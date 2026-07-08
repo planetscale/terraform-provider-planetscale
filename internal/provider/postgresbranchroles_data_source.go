@@ -158,7 +158,7 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 						},
 						"password": schema.StringAttribute{
 							Computed:    true,
-							Description: `The plain text password, available only after create`,
+							Description: `The plaintext password, available only after create`,
 						},
 						"private_access_host_url": schema.StringAttribute{
 							Computed:    true,
@@ -192,6 +192,10 @@ func (r *PostgresBranchRolesDataSource) Schema(ctx context.Context, req datasour
 						"username": schema.StringAttribute{
 							Computed:    true,
 							Description: `The database user name`,
+						},
+						"with_replication": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether the role has the REPLICATION attribute`,
 						},
 					},
 				},

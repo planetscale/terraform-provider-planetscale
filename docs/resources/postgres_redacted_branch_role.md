@@ -27,6 +27,7 @@ PostgresRedactedBranchRole Resource
 - `name` (String) The name of the role
 - `successor` (String) The optional role to reassign ownership to before dropping
 - `ttl` (Number) Time to live in seconds. Requires replacement if changed.
+- `with_replication` (Boolean) Whether the role should have the REPLICATION attribute. Requires replacement if changed.
 
 ### Read-Only
 

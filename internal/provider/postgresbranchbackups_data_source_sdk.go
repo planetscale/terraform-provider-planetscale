@@ -51,6 +51,7 @@ func (r *PostgresBranchBackupsDataSourceModel) RefreshFromOperationsListPostgres
 			data.Size = types.Int64Value(dataItem.Size)
 			data.StartedAt = types.StringPointerValue(dataItem.StartedAt)
 			data.State = types.StringValue(string(dataItem.State))
+			data.UncompressedSize = types.Int64Value(dataItem.UncompressedSize)
 
 			r.Data = append(r.Data, data)
 		}

@@ -42,6 +42,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 - `name` (String) The name of the role
 - `successor` (String) The optional role to reassign ownership to before dropping
 - `ttl` (Number) Time to live in seconds. Requires replacement if changed.
+- `with_replication` (Boolean) Whether the role should have the REPLICATION attribute. Requires replacement if changed.
 
 ### Read-Only
 
@@ -59,7 +60,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 - `expired` (Boolean) True if the credentials are expired
 - `expires_at` (String) When the role expires
 - `id` (String) The ID of the role
-- `password` (String, Sensitive) The plain text password, available only after create
+- `password` (String, Sensitive) The plaintext password, available only after create
 - `private_access_host_url` (String) The database connection string for private connections
 - `private_connection_service_name` (String) The service name to set up private connectivity
 - `query_safety_settings` (Attributes) (see [below for nested schema](#nestedatt--query_safety_settings))

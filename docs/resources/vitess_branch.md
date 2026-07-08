@@ -44,6 +44,7 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `html_url` (String) Planetscale app URL for the branch
 - `id` (String) The ID of the branch
+- `keyspace_count` (Number) The number of keyspaces in the branch
 - `mysql_address` (String) The MySQL address for the branch
 - `mysql_edge_address` (String) The address of the MySQL provider for the branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries

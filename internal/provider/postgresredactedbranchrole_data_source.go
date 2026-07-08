@@ -54,6 +54,7 @@ type PostgresRedactedBranchRoleDataSourceModel struct {
 	TTL                          types.Int64                                 `tfsdk:"ttl"`
 	UpdatedAt                    types.String                                `tfsdk:"updated_at"`
 	Username                     types.String                                `tfsdk:"username"`
+	WithReplication              types.Bool                                  `tfsdk:"with_replication"`
 }
 
 // Metadata returns the data source type name.
@@ -202,6 +203,10 @@ func (r *PostgresRedactedBranchRoleDataSource) Schema(ctx context.Context, req d
 			"username": schema.StringAttribute{
 				Computed:    true,
 				Description: `The database user name`,
+			},
+			"with_replication": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether the role has the REPLICATION attribute`,
 			},
 		},
 	}

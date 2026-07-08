@@ -62,13 +62,14 @@ Read-Only:
 - `id` (String) The ID of the role
 - `inherited_roles` (Set of String) Database roles these credentials inherit
 - `name` (String) The name of the role
-- `password` (String) The plain text password, available only after create
+- `password` (String) The plaintext password, available only after create
 - `private_access_host_url` (String) The database connection string for private connections
 - `private_connection_service_name` (String) The service name to set up private connectivity
 - `query_safety_settings` (Attributes) (see [below for nested schema](#nestedatt--data--query_safety_settings))
 - `ttl` (Number) Number of seconds before the credentials expire
 - `updated_at` (String) When the role was updated
 - `username` (String) The database user name
+- `with_replication` (Boolean) Whether the role has the REPLICATION attribute
 
 <a id="nestedatt--data--actor"></a>
 ### Nested Schema for `data.actor`

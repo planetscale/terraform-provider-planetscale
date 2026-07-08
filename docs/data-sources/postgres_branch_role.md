@@ -54,6 +54,7 @@ data "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 - `ttl` (Number) Number of seconds before the credentials expire
 - `updated_at` (String) When the role was updated
 - `username` (String) The database user name
+- `with_replication` (Boolean) Whether the role has the REPLICATION attribute
 
 <a id="nestedatt--actor_data"></a>
 ### Nested Schema for `actor_data`
