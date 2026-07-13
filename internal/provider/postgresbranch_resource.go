@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	custom_mapplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/mapplanmodifier"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
@@ -127,6 +128,9 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"parameters": schema.MapAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Map{
+					custom_mapplanmodifier.WarnOnRemovedParameters(),
+				},
 				ElementType: types.MapType{
 					ElemType: types.StringType,
 				},

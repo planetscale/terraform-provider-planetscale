@@ -12,6 +12,22 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestPostgresBranchResource_ParametersPlanModifiers(t *testing.T) {
+	t.Parallel()
+
+	r := NewPostgresBranchResource()
+	var schemaResp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &schemaResp)
+
+	attr, ok := schemaResp.Schema.Attributes["parameters"]
+	require.True(t, ok)
+
+	parametersAttr, ok := attr.(schema.MapAttribute)
+	require.True(t, ok)
+
+	require.NotEmpty(t, parametersAttr.PlanModifiers)
+}
+
 func TestPostgresBranchResource_ClusterSizeValidation(t *testing.T) {
 	t.Parallel()
 
