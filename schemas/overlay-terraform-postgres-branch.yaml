@@ -221,6 +221,7 @@ actions:
                         type: object
                         additionalProperties:
                           type: string
+                      x-speakeasy-plan-modifiers: WarnOnRemovedParameters
                       description: >-
                         Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
                         patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted
