@@ -63,6 +63,7 @@ Available configuration:
 ### Managed Resources
 
 * [planetscale_postgres_backup_policy](docs/resources/postgres_backup_policy.md)
+* [planetscale_postgres_bouncer](docs/resources/postgres_bouncer.md)
 * [planetscale_postgres_branch](docs/resources/postgres_branch.md)
 * [planetscale_postgres_branch_backup](docs/resources/postgres_branch_backup.md)
 * [planetscale_postgres_branch_role](docs/resources/postgres_branch_role.md)
@@ -81,6 +82,8 @@ Available configuration:
 * [planetscale_organizations](docs/data-sources/organizations.md)
 * [planetscale_postgres_backup_policies](docs/data-sources/postgres_backup_policies.md)
 * [planetscale_postgres_backup_policy](docs/data-sources/postgres_backup_policy.md)
+* [planetscale_postgres_bouncer](docs/data-sources/postgres_bouncer.md)
+* [planetscale_postgres_bouncers](docs/data-sources/postgres_bouncers.md)
 * [planetscale_postgres_branch](docs/data-sources/postgres_branch.md)
 * [planetscale_postgres_branch_backup](docs/data-sources/postgres_branch_backup.md)
 * [planetscale_postgres_branch_backups](docs/data-sources/postgres_branch_backups.md)

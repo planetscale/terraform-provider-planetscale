@@ -1,0 +1,90 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_bouncers data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get
+    description: API operation for read and enable pagination.
+    update:
+      x-speakeasy-entity-operation: PostgresBouncers#read
+      x-speakeasy-entity-description: Returns information about the dedicated PgBouncers for a PlanetScale Postgres branch.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.parameters[?@.name == 'per_page']
+    description: Ignore extraneous parameter in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties
+    description: Ignore extraneous response properties in Terraform schema.
+    update:
+      type:
+        x-speakeasy-terraform-ignore: true
+      current_page:
+        x-speakeasy-terraform-ignore: true
+      next_page:
+        x-speakeasy-terraform-ignore: true
+      next_page_url:
+        x-speakeasy-terraform-ignore: true
+      prev_page:
+        x-speakeasy-terraform-ignore: true
+      prev_page_url:
+        x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties
+    description: Prevent type mismatch with the branch path parameter. Hide the rich parameters array. Add undocumented response fields.
+    update:
+      parameters:
+        x-speakeasy-name-override: parameter_details
+        x-speakeasy-terraform-ignore: true
+      bouncer_size:
+        type: string
+        description: >-
+          The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`,
+          `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
+      parameter_overrides:
+        type: object
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: string
+        x-speakeasy-name-override: parameters
+        description: >-
+          PgBouncer parameter overrides, nested by namespace, e.g.
+          { pgbouncer = { default_pool_size = "100" } }. Omitted parameters
+          are reset to their defaults.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items
+    description: parameter_overrides is always present, so reads must always refresh the parameters attribute, including back to empty.
+    update:
+      required:
+        - parameter_overrides
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.created_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.updated_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.deleted_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.sku
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.branch
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.actor.properties.avatar_url
+    description: Trim the actor to its ID, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.actor.properties.display_name
+    description: Trim the actor to its ID, following the branch resource attribute conventions.
+    remove: true
