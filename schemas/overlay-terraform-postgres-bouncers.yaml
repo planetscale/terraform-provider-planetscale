@@ -61,6 +61,11 @@ actions:
           PgBouncer parameter overrides, nested by namespace, e.g.
           { pgbouncer = { default_pool_size = "100" } }. Omitted parameters
           are reset to their defaults.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items
+    description: parameter_overrides is always present, so reads must always refresh the parameters attribute, including back to empty.
+    update:
+      required:
+        - parameter_overrides
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.created_at
     description: Trim noisy response field, following the branch resource attribute conventions.

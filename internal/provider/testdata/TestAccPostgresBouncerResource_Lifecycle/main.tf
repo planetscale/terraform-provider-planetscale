@@ -19,7 +19,8 @@ variable "bouncer_size" {
 }
 
 variable "pool_size" {
-  type = string
+  type    = string
+  default = null
 }
 
 resource "planetscale_postgres_bouncer" "test" {
@@ -32,7 +33,10 @@ resource "planetscale_postgres_bouncer" "test" {
   bouncer_size      = var.bouncer_size
   replicas_per_cell = 1
 
-  parameters = {
+  # A bouncer only accepts one configuration change at a time, and changes
+  # take effect over hours, so the test makes a single update: parameters are
+  # added in the same step that resizes the bouncer.
+  parameters = var.pool_size == null ? null : {
     pgbouncer = {
       default_pool_size = var.pool_size
     }

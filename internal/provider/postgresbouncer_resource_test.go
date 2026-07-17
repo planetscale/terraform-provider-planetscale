@@ -33,7 +33,6 @@ func TestAccPostgresBouncerResource_Lifecycle(t *testing.T) {
 					"branch_name":   config.StringVariable(branchName),
 					"bouncer_name":  config.StringVariable(bouncerName),
 					"bouncer_size":  config.StringVariable("PGB_5"),
-					"pool_size":     config.StringVariable("50"),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -61,16 +60,13 @@ func TestAccPostgresBouncerResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("bouncer_size"),
 						knownvalue.StringExact("PGB_5"),
 					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("parameters").AtMapKey("pgbouncer").AtMapKey("default_pool_size"),
-						knownvalue.StringExact("50"),
-					),
 				},
 			},
-			// Resize the bouncer and change a parameter in place. Changes roll
-			// out asynchronously, but the API reflects the requested
-			// configuration immediately.
+			// Resize the bouncer and add a parameter in a single update. A
+			// bouncer only accepts one configuration change at a time and
+			// changes take effect over hours, so the test must not make a
+			// second change. The API reflects the requested configuration
+			// immediately.
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{

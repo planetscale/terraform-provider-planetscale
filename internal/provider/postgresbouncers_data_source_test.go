@@ -41,6 +41,11 @@ func TestAccPostgresBouncersDataSource(t *testing.T) {
 						tfjsonpath.New("bouncer_size"),
 						knownvalue.StringExact("PGB_5"),
 					),
+					statecheck.ExpectKnownValue(
+						"data.planetscale_postgres_bouncer.test",
+						tfjsonpath.New("parameters").AtMapKey("pgbouncer").AtMapKey("default_pool_size"),
+						knownvalue.StringExact("50"),
+					),
 					// Other acceptance tests may create bouncers on the same
 					// branch in parallel, so only check the list is non-empty.
 					statecheck.ExpectKnownValue(

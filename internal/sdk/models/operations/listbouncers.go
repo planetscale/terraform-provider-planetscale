@@ -396,18 +396,7 @@ type ListBouncersData struct {
 	// The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
 	BouncerSize *string `json:"bouncer_size,omitzero"`
 	// PgBouncer parameter overrides, nested by namespace, e.g. { pgbouncer = { default_pool_size = "100" } }. Omitted parameters are reset to their defaults.
-	Parameters map[string]map[string]string `json:"parameter_overrides,omitzero"`
-}
-
-func (l ListBouncersData) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
-}
-
-func (l *ListBouncersData) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Parameters map[string]map[string]string `json:"parameter_overrides"`
 }
 
 func (l *ListBouncersData) GetID() string {
@@ -461,7 +450,7 @@ func (l *ListBouncersData) GetBouncerSize() *string {
 
 func (l *ListBouncersData) GetParameters() map[string]map[string]string {
 	if l == nil {
-		return nil
+		return map[string]map[string]string{}
 	}
 	return l.Parameters
 }

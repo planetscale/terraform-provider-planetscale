@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: c22e50fa8c5f2166da6891710d38c762
+  docChecksum: 10e4021648a1ef1d3083e6345fcd8318
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
@@ -767,7 +767,7 @@ trackedFiles:
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go:
     last_write_checksum: sha1:c9bbd023d1a0e3c31f08f4cf36f2bab9f6772789
   internal/sdk/models/operations/createbouncer.go:
-    last_write_checksum: sha1:5619d501837fbffc3e82d7422a42e17613ccfbcf
+    last_write_checksum: sha1:8920720802df600a0dbb4a40e8ea8d2a901285b3
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     last_write_checksum: sha1:d8c34bf4df1751c4cb4f66a799750bc2255c4478
@@ -823,7 +823,7 @@ trackedFiles:
   internal/sdk/models/operations/deletevitessbranchbackup.go:
     last_write_checksum: sha1:baebdbea776e7f3cd696030cf0ffd4a734b36514
   internal/sdk/models/operations/getbouncer.go:
-    last_write_checksum: sha1:a2e30c20fd7accc83fadff9005f2544d21face02
+    last_write_checksum: sha1:edc929db95e26478dad61d60016f13c5aa1cfba2
   internal/sdk/models/operations/getbranchchangerequest.go:
     last_write_checksum: sha1:211d4629f1a9fc65e1c8f96177ec3e3a867d27b9
   internal/sdk/models/operations/getorganization.go:
@@ -865,7 +865,7 @@ trackedFiles:
     last_write_checksum: sha1:45a55d593fcac53c27cd9aa32589ca44e4508172
     pristine_git_object: be96b47a67d020a8a2b0d5198abfd4db9b7db3bf
   internal/sdk/models/operations/listbouncers.go:
-    last_write_checksum: sha1:cc353aa9abfe2132f79af3a88304643bd6c95520
+    last_write_checksum: sha1:ea67e074b1f9ee63522a70a9ea262bcdd3232e01
   internal/sdk/models/operations/listdatabases.go:
     id: 9a615ba562a7
     last_write_checksum: sha1:b10f3738fb608e4d068f712d17a605a88fbdfdcc
@@ -1374,7 +1374,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "immutable": false, "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}]}]}
+          application/json: {"type": "<value>", "current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "immutable": false, "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}], "parameter_overrides": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>"}}}]}
   create_bouncer:
     speakeasy-default-create-bouncer:
       parameters:
@@ -1384,7 +1384,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "actor": {"id": "<id>"}, "parameters": []}
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "actor": {"id": "<id>"}, "parameters": [], "parameter_overrides": {}}
   get_bouncer:
     speakeasy-default-get-bouncer:
       parameters:
@@ -1396,7 +1396,7 @@ examples:
           bouncer: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 2494.03, "actor": {"id": "<id>"}, "parameters": []}
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 2494.03, "actor": {"id": "<id>"}, "parameters": [], "parameter_overrides": {"key": {}}}
   delete_bouncer:
     speakeasy-default-delete-bouncer:
       parameters:

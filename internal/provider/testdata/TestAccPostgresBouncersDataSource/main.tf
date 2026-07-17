@@ -22,6 +22,12 @@ resource "planetscale_postgres_bouncer" "test" {
   name         = var.bouncer_name
   target       = "primary"
   bouncer_size = "PGB_5"
+
+  parameters = {
+    pgbouncer = {
+      default_pool_size = "50"
+    }
+  }
 }
 
 data "planetscale_postgres_bouncer" "test" {

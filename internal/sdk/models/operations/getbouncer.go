@@ -377,18 +377,7 @@ type GetBouncerResponseBody struct {
 	// The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
 	BouncerSize *string `json:"bouncer_size,omitzero"`
 	// PgBouncer parameter overrides, nested by namespace, e.g. { pgbouncer = { default_pool_size = "100" } }. Omitted parameters are reset to their defaults.
-	Parameters map[string]map[string]string `json:"parameter_overrides,omitzero"`
-}
-
-func (g GetBouncerResponseBody) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetBouncerResponseBody) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Parameters map[string]map[string]string `json:"parameter_overrides"`
 }
 
 func (g *GetBouncerResponseBody) GetID() string {
@@ -442,7 +431,7 @@ func (g *GetBouncerResponseBody) GetBouncerSize() *string {
 
 func (g *GetBouncerResponseBody) GetParameters() map[string]map[string]string {
 	if g == nil {
-		return nil
+		return map[string]map[string]string{}
 	}
 	return g.Parameters
 }
