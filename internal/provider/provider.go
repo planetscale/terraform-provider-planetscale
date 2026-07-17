@@ -149,6 +149,7 @@ func (p *PlanetscaleProvider) Actions(_ context.Context) []func() action.Action 
 func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewPostgresBackupPolicyResource,
+		NewPostgresBouncerResource,
 		NewPostgresBranchResource,
 		NewPostgresBranchBackupResource,
 		NewPostgresBranchRoleResource,
@@ -169,6 +170,8 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewOrganizationsDataSource,
 		NewPostgresBackupPoliciesDataSource,
 		NewPostgresBackupPolicyDataSource,
+		NewPostgresBouncerDataSource,
+		NewPostgresBouncersDataSource,
 		NewPostgresBranchDataSource,
 		NewPostgresBranchBackupDataSource,
 		NewPostgresBranchBackupsDataSource,

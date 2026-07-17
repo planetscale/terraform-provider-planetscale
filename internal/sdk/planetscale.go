@@ -56,6 +56,9 @@ type PlanetScale struct {
 	//             Resources for managing databases within an organization.
 	//
 	Databases *Databases
+	//           Resources for managing postgres bouncers.
+	//
+	Bouncers *Bouncers
 	//           Resources for managing cluster changes.
 	//
 	BranchChanges *BranchChanges
@@ -172,6 +175,7 @@ func New(opts ...SDKOption) *PlanetScale {
 
 	sdk.Organizations = newOrganizations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Bouncers = newBouncers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)

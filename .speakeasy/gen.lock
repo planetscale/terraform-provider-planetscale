@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 6e691a392cf84fbd91ce75a5f6602eac
+  docChecksum: be2b4e560e36d100ee0c6f2bc9b897c5
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
@@ -54,6 +54,10 @@ trackedFiles:
     last_write_checksum: sha1:467020706cd8fb86d873f23fc6f386b3574f8bb5
   examples/data-sources/planetscale_postgres_backup_policy/data-source.tf:
     last_write_checksum: sha1:a3b1f0c60606bfc3a11a22af49e5753e1f0e2b66
+  examples/data-sources/planetscale_postgres_bouncer/data-source.tf:
+    last_write_checksum: sha1:d4278f6367ed083691184dc129a110be40679545
+  examples/data-sources/planetscale_postgres_bouncers/data-source.tf:
+    last_write_checksum: sha1:641ea4999b8643092a74f8e1bd3e2cf4b3b6780e
   examples/data-sources/planetscale_postgres_branch/data-source.tf:
     id: e8498c910cc4
     last_write_checksum: sha1:778d7cf0b6a98c7009aec5c25d09863ecd841e0c
@@ -100,6 +104,10 @@ trackedFiles:
     last_write_checksum: sha1:898e41884b689e8b155d6fbdaef64ac5487d6217
   examples/resources/planetscale_postgres_backup_policy/import.sh:
     last_write_checksum: sha1:7551aed4289fae524465487109840a0668bcb8a6
+  examples/resources/planetscale_postgres_bouncer/import-by-string-id.tf:
+    last_write_checksum: sha1:24cbb74e880f034ff1d961b69ea2b0cc5c137868
+  examples/resources/planetscale_postgres_bouncer/import.sh:
+    last_write_checksum: sha1:81a063c3598daabd785b1f95121e9c5f0a8934bf
   examples/resources/planetscale_postgres_branch/import-by-string-id.tf:
     id: 84ea6cbb56ce
     last_write_checksum: sha1:01a3b5907c372a5e73e1f83e7d0f1afd7d19ea12
@@ -298,6 +306,18 @@ trackedFiles:
     last_write_checksum: sha1:4649580beb1d715b203b867817c2a3970740884f
   internal/provider/postgresbackuppolicy_resource_sdk.go:
     last_write_checksum: sha1:b38256e8bce7919d2527aa47ef83351face30d03
+  internal/provider/postgresbouncer_data_source.go:
+    last_write_checksum: sha1:0e422965792ec8e5aeb7f681594c5d28fcf44045
+  internal/provider/postgresbouncer_data_source_sdk.go:
+    last_write_checksum: sha1:dc381ef983b28e9a46e263039424b0fafa55c9d6
+  internal/provider/postgresbouncer_resource.go:
+    last_write_checksum: sha1:33d02005746ac318a6b29ae12fb69297d9c2436b
+  internal/provider/postgresbouncer_resource_sdk.go:
+    last_write_checksum: sha1:f7dbc06384e4803de17f119ec0cdb21277159a23
+  internal/provider/postgresbouncers_data_source.go:
+    last_write_checksum: sha1:51650afce36b2ecbb53aac7a17a3071a3a9ec4e2
+  internal/provider/postgresbouncers_data_source_sdk.go:
+    last_write_checksum: sha1:8a147347841e9536e0fb8159084d72334021dc81
   internal/provider/postgresbranch_data_source.go:
     id: 3d4847eac64b
     last_write_checksum: sha1:97bf2e2fc190cc8d1e204c5b77fa2c01bdfbf7f5
@@ -360,7 +380,7 @@ trackedFiles:
     last_write_checksum: sha1:eeb195d7b15339fe72d836544d37a676a5ed1677
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:0a680e8f891ec03b26735bd207478c1886f7eb2e
+    last_write_checksum: sha1:cbc3c758be48abeed5342a7fddcf9a5e9e5faacd
     pristine_git_object: d5212c5b98f75bdedecef2af4ef7079732ac749d
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -434,6 +454,8 @@ trackedFiles:
     id: 72a03805427f
     last_write_checksum: sha1:209d6c3a1f258deb4ba5bdcc000090ff582714c1
     pristine_git_object: ea5786b8bbcb244f690025648dfa5ec5fbe52bca
+  internal/provider/types/get_bouncer_actor.go:
+    last_write_checksum: sha1:6167a68ccacc11348cdf6fcd93f03c2b125d8aa8
   internal/provider/types/get_password_actor.go:
     id: 34086949be0f
     last_write_checksum: sha1:5a1503e8b9f4a4a5ae8f28c91d54bcca7ab01dd1
@@ -514,6 +536,10 @@ trackedFiles:
     id: ce859410bbec
     last_write_checksum: sha1:21522bb1dd45b4bd927aa0997e73687ec43a26f9
     pristine_git_object: 2e2fec5fe8f8eaf8802a5b6119fa9b7e2f1472f0
+  internal/provider/types/list_bouncers_actor.go:
+    last_write_checksum: sha1:582690d826880fd2351057accc70c3122a63aa51
+  internal/provider/types/list_bouncers_data.go:
+    last_write_checksum: sha1:499d90b8595ee57b084586df3421b8d9e05a3055
   internal/provider/types/list_databases_data.go:
     id: 3e22778bc2ef
     last_write_checksum: sha1:4c0f232ec89cf866e0de8bbc68a2083daee49eb4
@@ -652,6 +678,8 @@ trackedFiles:
     last_write_checksum: sha1:de9f729a4f62ab554657442244923bfa227c9ef4
   internal/sdk/backups.go:
     last_write_checksum: sha1:5fc0fbd63976dd29c73327581cbde44d3fd93dc1
+  internal/sdk/bouncers.go:
+    last_write_checksum: sha1:251c969ccf6eefa6098791313d37981d20c2def9
   internal/sdk/branchchanges.go:
     last_write_checksum: sha1:a0aad526bed875b307bd45833c28aa2f6ee2b18a
   internal/sdk/databasebranches.go:
@@ -734,8 +762,12 @@ trackedFiles:
     id: bf281d768352
     last_write_checksum: sha1:f8493be1606361ffba9bf77d77ede209acc0f562
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
+  internal/sdk/models/operations/applypostgresbouncerterraformchanges.go:
+    last_write_checksum: sha1:f92796c38a031d2883307ca15d50d00d82b6f411
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go:
     last_write_checksum: sha1:c9bbd023d1a0e3c31f08f4cf36f2bab9f6772789
+  internal/sdk/models/operations/createbouncer.go:
+    last_write_checksum: sha1:27dfc618f605702979221054b33690c21d9d9114
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     last_write_checksum: sha1:d8c34bf4df1751c4cb4f66a799750bc2255c4478
@@ -762,6 +794,8 @@ trackedFiles:
     pristine_git_object: 4164e962f94db2ef10a0ac3446371930522a0d05
   internal/sdk/models/operations/createvitessbranchbackup.go:
     last_write_checksum: sha1:1d19c6086f06c6deeb46979d8dfd70bc3033bd6d
+  internal/sdk/models/operations/deletebouncer.go:
+    last_write_checksum: sha1:d2071e82eed061c7bdb51418352092bca071e4e3
   internal/sdk/models/operations/deletepassword.go:
     id: 491914016b46
     last_write_checksum: sha1:7cda022c4378b37caab734de44dad29ca170c4ed
@@ -788,6 +822,8 @@ trackedFiles:
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
   internal/sdk/models/operations/deletevitessbranchbackup.go:
     last_write_checksum: sha1:baebdbea776e7f3cd696030cf0ffd4a734b36514
+  internal/sdk/models/operations/getbouncer.go:
+    last_write_checksum: sha1:a2e30c20fd7accc83fadff9005f2544d21face02
   internal/sdk/models/operations/getbranchchangerequest.go:
     last_write_checksum: sha1:211d4629f1a9fc65e1c8f96177ec3e3a867d27b9
   internal/sdk/models/operations/getorganization.go:
@@ -828,6 +864,8 @@ trackedFiles:
     id: c46fe7ab51ba
     last_write_checksum: sha1:45a55d593fcac53c27cd9aa32589ca44e4508172
     pristine_git_object: be96b47a67d020a8a2b0d5198abfd4db9b7db3bf
+  internal/sdk/models/operations/listbouncers.go:
+    last_write_checksum: sha1:cc353aa9abfe2132f79af3a88304643bd6c95520
   internal/sdk/models/operations/listdatabases.go:
     id: 9a615ba562a7
     last_write_checksum: sha1:b10f3738fb608e4d068f712d17a605a88fbdfdcc
@@ -892,7 +930,7 @@ trackedFiles:
     pristine_git_object: 482aa982b4571ec54f57707879032cc00c8fe24e
   internal/sdk/planetscale.go:
     id: e52bf6906e91
-    last_write_checksum: sha1:ebca9eebdd442dd2b06bec4271da6accf36c2de9
+    last_write_checksum: sha1:c2db8e6f19557547b0f5b24d4188bbe15d1ac5b0
     pristine_git_object: edd5a04397c8e2e1faa37b1515cc10715653813e
   internal/sdk/polling/config.go:
     id: e14a17f21f84
@@ -1336,7 +1374,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "sku": {"name": "<value>", "display_name": "Tabitha61", "cpu": "<value>", "ram": 9626.4, "sort_order": 7224.95}, "target": "primary", "replicas_per_cell": 3448.58, "created_at": "1706219570004", "updated_at": "1735655284202", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Avery63", "avatar_url": "https://vain-manner.info/"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1711805497882", "updated_at": "1735621515422", "deleted_at": "<value>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}]}]}
+          application/json: {"type": "<value>", "current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "immutable": false, "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}]}]}
   create_bouncer:
     speakeasy-default-create-bouncer:
       parameters:
@@ -1346,7 +1384,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "sku": {"name": "<value>", "display_name": "Abbey.Abbott", "cpu": "<value>", "ram": 1427.67, "sort_order": 8031.84}, "target": "primary", "replicas_per_cell": 5260.28, "created_at": "1704189068160", "updated_at": "1735635313028", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Gussie_Conroy12", "avatar_url": "https://which-chairperson.com"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1722810842786", "updated_at": "1735680154313", "deleted_at": "<value>"}, "parameters": []}
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "actor": {"id": "<id>"}, "parameters": []}
   get_bouncer:
     speakeasy-default-get-bouncer:
       parameters:
@@ -1358,7 +1396,7 @@ examples:
           bouncer: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "sku": {"name": "<value>", "display_name": "Hilbert86", "cpu": "<value>", "ram": 939.27, "sort_order": 3084.29}, "target": "primary", "replicas_per_cell": 2494.03, "created_at": "1727413063201", "updated_at": "1735627959135", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Santos.Botsford-Hackett", "avatar_url": "https://rectangular-chap.org"}, "branch": {"id": "<id>", "name": "<value>", "created_at": "1735541622830", "updated_at": "1735620048194", "deleted_at": "<value>"}, "parameters": []}
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 2494.03, "actor": {"id": "<id>"}, "parameters": []}
   delete_bouncer:
     speakeasy-default-delete-bouncer:
       parameters:
@@ -1394,7 +1432,7 @@ examples:
           bouncer: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "state": "pending", "replicas_per_cell": 5194.03, "parameters": {}, "previous_replicas_per_cell": 5400.16, "previous_parameters": {"key": "<value>"}, "started_at": "<value>", "completed_at": "<value>", "created_at": "1734464753464", "updated_at": "1735623817689", "actor": {"id": "<id>", "display_name": "Oran_Jones", "avatar_url": "https://excellent-department.org"}, "bouncer": {"id": "<id>", "name": "<value>", "created_at": "1735113029020", "updated_at": "1735627295645", "deleted_at": "<value>"}, "sku": {"name": "<value>", "display_name": "Ralph_Jones71", "cpu": "<value>", "ram": 428.02, "sort_order": 9852}, "previous_sku": {"name": "<value>", "display_name": "Julianne63", "cpu": "<value>", "ram": 7060.83, "sort_order": 707.33}}
+          application/json: {"id": "<id>", "state": "pending"}
   cancel_bouncer_resize_request:
     speakeasy-default-cancel-bouncer-resize-request:
       parameters:
@@ -2818,6 +2856,19 @@ examples:
           database: "<value>"
           branch: "<value>"
           id: "<id>"
+  apply_postgres_bouncer_terraform_changes:
+    speakeasy-default-apply-postgres-bouncer-terraform-changes:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          bouncer: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "<value>"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

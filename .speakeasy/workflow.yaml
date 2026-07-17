@@ -34,6 +34,9 @@ sources:
             - location: schemas/overlay-terraform-vitess-branch-backups.yaml
             - location: schemas/overlay-terraform-postgres-branch-backups.yaml
 
+            - location: schemas/overlay-terraform-postgres-bouncer.yaml
+            - location: schemas/overlay-terraform-postgres-bouncers.yaml
+
             - location: schemas/overlay-terraform-cleanup.yaml
         output: schemas/out.openapi.yaml
         registry:
