@@ -40,7 +40,7 @@ func (e *CreateBouncerTargetRequest) UnmarshalJSON(data []byte) error {
 }
 
 type CreateBouncerRequestBody struct {
-	// The name of the bouncer. Clients connect through the bouncer by appending it to the username, e.g. `postgres.abc123|my-bouncer`.
+	// The name of the bouncer, at most 12 characters. Clients connect through the bouncer by appending it to the username, e.g. `postgres.abc123|my-bouncer`.
 	Name string `json:"name"`
 	// The servers the bouncer routes connections to: `primary`, `replica`, or `replica_az_affinity` (replicas in the same availability zone as the bouncer).
 	Target *CreateBouncerTargetRequest `json:"target,omitzero"`

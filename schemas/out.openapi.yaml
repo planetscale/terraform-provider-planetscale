@@ -990,7 +990,8 @@ paths:
               properties:
                 name:
                   type: string
-                  description: The name of the bouncer. Clients connect through the bouncer by appending it to the username, e.g. `postgres.abc123|my-bouncer`.
+                  description: The name of the bouncer, at most 12 characters. Clients connect through the bouncer by appending it to the username, e.g. `postgres.abc123|my-bouncer`.
+                  maxLength: 12
                 target:
                   type: string
                   description: 'The servers the bouncer routes connections to: `primary`, `replica`, or `replica_az_affinity` (replicas in the same availability zone as the bouncer).'

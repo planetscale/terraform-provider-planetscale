@@ -25,9 +25,11 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.requestBody.content["application/json"].schema.properties.name
     description: Practitioner-facing attribute description.
     update:
+      maxLength: 12
       description: >-
-        The name of the bouncer. Clients connect through the bouncer by
-        appending it to the username, e.g. `postgres.abc123|my-bouncer`.
+        The name of the bouncer, at most 12 characters. Clients connect
+        through the bouncer by appending it to the username, e.g.
+        `postgres.abc123|my-bouncer`.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.requestBody.content["application/json"].schema.properties.target
     description: Practitioner-facing attribute description.

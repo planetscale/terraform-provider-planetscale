@@ -15,7 +15,8 @@ func TestAccPostgresBouncersDataSource(t *testing.T) {
 
 	databaseName := "testacc-postgres"
 	branchName := "main"
-	bouncerName := randomWithPrefix("test-bouncer-ds")
+	// Bouncer names are limited to 12 characters.
+	bouncerName := randomWithPrefix("tfbds")
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: be2b4e560e36d100ee0c6f2bc9b897c5
+  docChecksum: c22e50fa8c5f2166da6891710d38c762
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
@@ -311,7 +311,7 @@ trackedFiles:
   internal/provider/postgresbouncer_data_source_sdk.go:
     last_write_checksum: sha1:dc381ef983b28e9a46e263039424b0fafa55c9d6
   internal/provider/postgresbouncer_resource.go:
-    last_write_checksum: sha1:33d02005746ac318a6b29ae12fb69297d9c2436b
+    last_write_checksum: sha1:efbb13331ead2990b228c276755f8c1e02b4abbe
   internal/provider/postgresbouncer_resource_sdk.go:
     last_write_checksum: sha1:f7dbc06384e4803de17f119ec0cdb21277159a23
   internal/provider/postgresbouncers_data_source.go:
@@ -767,7 +767,7 @@ trackedFiles:
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go:
     last_write_checksum: sha1:c9bbd023d1a0e3c31f08f4cf36f2bab9f6772789
   internal/sdk/models/operations/createbouncer.go:
-    last_write_checksum: sha1:27dfc618f605702979221054b33690c21d9d9114
+    last_write_checksum: sha1:5619d501837fbffc3e82d7422a42e17613ccfbcf
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     last_write_checksum: sha1:d8c34bf4df1751c4cb4f66a799750bc2255c4478

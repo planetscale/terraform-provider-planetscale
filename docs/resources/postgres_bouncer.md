@@ -38,7 +38,7 @@ resource "planetscale_postgres_bouncer" "my_bouncer" {
 
 - `branch` (String) Branch name from `list_branches`. Example: `main`.
 - `database` (String) Database name slug from `list_databases`. Example: `app-db`.
-- `name` (String) The name of the bouncer. Clients connect through the bouncer by appending it to the username, e.g. `postgres.abc123|my-bouncer`. Requires replacement if changed.
+- `name` (String) The name of the bouncer, at most 12 characters. Clients connect through the bouncer by appending it to the username, e.g. `postgres.abc123|my-bouncer`. Requires replacement if changed.
 - `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 
 ### Optional

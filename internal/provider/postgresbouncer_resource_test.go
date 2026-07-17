@@ -17,7 +17,8 @@ func TestAccPostgresBouncerResource_Lifecycle(t *testing.T) {
 
 	databaseName := "testacc-postgres"
 	branchName := "main"
-	bouncerName := randomWithPrefix("test-bouncer")
+	// Bouncer names are limited to 12 characters.
+	bouncerName := randomWithPrefix("tfb")
 	resourceAddress := "planetscale_postgres_bouncer.test"
 
 	resource.Test(t, resource.TestCase{

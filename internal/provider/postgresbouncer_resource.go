@@ -92,7 +92,10 @@ func (r *PostgresBouncerResource) Schema(ctx context.Context, req resource.Schem
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The name of the bouncer. Clients connect through the bouncer by appending it to the username, e.g. ` + "`" + `postgres.abc123|my-bouncer` + "`" + `. Requires replacement if changed.`,
+				Description: `The name of the bouncer, at most 12 characters. Clients connect through the bouncer by appending it to the username, e.g. ` + "`" + `postgres.abc123|my-bouncer` + "`" + `. Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(12),
+				},
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
