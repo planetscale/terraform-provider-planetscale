@@ -510,7 +510,7 @@ func (c *CreateBouncerResponseBody) GetBouncerSize() *string {
 
 func (c *CreateBouncerResponseBody) GetParameters() map[string]map[string]string {
 	if c == nil {
-		return map[string]map[string]string{}
+		return nil
 	}
 	return c.Parameters
 }

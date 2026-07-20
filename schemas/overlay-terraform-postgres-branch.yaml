@@ -73,6 +73,7 @@ actions:
         description: The number of replicas for the branch
       parameters:
         type: object
+        nullable: true
         additionalProperties:
           type: object
           additionalProperties:
@@ -217,6 +218,7 @@ actions:
                       description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
                     parameters:
                       type: object
+                      nullable: true
                       additionalProperties:
                         type: object
                         additionalProperties:

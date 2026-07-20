@@ -899,6 +899,7 @@ paths:
                             The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
                         parameter_overrides:
                           type: object
+                          nullable: true
                           additionalProperties:
                             type: object
                             additionalProperties:
@@ -1160,6 +1161,7 @@ paths:
                       The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
                   parameter_overrides:
                     type: object
+                    nullable: true
                     additionalProperties:
                       type: object
                       additionalProperties:
@@ -1388,6 +1390,7 @@ paths:
                       The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
                   parameter_overrides:
                     type: object
+                    nullable: true
                     additionalProperties:
                       type: object
                       additionalProperties:
@@ -4287,6 +4290,7 @@ paths:
                     description: The number of replicas for the branch
                   parameters:
                     type: object
+                    nullable: true
                     additionalProperties:
                       type: object
                       additionalProperties:
@@ -5264,6 +5268,7 @@ paths:
                   description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
                 parameters:
                   type: object
+                  nullable: true
                   additionalProperties:
                     type: object
                     additionalProperties:
@@ -9595,6 +9600,7 @@ paths:
                   description: The number of PgBouncer instances per availability zone. Defaults to 1.
                 parameters:
                   type: object
+                  nullable: true
                   additionalProperties:
                     type: object
                     additionalProperties:

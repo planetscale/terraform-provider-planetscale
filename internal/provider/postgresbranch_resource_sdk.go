@@ -73,7 +73,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
-		if len(resp.Parameters) > 0 {
+		if resp.Parameters != nil {
 			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
 			for parametersKey, parametersValue := range resp.Parameters {
 				var parametersResult map[string]types.String
@@ -166,16 +166,19 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 	} else {
 		clusterSize = nil
 	}
-	parameters := make(map[string]map[string]string)
-	for parametersKey := range r.Parameters {
-		parametersInst := make(map[string]string)
-		for key := range r.Parameters[parametersKey] {
-			var inst string
-			inst = r.Parameters[parametersKey][key].ValueString()
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
 
-			parametersInst[key] = inst
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
 		}
-		parameters[parametersKey] = parametersInst
 	}
 	out := operations.ApplyPostgresBranchTerraformChangesRequestBody{
 		ClusterSize: clusterSize,

@@ -26,7 +26,7 @@ func (r *PostgresBouncersDataSourceModel) RefreshFromOperationsListBouncersRespo
 			data.BouncerSize = types.StringPointerValue(dataItem.BouncerSize)
 			data.ID = types.StringValue(dataItem.ID)
 			data.Name = types.StringValue(dataItem.Name)
-			if len(dataItem.Parameters) > 0 {
+			if dataItem.Parameters != nil {
 				data.Parameters = make(map[string]map[string]types.String, len(dataItem.Parameters))
 				for parametersKey, parametersValue := range dataItem.Parameters {
 					var parametersResult map[string]types.String

@@ -450,7 +450,7 @@ func (l *ListBouncersData) GetBouncerSize() *string {
 
 func (l *ListBouncersData) GetParameters() map[string]map[string]string {
 	if l == nil {
-		return map[string]map[string]string{}
+		return nil
 	}
 	return l.Parameters
 }
