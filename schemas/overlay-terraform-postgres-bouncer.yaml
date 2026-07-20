@@ -95,6 +95,7 @@ actions:
           `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
       parameter_overrides:
         type: object
+        nullable: true
         additionalProperties:
           type: object
           additionalProperties:
@@ -122,6 +123,7 @@ actions:
           `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
       parameter_overrides:
         type: object
+        nullable: true
         additionalProperties:
           type: object
           additionalProperties:
@@ -240,6 +242,7 @@ actions:
                       description: The number of PgBouncer instances per availability zone. Defaults to 1.
                     parameters:
                       type: object
+                      nullable: true
                       additionalProperties:
                         type: object
                         additionalProperties:

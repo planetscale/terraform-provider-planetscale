@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 10e4021648a1ef1d3083e6345fcd8318
+  docChecksum: 246f9a4df8119edd5055b8a49bc3961f
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
@@ -309,22 +309,22 @@ trackedFiles:
   internal/provider/postgresbouncer_data_source.go:
     last_write_checksum: sha1:0e422965792ec8e5aeb7f681594c5d28fcf44045
   internal/provider/postgresbouncer_data_source_sdk.go:
-    last_write_checksum: sha1:dc381ef983b28e9a46e263039424b0fafa55c9d6
+    last_write_checksum: sha1:f6563fc96104113c10f24a616a1389d11eb4192c
   internal/provider/postgresbouncer_resource.go:
     last_write_checksum: sha1:efbb13331ead2990b228c276755f8c1e02b4abbe
   internal/provider/postgresbouncer_resource_sdk.go:
-    last_write_checksum: sha1:f7dbc06384e4803de17f119ec0cdb21277159a23
+    last_write_checksum: sha1:441589c303bfb14c1245ef0f4b18074898bbdefd
   internal/provider/postgresbouncers_data_source.go:
     last_write_checksum: sha1:51650afce36b2ecbb53aac7a17a3071a3a9ec4e2
   internal/provider/postgresbouncers_data_source_sdk.go:
-    last_write_checksum: sha1:8a147347841e9536e0fb8159084d72334021dc81
+    last_write_checksum: sha1:e5e6c0701cbb77ff5006f49b1d3a169899a55a2a
   internal/provider/postgresbranch_data_source.go:
     id: 3d4847eac64b
     last_write_checksum: sha1:97bf2e2fc190cc8d1e204c5b77fa2c01bdfbf7f5
     pristine_git_object: 8c62e876b56d5f981678f2556da600430340d765
   internal/provider/postgresbranch_data_source_sdk.go:
     id: 65aff8470b2f
-    last_write_checksum: sha1:df224656eaff938b90b2e56e430233eecc95bb8a
+    last_write_checksum: sha1:852e68497fc0df4408dbe6c23548444eb69ba340
     pristine_git_object: ce4a668f6f884d6898c67aae59a7df6d67cd89e4
   internal/provider/postgresbranch_resource.go:
     id: b66a7c0510bb
@@ -332,7 +332,7 @@ trackedFiles:
     pristine_git_object: 592d4c15815e79e1711aa2bc6a6ede61aec55eee
   internal/provider/postgresbranch_resource_sdk.go:
     id: dd6faad04ef1
-    last_write_checksum: sha1:f8fa6ce30f7e59f4ff62a23d2533f5bdca5fb1eb
+    last_write_checksum: sha1:9bb12d98d4203a015aae7e26427cb62c4747e814
     pristine_git_object: 1654632ec76584a3f646c2394baac915f1ddbf84
   internal/provider/postgresbranchbackup_data_source.go:
     last_write_checksum: sha1:4c0ee7ef46349c97f7d6e737abfcd244e19ff36b
@@ -767,7 +767,7 @@ trackedFiles:
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go:
     last_write_checksum: sha1:c9bbd023d1a0e3c31f08f4cf36f2bab9f6772789
   internal/sdk/models/operations/createbouncer.go:
-    last_write_checksum: sha1:8920720802df600a0dbb4a40e8ea8d2a901285b3
+    last_write_checksum: sha1:28447e5823039c8b1045038779b30f602daffaad
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     last_write_checksum: sha1:d8c34bf4df1751c4cb4f66a799750bc2255c4478
@@ -823,7 +823,7 @@ trackedFiles:
   internal/sdk/models/operations/deletevitessbranchbackup.go:
     last_write_checksum: sha1:baebdbea776e7f3cd696030cf0ffd4a734b36514
   internal/sdk/models/operations/getbouncer.go:
-    last_write_checksum: sha1:edc929db95e26478dad61d60016f13c5aa1cfba2
+    last_write_checksum: sha1:0ac00c65d053802d68aeacb2446a53953917350a
   internal/sdk/models/operations/getbranchchangerequest.go:
     last_write_checksum: sha1:211d4629f1a9fc65e1c8f96177ec3e3a867d27b9
   internal/sdk/models/operations/getorganization.go:
@@ -865,7 +865,7 @@ trackedFiles:
     last_write_checksum: sha1:45a55d593fcac53c27cd9aa32589ca44e4508172
     pristine_git_object: be96b47a67d020a8a2b0d5198abfd4db9b7db3bf
   internal/sdk/models/operations/listbouncers.go:
-    last_write_checksum: sha1:ea67e074b1f9ee63522a70a9ea262bcdd3232e01
+    last_write_checksum: sha1:c2bca7fbf77953de5331ee1b62940545b3818a04
   internal/sdk/models/operations/listdatabases.go:
     id: 9a615ba562a7
     last_write_checksum: sha1:b10f3738fb608e4d068f712d17a605a88fbdfdcc
