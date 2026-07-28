@@ -29,16 +29,16 @@ type PostgresBouncerDataSource struct {
 
 // PostgresBouncerDataSourceModel describes the data model.
 type PostgresBouncerDataSourceModel struct {
-	Actor           *tfTypes.GetBouncerActor           `tfsdk:"actor"`
-	BouncerSize     types.String                       `tfsdk:"bouncer_size"`
-	Branch          types.String                       `tfsdk:"branch"`
-	Database        types.String                       `tfsdk:"database"`
-	ID              types.String                       `tfsdk:"id"`
-	Name            types.String                       `tfsdk:"name"`
-	Organization    types.String                       `tfsdk:"organization"`
-	Parameters      map[string]map[string]types.String `tfsdk:"parameters"`
-	ReplicasPerCell types.Int64                        `tfsdk:"replicas_per_cell"`
-	Target          types.String                       `tfsdk:"target"`
+	Actor           *tfTypes.GetPostgresBouncerTerraformStateActor `tfsdk:"actor"`
+	BouncerSize     types.String                                   `tfsdk:"bouncer_size"`
+	Branch          types.String                                   `tfsdk:"branch"`
+	Database        types.String                                   `tfsdk:"database"`
+	ID              types.String                                   `tfsdk:"id"`
+	Name            types.String                                   `tfsdk:"name"`
+	Organization    types.String                                   `tfsdk:"organization"`
+	Parameters      map[string]map[string]types.String             `tfsdk:"parameters"`
+	ReplicasPerCell types.Int64                                    `tfsdk:"replicas_per_cell"`
+	Target          types.String                                   `tfsdk:"target"`
 }
 
 // Metadata returns the data source type name.
@@ -94,11 +94,11 @@ func (r *PostgresBouncerDataSource) Schema(ctx context.Context, req datasource.S
 			},
 			"replicas_per_cell": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The count of replicas in each cell`,
+				Description: `The number of PgBouncer instances per availability zone. Defaults to 1.`,
 			},
 			"target": schema.StringAttribute{
 				Computed:    true,
-				Description: `The instance type the bouncer targets`,
+				Description: `The servers the bouncer routes connections to: ` + "`" + `primary` + "`" + `, ` + "`" + `replica` + "`" + `, or ` + "`" + `replica_az_affinity` + "`" + ` (replicas in the same availability zone as the bouncer).`,
 			},
 		},
 	}
@@ -142,13 +142,13 @@ func (r *PostgresBouncerDataSource) Read(ctx context.Context, req datasource.Rea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetBouncerRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPostgresBouncerTerraformStateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Bouncers.GetBouncer(ctx, *request)
+	res, err := r.client.Bouncers.GetPostgresBouncerTerraformState(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -168,7 +168,7 @@ func (r *PostgresBouncerDataSource) Read(ctx context.Context, req datasource.Rea
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBouncerResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBouncerTerraformStateResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

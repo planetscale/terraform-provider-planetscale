@@ -238,18 +238,18 @@ func (u *UpdateVitessBackupPolicyRequest) GetBody() *UpdateVitessBackupPolicyReq
 	return u.Body
 }
 
-// UpdateVitessBackupPolicyTargetResponse - Whether the policy is for production or development branches
-type UpdateVitessBackupPolicyTargetResponse string
+// UpdateVitessBackupPolicyTargetResponseBody - Whether the policy is for production or development branches
+type UpdateVitessBackupPolicyTargetResponseBody string
 
 const (
-	UpdateVitessBackupPolicyTargetResponseProduction  UpdateVitessBackupPolicyTargetResponse = "production"
-	UpdateVitessBackupPolicyTargetResponseDevelopment UpdateVitessBackupPolicyTargetResponse = "development"
+	UpdateVitessBackupPolicyTargetResponseBodyProduction  UpdateVitessBackupPolicyTargetResponseBody = "production"
+	UpdateVitessBackupPolicyTargetResponseBodyDevelopment UpdateVitessBackupPolicyTargetResponseBody = "development"
 )
 
-func (e UpdateVitessBackupPolicyTargetResponse) ToPointer() *UpdateVitessBackupPolicyTargetResponse {
+func (e UpdateVitessBackupPolicyTargetResponseBody) ToPointer() *UpdateVitessBackupPolicyTargetResponseBody {
 	return &e
 }
-func (e *UpdateVitessBackupPolicyTargetResponse) UnmarshalJSON(data []byte) error {
+func (e *UpdateVitessBackupPolicyTargetResponseBody) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -258,10 +258,10 @@ func (e *UpdateVitessBackupPolicyTargetResponse) UnmarshalJSON(data []byte) erro
 	case "production":
 		fallthrough
 	case "development":
-		*e = UpdateVitessBackupPolicyTargetResponse(v)
+		*e = UpdateVitessBackupPolicyTargetResponseBody(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for UpdateVitessBackupPolicyTargetResponse: %v", v)
+		return fmt.Errorf("invalid value for UpdateVitessBackupPolicyTargetResponseBody: %v", v)
 	}
 }
 
@@ -274,7 +274,7 @@ type UpdateVitessBackupPolicyResponseBody struct {
 	// The name of the backup policy
 	Name string `json:"name"`
 	// Whether the policy is for production or development branches
-	Target UpdateVitessBackupPolicyTargetResponse `json:"target"`
+	Target UpdateVitessBackupPolicyTargetResponseBody `json:"target"`
 	// A number value for the retention period of the backup policy
 	RetentionValue int64 `json:"retention_value"`
 	// The unit for the retention period of the backup policy
@@ -312,9 +312,9 @@ func (u *UpdateVitessBackupPolicyResponseBody) GetName() string {
 	return u.Name
 }
 
-func (u *UpdateVitessBackupPolicyResponseBody) GetTarget() UpdateVitessBackupPolicyTargetResponse {
+func (u *UpdateVitessBackupPolicyResponseBody) GetTarget() UpdateVitessBackupPolicyTargetResponseBody {
 	if u == nil {
-		return UpdateVitessBackupPolicyTargetResponse("")
+		return UpdateVitessBackupPolicyTargetResponseBody("")
 	}
 	return u.Target
 }

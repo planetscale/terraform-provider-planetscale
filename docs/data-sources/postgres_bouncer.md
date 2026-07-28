@@ -37,8 +37,8 @@ data "planetscale_postgres_bouncer" "my_postgresbouncer" {
 - `bouncer_size` (String) The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
 - `id` (String) The ID of the bouncer
 - `parameters` (Map of Map of String) PgBouncer parameter overrides, nested by namespace, e.g. { pgbouncer = { default_pool_size = "100" } }. Omitted parameters are reset to their defaults.
-- `replicas_per_cell` (Number) The count of replicas in each cell
-- `target` (String) The instance type the bouncer targets
+- `replicas_per_cell` (Number) The number of PgBouncer instances per availability zone. Defaults to 1.
+- `target` (String) The servers the bouncer routes connections to: `primary`, `replica`, or `replica_az_affinity` (replicas in the same availability zone as the bouncer).
 
 <a id="nestedatt--actor"></a>
 ### Nested Schema for `actor`

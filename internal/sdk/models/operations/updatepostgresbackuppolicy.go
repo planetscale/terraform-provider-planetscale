@@ -238,18 +238,18 @@ func (u *UpdatePostgresBackupPolicyRequest) GetBody() *UpdatePostgresBackupPolic
 	return u.Body
 }
 
-// UpdatePostgresBackupPolicyTargetResponse - Whether the policy is for production or development branches
-type UpdatePostgresBackupPolicyTargetResponse string
+// UpdatePostgresBackupPolicyTargetResponseBody - Whether the policy is for production or development branches
+type UpdatePostgresBackupPolicyTargetResponseBody string
 
 const (
-	UpdatePostgresBackupPolicyTargetResponseProduction  UpdatePostgresBackupPolicyTargetResponse = "production"
-	UpdatePostgresBackupPolicyTargetResponseDevelopment UpdatePostgresBackupPolicyTargetResponse = "development"
+	UpdatePostgresBackupPolicyTargetResponseBodyProduction  UpdatePostgresBackupPolicyTargetResponseBody = "production"
+	UpdatePostgresBackupPolicyTargetResponseBodyDevelopment UpdatePostgresBackupPolicyTargetResponseBody = "development"
 )
 
-func (e UpdatePostgresBackupPolicyTargetResponse) ToPointer() *UpdatePostgresBackupPolicyTargetResponse {
+func (e UpdatePostgresBackupPolicyTargetResponseBody) ToPointer() *UpdatePostgresBackupPolicyTargetResponseBody {
 	return &e
 }
-func (e *UpdatePostgresBackupPolicyTargetResponse) UnmarshalJSON(data []byte) error {
+func (e *UpdatePostgresBackupPolicyTargetResponseBody) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -258,10 +258,10 @@ func (e *UpdatePostgresBackupPolicyTargetResponse) UnmarshalJSON(data []byte) er
 	case "production":
 		fallthrough
 	case "development":
-		*e = UpdatePostgresBackupPolicyTargetResponse(v)
+		*e = UpdatePostgresBackupPolicyTargetResponseBody(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for UpdatePostgresBackupPolicyTargetResponse: %v", v)
+		return fmt.Errorf("invalid value for UpdatePostgresBackupPolicyTargetResponseBody: %v", v)
 	}
 }
 
@@ -274,7 +274,7 @@ type UpdatePostgresBackupPolicyResponseBody struct {
 	// The name of the backup policy
 	Name string `json:"name"`
 	// Whether the policy is for production or development branches
-	Target UpdatePostgresBackupPolicyTargetResponse `json:"target"`
+	Target UpdatePostgresBackupPolicyTargetResponseBody `json:"target"`
 	// A number value for the retention period of the backup policy
 	RetentionValue int64 `json:"retention_value"`
 	// The unit for the retention period of the backup policy
@@ -312,9 +312,9 @@ func (u *UpdatePostgresBackupPolicyResponseBody) GetName() string {
 	return u.Name
 }
 
-func (u *UpdatePostgresBackupPolicyResponseBody) GetTarget() UpdatePostgresBackupPolicyTargetResponse {
+func (u *UpdatePostgresBackupPolicyResponseBody) GetTarget() UpdatePostgresBackupPolicyTargetResponseBody {
 	if u == nil {
-		return UpdatePostgresBackupPolicyTargetResponse("")
+		return UpdatePostgresBackupPolicyTargetResponseBody("")
 	}
 	return u.Target
 }

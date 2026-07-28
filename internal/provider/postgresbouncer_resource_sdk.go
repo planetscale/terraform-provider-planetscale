@@ -25,25 +25,11 @@ func (r *PostgresBouncerResourceModel) RefreshFromOperationsCreateBouncerRespons
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor = &tfTypes.GetBouncerActor{}
+		r.Actor = &tfTypes.CreateBouncerActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
 		r.BouncerSize = types.StringPointerValue(resp.BouncerSize)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
-		if resp.Parameters != nil {
-			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
-			for parametersKey, parametersValue := range resp.Parameters {
-				var parametersResult map[string]types.String
-				if len(parametersValue) > 0 {
-					parametersResult = make(map[string]types.String, len(parametersValue))
-					for key, value := range parametersValue {
-						parametersResult[key] = types.StringValue(value)
-					}
-				}
-
-				r.Parameters[parametersKey] = parametersResult
-			}
-		}
 		r.ReplicasPerCell = types.Int64Value(resp.ReplicasPerCell)
 		r.Target = types.StringValue(string(resp.Target))
 	}
@@ -51,13 +37,13 @@ func (r *PostgresBouncerResourceModel) RefreshFromOperationsCreateBouncerRespons
 	return diags
 }
 
-func (r *PostgresBouncerResourceModel) RefreshFromOperationsGetBouncerResponseBody(ctx context.Context, resp *operations.GetBouncerResponseBody) diag.Diagnostics {
+func (r *PostgresBouncerResourceModel) RefreshFromOperationsGetPostgresBouncerTerraformStateResponseBody(ctx context.Context, resp *operations.GetPostgresBouncerTerraformStateResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor = &tfTypes.GetBouncerActor{}
+		r.Actor = &tfTypes.CreateBouncerActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.BouncerSize = types.StringPointerValue(resp.BouncerSize)
+		r.BouncerSize = types.StringValue(resp.BouncerSize)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.Parameters != nil {
@@ -240,7 +226,7 @@ func (r *PostgresBouncerResourceModel) ToOperationsDeleteBouncerRequest(ctx cont
 	return &out, diags
 }
 
-func (r *PostgresBouncerResourceModel) ToOperationsGetBouncerRequest(ctx context.Context) (*operations.GetBouncerRequest, diag.Diagnostics) {
+func (r *PostgresBouncerResourceModel) ToOperationsGetPostgresBouncerTerraformStateRequest(ctx context.Context) (*operations.GetPostgresBouncerTerraformStateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -255,7 +241,7 @@ func (r *PostgresBouncerResourceModel) ToOperationsGetBouncerRequest(ctx context
 	var bouncer string
 	bouncer = r.Name.ValueString()
 
-	out := operations.GetBouncerRequest{
+	out := operations.GetPostgresBouncerTerraformStateRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
