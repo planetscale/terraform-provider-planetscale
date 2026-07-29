@@ -6,6 +6,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GetBouncerActor struct {
+type CreateBouncerActor struct {
 	ID types.String `tfsdk:"id"`
 }

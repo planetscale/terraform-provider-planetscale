@@ -10,13 +10,13 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresBouncerDataSourceModel) RefreshFromOperationsGetBouncerResponseBody(ctx context.Context, resp *operations.GetBouncerResponseBody) diag.Diagnostics {
+func (r *PostgresBouncerDataSourceModel) RefreshFromOperationsGetPostgresBouncerTerraformStateResponseBody(ctx context.Context, resp *operations.GetPostgresBouncerTerraformStateResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Actor = &tfTypes.GetBouncerActor{}
+		r.Actor = &tfTypes.GetPostgresBouncerTerraformStateActor{}
 		r.Actor.ID = types.StringValue(resp.Actor.ID)
-		r.BouncerSize = types.StringPointerValue(resp.BouncerSize)
+		r.BouncerSize = types.StringValue(resp.BouncerSize)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.Parameters != nil {
@@ -40,7 +40,7 @@ func (r *PostgresBouncerDataSourceModel) RefreshFromOperationsGetBouncerResponse
 	return diags
 }
 
-func (r *PostgresBouncerDataSourceModel) ToOperationsGetBouncerRequest(ctx context.Context) (*operations.GetBouncerRequest, diag.Diagnostics) {
+func (r *PostgresBouncerDataSourceModel) ToOperationsGetPostgresBouncerTerraformStateRequest(ctx context.Context) (*operations.GetPostgresBouncerTerraformStateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -55,7 +55,7 @@ func (r *PostgresBouncerDataSourceModel) ToOperationsGetBouncerRequest(ctx conte
 	var bouncer string
 	bouncer = r.Name.ValueString()
 
-	out := operations.GetBouncerRequest{
+	out := operations.GetPostgresBouncerTerraformStateRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,

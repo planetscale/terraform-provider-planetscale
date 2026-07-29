@@ -229,18 +229,18 @@ func (c *CreatePostgresBackupPolicyRequest) GetBody() *CreatePostgresBackupPolic
 	return c.Body
 }
 
-// CreatePostgresBackupPolicyTargetResponse - Whether the policy is for production or development branches
-type CreatePostgresBackupPolicyTargetResponse string
+// CreatePostgresBackupPolicyTargetResponseBody - Whether the policy is for production or development branches
+type CreatePostgresBackupPolicyTargetResponseBody string
 
 const (
-	CreatePostgresBackupPolicyTargetResponseProduction  CreatePostgresBackupPolicyTargetResponse = "production"
-	CreatePostgresBackupPolicyTargetResponseDevelopment CreatePostgresBackupPolicyTargetResponse = "development"
+	CreatePostgresBackupPolicyTargetResponseBodyProduction  CreatePostgresBackupPolicyTargetResponseBody = "production"
+	CreatePostgresBackupPolicyTargetResponseBodyDevelopment CreatePostgresBackupPolicyTargetResponseBody = "development"
 )
 
-func (e CreatePostgresBackupPolicyTargetResponse) ToPointer() *CreatePostgresBackupPolicyTargetResponse {
+func (e CreatePostgresBackupPolicyTargetResponseBody) ToPointer() *CreatePostgresBackupPolicyTargetResponseBody {
 	return &e
 }
-func (e *CreatePostgresBackupPolicyTargetResponse) UnmarshalJSON(data []byte) error {
+func (e *CreatePostgresBackupPolicyTargetResponseBody) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -249,10 +249,10 @@ func (e *CreatePostgresBackupPolicyTargetResponse) UnmarshalJSON(data []byte) er
 	case "production":
 		fallthrough
 	case "development":
-		*e = CreatePostgresBackupPolicyTargetResponse(v)
+		*e = CreatePostgresBackupPolicyTargetResponseBody(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreatePostgresBackupPolicyTargetResponse: %v", v)
+		return fmt.Errorf("invalid value for CreatePostgresBackupPolicyTargetResponseBody: %v", v)
 	}
 }
 
@@ -265,7 +265,7 @@ type CreatePostgresBackupPolicyResponseBody struct {
 	// The name of the backup policy
 	Name string `json:"name"`
 	// Whether the policy is for production or development branches
-	Target CreatePostgresBackupPolicyTargetResponse `json:"target"`
+	Target CreatePostgresBackupPolicyTargetResponseBody `json:"target"`
 	// A number value for the retention period of the backup policy
 	RetentionValue int64 `json:"retention_value"`
 	// The unit for the retention period of the backup policy
@@ -303,9 +303,9 @@ func (c *CreatePostgresBackupPolicyResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreatePostgresBackupPolicyResponseBody) GetTarget() CreatePostgresBackupPolicyTargetResponse {
+func (c *CreatePostgresBackupPolicyResponseBody) GetTarget() CreatePostgresBackupPolicyTargetResponseBody {
 	if c == nil {
-		return CreatePostgresBackupPolicyTargetResponse("")
+		return CreatePostgresBackupPolicyTargetResponseBody("")
 	}
 	return c.Target
 }

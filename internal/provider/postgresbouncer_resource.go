@@ -38,7 +38,7 @@ type PostgresBouncerResource struct {
 
 // PostgresBouncerResourceModel describes the resource data model.
 type PostgresBouncerResourceModel struct {
-	Actor              *tfTypes.GetBouncerActor           `tfsdk:"actor"`
+	Actor              *tfTypes.CreateBouncerActor        `tfsdk:"actor"`
 	BouncerSize        types.String                       `tfsdk:"bouncer_size"`
 	Branch             types.String                       `tfsdk:"branch"`
 	Database           types.String                       `tfsdk:"database"`
@@ -252,6 +252,43 @@ func (r *PostgresBouncerResource) Create(ctx context.Context, req resource.Creat
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request2, request2Diags := data.ToOperationsGetPostgresBouncerTerraformStateRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.Bouncers.GetPostgresBouncerTerraformState(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+	if !(res2.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBouncerTerraformStateResponseBody(ctx, res2.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -275,13 +312,13 @@ func (r *PostgresBouncerResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetBouncerRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPostgresBouncerTerraformStateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Bouncers.GetBouncer(ctx, *request)
+	res, err := r.client.Bouncers.GetPostgresBouncerTerraformState(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -305,7 +342,7 @@ func (r *PostgresBouncerResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBouncerResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBouncerTerraformStateResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -369,13 +406,13 @@ func (r *PostgresBouncerResource) Update(ctx context.Context, req resource.Updat
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetBouncerRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetPostgresBouncerTerraformStateRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Bouncers.GetBouncer(ctx, *request1)
+	res1, err := r.client.Bouncers.GetPostgresBouncerTerraformState(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -395,7 +432,7 @@ func (r *PostgresBouncerResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetBouncerResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBouncerTerraformStateResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

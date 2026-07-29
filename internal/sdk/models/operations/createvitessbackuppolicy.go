@@ -229,18 +229,18 @@ func (c *CreateVitessBackupPolicyRequest) GetBody() *CreateVitessBackupPolicyReq
 	return c.Body
 }
 
-// CreateVitessBackupPolicyTargetResponse - Whether the policy is for production or development branches
-type CreateVitessBackupPolicyTargetResponse string
+// CreateVitessBackupPolicyTargetResponseBody - Whether the policy is for production or development branches
+type CreateVitessBackupPolicyTargetResponseBody string
 
 const (
-	CreateVitessBackupPolicyTargetResponseProduction  CreateVitessBackupPolicyTargetResponse = "production"
-	CreateVitessBackupPolicyTargetResponseDevelopment CreateVitessBackupPolicyTargetResponse = "development"
+	CreateVitessBackupPolicyTargetResponseBodyProduction  CreateVitessBackupPolicyTargetResponseBody = "production"
+	CreateVitessBackupPolicyTargetResponseBodyDevelopment CreateVitessBackupPolicyTargetResponseBody = "development"
 )
 
-func (e CreateVitessBackupPolicyTargetResponse) ToPointer() *CreateVitessBackupPolicyTargetResponse {
+func (e CreateVitessBackupPolicyTargetResponseBody) ToPointer() *CreateVitessBackupPolicyTargetResponseBody {
 	return &e
 }
-func (e *CreateVitessBackupPolicyTargetResponse) UnmarshalJSON(data []byte) error {
+func (e *CreateVitessBackupPolicyTargetResponseBody) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -249,10 +249,10 @@ func (e *CreateVitessBackupPolicyTargetResponse) UnmarshalJSON(data []byte) erro
 	case "production":
 		fallthrough
 	case "development":
-		*e = CreateVitessBackupPolicyTargetResponse(v)
+		*e = CreateVitessBackupPolicyTargetResponseBody(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreateVitessBackupPolicyTargetResponse: %v", v)
+		return fmt.Errorf("invalid value for CreateVitessBackupPolicyTargetResponseBody: %v", v)
 	}
 }
 
@@ -265,7 +265,7 @@ type CreateVitessBackupPolicyResponseBody struct {
 	// The name of the backup policy
 	Name string `json:"name"`
 	// Whether the policy is for production or development branches
-	Target CreateVitessBackupPolicyTargetResponse `json:"target"`
+	Target CreateVitessBackupPolicyTargetResponseBody `json:"target"`
 	// A number value for the retention period of the backup policy
 	RetentionValue int64 `json:"retention_value"`
 	// The unit for the retention period of the backup policy
@@ -303,9 +303,9 @@ func (c *CreateVitessBackupPolicyResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreateVitessBackupPolicyResponseBody) GetTarget() CreateVitessBackupPolicyTargetResponse {
+func (c *CreateVitessBackupPolicyResponseBody) GetTarget() CreateVitessBackupPolicyTargetResponseBody {
 	if c == nil {
-		return CreateVitessBackupPolicyTargetResponse("")
+		return CreateVitessBackupPolicyTargetResponseBody("")
 	}
 	return c.Target
 }

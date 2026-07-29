@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 246f9a4df8119edd5055b8a49bc3961f
+  docChecksum: d6e426e5f32f7e9b54db6fdf9190c7d4
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
@@ -307,13 +307,13 @@ trackedFiles:
   internal/provider/postgresbackuppolicy_resource_sdk.go:
     last_write_checksum: sha1:b38256e8bce7919d2527aa47ef83351face30d03
   internal/provider/postgresbouncer_data_source.go:
-    last_write_checksum: sha1:0e422965792ec8e5aeb7f681594c5d28fcf44045
+    last_write_checksum: sha1:4dcbe37cbc9bd7da6ae6c5a2f95f29691f2a31b4
   internal/provider/postgresbouncer_data_source_sdk.go:
-    last_write_checksum: sha1:f6563fc96104113c10f24a616a1389d11eb4192c
+    last_write_checksum: sha1:fb988f9c12215a215ad62317bdd2e03c3a04fe2e
   internal/provider/postgresbouncer_resource.go:
-    last_write_checksum: sha1:efbb13331ead2990b228c276755f8c1e02b4abbe
+    last_write_checksum: sha1:8a747940f07055ad3ed959a8273b6a2db3ad03c1
   internal/provider/postgresbouncer_resource_sdk.go:
-    last_write_checksum: sha1:441589c303bfb14c1245ef0f4b18074898bbdefd
+    last_write_checksum: sha1:83e8e298be4dd30183f4d86b0397962a68a035d4
   internal/provider/postgresbouncers_data_source.go:
     last_write_checksum: sha1:51650afce36b2ecbb53aac7a17a3071a3a9ec4e2
   internal/provider/postgresbouncers_data_source_sdk.go:
@@ -454,8 +454,8 @@ trackedFiles:
     id: 72a03805427f
     last_write_checksum: sha1:209d6c3a1f258deb4ba5bdcc000090ff582714c1
     pristine_git_object: ea5786b8bbcb244f690025648dfa5ec5fbe52bca
-  internal/provider/types/get_bouncer_actor.go:
-    last_write_checksum: sha1:6167a68ccacc11348cdf6fcd93f03c2b125d8aa8
+  internal/provider/types/create_bouncer_actor.go:
+    last_write_checksum: sha1:c795491d1978dcb2589636ce7b89ad9a51e6d5a5
   internal/provider/types/get_password_actor.go:
     id: 34086949be0f
     last_write_checksum: sha1:5a1503e8b9f4a4a5ae8f28c91d54bcca7ab01dd1
@@ -468,6 +468,8 @@ trackedFiles:
     id: ac046bdf5b53
     last_write_checksum: sha1:76f3fd6b293f599f0ff706d7a287ee0eb1bbe541
     pristine_git_object: a39fcc64fcd7e41bbe70af9e8e57a4482a37c7c7
+  internal/provider/types/get_postgres_bouncer_terraform_state_actor.go:
+    last_write_checksum: sha1:320a48df60d47c1ae11284b3402d93aaead1cebd
   internal/provider/types/get_postgres_branch_actor.go:
     id: 1e422d9ac7a3
     last_write_checksum: sha1:a421c025e38bcb850f915a23425bfa4e51475ce3
@@ -679,7 +681,7 @@ trackedFiles:
   internal/sdk/backups.go:
     last_write_checksum: sha1:5fc0fbd63976dd29c73327581cbde44d3fd93dc1
   internal/sdk/bouncers.go:
-    last_write_checksum: sha1:251c969ccf6eefa6098791313d37981d20c2def9
+    last_write_checksum: sha1:7f020deddefafcdb7d9aed420ca61942af67028d
   internal/sdk/branchchanges.go:
     last_write_checksum: sha1:a0aad526bed875b307bd45833c28aa2f6ee2b18a
   internal/sdk/databasebranches.go:
@@ -767,13 +769,13 @@ trackedFiles:
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go:
     last_write_checksum: sha1:c9bbd023d1a0e3c31f08f4cf36f2bab9f6772789
   internal/sdk/models/operations/createbouncer.go:
-    last_write_checksum: sha1:28447e5823039c8b1045038779b30f602daffaad
+    last_write_checksum: sha1:db4c64cb5779e40b8450bb5fbfebec653fef307a
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     last_write_checksum: sha1:d8c34bf4df1751c4cb4f66a799750bc2255c4478
     pristine_git_object: e84cf733d521e8be177285c0496c8540f011c362
   internal/sdk/models/operations/createpostgresbackuppolicy.go:
-    last_write_checksum: sha1:d737c8f5f4672671f66911b7a42112d44dd82a95
+    last_write_checksum: sha1:6abd06495f8ca6ac8d4f6c0b20980f75714613cc
   internal/sdk/models/operations/createpostgresbranch.go:
     id: 952731e87008
     last_write_checksum: sha1:99be76733879b5f0f1be902f0edbf5bf7d5d51ce
@@ -787,7 +789,7 @@ trackedFiles:
     last_write_checksum: sha1:f14f18d26d1028e4872e440297d50b0792146379
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
   internal/sdk/models/operations/createvitessbackuppolicy.go:
-    last_write_checksum: sha1:4014318c9b60d1dcc3a34c13e9f77137b92d5ac9
+    last_write_checksum: sha1:eca81b812b96e5fbc6c6a8486200bcc7bcf0b25b
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
     last_write_checksum: sha1:f829525a6b64e27b00707fc63b1ed3bae255c4c8
@@ -822,8 +824,6 @@ trackedFiles:
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
   internal/sdk/models/operations/deletevitessbranchbackup.go:
     last_write_checksum: sha1:baebdbea776e7f3cd696030cf0ffd4a734b36514
-  internal/sdk/models/operations/getbouncer.go:
-    last_write_checksum: sha1:0ac00c65d053802d68aeacb2446a53953917350a
   internal/sdk/models/operations/getbranchchangerequest.go:
     last_write_checksum: sha1:211d4629f1a9fc65e1c8f96177ec3e3a867d27b9
   internal/sdk/models/operations/getorganization.go:
@@ -836,6 +836,8 @@ trackedFiles:
     pristine_git_object: a4c11b32082c9f2f4f56a644c50a8da506fe64e7
   internal/sdk/models/operations/getpostgresbackuppolicy.go:
     last_write_checksum: sha1:d73ada12a6237fb6f716e184a46aa83e6331a01b
+  internal/sdk/models/operations/getpostgresbouncerterraformstate.go:
+    last_write_checksum: sha1:078fa366baa1b3885b4cfc66839ec156bae2294e
   internal/sdk/models/operations/getpostgresbranch.go:
     id: e4f92de0a1c5
     last_write_checksum: sha1:d4f258d96cdb5b8b4ec914cc525cfc8b8bce0de1
@@ -899,7 +901,7 @@ trackedFiles:
     last_write_checksum: sha1:54da4ea20c1dfbb193d128c690b6a2050e9898ca
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
   internal/sdk/models/operations/updatepostgresbackuppolicy.go:
-    last_write_checksum: sha1:7bb8cc62a79f2f34b1c57b8cf2cfa0a87e22ab46
+    last_write_checksum: sha1:748f3c236056958b3970c6dbfdd442ac5afd7534
   internal/sdk/models/operations/updatepostgresbranch.go:
     last_write_checksum: sha1:dd3fef51590fa7fbdb2bb12611275a7d5fb058ff
   internal/sdk/models/operations/updateredactedrole.go:
@@ -909,7 +911,7 @@ trackedFiles:
     last_write_checksum: sha1:a50d70fb61dda9fb90cbe3037ce0d2c0e52bddd6
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
   internal/sdk/models/operations/updatevitessbackuppolicy.go:
-    last_write_checksum: sha1:14ce98a76dedd3b97d91a3a13259be8263574317
+    last_write_checksum: sha1:8579426bb2a0daad3ed2a8fe5176d3b544c3cc21
   internal/sdk/models/operations/updatevitessbranch.go:
     last_write_checksum: sha1:acec1c1f674656aa59513cd0df01598645ec4aad
   internal/sdk/models/shared/security.go:
@@ -1384,7 +1386,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "actor": {"id": "<id>"}, "parameters": [], "parameter_overrides": {}}
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "actor": {"id": "<id>"}, "parameters": []}
   get_bouncer:
     speakeasy-default-get-bouncer:
       parameters:
@@ -2869,6 +2871,17 @@ examples:
       responses:
         "200":
           application/json: {"id": "<id>", "state": "<value>"}
+  get_postgres_bouncer_terraform_state:
+    speakeasy-default-get-postgres-bouncer-terraform-state:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          bouncer: "<value>"
+      responses:
+        "200":
+          application/json: {"type": "PostgresBouncer", "id": "<id>", "name": "<value>", "target": "replica", "bouncer_size": "<value>", "replicas_per_cell": 883830, "actor": {"id": "<id>"}, "parameters": {"key": {}, "key1": {}, "key2": {}}}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

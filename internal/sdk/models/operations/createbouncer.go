@@ -127,19 +127,19 @@ func (c *CreateBouncerRequest) GetBody() *CreateBouncerRequestBody {
 	return c.Body
 }
 
-// CreateBouncerTargetResponse - The instance type the bouncer targets
-type CreateBouncerTargetResponse string
+// CreateBouncerTargetResponseBody - The instance type the bouncer targets
+type CreateBouncerTargetResponseBody string
 
 const (
-	CreateBouncerTargetResponsePrimary           CreateBouncerTargetResponse = "primary"
-	CreateBouncerTargetResponseReplica           CreateBouncerTargetResponse = "replica"
-	CreateBouncerTargetResponseReplicaAzAffinity CreateBouncerTargetResponse = "replica_az_affinity"
+	CreateBouncerTargetResponseBodyPrimary           CreateBouncerTargetResponseBody = "primary"
+	CreateBouncerTargetResponseBodyReplica           CreateBouncerTargetResponseBody = "replica"
+	CreateBouncerTargetResponseBodyReplicaAzAffinity CreateBouncerTargetResponseBody = "replica_az_affinity"
 )
 
-func (e CreateBouncerTargetResponse) ToPointer() *CreateBouncerTargetResponse {
+func (e CreateBouncerTargetResponseBody) ToPointer() *CreateBouncerTargetResponseBody {
 	return &e
 }
-func (e *CreateBouncerTargetResponse) UnmarshalJSON(data []byte) error {
+func (e *CreateBouncerTargetResponseBody) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -150,10 +150,10 @@ func (e *CreateBouncerTargetResponse) UnmarshalJSON(data []byte) error {
 	case "replica":
 		fallthrough
 	case "replica_az_affinity":
-		*e = CreateBouncerTargetResponse(v)
+		*e = CreateBouncerTargetResponseBody(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreateBouncerTargetResponse: %v", v)
+		return fmt.Errorf("invalid value for CreateBouncerTargetResponseBody: %v", v)
 	}
 }
 
@@ -448,15 +448,13 @@ type CreateBouncerResponseBody struct {
 	// The name of the bouncer
 	Name string `json:"name"`
 	// The instance type the bouncer targets
-	Target CreateBouncerTargetResponse `json:"target"`
+	Target CreateBouncerTargetResponseBody `json:"target"`
 	// The count of replicas in each cell
 	ReplicasPerCell  int64                          `json:"replicas_per_cell"`
 	Actor            CreateBouncerActor             `json:"actor"`
 	ParameterDetails []CreateBouncerParameterDetail `json:"parameters"`
 	// The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
 	BouncerSize *string `json:"bouncer_size,omitzero"`
-	// PgBouncer parameter overrides, nested by namespace, e.g. { pgbouncer = { default_pool_size = "100" } }. Omitted parameters are reset to their defaults.
-	Parameters map[string]map[string]string `json:"parameter_overrides"`
 }
 
 func (c *CreateBouncerResponseBody) GetID() string {
@@ -473,9 +471,9 @@ func (c *CreateBouncerResponseBody) GetName() string {
 	return c.Name
 }
 
-func (c *CreateBouncerResponseBody) GetTarget() CreateBouncerTargetResponse {
+func (c *CreateBouncerResponseBody) GetTarget() CreateBouncerTargetResponseBody {
 	if c == nil {
-		return CreateBouncerTargetResponse("")
+		return CreateBouncerTargetResponseBody("")
 	}
 	return c.Target
 }
@@ -506,13 +504,6 @@ func (c *CreateBouncerResponseBody) GetBouncerSize() *string {
 		return nil
 	}
 	return c.BouncerSize
-}
-
-func (c *CreateBouncerResponseBody) GetParameters() map[string]map[string]string {
-	if c == nil {
-		return nil
-	}
-	return c.Parameters
 }
 
 type CreateBouncerResponse struct {

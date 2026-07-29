@@ -55,17 +55,6 @@ actions:
     update:
       description: The number of PgBouncer instances per availability zone. Defaults to 1.
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get
-    description: API operation for data and managed resource read.
-    update:
-      x-speakeasy-entity-operation: PostgresBouncer#read
-      x-speakeasy-entity-description: Returns information about a dedicated PgBouncer for a PlanetScale Postgres branch.
-
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.parameters[?@.name == 'bouncer']
-    description: The bouncer path parameter is the bouncer name.
-    update:
-      x-speakeasy-match: name
-
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].delete
     description: API operation for managed resource delete.
     update:
@@ -76,12 +65,11 @@ actions:
     update:
       x-speakeasy-match: name
 
-  # Response shaping shared by create and read: the branch object collides
-  # with the branch path parameter, and the rich parameters array cannot
-  # reconcile with the map-shaped parameters the write endpoints take.
-  # bouncer_size and parameter_overrides are returned by the API but not yet
-  # published in the upstream schema; parameter_overrides is renamed so reads
-  # refresh the parameters attribute defined by the terraform-changes request.
+  # Response shaping for create: the branch object collides with the branch
+  # path parameter, and the rich parameters array cannot reconcile with the
+  # map-shaped parameters the write and terraform-state endpoints use.
+  # bouncer_size is returned by the API but not yet published in the upstream
+  # schema.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema.properties
     description: Hide the rich parameters array, which cannot reconcile with the map-shaped request. Add undocumented response fields.
     update:
@@ -93,51 +81,6 @@ actions:
         description: >-
           The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`,
           `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
-      parameter_overrides:
-        type: object
-        nullable: true
-        additionalProperties:
-          type: object
-          additionalProperties:
-            type: string
-        x-speakeasy-name-override: parameters
-        description: >-
-          PgBouncer parameter overrides, nested by namespace, e.g.
-          { pgbouncer = { default_pool_size = "100" } }. Omitted parameters
-          are reset to their defaults.
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema
-    description: parameter_overrides is always present, so reads must always refresh the parameters attribute, including back to empty.
-    update:
-      required:
-        - parameter_overrides
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties
-    description: Hide the rich parameters array, which cannot reconcile with the map-shaped request. Add undocumented response fields.
-    update:
-      parameters:
-        x-speakeasy-name-override: parameter_details
-        x-speakeasy-terraform-ignore: true
-      bouncer_size:
-        type: string
-        description: >-
-          The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`,
-          `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
-      parameter_overrides:
-        type: object
-        nullable: true
-        additionalProperties:
-          type: object
-          additionalProperties:
-            type: string
-        x-speakeasy-name-override: parameters
-        description: >-
-          PgBouncer parameter overrides, nested by namespace, e.g.
-          { pgbouncer = { default_pool_size = "100" } }. Omitted parameters
-          are reset to their defaults.
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema
-    description: parameter_overrides is always present, so reads must always refresh the parameters attribute, including back to empty.
-    update:
-      required:
-        - parameter_overrides
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema.properties.created_at
     description: Trim noisy response field, following the branch resource attribute conventions.
@@ -160,28 +103,10 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema.properties.actor.properties.display_name
     description: Trim the actor to its ID, following the branch resource attribute conventions.
     remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties.created_at
-    description: Trim noisy response field, following the branch resource attribute conventions.
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties.updated_at
-    description: Trim noisy response field, following the branch resource attribute conventions.
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties.deleted_at
-    description: Trim noisy response field, following the branch resource attribute conventions.
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties.sku
-    description: Trim noisy response field, following the branch resource attribute conventions.
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties.branch
-    description: Trim noisy response field, following the branch resource attribute conventions.
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties.actor.properties.avatar_url
-    description: Trim the actor to its ID, following the branch resource attribute conventions.
-    remove: true
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}"].get.responses["200"].content["application/json"].schema.properties.actor.properties.display_name
-    description: Trim the actor to its ID, following the branch resource attribute conventions.
-    remove: true
-
+  # Reads go through the terraform-state endpoint so Terraform drift detection
+  # uses the API's state map of user-overridden parameters, not the richer
+  # parameter definition list from the general bouncer endpoint.
+  #
   # Updates go through the undocumented terraform-changes endpoint, which
   # applies bouncer_size, replicas_per_cell, and parameters with replace
   # semantics (omitted values reset to their defaults), returns the resulting
@@ -190,8 +115,116 @@ actions:
   # accept. Resizes are asynchronous, but reads reflect the requested
   # configuration immediately, so no polling is needed.
   - target: $.paths
-    description: Add the undocumented bouncer terraform-changes endpoint.
+    description: Add the undocumented bouncer terraform-state and terraform-changes endpoints.
     update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/terraform-state:
+        get:
+          operationId: get_postgres_bouncer_terraform_state
+          summary: Get a Postgres bouncer's Terraform state
+          tags:
+            - Bouncers
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              description: "Organization name slug from `list_organizations`. Example: `acme`."
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              description: "Database name slug from `list_databases`. Example: `app-db`."
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              description: "Branch name from `list_branches`. Example: `main`."
+              schema:
+                type: string
+            - name: bouncer
+              in: path
+              required: true
+              description: The name of the bouncer
+              x-speakeasy-match: name
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns Terraform state for a Postgres bouncer
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      type:
+                        type: string
+                        const: PostgresBouncer
+                        x-speakeasy-terraform-ignore: true
+                      id:
+                        type: string
+                        description: The ID of the bouncer
+                      name:
+                        type: string
+                        description: The name of the bouncer
+                      target:
+                        type: string
+                        enum:
+                          - primary
+                          - replica
+                          - replica_az_affinity
+                        description: >-
+                          The servers the bouncer routes connections to: `primary`,
+                          `replica`, or `replica_az_affinity` (replicas in the same
+                          availability zone as the bouncer).
+                      bouncer_size:
+                        type: string
+                        description: >-
+                          The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`,
+                          `PGB_40`, `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
+                      replicas_per_cell:
+                        type: integer
+                        description: The number of PgBouncer instances per availability zone. Defaults to 1.
+                      actor:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the actor
+                        required:
+                          - id
+                      parameters:
+                        type: object
+                        nullable: true
+                        additionalProperties:
+                          type: object
+                          additionalProperties:
+                            type: string
+                        description: >-
+                          PgBouncer parameter overrides, nested by namespace, e.g.
+                          { pgbouncer = { default_pool_size = "100" } }. Omitted
+                          parameters are reset to their defaults.
+                    required:
+                      - id
+                      - name
+                      - target
+                      - bouncer_size
+                      - replicas_per_cell
+                      - actor
+                      - parameters
+            "401":
+              description: Unauthorized
+            "403":
+              description: Forbidden
+            "404":
+              description: Not found
+            "500":
+              description: Internal server error
+          x-speakeasy-entity-operation:
+            - PostgresBouncer#read
+            - PostgresBouncer#create#3
+          x-speakeasy-entity-description: Returns Terraform state for a dedicated PgBouncer for a PlanetScale Postgres branch.
       /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/terraform-changes:
         put:
           operationId: apply_postgres_bouncer_terraform_changes
