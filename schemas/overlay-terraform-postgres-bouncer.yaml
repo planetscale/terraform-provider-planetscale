@@ -196,6 +196,7 @@ actions:
                           - id
                       parameters:
                         type: object
+                        nullable: true
                         additionalProperties:
                           type: object
                           additionalProperties:

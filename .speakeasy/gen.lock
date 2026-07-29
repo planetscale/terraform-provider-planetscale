@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 086460020f2114fc352209392c93e75e
+  docChecksum: d6e426e5f32f7e9b54db6fdf9190c7d4
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
@@ -309,7 +309,7 @@ trackedFiles:
   internal/provider/postgresbouncer_data_source.go:
     last_write_checksum: sha1:4dcbe37cbc9bd7da6ae6c5a2f95f29691f2a31b4
   internal/provider/postgresbouncer_data_source_sdk.go:
-    last_write_checksum: sha1:6a57ea426dbe85239d3b7f8b569c84896e83c5af
+    last_write_checksum: sha1:48e768a5efd2c74ef02b533a4dff88607d70d17f
   internal/provider/postgresbouncer_resource.go:
     last_write_checksum: sha1:8a747940f07055ad3ed959a8273b6a2db3ad03c1
   internal/provider/postgresbouncer_resource_sdk.go:
@@ -837,7 +837,7 @@ trackedFiles:
   internal/sdk/models/operations/getpostgresbackuppolicy.go:
     last_write_checksum: sha1:d73ada12a6237fb6f716e184a46aa83e6331a01b
   internal/sdk/models/operations/getpostgresbouncerterraformstate.go:
-    last_write_checksum: sha1:56fa2ed3e45d7a620dc7799d6d45df25c4875df9
+    last_write_checksum: sha1:ff2e1d38ed6da923275a3f81cc9d9f201e10ff60
   internal/sdk/models/operations/getpostgresbranch.go:
     id: e4f92de0a1c5
     last_write_checksum: sha1:d4f258d96cdb5b8b4ec914cc525cfc8b8bce0de1

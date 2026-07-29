@@ -169,7 +169,7 @@ func (g *GetPostgresBouncerTerraformStateResponseBody) GetActor() GetPostgresBou
 
 func (g *GetPostgresBouncerTerraformStateResponseBody) GetParameters() map[string]map[string]string {
 	if g == nil {
-		return map[string]map[string]string{}
+		return nil
 	}
 	return g.Parameters
 }
