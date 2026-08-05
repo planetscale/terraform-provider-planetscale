@@ -18,29 +18,27 @@ import (
 // VitessBranchSettings is the stable subset of branch state used by the
 // custom Terraform settings resources.
 type VitessBranchSettings struct {
-	ID             string `json:"id"`
-	SafeMigrations bool   `json:"safe_migrations"`
-	VTGateSize     string `json:"vtgate_size"`
-	VTGateCount    int64  `json:"vtgate_count"`
+	ID                         string `json:"id"`
+	SafeMigrations             bool   `json:"safe_migrations"`
+	VTGateSize                 string `json:"vtgate_size"`
+	VTGateName                 string `json:"vtgate_name"`
+	VTGateCount                int64  `json:"vtgate_count"`
+	VTGateMaxCount             *int64 `json:"vtgate_max_count"`
+	VTGateAutoscaling          bool   `json:"vtgate_autoscaling"`
+	VTGateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization"`
 }
 
 // VitessBranchResizeRequest represents the VTGate configuration captured by a
 // branch resize request.
 type VitessBranchResizeRequest struct {
-	ID                                 string `json:"id"`
-	State                              string `json:"state"`
-	VTGateSize                         string `json:"vtgate_size"`
-	VTGateName                         string `json:"vtgate_name"`
-	PreviousVTGateSize                 string `json:"previous_vtgate_size"`
-	PreviousVTGateName                 string `json:"previous_vtgate_name"`
-	VTGateCount                        int64  `json:"vtgate_count"`
-	PreviousVTGateCount                int64  `json:"previous_vtgate_count"`
-	VTGateMaxCount                     *int64 `json:"vtgate_max_count"`
-	PreviousVTGateMaxCount             *int64 `json:"previous_vtgate_max_count"`
-	VTGateAutoscaling                  bool   `json:"vtgate_autoscaling"`
-	PreviousVTGateAutoscaling          bool   `json:"previous_vtgate_autoscaling"`
-	VTGateTargetCPUUtilization         *int64 `json:"vtgate_target_cpu_utilization"`
-	PreviousVTGateTargetCPUUtilization *int64 `json:"previous_vtgate_target_cpu_utilization"`
+	ID                         string `json:"id"`
+	State                      string `json:"state"`
+	VTGateSize                 string `json:"vtgate_size"`
+	VTGateName                 string `json:"vtgate_name"`
+	VTGateCount                int64  `json:"vtgate_count"`
+	VTGateMaxCount             *int64 `json:"vtgate_max_count"`
+	VTGateAutoscaling          bool   `json:"vtgate_autoscaling"`
+	VTGateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization"`
 }
 
 // UpdateVitessBranchVTGateConfigurationRequest contains the optional VTGate
@@ -51,10 +49,6 @@ type UpdateVitessBranchVTGateConfigurationRequest struct {
 	VTGateMaxCount             *int64  `json:"vtgate_max_count,omitempty"`
 	VTGateAutoscaling          *bool   `json:"vtgate_autoscaling,omitempty"`
 	VTGateTargetCPUUtilization *int64  `json:"vtgate_target_cpu_utilization,omitempty"`
-}
-
-type vitessBranchResizeList struct {
-	Data []VitessBranchResizeRequest `json:"data"`
 }
 
 // GetVitessBranchSettings reads the current branch settings.
@@ -78,15 +72,6 @@ func (s *DatabaseBranches) SetVitessBranchSafeMigrations(ctx context.Context, or
 		return nil, err
 	}
 	return &settings, nil
-}
-
-// ListVitessBranchResizeRequests returns resize requests newest first.
-func (s *DatabaseBranches) ListVitessBranchResizeRequests(ctx context.Context, organization, database, branch string) ([]VitessBranchResizeRequest, error) {
-	var response vitessBranchResizeList
-	if err := s.doCustomBranchRequest(ctx, http.MethodGet, organization, database, branch, "resizes", nil, &response, "list_vitess_branch_resize_requests"); err != nil {
-		return nil, err
-	}
-	return response.Data, nil
 }
 
 // UpdateVitessBranchVTGateConfiguration queues a VTGate configuration change.

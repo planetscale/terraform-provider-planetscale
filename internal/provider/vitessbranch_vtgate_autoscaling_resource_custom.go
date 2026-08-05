@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -214,13 +213,6 @@ func (r *VitessBranchVTGateAutoscalingResource) Delete(ctx context.Context, req 
 	)
 	if err != nil && !isBranchSettingNotFound(err) {
 		resp.Diagnostics.AddError("Unable to disable VTGate autoscaling", err.Error())
-		return
-	}
-	if err == nil {
-		_, err = r.waitForResize(ctx, &data)
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to wait for VTGate autoscaling to be disabled", err.Error())
-		}
 	}
 }
 
@@ -297,10 +289,6 @@ func (r *VitessBranchVTGateAutoscalingResource) apply(
 		return err
 	}
 
-	resize, err = r.waitForResizeRequest(ctx, data, resize)
-	if err != nil {
-		return err
-	}
 	refreshVTGateAutoscalingModel(data, configurationFromResize(current.branchID, *resize))
 	return nil
 }
@@ -319,43 +307,22 @@ func (r *VitessBranchVTGateAutoscalingResource) readCurrent(
 		return currentVTGateConfiguration{}, err
 	}
 
-	current := currentVTGateConfiguration{
-		branchID: settings.ID,
-		size:     settings.VTGateSize,
-		count:    settings.VTGateCount,
-	}
-	resizes, err := r.client.DatabaseBranches.ListVitessBranchResizeRequests(
-		ctx,
-		data.Organization.ValueString(),
-		data.Database.ValueString(),
-		data.Branch.ValueString(),
-	)
-	if err != nil {
-		return currentVTGateConfiguration{}, err
-	}
-	if len(resizes) == 0 {
-		return current, nil
+	size := settings.VTGateName
+	if size == "" {
+		size = settings.VTGateSize
 	}
 
-	return configurationFromResize(settings.ID, resizes[0]), nil
+	return currentVTGateConfiguration{
+		branchID:             settings.ID,
+		autoscaling:          settings.VTGateAutoscaling,
+		size:                 size,
+		count:                settings.VTGateCount,
+		maxCount:             settings.VTGateMaxCount,
+		targetCPUUtilization: settings.VTGateTargetCPUUtilization,
+	}, nil
 }
 
 func configurationFromResize(branchID string, resize sdk.VitessBranchResizeRequest) currentVTGateConfiguration {
-	if resize.State == "canceled" {
-		size := resize.PreviousVTGateName
-		if size == "" {
-			size = resize.PreviousVTGateSize
-		}
-		return currentVTGateConfiguration{
-			branchID:             branchID,
-			autoscaling:          resize.PreviousVTGateAutoscaling,
-			size:                 size,
-			count:                resize.PreviousVTGateCount,
-			maxCount:             resize.PreviousVTGateMaxCount,
-			targetCPUUtilization: resize.PreviousVTGateTargetCPUUtilization,
-		}
-	}
-
 	size := resize.VTGateName
 	if size == "" {
 		size = resize.VTGateSize
@@ -384,72 +351,5 @@ func refreshVTGateAutoscalingModel(data *vitessBranchVTGateAutoscalingResourceMo
 		data.VTGateTargetCPUUtilization = types.Int64Null()
 	} else {
 		data.VTGateTargetCPUUtilization = types.Int64Value(*current.targetCPUUtilization)
-	}
-}
-
-func (r *VitessBranchVTGateAutoscalingResource) waitForResize(
-	ctx context.Context,
-	data *vitessBranchVTGateAutoscalingResourceModel,
-) (*sdk.VitessBranchResizeRequest, error) {
-	resizes, err := r.client.DatabaseBranches.ListVitessBranchResizeRequests(
-		ctx,
-		data.Organization.ValueString(),
-		data.Database.ValueString(),
-		data.Branch.ValueString(),
-	)
-	if err != nil {
-		return nil, err
-	}
-	if len(resizes) == 0 {
-		return nil, fmt.Errorf("the API returned no resize request")
-	}
-	return r.waitForResizeRequest(ctx, data, &resizes[0])
-}
-
-func (r *VitessBranchVTGateAutoscalingResource) waitForResizeRequest(
-	ctx context.Context,
-	data *vitessBranchVTGateAutoscalingResourceModel,
-	resize *sdk.VitessBranchResizeRequest,
-) (*sdk.VitessBranchResizeRequest, error) {
-	const (
-		resizePollInterval = 10 * time.Second
-		resizePollTimeout  = 15 * time.Minute
-	)
-
-	timer := time.NewTimer(resizePollTimeout)
-	defer timer.Stop()
-	ticker := time.NewTicker(resizePollInterval)
-	defer ticker.Stop()
-
-	for {
-		switch resize.State {
-		case "completed":
-			return resize, nil
-		case "canceled":
-			return nil, fmt.Errorf("VTGate resize request %q was canceled", resize.ID)
-		}
-
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		case <-timer.C:
-			return nil, fmt.Errorf("timed out waiting for VTGate resize request %q", resize.ID)
-		case <-ticker.C:
-			resizes, err := r.client.DatabaseBranches.ListVitessBranchResizeRequests(
-				ctx,
-				data.Organization.ValueString(),
-				data.Database.ValueString(),
-				data.Branch.ValueString(),
-			)
-			if err != nil {
-				return nil, err
-			}
-			for i := range resizes {
-				if resizes[i].ID == resize.ID {
-					resize = &resizes[i]
-					break
-				}
-			}
-		}
 	}
 }

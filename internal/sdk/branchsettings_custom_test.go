@@ -32,10 +32,14 @@ func TestDatabaseBranchesSafeMigrationsSettings(t *testing.T) {
 
 		w.Header().Set("Content-Type", "application/json")
 		require.NoError(t, json.NewEncoder(w).Encode(map[string]any{
-			"id":              "branch-id",
-			"safe_migrations": safeMigrations,
-			"vtgate_size":     "vg.c1.large",
-			"vtgate_count":    1,
+			"id":                            "branch-id",
+			"safe_migrations":               safeMigrations,
+			"vtgate_size":                   "vg.c1.large",
+			"vtgate_name":                   "VTG_320",
+			"vtgate_count":                  1,
+			"vtgate_max_count":              2,
+			"vtgate_autoscaling":            false,
+			"vtgate_target_cpu_utilization": 50,
 		}))
 	}))
 	t.Cleanup(server.Close)
@@ -49,6 +53,9 @@ func TestDatabaseBranchesSafeMigrationsSettings(t *testing.T) {
 	settings, err := client.DatabaseBranches.GetVitessBranchSettings(context.Background(), "org", "db", "br")
 	require.NoError(t, err)
 	require.False(t, settings.SafeMigrations)
+	require.Equal(t, "VTG_320", settings.VTGateName)
+	require.Equal(t, int64(2), *settings.VTGateMaxCount)
+	require.Equal(t, int64(50), *settings.VTGateTargetCPUUtilization)
 
 	settings, err = client.DatabaseBranches.SetVitessBranchSafeMigrations(context.Background(), "org", "db", "br", true)
 	require.NoError(t, err)
@@ -67,13 +74,9 @@ func TestDatabaseBranchesVTGateConfiguration(t *testing.T) {
 		State:                      "completed",
 		VTGateSize:                 "vg.c1.large",
 		VTGateName:                 "VTG_320",
-		PreviousVTGateSize:         "vg.c1.nano",
-		PreviousVTGateName:         "VTG_5",
 		VTGateCount:                1,
-		PreviousVTGateCount:        1,
 		VTGateMaxCount:             Int64(2),
 		VTGateAutoscaling:          true,
-		PreviousVTGateAutoscaling:  false,
 		VTGateTargetCPUUtilization: Int64(50),
 	}
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -81,8 +84,6 @@ func TestDatabaseBranchesVTGateConfiguration(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 
 		switch r.Method {
-		case http.MethodGet:
-			require.NoError(t, json.NewEncoder(w).Encode(map[string]any{"data": []VitessBranchResizeRequest{resize}}))
 		case http.MethodPut:
 			var request UpdateVitessBranchVTGateConfigurationRequest
 			require.NoError(t, json.NewDecoder(r.Body).Decode(&request))
@@ -102,11 +103,6 @@ func TestDatabaseBranchesVTGateConfiguration(t *testing.T) {
 		WithSecurity(shared.Security{ServiceTokenID: "token-id", ServiceToken: "token"}),
 	)
 	enabled := true
-	resizes, err := client.DatabaseBranches.ListVitessBranchResizeRequests(context.Background(), "org", "db", "br")
-	require.NoError(t, err)
-	require.Len(t, resizes, 1)
-	require.Equal(t, "VTG_320", resizes[0].VTGateName)
-
 	updated, err := client.DatabaseBranches.UpdateVitessBranchVTGateConfiguration(
 		context.Background(),
 		"org",

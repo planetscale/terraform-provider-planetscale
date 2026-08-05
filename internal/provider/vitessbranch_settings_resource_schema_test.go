@@ -29,23 +29,3 @@ func TestConfigurationFromResizeUsesPublicVTGateNames(t *testing.T) {
 	require.True(t, current.autoscaling)
 	require.Equal(t, targetCPU, *current.targetCPUUtilization)
 }
-
-func TestConfigurationFromCanceledResizeUsesPreviousValues(t *testing.T) {
-	t.Parallel()
-
-	previousMaxCount := int64(4)
-	current := configurationFromResize("branch-id", sdk.VitessBranchResizeRequest{
-		State:                     "canceled",
-		VTGateName:                "VTG_320",
-		PreviousVTGateName:        "VTG_80",
-		VTGateAutoscaling:         true,
-		PreviousVTGateAutoscaling: false,
-		PreviousVTGateCount:       1,
-		PreviousVTGateMaxCount:    &previousMaxCount,
-	})
-
-	require.Equal(t, "VTG_80", current.size)
-	require.Equal(t, int64(1), current.count)
-	require.Equal(t, previousMaxCount, *current.maxCount)
-	require.False(t, current.autoscaling)
-}
