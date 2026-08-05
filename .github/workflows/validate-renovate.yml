@@ -5,6 +5,7 @@ on:
 
 env:
   LOG_LEVEL: debug
+  RENOVATE_VERSION: "44.11.4" # renovate: datasource=npm depName=renovate
 
 permissions:
   contents: read
@@ -23,4 +24,4 @@ jobs:
         with:
           node-version: 24
 
-      - run: npx -p renovate renovate-config-validator renovate.json5
+      - run: npx --yes --ignore-scripts -p "renovate@${RENOVATE_VERSION}" -- renovate-config-validator renovate.json5
