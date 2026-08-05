@@ -14,6 +14,7 @@ resource "planetscale_vitess_branch" "test" {
   organization = var.organization
   database     = var.database_name
   name         = "main"
+  cluster_size = "PS_10"
 }
 
 resource "planetscale_vitess_branch_safe_migrations" "test" {
