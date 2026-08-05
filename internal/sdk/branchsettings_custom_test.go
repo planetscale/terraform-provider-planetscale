@@ -96,7 +96,11 @@ func TestDatabaseBranchesVTGateConfiguration(t *testing.T) {
 	}))
 	t.Cleanup(server.Close)
 
-	client := New(WithServerURL(server.URL), WithClient(server.Client()))
+	client := New(
+		WithServerURL(server.URL),
+		WithClient(server.Client()),
+		WithSecurity(shared.Security{ServiceTokenID: "token-id", ServiceToken: "token"}),
+	)
 	enabled := true
 	resizes, err := client.DatabaseBranches.ListVitessBranchResizeRequests(context.Background(), "org", "db", "br")
 	require.NoError(t, err)
