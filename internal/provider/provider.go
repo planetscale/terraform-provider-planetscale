@@ -158,6 +158,8 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 		NewVitessBranchResource,
 		NewVitessBranchBackupResource,
 		NewVitessBranchPasswordResource,
+		NewVitessBranchSafeMigrationsResource,
+		NewVitessBranchVTGateAutoscalingResource,
 	}
 }
 

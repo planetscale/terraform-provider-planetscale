@@ -42,7 +42,9 @@ terraform:
   additionalProviderAttributes:
     httpHeaders: ""
     tlsSkipVerify: ""
-  additionalResources: []
+  additionalResources:
+    - resource: NewVitessBranchSafeMigrationsResource
+    - resource: NewVitessBranchVTGateAutoscalingResource
   author: planetscale
   baseErrorName: PlanetScaleError
   debugLogging: {}
