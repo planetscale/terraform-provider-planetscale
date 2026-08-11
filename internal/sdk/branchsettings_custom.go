@@ -41,6 +41,12 @@ type VitessBranchResizeRequest struct {
 	VTGateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization"`
 }
 
+// Resize request states that the API considers finished.
+const (
+	VitessBranchResizeStateCompleted = "completed"
+	VitessBranchResizeStateCanceled  = "canceled"
+)
+
 // UpdateVitessBranchVTGateConfigurationRequest contains the optional VTGate
 // values accepted by the branch resize API.
 type UpdateVitessBranchVTGateConfigurationRequest struct {
@@ -72,6 +78,18 @@ func (s *DatabaseBranches) SetVitessBranchSafeMigrations(ctx context.Context, or
 		return nil, err
 	}
 	return &settings, nil
+}
+
+// ListVitessBranchResizeRequests returns the most recent resize requests for a
+// branch, newest first.
+func (s *DatabaseBranches) ListVitessBranchResizeRequests(ctx context.Context, organization, database, branch string) ([]VitessBranchResizeRequest, error) {
+	var list struct {
+		Data []VitessBranchResizeRequest `json:"data"`
+	}
+	if err := s.doCustomBranchRequest(ctx, http.MethodGet, organization, database, branch, "resizes", nil, &list, "list_vitess_branch_resize_requests"); err != nil {
+		return nil, err
+	}
+	return list.Data, nil
 }
 
 // UpdateVitessBranchVTGateConfiguration queues a VTGate configuration change.

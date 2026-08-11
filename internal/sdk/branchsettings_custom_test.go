@@ -91,6 +91,10 @@ func TestDatabaseBranchesVTGateConfiguration(t *testing.T) {
 			require.True(t, *request.VTGateAutoscaling)
 			require.Equal(t, int64(2), *request.VTGateMaxCount)
 			require.NoError(t, json.NewEncoder(w).Encode(resize))
+		case http.MethodGet:
+			require.NoError(t, json.NewEncoder(w).Encode(map[string]any{
+				"data": []VitessBranchResizeRequest{resize},
+			}))
 		default:
 			http.NotFound(w, r)
 		}
@@ -115,4 +119,10 @@ func TestDatabaseBranchesVTGateConfiguration(t *testing.T) {
 	)
 	require.NoError(t, err)
 	require.True(t, updated.VTGateAutoscaling)
+
+	resizes, err := client.DatabaseBranches.ListVitessBranchResizeRequests(context.Background(), "org", "db", "br")
+	require.NoError(t, err)
+	require.Len(t, resizes, 1)
+	require.Equal(t, "resize-id", resizes[0].ID)
+	require.Equal(t, VitessBranchResizeStateCompleted, resizes[0].State)
 }

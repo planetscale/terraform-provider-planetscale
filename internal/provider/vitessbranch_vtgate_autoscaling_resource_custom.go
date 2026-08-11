@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -17,6 +18,14 @@ import (
 var (
 	_ resource.Resource                = &VitessBranchVTGateAutoscalingResource{}
 	_ resource.ResourceWithImportState = &VitessBranchVTGateAutoscalingResource{}
+)
+
+// The API rejects a resize request while another one is unfinished, so changes
+// have to wait for any in-flight resize, including one started outside
+// Terraform.
+const (
+	vtgateResizeWaitTimeout  = 10 * time.Minute
+	vtgateResizePollInterval = 10 * time.Second
 )
 
 // NewVitessBranchVTGateAutoscalingResource returns a resource that manages the
@@ -201,6 +210,11 @@ func (r *VitessBranchVTGateAutoscalingResource) Delete(ctx context.Context, req 
 		return
 	}
 
+	if err := r.waitForIdleResize(ctx, &data); err != nil {
+		resp.Diagnostics.AddError("Unable to disable VTGate autoscaling", err.Error())
+		return
+	}
+
 	disabled := false
 	_, err = r.client.DatabaseBranches.UpdateVitessBranchVTGateConfiguration(
 		ctx,
@@ -278,6 +292,10 @@ func (r *VitessBranchVTGateAutoscalingResource) apply(
 		return nil
 	}
 
+	if err := r.waitForIdleResize(ctx, data); err != nil {
+		return err
+	}
+
 	resize, err := r.client.DatabaseBranches.UpdateVitessBranchVTGateConfiguration(
 		ctx,
 		data.Organization.ValueString(),
@@ -320,6 +338,51 @@ func (r *VitessBranchVTGateAutoscalingResource) readCurrent(
 		maxCount:             settings.VTGateMaxCount,
 		targetCPUUtilization: settings.VTGateTargetCPUUtilization,
 	}, nil
+}
+
+func (r *VitessBranchVTGateAutoscalingResource) waitForIdleResize(
+	ctx context.Context,
+	data *vitessBranchVTGateAutoscalingResourceModel,
+) error {
+	deadline := time.Now().Add(vtgateResizeWaitTimeout)
+	for {
+		resizes, err := r.client.DatabaseBranches.ListVitessBranchResizeRequests(
+			ctx,
+			data.Organization.ValueString(),
+			data.Database.ValueString(),
+			data.Branch.ValueString(),
+		)
+		if err != nil {
+			return err
+		}
+		if !hasUnfinishedResize(resizes) {
+			return nil
+		}
+		if time.Now().After(deadline) {
+			return fmt.Errorf(
+				"timed out after %s waiting for an in-progress VTGate resize of branch %s to finish",
+				vtgateResizeWaitTimeout,
+				data.Branch.ValueString(),
+			)
+		}
+
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(vtgateResizePollInterval):
+		}
+	}
+}
+
+func hasUnfinishedResize(resizes []sdk.VitessBranchResizeRequest) bool {
+	for _, resize := range resizes {
+		switch resize.State {
+		case sdk.VitessBranchResizeStateCompleted, sdk.VitessBranchResizeStateCanceled:
+		default:
+			return true
+		}
+	}
+	return false
 }
 
 func configurationFromResize(branchID string, resize sdk.VitessBranchResizeRequest) currentVTGateConfiguration {

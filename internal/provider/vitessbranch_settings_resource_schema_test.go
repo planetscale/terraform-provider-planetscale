@@ -29,3 +29,27 @@ func TestConfigurationFromResizeUsesPublicVTGateNames(t *testing.T) {
 	require.True(t, current.autoscaling)
 	require.Equal(t, targetCPU, *current.targetCPUUtilization)
 }
+
+func TestHasUnfinishedResize(t *testing.T) {
+	t.Parallel()
+
+	for state, unfinished := range map[string]bool{
+		"pending":   true,
+		"queued":    true,
+		"resizing":  true,
+		"completed": false,
+		"canceled":  false,
+	} {
+		require.Equal(
+			t,
+			unfinished,
+			hasUnfinishedResize([]sdk.VitessBranchResizeRequest{
+				{State: "completed"},
+				{State: state},
+			}),
+			"state %q", state,
+		)
+	}
+
+	require.False(t, hasUnfinishedResize(nil))
+}
