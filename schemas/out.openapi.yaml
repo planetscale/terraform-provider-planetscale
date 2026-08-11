@@ -2685,6 +2685,8 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
+        '204':
+          description: No changes to apply
       description: |-
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
@@ -2807,7 +2809,7 @@ paths:
               name: WaitForResizeComplete
       x-speakeasy-polling:
         - name: WaitForResizeComplete
-          delaySeconds: 10
+          delaySeconds: 0
           intervalSeconds: 10
           limitCount: 90
           failureCriteria:

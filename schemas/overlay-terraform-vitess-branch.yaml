@@ -125,6 +125,12 @@ actions:
     update:
       x-speakeasy-match: id
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes'].put.responses
+    description: Accept an idempotent no-op response when VTGate settings already match.
+    update:
+      '204':
+        description: No changes to apply
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes'].put.responses['200'].content['application/json'].schema.properties.*
     description: Keep only the resize request ID needed by the polling operation.
     remove: true
@@ -176,7 +182,7 @@ actions:
               name: WaitForResizeComplete
       x-speakeasy-polling:
         - name: WaitForResizeComplete
-          delaySeconds: 10
+          delaySeconds: 0
           intervalSeconds: 10
           limitCount: 90
           failureCriteria:

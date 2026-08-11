@@ -169,6 +169,8 @@ func (s *APIBranchResizes) UpdateBranchResizeRequest(ctx context.Context, reques
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 204:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
@@ -365,7 +367,7 @@ func (s *APIBranchResizes) getBranchResizeRequest(ctx context.Context, hookCtx h
 //     override the predefined limit.
 func (s *APIBranchResizes) GetBranchResizeRequestWaitForResizeComplete() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 10
+		defaultDelaySeconds := 0
 		defaultIntervalSeconds := 10
 		defaultLimitCount := 90
 		result := &polling.Config{
