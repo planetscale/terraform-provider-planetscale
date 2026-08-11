@@ -14,10 +14,11 @@ VitessBranch Resource
 
 ```terraform
 resource "planetscale_vitess_branch" "my_vitessbranch" {
-  organization  = "my-organization"
-  database      = "ru00w3vqvfr9"
+  organization = "my-organization"
+  database     = "ru00w3vqvfr9"
 
-  name          = "my-branch"
+  name            = "my-branch"
+  safe_migrations = true
 }
 ```
 
@@ -26,9 +27,9 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 
 ### Required
 
-- `database` (String) Database name slug from `list_databases`. Example: `app-db`.
+- `database` (String) The name of the database the branch belongs to
 - `name` (String) The name of the branch to create
-- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
+- `organization` (String) The name of the organization the branch belongs to
 
 ### Optional
 
@@ -37,6 +38,7 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 - `delete_descendants` (Boolean) If true, recursively delete all descendant branches along with this branch
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
+- `safe_migrations` (Boolean) Whether safe migrations (DDL protection) are enabled.
 - `seed_data` (String) If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch. must be "last_successful_backup"; Requires replacement if changed.
 
 ### Read-Only

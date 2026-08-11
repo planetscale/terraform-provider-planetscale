@@ -42,6 +42,7 @@ type VitessBranchDataSourceModel struct {
 	ParentBranch     types.String                       `tfsdk:"parent_branch"`
 	Ready            types.Bool                         `tfsdk:"ready"`
 	RegionData       *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	SafeMigrations   types.Bool                         `tfsdk:"safe_migrations"`
 	State            types.String                       `tfsdk:"state"`
 	URL              types.String                       `tfsdk:"url"`
 }
@@ -126,6 +127,10 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 						Description: `Whether the region supports PostgreSQL databases`,
 					},
 				},
+			},
+			"safe_migrations": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not the branch has safe migrations enabled`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,

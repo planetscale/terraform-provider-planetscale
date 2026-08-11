@@ -41,6 +41,7 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 - `parent_branch` (String) The name of the parent branch from which the branch was created
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
+- `safe_migrations` (Boolean) Whether or not the branch has safe migrations enabled
 - `state` (String) The current state of the branch
 - `url` (String) Planetscale API URL for the branch
 

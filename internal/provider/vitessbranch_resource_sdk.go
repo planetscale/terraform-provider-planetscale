@@ -33,6 +33,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -63,6 +64,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -93,6 +95,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateVitessBranchRespo
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}
@@ -161,13 +164,20 @@ func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequestBody(ct
 	} else {
 		clusterSize = nil
 	}
+	safeMigrations := new(bool)
+	if !r.SafeMigrations.IsUnknown() && !r.SafeMigrations.IsNull() {
+		*safeMigrations = r.SafeMigrations.ValueBool()
+	} else {
+		safeMigrations = nil
+	}
 	out := operations.CreateVitessBranchRequestBody{
-		Name:         name,
-		ParentBranch: parentBranch,
-		BackupID:     backupID,
-		Region:       region,
-		SeedData:     seedData,
-		ClusterSize:  clusterSize,
+		Name:           name,
+		ParentBranch:   parentBranch,
+		BackupID:       backupID,
+		Region:         region,
+		SeedData:       seedData,
+		ClusterSize:    clusterSize,
+		SafeMigrations: safeMigrations,
 	}
 
 	return &out, diags
@@ -259,6 +269,48 @@ func (r *VitessBranchResourceModel) ToOperationsUpdateVitessBranchRequestBody(ct
 
 	out := operations.UpdateVitessBranchRequestBody{
 		Name: name,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateVitessBranchSafeMigrationsRequest(ctx context.Context) (*operations.UpdateVitessBranchSafeMigrationsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsUpdateVitessBranchSafeMigrationsRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateVitessBranchSafeMigrationsRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateVitessBranchSafeMigrationsRequestBody(ctx context.Context) (*operations.UpdateVitessBranchSafeMigrationsRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var safeMigrations bool
+	safeMigrations = r.SafeMigrations.ValueBool()
+
+	out := operations.UpdateVitessBranchSafeMigrationsRequestBody{
+		SafeMigrations: safeMigrations,
 	}
 
 	return &out, diags

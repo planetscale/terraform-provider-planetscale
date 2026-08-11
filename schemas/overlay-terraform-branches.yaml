@@ -188,13 +188,6 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.restored_from_branch
     remove: true
 
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.safe_migrations
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.safe_migrations
-    remove: true
-  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.safe_migrations
-    remove: true
-
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.schema_last_updated_at
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.schema_last_updated_at

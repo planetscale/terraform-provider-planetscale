@@ -27,9 +27,10 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-					"organization":  config.StringVariable(testAccOrg),
-					"branch_name":   config.StringVariable(branchNameOriginal),
+					"database_name":   config.StringVariable(databaseName),
+					"organization":    config.StringVariable(testAccOrg),
+					"branch_name":     config.StringVariable(branchNameOriginal),
+					"safe_migrations": config.BoolVariable(true),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -52,14 +53,20 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("state"),
 						knownvalue.StringExact("ready"),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("safe_migrations"),
+						knownvalue.Bool(true),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"branch_name":   config.StringVariable(branchNameRenamed),
+					"organization":    config.StringVariable(testAccOrg),
+					"database_name":   config.StringVariable(databaseName),
+					"branch_name":     config.StringVariable(branchNameRenamed),
+					"safe_migrations": config.BoolVariable(false),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -67,14 +74,20 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("name"),
 						knownvalue.StringExact(branchNameRenamed),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("safe_migrations"),
+						knownvalue.Bool(false),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"branch_name":   config.StringVariable(branchNameRenamed),
+					"organization":    config.StringVariable(testAccOrg),
+					"database_name":   config.StringVariable(databaseName),
+					"branch_name":     config.StringVariable(branchNameRenamed),
+					"safe_migrations": config.BoolVariable(false),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: d6e426e5f32f7e9b54db6fdf9190c7d4
+  docChecksum: 3cb23bc56b4a25c90c43ac874f99cf58
   docVersion: v1
   speakeasyVersion: 1.778.0
   generationVersion: 2.904.2
@@ -626,19 +626,19 @@ trackedFiles:
     last_write_checksum: sha1:acb5f599eba200eda44d61c40d9cc8609702ff1a
   internal/provider/vitessbranch_data_source.go:
     id: 4ef7739d6663
-    last_write_checksum: sha1:4ab9ac68a966229fca743ba7b9bfe641860275b1
+    last_write_checksum: sha1:26452d5b9c28878ed21c5ec9870b6cda9d9f3c33
     pristine_git_object: 77f7fc696a931c59231f7e497086c6d43d750bdb
   internal/provider/vitessbranch_data_source_sdk.go:
     id: a204240a587d
-    last_write_checksum: sha1:21783be60d2db96934b3ac67af0bcbcd13397054
+    last_write_checksum: sha1:74dbdfa0812b86208388fa882feb379060bf06cd
     pristine_git_object: 2557ef7bbc5e3edd5578829c061609c7b7a02504
   internal/provider/vitessbranch_resource.go:
     id: 253814c7c29a
-    last_write_checksum: sha1:5509885c012bb8f423eeebee9ad0d9ce7b6fedcf
+    last_write_checksum: sha1:c4e948d831f9b17419e5c20c5c404518f857b7cd
     pristine_git_object: 3fa960d342bf6de4878019abd742d68bc1517dba
   internal/provider/vitessbranch_resource_sdk.go:
     id: b7741edc0d6e
-    last_write_checksum: sha1:75d2463e001219162efd9976ba730c14b4c2b326
+    last_write_checksum: sha1:a62db32822c58aa9ca4722cc247a711ee5fbe5e1
     pristine_git_object: ae27395a04f18ff08bf466c08de8fd0ec47bd226
   internal/provider/vitessbranchbackup_data_source.go:
     last_write_checksum: sha1:ce90dc35fc848cf044035f4cb44a8388a468dbf4
@@ -686,7 +686,7 @@ trackedFiles:
     last_write_checksum: sha1:a0aad526bed875b307bd45833c28aa2f6ee2b18a
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
-    last_write_checksum: sha1:62f4cffc67c4fa72f1f916b07f29b2fabd170b20
+    last_write_checksum: sha1:5b3f278763a7f4f3c980e311ac040581d65e5b23
     pristine_git_object: fa7fcf53770dfab66ff0b41fb2abc57deae178e0
   internal/sdk/databasebranchpasswords.go:
     id: a545604b52ee
@@ -792,7 +792,7 @@ trackedFiles:
     last_write_checksum: sha1:eca81b812b96e5fbc6c6a8486200bcc7bcf0b25b
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
-    last_write_checksum: sha1:f829525a6b64e27b00707fc63b1ed3bae255c4c8
+    last_write_checksum: sha1:33556b1f61e4dbf4ad9d104f09fd521387f0deda
     pristine_git_object: 4164e962f94db2ef10a0ac3446371930522a0d05
   internal/sdk/models/operations/createvitessbranchbackup.go:
     last_write_checksum: sha1:1d19c6086f06c6deeb46979d8dfd70bc3033bd6d
@@ -858,7 +858,7 @@ trackedFiles:
     last_write_checksum: sha1:c7d6b268693f1a7790bb55db9ad50c879e901346
   internal/sdk/models/operations/getvitessbranch.go:
     id: 91f8cc51ecc6
-    last_write_checksum: sha1:b48405f7d2be683323752da3bedd2a17e365bae1
+    last_write_checksum: sha1:882433d3a52ec3e4738ac494f666e888cf607874
     pristine_git_object: 05e715d265afc7f9237fb7ff92f378e221a4491a
   internal/sdk/models/operations/getvitessbranchbackup.go:
     last_write_checksum: sha1:276c93df4a55cc459fb75915c4a60d8b69305061
@@ -913,7 +913,9 @@ trackedFiles:
   internal/sdk/models/operations/updatevitessbackuppolicy.go:
     last_write_checksum: sha1:8579426bb2a0daad3ed2a8fe5176d3b544c3cc21
   internal/sdk/models/operations/updatevitessbranch.go:
-    last_write_checksum: sha1:acec1c1f674656aa59513cd0df01598645ec4aad
+    last_write_checksum: sha1:795b324fac996bb770328464660877af0780f7fb
+  internal/sdk/models/operations/updatevitessbranchsafemigrations.go:
+    last_write_checksum: sha1:818a57dab6bf43430e5f08239c99356065bd59f7
   internal/sdk/models/shared/security.go:
     id: 9098af98367e
     last_write_checksum: sha1:803d1a52522289162df488ad8f161153a22cc6dc
@@ -2555,7 +2557,7 @@ examples:
           database: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "pending", "cluster_name": "<value>", "ready": true, "keyspace_count": 465224, "actor": {"id": "<id>"}, "html_url": "https://lone-vicinity.name", "url": "https://secret-fedora.info/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "pending", "cluster_name": "<value>", "ready": true, "safe_migrations": true, "keyspace_count": 465224, "actor": {"id": "<id>"}, "html_url": "https://lone-vicinity.name", "url": "https://secret-fedora.info/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
   get_vitess_branch:
     speakeasy-default-get-vitess-branch:
       parameters:
@@ -2565,7 +2567,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "cluster_name": "<value>", "ready": true, "keyspace_count": 286721, "actor": {"id": "<id>"}, "html_url": "https://far-flung-toothbrush.name", "url": "https://present-deed.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "cluster_name": "<value>", "ready": true, "safe_migrations": true, "keyspace_count": 286721, "actor": {"id": "<id>"}, "html_url": "https://far-flung-toothbrush.name", "url": "https://present-deed.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
   delete_vitess_branch:
     speakeasy-default-delete-vitess-branch:
       parameters:
@@ -2603,7 +2605,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleeping", "cluster_name": "<value>", "ready": true, "keyspace_count": 533701, "actor": {"id": "<id>"}, "html_url": "https://strange-hexagon.org/", "url": "https://flawed-soliloquy.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleeping", "cluster_name": "<value>", "ready": true, "safe_migrations": false, "keyspace_count": 533701, "actor": {"id": "<id>"}, "html_url": "https://strange-hexagon.org/", "url": "https://flawed-soliloquy.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true}, "parent_branch": "<value>"}
   list_vitess_backup_policies:
     speakeasy-default-list-vitess-backup-policies:
       parameters:
@@ -2882,6 +2884,15 @@ examples:
       responses:
         "200":
           application/json: {"type": "PostgresBouncer", "id": "<id>", "name": "<value>", "target": "replica", "bouncer_size": "<value>", "replicas_per_cell": 883830, "actor": {"id": "<id>"}, "parameters": {"key": {}, "key1": {}, "key2": {}}}
+  update_vitess_branch_safe_migrations:
+    speakeasy-default-update-vitess-branch-safe-migrations:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {"safe_migrations": true}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

@@ -55,6 +55,7 @@ type VitessBranchResourceModel struct {
 	Ready             types.Bool                         `tfsdk:"ready"`
 	Region            types.String                       `tfsdk:"region"`
 	RegionData        *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	SafeMigrations    types.Bool                         `tfsdk:"safe_migrations"`
 	SeedData          types.String                       `tfsdk:"seed_data"`
 	State             types.String                       `tfsdk:"state"`
 	URL               types.String                       `tfsdk:"url"`
@@ -98,7 +99,7 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
-				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
+				Description: `The name of the database the branch belongs to`,
 			},
 			"delete_descendants": schema.BoolAttribute{
 				Optional:    true,
@@ -130,7 +131,7 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
-				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
+				Description: `The name of the organization the branch belongs to`,
 			},
 			"parent_branch": schema.StringAttribute{
 				Computed: true,
@@ -168,6 +169,11 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 						Description: `Whether the region supports PostgreSQL databases`,
 					},
 				},
+			},
+			"safe_migrations": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Whether safe migrations (DDL protection) are enabled.`,
 			},
 			"seed_data": schema.StringAttribute{
 				Optional: true,
@@ -310,6 +316,34 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request2, request2Diags := data.ToOperationsUpdateVitessBranchSafeMigrationsRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.DatabaseBranches.UpdateVitessBranchSafeMigrations(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -387,13 +421,13 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateVitessBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateVitessBranchSafeMigrationsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DatabaseBranches.UpdateVitessBranch(ctx, *request)
+	res, err := r.client.DatabaseBranches.UpdateVitessBranchSafeMigrations(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -409,11 +443,39 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateVitessBranchResponseBody(ctx, res.Object)...)
+	request1, request1Diags := data.ToOperationsUpdateVitessBranchRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.DatabaseBranches.UpdateVitessBranch(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateVitessBranchResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

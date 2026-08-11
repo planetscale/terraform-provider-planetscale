@@ -1,0 +1,56 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for Vitess branch safe migrations.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties
+    description: Include safe migrations in the Terraform create schema; the ordered PUT applies it after the branch becomes ready.
+    update:
+      safe_migrations:
+        type: boolean
+        description: Whether safe migrations (DDL protection) are enabled.
+
+  # The desired-state PUT operation is pending publication in the upstream
+  # OpenAPI document. Copy the existing endpoint metadata so provider
+  # generation can proceed without hand-written resource or SDK code.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations']
+    update:
+      put: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].put
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].post
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].put
+    update:
+      operationId: update_vitess_branch_safe_migrations
+      summary: Update safe migrations for a Vitess branch
+      x-speakeasy-entity-operation:
+        - entityOperation: VitessBranch#create#3
+        - VitessBranch#update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - safe_migrations
+              properties:
+                safe_migrations:
+                  type: boolean
+                  description: Whether safe migrations (DDL protection) are enabled.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].put.parameters[?@.name == 'branch']
+    description: Match the safe migrations operation to the branch public ID.
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].put.responses['200'].content
+    description: The branch read operation is the source of Terraform state.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].patch
+    description: Rename the branch after applying the primary safe migrations update.
+    update:
+      x-speakeasy-entity-operation: VitessBranch#update#2

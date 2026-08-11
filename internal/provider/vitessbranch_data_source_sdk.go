@@ -33,6 +33,7 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
 	}

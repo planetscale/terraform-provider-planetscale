@@ -133,6 +133,8 @@ type GetVitessBranchResponseBody struct {
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
+	// Whether or not the branch has safe migrations enabled
+	SafeMigrations bool `json:"safe_migrations"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                 `json:"keyspace_count"`
 	Actor         *GetVitessBranchActor `json:"actor"`
@@ -192,6 +194,13 @@ func (g *GetVitessBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return g.Ready
+}
+
+func (g *GetVitessBranchResponseBody) GetSafeMigrations() bool {
+	if g == nil {
+		return false
+	}
+	return g.SafeMigrations
 }
 
 func (g *GetVitessBranchResponseBody) GetKeyspaceCount() int64 {

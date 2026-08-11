@@ -12,6 +12,19 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestVitessBranchResource_SafeMigrationsIsConfigurable(t *testing.T) {
+	t.Parallel()
+
+	r := NewVitessBranchResource()
+	var schemaResp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &schemaResp)
+
+	attr, ok := schemaResp.Schema.Attributes["safe_migrations"].(schema.BoolAttribute)
+	require.True(t, ok)
+	require.True(t, attr.Optional)
+	require.True(t, attr.Computed)
+}
+
 func TestVitessBranchResource_ClusterSizeValidation(t *testing.T) {
 	t.Parallel()
 
