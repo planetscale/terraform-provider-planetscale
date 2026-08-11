@@ -41,8 +41,14 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 - `parent_branch` (String) The name of the parent branch from which the branch was created
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
+- `safe_migrations` (Boolean) Whether or not the branch has safe migrations enabled
 - `state` (String) The current state of the branch
 - `url` (String) Planetscale API URL for the branch
+- `vtgate_autoscaling` (Boolean) Whether VTGate autoscaling is enabled
+- `vtgate_count` (Number) The number of vtgate instances in the branch
+- `vtgate_max_count` (Number) The maximum number of VTGate instances when autoscaling is enabled
+- `vtgate_size` (String) The public SKU representing the VTGate size
+- `vtgate_target_cpu_utilization` (Number) The target CPU utilization for VTGate autoscaling
 
 <a id="nestedatt--actor"></a>
 ### Nested Schema for `actor`

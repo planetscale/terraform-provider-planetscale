@@ -29,21 +29,27 @@ type VitessBranchDataSource struct {
 
 // VitessBranchDataSourceModel describes the data model.
 type VitessBranchDataSourceModel struct {
-	Actor            *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
-	ClusterSize      types.String                       `tfsdk:"cluster_size"`
-	Database         types.String                       `tfsdk:"database"`
-	HTMLURL          types.String                       `tfsdk:"html_url"`
-	ID               types.String                       `tfsdk:"id"`
-	KeyspaceCount    types.Int64                        `tfsdk:"keyspace_count"`
-	MysqlAddress     types.String                       `tfsdk:"mysql_address"`
-	MysqlEdgeAddress types.String                       `tfsdk:"mysql_edge_address"`
-	Name             types.String                       `tfsdk:"name"`
-	Organization     types.String                       `tfsdk:"organization"`
-	ParentBranch     types.String                       `tfsdk:"parent_branch"`
-	Ready            types.Bool                         `tfsdk:"ready"`
-	RegionData       *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
-	State            types.String                       `tfsdk:"state"`
-	URL              types.String                       `tfsdk:"url"`
+	Actor                      *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
+	ClusterSize                types.String                       `tfsdk:"cluster_size"`
+	Database                   types.String                       `tfsdk:"database"`
+	HTMLURL                    types.String                       `tfsdk:"html_url"`
+	ID                         types.String                       `tfsdk:"id"`
+	KeyspaceCount              types.Int64                        `tfsdk:"keyspace_count"`
+	MysqlAddress               types.String                       `tfsdk:"mysql_address"`
+	MysqlEdgeAddress           types.String                       `tfsdk:"mysql_edge_address"`
+	Name                       types.String                       `tfsdk:"name"`
+	Organization               types.String                       `tfsdk:"organization"`
+	ParentBranch               types.String                       `tfsdk:"parent_branch"`
+	Ready                      types.Bool                         `tfsdk:"ready"`
+	RegionData                 *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
+	SafeMigrations             types.Bool                         `tfsdk:"safe_migrations"`
+	State                      types.String                       `tfsdk:"state"`
+	URL                        types.String                       `tfsdk:"url"`
+	VtgateAutoscaling          types.Bool                         `tfsdk:"vtgate_autoscaling"`
+	VtgateCount                types.Int64                        `tfsdk:"vtgate_count"`
+	VtgateMaxCount             types.Int64                        `tfsdk:"vtgate_max_count"`
+	VtgateSize                 types.String                       `tfsdk:"vtgate_size"`
+	VtgateTargetCPUUtilization types.Int64                        `tfsdk:"vtgate_target_cpu_utilization"`
 }
 
 // Metadata returns the data source type name.
@@ -127,6 +133,10 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 					},
 				},
 			},
+			"safe_migrations": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not the branch has safe migrations enabled`,
+			},
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
@@ -134,6 +144,26 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"url": schema.StringAttribute{
 				Computed:    true,
 				Description: `Planetscale API URL for the branch`,
+			},
+			"vtgate_autoscaling": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether VTGate autoscaling is enabled`,
+			},
+			"vtgate_count": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The number of vtgate instances in the branch`,
+			},
+			"vtgate_max_count": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The maximum number of VTGate instances when autoscaling is enabled`,
+			},
+			"vtgate_size": schema.StringAttribute{
+				Computed:    true,
+				Description: `The public SKU representing the VTGate size`,
+			},
+			"vtgate_target_cpu_utilization": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The target CPU utilization for VTGate autoscaling`,
 			},
 		},
 	}

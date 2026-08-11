@@ -160,10 +160,22 @@ type UpdateVitessBranchResponseBody struct {
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State UpdateVitessBranchState `json:"state"`
+	// The public SKU representing the VTGate size
+	VtgateSize *string `json:"vtgate_name"`
+	// The number of vtgate instances in the branch
+	VtgateCount int64 `json:"vtgate_count"`
+	// Whether VTGate autoscaling is enabled
+	VtgateAutoscaling bool `json:"vtgate_autoscaling"`
+	// The maximum number of VTGate instances when autoscaling is enabled
+	VtgateMaxCount *int64 `json:"vtgate_max_count"`
+	// The target CPU utilization for VTGate autoscaling
+	VtgateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization"`
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
+	// Whether or not the branch has safe migrations enabled
+	SafeMigrations bool `json:"safe_migrations"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                    `json:"keyspace_count"`
 	Actor         *UpdateVitessBranchActor `json:"actor"`
@@ -211,6 +223,41 @@ func (u *UpdateVitessBranchResponseBody) GetState() UpdateVitessBranchState {
 	return u.State
 }
 
+func (u *UpdateVitessBranchResponseBody) GetVtgateSize() *string {
+	if u == nil {
+		return nil
+	}
+	return u.VtgateSize
+}
+
+func (u *UpdateVitessBranchResponseBody) GetVtgateCount() int64 {
+	if u == nil {
+		return 0
+	}
+	return u.VtgateCount
+}
+
+func (u *UpdateVitessBranchResponseBody) GetVtgateAutoscaling() bool {
+	if u == nil {
+		return false
+	}
+	return u.VtgateAutoscaling
+}
+
+func (u *UpdateVitessBranchResponseBody) GetVtgateMaxCount() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.VtgateMaxCount
+}
+
+func (u *UpdateVitessBranchResponseBody) GetVtgateTargetCPUUtilization() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.VtgateTargetCPUUtilization
+}
+
 func (u *UpdateVitessBranchResponseBody) GetClusterSize() string {
 	if u == nil {
 		return ""
@@ -223,6 +270,13 @@ func (u *UpdateVitessBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return u.Ready
+}
+
+func (u *UpdateVitessBranchResponseBody) GetSafeMigrations() bool {
+	if u == nil {
+		return false
+	}
+	return u.SafeMigrations
 }
 
 func (u *UpdateVitessBranchResponseBody) GetKeyspaceCount() int64 {

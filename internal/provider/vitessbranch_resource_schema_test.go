@@ -74,3 +74,32 @@ func TestVitessBranchResource_ClusterSizeValidation(t *testing.T) {
 		})
 	}
 }
+
+func TestVitessBranchResource_BranchSettingsAreConfigurable(t *testing.T) {
+	t.Parallel()
+
+	r := NewVitessBranchResource()
+	var schemaResp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &schemaResp)
+
+	boolAttributes := []string{"safe_migrations", "vtgate_autoscaling"}
+	for _, name := range boolAttributes {
+		attr, ok := schemaResp.Schema.Attributes[name].(schema.BoolAttribute)
+		require.True(t, ok, name)
+		require.True(t, attr.Optional, name)
+		require.True(t, attr.Computed, name)
+	}
+
+	intAttributes := []string{"vtgate_count", "vtgate_max_count", "vtgate_target_cpu_utilization"}
+	for _, name := range intAttributes {
+		attr, ok := schemaResp.Schema.Attributes[name].(schema.Int64Attribute)
+		require.True(t, ok, name)
+		require.True(t, attr.Optional, name)
+		require.True(t, attr.Computed, name)
+	}
+
+	vtgateSize, ok := schemaResp.Schema.Attributes["vtgate_size"].(schema.StringAttribute)
+	require.True(t, ok)
+	require.True(t, vtgateSize.Optional)
+	require.True(t, vtgateSize.Computed)
+}

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: abf072ea699c4e157d253853ecdf5a4d
+  docChecksum: 473826492c2d00b010f5f17fbdb27d7e
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -461,6 +461,7 @@ trackedFiles:
   internal/provider/vitessbranchpasswords_data_source_sdk.go:
     id: f217ab3e870d
     pristine_git_object: 0afc249db96660a552cc00c4dcd7d1675b0be1fb
+  internal/sdk/apibranchresizes.go: {}
   internal/sdk/backuppolicies.go: {}
   internal/sdk/backups.go: {}
   internal/sdk/bouncers.go: {}
@@ -564,6 +565,7 @@ trackedFiles:
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
   internal/sdk/models/operations/deletevitessbranchbackup.go: {}
   internal/sdk/models/operations/getbranchchangerequest.go: {}
+  internal/sdk/models/operations/getbranchresizerequest.go: {}
   internal/sdk/models/operations/getorganization.go:
     id: ebae13951225
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
@@ -611,6 +613,7 @@ trackedFiles:
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
+  internal/sdk/models/operations/updatebranchresizerequest.go: {}
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
@@ -620,6 +623,7 @@ trackedFiles:
   internal/sdk/models/operations/updaterole.go:
     id: eaca616a88af
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
+  internal/sdk/models/operations/updatesafemigrations.go: {}
   internal/sdk/models/operations/updatevitessbackuppolicy.go: {}
   internal/sdk/models/operations/updatevitessbranch.go: {}
   internal/sdk/models/shared/security.go:
@@ -2231,7 +2235,7 @@ examples:
           database: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "pending", "cluster_name": "<value>", "ready": true, "keyspace_count": 465224, "actor": {"id": "<id>"}, "html_url": "https://lone-vicinity.name", "url": "https://secret-fedora.info/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "pending", "vtgate_name": "<value>", "vtgate_count": 465224, "vtgate_autoscaling": true, "vtgate_max_count": null, "vtgate_target_cpu_utilization": 652629, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "keyspace_count": 465224, "actor": {"id": "<id>"}, "html_url": "https://lone-vicinity.name", "url": "https://secret-fedora.info/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
   get_vitess_branch:
     speakeasy-default-get-vitess-branch:
       parameters:
@@ -2241,7 +2245,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "cluster_name": "<value>", "ready": true, "keyspace_count": 286721, "actor": {"id": "<id>"}, "html_url": "https://far-flung-toothbrush.name", "url": "https://present-deed.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "vtgate_name": "<value>", "vtgate_count": 286721, "vtgate_autoscaling": false, "vtgate_max_count": 225035, "vtgate_target_cpu_utilization": 938889, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "keyspace_count": 286721, "actor": {"id": "<id>"}, "html_url": "https://far-flung-toothbrush.name", "url": "https://present-deed.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
   delete_vitess_branch:
     speakeasy-default-delete-vitess-branch:
       parameters:
@@ -2279,7 +2283,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleeping", "cluster_name": "<value>", "ready": true, "keyspace_count": 533701, "actor": {"id": "<id>"}, "html_url": "https://strange-hexagon.org/", "url": "https://flawed-soliloquy.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleeping", "vtgate_name": "<value>", "vtgate_count": 533701, "vtgate_autoscaling": true, "vtgate_max_count": 805832, "vtgate_target_cpu_utilization": 945676, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "keyspace_count": 533701, "actor": {"id": "<id>"}, "html_url": "https://strange-hexagon.org/", "url": "https://flawed-soliloquy.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true}, "parent_branch": "<value>"}
   list_vitess_backup_policies:
     speakeasy-default-list-vitess-backup-policies:
       parameters:
@@ -2558,6 +2562,38 @@ examples:
       responses:
         "200":
           application/json: {"type": "PostgresBouncer", "id": "<id>", "name": "<value>", "target": "replica", "bouncer_size": "<value>", "replicas_per_cell": 883830, "actor": {"id": "<id>"}, "parameters": {"key": {}, "key1": {}, "key2": {}}}
+  update_branch_resize_request:
+    speakeasy-default-update-branch-resize-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"id": "<id>"}
+  get_branch_resize_request:
+    speakeasy-default-get-branch-resize-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          resize: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "<value>"}
+  update_safe_migrations:
+    speakeasy-default-update-safe-migrations:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {"safe_migrations": false}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

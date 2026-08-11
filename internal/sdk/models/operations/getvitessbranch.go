@@ -129,10 +129,22 @@ type GetVitessBranchResponseBody struct {
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State GetVitessBranchState `json:"state"`
+	// The public SKU representing the VTGate size
+	VtgateSize *string `json:"vtgate_name"`
+	// The number of vtgate instances in the branch
+	VtgateCount int64 `json:"vtgate_count"`
+	// Whether VTGate autoscaling is enabled
+	VtgateAutoscaling bool `json:"vtgate_autoscaling"`
+	// The maximum number of VTGate instances when autoscaling is enabled
+	VtgateMaxCount *int64 `json:"vtgate_max_count"`
+	// The target CPU utilization for VTGate autoscaling
+	VtgateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization"`
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
+	// Whether or not the branch has safe migrations enabled
+	SafeMigrations bool `json:"safe_migrations"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                 `json:"keyspace_count"`
 	Actor         *GetVitessBranchActor `json:"actor"`
@@ -180,6 +192,41 @@ func (g *GetVitessBranchResponseBody) GetState() GetVitessBranchState {
 	return g.State
 }
 
+func (g *GetVitessBranchResponseBody) GetVtgateSize() *string {
+	if g == nil {
+		return nil
+	}
+	return g.VtgateSize
+}
+
+func (g *GetVitessBranchResponseBody) GetVtgateCount() int64 {
+	if g == nil {
+		return 0
+	}
+	return g.VtgateCount
+}
+
+func (g *GetVitessBranchResponseBody) GetVtgateAutoscaling() bool {
+	if g == nil {
+		return false
+	}
+	return g.VtgateAutoscaling
+}
+
+func (g *GetVitessBranchResponseBody) GetVtgateMaxCount() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.VtgateMaxCount
+}
+
+func (g *GetVitessBranchResponseBody) GetVtgateTargetCPUUtilization() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.VtgateTargetCPUUtilization
+}
+
 func (g *GetVitessBranchResponseBody) GetClusterSize() string {
 	if g == nil {
 		return ""
@@ -192,6 +239,13 @@ func (g *GetVitessBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return g.Ready
+}
+
+func (g *GetVitessBranchResponseBody) GetSafeMigrations() bool {
+	if g == nil {
+		return false
+	}
+	return g.SafeMigrations
 }
 
 func (g *GetVitessBranchResponseBody) GetKeyspaceCount() int64 {
