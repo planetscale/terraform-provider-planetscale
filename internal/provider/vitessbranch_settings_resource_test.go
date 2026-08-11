@@ -68,11 +68,11 @@ func TestAccVitessBranchSafeMigrationsResource_Lifecycle(t *testing.T) {
 	})
 }
 
-func TestAccVitessBranchVTGateAutoscalingResource_Lifecycle(t *testing.T) {
+func TestAccVitessBranchVTGateResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
-	databaseName := randomWithPrefix("testacc-vtgate-autoscaling")
-	resourceAddress := "planetscale_vitess_branch_vtgate_autoscaling.test"
+	databaseName := randomWithPrefix("testacc-vtgate")
+	resourceAddress := "planetscale_vitess_branch_vtgate.test"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

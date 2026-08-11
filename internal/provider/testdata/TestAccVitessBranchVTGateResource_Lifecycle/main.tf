@@ -17,7 +17,7 @@ resource "planetscale_vitess_branch" "test" {
   cluster_size = "PS_10"
 }
 
-resource "planetscale_vitess_branch_vtgate_autoscaling" "test" {
+resource "planetscale_vitess_branch_vtgate" "test" {
   organization                  = var.organization
   database                      = var.database_name
   branch                        = planetscale_vitess_branch.test.id

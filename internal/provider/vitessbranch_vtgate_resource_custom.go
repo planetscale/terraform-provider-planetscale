@@ -16,8 +16,8 @@ import (
 )
 
 var (
-	_ resource.Resource                = &VitessBranchVTGateAutoscalingResource{}
-	_ resource.ResourceWithImportState = &VitessBranchVTGateAutoscalingResource{}
+	_ resource.Resource                = &VitessBranchVTGateResource{}
+	_ resource.ResourceWithImportState = &VitessBranchVTGateResource{}
 )
 
 // The API rejects a resize request while another one is unfinished, so changes
@@ -28,19 +28,20 @@ const (
 	vtgateResizePollInterval = 10 * time.Second
 )
 
-// NewVitessBranchVTGateAutoscalingResource returns a resource that manages the
-// VTGate autoscaling configuration of an existing Vitess branch.
-func NewVitessBranchVTGateAutoscalingResource() resource.Resource {
-	return &VitessBranchVTGateAutoscalingResource{}
+// NewVitessBranchVTGateResource returns a resource that manages the VTGate
+// configuration of an existing Vitess branch.
+func NewVitessBranchVTGateResource() resource.Resource {
+	return &VitessBranchVTGateResource{}
 }
 
-// VitessBranchVTGateAutoscalingResource models autoscaling as a durable branch
-// setting rather than exposing transient resize requests as Terraform objects.
-type VitessBranchVTGateAutoscalingResource struct {
+// VitessBranchVTGateResource models the VTGate configuration as a durable
+// branch setting rather than exposing transient resize requests as Terraform
+// objects.
+type VitessBranchVTGateResource struct {
 	client *sdk.PlanetScale
 }
 
-type vitessBranchVTGateAutoscalingResourceModel struct {
+type vitessBranchVTGateResourceModel struct {
 	ID                         types.String `tfsdk:"id"`
 	Organization               types.String `tfsdk:"organization"`
 	Database                   types.String `tfsdk:"database"`
@@ -61,13 +62,15 @@ type currentVTGateConfiguration struct {
 	targetCPUUtilization *int64
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_vitess_branch_vtgate_autoscaling"
+func (r *VitessBranchVTGateResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_vitess_branch_vtgate"
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *VitessBranchVTGateResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manages VTGate autoscaling for an existing PlanetScale Vitess branch.",
+		MarkdownDescription: "Manages the VTGate configuration of an existing PlanetScale Vitess branch. " +
+			"Changes are applied through a branch resize, and destroying this resource disables autoscaling " +
+			"but leaves the VTGate size and count in place.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:            true,
@@ -122,7 +125,7 @@ func (r *VitessBranchVTGateAutoscalingResource) Schema(_ context.Context, _ reso
 	}
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *VitessBranchVTGateResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -138,9 +141,9 @@ func (r *VitessBranchVTGateAutoscalingResource) Configure(_ context.Context, req
 	r.client = client
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data vitessBranchVTGateAutoscalingResourceModel
-	var config vitessBranchVTGateAutoscalingResourceModel
+func (r *VitessBranchVTGateResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data vitessBranchVTGateResourceModel
+	var config vitessBranchVTGateResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	if resp.Diagnostics.HasError() {
@@ -148,14 +151,14 @@ func (r *VitessBranchVTGateAutoscalingResource) Create(ctx context.Context, req 
 	}
 
 	if err := r.apply(ctx, &data, &config); err != nil {
-		resp.Diagnostics.AddError("Unable to update VTGate autoscaling", err.Error())
+		resp.Diagnostics.AddError("Unable to update VTGate configuration", err.Error())
 		return
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data vitessBranchVTGateAutoscalingResourceModel
+func (r *VitessBranchVTGateResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data vitessBranchVTGateResourceModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -167,17 +170,17 @@ func (r *VitessBranchVTGateAutoscalingResource) Read(ctx context.Context, req re
 			resp.State.RemoveResource(ctx)
 			return
 		}
-		resp.Diagnostics.AddError("Unable to read VTGate autoscaling", err.Error())
+		resp.Diagnostics.AddError("Unable to read VTGate configuration", err.Error())
 		return
 	}
 
-	refreshVTGateAutoscalingModel(&data, current)
+	refreshVTGateModel(&data, current)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data vitessBranchVTGateAutoscalingResourceModel
-	var config vitessBranchVTGateAutoscalingResourceModel
+func (r *VitessBranchVTGateResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data vitessBranchVTGateResourceModel
+	var config vitessBranchVTGateResourceModel
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
 	if resp.Diagnostics.HasError() {
@@ -185,14 +188,14 @@ func (r *VitessBranchVTGateAutoscalingResource) Update(ctx context.Context, req 
 	}
 
 	if err := r.apply(ctx, &data, &config); err != nil {
-		resp.Diagnostics.AddError("Unable to update VTGate autoscaling", err.Error())
+		resp.Diagnostics.AddError("Unable to update VTGate configuration", err.Error())
 		return
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data vitessBranchVTGateAutoscalingResourceModel
+func (r *VitessBranchVTGateResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data vitessBranchVTGateResourceModel
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -203,7 +206,7 @@ func (r *VitessBranchVTGateAutoscalingResource) Delete(ctx context.Context, req 
 		if isBranchSettingNotFound(err) {
 			return
 		}
-		resp.Diagnostics.AddError("Unable to read VTGate autoscaling", err.Error())
+		resp.Diagnostics.AddError("Unable to read VTGate configuration", err.Error())
 		return
 	}
 	if !current.autoscaling {
@@ -230,7 +233,7 @@ func (r *VitessBranchVTGateAutoscalingResource) Delete(ctx context.Context, req 
 	}
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *VitessBranchVTGateResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	var identity struct {
 		Organization string `json:"organization"`
 		Database     string `json:"database"`
@@ -250,10 +253,10 @@ func (r *VitessBranchVTGateAutoscalingResource) ImportState(ctx context.Context,
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("branch"), identity.Branch)...)
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) apply(
+func (r *VitessBranchVTGateResource) apply(
 	ctx context.Context,
-	data *vitessBranchVTGateAutoscalingResourceModel,
-	config *vitessBranchVTGateAutoscalingResourceModel,
+	data *vitessBranchVTGateResourceModel,
+	config *vitessBranchVTGateResourceModel,
 ) error {
 	current, err := r.readCurrent(ctx, data)
 	if err != nil {
@@ -288,7 +291,7 @@ func (r *VitessBranchVTGateAutoscalingResource) apply(
 	}
 
 	if !changed {
-		refreshVTGateAutoscalingModel(data, current)
+		refreshVTGateModel(data, current)
 		return nil
 	}
 
@@ -307,13 +310,13 @@ func (r *VitessBranchVTGateAutoscalingResource) apply(
 		return err
 	}
 
-	refreshVTGateAutoscalingModel(data, configurationFromResize(current.branchID, *resize))
+	refreshVTGateModel(data, configurationFromResize(current.branchID, *resize))
 	return nil
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) readCurrent(
+func (r *VitessBranchVTGateResource) readCurrent(
 	ctx context.Context,
-	data *vitessBranchVTGateAutoscalingResourceModel,
+	data *vitessBranchVTGateResourceModel,
 ) (currentVTGateConfiguration, error) {
 	settings, err := r.client.DatabaseBranches.GetVitessBranchSettings(
 		ctx,
@@ -340,9 +343,9 @@ func (r *VitessBranchVTGateAutoscalingResource) readCurrent(
 	}, nil
 }
 
-func (r *VitessBranchVTGateAutoscalingResource) waitForIdleResize(
+func (r *VitessBranchVTGateResource) waitForIdleResize(
 	ctx context.Context,
-	data *vitessBranchVTGateAutoscalingResourceModel,
+	data *vitessBranchVTGateResourceModel,
 ) error {
 	deadline := time.Now().Add(vtgateResizeWaitTimeout)
 	for {
@@ -400,7 +403,7 @@ func configurationFromResize(branchID string, resize sdk.VitessBranchResizeReque
 	}
 }
 
-func refreshVTGateAutoscalingModel(data *vitessBranchVTGateAutoscalingResourceModel, current currentVTGateConfiguration) {
+func refreshVTGateModel(data *vitessBranchVTGateResourceModel, current currentVTGateConfiguration) {
 	data.ID = types.StringValue(current.branchID)
 	data.VTGateAutoscaling = types.BoolValue(current.autoscaling)
 	data.VTGateSize = types.StringValue(current.size)

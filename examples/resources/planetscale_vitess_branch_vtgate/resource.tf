@@ -4,7 +4,7 @@ resource "planetscale_vitess_branch" "main" {
   name         = "main"
 }
 
-resource "planetscale_vitess_branch_vtgate_autoscaling" "main" {
+resource "planetscale_vitess_branch_vtgate" "main" {
   organization                  = planetscale_vitess_branch.main.organization
   database                      = planetscale_vitess_branch.main.database
   branch                        = planetscale_vitess_branch.main.id

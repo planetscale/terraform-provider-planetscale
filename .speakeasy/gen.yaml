@@ -44,7 +44,7 @@ terraform:
     tlsSkipVerify: ""
   additionalResources:
     - resource: NewVitessBranchSafeMigrationsResource
-    - resource: NewVitessBranchVTGateAutoscalingResource
+    - resource: NewVitessBranchVTGateResource
   author: planetscale
   baseErrorName: PlanetScaleError
   debugLogging: {}
