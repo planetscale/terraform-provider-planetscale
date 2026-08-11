@@ -3,9 +3,6 @@ name: validate renovate.json
 on:
   pull_request:
 
-env:
-  LOG_LEVEL: debug
-
 permissions:
   contents: read
 
@@ -19,8 +16,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - uses: docker://ghcr.io/renovatebot/renovate:44.13.1@sha256:3e4149122921d530218a4ca809c59636faa668b330e4c9ea7f9ee1e20ea505dd
         with:
-          node-version: 24
-
-      - run: npx -p renovate renovate-config-validator renovate.json5
+          entrypoint: renovate-config-validator
+          args: --no-global renovate.json5
