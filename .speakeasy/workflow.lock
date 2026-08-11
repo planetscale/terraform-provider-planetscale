@@ -1,4 +1,4 @@
-speakeasyVersion: 1.778.0
+speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
@@ -15,7 +15,7 @@ targets:
         sourceBlobDigest: sha256:7689bf38611fe18533d9cb18a6458f8048a720f0ec5c9e527bbf00f78319e4f5
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: 1.778.0
+    speakeasyVersion: 1.793.0
     sources:
         PlanetScale API:
             inputs:
