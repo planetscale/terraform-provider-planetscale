@@ -21,7 +21,10 @@ func TestAccPostgresBranchBackupResource_Lifecycle(t *testing.T) {
 	resourceAddress := "planetscale_postgres_branch_backup.test"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
+		PreCheck: func() {
+			testAccPreCheck(t)
+			waitForNoInFlightPostgresBackups(t, databaseName, branchName)
+		},
 		ProtoV6ProviderFactories: testAccProviders(),
 		Steps: []resource.TestStep{
 			{

@@ -21,7 +21,10 @@ func TestAccVitessBranchBackupResource_Lifecycle(t *testing.T) {
 	resourceAddress := "planetscale_vitess_branch_backup.test"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:                 func() { testAccPreCheck(t) },
+		PreCheck: func() {
+			testAccPreCheck(t)
+			waitForNoInFlightVitessBackups(t, databaseName, branchName)
+		},
 		ProtoV6ProviderFactories: testAccProviders(),
 		Steps: []resource.TestStep{
 			{
