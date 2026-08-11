@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: d6e426e5f32f7e9b54db6fdf9190c7d4
+  docChecksum: abf072ea699c4e157d253853ecdf5a4d
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -727,7 +727,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9917.69, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "has_card": false, "payment_info_required": false}]}
+          application/json: {"type": "<value>", "current_page": 9917.69, "per_page": 991769, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "has_card": false, "payment_info_required": false}]}
   get_organization:
     speakeasy-default-get-organization:
       parameters:
@@ -777,7 +777,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 5232.67, "next_page": 4264.25, "next_page_url": "https://separate-bonnet.net/", "prev_page": 1088.11, "prev_page_url": "https://enchanted-freezing.biz", "data": [{"id": "<id>", "url": "https://puny-wilderness.biz/", "branches_url": "https://glorious-typewriter.net/", "branches_count": 8369.88, "open_schema_recommendations_count": 5261.3, "development_branches_count": 4828.45, "production_branches_count": 1863.74, "issues_count": 8325.8, "multiple_admins_required_for_deletion": true, "ready": true, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": true, "data_import": {"state": "Washington", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "reflecting-creature.com", "port": 4418.33, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Lauryn_Powlowski50", "location": "<value>", "slug": "<value>", "current_default": false, "mysql_supported": false, "postgresql_supported": true}, "html_url": "https://functional-forage.biz", "name": "<value>", "state": "importing", "sharded": false, "default_branch_shard_count": 2798.89, "default_branch_read_only_regions_count": 2029.15, "default_branch_table_count": 3322.17, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": true, "allow_data_branching": false, "foreign_keys_enabled": true, "automatic_migrations": false, "restrict_branch_region": false, "insights_raw_queries": true, "plan": "<value>", "insights_enabled": true, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1714679661835", "updated_at": "1735618664278", "schema_last_updated_at": "<value>", "kind": "postgresql"}]}
+          application/json: {"type": "<value>", "current_page": 5232.67, "per_page": 523267, "next_page": 4264.25, "next_page_url": "https://separate-bonnet.net/", "prev_page": 1088.11, "prev_page_url": "https://enchanted-freezing.biz", "total_count": 426425, "total_pages": 397442, "data": [{"id": "<id>", "url": "https://puny-wilderness.biz/", "branches_url": "https://glorious-typewriter.net/", "branches_count": 8369.88, "open_schema_recommendations_count": 5261.3, "development_branches_count": 4828.45, "production_branches_count": 1863.74, "issues_count": 8325.8, "multiple_admins_required_for_deletion": true, "ready": true, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": true, "data_import": {"state": "Washington", "import_check_errors": "<value>", "started_at": "<value>", "finished_at": "<value>", "data_source": {"hostname": "reflecting-creature.com", "port": 4418.33, "database": "<value>"}}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>"], "display_name": "Lauryn_Powlowski50", "location": "<value>", "slug": "<value>", "current_default": false, "mysql_supported": false, "postgresql_supported": true}, "html_url": "https://functional-forage.biz", "name": "<value>", "state": "importing", "sharded": false, "default_branch_shard_count": 2798.89, "default_branch_read_only_regions_count": 2029.15, "default_branch_table_count": 3322.17, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": true, "allow_data_branching": false, "foreign_keys_enabled": true, "automatic_migrations": false, "restrict_branch_region": false, "insights_raw_queries": true, "plan": "<value>", "insights_enabled": true, "production_branch_web_console": true, "migration_table_name": "<value>", "migration_framework": "<value>", "created_at": "1714679661835", "updated_at": "1735618664278", "schema_last_updated_at": "<value>", "kind": "postgresql"}]}
   create_database:
     speakeasy-default-create-database:
       parameters:
@@ -1052,7 +1052,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9096.15, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "immutable": false, "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}], "parameter_overrides": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>"}}}]}
+          application/json: {"type": "<value>", "current_page": 9096.15, "per_page": 909615, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "immutable": false, "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "step": 7607.62, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}], "parameter_overrides": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>"}}}]}
   create_bouncer:
     speakeasy-default-create-bouncer:
       parameters:
@@ -1272,7 +1272,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 2580.97, "next_page": 4641.64, "next_page_url": "https://dismal-brief.name", "prev_page": 9208.93, "prev_page_url": "https://known-pillbox.name", "data": [{"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>"], "created_at": "1705263069408", "deleted_at": "<value>", "expires_at": "1747391773298", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "direct_vtgate_addresses": ["<value 1>"], "ttl_seconds": 8467, "access_host_url": "https://humble-tackle.com", "access_host_regional_url": "https://judicious-metabolite.info/", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Alison76", "avatar_url": "https://last-decryption.name/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Jackeline.Kessler2", "location": "<value>", "slug": "<value>", "current_default": false, "mysql_supported": true, "postgresql_supported": true}, "username": "Sabryna_Mosciski", "plain_text": "<value>", "replica": true, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}]}
+          application/json: {"type": "<value>", "current_page": 2580.97, "per_page": 258097, "next_page": 4641.64, "next_page_url": "https://dismal-brief.name", "prev_page": 9208.93, "prev_page_url": "https://known-pillbox.name", "data": [{"id": "<id>", "name": "<value>", "role": "reader", "cidrs": ["<value 1>"], "created_at": "1705263069408", "deleted_at": "<value>", "expires_at": "1747391773298", "last_used_at": "<value>", "expired": true, "direct_vtgate": true, "direct_vtgate_addresses": ["<value 1>"], "ttl_seconds": 8467, "access_host_url": "https://humble-tackle.com", "access_host_regional_url": "https://judicious-metabolite.info/", "access_host_regional_urls": [], "actor": {"id": "<id>", "display_name": "Alison76", "avatar_url": "https://last-decryption.name/"}, "region": {"id": "<id>", "provider": "<value>", "enabled": true, "public_ip_addresses": ["<value 1>", "<value 2>", "<value 3>"], "display_name": "Jackeline.Kessler2", "location": "<value>", "slug": "<value>", "current_default": false, "mysql_supported": true, "postgresql_supported": true}, "username": "Sabryna_Mosciski", "plain_text": "<value>", "replica": true, "renewable": true, "database_branch": {"name": "<value>", "id": "<id>", "production": true, "mysql_edge_address": "<value>", "private_edge_connectivity": true}}]}
   create_password:
     speakeasy-default-create-password:
       parameters:
@@ -1386,7 +1386,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 273.09, "next_page": 6627.09, "next_page_url": "https://gummy-milestone.com/", "prev_page": 3992.96, "prev_page_url": "https://frail-swath.com", "data": []}
+          application/json: {"type": "<value>", "current_page": 273.09, "per_page": 27309, "next_page": 6627.09, "next_page_url": "https://gummy-milestone.com/", "prev_page": 3992.96, "prev_page_url": "https://frail-swath.com", "data": []}
   create_role:
     speakeasy-default-create-role:
       parameters:
@@ -2291,7 +2291,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 12099, "next_page": 261643, "next_page_url": "https://heavenly-sand.name", "prev_page": 194653, "prev_page_url": "https://murky-tune-up.name/", "data": []}
+          application/json: {"type": "<value>", "current_page": 12099, "per_page": 12099, "next_page": 261643, "next_page_url": "https://heavenly-sand.name", "prev_page": 194653, "prev_page_url": "https://murky-tune-up.name/", "data": []}
   get_vitess_backup_policy:
     speakeasy-default-get-vitess-backup-policy:
       parameters:
@@ -2313,7 +2313,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 262411, "next_page": 991022, "next_page_url": "https://measly-mythology.name/", "prev_page": 98163, "prev_page_url": null, "data": []}
+          application/json: {"type": "<value>", "current_page": 262411, "per_page": 262411, "next_page": 991022, "next_page_url": "https://measly-mythology.name/", "prev_page": 98163, "prev_page_url": null, "data": []}
   get_postgres_backup_policy:
     speakeasy-default-get-postgres-backup-policy:
       parameters:
@@ -2388,7 +2388,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 829720, "next_page": 74909, "next_page_url": null, "prev_page": 81756, "prev_page_url": "https://reasonable-carnival.biz/", "data": [{"id": "<id>", "name": "<value>", "state": "running", "size": 261258, "estimated_storage_cost": 6380.68, "started_at": "<value>", "expires_at": "1752161474661", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 656671, "uncompressed_size": 829720, "protected": true, "actor": {"id": "<id>"}}]}
+          application/json: {"type": "<value>", "current_page": 829720, "per_page": 829720, "next_page": 74909, "next_page_url": null, "prev_page": 81756, "prev_page_url": "https://reasonable-carnival.biz/", "data": [{"id": "<id>", "name": "<value>", "state": "running", "size": 261258, "estimated_storage_cost": 6380.68, "started_at": "<value>", "expires_at": "1752161474661", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 656671, "uncompressed_size": 829720, "protected": true, "actor": {"id": "<id>"}}]}
   create_vitess_branch_backup:
     speakeasy-default-create-vitess-branch-backup:
       parameters:
@@ -2441,7 +2441,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 44803, "next_page": 324233, "next_page_url": "https://well-made-soup.net/", "prev_page": 702590, "prev_page_url": "https://outstanding-mentor.biz", "data": [{"id": "<id>", "name": "<value>", "state": "canceled", "size": 237432, "estimated_storage_cost": 8030.96, "started_at": "<value>", "expires_at": "1738680984512", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 629514, "uncompressed_size": 44803, "protected": true, "actor": {"id": "<id>"}}]}
+          application/json: {"type": "<value>", "current_page": 44803, "per_page": 44803, "next_page": 324233, "next_page_url": "https://well-made-soup.net/", "prev_page": 702590, "prev_page_url": "https://outstanding-mentor.biz", "data": [{"id": "<id>", "name": "<value>", "state": "canceled", "size": 237432, "estimated_storage_cost": 8030.96, "started_at": "<value>", "expires_at": "1738680984512", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 629514, "uncompressed_size": 44803, "protected": true, "actor": {"id": "<id>"}}]}
   create_postgres_branch_backup:
     speakeasy-default-create-postgres-branch-backup:
       parameters:

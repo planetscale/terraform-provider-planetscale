@@ -667,6 +667,8 @@ type ListDatabasesResponseBody struct {
 	Type string `json:"type"`
 	// The current page number
 	CurrentPage int64 `json:"current_page"`
+	// The maximum number of results per page
+	PerPage int64 `json:"per_page"`
 	// The next page number, or null when this is the last page
 	NextPage *int64 `json:"next_page"`
 	// The next page of results, or null when this is the last page
@@ -674,8 +676,12 @@ type ListDatabasesResponseBody struct {
 	// The previous page number, or null when this is the first page
 	PrevPage *int64 `json:"prev_page"`
 	// The previous page of results, or null when this is the first page
-	PrevPageURL *string             `json:"prev_page_url"`
-	Data        []ListDatabasesData `json:"data"`
+	PrevPageURL *string `json:"prev_page_url"`
+	// The total number of matching results
+	TotalCount int64 `json:"total_count"`
+	// The total number of pages of matching results
+	TotalPages int64               `json:"total_pages"`
+	Data       []ListDatabasesData `json:"data"`
 }
 
 func (l *ListDatabasesResponseBody) GetType() string {
@@ -690,6 +696,13 @@ func (l *ListDatabasesResponseBody) GetCurrentPage() int64 {
 		return 0
 	}
 	return l.CurrentPage
+}
+
+func (l *ListDatabasesResponseBody) GetPerPage() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.PerPage
 }
 
 func (l *ListDatabasesResponseBody) GetNextPage() *int64 {
@@ -718,6 +731,20 @@ func (l *ListDatabasesResponseBody) GetPrevPageURL() *string {
 		return nil
 	}
 	return l.PrevPageURL
+}
+
+func (l *ListDatabasesResponseBody) GetTotalCount() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalCount
+}
+
+func (l *ListDatabasesResponseBody) GetTotalPages() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalPages
 }
 
 func (l *ListDatabasesResponseBody) GetData() []ListDatabasesData {
