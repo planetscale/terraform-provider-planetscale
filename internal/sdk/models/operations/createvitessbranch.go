@@ -80,6 +80,8 @@ type CreateVitessBranchRequestBody struct {
 	// The kind of database. Always mysql for planetscale_vitess_branch.
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	kind *CreateVitessBranchKind `const:"mysql" json:"kind"`
+	// Whether safe migrations (DDL protection) are enabled.
+	SafeMigrations *bool `json:"safe_migrations,omitzero"`
 }
 
 func (c CreateVitessBranchRequestBody) MarshalJSON() ([]byte, error) {
@@ -141,6 +143,13 @@ func (c *CreateVitessBranchRequestBody) GetCreateDatabaseIfMissing() *bool {
 
 func (c *CreateVitessBranchRequestBody) GetKind() *CreateVitessBranchKind {
 	return CreateVitessBranchKindMysql.ToPointer()
+}
+
+func (c *CreateVitessBranchRequestBody) GetSafeMigrations() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.SafeMigrations
 }
 
 type CreateVitessBranchRequest struct {
@@ -273,10 +282,22 @@ type CreateVitessBranchResponseBody struct {
 	MysqlEdgeAddress string `json:"mysql_edge_address"`
 	// The current state of the branch
 	State CreateVitessBranchState `json:"state"`
+	// The public SKU representing the VTGate size
+	VtgateSize *string `json:"vtgate_name"`
+	// The number of vtgate instances in the branch
+	VtgateCount int64 `json:"vtgate_count"`
+	// Whether VTGate autoscaling is enabled
+	VtgateAutoscaling bool `json:"vtgate_autoscaling"`
+	// The maximum number of VTGate instances when autoscaling is enabled
+	VtgateMaxCount *int64 `json:"vtgate_max_count"`
+	// The target CPU utilization for VTGate autoscaling
+	VtgateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization"`
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
+	// Whether or not the branch has safe migrations enabled
+	SafeMigrations bool `json:"safe_migrations"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                    `json:"keyspace_count"`
 	Actor         *CreateVitessBranchActor `json:"actor"`
@@ -324,6 +345,41 @@ func (c *CreateVitessBranchResponseBody) GetState() CreateVitessBranchState {
 	return c.State
 }
 
+func (c *CreateVitessBranchResponseBody) GetVtgateSize() *string {
+	if c == nil {
+		return nil
+	}
+	return c.VtgateSize
+}
+
+func (c *CreateVitessBranchResponseBody) GetVtgateCount() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.VtgateCount
+}
+
+func (c *CreateVitessBranchResponseBody) GetVtgateAutoscaling() bool {
+	if c == nil {
+		return false
+	}
+	return c.VtgateAutoscaling
+}
+
+func (c *CreateVitessBranchResponseBody) GetVtgateMaxCount() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.VtgateMaxCount
+}
+
+func (c *CreateVitessBranchResponseBody) GetVtgateTargetCPUUtilization() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.VtgateTargetCPUUtilization
+}
+
 func (c *CreateVitessBranchResponseBody) GetClusterSize() string {
 	if c == nil {
 		return ""
@@ -336,6 +392,13 @@ func (c *CreateVitessBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return c.Ready
+}
+
+func (c *CreateVitessBranchResponseBody) GetSafeMigrations() bool {
+	if c == nil {
+		return false
+	}
+	return c.SafeMigrations
 }
 
 func (c *CreateVitessBranchResponseBody) GetKeyspaceCount() int64 {

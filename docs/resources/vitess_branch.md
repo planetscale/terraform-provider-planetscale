@@ -14,10 +14,16 @@ VitessBranch Resource
 
 ```terraform
 resource "planetscale_vitess_branch" "my_vitessbranch" {
-  organization  = "my-organization"
-  database      = "ru00w3vqvfr9"
+  organization = "my-organization"
+  database     = "ru00w3vqvfr9"
 
-  name          = "my-branch"
+  name                          = "my-branch"
+  safe_migrations               = true
+  vtgate_autoscaling            = true
+  vtgate_count                  = 1
+  vtgate_max_count              = 2
+  vtgate_size                   = "VTG_320"
+  vtgate_target_cpu_utilization = 50
 }
 ```
 
@@ -26,9 +32,9 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 
 ### Required
 
-- `database` (String) Database name slug from `list_databases`. Example: `app-db`.
+- `database` (String) The name of the database the branch belongs to
 - `name` (String) The name of the branch to create
-- `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
+- `organization` (String) The name of the organization the branch belongs to
 
 ### Optional
 
@@ -37,7 +43,13 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 - `delete_descendants` (Boolean) If true, recursively delete all descendant branches along with this branch
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
+- `safe_migrations` (Boolean) Whether safe migrations are enabled
 - `seed_data` (String) If provided, restores the last successful backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this, in addition to Data Branching™ being enabled for the branch. must be "last_successful_backup"; Requires replacement if changed.
+- `vtgate_autoscaling` (Boolean) If autoscaling is enabled for the vtgate cluster
+- `vtgate_count` (Number) The number of vtgates in an availability zone
+- `vtgate_max_count` (Number) The maximum number of vtgates in an availability zone when autoscaling is enabled
+- `vtgate_size` (String) The size of the vtgate cluster: VTG_5, VTG_10,…
+- `vtgate_target_cpu_utilization` (Number) The target CPU utilization for the vtgate cluster when autoscaling is enabled
 
 ### Read-Only
 

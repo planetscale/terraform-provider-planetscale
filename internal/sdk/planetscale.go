@@ -65,6 +65,7 @@ type PlanetScale struct {
 	//           Resources for managing database branch passwords.
 	//
 	DatabaseBranchPasswords *DatabaseBranchPasswords
+	APIBranchResizes        *APIBranchResizes
 	//           Resources for managing role credentials.
 	//
 	Roles            *Roles
@@ -178,6 +179,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.Bouncers = newBouncers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)

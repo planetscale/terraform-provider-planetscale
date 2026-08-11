@@ -27,9 +27,10 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-					"organization":  config.StringVariable(testAccOrg),
-					"branch_name":   config.StringVariable(branchNameOriginal),
+					"database_name":   config.StringVariable(databaseName),
+					"organization":    config.StringVariable(testAccOrg),
+					"branch_name":     config.StringVariable(branchNameOriginal),
+					"safe_migrations": config.BoolVariable(true),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -52,14 +53,20 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("state"),
 						knownvalue.StringExact("ready"),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("safe_migrations"),
+						knownvalue.Bool(true),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"branch_name":   config.StringVariable(branchNameRenamed),
+					"organization":    config.StringVariable(testAccOrg),
+					"database_name":   config.StringVariable(databaseName),
+					"branch_name":     config.StringVariable(branchNameRenamed),
+					"safe_migrations": config.BoolVariable(false),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -67,14 +74,20 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("name"),
 						knownvalue.StringExact(branchNameRenamed),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("safe_migrations"),
+						knownvalue.Bool(false),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"branch_name":   config.StringVariable(branchNameRenamed),
+					"organization":    config.StringVariable(testAccOrg),
+					"database_name":   config.StringVariable(databaseName),
+					"branch_name":     config.StringVariable(branchNameRenamed),
+					"safe_migrations": config.BoolVariable(false),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
@@ -100,6 +113,7 @@ func TestAccVitessBranchResource_CreatesAndDeletesDatabase(t *testing.T) {
 	branchName := "main"
 	resourceAddress := "planetscale_vitess_branch.test"
 	clusterSize := "PS_10"
+	vtgateSize := "VTG_320"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -108,10 +122,16 @@ func TestAccVitessBranchResource_CreatesAndDeletesDatabase(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"branch_name":   config.StringVariable(branchName),
-					"cluster_size":  config.StringVariable(clusterSize),
+					"organization":                  config.StringVariable(testAccOrg),
+					"database_name":                 config.StringVariable(databaseName),
+					"branch_name":                   config.StringVariable(branchName),
+					"cluster_size":                  config.StringVariable(clusterSize),
+					"safe_migrations":               config.BoolVariable(true),
+					"vtgate_autoscaling":            config.BoolVariable(true),
+					"vtgate_count":                  config.IntegerVariable(1),
+					"vtgate_max_count":              config.IntegerVariable(2),
+					"vtgate_size":                   config.StringVariable(vtgateSize),
+					"vtgate_target_cpu_utilization": config.IntegerVariable(50),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -133,6 +153,68 @@ func TestAccVitessBranchResource_CreatesAndDeletesDatabase(t *testing.T) {
 						resourceAddress,
 						tfjsonpath.New("state"),
 						knownvalue.StringExact("ready"),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("safe_migrations"),
+						knownvalue.Bool(true),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("vtgate_autoscaling"),
+						knownvalue.Bool(true),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("vtgate_count"),
+						knownvalue.Int64Exact(1),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("vtgate_max_count"),
+						knownvalue.Int64Exact(2),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("vtgate_size"),
+						knownvalue.StringExact(vtgateSize),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("vtgate_target_cpu_utilization"),
+						knownvalue.Int64Exact(50),
+					),
+				},
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization":                  config.StringVariable(testAccOrg),
+					"database_name":                 config.StringVariable(databaseName),
+					"branch_name":                   config.StringVariable(branchName),
+					"cluster_size":                  config.StringVariable(clusterSize),
+					"safe_migrations":               config.BoolVariable(false),
+					"vtgate_autoscaling":            config.BoolVariable(true),
+					"vtgate_count":                  config.IntegerVariable(2),
+					"vtgate_max_count":              config.IntegerVariable(3),
+					"vtgate_size":                   config.StringVariable(vtgateSize),
+					"vtgate_target_cpu_utilization": config.IntegerVariable(50),
+				},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("safe_migrations"),
+						knownvalue.Bool(false),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("vtgate_count"),
+						knownvalue.Int64Exact(2),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("vtgate_max_count"),
+						knownvalue.Int64Exact(3),
 					),
 				},
 			},

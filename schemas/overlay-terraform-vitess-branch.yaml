@@ -16,6 +16,19 @@ actions:
     update:
       x-speakeasy-plan-validators: VitessClusterSizeValidator
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.responses['201'].content['application/json'].schema.properties.vtgate_name
+    description: Use the public VTGate SKU as the configurable VTGate size.
+    update:
+      x-speakeasy-name-override: vtgate_size
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get.responses['200'].content['application/json'].schema.properties.vtgate_name
+    description: Use the public VTGate SKU as the configurable VTGate size.
+    update:
+      x-speakeasy-name-override: vtgate_size
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].patch.responses['200'].content['application/json'].schema.properties.vtgate_name
+    description: Use the public VTGate SKU as the configurable VTGate size.
+    update:
+      x-speakeasy-name-override: vtgate_size
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.restore_point
     description: Remove restore_point (Postgres-only field)
     remove: true
@@ -24,7 +37,7 @@ actions:
     remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties
-    description: Always send create_database_if_missing=true and kind=mysql so the branch resource transparently creates the database when it does not already exist.
+    description: Add Vitess create-time fields and constants.
     update:
       create_database_if_missing:
         type: boolean
@@ -38,6 +51,9 @@ actions:
         default: mysql
         description: The kind of database. Always mysql for planetscale_vitess_branch.
         x-speakeasy-terraform-ignore: schema
+      safe_migrations:
+        type: boolean
+        description: Whether safe migrations (DDL protection) are enabled.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].get
     description: Update operation metadata for Vitess
@@ -65,7 +81,7 @@ actions:
     update:
       operationId: update_vitess_branch
       summary: Update a Vitess branch
-      x-speakeasy-entity-operation: VitessBranch#update
+      x-speakeasy-entity-operation: VitessBranch#update#4
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].patch.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter
@@ -76,6 +92,105 @@ actions:
     description: Map new_name to name field from GET response
     update:
       x-speakeasy-name-override: name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].put
+    description: Apply safe migrations after the branch is ready and during in-place updates.
+    update:
+      x-speakeasy-entity-operation:
+        - VitessBranch#create#3
+        - VitessBranch#update#3
+      requestBody:
+        required: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].put.parameters[?@.name == 'branch']
+    description: Match the safe migrations operation to the branch public ID.
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations'].put.responses['200'].content
+    description: Use the branch read operation as the source of Terraform state.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes'].put
+    description: Apply VTGate settings after the branch is ready and during in-place updates.
+    update:
+      x-speakeasy-entity-operation:
+        - VitessBranch#create#4
+        - VitessBranch#update
+      requestBody:
+        required: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes'].put.parameters[?@.name == 'branch']
+    description: Match the resize operation to the branch public ID.
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes'].put.responses
+    description: Accept an idempotent no-op response when VTGate settings already match.
+    update:
+      '204':
+        description: No changes to apply
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes'].put.responses['200'].content['application/json'].schema.properties.*
+    description: Keep only the resize request ID needed by the polling operation.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes'].put.responses['200'].content['application/json'].schema.properties
+    update:
+      id:
+        type: string
+        x-speakeasy-name-override: resize_request_id
+        x-speakeasy-terraform-ignore: schema
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes/{resize}'].get.parameters[?@.name == 'branch']
+    description: Match the resize polling operation to the branch public ID.
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes/{resize}'].get.parameters[?@.name == 'resize']
+    description: Match the polling path parameter to the resize request ID.
+    update:
+      x-speakeasy-name-override: resize_request_id
+      x-speakeasy-terraform-ignore: schema
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes/{resize}'].get.responses['200'].content['application/json'].schema.properties.*
+    description: Keep only the fields needed to poll the resize request.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes/{resize}'].get.responses['200'].content['application/json'].schema.properties
+    update:
+      id:
+        type: string
+        x-speakeasy-name-override: resize_request_id
+        x-speakeasy-terraform-ignore: schema
+      state:
+        type: string
+        x-speakeasy-name-override: resize_request_state
+        x-speakeasy-terraform-ignore: schema
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/resizes/{resize}'].get
+    description: Poll the exact resize request after applying VTGate settings.
+    update:
+      x-speakeasy-entity-operation:
+        - entityOperation: VitessBranch#create#5
+          options:
+            polling:
+              name: WaitForResizeComplete
+        - entityOperation: VitessBranch#update#2
+          options:
+            polling:
+              name: WaitForResizeComplete
+      x-speakeasy-polling:
+        - name: WaitForResizeComplete
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 90
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/resize_request_state == "canceled"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/resize_request_state == "completed"
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#vitess'].delete
     description: Update operation metadata for Vitess

@@ -33,8 +33,25 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
+		r.VtgateAutoscaling = types.BoolValue(resp.VtgateAutoscaling)
+		r.VtgateCount = types.Int64Value(resp.VtgateCount)
+		r.VtgateMaxCount = types.Int64PointerValue(resp.VtgateMaxCount)
+		r.VtgateSize = types.StringPointerValue(resp.VtgateSize)
+		r.VtgateTargetCPUUtilization = types.Int64PointerValue(resp.VtgateTargetCPUUtilization)
+	}
+
+	return diags
+}
+
+func (r *VitessBranchResourceModel) RefreshFromOperationsGetBranchResizeRequestResponseBody(ctx context.Context, resp *operations.GetBranchResizeRequestResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ResizeRequestID = types.StringValue(resp.ResizeRequestID)
+		r.ResizeRequestState = types.StringValue(resp.ResizeRequestState)
 	}
 
 	return diags
@@ -63,8 +80,24 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
+		r.VtgateAutoscaling = types.BoolValue(resp.VtgateAutoscaling)
+		r.VtgateCount = types.Int64Value(resp.VtgateCount)
+		r.VtgateMaxCount = types.Int64PointerValue(resp.VtgateMaxCount)
+		r.VtgateSize = types.StringPointerValue(resp.VtgateSize)
+		r.VtgateTargetCPUUtilization = types.Int64PointerValue(resp.VtgateTargetCPUUtilization)
+	}
+
+	return diags
+}
+
+func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateBranchResizeRequestResponseBody(ctx context.Context, resp *operations.UpdateBranchResizeRequestResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ResizeRequestID = types.StringValue(resp.ResizeRequestID)
 	}
 
 	return diags
@@ -93,8 +126,14 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateVitessBranchRespo
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
+		r.SafeMigrations = types.BoolValue(resp.SafeMigrations)
 		r.State = types.StringValue(string(resp.State))
 		r.URL = types.StringValue(resp.URL)
+		r.VtgateAutoscaling = types.BoolValue(resp.VtgateAutoscaling)
+		r.VtgateCount = types.Int64Value(resp.VtgateCount)
+		r.VtgateMaxCount = types.Int64PointerValue(resp.VtgateMaxCount)
+		r.VtgateSize = types.StringPointerValue(resp.VtgateSize)
+		r.VtgateTargetCPUUtilization = types.Int64PointerValue(resp.VtgateTargetCPUUtilization)
 	}
 
 	return diags
@@ -161,13 +200,20 @@ func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequestBody(ct
 	} else {
 		clusterSize = nil
 	}
+	safeMigrations := new(bool)
+	if !r.SafeMigrations.IsUnknown() && !r.SafeMigrations.IsNull() {
+		*safeMigrations = r.SafeMigrations.ValueBool()
+	} else {
+		safeMigrations = nil
+	}
 	out := operations.CreateVitessBranchRequestBody{
-		Name:         name,
-		ParentBranch: parentBranch,
-		BackupID:     backupID,
-		Region:       region,
-		SeedData:     seedData,
-		ClusterSize:  clusterSize,
+		Name:           name,
+		ParentBranch:   parentBranch,
+		BackupID:       backupID,
+		Region:         region,
+		SeedData:       seedData,
+		ClusterSize:    clusterSize,
+		SafeMigrations: safeMigrations,
 	}
 
 	return &out, diags
@@ -201,6 +247,31 @@ func (r *VitessBranchResourceModel) ToOperationsDeleteVitessBranchRequest(ctx co
 	return &out, diags
 }
 
+func (r *VitessBranchResourceModel) ToOperationsGetBranchResizeRequestRequest(ctx context.Context) (*operations.GetBranchResizeRequestRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	var resizeRequestID string
+	resizeRequestID = r.ResizeRequestID.ValueString()
+
+	out := operations.GetBranchResizeRequestRequest{
+		Organization:    organization,
+		Database:        database,
+		Branch:          branch,
+		ResizeRequestID: resizeRequestID,
+	}
+
+	return &out, diags
+}
+
 func (r *VitessBranchResourceModel) ToOperationsGetVitessBranchRequest(ctx context.Context) (*operations.GetVitessBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -217,6 +288,121 @@ func (r *VitessBranchResourceModel) ToOperationsGetVitessBranchRequest(ctx conte
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateBranchResizeRequestRequest(ctx context.Context) (*operations.UpdateBranchResizeRequestRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsUpdateBranchResizeRequestRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateBranchResizeRequestRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateBranchResizeRequestRequestBody(ctx context.Context) (*operations.UpdateBranchResizeRequestRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	vtgateSize := new(string)
+	if !r.VtgateSize.IsUnknown() && !r.VtgateSize.IsNull() {
+		*vtgateSize = r.VtgateSize.ValueString()
+	} else {
+		vtgateSize = nil
+	}
+	vtgateCount := new(int64)
+	if !r.VtgateCount.IsUnknown() && !r.VtgateCount.IsNull() {
+		*vtgateCount = r.VtgateCount.ValueInt64()
+	} else {
+		vtgateCount = nil
+	}
+	vtgateMaxCount := new(int64)
+	if !r.VtgateMaxCount.IsUnknown() && !r.VtgateMaxCount.IsNull() {
+		*vtgateMaxCount = r.VtgateMaxCount.ValueInt64()
+	} else {
+		vtgateMaxCount = nil
+	}
+	vtgateAutoscaling := new(bool)
+	if !r.VtgateAutoscaling.IsUnknown() && !r.VtgateAutoscaling.IsNull() {
+		*vtgateAutoscaling = r.VtgateAutoscaling.ValueBool()
+	} else {
+		vtgateAutoscaling = nil
+	}
+	vtgateTargetCPUUtilization := new(int64)
+	if !r.VtgateTargetCPUUtilization.IsUnknown() && !r.VtgateTargetCPUUtilization.IsNull() {
+		*vtgateTargetCPUUtilization = r.VtgateTargetCPUUtilization.ValueInt64()
+	} else {
+		vtgateTargetCPUUtilization = nil
+	}
+	out := operations.UpdateBranchResizeRequestRequestBody{
+		VtgateSize:                 vtgateSize,
+		VtgateCount:                vtgateCount,
+		VtgateMaxCount:             vtgateMaxCount,
+		VtgateAutoscaling:          vtgateAutoscaling,
+		VtgateTargetCPUUtilization: vtgateTargetCPUUtilization,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateSafeMigrationsRequest(ctx context.Context) (*operations.UpdateSafeMigrationsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsUpdateSafeMigrationsRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateSafeMigrationsRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsUpdateSafeMigrationsRequestBody(ctx context.Context) (*operations.UpdateSafeMigrationsRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var safeMigrations bool
+	safeMigrations = r.SafeMigrations.ValueBool()
+
+	out := operations.UpdateSafeMigrationsRequestBody{
+		SafeMigrations: safeMigrations,
 	}
 
 	return &out, diags

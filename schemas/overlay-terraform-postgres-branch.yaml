@@ -83,6 +83,16 @@ actions:
           patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted
           parameters are reset to their defaults.
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties['safe_migrations','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Remove Vitess-only branch settings
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties['safe_migrations','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Remove Vitess-only branch settings
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].patch.responses['200'].content['application/json'].schema.properties['safe_migrations','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Remove Vitess-only branch settings
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.mysql_address
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties.mysql_edge_address
