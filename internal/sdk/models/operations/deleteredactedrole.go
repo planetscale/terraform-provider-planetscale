@@ -15,7 +15,7 @@ type DeleteRedactedRoleRequest struct {
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// The ID of the role
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// The optional role to reassign ownership to before dropping
+	// The optional role to reassign ownership to before dropping. Accepts the role's ID, or its username with or without the branch ID suffix.
 	Successor *string `queryParam:"style=form,explode=true,name=successor"`
 }
 

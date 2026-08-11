@@ -406,6 +406,8 @@ type ListVitessBranchBackupsResponseBody struct {
 	Type string `json:"type"`
 	// The current page number
 	CurrentPage int64 `json:"current_page"`
+	// The maximum number of results per page
+	PerPage int64 `json:"per_page"`
 	// The next page number, or null when this is the last page
 	NextPage *int64 `json:"next_page"`
 	// The next page of results, or null when this is the last page
@@ -429,6 +431,13 @@ func (l *ListVitessBranchBackupsResponseBody) GetCurrentPage() int64 {
 		return 0
 	}
 	return l.CurrentPage
+}
+
+func (l *ListVitessBranchBackupsResponseBody) GetPerPage() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.PerPage
 }
 
 func (l *ListVitessBranchBackupsResponseBody) GetNextPage() *int64 {

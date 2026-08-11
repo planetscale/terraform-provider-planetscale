@@ -8,6 +8,9 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.requestBody.content['application/json'].schema.properties.storage
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.requestBody.content['application/json'].schema.properties.keyspace_cluster_sizes
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter
     update:
@@ -237,11 +240,32 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.updated_at
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_autoscaling
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_autoscaling
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_autoscaling
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_count
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_count
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_count
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_max_count
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_max_count
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_max_count
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_name
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_name
     remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_options
@@ -256,6 +280,13 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_size
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_size
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.responses['200'].content['application/json'].schema.properties.vtgate_target_cpu_utilization
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.responses['201'].content['application/json'].schema.properties.vtgate_target_cpu_utilization
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].patch.responses['200'].content['application/json'].schema.properties.vtgate_target_cpu_utilization
     remove: true
 
   # Copy and split out branch resources by kind

@@ -451,8 +451,8 @@ func (s *DatabaseBranches) getPostgresBranchWaitForReady(ctx context.Context, ho
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `write_branches` |
-// | Database | `write_branches` |
+// | Organization | `write_branches`, `write_databases` |
+// | Database | `write_branches`, `write_database` |
 // | Branch | `write_branch` |
 func (s *DatabaseBranches) UpdatePostgresBranch(ctx context.Context, request operations.UpdatePostgresBranchRequest, opts ...operations.Option) (*operations.UpdatePostgresBranchResponse, error) {
 	o := operations.Options{}
@@ -1155,8 +1155,8 @@ func (s *DatabaseBranches) getVitessBranchWaitForReady(ctx context.Context, hook
 //	| Resource | Scopes |
 //
 // | :------- | :---------- |
-// | Organization | `write_branches` |
-// | Database | `write_branches` |
+// | Organization | `write_branches`, `write_databases` |
+// | Database | `write_branches`, `write_database` |
 // | Branch | `write_branch` |
 func (s *DatabaseBranches) UpdateVitessBranch(ctx context.Context, request operations.UpdateVitessBranchRequest, opts ...operations.Option) (*operations.UpdateVitessBranchResponse, error) {
 	o := operations.Options{}

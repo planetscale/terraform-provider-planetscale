@@ -40,7 +40,7 @@ resource "planetscale_postgres_branch_role" "my_postgresbranchrole" {
 
 - `inherited_roles` (Set of String) Roles to inherit from. Requires replacement if changed.
 - `name` (String) The name of the role
-- `successor` (String) The optional role to reassign ownership to before dropping
+- `successor` (String) The optional role to reassign ownership to before dropping. Accepts the role's ID, or its username with or without the branch ID suffix.
 - `ttl` (Number) Time to live in seconds. Requires replacement if changed.
 - `with_replication` (Boolean) Whether the role should have the REPLICATION attribute. Requires replacement if changed.
 

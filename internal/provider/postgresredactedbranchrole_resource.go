@@ -208,7 +208,7 @@ func (r *PostgresRedactedBranchRoleResource) Schema(ctx context.Context, req res
 			},
 			"successor": schema.StringAttribute{
 				Optional:    true,
-				Description: `The optional role to reassign ownership to before dropping`,
+				Description: `The optional role to reassign ownership to before dropping. Accepts the role's ID, or its username with or without the branch ID suffix.`,
 			},
 			"ttl": schema.Int64Attribute{
 				Computed: true,
