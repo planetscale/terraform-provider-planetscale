@@ -5,8 +5,8 @@ management:
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
-  releaseVersion: 1.7.0
-  configChecksum: beb7ff10230ab6a6c04a8bf7541a23d4
+  releaseVersion: 1.7.1
+  configChecksum: ee312a8aca8eb27bc1d68e7e3936ce3f
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
