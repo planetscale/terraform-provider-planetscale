@@ -164,8 +164,9 @@ actions:
         type: boolean
         description: >-
           True while any unfinished resize request exists for the keyspace.
-          The provider waits for this to become false after create and update
-          before returning.
+          Computed for observability; apply waits on ready, resizing,
+          resize_pending, and config_change_in_progress instead, because this
+          flag can lag after the resize has already applied.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.required
     update:
       - resize_in_progress
@@ -175,8 +176,9 @@ actions:
         type: boolean
         description: >-
           True while any unfinished resize request exists for the keyspace.
-          The provider waits for this to become false after create and update
-          before returning.
+          Computed for observability; apply waits on ready, resizing,
+          resize_pending, and config_change_in_progress instead, because this
+          flag can lag after the resize has already applied.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.required
     update:
       - resize_in_progress
@@ -225,9 +227,11 @@ actions:
             - condition: $response.body#/ready == true
             - condition: $response.body#/resizing == false
             - condition: $response.body#/resize_pending == false
-            # resize_pending only covers a queued request, so it can clear while a resize is still
-            # running and the next resize PUT would be rejected with a 422.
-            - condition: $response.body#/resize_in_progress == false
+            # Do not wait on resize_in_progress: under load the API can leave it
+            # true for 30m+ after resizing/resize_pending clear and the desired
+            # size/replicas are already applied (CI Acc hung on that). Keep the
+            # attribute computed for observability; consecutive rapid resizes may
+            # still 422 if a request is actually unfinished.
             - condition: $response.body#/config_change_in_progress == false
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.parameters[?@.name == 'keyspace']

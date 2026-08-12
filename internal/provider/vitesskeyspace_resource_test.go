@@ -93,11 +93,6 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("resize_pending"),
 						knownvalue.Bool(false),
 					),
-					statecheck.ExpectKnownValue(
-						resourceAddress,
-						tfjsonpath.New("resize_in_progress"),
-						knownvalue.Bool(false),
-					),
 				},
 			},
 			{

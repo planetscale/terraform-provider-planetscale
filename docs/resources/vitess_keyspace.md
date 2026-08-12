@@ -71,7 +71,7 @@ resource "planetscale_vitess_keyspace" "example" {
 - `ready` (Boolean) Is the keyspace provisioned and serving traffic
 - `replicas` (Number) Total number of replicas in the keyspace
 - `replication_durability_constraints` (Attributes) (see [below for nested schema](#nestedatt--replication_durability_constraints))
-- `resize_in_progress` (Boolean) True while any unfinished resize request exists for the keyspace. The provider waits for this to become false after create and update before returning.
+- `resize_in_progress` (Boolean) True while any unfinished resize request exists for the keyspace. Computed for observability; apply waits on ready, resizing, resize_pending, and config_change_in_progress instead, because this flag can lag after the resize has already applied.
 - `resize_pending` (Boolean) True while a resize request is queued. The provider waits for this to become false after create and update.
 - `resizing` (Boolean) True while the keyspace is actively resizing. The provider waits for this to become false after create and update.
 - `sharded` (Boolean) If the keyspace is sharded

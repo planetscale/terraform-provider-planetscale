@@ -192,7 +192,7 @@ type GetKeyspaceResponseBody struct {
 	NodeTTLStrategy                  GetKeyspaceNodeTTLStrategy                  `json:"node_ttl_strategy"`
 	ReplicationDurabilityConstraints GetKeyspaceReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                GetKeyspaceVreplicationFlags                `json:"vreplication_flags"`
-	// True while any unfinished resize request exists for the keyspace. The provider waits for this to become false after create and update before returning.
+	// True while any unfinished resize request exists for the keyspace. Computed for observability; apply waits on ready, resizing, resize_pending, and config_change_in_progress instead, because this flag can lag after the resize has already applied.
 	ResizeInProgress bool `json:"resize_in_progress"`
 }
 

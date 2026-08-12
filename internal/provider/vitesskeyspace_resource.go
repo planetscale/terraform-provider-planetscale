@@ -167,7 +167,7 @@ func (r *VitessKeyspaceResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"resize_in_progress": schema.BoolAttribute{
 				Computed:    true,
-				Description: `True while any unfinished resize request exists for the keyspace. The provider waits for this to become false after create and update before returning.`,
+				Description: `True while any unfinished resize request exists for the keyspace. Computed for observability; apply waits on ready, resizing, resize_pending, and config_change_in_progress instead, because this flag can lag after the resize has already applied.`,
 			},
 			"resize_pending": schema.BoolAttribute{
 				Computed:    true,
