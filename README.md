@@ -72,6 +72,7 @@ Available configuration:
 * [planetscale_vitess_branch](docs/resources/vitess_branch.md)
 * [planetscale_vitess_branch_backup](docs/resources/vitess_branch_backup.md)
 * [planetscale_vitess_branch_password](docs/resources/vitess_branch_password.md)
+* [planetscale_vitess_keyspace](docs/resources/vitess_keyspace.md)
 
 ### Data Sources
 
@@ -97,6 +98,8 @@ Available configuration:
 * [planetscale_vitess_branch_backups](docs/data-sources/vitess_branch_backups.md)
 * [planetscale_vitess_branch_password](docs/data-sources/vitess_branch_password.md)
 * [planetscale_vitess_branch_passwords](docs/data-sources/vitess_branch_passwords.md)
+* [planetscale_vitess_keyspace](docs/data-sources/vitess_keyspace.md)
+* [planetscale_vitess_keyspaces](docs/data-sources/vitess_keyspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

@@ -62,6 +62,12 @@ type PlanetScale struct {
 	//           Resources for managing cluster changes.
 	//
 	BranchChanges *BranchChanges
+	//           Resources for managing keyspaces.
+	//
+	DatabaseBranchKeyspaces *DatabaseBranchKeyspaces
+	//           Resources for managing keyspace resize requests.
+	//
+	KeyspaceResizes *KeyspaceResizes
 	//           Resources for managing database branch passwords.
 	//
 	DatabaseBranchPasswords *DatabaseBranchPasswords
@@ -178,6 +184,8 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Bouncers = newBouncers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.DatabaseBranchKeyspaces = newDatabaseBranchKeyspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.KeyspaceResizes = newKeyspaceResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)

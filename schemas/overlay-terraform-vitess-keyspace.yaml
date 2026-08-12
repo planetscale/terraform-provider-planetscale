@@ -1,0 +1,288 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_vitess_keyspace managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: VitessKeyspace#create
+      x-speakeasy-entity-description: >-
+        Manage an additional PlanetScale Vitess keyspace on a branch.
+
+        Creating a `planetscale_vitess_branch` already provisions the branch's
+        **default** keyspace. Do not create that keyspace with this resource;
+        import it if you need to manage its size or replicas in Terraform.
+
+        `cluster_size` and `extra_replicas` update in place (the provider calls
+        the keyspace resize API and waits until the resize finishes). Prefer
+        this resource for resizing any keyspace. Changing
+        `planetscale_vitess_branch.cluster_size` still replaces the branch.
+
+        Apply can take several minutes while a keyspace is provisioning or
+        resizing. Replication durability, vreplication flags, and vector pool
+        allocation are read-only in this provider version.
+
+  # Speakeasy docs put resource MarkdownDescription on the entity schema.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: VitessKeyspace
+      x-speakeasy-entity-description: >-
+        Manage an additional PlanetScale Vitess keyspace on a branch.
+
+        Creating a `planetscale_vitess_branch` already provisions the branch's
+        **default** keyspace. Do not create that keyspace with this resource;
+        import it if you need to manage its size or replicas in Terraform.
+
+        `cluster_size` and `extra_replicas` update in place (the provider calls
+        the keyspace resize API and waits until the resize finishes). Prefer
+        this resource for resizing any keyspace. Changing
+        `planetscale_vitess_branch.cluster_size` still replaces the branch.
+
+        Apply can take several minutes while a keyspace is provisioning or
+        resizing. Replication durability, vreplication flags, and vector pool
+        allocation are read-only in this provider version.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.requestBody.content["application/json"].schema.properties.cluster_size
+    update:
+      description: >-
+        The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in
+        place via a keyspace resize. Use the List available cluster sizes
+        endpoint for options for your organization.
+      x-speakeasy-plan-validators: VitessClusterSizeValidator
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.requestBody.content["application/json"].schema.properties.extra_replicas
+    update:
+      description: >-
+        The number of additional replicas beyond the included default. Updates
+        in place via a keyspace resize.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.requestBody.content["application/json"].schema.properties.shards
+    update:
+      description: >-
+        The number of shards. Default: 1. Set only at create time; changing
+        this value requires replacement.
+
+  # A keyspace belongs to one branch, so changing where it lives means a different keyspace. Without
+  # this, editing one of these sends the resize to the keyspace at the new address instead.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  # The keyspace response schema is repeated inline per operation, so each response Terraform reads
+  # from (create and read) needs the same treatment.
+  # cluster_name is the API's name for what create and update send as cluster_size; mapping it keeps
+  # one attribute that refreshes from the API instead of a write-only value plus a read-only twin.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+      description: >-
+        The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in
+        place via a keyspace resize.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+      description: >-
+        The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in
+        place via a keyspace resize.
+
+  # `default` is a reserved word in Go/HCL.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+      description: >-
+        True when this is the branch's default keyspace (usually created with
+        the branch). Import that keyspace to manage its size or replicas; do
+        not try to create it with this resource.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+      description: >-
+        True when this is the branch's default keyspace (usually created with
+        the branch). Import that keyspace to manage its size or replicas; do
+        not try to create it with this resource.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.resizing
+    update:
+      description: >-
+        True while the keyspace is actively resizing. The provider waits for
+        this to become false after create and update.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.resizing
+    update:
+      description: >-
+        True while the keyspace is actively resizing. The provider waits for
+        this to become false after create and update.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.resize_pending
+    update:
+      description: >-
+        True while a resize request is queued. The provider waits for this to
+        become false after create and update.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.resize_pending
+    update:
+      description: >-
+        True while a resize request is queued. The provider waits for this to
+        become false after create and update.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.shards
+    update:
+      description: >-
+        The number of shards. Set only at create time; changing this value
+        requires replacement.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.shards
+    update:
+      description: >-
+        The number of shards. Set only at create time; changing this value
+        requires replacement.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.extra_replicas
+    update:
+      description: >-
+        The number of additional replicas beyond the included default. Updates
+        in place via a keyspace resize.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.extra_replicas
+    update:
+      description: >-
+        The number of additional replicas beyond the included default. Updates
+        in place via a keyspace resize.
+
+  # The API returns resize_in_progress but it is not published in the upstream spec yet. Drop these
+  # once it shows up in schemas/openapi.yaml after a make download-openapi.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties
+    update:
+      resize_in_progress:
+        type: boolean
+        description: >-
+          True while any unfinished resize request exists for the keyspace.
+          The provider waits for this to become false after create and update
+          before returning.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties
+    update:
+      resize_in_progress:
+        type: boolean
+        description: >-
+          True while any unfinished resize request exists for the keyspace.
+          The provider waits for this to become false after create and update
+          before returning.
+
+  # Free-form option maps are noisy and not managed in v1.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.mysqld_options
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.vttablet_options
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.required[?@ == 'mysqld_options']
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.required[?@ == 'vttablet_options']
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.mysqld_options
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.vttablet_options
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.required[?@ == 'mysqld_options']
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.required[?@ == 'vttablet_options']
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get
+    description: API operation for data and managed resource read, with create/update polling until ready.
+    update:
+      x-speakeasy-entity-operation:
+        - VitessKeyspace#read
+        - entityOperation: VitessKeyspace#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: VitessKeyspace#update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: >-
+        Look up a PlanetScale Vitess keyspace. See the managed resource for
+        create, resize, and default-keyspace guidance.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 180 # 30 minutes at a 10 second interval, plus initial 30 second delay
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/ready == true
+            - condition: $response.body#/resizing == false
+            - condition: $response.body#/resize_pending == false
+            # resize_pending only covers a queued request, so it can clear while a resize is still
+            # running and the next resize PUT would be rejected with a 422.
+            - condition: $response.body#/resize_in_progress == false
+            - condition: $response.body#/config_change_in_progress == false
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.parameters[?@.name == 'keyspace']
+    description: The keyspace path parameter is the keyspace name.
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: VitessKeyspace#delete
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].delete.parameters[?@.name == 'keyspace']
+    description: The keyspace path parameter is the keyspace name.
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes"].put
+    description: API operation for managed resource update (cluster_size / extra_replicas).
+    update:
+      x-speakeasy-entity-operation: VitessKeyspace#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes"].put.requestBody.content["application/json"].schema.properties.cluster_size
+    update:
+      description: >-
+        The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in
+        place via a keyspace resize.
+      x-speakeasy-plan-validators: VitessClusterSizeValidator
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes"].put.requestBody.content["application/json"].schema.properties.extra_replicas
+    update:
+      description: >-
+        The number of additional replicas beyond the included default. Updates
+        in place via a keyspace resize.
+
+  # vector_pool_allocation is accepted by the API but not managed in v1.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes"].put.requestBody.content["application/json"].schema.properties.vector_pool_allocation
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes"].put.parameters[?@.name == 'keyspace']
+    description: The keyspace path parameter is the keyspace name.
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes"].put.responses["200"].content["application/json"].schema
+    description: Drop the resize request shape so update does not map its fields onto the keyspace resource.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes"].put.responses["200"].content["application/json"]
+    description: Ignore resize-request response shape; Terraform polls GET keyspace for final state.
+    update:
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            x-speakeasy-name-override: resize_request_id
+            x-speakeasy-terraform-ignore: schema
+          state:
+            type: string
+            x-speakeasy-name-override: resize_request_state
+            x-speakeasy-terraform-ignore: schema
+        required:
+          - id
+          - state
