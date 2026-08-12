@@ -2,12 +2,18 @@
 * `speakeasy` generates this provider from an OpenAPI schema and overlays; do not modify generated Go files directly outside of tests
 * The upstream schema is `schemas/openapi.yaml`. Never hand-edit it — refresh it with `make download-openapi`
 * All customization happens via overlay files in `schemas/` (`overlay-terraform-*.yaml`), composed in order by `.speakeasy/workflow.yaml`. `schemas/out.openapi.yaml` is the generated merge result; don't edit it
-* After changing a schema or overlay, run `make generate`
+* OpenAPI update PRs only refresh the schema. Check them out, adjust overlays, run `make generate`, and review the complete generated diff before merging
+* Use overlays to keep unrelated or UI-only API fields out of Terraform
 
 # Bash commands
 * make generate: regenerate the Terraform provider from the OpenAPI schema and overlays
 * make download-openapi: download the latest OpenAPI schema from PlanetScale
 * make update-speakeasy: update the `speakeasy` CLI
+
+# Terraform design
+* Put settings on the resource that owns them; add a separate resource only for an object with its own long-lived lifecycle
+* Use public IDs for stable resource identity
+* API operations used in generated create or update chains must safely handle unchanged desired state
 
 # Adding a new resource
 * Add a new `overlay-terraform-<name>.yaml` (and a plural variant for the corresponding list data source, if any) and register it under `sources.overlays` in `.speakeasy/workflow.yaml`
@@ -15,8 +21,10 @@
 * Look at an existing overlay (e.g. `schemas/overlay-terraform-vitess-branch.yaml`) for the conventions this repo follows
 
 # Async operations
-* If create/update doesn't return the resource in its final state, chain a second step onto the `read` operation: add an `entityOperation: EntityName#create#2` (or `#update#2`) entry with `options.polling.name` alongside the normal `#read` entry, then define that named poller via `x-speakeasy-polling` (delay/interval/limit + `successCriteria`/`failureCriteria` over `$statusCode`/`$response.body`)
-* See `schemas/overlay-terraform-vitess-branch.yaml` (`WaitForReady`) and `schemas/overlay-terraform-postgres-branch-backup.yaml` (`WaitForComplete`) for working examples of both a state-based and a terminal-status-based poller
+* Poll after the write that starts the async work
+* If the resource read reports completion, chain it after create or update and configure `x-speakeasy-polling`
+* If the write returns a separate operation, poll that operation by ID and define explicit success and failure criteria
+* See `schemas/overlay-terraform-vitess-branch.yaml` and `schemas/overlay-terraform-postgres-branch-backup.yaml` for working examples
 
 # Testing
 * Acceptance tests use Terraform configs from `internal/provider/testdata/`
