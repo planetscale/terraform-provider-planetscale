@@ -212,7 +212,7 @@ type ListKeyspacesData struct {
 	ReplicationDurabilityConstraints ListKeyspacesReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                ListKeyspacesVreplicationFlags                `json:"vreplication_flags"`
 	// True while any unfinished resize request exists for the keyspace.
-	ResizeInProgress *bool `json:"resize_in_progress,omitzero"`
+	ResizeInProgress bool `json:"resize_in_progress"`
 }
 
 func (l *ListKeyspacesData) GetID() string {
@@ -362,9 +362,9 @@ func (l *ListKeyspacesData) GetVreplicationFlags() ListKeyspacesVreplicationFlag
 	return l.VreplicationFlags
 }
 
-func (l *ListKeyspacesData) GetResizeInProgress() *bool {
+func (l *ListKeyspacesData) GetResizeInProgress() bool {
 	if l == nil {
-		return nil
+		return false
 	}
 	return l.ResizeInProgress
 }

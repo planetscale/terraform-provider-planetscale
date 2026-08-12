@@ -156,6 +156,8 @@ actions:
 
   # The API returns resize_in_progress but it is not published in the upstream spec yet. Drop these
   # once it shows up in schemas/openapi.yaml after a make download-openapi.
+  # Mark required so Speakeasy generates a non-pointer bool; optional *bool would make WaitForReady
+  # treat a missing field as "not ready yet" and poll until the 30-minute limit.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties
     update:
       resize_in_progress:
@@ -164,6 +166,9 @@ actions:
           True while any unfinished resize request exists for the keyspace.
           The provider waits for this to become false after create and update
           before returning.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.required
+    update:
+      - resize_in_progress
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties
     update:
       resize_in_progress:
@@ -172,6 +177,9 @@ actions:
           True while any unfinished resize request exists for the keyspace.
           The provider waits for this to become false after create and update
           before returning.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.required
+    update:
+      - resize_in_progress
 
   # Free-form option maps are noisy and not managed in v1.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.mysqld_options

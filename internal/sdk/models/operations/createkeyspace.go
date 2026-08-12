@@ -242,7 +242,7 @@ type CreateKeyspaceResponseBody struct {
 	ReplicationDurabilityConstraints CreateKeyspaceReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                CreateKeyspaceVreplicationFlags                `json:"vreplication_flags"`
 	// True while any unfinished resize request exists for the keyspace. The provider waits for this to become false after create and update before returning.
-	ResizeInProgress *bool `json:"resize_in_progress,omitzero"`
+	ResizeInProgress bool `json:"resize_in_progress"`
 }
 
 func (c *CreateKeyspaceResponseBody) GetID() string {
@@ -392,9 +392,9 @@ func (c *CreateKeyspaceResponseBody) GetVreplicationFlags() CreateKeyspaceVrepli
 	return c.VreplicationFlags
 }
 
-func (c *CreateKeyspaceResponseBody) GetResizeInProgress() *bool {
+func (c *CreateKeyspaceResponseBody) GetResizeInProgress() bool {
 	if c == nil {
-		return nil
+		return false
 	}
 	return c.ResizeInProgress
 }

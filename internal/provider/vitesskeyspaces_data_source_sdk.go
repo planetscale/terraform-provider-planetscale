@@ -40,7 +40,7 @@ func (r *VitessKeyspacesDataSourceModel) RefreshFromOperationsListKeyspacesRespo
 			} else {
 				data.ReplicationDurabilityConstraints.Strategy = types.StringNull()
 			}
-			data.ResizeInProgress = types.BoolPointerValue(dataItem.ResizeInProgress)
+			data.ResizeInProgress = types.BoolValue(dataItem.ResizeInProgress)
 			data.ResizePending = types.BoolValue(dataItem.ResizePending)
 			data.Resizing = types.BoolValue(dataItem.Resizing)
 			data.Sharded = types.BoolValue(dataItem.Sharded)

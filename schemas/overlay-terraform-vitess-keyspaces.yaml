@@ -86,6 +86,9 @@ actions:
         type: boolean
         description: >-
           True while any unfinished resize request exists for the keyspace.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.required
+    update:
+      - resize_in_progress
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.mysqld_options
     remove: true

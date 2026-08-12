@@ -1616,6 +1616,7 @@ paths:
                         - node_ttl_strategy
                         - replication_durability_constraints
                         - vreplication_flags
+                        - resize_in_progress
                 required:
                   - type
                   - current_page
@@ -1829,6 +1830,7 @@ paths:
                   - node_ttl_strategy
                   - replication_durability_constraints
                   - vreplication_flags
+                  - resize_in_progress
                 x-speakeasy-entity: VitessKeyspace
                 x-speakeasy-entity-description: >-
                   Manage an additional PlanetScale Vitess keyspace on a branch.
@@ -2020,6 +2022,7 @@ paths:
                   - node_ttl_strategy
                   - replication_durability_constraints
                   - vreplication_flags
+                  - resize_in_progress
         "401":
           description: Unauthorized
         "403":

@@ -602,11 +602,7 @@ func (s *DatabaseBranchKeyspaces) getKeyspaceWaitForReady(ctx context.Context, h
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.Object.ResizeInProgress != nil
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = *res.Object.ResizeInProgress == false
+			successCriteriaMet = res.Object.ResizeInProgress == false
 		}
 
 		if successCriteriaMet {

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 4a510d64edadda2db3bbc1ccbf152b44
+  docChecksum: a89fa11390fb891381fb01cf33f93322
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -1198,7 +1198,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 1511.55, "per_page": 151155, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "node_ttl_strategy": "node_ttl_always", "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}}]}
+          application/json: {"type": "<value>", "current_page": 1511.55, "per_page": 151155, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "node_ttl_strategy": "node_ttl_always", "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}, "resize_in_progress": true}]}
   create_keyspace:
     speakeasy-default-create-keyspace:
       parameters:
@@ -1208,7 +1208,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": false, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "node_ttl_strategy": "node_ttl_always", "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": false, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "node_ttl_strategy": "node_ttl_always", "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}, "resize_in_progress": false}
   get_keyspace:
     speakeasy-default-get-keyspace:
       parameters:
@@ -1220,7 +1220,7 @@ examples:
           keyspace: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "config_change_in_progress": false, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "node_ttl_strategy": "node_ttl_follow_maintenance", "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "config_change_in_progress": false, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "node_ttl_strategy": "node_ttl_follow_maintenance", "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}, "resize_in_progress": false}
   update_keyspace:
     speakeasy-default-update-keyspace:
       parameters:

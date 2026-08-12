@@ -33,7 +33,7 @@ func (r *VitessKeyspaceResourceModel) RefreshFromOperationsCreateKeyspaceRespons
 		} else {
 			r.ReplicationDurabilityConstraints.Strategy = types.StringNull()
 		}
-		r.ResizeInProgress = types.BoolPointerValue(resp.ResizeInProgress)
+		r.ResizeInProgress = types.BoolValue(resp.ResizeInProgress)
 		r.ResizePending = types.BoolValue(resp.ResizePending)
 		r.Resizing = types.BoolValue(resp.Resizing)
 		r.Sharded = types.BoolValue(resp.Sharded)
@@ -72,7 +72,7 @@ func (r *VitessKeyspaceResourceModel) RefreshFromOperationsGetKeyspaceResponseBo
 		} else {
 			r.ReplicationDurabilityConstraints.Strategy = types.StringNull()
 		}
-		r.ResizeInProgress = types.BoolPointerValue(resp.ResizeInProgress)
+		r.ResizeInProgress = types.BoolValue(resp.ResizeInProgress)
 		r.ResizePending = types.BoolValue(resp.ResizePending)
 		r.Resizing = types.BoolValue(resp.Resizing)
 		r.Sharded = types.BoolValue(resp.Sharded)
