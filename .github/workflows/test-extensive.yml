@@ -51,7 +51,7 @@ jobs:
     name: integration-terraform (${{ matrix.terraform }})
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -79,13 +79,15 @@ jobs:
           # Dedicated backup branch so concurrent jobs don't contend for the
           # API's single in-flight manual backup per branch.
           PLANETSCALE_TEST_BRANCH: ${{ matrix.branch }}
-        timeout-minutes: 30
+        # Keyspace Acc adds ~2m; under three concurrent matrices Vitess
+        # provisioning can stretch wall clock past the old 30m step limit.
+        timeout-minutes: 60
 
   test-tofu:
     name: integration-tofu (${{ matrix.tofu }})
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     strategy:
       max-parallel: 2
       fail-fast: false
@@ -111,4 +113,4 @@ jobs:
           # Dedicated backup branch so concurrent jobs don't contend for the
           # API's single in-flight manual backup per branch.
           PLANETSCALE_TEST_BRANCH: ${{ matrix.branch }}
-        timeout-minutes: 30
+        timeout-minutes: 60
