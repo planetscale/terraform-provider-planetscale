@@ -28,6 +28,10 @@ actions:
         description: The kind of database. Always neki for planetscale_neki_branch.
         x-speakeasy-terraform-ignore: schema
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties.kind.enum
+    description: Remove the upstream mysql/postgresql enum; this path always sends the Neki const.
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties.seed_data
     description: Remove the Vitess-only seed option.
     remove: true
