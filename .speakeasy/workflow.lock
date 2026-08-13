@@ -2,8 +2,8 @@ speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:4da383cfdd2348680ebefd30717a4393cc812c51cb6bd7086d97f2b33cdc124d
-        sourceBlobDigest: sha256:57fe8f8798e6c875238ac3c0fd0c401308e6cd532107ad696fe866af22f64ecf
+        sourceRevisionDigest: sha256:3d1cd827dae8096c37e2036a6cacb43ea4910a7dc5a26272911b3ede72d08d2c
+        sourceBlobDigest: sha256:6d935b11d6fb537cd93ab201957f4aaf4ffd5ac6a608f78e8ffe8ef90ddec0a3
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:4da383cfdd2348680ebefd30717a4393cc812c51cb6bd7086d97f2b33cdc124d
-        sourceBlobDigest: sha256:57fe8f8798e6c875238ac3c0fd0c401308e6cd532107ad696fe866af22f64ecf
+        sourceRevisionDigest: sha256:3d1cd827dae8096c37e2036a6cacb43ea4910a7dc5a26272911b3ede72d08d2c
+        sourceBlobDigest: sha256:6d935b11d6fb537cd93ab201957f4aaf4ffd5ac6a608f78e8ffe8ef90ddec0a3
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.793.0
@@ -22,14 +22,20 @@ workflow:
                 - location: schemas/openapi.yaml
             overlays:
                 - location: schemas/overlay-terraform.yaml
+                - location: schemas/overlay-terraform-neki-api.yaml
                 - location: schemas/overlay-terraform-branches.yaml
                 - location: schemas/overlay-terraform-postgres-branch.yaml
                 - location: schemas/overlay-terraform-vitess-branch.yaml
+                - location: schemas/overlay-terraform-neki-branch.yaml
                 - location: schemas/overlay-terraform-database_vitess.yaml
                 - location: schemas/overlay-terraform-database_postgres.yaml
+                - location: schemas/overlay-terraform-database_neki.yaml
                 - location: schemas/overlay-terraform-databases.yaml
                 - location: schemas/overlay-terraform-organization.yaml
                 - location: schemas/overlay-terraform-organizations.yaml
+                - location: schemas/overlay-terraform-neki-branch-role.yaml
+                - location: schemas/overlay-terraform-neki-redacted-branch-role.yaml
+                - location: schemas/overlay-terraform-neki-branch-roles.yaml
                 - location: schemas/overlay-terraform-postgres-branch-role.yaml
                 - location: schemas/overlay-terraform-postgres-redacted-branch-role.yaml
                 - location: schemas/overlay-terraform-postgres-branch-roles.yaml
@@ -37,16 +43,22 @@ workflow:
                 - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
                 - location: schemas/overlay-terraform-vitess-keyspace.yaml
                 - location: schemas/overlay-terraform-vitess-keyspaces.yaml
+                - location: schemas/overlay-terraform-neki-configuration-profile.yaml
+                - location: schemas/overlay-terraform-neki-configuration-profiles.yaml
                 - location: schemas/overlay-terraform-backup-policies.yaml
                 - location: schemas/overlay-terraform-vitess-backup-policy.yaml
                 - location: schemas/overlay-terraform-postgres-backup-policy.yaml
+                - location: schemas/overlay-terraform-neki-backup-policy.yaml
                 - location: schemas/overlay-terraform-vitess-backup-policies.yaml
                 - location: schemas/overlay-terraform-postgres-backup-policies.yaml
+                - location: schemas/overlay-terraform-neki-backup-policies.yaml
                 - location: schemas/overlay-terraform-backups.yaml
                 - location: schemas/overlay-terraform-vitess-branch-backup.yaml
                 - location: schemas/overlay-terraform-postgres-branch-backup.yaml
+                - location: schemas/overlay-terraform-neki-branch-backup.yaml
                 - location: schemas/overlay-terraform-vitess-branch-backups.yaml
                 - location: schemas/overlay-terraform-postgres-branch-backups.yaml
+                - location: schemas/overlay-terraform-neki-branch-backups.yaml
                 - location: schemas/overlay-terraform-postgres-bouncer.yaml
                 - location: schemas/overlay-terraform-postgres-bouncers.yaml
                 - location: schemas/overlay-terraform-cleanup.yaml

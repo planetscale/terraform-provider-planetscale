@@ -74,8 +74,9 @@ type PlanetScale struct {
 	APIBranchResizes        *APIBranchResizes
 	//           Resources for managing role credentials.
 	//
-	Roles            *Roles
-	DatabaseBranches *DatabaseBranches
+	Roles                     *Roles
+	DatabaseBranches          *DatabaseBranches
+	NekiConfigurationProfiles *NekiConfigurationProfiles
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
@@ -190,6 +191,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.NekiConfigurationProfiles = newNekiConfigurationProfiles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 

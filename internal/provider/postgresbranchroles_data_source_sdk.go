@@ -27,7 +27,7 @@ func (r *PostgresBranchRolesDataSourceModel) RefreshFromOperationsListRolesRespo
 			data.Actor.DisplayName = types.StringValue(dataItem.Actor.DisplayName)
 			data.Actor.ID = types.StringValue(dataItem.Actor.ID)
 			data.BaseUsername = types.StringValue(dataItem.BaseUsername)
-			data.Branch = &tfTypes.Branch{}
+			data.Branch = &tfTypes.ListRolesBranch{}
 			data.Branch.CreatedAt = types.StringValue(dataItem.Branch.CreatedAt)
 			data.Branch.DeletedAt = types.StringPointerValue(dataItem.Branch.DeletedAt)
 			data.Branch.ID = types.StringValue(dataItem.Branch.ID)

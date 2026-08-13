@@ -10,7 +10,7 @@ type ListRolesData struct {
 	AccessHostURL                types.String                  `tfsdk:"access_host_url"`
 	Actor                        *ListRolesActor               `tfsdk:"actor"`
 	BaseUsername                 types.String                  `tfsdk:"base_username"`
-	Branch                       *Branch                       `tfsdk:"branch"`
+	Branch                       *ListRolesBranch              `tfsdk:"branch"`
 	CreatedAt                    types.String                  `tfsdk:"created_at"`
 	DatabaseName                 types.String                  `tfsdk:"database_name"`
 	Default                      types.Bool                    `tfsdk:"default"`

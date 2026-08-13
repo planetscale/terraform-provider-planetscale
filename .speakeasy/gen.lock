@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: e7b1586a0785515d8c2ba4952c7a853b
+  docChecksum: 5b3d136edc770e815c094a75135000a6
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -38,6 +38,17 @@ trackedFiles:
   examples/data-sources/planetscale_databases/data-source.tf:
     id: 57d3e2281913
     pristine_git_object: 24383b2da1ebc70258141e25e64456a8af0fb022
+  examples/data-sources/planetscale_neki_backup_policies/data-source.tf: {}
+  examples/data-sources/planetscale_neki_backup_policy/data-source.tf: {}
+  examples/data-sources/planetscale_neki_branch/data-source.tf: {}
+  examples/data-sources/planetscale_neki_branch_backup/data-source.tf: {}
+  examples/data-sources/planetscale_neki_branch_backups/data-source.tf: {}
+  examples/data-sources/planetscale_neki_branch_role/data-source.tf: {}
+  examples/data-sources/planetscale_neki_branch_roles/data-source.tf: {}
+  examples/data-sources/planetscale_neki_configuration_profile/data-source.tf: {}
+  examples/data-sources/planetscale_neki_configuration_profiles/data-source.tf: {}
+  examples/data-sources/planetscale_neki_database/data-source.tf: {}
+  examples/data-sources/planetscale_neki_redacted_branch_role/data-source.tf: {}
   examples/data-sources/planetscale_organization/data-source.tf:
     id: 66920cabf1a1
     pristine_git_object: 9f31bb76143f3c25afdb3c8befaa55d7da62d6e0
@@ -78,6 +89,18 @@ trackedFiles:
   examples/provider/provider.tf:
     id: 954e955c0240
     pristine_git_object: 66664be2637146405147ef9bc663d13b453ce3f8
+  examples/resources/planetscale_neki_backup_policy/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_backup_policy/import.sh: {}
+  examples/resources/planetscale_neki_branch/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_branch/import.sh: {}
+  examples/resources/planetscale_neki_branch_backup/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_branch_backup/import.sh: {}
+  examples/resources/planetscale_neki_branch_role/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_branch_role/import.sh: {}
+  examples/resources/planetscale_neki_configuration_profile/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_configuration_profile/import.sh: {}
+  examples/resources/planetscale_neki_redacted_branch_role/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_redacted_branch_role/import.sh: {}
   examples/resources/planetscale_postgres_backup_policy/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_backup_policy/import.sh: {}
   examples/resources/planetscale_postgres_bouncer/import-by-string-id.tf: {}
@@ -196,6 +219,40 @@ trackedFiles:
   internal/provider/databasevitess_data_source_sdk.go:
     id: 10eed77db4ed
     pristine_git_object: c078ca2e83ba8a926f395997aa4daee4ddc9d637
+  internal/provider/nekibackuppolicies_data_source.go: {}
+  internal/provider/nekibackuppolicies_data_source_sdk.go: {}
+  internal/provider/nekibackuppolicy_data_source.go: {}
+  internal/provider/nekibackuppolicy_data_source_sdk.go: {}
+  internal/provider/nekibackuppolicy_resource.go: {}
+  internal/provider/nekibackuppolicy_resource_sdk.go: {}
+  internal/provider/nekibranch_data_source.go: {}
+  internal/provider/nekibranch_data_source_sdk.go: {}
+  internal/provider/nekibranch_resource.go: {}
+  internal/provider/nekibranch_resource_sdk.go: {}
+  internal/provider/nekibranchbackup_data_source.go: {}
+  internal/provider/nekibranchbackup_data_source_sdk.go: {}
+  internal/provider/nekibranchbackup_resource.go: {}
+  internal/provider/nekibranchbackup_resource_sdk.go: {}
+  internal/provider/nekibranchbackups_data_source.go: {}
+  internal/provider/nekibranchbackups_data_source_sdk.go: {}
+  internal/provider/nekibranchrole_data_source.go: {}
+  internal/provider/nekibranchrole_data_source_sdk.go: {}
+  internal/provider/nekibranchrole_resource.go: {}
+  internal/provider/nekibranchrole_resource_sdk.go: {}
+  internal/provider/nekibranchroles_data_source.go: {}
+  internal/provider/nekibranchroles_data_source_sdk.go: {}
+  internal/provider/nekiconfigurationprofile_data_source.go: {}
+  internal/provider/nekiconfigurationprofile_data_source_sdk.go: {}
+  internal/provider/nekiconfigurationprofile_resource.go: {}
+  internal/provider/nekiconfigurationprofile_resource_sdk.go: {}
+  internal/provider/nekiconfigurationprofiles_data_source.go: {}
+  internal/provider/nekiconfigurationprofiles_data_source_sdk.go: {}
+  internal/provider/nekidatabase_data_source.go: {}
+  internal/provider/nekidatabase_data_source_sdk.go: {}
+  internal/provider/nekiredactedbranchrole_data_source.go: {}
+  internal/provider/nekiredactedbranchrole_data_source_sdk.go: {}
+  internal/provider/nekiredactedbranchrole_resource.go: {}
+  internal/provider/nekiredactedbranchrole_resource_sdk.go: {}
   internal/provider/organization_data_source.go:
     id: d22d005e3012
     pristine_git_object: 82a33d8488b23f60aa73688e445ce1e5c225c871
@@ -314,12 +371,25 @@ trackedFiles:
   internal/provider/typeconvert/int.go:
     id: c44fcd78fccc
     pristine_git_object: 54763e7a7555fae6d8bf51c4590220ff610202aa
-  internal/provider/types/branch.go:
-    id: 72a03805427f
-    pristine_git_object: ea5786b8bbcb244f690025648dfa5ec5fbe52bca
   internal/provider/types/create_bouncer_actor.go: {}
   internal/provider/types/get_keyspace_replication_durability_constraints.go: {}
   internal/provider/types/get_keyspace_vreplication_flags.go: {}
+  internal/provider/types/get_neki_branch_actor.go: {}
+  internal/provider/types/get_neki_branch_backup_actor.go: {}
+  internal/provider/types/get_neki_branch_backup_backup_policy.go: {}
+  internal/provider/types/get_neki_branch_backup_database_branch.go: {}
+  internal/provider/types/get_neki_branch_backup_restored_branch.go: {}
+  internal/provider/types/get_neki_branch_backup_schema_snapshot.go: {}
+  internal/provider/types/get_neki_branch_region_data.go: {}
+  internal/provider/types/get_neki_database_data_import.go: {}
+  internal/provider/types/get_neki_database_data_source.go: {}
+  internal/provider/types/get_neki_database_region_data.go: {}
+  internal/provider/types/get_neki_redacted_role_actor_data.go: {}
+  internal/provider/types/get_neki_redacted_role_branch_data.go: {}
+  internal/provider/types/get_neki_redacted_role_query_safety_settings.go: {}
+  internal/provider/types/get_neki_role_actor_data.go: {}
+  internal/provider/types/get_neki_role_branch_data.go: {}
+  internal/provider/types/get_neki_role_query_safety_settings.go: {}
   internal/provider/types/get_password_actor.go:
     id: 34086949be0f
     pristine_git_object: 09f2e6106da7aaf78681c662708280a334e0ae77
@@ -393,6 +463,17 @@ trackedFiles:
   internal/provider/types/list_keyspaces_data.go: {}
   internal/provider/types/list_keyspaces_replication_durability_constraints.go: {}
   internal/provider/types/list_keyspaces_vreplication_flags.go: {}
+  internal/provider/types/list_neki_backup_policies_data.go: {}
+  internal/provider/types/list_neki_branch_backups_actor.go: {}
+  internal/provider/types/list_neki_branch_backups_backup_policy.go: {}
+  internal/provider/types/list_neki_branch_backups_data.go: {}
+  internal/provider/types/list_neki_branch_backups_database_branch.go: {}
+  internal/provider/types/list_neki_branch_backups_restored_branch.go: {}
+  internal/provider/types/list_neki_branch_backups_schema_snapshot.go: {}
+  internal/provider/types/list_neki_roles_actor.go: {}
+  internal/provider/types/list_neki_roles_branch.go: {}
+  internal/provider/types/list_neki_roles_data.go: {}
+  internal/provider/types/list_neki_roles_query_safety_settings.go: {}
   internal/provider/types/list_organizations_data.go:
     id: 18371e48c5b0
     pristine_git_object: acbee94fd837e34920350b6246cc4740fb4911a3
@@ -416,6 +497,7 @@ trackedFiles:
   internal/provider/types/list_roles_actor.go:
     id: 34a6e1993469
     pristine_git_object: 330389882a22ba2344c0af11908f55f7c364731c
+  internal/provider/types/list_roles_branch.go: {}
   internal/provider/types/list_roles_data.go:
     id: efa9512f3de4
     pristine_git_object: bc9fb8d5b39bf7238b248003c48f073b5cc57b2b
@@ -425,6 +507,7 @@ trackedFiles:
   internal/provider/types/list_vitess_branch_backups_backup_policy.go: {}
   internal/provider/types/list_vitess_branch_backups_data.go: {}
   internal/provider/types/list_vitess_branch_backups_database_branch.go: {}
+  internal/provider/types/neki_configuration_profile.go: {}
   internal/provider/utils.go:
     id: 312d50f148af
     pristine_git_object: 2b167edfe9b7df08d35bacb896143fd8c6e3bf8c
@@ -547,6 +630,11 @@ trackedFiles:
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go: {}
   internal/sdk/models/operations/createbouncer.go: {}
   internal/sdk/models/operations/createkeyspace.go: {}
+  internal/sdk/models/operations/createnekibackuppolicy.go: {}
+  internal/sdk/models/operations/createnekibranch.go: {}
+  internal/sdk/models/operations/createnekibranchbackup.go: {}
+  internal/sdk/models/operations/createnekiredactedrole.go: {}
+  internal/sdk/models/operations/createnekirole.go: {}
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     pristine_git_object: e84cf733d521e8be177285c0496c8540f011c362
@@ -559,6 +647,7 @@ trackedFiles:
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
+  internal/sdk/models/operations/createshardconfigurationprofile.go: {}
   internal/sdk/models/operations/createvitessbackuppolicy.go: {}
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
@@ -566,6 +655,11 @@ trackedFiles:
   internal/sdk/models/operations/createvitessbranchbackup.go: {}
   internal/sdk/models/operations/deletebouncer.go: {}
   internal/sdk/models/operations/deletekeyspace.go: {}
+  internal/sdk/models/operations/deletenekibackuppolicy.go: {}
+  internal/sdk/models/operations/deletenekibranch.go: {}
+  internal/sdk/models/operations/deletenekibranchbackup.go: {}
+  internal/sdk/models/operations/deletenekiredactedrole.go: {}
+  internal/sdk/models/operations/deletenekirole.go: {}
   internal/sdk/models/operations/deletepassword.go:
     id: 491914016b46
     pristine_git_object: 00fb90f9f8cb86916ff644e893dc5db362c004cf
@@ -578,6 +672,7 @@ trackedFiles:
   internal/sdk/models/operations/deleterole.go:
     id: 63abc80d4993
     pristine_git_object: 26de167508a6ba14741fd13262ec8137c8d70023
+  internal/sdk/models/operations/deleteshardconfigurationprofile.go: {}
   internal/sdk/models/operations/deletevitessbackuppolicy.go: {}
   internal/sdk/models/operations/deletevitessbranch.go:
     id: d38f63b60ddf
@@ -586,6 +681,12 @@ trackedFiles:
   internal/sdk/models/operations/getbranchchangerequest.go: {}
   internal/sdk/models/operations/getbranchresizerequest.go: {}
   internal/sdk/models/operations/getkeyspace.go: {}
+  internal/sdk/models/operations/getnekibackuppolicy.go: {}
+  internal/sdk/models/operations/getnekibranch.go: {}
+  internal/sdk/models/operations/getnekibranchbackup.go: {}
+  internal/sdk/models/operations/getnekidatabase.go: {}
+  internal/sdk/models/operations/getnekiredactedrole.go: {}
+  internal/sdk/models/operations/getnekirole.go: {}
   internal/sdk/models/operations/getorganization.go:
     id: ebae13951225
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
@@ -605,6 +706,7 @@ trackedFiles:
   internal/sdk/models/operations/getrole.go:
     id: a854350465dd
     pristine_git_object: 019cd3b4fa0b8af2ac8f806b8f0b8ce776a2588e
+  internal/sdk/models/operations/getshardconfigurationprofile.go: {}
   internal/sdk/models/operations/getvitessbackuppolicy.go: {}
   internal/sdk/models/operations/getvitessbranch.go:
     id: 91f8cc51ecc6
@@ -618,6 +720,9 @@ trackedFiles:
     id: 9a615ba562a7
     pristine_git_object: 3b63c0cbb7a174e2c27699547377755e941ee9f2
   internal/sdk/models/operations/listkeyspaces.go: {}
+  internal/sdk/models/operations/listnekibackuppolicies.go: {}
+  internal/sdk/models/operations/listnekibranchbackups.go: {}
+  internal/sdk/models/operations/listnekiroles.go: {}
   internal/sdk/models/operations/listorganizations.go:
     id: 4fe6c8fc6771
     pristine_git_object: bbd5afa074ed22ba3b63edc28064bbb039d72db0
@@ -629,6 +734,7 @@ trackedFiles:
   internal/sdk/models/operations/listroles.go:
     id: ba1976927ea8
     pristine_git_object: 2759d9ffe5333235ea0787dc880ea888ed739c68
+  internal/sdk/models/operations/listshardconfigurationprofiles.go: {}
   internal/sdk/models/operations/listvitessbackuppolicies.go: {}
   internal/sdk/models/operations/listvitessbranchbackups.go: {}
   internal/sdk/models/operations/options.go:
@@ -636,6 +742,10 @@ trackedFiles:
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
   internal/sdk/models/operations/updatebranchresizerequest.go: {}
   internal/sdk/models/operations/updatekeyspaceresizerequest.go: {}
+  internal/sdk/models/operations/updatenekibackuppolicy.go: {}
+  internal/sdk/models/operations/updatenekibranch.go: {}
+  internal/sdk/models/operations/updatenekiredactedrole.go: {}
+  internal/sdk/models/operations/updatenekirole.go: {}
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
@@ -646,11 +756,14 @@ trackedFiles:
     id: eaca616a88af
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
   internal/sdk/models/operations/updatesafemigrations.go: {}
+  internal/sdk/models/operations/updateshardconfigurationprofile.go: {}
   internal/sdk/models/operations/updatevitessbackuppolicy.go: {}
   internal/sdk/models/operations/updatevitessbranch.go: {}
+  internal/sdk/models/shared/nekiconfigurationprofile.go: {}
   internal/sdk/models/shared/security.go:
     id: 9098af98367e
     pristine_git_object: 5bbf429fa7c73f8213d34abbf017df9f6d45b04c
+  internal/sdk/nekiconfigurationprofiles.go: {}
   internal/sdk/optionalnullable/optionalnullable.go:
     id: 4b83aa3f3df3
     pristine_git_object: c6739be0619b6726565e0f11855ffe44b0e5607e
@@ -2627,6 +2740,288 @@ examples:
       responses:
         "200":
           application/json: {"id": "<id>", "state": "<value>"}
+  get_neki_database:
+    speakeasy-default-get-neki-database:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "url": "https://somber-compromise.org", "branches_url": "https://radiant-overheard.org", "branches_count": 625242, "open_schema_recommendations_count": 356036, "development_branches_count": 316440, "production_branches_count": 467373, "multiple_admins_required_for_deletion": false, "ready": true, "at_backup_restore_branches_limit": false, "at_development_branch_usage_limit": true, "region": {"id": "<id>", "provider": "<value>", "enabled": false, "public_ip_addresses": ["<value 1>"], "display_name": "Zack_Smitham", "location": "<value>", "slug": "<value>", "current_default": false, "mysql_supported": false, "postgresql_supported": true}, "html_url": "https://biodegradable-premium.com", "name": "<value>", "state": "awakening", "sharded": false, "default_branch_shard_count": 684862, "default_branch_read_only_regions_count": 861527, "default_branch_table_count": 150261, "default_branch": "<value>", "require_approval_for_deploy": true, "resizing": false, "resize_queued": false, "restrict_branch_region": true, "insights_raw_queries": true, "plan": "<value>", "insights_enabled": true, "production_branch_web_console": true, "created_at": "1705829542017", "updated_at": "1735668725337", "schema_last_updated_at": "<value>", "kind": "neki"}
+  list_neki_roles:
+    speakeasy-default-list-neki-roles:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"type": "<value>", "current_page": 226589, "per_page": 687256, "next_page": 259507, "next_page_url": "https://putrid-pick.info", "prev_page": 946582, "prev_page_url": "https://animated-granny.net", "data": []}
+  create_neki_role:
+    speakeasy-default-create-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://shoddy-abacus.net/", "private_access_host_url": "https://faint-pharmacopoeia.biz/", "private_connection_service_name": "<value>", "username": "Johathan50", "base_username": "<value>", "password": "OgaDK0SvtRI_qUt", "database_name": "<value>", "created_at": "1720295421988", "updated_at": "1735646034060", "deleted_at": "<value>", "expires_at": "1744111392806", "dropped_at": "<value>", "disabled_at": null, "drop_failed": "<value>", "expired": false, "default": true, "ttl": 907978, "inherited_roles": ["pg_monitor"], "with_replication": false, "branch": {"id": "<id>", "name": "<value>", "created_at": "1732703628583", "updated_at": "1735606098525", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Billie.Braun12", "avatar_url": "https://sophisticated-accompanist.name"}, "query_safety_settings": {"require_where_on_delete": "on", "require_where_on_update": "warn"}}
+  get_neki_role:
+    speakeasy-default-get-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://practical-community.org/", "private_access_host_url": "https://sugary-antelope.net", "private_connection_service_name": "<value>", "username": "Alexandria.Rippin76", "base_username": "<value>", "database_name": "<value>", "created_at": "1726247287427", "updated_at": "1735666604395", "deleted_at": "<value>", "expires_at": "1745777775477", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": true, "default": true, "ttl": 965172, "inherited_roles": [], "with_replication": false, "branch": {"id": "<id>", "name": "<value>", "created_at": "1710826647631", "updated_at": "1735631639624", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Cristina.Leffler", "avatar_url": "https://tall-fen.com/"}, "query_safety_settings": {"require_where_on_delete": "warn", "require_where_on_update": "warn"}}
+  update_neki_role:
+    speakeasy-default-update-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://jam-packed-sonar.net/", "private_access_host_url": "https://quarrelsome-ferret.biz/", "private_connection_service_name": "<value>", "username": "Gretchen.Keeling97", "base_username": "<value>", "database_name": "<value>", "created_at": "1733857849103", "updated_at": "1735632581475", "deleted_at": "<value>", "expires_at": "1751831063360", "dropped_at": "<value>", "disabled_at": null, "drop_failed": "<value>", "expired": false, "default": false, "ttl": 940083, "inherited_roles": ["pg_read_all_settings"], "with_replication": false, "branch": {"id": "<id>", "name": "<value>", "created_at": "1723886125257", "updated_at": "1735613398573", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Eusebio64", "avatar_url": "https://miserly-cow.net"}, "query_safety_settings": {"require_where_on_delete": "on", "require_where_on_update": "off"}}
+  delete_neki_role:
+    speakeasy-default-delete-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+  create_neki_redacted_role:
+    speakeasy-default-create-neki-redacted-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://extroverted-stool.org/", "private_access_host_url": "https://big-bidet.name/", "private_connection_service_name": "<value>", "username": "Jay_Steuber", "base_username": "<value>", "password": "5hquoihXXRmH8lY", "database_name": "<value>", "created_at": "1706658984292", "updated_at": "1735604508880", "deleted_at": "<value>", "expires_at": "1743215596878", "dropped_at": "<value>", "disabled_at": "<value>", "drop_failed": "<value>", "expired": false, "default": true, "ttl": 177886, "inherited_roles": [], "with_replication": true, "branch": {"id": "<id>", "name": "<value>", "created_at": "1723872631906", "updated_at": "1735633013027", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Taylor.Murazik55", "avatar_url": "https://monumental-dividend.name"}, "query_safety_settings": {"require_where_on_delete": "on", "require_where_on_update": "off"}}
+  get_neki_redacted_role:
+    speakeasy-default-get-neki-redacted-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://reckless-place.com", "private_access_host_url": "https://fluffy-jellyfish.org", "private_connection_service_name": "<value>", "username": "Billie.Bergnaum", "base_username": "<value>", "database_name": "<value>", "created_at": "1734788911126", "updated_at": "1735613316705", "deleted_at": "<value>", "expires_at": "1755986577105", "dropped_at": null, "disabled_at": "<value>", "drop_failed": "<value>", "expired": true, "default": true, "ttl": 708226, "inherited_roles": ["pg_write_all_data"], "with_replication": true, "branch": {"id": "<id>", "name": "<value>", "created_at": "1709068336963", "updated_at": "1735624232210", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Josianne_Larkin3", "avatar_url": "https://passionate-unit.name/"}, "query_safety_settings": {"require_where_on_delete": "warn", "require_where_on_update": "off"}}
+  update_neki_redacted_role:
+    speakeasy-default-update-neki-redacted-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://impossible-sport.name/", "private_access_host_url": "https://complete-appliance.com/", "private_connection_service_name": "<value>", "username": "Andreanne17", "base_username": "<value>", "database_name": "<value>", "created_at": "1706045045757", "updated_at": "1735680604995", "deleted_at": "<value>", "expires_at": "1746536068241", "dropped_at": "<value>", "disabled_at": null, "drop_failed": "<value>", "expired": true, "default": false, "ttl": 839643, "inherited_roles": ["pg_create_subscription"], "with_replication": true, "branch": {"id": "<id>", "name": "<value>", "created_at": "1713042440077", "updated_at": "1735637721892", "deleted_at": "<value>"}, "actor": {"id": "<id>", "display_name": "Stephany93", "avatar_url": "https://unlucky-obesity.info/"}, "query_safety_settings": {"require_where_on_delete": "off", "require_where_on_update": "on"}}
+  delete_neki_redacted_role:
+    speakeasy-default-delete-neki-redacted-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+  create_neki_branch:
+    speakeasy-default-create-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "state": "ready", "cluster_name": "<value>", "ready": false, "safe_migrations": true, "actor": {"id": "<id>"}, "html_url": "https://sniveling-longboat.biz/", "url": "https://shady-tapioca.name", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
+  get_neki_branch:
+    speakeasy-default-get-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "sleeping", "cluster_name": "<value>", "ready": true, "safe_migrations": false, "actor": {"id": "<id>"}, "html_url": "https://uniform-seagull.info", "url": "https://legal-hyena.name", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true}, "parent_branch": "<value>"}
+  update_neki_branch:
+    speakeasy-default-update-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "pending", "cluster_name": "<value>", "ready": false, "safe_migrations": true, "actor": {"id": "<id>"}, "html_url": "https://smoggy-dandelion.info", "url": "https://everlasting-tenant.biz/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": false}, "parent_branch": "<value>"}
+  delete_neki_branch:
+    speakeasy-default-delete-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+  list_shard_configuration_profiles:
+    speakeasy-default-list-shard-configuration-profiles:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: [{"type": "NekiConfigurationProfile", "name": "<value>", "cluster_size": "<value>", "default": false, "replicas": 236151, "state": "draft"}]
+  create_shard_configuration_profile:
+    speakeasy-default-create-shard-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {"name": "<value>"}
+      responses:
+        "201":
+          application/json: {"type": "NekiConfigurationProfile", "name": "<value>", "cluster_size": "<value>", "default": true, "replicas": 366833, "state": "applying"}
+  get_shard_configuration_profile:
+    speakeasy-default-get-shard-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "200":
+          application/json: {"type": "NekiConfigurationProfile", "name": "<value>", "cluster_size": "<value>", "default": false, "replicas": 17237, "state": "ready"}
+  update_shard_configuration_profile:
+    speakeasy-default-update-shard-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"type": "NekiConfigurationProfile", "name": "<value>", "cluster_size": "<value>", "default": true, "replicas": 638957, "state": "pending"}
+  delete_shard_configuration_profile:
+    speakeasy-default-delete-shard-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+  list_neki_backup_policies:
+    speakeasy-default-list-neki-backup-policies:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"type": "<value>", "current_page": 160793, "per_page": 498956, "next_page": 248923, "next_page_url": "https://squiggly-stool.com", "prev_page": 893368, "prev_page_url": "https://competent-mousse.biz", "data": [{"id": "<id>", "display_name": "Alaina_Casper", "name": "<value>", "target": "development", "retention_value": 791245, "retention_unit": "<value>", "frequency_value": 456043, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 970940, "schedule_week": 575188}]}
+  create_neki_backup_policy:
+    speakeasy-default-create-neki-backup-policy:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "display_name": "Hosea.DAmore", "name": "<value>", "target": "development", "retention_value": 123701, "retention_unit": "<value>", "frequency_value": 646039, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 301337, "schedule_week": 740682}
+  get_neki_backup_policy:
+    speakeasy-default-get-neki-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Lincoln_Lemke", "name": "<value>", "target": "production", "retention_value": 325460, "retention_unit": "<value>", "frequency_value": 134184, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 134492, "schedule_week": 242614}
+  update_neki_backup_policy:
+    speakeasy-default-update-neki-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Wilhelmine_Wyman", "name": "<value>", "target": "production", "retention_value": 693898, "retention_unit": "<value>", "frequency_value": 539927, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 573053, "schedule_week": 741675}
+  delete_neki_backup_policy:
+    speakeasy-default-delete-neki-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+  list_neki_branch_backups:
+    speakeasy-default-list-neki-branch-backups:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"type": "<value>", "current_page": 337595, "per_page": 146186, "next_page": 182020, "next_page_url": "https://superb-promise.org", "prev_page": 698138, "prev_page_url": "https://sunny-almighty.net/", "data": [{"id": "<id>", "name": "<value>", "state": "canceled", "size": 383323, "estimated_storage_cost": 2174.17, "started_at": "<value>", "expires_at": "1759030983787", "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 44986, "uncompressed_size": 917466, "protected": false, "restored_branches": [{"id": "<id>", "name": "<value>", "created_at": "1726192679051", "updated_at": "1735605225885", "deleted_at": "<value>"}], "actor": {"id": "<id>", "display_name": "Laron_Cremin"}}]}
+  create_neki_branch_backup:
+    speakeasy-default-create-neki-branch-backup:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "state": "ignored", "size": 258272, "estimated_storage_cost": 8764.76, "started_at": "<value>", "expires_at": "1763431870267", "completed_at": "<value>", "deleted_at": null, "pvc_size": 518675, "uncompressed_size": 62927, "protected": false, "restored_branches": [], "actor": {"id": "<id>", "display_name": "Stanton.Waters"}}
+  get_neki_branch_backup:
+    speakeasy-default-get-neki-branch-backup:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "success", "size": 122386, "estimated_storage_cost": 751.94, "started_at": "<value>", "expires_at": null, "completed_at": "<value>", "deleted_at": "<value>", "pvc_size": 958157, "uncompressed_size": 626529, "protected": false, "restored_branches": [], "actor": null}
+  delete_neki_branch_backup:
+    speakeasy-default-delete-neki-branch-backup:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

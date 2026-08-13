@@ -145,7 +145,7 @@ func (e *ListRolesInheritedRole) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type Branch struct {
+type ListRolesBranch struct {
 	// The ID for the resource
 	ID string `json:"id"`
 	// The name for the resource
@@ -158,39 +158,39 @@ type Branch struct {
 	DeletedAt *string `json:"deleted_at"`
 }
 
-func (b *Branch) GetID() string {
-	if b == nil {
+func (l *ListRolesBranch) GetID() string {
+	if l == nil {
 		return ""
 	}
-	return b.ID
+	return l.ID
 }
 
-func (b *Branch) GetName() string {
-	if b == nil {
+func (l *ListRolesBranch) GetName() string {
+	if l == nil {
 		return ""
 	}
-	return b.Name
+	return l.Name
 }
 
-func (b *Branch) GetCreatedAt() string {
-	if b == nil {
+func (l *ListRolesBranch) GetCreatedAt() string {
+	if l == nil {
 		return ""
 	}
-	return b.CreatedAt
+	return l.CreatedAt
 }
 
-func (b *Branch) GetUpdatedAt() string {
-	if b == nil {
+func (l *ListRolesBranch) GetUpdatedAt() string {
+	if l == nil {
 		return ""
 	}
-	return b.UpdatedAt
+	return l.UpdatedAt
 }
 
-func (b *Branch) GetDeletedAt() *string {
-	if b == nil {
+func (l *ListRolesBranch) GetDeletedAt() *string {
+	if l == nil {
 		return nil
 	}
-	return b.DeletedAt
+	return l.DeletedAt
 }
 
 type ListRolesActor struct {
@@ -347,7 +347,7 @@ type ListRolesData struct {
 	InheritedRoles []ListRolesInheritedRole `json:"inherited_roles"`
 	// Whether the role has the REPLICATION attribute
 	WithReplication     bool                         `json:"with_replication"`
-	Branch              Branch                       `json:"branch"`
+	Branch              ListRolesBranch              `json:"branch"`
 	Actor               ListRolesActor               `json:"actor"`
 	QuerySafetySettings ListRolesQuerySafetySettings `json:"query_safety_settings"`
 }
@@ -499,9 +499,9 @@ func (l *ListRolesData) GetWithReplication() bool {
 	return l.WithReplication
 }
 
-func (l *ListRolesData) GetBranch() Branch {
+func (l *ListRolesData) GetBranch() ListRolesBranch {
 	if l == nil {
-		return Branch{}
+		return ListRolesBranch{}
 	}
 	return l.Branch
 }
