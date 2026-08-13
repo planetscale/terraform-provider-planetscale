@@ -80,6 +80,12 @@ actions:
       description: >-
         True while a resize request is queued.
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.resize_in_progress
+    description: Reposition the native field to preserve generated schema order.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.required[?@ == 'resize_in_progress']
+    description: Reposition the native field to preserve generated schema order.
+    remove: true
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties
     update:
       resize_in_progress:

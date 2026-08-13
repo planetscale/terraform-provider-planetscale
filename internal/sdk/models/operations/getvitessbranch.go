@@ -145,6 +145,10 @@ type GetVitessBranchResponseBody struct {
 	Ready bool `json:"ready"`
 	// Whether or not the branch has safe migrations enabled
 	SafeMigrations bool `json:"safe_migrations"`
+	// Whether customer-managed deletion protection is enabled for the branch
+	DeletionProtected bool `json:"deletion_protected"`
+	// Whether deletion protection is managed by PlanetScale and cannot be disabled
+	DeletionProtectionManaged bool `json:"deletion_protection_managed"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                 `json:"keyspace_count"`
 	Actor         *GetVitessBranchActor `json:"actor"`
@@ -246,6 +250,20 @@ func (g *GetVitessBranchResponseBody) GetSafeMigrations() bool {
 		return false
 	}
 	return g.SafeMigrations
+}
+
+func (g *GetVitessBranchResponseBody) GetDeletionProtected() bool {
+	if g == nil {
+		return false
+	}
+	return g.DeletionProtected
+}
+
+func (g *GetVitessBranchResponseBody) GetDeletionProtectionManaged() bool {
+	if g == nil {
+		return false
+	}
+	return g.DeletionProtectionManaged
 }
 
 func (g *GetVitessBranchResponseBody) GetKeyspaceCount() int64 {

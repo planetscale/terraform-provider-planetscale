@@ -33,11 +33,12 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"database_name": config.StringVariable(databaseName),
-					"organization":  config.StringVariable(testAccOrg),
-					"branch_name":   config.StringVariable(branchNameOriginal),
-					"cluster_size":  config.StringVariable(clusterSize),
-					"parameters":    parameters,
+					"database_name":      config.StringVariable(databaseName),
+					"organization":       config.StringVariable(testAccOrg),
+					"branch_name":        config.StringVariable(branchNameOriginal),
+					"cluster_size":       config.StringVariable(clusterSize),
+					"deletion_protected": config.BoolVariable(true),
+					"parameters":         parameters,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -69,16 +70,22 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("state"),
 						knownvalue.StringExact("ready"),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("deletion_protected"),
+						knownvalue.Bool(true),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"branch_name":   config.StringVariable(branchNameRenamed),
-					"cluster_size":  config.StringVariable(clusterSize),
-					"parameters":    parameters,
+					"organization":       config.StringVariable(testAccOrg),
+					"database_name":      config.StringVariable(databaseName),
+					"branch_name":        config.StringVariable(branchNameRenamed),
+					"cluster_size":       config.StringVariable(clusterSize),
+					"deletion_protected": config.BoolVariable(false),
+					"parameters":         parameters,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -95,16 +102,22 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 							}),
 						}),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("deletion_protected"),
+						knownvalue.Bool(false),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":  config.StringVariable(testAccOrg),
-					"database_name": config.StringVariable(databaseName),
-					"branch_name":   config.StringVariable(branchNameRenamed),
-					"cluster_size":  config.StringVariable(clusterSize),
-					"parameters":    parameters,
+					"organization":       config.StringVariable(testAccOrg),
+					"database_name":      config.StringVariable(databaseName),
+					"branch_name":        config.StringVariable(branchNameRenamed),
+					"cluster_size":       config.StringVariable(clusterSize),
+					"deletion_protected": config.BoolVariable(false),
+					"parameters":         parameters,
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,

@@ -33,6 +33,8 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `cluster_size` (String) The SKU representing the branch's cluster size
+- `deletion_protected` (Boolean) Whether customer-managed deletion protection is enabled for the branch
+- `deletion_protection_managed` (Boolean) Whether deletion protection is managed by PlanetScale and cannot be disabled
 - `html_url` (String) Planetscale app URL for the branch
 - `name` (String) The name of the branch
 - `parameters` (Map of Map of String) Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.

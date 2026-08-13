@@ -27,10 +27,11 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"database_name":   config.StringVariable(databaseName),
-					"organization":    config.StringVariable(testAccOrg),
-					"branch_name":     config.StringVariable(branchNameOriginal),
-					"safe_migrations": config.BoolVariable(true),
+					"database_name":      config.StringVariable(databaseName),
+					"organization":       config.StringVariable(testAccOrg),
+					"branch_name":        config.StringVariable(branchNameOriginal),
+					"deletion_protected": config.BoolVariable(true),
+					"safe_migrations":    config.BoolVariable(true),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -58,15 +59,21 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("safe_migrations"),
 						knownvalue.Bool(true),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("deletion_protected"),
+						knownvalue.Bool(true),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":    config.StringVariable(testAccOrg),
-					"database_name":   config.StringVariable(databaseName),
-					"branch_name":     config.StringVariable(branchNameRenamed),
-					"safe_migrations": config.BoolVariable(false),
+					"organization":       config.StringVariable(testAccOrg),
+					"database_name":      config.StringVariable(databaseName),
+					"branch_name":        config.StringVariable(branchNameRenamed),
+					"deletion_protected": config.BoolVariable(false),
+					"safe_migrations":    config.BoolVariable(false),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -79,15 +86,21 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("safe_migrations"),
 						knownvalue.Bool(false),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("deletion_protected"),
+						knownvalue.Bool(false),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":    config.StringVariable(testAccOrg),
-					"database_name":   config.StringVariable(databaseName),
-					"branch_name":     config.StringVariable(branchNameRenamed),
-					"safe_migrations": config.BoolVariable(false),
+					"organization":       config.StringVariable(testAccOrg),
+					"database_name":      config.StringVariable(databaseName),
+					"branch_name":        config.StringVariable(branchNameRenamed),
+					"deletion_protected": config.BoolVariable(false),
+					"safe_migrations":    config.BoolVariable(false),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,

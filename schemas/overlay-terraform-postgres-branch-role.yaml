@@ -4,6 +4,27 @@ info:
   title: Terraform generation overlay for planetscale_role managed and data resources.
   version: 0.0.1
 actions:
+  - target: $..inherited_roles.items.enum
+    description: Replace the upstream enum before restoring the existing Terraform values and order.
+    remove: true
+  - target: $..inherited_roles.items
+    description: Preserve the existing Terraform role enum.
+    update:
+      enum:
+        - pscale_managed
+        - pg_checkpoint
+        - pg_create_subscription
+        - pg_maintain
+        - pg_monitor
+        - pg_read_all_data
+        - pg_read_all_settings
+        - pg_read_all_stats
+        - pg_signal_backend
+        - pg_stat_scan_tables
+        - pg_use_reserved_connections
+        - pg_write_all_data
+        - postgres
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post
     description: API operation for managed resource create.
     update:

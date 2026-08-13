@@ -21,6 +21,8 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
+		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
+		r.DeletionProtectionManaged = types.BoolValue(resp.DeletionProtectionManaged)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
