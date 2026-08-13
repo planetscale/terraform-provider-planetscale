@@ -42,6 +42,14 @@ func testAccPreCheck(t *testing.T) {
 	t.Fatal("Both PLANETSCALE_SERVICE_TOKEN and PLANETSCALE_SERVICE_TOKEN_ID must be set for acceptance tests")
 }
 
+func testAccNekiPreCheck(t *testing.T) {
+	t.Helper()
+	testAccPreCheck(t)
+	if os.Getenv("PLANETSCALE_NEKI_ENABLED") != "true" {
+		t.Skip("skipping Neki acceptance test; set PLANETSCALE_NEKI_ENABLED=true")
+	}
+}
+
 // randomWithPrefix generates a random string with the given prefix.
 func randomWithPrefix(prefix string) string {
 	return fmt.Sprintf("%s-%d", prefix, rand.Intn(1000000))
