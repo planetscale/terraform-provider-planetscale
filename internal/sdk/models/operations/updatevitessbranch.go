@@ -11,14 +11,23 @@ import (
 
 type UpdateVitessBranchRequestBody struct {
 	// The name to update the branch
-	Name string `json:"new_name"`
+	Name *string `json:"new_name,omitzero"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected *bool `json:"deletion_protected,omitzero"`
 }
 
-func (u *UpdateVitessBranchRequestBody) GetName() string {
+func (u *UpdateVitessBranchRequestBody) GetName() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
 	return u.Name
+}
+
+func (u *UpdateVitessBranchRequestBody) GetDeletionProtected() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.DeletionProtected
 }
 
 type UpdateVitessBranchRequest struct {
@@ -176,6 +185,8 @@ type UpdateVitessBranchResponseBody struct {
 	Ready bool `json:"ready"`
 	// Whether or not the branch has safe migrations enabled
 	SafeMigrations bool `json:"safe_migrations"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected bool `json:"deletion_protected"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                    `json:"keyspace_count"`
 	Actor         *UpdateVitessBranchActor `json:"actor"`
@@ -277,6 +288,13 @@ func (u *UpdateVitessBranchResponseBody) GetSafeMigrations() bool {
 		return false
 	}
 	return u.SafeMigrations
+}
+
+func (u *UpdateVitessBranchResponseBody) GetDeletionProtected() bool {
+	if u == nil {
+		return false
+	}
+	return u.DeletionProtected
 }
 
 func (u *UpdateVitessBranchResponseBody) GetKeyspaceCount() int64 {

@@ -29,20 +29,21 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor        *tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	ClusterSize  types.String                         `tfsdk:"cluster_size"`
-	Database     types.String                         `tfsdk:"database"`
-	HTMLURL      types.String                         `tfsdk:"html_url"`
-	ID           types.String                         `tfsdk:"id"`
-	Name         types.String                         `tfsdk:"name"`
-	Organization types.String                         `tfsdk:"organization"`
-	Parameters   map[string]map[string]types.String   `tfsdk:"parameters"`
-	ParentBranch types.String                         `tfsdk:"parent_branch"`
-	Ready        types.Bool                           `tfsdk:"ready"`
-	RegionData   *tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas     types.Int64                          `tfsdk:"replicas"`
-	State        types.String                         `tfsdk:"state"`
-	URL          types.String                         `tfsdk:"url"`
+	Actor             *tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
+	ClusterSize       types.String                         `tfsdk:"cluster_size"`
+	Database          types.String                         `tfsdk:"database"`
+	DeletionProtected types.Bool                           `tfsdk:"deletion_protected"`
+	HTMLURL           types.String                         `tfsdk:"html_url"`
+	ID                types.String                         `tfsdk:"id"`
+	Name              types.String                         `tfsdk:"name"`
+	Organization      types.String                         `tfsdk:"organization"`
+	Parameters        map[string]map[string]types.String   `tfsdk:"parameters"`
+	ParentBranch      types.String                         `tfsdk:"parent_branch"`
+	Ready             types.Bool                           `tfsdk:"ready"`
+	RegionData        *tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
+	Replicas          types.Int64                          `tfsdk:"replicas"`
+	State             types.String                         `tfsdk:"state"`
+	URL               types.String                         `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -72,6 +73,10 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
+			},
+			"deletion_protected": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether deletion protection is enabled for the branch`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,

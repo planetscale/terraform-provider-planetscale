@@ -21,6 +21,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
+		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.KeyspaceCount = types.Int64Value(resp.KeyspaceCount)
@@ -68,6 +69,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
+		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.KeyspaceCount = types.Int64Value(resp.KeyspaceCount)
@@ -114,6 +116,7 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateVitessBranchRespo
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
+		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.KeyspaceCount = types.Int64Value(resp.KeyspaceCount)
@@ -170,6 +173,12 @@ func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequestBody(ct
 	var name string
 	name = r.Name.ValueString()
 
+	deletionProtected := new(bool)
+	if !r.DeletionProtected.IsUnknown() && !r.DeletionProtected.IsNull() {
+		*deletionProtected = r.DeletionProtected.ValueBool()
+	} else {
+		deletionProtected = nil
+	}
 	parentBranch := new(string)
 	if !r.ParentBranch.IsUnknown() && !r.ParentBranch.IsNull() {
 		*parentBranch = r.ParentBranch.ValueString()
@@ -207,13 +216,14 @@ func (r *VitessBranchResourceModel) ToOperationsCreateVitessBranchRequestBody(ct
 		safeMigrations = nil
 	}
 	out := operations.CreateVitessBranchRequestBody{
-		Name:           name,
-		ParentBranch:   parentBranch,
-		BackupID:       backupID,
-		Region:         region,
-		SeedData:       seedData,
-		ClusterSize:    clusterSize,
-		SafeMigrations: safeMigrations,
+		Name:              name,
+		DeletionProtected: deletionProtected,
+		ParentBranch:      parentBranch,
+		BackupID:          backupID,
+		Region:            region,
+		SeedData:          seedData,
+		ClusterSize:       clusterSize,
+		SafeMigrations:    safeMigrations,
 	}
 
 	return &out, diags
@@ -440,11 +450,21 @@ func (r *VitessBranchResourceModel) ToOperationsUpdateVitessBranchRequest(ctx co
 func (r *VitessBranchResourceModel) ToOperationsUpdateVitessBranchRequestBody(ctx context.Context) (*operations.UpdateVitessBranchRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	deletionProtected := new(bool)
+	if !r.DeletionProtected.IsUnknown() && !r.DeletionProtected.IsNull() {
+		*deletionProtected = r.DeletionProtected.ValueBool()
+	} else {
+		deletionProtected = nil
+	}
 	out := operations.UpdateVitessBranchRequestBody{
-		Name: name,
+		Name:              name,
+		DeletionProtected: deletionProtected,
 	}
 
 	return &out, diags

@@ -64,6 +64,8 @@ func (e *CreateVitessBranchKind) UnmarshalJSON(data []byte) error {
 type CreateVitessBranchRequestBody struct {
 	// The name of the branch to create
 	Name string `json:"name"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected *bool `json:"deletion_protected,omitzero"`
 	// The name of the parent branch. Defaults to the database's default branch if not provided.
 	ParentBranch *string `json:"parent_branch,omitzero"`
 	// If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
@@ -100,6 +102,13 @@ func (c *CreateVitessBranchRequestBody) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateVitessBranchRequestBody) GetDeletionProtected() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.DeletionProtected
 }
 
 func (c *CreateVitessBranchRequestBody) GetParentBranch() *string {
@@ -298,6 +307,8 @@ type CreateVitessBranchResponseBody struct {
 	Ready bool `json:"ready"`
 	// Whether or not the branch has safe migrations enabled
 	SafeMigrations bool `json:"safe_migrations"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected bool `json:"deletion_protected"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                    `json:"keyspace_count"`
 	Actor         *CreateVitessBranchActor `json:"actor"`
@@ -399,6 +410,13 @@ func (c *CreateVitessBranchResponseBody) GetSafeMigrations() bool {
 		return false
 	}
 	return c.SafeMigrations
+}
+
+func (c *CreateVitessBranchResponseBody) GetDeletionProtected() bool {
+	if c == nil {
+		return false
+	}
+	return c.DeletionProtected
 }
 
 func (c *CreateVitessBranchResponseBody) GetKeyspaceCount() int64 {

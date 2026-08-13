@@ -40,6 +40,8 @@ func (e *CreatePostgresBranchKind) UnmarshalJSON(data []byte) error {
 type CreatePostgresBranchRequestBody struct {
 	// The name of the branch to create
 	Name string `json:"name"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected *bool `json:"deletion_protected,omitzero"`
 	// The name of the parent branch. Defaults to the database's default branch if not provided.
 	ParentBranch *string `json:"parent_branch,omitzero"`
 	// If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
@@ -76,6 +78,13 @@ func (c *CreatePostgresBranchRequestBody) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreatePostgresBranchRequestBody) GetDeletionProtected() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.DeletionProtected
 }
 
 func (c *CreatePostgresBranchRequestBody) GetParentBranch() *string {
@@ -257,8 +266,10 @@ type CreatePostgresBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                       `json:"ready"`
-	Actor *CreatePostgresBranchActor `json:"actor"`
+	Ready bool `json:"ready"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected bool                       `json:"deletion_protected"`
+	Actor             *CreatePostgresBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -301,6 +312,13 @@ func (c *CreatePostgresBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return c.Ready
+}
+
+func (c *CreatePostgresBranchResponseBody) GetDeletionProtected() bool {
+	if c == nil {
+		return false
+	}
+	return c.DeletionProtected
 }
 
 func (c *CreatePostgresBranchResponseBody) GetActor() *CreatePostgresBranchActor {

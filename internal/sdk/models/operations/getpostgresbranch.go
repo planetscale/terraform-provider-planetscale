@@ -128,8 +128,10 @@ type GetPostgresBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                    `json:"ready"`
-	Actor *GetPostgresBranchActor `json:"actor"`
+	Ready bool `json:"ready"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected bool                    `json:"deletion_protected"`
+	Actor             *GetPostgresBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -187,6 +189,13 @@ func (g *GetPostgresBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return g.Ready
+}
+
+func (g *GetPostgresBranchResponseBody) GetDeletionProtected() bool {
+	if g == nil {
+		return false
+	}
+	return g.DeletionProtected
 }
 
 func (g *GetPostgresBranchResponseBody) GetActor() *GetPostgresBranchActor {

@@ -32,6 +32,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
+		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
@@ -70,6 +71,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
+		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
@@ -112,6 +114,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdatePostgresBranchR
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
+		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
@@ -219,6 +222,12 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 	var name string
 	name = r.Name.ValueString()
 
+	deletionProtected := new(bool)
+	if !r.DeletionProtected.IsUnknown() && !r.DeletionProtected.IsNull() {
+		*deletionProtected = r.DeletionProtected.ValueBool()
+	} else {
+		deletionProtected = nil
+	}
 	parentBranch := new(string)
 	if !r.ParentBranch.IsUnknown() && !r.ParentBranch.IsNull() {
 		*parentBranch = r.ParentBranch.ValueString()
@@ -256,13 +265,14 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 		majorVersion = nil
 	}
 	out := operations.CreatePostgresBranchRequestBody{
-		Name:         name,
-		ParentBranch: parentBranch,
-		BackupID:     backupID,
-		Region:       region,
-		RestorePoint: restorePoint,
-		ClusterSize:  clusterSize,
-		MajorVersion: majorVersion,
+		Name:              name,
+		DeletionProtected: deletionProtected,
+		ParentBranch:      parentBranch,
+		BackupID:          backupID,
+		Region:            region,
+		RestorePoint:      restorePoint,
+		ClusterSize:       clusterSize,
+		MajorVersion:      majorVersion,
 	}
 
 	return &out, diags
@@ -374,11 +384,21 @@ func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequest(ct
 func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequestBody(ctx context.Context) (*operations.UpdatePostgresBranchRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	deletionProtected := new(bool)
+	if !r.DeletionProtected.IsUnknown() && !r.DeletionProtected.IsNull() {
+		*deletionProtected = r.DeletionProtected.ValueBool()
+	} else {
+		deletionProtected = nil
+	}
 	out := operations.UpdatePostgresBranchRequestBody{
-		Name: name,
+		Name:              name,
+		DeletionProtected: deletionProtected,
 	}
 
 	return &out, diags

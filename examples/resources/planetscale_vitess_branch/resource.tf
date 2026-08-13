@@ -3,6 +3,7 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
   database     = "ru00w3vqvfr9"
 
   name                          = "my-branch"
+  deletion_protected            = true
   safe_migrations               = true
   vtgate_autoscaling            = true
   vtgate_count                  = 1

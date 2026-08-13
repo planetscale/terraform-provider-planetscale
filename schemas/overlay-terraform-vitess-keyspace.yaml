@@ -154,10 +154,15 @@ actions:
         The number of additional replicas beyond the included default. Updates
         in place via a keyspace resize.
 
-  # The API returns resize_in_progress but it is not published in the upstream spec yet. Drop these
-  # once it shows up in schemas/openapi.yaml after a make download-openapi.
+  # Keep resize_in_progress at the end of the generated schema to avoid unrelated code churn.
   # Mark required so Speakeasy generates a non-pointer bool; optional *bool would make WaitForReady
   # treat a missing field as "not ready yet" and poll until the 30-minute limit.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.resize_in_progress
+    description: Reposition the native field to preserve generated schema order.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.required[?@ == 'resize_in_progress']
+    description: Reposition the native field to preserve generated schema order.
+    remove: true
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties
     update:
       resize_in_progress:
@@ -170,6 +175,12 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.required
     update:
       - resize_in_progress
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.resize_in_progress
+    description: Reposition the native field to preserve generated schema order.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.required[?@ == 'resize_in_progress']
+    description: Reposition the native field to preserve generated schema order.
+    remove: true
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties
     update:
       resize_in_progress:

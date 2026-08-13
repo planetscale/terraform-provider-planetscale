@@ -11,14 +11,23 @@ import (
 
 type UpdatePostgresBranchRequestBody struct {
 	// The name to update the branch
-	Name string `json:"new_name"`
+	Name *string `json:"new_name,omitzero"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected *bool `json:"deletion_protected,omitzero"`
 }
 
-func (u *UpdatePostgresBranchRequestBody) GetName() string {
+func (u *UpdatePostgresBranchRequestBody) GetName() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
 	return u.Name
+}
+
+func (u *UpdatePostgresBranchRequestBody) GetDeletionProtected() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.DeletionProtected
 }
 
 type UpdatePostgresBranchRequest struct {
@@ -159,8 +168,10 @@ type UpdatePostgresBranchResponseBody struct {
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
-	Ready bool                       `json:"ready"`
-	Actor *UpdatePostgresBranchActor `json:"actor"`
+	Ready bool `json:"ready"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected bool                       `json:"deletion_protected"`
+	Actor             *UpdatePostgresBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -203,6 +214,13 @@ func (u *UpdatePostgresBranchResponseBody) GetReady() bool {
 		return false
 	}
 	return u.Ready
+}
+
+func (u *UpdatePostgresBranchResponseBody) GetDeletionProtected() bool {
+	if u == nil {
+		return false
+	}
+	return u.DeletionProtected
 }
 
 func (u *UpdatePostgresBranchResponseBody) GetActor() *UpdatePostgresBranchActor {

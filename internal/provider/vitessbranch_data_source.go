@@ -32,6 +32,7 @@ type VitessBranchDataSourceModel struct {
 	Actor                      *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
 	ClusterSize                types.String                       `tfsdk:"cluster_size"`
 	Database                   types.String                       `tfsdk:"database"`
+	DeletionProtected          types.Bool                         `tfsdk:"deletion_protected"`
 	HTMLURL                    types.String                       `tfsdk:"html_url"`
 	ID                         types.String                       `tfsdk:"id"`
 	KeyspaceCount              types.Int64                        `tfsdk:"keyspace_count"`
@@ -79,6 +80,10 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"database": schema.StringAttribute{
 				Required:    true,
 				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
+			},
+			"deletion_protected": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether deletion protection is enabled for the branch`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,

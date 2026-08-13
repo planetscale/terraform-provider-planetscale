@@ -46,6 +46,7 @@ type PostgresBranchResourceModel struct {
 	ClusterSize        types.String                         `tfsdk:"cluster_size"`
 	Database           types.String                         `tfsdk:"database"`
 	DeleteDescendants  types.Bool                           `queryParam:"style=form,explode=true,name=delete_descendants" tfsdk:"delete_descendants"`
+	DeletionProtected  types.Bool                           `tfsdk:"deletion_protected"`
 	HTMLURL            types.String                         `tfsdk:"html_url"`
 	ID                 types.String                         `tfsdk:"id"`
 	MajorVersion       types.String                         `tfsdk:"major_version"`
@@ -101,6 +102,11 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"delete_descendants": schema.BoolAttribute{
 				Optional:    true,
 				Description: `If true, recursively delete all descendant branches along with this branch`,
+			},
+			"deletion_protected": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Whether deletion protection is enabled for the branch`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,

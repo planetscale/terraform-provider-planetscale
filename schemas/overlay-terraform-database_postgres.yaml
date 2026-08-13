@@ -131,6 +131,12 @@ actions:
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}#postgres'].get.responses['200'].content['application/json'].schema.properties.config_changing
     remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}#postgres'].get.responses['200'].content['application/json'].schema.properties['deletion_protected','deletion_protection_managed']
+    description: Keep database deletion protection out of Terraform.
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}#postgres'].get.responses['200'].content['application/json'].schema.required[?@ == 'deletion_protected' || @ == 'deletion_protection_managed']
+    description: Remove ignored database deletion protection fields from the required list.
+    remove: true
 
   - target: $.paths['/organizations/{organization}/databases#postgres'].post.responses['201'].content['application/json'].schema.properties.config_change_queued
     remove: true
