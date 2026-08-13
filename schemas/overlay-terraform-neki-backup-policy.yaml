@@ -1,0 +1,30 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_backup_policy managed resource
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post
+    update:
+      operationId: create_neki_backup_policy
+      summary: Create a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#create
+      x-speakeasy-entity-description: Manage a PlanetScale Neki database backup policy.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].get
+    update:
+      operationId: get_neki_backup_policy
+      summary: Get a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#read
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].patch
+    update:
+      operationId: update_neki_backup_policy
+      summary: Update a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].delete
+    update:
+      operationId: delete_neki_backup_policy
+      summary: Delete a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#delete

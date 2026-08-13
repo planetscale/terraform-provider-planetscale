@@ -98,6 +98,23 @@ actions:
     description: Copy backup policy item path as base for postgres
     copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}']
 
+  - target: $.paths
+    description: Add Neki backup policy path entries
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki']
+    description: Copy backup policies collection path as base for Neki
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies/{id}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki']
+    description: Copy backup policy item path as base for Neki
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}']
+
   # Remove copied base backup policy paths
   - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies']
     remove: true

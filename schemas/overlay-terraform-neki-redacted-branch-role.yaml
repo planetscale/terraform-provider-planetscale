@@ -1,0 +1,59 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_redacted_branch_role managed resource
+  version: 0.0.1
+actions:
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles#neki-redacted: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki-redacted']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki-redacted: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki-redacted']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki-redacted'].get
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki-redacted'].post
+    update:
+      operationId: create_neki_redacted_role
+      summary: Create a Neki role without retaining its password
+      x-speakeasy-entity-operation: NekiRedactedBranchRole#create
+      x-speakeasy-entity-description: Manage a PlanetScale Neki branch role without storing its password in Terraform state.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki-redacted'].get
+    update:
+      operationId: get_neki_redacted_role
+      summary: Get a Neki role without a password
+      x-speakeasy-entity-operation: NekiRedactedBranchRole#read
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki-redacted'].patch
+    update:
+      operationId: update_neki_redacted_role
+      summary: Update a redacted Neki role
+      x-speakeasy-entity-operation: NekiRedactedBranchRole#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki-redacted'].delete
+    update:
+      operationId: delete_neki_redacted_role
+      summary: Delete a redacted Neki role
+      x-speakeasy-entity-operation: NekiRedactedBranchRole#delete
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki-redacted'].get.responses["200"].content["application/json"].schema.properties.password
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki-redacted'].patch.responses["200"].content["application/json"].schema.properties.password
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki-redacted'].post.responses["200"].content["application/json"].schema.properties.password
+    update:
+      x-speakeasy-terraform-ignore: true

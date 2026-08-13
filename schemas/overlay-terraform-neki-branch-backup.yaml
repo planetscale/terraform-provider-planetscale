@@ -1,0 +1,40 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_branch_backup managed resource
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#neki'].post
+    update:
+      operationId: create_neki_branch_backup
+      summary: Create a Neki branch backup
+      x-speakeasy-entity-operation: NekiBranchBackup#create
+      x-speakeasy-entity-description: Manage a PlanetScale Neki database branch backup.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#neki'].get
+    update:
+      operationId: get_neki_branch_backup
+      summary: Get a Neki branch backup
+      x-speakeasy-entity-operation:
+        - NekiBranchBackup#read
+        - entityOperation: NekiBranchBackup#create#2
+          options:
+            polling:
+              name: WaitForComplete
+      x-speakeasy-polling:
+        - name: WaitForComplete
+          delaySeconds: 30
+          intervalSeconds: 30
+          limitCount: 1440
+          failureCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "failed"
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "success"
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#neki'].delete
+    update:
+      operationId: delete_neki_branch_backup
+      summary: Delete a Neki branch backup
+      x-speakeasy-entity-operation: NekiBranchBackup#delete

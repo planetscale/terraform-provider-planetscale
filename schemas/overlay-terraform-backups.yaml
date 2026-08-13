@@ -136,6 +136,23 @@ actions:
     description: Copy backup item path as base for postgres
     copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}']
 
+  - target: $.paths
+    description: Add Neki backup path entries
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/backups#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#neki']
+    description: Copy backups collection path as base for Neki
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}#neki']
+    description: Copy backup item path as base for Neki
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}']
+
   # Remove copied base backup paths
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups']
     remove: true
