@@ -1,0 +1,88 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_branch managed and data resources
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post
+    description: Configure the Neki branch create operation.
+    update:
+      operationId: create_neki_branch
+      summary: Create a Neki branch
+      x-speakeasy-entity-operation: NekiBranch#create
+      x-speakeasy-entity-description: Manage a PlanetScale Neki database branch.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties
+    description: Transparently create Neki databases from branch resources.
+    update:
+      create_database_if_missing:
+        type: boolean
+        const: true
+        default: true
+        description: Create the database if it does not already exist.
+        x-speakeasy-terraform-ignore: schema
+      kind:
+        type: string
+        const: neki
+        default: neki
+        description: The kind of database. Always neki for planetscale_neki_branch.
+        x-speakeasy-terraform-ignore: schema
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties.seed_data
+    description: Remove the Vitess-only seed option.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].get
+    description: Configure Neki branch reads and creation polling.
+    update:
+      operationId: get_neki_branch
+      summary: Get a Neki branch
+      x-speakeasy-entity-operation:
+        - NekiBranch#read
+        - entityOperation: NekiBranch#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale Neki database branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 90
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch
+    description: Configure Neki branch metadata updates.
+    update:
+      operationId: update_neki_branch
+      summary: Update a Neki branch
+      x-speakeasy-entity-operation: NekiBranch#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch.parameters[?@.name == 'branch']
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch.requestBody.content['application/json'].schema.properties.new_name
+    update:
+      x-speakeasy-name-override: name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].delete
+    description: Configure Neki branch deletion.
+    update:
+      operationId: delete_neki_branch
+      summary: Delete a Neki branch
+      x-speakeasy-entity-operation: NekiBranch#delete
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.responses['201'].content['application/json'].schema.properties['mysql_address','mysql_edge_address','keyspace_count','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Remove Vitess-only response fields.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].get.responses['200'].content['application/json'].schema.properties['mysql_address','mysql_edge_address','keyspace_count','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Remove Vitess-only response fields.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch.responses['200'].content['application/json'].schema.properties['mysql_address','mysql_edge_address','keyspace_count','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Remove Vitess-only response fields.
+    remove: true

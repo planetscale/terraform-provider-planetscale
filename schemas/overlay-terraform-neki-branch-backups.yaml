@@ -1,0 +1,20 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_branch_backups data source
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#neki'].get
+    update:
+      operationId: list_neki_branch_backups
+      summary: List Neki branch backups
+      x-speakeasy-entity-operation: NekiBranchBackups#read
+      x-speakeasy-entity-description: Returns PlanetScale Neki database branch backups.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data

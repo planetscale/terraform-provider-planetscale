@@ -1,0 +1,55 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_database_neki data source
+  version: 0.0.1
+actions:
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases#neki']
+    copy: $.paths['/organizations/{organization}/databases']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#neki']
+    copy: $.paths['/organizations/{organization}/databases/{database}']
+
+  - target: $.paths['/organizations/{organization}/databases#neki'].get
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases#neki'].post.requestBody.content['application/json'].schema.properties.kind
+    update:
+      type: string
+      const: neki
+      default: neki
+      description: The kind of database. Always neki.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#neki'].get
+    update:
+      operationId: get_neki_database
+      summary: Get a Neki database
+      x-speakeasy-entity-operation: NekiDatabase#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Neki database.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#neki'].get.parameters[?@.name == 'database']
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#neki'].get.responses['200'].content['application/json'].schema.properties.kind
+    update:
+      const: neki
+      description: The kind of database.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#neki'].get.responses['200'].content['application/json'].schema.properties.kind.enum
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#neki'].get.responses['200'].content['application/json'].schema.properties.region
+    update:
+      x-speakeasy-name-override: region_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}#neki'].get.responses['200'].content['application/json'].schema.properties['allow_data_branching','foreign_keys_enabled','automatic_migrations','migration_table_name','migration_framework','config_change_queued','config_changing']
+    remove: true

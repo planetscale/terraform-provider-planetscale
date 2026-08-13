@@ -1,0 +1,279 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Temporary OpenAPI definitions for the Neki Terraform provider
+  version: 0.0.1
+actions:
+  # Source: api-bb Api::V1::NekiShardConfigurationProfilesController and
+  # NekiShardConfigurationProfileSerializer. Remove this overlay once these
+  # public_neki_api operations are included in the published OpenAPI document.
+  - target: $.components.schemas
+    update:
+      NekiConfigurationProfile:
+        type: object
+        additionalProperties: false
+        required:
+          - name
+          - cluster_size
+          - default
+          - replicas
+          - state
+        properties:
+          type:
+            type: string
+            const: NekiConfigurationProfile
+          name:
+            type: string
+            description: The name of the shard configuration profile.
+          architecture:
+            type: string
+            description: The architecture of the profile's cluster size.
+          cluster_size:
+            type: string
+            description: The cluster size used by shards assigned to this profile.
+          cluster_display_name:
+            type: string
+            description: The display name of the cluster size.
+          default:
+            type: boolean
+            description: Whether this is the branch's default configuration profile.
+          metal:
+            type: boolean
+            description: Whether shards using this profile run on metal instances.
+          replicas:
+            type: integer
+            description: The number of replicas for shards using this profile.
+          postgres_major_version:
+            type: integer
+            description: The PostgreSQL major version used by this profile.
+          postgres_minor_version:
+            type: integer
+            description: The PostgreSQL minor version used by this profile.
+          shards:
+            type: integer
+            description: The number of shards assigned to this profile.
+          state:
+            type: string
+            enum:
+              - ready
+              - draft
+              - pending
+              - applying
+            description: The rollout state of the profile.
+          created_at:
+            type: string
+            format: date-time
+          updated_at:
+            type: string
+            format: date-time
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles:
+        get:
+          operationId: list_shard_configuration_profiles
+          summary: List Neki shard configuration profiles
+          tags:
+            - Neki configuration profiles
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns shard configuration profiles for the branch.
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/NekiConfigurationProfile"
+        post:
+          operationId: create_shard_configuration_profile
+          summary: Create a Neki shard configuration profile
+          tags:
+            - Neki configuration profiles
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                      description: The name of the shard configuration profile.
+                    cluster_size:
+                      type: string
+                      description: The cluster size used by shards assigned to this profile.
+                    replicas:
+                      type: integer
+                      description: The number of replicas for shards using this profile.
+                    postgres_major_version:
+                      type: integer
+                      description: The PostgreSQL major version used by this profile.
+                    postgres_minor_version:
+                      type: integer
+                      description: The PostgreSQL minor version used by this profile.
+          responses:
+            "201":
+              description: Returns the created shard configuration profile.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NekiConfigurationProfile"
+            "422":
+              description: The profile could not be created.
+
+      /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}:
+        get:
+          operationId: get_shard_configuration_profile
+          summary: Get a Neki shard configuration profile
+          tags:
+            - Neki configuration profiles
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: configuration_profile
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns the shard configuration profile.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NekiConfigurationProfile"
+            "404":
+              description: The profile was not found.
+        patch:
+          operationId: update_shard_configuration_profile
+          summary: Update a Neki shard configuration profile
+          tags:
+            - Neki configuration profiles
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: configuration_profile
+              in: path
+              required: true
+              schema:
+                type: string
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    name:
+                      type: string
+                      description: The new name of the shard configuration profile.
+                    cluster_size:
+                      type: string
+                      description: The new cluster size for the profile.
+                    replicas:
+                      type: integer
+                      description: The new number of replicas for the profile.
+          responses:
+            "200":
+              description: Returns the updated shard configuration profile.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NekiConfigurationProfile"
+            "404":
+              description: The profile was not found.
+            "422":
+              description: The profile could not be updated.
+        delete:
+          operationId: delete_shard_configuration_profile
+          summary: Delete a Neki shard configuration profile
+          tags:
+            - Neki configuration profiles
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: configuration_profile
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "204":
+              description: The profile was deleted.
+            "404":
+              description: The profile was not found.

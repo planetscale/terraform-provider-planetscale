@@ -1,0 +1,84 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_configuration_profile managed and data resources
+  version: 0.0.1
+actions:
+  - target: $.components.schemas.NekiConfigurationProfile
+    update:
+      x-speakeasy-entity: NekiConfigurationProfile
+      x-speakeasy-entity-description: >-
+        Manage an additional Neki shard configuration profile on a branch.
+
+        Creating a `planetscale_neki_branch` already provisions a default
+        configuration profile. Import that profile if it needs to be managed;
+        do not attempt to create it again.
+
+  - target: $.components.schemas.NekiConfigurationProfile.properties.type
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.components.schemas.NekiConfigurationProfile.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+
+  - target: $.components.schemas.NekiConfigurationProfile.properties['created_at','updated_at','cluster_display_name']
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post
+    update:
+      x-speakeasy-entity-operation: NekiConfigurationProfile#create
+      x-speakeasy-entity-description: >-
+        Manage an additional Neki shard configuration profile on a branch.
+        A branch's automatically created default profile should be imported
+        rather than created again.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].get
+    update:
+      x-speakeasy-entity-operation:
+        - NekiConfigurationProfile#read
+        - entityOperation: NekiConfigurationProfile#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: NekiConfigurationProfile#update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns a Neki shard configuration profile.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 10
+          intervalSeconds: 10
+          limitCount: 180
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch
+    update:
+      x-speakeasy-entity-operation: NekiConfigurationProfile#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].delete
+    update:
+      x-speakeasy-entity-operation: NekiConfigurationProfile#delete
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].*.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties.name
+    update:
+      x-speakeasy-name-override: name

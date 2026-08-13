@@ -288,6 +288,26 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].get
     remove: true
 
+  - target: $.paths
+    description: Add NekiBranch path entries
+    update:
+      /organizations/{organization}/databases/{database}/branches#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki']
+    description: Copy branches path as base for Neki
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki']
+    description: Copy branch path as base for Neki
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].get
+    remove: true
+
   # Remove copied base branches paths
   - target: $.paths['/organizations/{organization}/databases/{database}/branches']
     remove: true

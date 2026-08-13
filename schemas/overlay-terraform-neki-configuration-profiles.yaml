@@ -1,0 +1,15 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_configuration_profiles data source
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].get
+    update:
+      x-speakeasy-entity-operation: NekiConfigurationProfiles#read
+      x-speakeasy-entity-description: Returns Neki shard configuration profiles for a branch.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].get.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiConfigurationProfiles
+      x-speakeasy-entity-description: Returns Neki shard configuration profiles for a branch.

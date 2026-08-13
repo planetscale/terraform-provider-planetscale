@@ -1,0 +1,99 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_branch_role managed and data resources
+  version: 0.0.1
+actions:
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post
+    update:
+      operationId: create_neki_role
+      summary: Create a Neki role
+      x-speakeasy-entity-operation: NekiBranchRole#create
+      x-speakeasy-entity-description: Manage a PlanetScale Neki branch role.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get
+    update:
+      operationId: get_neki_role
+      summary: Get a Neki role
+      x-speakeasy-entity-operation: NekiBranchRole#read
+      x-speakeasy-entity-description: Returns information about a PlanetScale Neki branch role.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch
+    update:
+      operationId: update_neki_role
+      summary: Update a Neki role
+      x-speakeasy-entity-operation: NekiBranchRole#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].delete
+    update:
+      operationId: delete_neki_role
+      summary: Delete a Neki role
+      x-speakeasy-entity-operation: NekiBranchRole#delete
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses['200'].content['application/json'].schema.properties.password
+    update:
+      x-speakeasy-param-sensitive: true
+      x-speakeasy-ignore: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses['200'].content['application/json'].schema.properties.password
+    update:
+      x-speakeasy-param-sensitive: true
+      x-speakeasy-ignore: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses['200'].content['application/json'].schema.properties.password
+    update:
+      x-speakeasy-param-sensitive: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.requestBody.content['application/json'].schema.properties.inherited_roles
+    update:
+      format: set
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses['200'].content['application/json'].schema.properties.inherited_roles
+    update:
+      format: set
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses['200'].content['application/json'].schema.properties.inherited_roles
+    update:
+      format: set
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses['200'].content['application/json'].schema.properties.inherited_roles
+    update:
+      format: set
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses['200'].content['application/json'].schema.properties.actor
+    update:
+      x-speakeasy-name-override: actor_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses['200'].content['application/json'].schema.properties.branch
+    update:
+      x-speakeasy-name-override: branch_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses['200'].content['application/json'].schema.properties.actor
+    update:
+      x-speakeasy-name-override: actor_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses['200'].content['application/json'].schema.properties.branch
+    update:
+      x-speakeasy-name-override: branch_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses['200'].content['application/json'].schema.properties.actor
+    update:
+      x-speakeasy-name-override: actor_data
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses['200'].content['application/json'].schema.properties.branch
+    update:
+      x-speakeasy-name-override: branch_data
