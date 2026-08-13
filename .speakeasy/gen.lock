@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: a3b5c406551f60d4ded180bf8ae35dc2
+  docChecksum: 5e61761c4c0c4a8678f4a616b1fbef39
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -2231,7 +2231,7 @@ examples:
           database: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "state": "sleep_in_progress", "cluster_name": "<value>", "ready": true, "deletion_protected": false, "deletion_protection_managed": false, "actor": {"id": "<id>"}, "html_url": "https://surprised-elevator.info", "url": "https://immaculate-peninsula.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": false}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "state": "sleep_in_progress", "cluster_name": "<value>", "ready": true, "deletion_protected": false, "actor": {"id": "<id>"}, "html_url": "https://surprised-elevator.info", "url": "https://immaculate-peninsula.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": false}, "parent_branch": "<value>"}
   get_postgres_branch:
     speakeasy-default-get-postgres-branch:
       parameters:
@@ -2241,7 +2241,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "state": "awakening", "cluster_name": "<value>", "ready": true, "deletion_protected": true, "deletion_protection_managed": false, "actor": {"id": "<id>"}, "html_url": "https://unsung-pliers.info/", "url": "https://all-tool.name/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "state": "awakening", "cluster_name": "<value>", "ready": true, "deletion_protected": true, "actor": {"id": "<id>"}, "html_url": "https://unsung-pliers.info/", "url": "https://all-tool.name/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
   delete_postgres_branch:
     speakeasy-default-delete-postgres-branch:
       parameters:
@@ -2257,7 +2257,7 @@ examples:
           database: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "pending", "vtgate_name": "<value>", "vtgate_count": 465224, "vtgate_autoscaling": true, "vtgate_max_count": null, "vtgate_target_cpu_utilization": 652629, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "deletion_protected": true, "deletion_protection_managed": true, "keyspace_count": 465224, "actor": {"id": "<id>"}, "html_url": "https://lone-vicinity.name", "url": "https://secret-fedora.info/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "pending", "vtgate_name": "<value>", "vtgate_count": 465224, "vtgate_autoscaling": true, "vtgate_max_count": null, "vtgate_target_cpu_utilization": 652629, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "deletion_protected": true, "keyspace_count": 465224, "actor": {"id": "<id>"}, "html_url": "https://lone-vicinity.name", "url": "https://secret-fedora.info/", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
   get_vitess_branch:
     speakeasy-default-get-vitess-branch:
       parameters:
@@ -2267,7 +2267,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "vtgate_name": "<value>", "vtgate_count": 286721, "vtgate_autoscaling": false, "vtgate_max_count": 225035, "vtgate_target_cpu_utilization": 938889, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "deletion_protected": true, "deletion_protection_managed": false, "keyspace_count": 286721, "actor": {"id": "<id>"}, "html_url": "https://far-flung-toothbrush.name", "url": "https://present-deed.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleep_in_progress", "vtgate_name": "<value>", "vtgate_count": 286721, "vtgate_autoscaling": false, "vtgate_max_count": 225035, "vtgate_target_cpu_utilization": 938889, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "deletion_protected": true, "keyspace_count": 286721, "actor": {"id": "<id>"}, "html_url": "https://far-flung-toothbrush.name", "url": "https://present-deed.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": false}, "parent_branch": "<value>"}
   delete_vitess_branch:
     speakeasy-default-delete-vitess-branch:
       parameters:
@@ -2295,7 +2295,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "state": "pending", "cluster_name": "<value>", "ready": true, "deletion_protected": true, "deletion_protection_managed": true, "actor": {"id": "<id>"}, "html_url": "https://rotating-declaration.name", "url": "https://other-hydrolyse.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "state": "pending", "cluster_name": "<value>", "ready": true, "deletion_protected": true, "actor": {"id": "<id>"}, "html_url": "https://rotating-declaration.name", "url": "https://other-hydrolyse.info", "region": {"id": "<id>", "mysql_supported": true, "postgresql_supported": true}, "parent_branch": "<value>"}
   update_vitess_branch:
     speakeasy-default-update-vitess-branch:
       parameters:
@@ -2305,7 +2305,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleeping", "vtgate_name": "<value>", "vtgate_count": 533701, "vtgate_autoscaling": true, "vtgate_max_count": 805832, "vtgate_target_cpu_utilization": 945676, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "deletion_protected": false, "deletion_protection_managed": true, "keyspace_count": 533701, "actor": {"id": "<id>"}, "html_url": "https://strange-hexagon.org/", "url": "https://flawed-soliloquy.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true}, "parent_branch": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "mysql_address": "<value>", "mysql_edge_address": "<value>", "state": "sleeping", "vtgate_name": "<value>", "vtgate_count": 533701, "vtgate_autoscaling": true, "vtgate_max_count": 805832, "vtgate_target_cpu_utilization": 945676, "cluster_name": "<value>", "ready": true, "safe_migrations": true, "deletion_protected": false, "keyspace_count": 533701, "actor": {"id": "<id>"}, "html_url": "https://strange-hexagon.org/", "url": "https://flawed-soliloquy.org/", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true}, "parent_branch": "<value>"}
   list_vitess_backup_policies:
     speakeasy-default-list-vitess-backup-policies:
       parameters:

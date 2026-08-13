@@ -64,7 +64,7 @@ func (e *CreateVitessBranchKind) UnmarshalJSON(data []byte) error {
 type CreateVitessBranchRequestBody struct {
 	// The name of the branch to create
 	Name string `json:"name"`
-	// Whether customer-managed deletion protection is enabled for the branch
+	// Whether deletion protection is enabled for the branch
 	DeletionProtected *bool `json:"deletion_protected,omitzero"`
 	// The name of the parent branch. Defaults to the database's default branch if not provided.
 	ParentBranch *string `json:"parent_branch,omitzero"`
@@ -307,10 +307,8 @@ type CreateVitessBranchResponseBody struct {
 	Ready bool `json:"ready"`
 	// Whether or not the branch has safe migrations enabled
 	SafeMigrations bool `json:"safe_migrations"`
-	// Whether customer-managed deletion protection is enabled for the branch
+	// Whether deletion protection is enabled for the branch
 	DeletionProtected bool `json:"deletion_protected"`
-	// Whether deletion protection is managed by PlanetScale and cannot be disabled
-	DeletionProtectionManaged bool `json:"deletion_protection_managed"`
 	// The number of keyspaces in the branch
 	KeyspaceCount int64                    `json:"keyspace_count"`
 	Actor         *CreateVitessBranchActor `json:"actor"`
@@ -419,13 +417,6 @@ func (c *CreateVitessBranchResponseBody) GetDeletionProtected() bool {
 		return false
 	}
 	return c.DeletionProtected
-}
-
-func (c *CreateVitessBranchResponseBody) GetDeletionProtectionManaged() bool {
-	if c == nil {
-		return false
-	}
-	return c.DeletionProtectionManaged
 }
 
 func (c *CreateVitessBranchResponseBody) GetKeyspaceCount() int64 {

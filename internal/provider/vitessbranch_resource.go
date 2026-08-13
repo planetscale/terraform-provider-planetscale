@@ -45,7 +45,6 @@ type VitessBranchResourceModel struct {
 	Database                   types.String                       `tfsdk:"database"`
 	DeleteDescendants          types.Bool                         `queryParam:"style=form,explode=true,name=delete_descendants" tfsdk:"delete_descendants"`
 	DeletionProtected          types.Bool                         `tfsdk:"deletion_protected"`
-	DeletionProtectionManaged  types.Bool                         `tfsdk:"deletion_protection_managed"`
 	HTMLURL                    types.String                       `tfsdk:"html_url"`
 	ID                         types.String                       `tfsdk:"id"`
 	KeyspaceCount              types.Int64                        `tfsdk:"keyspace_count"`
@@ -117,11 +116,7 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			"deletion_protected": schema.BoolAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Whether customer-managed deletion protection is enabled for the branch`,
-			},
-			"deletion_protection_managed": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether deletion protection is managed by PlanetScale and cannot be disabled`,
+				Description: `Whether deletion protection is enabled for the branch`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,

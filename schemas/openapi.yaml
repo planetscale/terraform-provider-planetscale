@@ -972,10 +972,7 @@ paths:
                           description: Whether an approval is required to deploy schema changes to this database
                         deletion_protected:
                           type: boolean
-                          description: Whether customer-managed deletion protection is enabled for the database
-                        deletion_protection_managed:
-                          type: boolean
-                          description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                          description: Whether deletion protection is enabled for the database
                         resizing:
                           type: boolean
                           description: True if a branch is currently resizing
@@ -1060,7 +1057,6 @@ paths:
                         - default_branch
                         - require_approval_for_deploy
                         - deletion_protected
-                        - deletion_protection_managed
                         - resizing
                         - resize_queued
                         - config_changing
@@ -1328,10 +1324,7 @@ paths:
                     description: Whether an approval is required to deploy schema changes to this database
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the database
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the database
                   resizing:
                     type: boolean
                     description: True if a branch is currently resizing
@@ -1416,7 +1409,6 @@ paths:
                   - default_branch
                   - require_approval_for_deploy
                   - deletion_protected
-                  - deletion_protection_managed
                   - resizing
                   - resize_queued
                   - config_changing
@@ -1641,10 +1633,7 @@ paths:
                     description: Whether an approval is required to deploy schema changes to this database
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the database
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the database
                   resizing:
                     type: boolean
                     description: True if a branch is currently resizing
@@ -1729,7 +1718,6 @@ paths:
                   - default_branch
                   - require_approval_for_deploy
                   - deletion_protected
-                  - deletion_protection_managed
                   - resizing
                   - resize_queued
                   - config_changing
@@ -1820,7 +1808,7 @@ paths:
                   description: Whether or not full queries should be collected from the database
                 deletion_protected:
                   type: boolean
-                  description: Whether customer-managed deletion protection is enabled for the database
+                  description: Whether deletion protection is enabled for the database
                 production_branch_web_console:
                   type: boolean
                   description: Whether or not the web console can be used on the production branch of the database
@@ -1996,10 +1984,7 @@ paths:
                     description: Whether an approval is required to deploy schema changes to this database
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the database
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the database
                   resizing:
                     type: boolean
                     description: True if a branch is currently resizing
@@ -2084,7 +2069,6 @@ paths:
                   - default_branch
                   - require_approval_for_deploy
                   - deletion_protected
-                  - deletion_protection_managed
                   - resizing
                   - resize_queued
                   - config_changing
@@ -3051,10 +3035,7 @@ paths:
                           description: Whether or not the branch has safe migrations enabled
                         deletion_protected:
                           type: boolean
-                          description: Whether customer-managed deletion protection is enabled for the branch
-                        deletion_protection_managed:
-                          type: boolean
-                          description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                          description: Whether deletion protection is enabled for the branch
                         sharded:
                           type: boolean
                           description: Whether or not the branch is sharded
@@ -3206,7 +3187,6 @@ paths:
                         - production
                         - safe_migrations
                         - deletion_protected
-                        - deletion_protection_managed
                         - sharded
                         - shard_count
                         - keyspace_count
@@ -3284,7 +3264,7 @@ paths:
                   description: The name of the branch to create
                 deletion_protected:
                   type: boolean
-                  description: Whether customer-managed deletion protection is enabled for the branch
+                  description: Whether deletion protection is enabled for the branch
                 parent_branch:
                   type: string
                   description: The name of the parent branch. Defaults to the database's default branch if not provided.
@@ -3435,10 +3415,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -3590,7 +3567,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -3755,10 +3731,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -3910,7 +3883,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -3983,7 +3955,7 @@ paths:
                   description: The name to update the branch
                 deletion_protected:
                   type: boolean
-                  description: Whether customer-managed deletion protection is enabled for the branch
+                  description: Whether deletion protection is enabled for the branch
       responses:
         "200":
           description: Returns the updated branch
@@ -4086,10 +4058,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -4241,7 +4210,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -8435,10 +8403,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -8590,7 +8555,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -15130,10 +15094,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -15285,7 +15246,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -18509,10 +18469,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -18664,7 +18621,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -18826,10 +18782,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -18981,7 +18934,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -19132,10 +19084,7 @@ paths:
                     description: Whether or not the branch has safe migrations enabled
                   deletion_protected:
                     type: boolean
-                    description: Whether customer-managed deletion protection is enabled for the branch
-                  deletion_protection_managed:
-                    type: boolean
-                    description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                    description: Whether deletion protection is enabled for the branch
                   sharded:
                     type: boolean
                     description: Whether or not the branch is sharded
@@ -19287,7 +19236,6 @@ paths:
                   - production
                   - safe_migrations
                   - deletion_protected
-                  - deletion_protection_managed
                   - sharded
                   - shard_count
                   - keyspace_count
@@ -56732,10 +56680,7 @@ components:
           description: Whether an approval is required to deploy schema changes to this database
         deletion_protected:
           type: boolean
-          description: Whether customer-managed deletion protection is enabled for the database
-        deletion_protection_managed:
-          type: boolean
-          description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+          description: Whether deletion protection is enabled for the database
         resizing:
           type: boolean
           description: True if a branch is currently resizing
@@ -56820,7 +56765,6 @@ components:
         - default_branch
         - require_approval_for_deploy
         - deletion_protected
-        - deletion_protection_managed
         - resizing
         - resize_queued
         - config_changing
@@ -57035,10 +56979,7 @@ components:
                 description: Whether an approval is required to deploy schema changes to this database
               deletion_protected:
                 type: boolean
-                description: Whether customer-managed deletion protection is enabled for the database
-              deletion_protection_managed:
-                type: boolean
-                description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                description: Whether deletion protection is enabled for the database
               resizing:
                 type: boolean
                 description: True if a branch is currently resizing
@@ -57123,7 +57064,6 @@ components:
               - default_branch
               - require_approval_for_deploy
               - deletion_protected
-              - deletion_protection_managed
               - resizing
               - resize_queued
               - config_changing
@@ -58620,10 +58560,7 @@ components:
           description: Whether or not the branch has safe migrations enabled
         deletion_protected:
           type: boolean
-          description: Whether customer-managed deletion protection is enabled for the branch
-        deletion_protection_managed:
-          type: boolean
-          description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+          description: Whether deletion protection is enabled for the branch
         sharded:
           type: boolean
           description: Whether or not the branch is sharded
@@ -58775,7 +58712,6 @@ components:
         - production
         - safe_migrations
         - deletion_protected
-        - deletion_protection_managed
         - sharded
         - shard_count
         - keyspace_count
@@ -58922,10 +58858,7 @@ components:
                 description: Whether or not the branch has safe migrations enabled
               deletion_protected:
                 type: boolean
-                description: Whether customer-managed deletion protection is enabled for the branch
-              deletion_protection_managed:
-                type: boolean
-                description: Whether deletion protection is managed by PlanetScale and cannot be disabled
+                description: Whether deletion protection is enabled for the branch
               sharded:
                 type: boolean
                 description: Whether or not the branch is sharded
@@ -59077,7 +59010,6 @@ components:
               - production
               - safe_migrations
               - deletion_protected
-              - deletion_protection_managed
               - sharded
               - shard_count
               - keyspace_count

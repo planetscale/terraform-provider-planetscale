@@ -33,8 +33,7 @@ data "planetscale_vitess_branch" "my_vitessbranch" {
 
 - `actor` (Attributes) (see [below for nested schema](#nestedatt--actor))
 - `cluster_size` (String) The SKU representing the branch's cluster size
-- `deletion_protected` (Boolean) Whether customer-managed deletion protection is enabled for the branch
-- `deletion_protection_managed` (Boolean) Whether deletion protection is managed by PlanetScale and cannot be disabled
+- `deletion_protected` (Boolean) Whether deletion protection is enabled for the branch
 - `html_url` (String) Planetscale app URL for the branch
 - `keyspace_count` (Number) The number of keyspaces in the branch
 - `mysql_address` (String) The MySQL address for the branch

@@ -33,7 +33,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsCreatePostgresBranchR
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
-		r.DeletionProtectionManaged = types.BoolValue(resp.DeletionProtectionManaged)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
@@ -73,7 +72,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
-		r.DeletionProtectionManaged = types.BoolValue(resp.DeletionProtectionManaged)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
@@ -117,7 +115,6 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdatePostgresBranchR
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
-		r.DeletionProtectionManaged = types.BoolValue(resp.DeletionProtectionManaged)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)

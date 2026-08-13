@@ -12,7 +12,7 @@ import (
 type UpdatePostgresBranchRequestBody struct {
 	// The name to update the branch
 	Name *string `json:"new_name,omitzero"`
-	// Whether customer-managed deletion protection is enabled for the branch
+	// Whether deletion protection is enabled for the branch
 	DeletionProtected *bool `json:"deletion_protected,omitzero"`
 }
 
@@ -169,11 +169,9 @@ type UpdatePostgresBranchResponseBody struct {
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
-	// Whether customer-managed deletion protection is enabled for the branch
-	DeletionProtected bool `json:"deletion_protected"`
-	// Whether deletion protection is managed by PlanetScale and cannot be disabled
-	DeletionProtectionManaged bool                       `json:"deletion_protection_managed"`
-	Actor                     *UpdatePostgresBranchActor `json:"actor"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected bool                       `json:"deletion_protected"`
+	Actor             *UpdatePostgresBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -223,13 +221,6 @@ func (u *UpdatePostgresBranchResponseBody) GetDeletionProtected() bool {
 		return false
 	}
 	return u.DeletionProtected
-}
-
-func (u *UpdatePostgresBranchResponseBody) GetDeletionProtectionManaged() bool {
-	if u == nil {
-		return false
-	}
-	return u.DeletionProtectionManaged
 }
 
 func (u *UpdatePostgresBranchResponseBody) GetActor() *UpdatePostgresBranchActor {

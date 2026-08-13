@@ -40,7 +40,7 @@ func (e *CreatePostgresBranchKind) UnmarshalJSON(data []byte) error {
 type CreatePostgresBranchRequestBody struct {
 	// The name of the branch to create
 	Name string `json:"name"`
-	// Whether customer-managed deletion protection is enabled for the branch
+	// Whether deletion protection is enabled for the branch
 	DeletionProtected *bool `json:"deletion_protected,omitzero"`
 	// The name of the parent branch. Defaults to the database's default branch if not provided.
 	ParentBranch *string `json:"parent_branch,omitzero"`
@@ -267,11 +267,9 @@ type CreatePostgresBranchResponseBody struct {
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
-	// Whether customer-managed deletion protection is enabled for the branch
-	DeletionProtected bool `json:"deletion_protected"`
-	// Whether deletion protection is managed by PlanetScale and cannot be disabled
-	DeletionProtectionManaged bool                       `json:"deletion_protection_managed"`
-	Actor                     *CreatePostgresBranchActor `json:"actor"`
+	// Whether deletion protection is enabled for the branch
+	DeletionProtected bool                       `json:"deletion_protected"`
+	Actor             *CreatePostgresBranchActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
@@ -321,13 +319,6 @@ func (c *CreatePostgresBranchResponseBody) GetDeletionProtected() bool {
 		return false
 	}
 	return c.DeletionProtected
-}
-
-func (c *CreatePostgresBranchResponseBody) GetDeletionProtectionManaged() bool {
-	if c == nil {
-		return false
-	}
-	return c.DeletionProtectionManaged
 }
 
 func (c *CreatePostgresBranchResponseBody) GetActor() *CreatePostgresBranchActor {

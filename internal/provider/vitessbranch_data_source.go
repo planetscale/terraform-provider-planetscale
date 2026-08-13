@@ -33,7 +33,6 @@ type VitessBranchDataSourceModel struct {
 	ClusterSize                types.String                       `tfsdk:"cluster_size"`
 	Database                   types.String                       `tfsdk:"database"`
 	DeletionProtected          types.Bool                         `tfsdk:"deletion_protected"`
-	DeletionProtectionManaged  types.Bool                         `tfsdk:"deletion_protection_managed"`
 	HTMLURL                    types.String                       `tfsdk:"html_url"`
 	ID                         types.String                       `tfsdk:"id"`
 	KeyspaceCount              types.Int64                        `tfsdk:"keyspace_count"`
@@ -84,11 +83,7 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"deletion_protected": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether customer-managed deletion protection is enabled for the branch`,
-			},
-			"deletion_protection_managed": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether deletion protection is managed by PlanetScale and cannot be disabled`,
+				Description: `Whether deletion protection is enabled for the branch`,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,

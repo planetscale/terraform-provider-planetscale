@@ -22,7 +22,6 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
-		r.DeletionProtectionManaged = types.BoolValue(resp.DeletionProtectionManaged)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.KeyspaceCount = types.Int64Value(resp.KeyspaceCount)
@@ -71,7 +70,6 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
-		r.DeletionProtectionManaged = types.BoolValue(resp.DeletionProtectionManaged)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.KeyspaceCount = types.Int64Value(resp.KeyspaceCount)
@@ -119,7 +117,6 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsUpdateVitessBranchRespo
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
 		r.DeletionProtected = types.BoolValue(resp.DeletionProtected)
-		r.DeletionProtectionManaged = types.BoolValue(resp.DeletionProtectionManaged)
 		r.HTMLURL = types.StringValue(resp.HTMLURL)
 		r.ID = types.StringValue(resp.ID)
 		r.KeyspaceCount = types.Int64Value(resp.KeyspaceCount)
