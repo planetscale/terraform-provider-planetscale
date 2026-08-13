@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 81892bd20df6455029fb613f3148bbff
+  docChecksum: e7b1586a0785515d8c2ba4952c7a853b
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
-  releaseVersion: 1.6.0
-  configChecksum: 2903f689f1907338345bcdd07579df08
+  releaseVersion: 1.7.1
+  configChecksum: ee312a8aca8eb27bc1d68e7e3936ce3f
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
@@ -73,6 +73,8 @@ trackedFiles:
   examples/data-sources/planetscale_vitess_branch_passwords/data-source.tf:
     id: b575309b1166
     pristine_git_object: 7ab5ffb6c575475282a87565f6ee7c8403074b63
+  examples/data-sources/planetscale_vitess_keyspace/data-source.tf: {}
+  examples/data-sources/planetscale_vitess_keyspaces/data-source.tf: {}
   examples/provider/provider.tf:
     id: 954e955c0240
     pristine_git_object: 66664be2637146405147ef9bc663d13b453ce3f8
@@ -112,6 +114,8 @@ trackedFiles:
   examples/resources/planetscale_vitess_branch_password/import.sh:
     id: 33bc70dd4e06
     pristine_git_object: 4a8d92374beb311bf11912bcc446c68961f0ca49
+  examples/resources/planetscale_vitess_keyspace/import-by-string-id.tf: {}
+  examples/resources/planetscale_vitess_keyspace/import.sh: {}
   go.mod:
     id: c47645c391ad
     pristine_git_object: 4df25b7df884a56bc731483888f5d1dd3185ffa6
@@ -314,6 +318,8 @@ trackedFiles:
     id: 72a03805427f
     pristine_git_object: ea5786b8bbcb244f690025648dfa5ec5fbe52bca
   internal/provider/types/create_bouncer_actor.go: {}
+  internal/provider/types/get_keyspace_replication_durability_constraints.go: {}
+  internal/provider/types/get_keyspace_vreplication_flags.go: {}
   internal/provider/types/get_password_actor.go:
     id: 34086949be0f
     pristine_git_object: 09f2e6106da7aaf78681c662708280a334e0ae77
@@ -384,6 +390,9 @@ trackedFiles:
   internal/provider/types/list_databases_region.go:
     id: b2ea2fd8d5d1
     pristine_git_object: 670933e4a82a97a3d332a447686e439f7ac2c402
+  internal/provider/types/list_keyspaces_data.go: {}
+  internal/provider/types/list_keyspaces_replication_durability_constraints.go: {}
+  internal/provider/types/list_keyspaces_vreplication_flags.go: {}
   internal/provider/types/list_organizations_data.go:
     id: 18371e48c5b0
     pristine_git_object: acbee94fd837e34920350b6246cc4740fb4911a3
@@ -461,6 +470,12 @@ trackedFiles:
   internal/provider/vitessbranchpasswords_data_source_sdk.go:
     id: f217ab3e870d
     pristine_git_object: 0afc249db96660a552cc00c4dcd7d1675b0be1fb
+  internal/provider/vitesskeyspace_data_source.go: {}
+  internal/provider/vitesskeyspace_data_source_sdk.go: {}
+  internal/provider/vitesskeyspace_resource.go: {}
+  internal/provider/vitesskeyspace_resource_sdk.go: {}
+  internal/provider/vitesskeyspaces_data_source.go: {}
+  internal/provider/vitesskeyspaces_data_source_sdk.go: {}
   internal/sdk/apibranchresizes.go: {}
   internal/sdk/backuppolicies.go: {}
   internal/sdk/backups.go: {}
@@ -469,6 +484,7 @@ trackedFiles:
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
     pristine_git_object: fa7fcf53770dfab66ff0b41fb2abc57deae178e0
+  internal/sdk/databasebranchkeyspaces.go: {}
   internal/sdk/databasebranchpasswords.go:
     id: a545604b52ee
     pristine_git_object: bbdaca1bf8767c009824bd0b013ec873f22e23e9
@@ -523,12 +539,14 @@ trackedFiles:
   internal/sdk/internal/utils/utils.go:
     id: feefcdf75dbd
     pristine_git_object: 0415b536598baa76c5d1a8fc32816ed1b83f9137
+  internal/sdk/keyspaceresizes.go: {}
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
   internal/sdk/models/operations/applypostgresbouncerterraformchanges.go: {}
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go: {}
   internal/sdk/models/operations/createbouncer.go: {}
+  internal/sdk/models/operations/createkeyspace.go: {}
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     pristine_git_object: e84cf733d521e8be177285c0496c8540f011c362
@@ -547,6 +565,7 @@ trackedFiles:
     pristine_git_object: 4164e962f94db2ef10a0ac3446371930522a0d05
   internal/sdk/models/operations/createvitessbranchbackup.go: {}
   internal/sdk/models/operations/deletebouncer.go: {}
+  internal/sdk/models/operations/deletekeyspace.go: {}
   internal/sdk/models/operations/deletepassword.go:
     id: 491914016b46
     pristine_git_object: 00fb90f9f8cb86916ff644e893dc5db362c004cf
@@ -566,6 +585,7 @@ trackedFiles:
   internal/sdk/models/operations/deletevitessbranchbackup.go: {}
   internal/sdk/models/operations/getbranchchangerequest.go: {}
   internal/sdk/models/operations/getbranchresizerequest.go: {}
+  internal/sdk/models/operations/getkeyspace.go: {}
   internal/sdk/models/operations/getorganization.go:
     id: ebae13951225
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
@@ -597,6 +617,7 @@ trackedFiles:
   internal/sdk/models/operations/listdatabases.go:
     id: 9a615ba562a7
     pristine_git_object: 3b63c0cbb7a174e2c27699547377755e941ee9f2
+  internal/sdk/models/operations/listkeyspaces.go: {}
   internal/sdk/models/operations/listorganizations.go:
     id: 4fe6c8fc6771
     pristine_git_object: bbd5afa074ed22ba3b63edc28064bbb039d72db0
@@ -614,6 +635,7 @@ trackedFiles:
     id: 6d0d29414e00
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
   internal/sdk/models/operations/updatebranchresizerequest.go: {}
+  internal/sdk/models/operations/updatekeyspaceresizerequest.go: {}
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
@@ -1176,7 +1198,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"current_page": 1511.55, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}}]}
+          application/json: {"type": "<value>", "current_page": 1511.55, "per_page": 151155, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "node_ttl_strategy": "node_ttl_always", "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}, "resize_in_progress": true}]}
   create_keyspace:
     speakeasy-default-create-keyspace:
       parameters:
@@ -1186,7 +1208,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "replication_durability_constraints": {"strategy": "lag"}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": false, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "node_ttl_strategy": "node_ttl_always", "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}, "resize_in_progress": false}
   get_keyspace:
     speakeasy-default-get-keyspace:
       parameters:
@@ -1198,7 +1220,7 @@ examples:
           keyspace: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "replication_durability_constraints": {"strategy": "available"}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "config_change_in_progress": false, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "node_ttl_strategy": "node_ttl_follow_maintenance", "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}, "resize_in_progress": false}
   update_keyspace:
     speakeasy-default-update-keyspace:
       parameters:
@@ -2594,6 +2616,17 @@ examples:
           branch: "<value>"
       requestBody:
         application/json: {"safe_migrations": false}
+  update_keyspace_resize_request:
+    speakeasy-default-update-keyspace-resize-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          keyspace: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "<value>"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

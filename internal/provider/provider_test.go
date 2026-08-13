@@ -15,7 +15,13 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/shared"
 )
 
-const testAccOrg = "planetscale-terraform-testing"
+// Defaults to planetscale-terraform-testing; override with PLANETSCALE_TEST_ORG.
+var testAccOrg = func() string {
+	if org := os.Getenv("PLANETSCALE_TEST_ORG"); org != "" {
+		return org
+	}
+	return "planetscale-terraform-testing"
+}()
 
 // Returns a mapping of provider type names to provider server implementations,
 // suitable for acceptance testing via the

@@ -158,6 +158,7 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 		NewVitessBranchResource,
 		NewVitessBranchBackupResource,
 		NewVitessBranchPasswordResource,
+		NewVitessKeyspaceResource,
 	}
 }
 
@@ -185,6 +186,8 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewVitessBranchBackupsDataSource,
 		NewVitessBranchPasswordDataSource,
 		NewVitessBranchPasswordsDataSource,
+		NewVitessKeyspaceDataSource,
+		NewVitessKeyspacesDataSource,
 	}
 }
 

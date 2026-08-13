@@ -1,0 +1,100 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_vitess_keyspaces data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get
+    description: API operation for read and enable pagination.
+    update:
+      x-speakeasy-entity-operation: VitessKeyspaces#read
+      x-speakeasy-entity-description: >-
+        List PlanetScale Vitess keyspaces on a branch. See
+        `planetscale_vitess_keyspace` for create, resize, and default-keyspace
+        guidance.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: VitessKeyspaces
+      x-speakeasy-entity-description: >-
+        List PlanetScale Vitess keyspaces on a branch. See
+        `planetscale_vitess_keyspace` for create, resize, and default-keyspace
+        guidance.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.parameters[?@.name == 'per_page']
+    description: Ignore extraneous parameter in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties
+    description: Ignore extraneous pagination properties in Terraform schema.
+    update:
+      current_page:
+        x-speakeasy-terraform-ignore: true
+      next_page:
+        x-speakeasy-terraform-ignore: true
+      next_page_url:
+        x-speakeasy-terraform-ignore: true
+      prev_page:
+        x-speakeasy-terraform-ignore: true
+      prev_page_url:
+        x-speakeasy-terraform-ignore: true
+
+  # Keep the list items consistent with the keyspace resource and single data source; see
+  # overlay-terraform-vitess-keyspace.yaml.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+      description: >-
+        The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in
+        place via a keyspace resize.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+      description: >-
+        True when this is the branch's default keyspace (usually created with
+        the branch). Import that keyspace to manage its size or replicas.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.extra_replicas
+    update:
+      description: >-
+        The number of additional replicas beyond the included default. Updates
+        in place via a keyspace resize.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.resizing
+    update:
+      description: >-
+        True while the keyspace is actively resizing.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.resize_pending
+    update:
+      description: >-
+        True while a resize request is queued.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties
+    update:
+      resize_in_progress:
+        type: boolean
+        description: >-
+          True while any unfinished resize request exists for the keyspace.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.required
+    update:
+      - resize_in_progress
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.mysqld_options
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.vttablet_options
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.required[?@ == 'mysqld_options']
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.required[?@ == 'vttablet_options']
+    remove: true

@@ -1417,9 +1417,788 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/insights/{fingerprint}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/insights/{fingerprint}/summary: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/insights/{fingerprint}/traffic/budgets: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces:
+    get:
+      tags:
+        - Database branch keyspaces
+      operationId: list_keyspaces
+      summary: Get keyspaces
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: If provided, specifies the page offset of returned results
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: If provided, specifies the number of returned results
+          schema:
+            type: integer
+            default: 25
+          x-speakeasy-terraform-ignore: true
+      responses:
+        "200":
+          description: Returns keyspaces
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The response type. Always "list" for paginated responses.
+                  current_page:
+                    type: integer
+                    description: The current page number
+                    x-speakeasy-terraform-ignore: true
+                  per_page:
+                    type: integer
+                    description: The maximum number of results per page
+                  next_page:
+                    type: integer
+                    description: The next page number, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  next_page_url:
+                    type: string
+                    description: The next page of results, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page:
+                    type: integer
+                    description: The previous page number, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the keyspace
+                        name:
+                          type: string
+                          description: Name of the keyspace
+                        shards:
+                          type: integer
+                          description: The number of keyspace shards
+                        sharded:
+                          type: boolean
+                          description: If the keyspace is sharded
+                        replicas:
+                          type: integer
+                          description: Total number of replicas in the keyspace
+                        extra_replicas:
+                          type: integer
+                          description: The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
+                        created_at:
+                          type: string
+                          description: When the keyspace was created
+                        updated_at:
+                          type: string
+                          description: When the keyspace was last updated
+                        cluster_name:
+                          type: string
+                          description: The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in place via a keyspace resize.
+                          x-speakeasy-name-override: cluster_size
+                        cluster_display_name:
+                          type: string
+                          description: The SKU representing the keyspace cluster size for display
+                        resizing:
+                          type: boolean
+                          description: True while the keyspace is actively resizing.
+                        resize_pending:
+                          type: boolean
+                          description: True while a resize request is queued.
+                        config_change_in_progress:
+                          type: boolean
+                          description: Is the keyspace undergoing a config change
+                        ready:
+                          type: boolean
+                          description: Is the keyspace provisioned and serving traffic
+                        metal:
+                          type: boolean
+                          description: Is the keyspace running on metal instances
+                        default:
+                          type: boolean
+                          description: True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas.
+                          x-speakeasy-name-override: is_default
+                        imported:
+                          type: boolean
+                          description: Is this keyspace used in an import
+                        vector_pool_allocation:
+                          type: number
+                          description: Percentage of buffer pool memory allocated to vector indexes
+                          nullable: true
+                        node_ttl_strategy:
+                          type: string
+                          enum:
+                            - node_ttl_follow_maintenance
+                            - node_ttl_always
+                            - node_ttl_off
+                          description: Controls when node TTL drains are allowed
+                        replication_durability_constraints:
+                          type: object
+                          properties:
+                            strategy:
+                              type: string
+                              enum:
+                                - available
+                                - lag
+                                - always
+                              description: The replication durability strategy
+                              nullable: true
+                        vreplication_flags:
+                          type: object
+                          properties:
+                            optimize_inserts:
+                              type: boolean
+                              description: Enable optimized inserts
+                            allow_no_blob_binlog_row_image:
+                              type: boolean
+                              description: Allow no blob binlog row image
+                            vplayer_batching:
+                              type: boolean
+                              description: Enable VPlayer batching
+                          required:
+                            - optimize_inserts
+                            - allow_no_blob_binlog_row_image
+                            - vplayer_batching
+                        resize_in_progress:
+                          type: boolean
+                          description: >-
+                            True while any unfinished resize request exists for the keyspace.
+                      required:
+                        - id
+                        - name
+                        - shards
+                        - sharded
+                        - replicas
+                        - extra_replicas
+                        - created_at
+                        - updated_at
+                        - cluster_name
+                        - cluster_display_name
+                        - resizing
+                        - resize_pending
+                        - config_change_in_progress
+                        - ready
+                        - metal
+                        - default
+                        - imported
+                        - vector_pool_allocation
+                        - node_ttl_strategy
+                        - replication_durability_constraints
+                        - vreplication_flags
+                        - resize_in_progress
+                required:
+                  - type
+                  - current_page
+                  - per_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - data
+                x-speakeasy-entity: VitessKeyspaces
+                x-speakeasy-entity-description: >-
+                  List PlanetScale Vitess keyspaces on a branch. See `planetscale_vitess_keyspace` for create, resize, and default-keyspace guidance.
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |+
+        ### Authorization
+        A service token   must have at least one of the following access   in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`
+
+      x-speakeasy-entity-operation: VitessKeyspaces#read
+      x-speakeasy-entity-description: >-
+        List PlanetScale Vitess keyspaces on a branch. See `planetscale_vitess_keyspace` for create, resize, and default-keyspace guidance.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+    post:
+      tags:
+        - Database branch keyspaces
+      operationId: create_keyspace
+      summary: Create a keyspace
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the keyspace
+                cluster_size:
+                  type: string
+                  description: The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in place via a keyspace resize. Use the List available cluster sizes endpoint for options for your organization.
+                  x-speakeasy-plan-validators: VitessClusterSizeValidator
+                extra_replicas:
+                  type: integer
+                  description: The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
+                shards:
+                  type: integer
+                  description: "The number of shards. Default: 1. Set only at create time; changing this value requires replacement."
+              required:
+                - name
+                - cluster_size
+      responses:
+        "200":
+          description: Returns a created keyspace
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the keyspace
+                  name:
+                    type: string
+                    description: Name of the keyspace
+                  shards:
+                    type: integer
+                    description: The number of shards. Set only at create time; changing this value requires replacement.
+                  sharded:
+                    type: boolean
+                    description: If the keyspace is sharded
+                  replicas:
+                    type: integer
+                    description: Total number of replicas in the keyspace
+                  extra_replicas:
+                    type: integer
+                    description: The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
+                  created_at:
+                    type: string
+                    description: When the keyspace was created
+                  updated_at:
+                    type: string
+                    description: When the keyspace was last updated
+                  cluster_name:
+                    type: string
+                    description: The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in place via a keyspace resize.
+                    x-speakeasy-name-override: cluster_size
+                  cluster_display_name:
+                    type: string
+                    description: The SKU representing the keyspace cluster size for display
+                  resizing:
+                    type: boolean
+                    description: True while the keyspace is actively resizing. The provider waits for this to become false after create and update.
+                  resize_pending:
+                    type: boolean
+                    description: True while a resize request is queued. The provider waits for this to become false after create and update.
+                  config_change_in_progress:
+                    type: boolean
+                    description: Is the keyspace undergoing a config change
+                  ready:
+                    type: boolean
+                    description: Is the keyspace provisioned and serving traffic
+                  metal:
+                    type: boolean
+                    description: Is the keyspace running on metal instances
+                  default:
+                    type: boolean
+                    description: True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.
+                    x-speakeasy-name-override: is_default
+                  imported:
+                    type: boolean
+                    description: Is this keyspace used in an import
+                  vector_pool_allocation:
+                    type: number
+                    description: Percentage of buffer pool memory allocated to vector indexes
+                    nullable: true
+                  node_ttl_strategy:
+                    type: string
+                    enum:
+                      - node_ttl_follow_maintenance
+                      - node_ttl_always
+                      - node_ttl_off
+                    description: Controls when node TTL drains are allowed
+                  replication_durability_constraints:
+                    type: object
+                    properties:
+                      strategy:
+                        type: string
+                        enum:
+                          - available
+                          - lag
+                          - always
+                        description: The replication durability strategy
+                        nullable: true
+                  vreplication_flags:
+                    type: object
+                    properties:
+                      optimize_inserts:
+                        type: boolean
+                        description: Enable optimized inserts
+                      allow_no_blob_binlog_row_image:
+                        type: boolean
+                        description: Allow no blob binlog row image
+                      vplayer_batching:
+                        type: boolean
+                        description: Enable VPlayer batching
+                    required:
+                      - optimize_inserts
+                      - allow_no_blob_binlog_row_image
+                      - vplayer_batching
+                  resize_in_progress:
+                    type: boolean
+                    description: >-
+                      True while any unfinished resize request exists for the keyspace. Computed for observability; apply waits on ready, resizing, resize_pending, and config_change_in_progress instead, because this flag can lag after the resize has already applied.
+                required:
+                  - id
+                  - name
+                  - shards
+                  - sharded
+                  - replicas
+                  - extra_replicas
+                  - created_at
+                  - updated_at
+                  - cluster_name
+                  - cluster_display_name
+                  - resizing
+                  - resize_pending
+                  - config_change_in_progress
+                  - ready
+                  - metal
+                  - default
+                  - imported
+                  - vector_pool_allocation
+                  - node_ttl_strategy
+                  - replication_durability_constraints
+                  - vreplication_flags
+                  - resize_in_progress
+                x-speakeasy-entity: VitessKeyspace
+                x-speakeasy-entity-description: >-
+                  Manage an additional PlanetScale Vitess keyspace on a branch.
+
+                  Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size or replicas in Terraform.
+
+                  `cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch.
+
+                  Apply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |+
+        ### Authorization
+        A service token   must have at least one of the following access   in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `create_branch`
+
+      x-speakeasy-entity-operation: VitessKeyspace#create
+      x-speakeasy-entity-description: >-
+        Manage an additional PlanetScale Vitess keyspace on a branch.
+
+        Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size or replicas in Terraform.
+
+        `cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch.
+
+        Apply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.
+  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}:
+    get:
+      tags:
+        - Database branch keyspaces
+      operationId: get_keyspace
+      summary: Get a keyspace
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: keyspace
+          in: path
+          required: true
+          description: The name of the keyspace
+          schema:
+            type: string
+          x-speakeasy-match: name
+      responses:
+        "200":
+          description: Returns information about a keyspace
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the keyspace
+                  name:
+                    type: string
+                    description: Name of the keyspace
+                  shards:
+                    type: integer
+                    description: The number of shards. Set only at create time; changing this value requires replacement.
+                  sharded:
+                    type: boolean
+                    description: If the keyspace is sharded
+                  replicas:
+                    type: integer
+                    description: Total number of replicas in the keyspace
+                  extra_replicas:
+                    type: integer
+                    description: The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
+                  created_at:
+                    type: string
+                    description: When the keyspace was created
+                  updated_at:
+                    type: string
+                    description: When the keyspace was last updated
+                  cluster_name:
+                    type: string
+                    description: The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in place via a keyspace resize.
+                    x-speakeasy-name-override: cluster_size
+                  cluster_display_name:
+                    type: string
+                    description: The SKU representing the keyspace cluster size for display
+                  resizing:
+                    type: boolean
+                    description: True while the keyspace is actively resizing. The provider waits for this to become false after create and update.
+                  resize_pending:
+                    type: boolean
+                    description: True while a resize request is queued. The provider waits for this to become false after create and update.
+                  config_change_in_progress:
+                    type: boolean
+                    description: Is the keyspace undergoing a config change
+                  ready:
+                    type: boolean
+                    description: Is the keyspace provisioned and serving traffic
+                  metal:
+                    type: boolean
+                    description: Is the keyspace running on metal instances
+                  default:
+                    type: boolean
+                    description: True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.
+                    x-speakeasy-name-override: is_default
+                  imported:
+                    type: boolean
+                    description: Is this keyspace used in an import
+                  vector_pool_allocation:
+                    type: number
+                    description: Percentage of buffer pool memory allocated to vector indexes
+                    nullable: true
+                  node_ttl_strategy:
+                    type: string
+                    enum:
+                      - node_ttl_follow_maintenance
+                      - node_ttl_always
+                      - node_ttl_off
+                    description: Controls when node TTL drains are allowed
+                  replication_durability_constraints:
+                    type: object
+                    properties:
+                      strategy:
+                        type: string
+                        enum:
+                          - available
+                          - lag
+                          - always
+                        description: The replication durability strategy
+                        nullable: true
+                  vreplication_flags:
+                    type: object
+                    properties:
+                      optimize_inserts:
+                        type: boolean
+                        description: Enable optimized inserts
+                      allow_no_blob_binlog_row_image:
+                        type: boolean
+                        description: Allow no blob binlog row image
+                      vplayer_batching:
+                        type: boolean
+                        description: Enable VPlayer batching
+                    required:
+                      - optimize_inserts
+                      - allow_no_blob_binlog_row_image
+                      - vplayer_batching
+                  resize_in_progress:
+                    type: boolean
+                    description: >-
+                      True while any unfinished resize request exists for the keyspace. Computed for observability; apply waits on ready, resizing, resize_pending, and config_change_in_progress instead, because this flag can lag after the resize has already applied.
+                required:
+                  - id
+                  - name
+                  - shards
+                  - sharded
+                  - replicas
+                  - extra_replicas
+                  - created_at
+                  - updated_at
+                  - cluster_name
+                  - cluster_display_name
+                  - resizing
+                  - resize_pending
+                  - config_change_in_progress
+                  - ready
+                  - metal
+                  - default
+                  - imported
+                  - vector_pool_allocation
+                  - node_ttl_strategy
+                  - replication_durability_constraints
+                  - vreplication_flags
+                  - resize_in_progress
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |+
+        ### Authorization
+        A service token   must have at least one of the following access   in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`
+
+      x-speakeasy-entity-operation:
+        - VitessKeyspace#read
+        - entityOperation: VitessKeyspace#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: VitessKeyspace#update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: >-
+        Look up a PlanetScale Vitess keyspace. See the managed resource for create, resize, and default-keyspace guidance.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 180 # 30 minutes at a 10 second interval, plus initial 30 second delay
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/ready == true
+            - condition: $response.body#/resizing == false
+            - condition: $response.body#/resize_pending == false
+            # Do not wait on resize_in_progress: under load the API can leave it
+            # true for 30m+ after resizing/resize_pending clear and the desired
+            # size/replicas are already applied (CI Acc hung on that). Keep the
+            # attribute computed for observability; consecutive rapid resizes may
+            # still 422 if a request is actually unfinished.
+            - condition: $response.body#/config_change_in_progress == false
+    delete:
+      tags:
+        - Database branch keyspaces
+      operationId: delete_keyspace
+      summary: Delete a keyspace
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: keyspace
+          in: path
+          required: true
+          description: The name of the keyspace
+          schema:
+            type: string
+          x-speakeasy-match: name
+      responses:
+        "204":
+          description: Delete a keyspace
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |+
+        ### Authorization
+        A service token   must have at least one of the following access   in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `delete_branch`, `delete_production_branch`
+
+      x-speakeasy-entity-operation: VitessKeyspace#delete
+  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes:
+    put:
+      tags:
+        - Keyspace resizes
+      operationId: update_keyspace_resize_request
+      summary: Upsert a resize request
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: keyspace
+          in: path
+          required: true
+          description: The name of the keyspace
+          schema:
+            type: string
+          x-speakeasy-match: name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cluster_size:
+                  type: string
+                  description: "The database cluster size name (e.g., `PS_10`, `PS_80`). Updates in place via a keyspace resize."
+                  x-speakeasy-plan-validators: VitessClusterSizeValidator
+                extra_replicas:
+                  type: integer
+                  description: The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
+      responses:
+        "200":
+          description: Returns keyspace resize request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: resize_request_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: resize_request_state
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - id
+                  - state
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |+
+        ### Authorization
+        A service token   must have at least one of the following access   in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+      x-speakeasy-entity-operation: VitessKeyspace#update
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/rollout-status: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vschema: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/parameters: {}

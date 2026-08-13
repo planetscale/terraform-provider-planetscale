@@ -2,8 +2,8 @@ speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:35ea5cbb1dbd04ec50ce88547c30f619b8127e6135a2779862c9f495ea2e7c5d
-        sourceBlobDigest: sha256:21fe6ccb88f35c1a5fc972f598454252387ca834080d0a4c7fe9105dc976617c
+        sourceRevisionDigest: sha256:4da383cfdd2348680ebefd30717a4393cc812c51cb6bd7086d97f2b33cdc124d
+        sourceBlobDigest: sha256:57fe8f8798e6c875238ac3c0fd0c401308e6cd532107ad696fe866af22f64ecf
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:35ea5cbb1dbd04ec50ce88547c30f619b8127e6135a2779862c9f495ea2e7c5d
-        sourceBlobDigest: sha256:21fe6ccb88f35c1a5fc972f598454252387ca834080d0a4c7fe9105dc976617c
+        sourceRevisionDigest: sha256:4da383cfdd2348680ebefd30717a4393cc812c51cb6bd7086d97f2b33cdc124d
+        sourceBlobDigest: sha256:57fe8f8798e6c875238ac3c0fd0c401308e6cd532107ad696fe866af22f64ecf
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.793.0
@@ -35,6 +35,8 @@ workflow:
                 - location: schemas/overlay-terraform-postgres-branch-roles.yaml
                 - location: schemas/overlay-terraform-vitess-branch-password.yaml
                 - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
+                - location: schemas/overlay-terraform-vitess-keyspace.yaml
+                - location: schemas/overlay-terraform-vitess-keyspaces.yaml
                 - location: schemas/overlay-terraform-backup-policies.yaml
                 - location: schemas/overlay-terraform-vitess-backup-policy.yaml
                 - location: schemas/overlay-terraform-postgres-backup-policy.yaml
