@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 5b3d136edc770e815c094a75135000a6
+  docChecksum: 6a28955885d5de82acce61deb6c0b988
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -46,9 +46,15 @@ trackedFiles:
   examples/data-sources/planetscale_neki_branch_role/data-source.tf: {}
   examples/data-sources/planetscale_neki_branch_roles/data-source.tf: {}
   examples/data-sources/planetscale_neki_configuration_profile/data-source.tf: {}
+  examples/data-sources/planetscale_neki_configuration_profile_parameters/data-source.tf: {}
+  examples/data-sources/planetscale_neki_configuration_profile_shards/data-source.tf: {}
   examples/data-sources/planetscale_neki_configuration_profiles/data-source.tf: {}
   examples/data-sources/planetscale_neki_database/data-source.tf: {}
   examples/data-sources/planetscale_neki_redacted_branch_role/data-source.tf: {}
+  examples/data-sources/planetscale_neki_router/data-source.tf: {}
+  examples/data-sources/planetscale_neki_router_parameters/data-source.tf: {}
+  examples/data-sources/planetscale_neki_routers/data-source.tf: {}
+  examples/data-sources/planetscale_neki_shards/data-source.tf: {}
   examples/data-sources/planetscale_organization/data-source.tf:
     id: 66920cabf1a1
     pristine_git_object: 9f31bb76143f3c25afdb3c8befaa55d7da62d6e0
@@ -101,6 +107,8 @@ trackedFiles:
   examples/resources/planetscale_neki_configuration_profile/import.sh: {}
   examples/resources/planetscale_neki_redacted_branch_role/import-by-string-id.tf: {}
   examples/resources/planetscale_neki_redacted_branch_role/import.sh: {}
+  examples/resources/planetscale_neki_router/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_router/import.sh: {}
   examples/resources/planetscale_postgres_backup_policy/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_backup_policy/import.sh: {}
   examples/resources/planetscale_postgres_bouncer/import-by-string-id.tf: {}
@@ -245,14 +253,28 @@ trackedFiles:
   internal/provider/nekiconfigurationprofile_data_source_sdk.go: {}
   internal/provider/nekiconfigurationprofile_resource.go: {}
   internal/provider/nekiconfigurationprofile_resource_sdk.go: {}
+  internal/provider/nekiconfigurationprofileparameters_data_source.go: {}
+  internal/provider/nekiconfigurationprofileparameters_data_source_sdk.go: {}
   internal/provider/nekiconfigurationprofiles_data_source.go: {}
   internal/provider/nekiconfigurationprofiles_data_source_sdk.go: {}
+  internal/provider/nekiconfigurationprofileshards_data_source.go: {}
+  internal/provider/nekiconfigurationprofileshards_data_source_sdk.go: {}
   internal/provider/nekidatabase_data_source.go: {}
   internal/provider/nekidatabase_data_source_sdk.go: {}
   internal/provider/nekiredactedbranchrole_data_source.go: {}
   internal/provider/nekiredactedbranchrole_data_source_sdk.go: {}
   internal/provider/nekiredactedbranchrole_resource.go: {}
   internal/provider/nekiredactedbranchrole_resource_sdk.go: {}
+  internal/provider/nekirouter_data_source.go: {}
+  internal/provider/nekirouter_data_source_sdk.go: {}
+  internal/provider/nekirouter_resource.go: {}
+  internal/provider/nekirouter_resource_sdk.go: {}
+  internal/provider/nekirouterparameters_data_source.go: {}
+  internal/provider/nekirouterparameters_data_source_sdk.go: {}
+  internal/provider/nekirouters_data_source.go: {}
+  internal/provider/nekirouters_data_source_sdk.go: {}
+  internal/provider/nekishards_data_source.go: {}
+  internal/provider/nekishards_data_source_sdk.go: {}
   internal/provider/organization_data_source.go:
     id: d22d005e3012
     pristine_git_object: 82a33d8488b23f60aa73688e445ce1e5c225c871
@@ -508,6 +530,10 @@ trackedFiles:
   internal/provider/types/list_vitess_branch_backups_data.go: {}
   internal/provider/types/list_vitess_branch_backups_database_branch.go: {}
   internal/provider/types/neki_configuration_profile.go: {}
+  internal/provider/types/neki_parameter.go: {}
+  internal/provider/types/neki_router.go: {}
+  internal/provider/types/neki_router_size_sku.go: {}
+  internal/provider/types/neki_shard.go: {}
   internal/provider/utils.go:
     id: 312d50f148af
     pristine_git_object: 2b167edfe9b7df08d35bacb896143fd8c6e3bf8c
@@ -647,6 +673,7 @@ trackedFiles:
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
+  internal/sdk/models/operations/createrouter.go: {}
   internal/sdk/models/operations/createshardconfigurationprofile.go: {}
   internal/sdk/models/operations/createvitessbackuppolicy.go: {}
   internal/sdk/models/operations/createvitessbranch.go:
@@ -672,6 +699,7 @@ trackedFiles:
   internal/sdk/models/operations/deleterole.go:
     id: 63abc80d4993
     pristine_git_object: 26de167508a6ba14741fd13262ec8137c8d70023
+  internal/sdk/models/operations/deleterouter.go: {}
   internal/sdk/models/operations/deleteshardconfigurationprofile.go: {}
   internal/sdk/models/operations/deletevitessbackuppolicy.go: {}
   internal/sdk/models/operations/deletevitessbranch.go:
@@ -706,6 +734,7 @@ trackedFiles:
   internal/sdk/models/operations/getrole.go:
     id: a854350465dd
     pristine_git_object: 019cd3b4fa0b8af2ac8f806b8f0b8ce776a2588e
+  internal/sdk/models/operations/getrouter.go: {}
   internal/sdk/models/operations/getshardconfigurationprofile.go: {}
   internal/sdk/models/operations/getvitessbackuppolicy.go: {}
   internal/sdk/models/operations/getvitessbranch.go:
@@ -734,7 +763,12 @@ trackedFiles:
   internal/sdk/models/operations/listroles.go:
     id: ba1976927ea8
     pristine_git_object: 2759d9ffe5333235ea0787dc880ea888ed739c68
+  internal/sdk/models/operations/listrouterparameters.go: {}
+  internal/sdk/models/operations/listrouters.go: {}
+  internal/sdk/models/operations/listshardconfigurationprofileparameters.go: {}
   internal/sdk/models/operations/listshardconfigurationprofiles.go: {}
+  internal/sdk/models/operations/listshardconfigurationprofileshards.go: {}
+  internal/sdk/models/operations/listshards.go: {}
   internal/sdk/models/operations/listvitessbackuppolicies.go: {}
   internal/sdk/models/operations/listvitessbranchbackups.go: {}
   internal/sdk/models/operations/options.go:
@@ -755,15 +789,23 @@ trackedFiles:
   internal/sdk/models/operations/updaterole.go:
     id: eaca616a88af
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
+  internal/sdk/models/operations/updaterouter.go: {}
   internal/sdk/models/operations/updatesafemigrations.go: {}
   internal/sdk/models/operations/updateshardconfigurationprofile.go: {}
   internal/sdk/models/operations/updatevitessbackuppolicy.go: {}
   internal/sdk/models/operations/updatevitessbranch.go: {}
   internal/sdk/models/shared/nekiconfigurationprofile.go: {}
+  internal/sdk/models/shared/nekiparameter.go: {}
+  internal/sdk/models/shared/nekirouter.go: {}
+  internal/sdk/models/shared/nekiroutersizesku.go: {}
+  internal/sdk/models/shared/nekishard.go: {}
+  internal/sdk/models/shared/paginatednekishards.go: {}
   internal/sdk/models/shared/security.go:
     id: 9098af98367e
     pristine_git_object: 5bbf429fa7c73f8213d34abbf017df9f6d45b04c
   internal/sdk/nekiconfigurationprofiles.go: {}
+  internal/sdk/nekirouters.go: {}
+  internal/sdk/nekishards.go: {}
   internal/sdk/optionalnullable/optionalnullable.go:
     id: 4b83aa3f3df3
     pristine_git_object: c6739be0619b6726565e0f11855ffe44b0e5607e
@@ -3022,6 +3064,103 @@ examples:
           organization: "<value>"
           database: "<value>"
           branch: "<value>"
+  list_shard_configuration_profile_parameters:
+    speakeasy-default-list-shard-configuration-profile-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "200":
+          application/json: [{"name": "<value>", "display_name": "Ebba36", "namespace": "<value>", "advanced": true, "description": "blah mid duh boo collectivization highly trench gee", "parameter_type": "<value>", "default_value": "<value>", "value": "<value>", "required": false, "restart": false, "url": "https://mediocre-fraudster.org"}]
+  list_routers:
+    speakeasy-default-list-routers:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: [{"name": "<value>", "default": true, "replicas_per_cell": 467949, "state": "Nebraska", "sku": {"name": "<value>", "display_name": "Abbie6", "cpu": "<value>", "ram": 754484, "sort_order": 336342}}]
+  create_router:
+    speakeasy-default-create-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {"name": "<value>"}
+      responses:
+        "201":
+          application/json: {"name": "<value>", "default": true, "replicas_per_cell": 496306, "state": "Maine", "sku": {"name": "<value>", "display_name": "Amie72", "cpu": "<value>", "ram": 610796, "sort_order": 494400}}
+  get_router:
+    speakeasy-default-get-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+      responses:
+        "200":
+          application/json: {"name": "<value>", "default": false, "replicas_per_cell": 977530, "state": "Ohio", "sku": {"name": "<value>", "display_name": "Evie18", "cpu": "<value>", "ram": 18122, "sort_order": 90610}}
+  update_router:
+    speakeasy-default-update-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"name": "<value>", "default": true, "replicas_per_cell": 46483, "state": "Oregon", "sku": {"name": "<value>", "display_name": "Rory10", "cpu": "<value>", "ram": 385229, "sort_order": 455610}}
+  delete_router:
+    speakeasy-default-delete-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+  list_router_parameters:
+    speakeasy-default-list-router-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+      responses:
+        "200":
+          application/json: [{"name": "<value>", "display_name": "Monica.Mosciski", "namespace": "<value>", "advanced": true, "description": "judicious sandy pfft strategy stabilise next brr yet ha", "parameter_type": "<value>", "default_value": "<value>", "value": "<value>", "required": false, "restart": false, "url": "https://optimistic-farm.name"}]
+  list_shards:
+    speakeasy-default-list-shards:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"data": [{"id": "<id>", "name": "<value>", "configuration_profile": "<value>", "created_at": "2024-10-16T11:19:05.618Z", "ready": true}]}
+  list_shard_configuration_profile_shards:
+    speakeasy-default-list-shard-configuration-profile-shards:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "200":
+          application/json: {"data": []}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

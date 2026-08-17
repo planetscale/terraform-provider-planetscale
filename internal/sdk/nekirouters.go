@@ -17,22 +17,22 @@ import (
 	"time"
 )
 
-type NekiConfigurationProfiles struct {
+type NekiRouters struct {
 	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newNekiConfigurationProfiles(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *NekiConfigurationProfiles {
-	return &NekiConfigurationProfiles{
+func newNekiRouters(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *NekiRouters {
+	return &NekiRouters{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
 	}
 }
 
-// ListShardConfigurationProfiles - List Neki shard configuration profiles
-func (s *NekiConfigurationProfiles) ListShardConfigurationProfiles(ctx context.Context, request operations.ListShardConfigurationProfilesRequest, opts ...operations.Option) (*operations.ListShardConfigurationProfilesResponse, error) {
+// ListRouters - List Neki routers
+func (s *NekiRouters) ListRouters(ctx context.Context, request operations.ListRoutersRequest, opts ...operations.Option) (*operations.ListRoutersResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -50,7 +50,7 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfiles(ctx context.C
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/routers", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -60,7 +60,7 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfiles(ctx context.C
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "list_shard_configuration_profiles",
+		OperationID:      "list_routers",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -120,7 +120,7 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfiles(ctx context.C
 		}
 	}
 
-	res := &operations.ListShardConfigurationProfilesResponse{
+	res := &operations.ListRoutersResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -135,12 +135,12 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfiles(ctx context.C
 				return nil, err
 			}
 
-			var out []shared.NekiConfigurationProfile
+			var out []shared.NekiRouter
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.NekiConfigurationProfiles = out
+			res.NekiRouters = out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -162,8 +162,8 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfiles(ctx context.C
 
 }
 
-// CreateShardConfigurationProfile - Create a Neki shard configuration profile
-func (s *NekiConfigurationProfiles) CreateShardConfigurationProfile(ctx context.Context, request operations.CreateShardConfigurationProfileRequest, opts ...operations.Option) (*operations.CreateShardConfigurationProfileResponse, error) {
+// CreateRouter - Create a Neki router
+func (s *NekiRouters) CreateRouter(ctx context.Context, request operations.CreateRouterRequest, opts ...operations.Option) (*operations.CreateRouterResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -181,7 +181,7 @@ func (s *NekiConfigurationProfiles) CreateShardConfigurationProfile(ctx context.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/routers", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -191,7 +191,7 @@ func (s *NekiConfigurationProfiles) CreateShardConfigurationProfile(ctx context.
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "create_shard_configuration_profile",
+		OperationID:      "create_router",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -258,7 +258,7 @@ func (s *NekiConfigurationProfiles) CreateShardConfigurationProfile(ctx context.
 		}
 	}
 
-	res := &operations.CreateShardConfigurationProfileResponse{
+	res := &operations.CreateRouterResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -273,12 +273,12 @@ func (s *NekiConfigurationProfiles) CreateShardConfigurationProfile(ctx context.
 				return nil, err
 			}
 
-			var out shared.NekiConfigurationProfile
+			var out shared.NekiRouter
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.NekiConfigurationProfile = &out
+			res.NekiRouter = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -300,8 +300,8 @@ func (s *NekiConfigurationProfiles) CreateShardConfigurationProfile(ctx context.
 
 }
 
-// GetShardConfigurationProfile - Get a Neki shard configuration profile
-func (s *NekiConfigurationProfiles) GetShardConfigurationProfile(ctx context.Context, request operations.GetShardConfigurationProfileRequest, opts ...operations.Option) (*operations.GetShardConfigurationProfileResponse, error) {
+// GetRouter - Get a Neki router
+func (s *NekiRouters) GetRouter(ctx context.Context, request operations.GetRouterRequest, opts ...operations.Option) (*operations.GetRouterResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionPolling,
@@ -320,7 +320,7 @@ func (s *NekiConfigurationProfiles) GetShardConfigurationProfile(ctx context.Con
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -330,7 +330,7 @@ func (s *NekiConfigurationProfiles) GetShardConfigurationProfile(ctx context.Con
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "get_shard_configuration_profile",
+		OperationID:      "get_router",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -364,14 +364,14 @@ func (s *NekiConfigurationProfiles) GetShardConfigurationProfile(ctx context.Con
 	if o.Polling != nil {
 		switch o.Polling.Name {
 		case "WaitForReady":
-			return s.getShardConfigurationProfileWaitForReady(ctx, hookCtx, req, o)
+			return s.getRouterWaitForReady(ctx, hookCtx, req, o)
 		}
 	}
 
-	return s.getShardConfigurationProfile(ctx, hookCtx, req, o)
+	return s.getRouter(ctx, hookCtx, req, o)
 }
 
-func (s *NekiConfigurationProfiles) getShardConfigurationProfile(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetShardConfigurationProfileResponse, error) {
+func (s *NekiRouters) getRouter(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetRouterResponse, error) {
 	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
@@ -403,7 +403,7 @@ func (s *NekiConfigurationProfiles) getShardConfigurationProfile(ctx context.Con
 		}
 	}
 
-	res := &operations.GetShardConfigurationProfileResponse{
+	res := &operations.GetRouterResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -418,12 +418,12 @@ func (s *NekiConfigurationProfiles) getShardConfigurationProfile(ctx context.Con
 				return nil, err
 			}
 
-			var out shared.NekiConfigurationProfile
+			var out shared.NekiRouter
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.NekiConfigurationProfile = &out
+			res.NekiRouter = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -445,7 +445,7 @@ func (s *NekiConfigurationProfiles) getShardConfigurationProfile(ctx context.Con
 
 }
 
-// Use with GetShardConfigurationProfile by adding the operations.WithPolling option.
+// Use with GetRouter by adding the operations.WithPolling option.
 // Responses are returned when enabling polling, however additional errors may
 // be returned:
 //   - polling.FailureCriteriaError: If the polling option has explicit failure
@@ -453,7 +453,7 @@ func (s *NekiConfigurationProfiles) getShardConfigurationProfile(ctx context.Con
 //   - polling.LimitCountError: When polling has reached the maximum number of
 //     attempts. Use the polling.WithLimitCountOverride polling option to
 //     override the predefined limit.
-func (s *NekiConfigurationProfiles) GetShardConfigurationProfileWaitForReady() polling.ConfigFunc {
+func (s *NekiRouters) GetRouterWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 10
 		defaultIntervalSeconds := 10
@@ -475,16 +475,16 @@ func (s *NekiConfigurationProfiles) GetShardConfigurationProfileWaitForReady() p
 	}
 }
 
-func (s *NekiConfigurationProfiles) getShardConfigurationProfileWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetShardConfigurationProfileResponse, error) {
+func (s *NekiRouters) getRouterWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetRouterResponse, error) {
 	if o.Polling == nil || o.Polling.LimitCount == nil {
-		return s.getShardConfigurationProfile(ctx, hookCtx, req, o)
+		return s.getRouter(ctx, hookCtx, req, o)
 	}
 
 	if o.Polling.DelaySeconds != nil {
 		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
 	}
 
-	var res *operations.GetShardConfigurationProfileResponse
+	var res *operations.GetRouterResponse
 
 	for i := 1; i <= *o.Polling.LimitCount; i++ {
 		// Ensure request body, if exists, is not empty on subsequent requests.
@@ -500,7 +500,7 @@ func (s *NekiConfigurationProfiles) getShardConfigurationProfileWaitForReady(ctx
 
 		var err error
 
-		res, err = s.getShardConfigurationProfile(ctx, hookCtx, req, o)
+		res, err = s.getRouter(ctx, hookCtx, req, o)
 
 		if err != nil {
 			return res, err
@@ -513,7 +513,7 @@ func (s *NekiConfigurationProfiles) getShardConfigurationProfileWaitForReady(ctx
 		}
 
 		if successCriteriaMet {
-			successCriteriaMet = res.NekiConfigurationProfile.State == "ready"
+			successCriteriaMet = res.NekiRouter.State == "ready"
 		}
 
 		if successCriteriaMet {
@@ -528,8 +528,8 @@ func (s *NekiConfigurationProfiles) getShardConfigurationProfileWaitForReady(ctx
 	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
-// UpdateShardConfigurationProfile - Update a Neki shard configuration profile
-func (s *NekiConfigurationProfiles) UpdateShardConfigurationProfile(ctx context.Context, request operations.UpdateShardConfigurationProfileRequest, opts ...operations.Option) (*operations.UpdateShardConfigurationProfileResponse, error) {
+// UpdateRouter - Update a Neki router
+func (s *NekiRouters) UpdateRouter(ctx context.Context, request operations.UpdateRouterRequest, opts ...operations.Option) (*operations.UpdateRouterResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -547,7 +547,7 @@ func (s *NekiConfigurationProfiles) UpdateShardConfigurationProfile(ctx context.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -557,7 +557,7 @@ func (s *NekiConfigurationProfiles) UpdateShardConfigurationProfile(ctx context.
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "update_shard_configuration_profile",
+		OperationID:      "update_router",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -624,7 +624,7 @@ func (s *NekiConfigurationProfiles) UpdateShardConfigurationProfile(ctx context.
 		}
 	}
 
-	res := &operations.UpdateShardConfigurationProfileResponse{
+	res := &operations.UpdateRouterResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -639,12 +639,12 @@ func (s *NekiConfigurationProfiles) UpdateShardConfigurationProfile(ctx context.
 				return nil, err
 			}
 
-			var out shared.NekiConfigurationProfile
+			var out shared.NekiRouter
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.NekiConfigurationProfile = &out
+			res.NekiRouter = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -668,8 +668,8 @@ func (s *NekiConfigurationProfiles) UpdateShardConfigurationProfile(ctx context.
 
 }
 
-// DeleteShardConfigurationProfile - Delete a Neki shard configuration profile
-func (s *NekiConfigurationProfiles) DeleteShardConfigurationProfile(ctx context.Context, request operations.DeleteShardConfigurationProfileRequest, opts ...operations.Option) (*operations.DeleteShardConfigurationProfileResponse, error) {
+// DeleteRouter - Delete a Neki router
+func (s *NekiRouters) DeleteRouter(ctx context.Context, request operations.DeleteRouterRequest, opts ...operations.Option) (*operations.DeleteRouterResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -687,7 +687,7 @@ func (s *NekiConfigurationProfiles) DeleteShardConfigurationProfile(ctx context.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -697,7 +697,7 @@ func (s *NekiConfigurationProfiles) DeleteShardConfigurationProfile(ctx context.
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "delete_shard_configuration_profile",
+		OperationID:      "delete_router",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -757,7 +757,7 @@ func (s *NekiConfigurationProfiles) DeleteShardConfigurationProfile(ctx context.
 		}
 	}
 
-	res := &operations.DeleteShardConfigurationProfileResponse{
+	res := &operations.DeleteRouterResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -767,6 +767,8 @@ func (s *NekiConfigurationProfiles) DeleteShardConfigurationProfile(ctx context.
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
 		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -780,8 +782,8 @@ func (s *NekiConfigurationProfiles) DeleteShardConfigurationProfile(ctx context.
 
 }
 
-// ListShardConfigurationProfileParameters - List Neki configuration profile parameters
-func (s *NekiConfigurationProfiles) ListShardConfigurationProfileParameters(ctx context.Context, request operations.ListShardConfigurationProfileParametersRequest, opts ...operations.Option) (*operations.ListShardConfigurationProfileParametersResponse, error) {
+// ListRouterParameters - List Neki router parameters
+func (s *NekiRouters) ListRouterParameters(ctx context.Context, request operations.ListRouterParametersRequest, opts ...operations.Option) (*operations.ListRouterParametersResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -799,7 +801,7 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfileParameters(ctx 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -809,7 +811,7 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfileParameters(ctx 
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "list_shard_configuration_profile_parameters",
+		OperationID:      "list_router_parameters",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -869,7 +871,7 @@ func (s *NekiConfigurationProfiles) ListShardConfigurationProfileParameters(ctx 
 		}
 	}
 
-	res := &operations.ListShardConfigurationProfileParametersResponse{
+	res := &operations.ListRouterParametersResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,

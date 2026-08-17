@@ -15,6 +15,10 @@ type UpdateShardConfigurationProfileRequestBody struct {
 	ClusterSize *string `json:"cluster_size,omitzero"`
 	// The new number of replicas for the profile.
 	Replicas *int64 `json:"replicas,omitzero"`
+	// The new PostgreSQL major version for the profile.
+	PostgresMajorVersion *int64 `json:"postgres_major_version,omitzero"`
+	// The new PostgreSQL minor version for the profile. Requires postgres_major_version when specified.
+	PostgresMinorVersion *int64 `json:"postgres_minor_version,omitzero"`
 }
 
 func (u *UpdateShardConfigurationProfileRequestBody) GetName() *string {
@@ -36,6 +40,20 @@ func (u *UpdateShardConfigurationProfileRequestBody) GetReplicas() *int64 {
 		return nil
 	}
 	return u.Replicas
+}
+
+func (u *UpdateShardConfigurationProfileRequestBody) GetPostgresMajorVersion() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.PostgresMajorVersion
+}
+
+func (u *UpdateShardConfigurationProfileRequestBody) GetPostgresMinorVersion() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.PostgresMinorVersion
 }
 
 type UpdateShardConfigurationProfileRequest struct {

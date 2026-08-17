@@ -85,11 +85,11 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 			},
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The PostgreSQL major version used by this profile.`,
+				Description: `The PostgreSQL major version used by this profile. Updates in place through a configuration profile change request.`,
 			},
 			"postgres_minor_version": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The PostgreSQL minor version used by this profile.`,
+				Description: `The PostgreSQL minor version used by this profile. Updates in place and requires postgres_major_version when configured.`,
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,

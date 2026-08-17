@@ -57,9 +57,9 @@ type NekiConfigurationProfile struct {
 	Metal *bool `json:"metal,omitzero"`
 	// The number of replicas for shards using this profile.
 	Replicas int64 `json:"replicas"`
-	// The PostgreSQL major version used by this profile.
+	// The PostgreSQL major version used by this profile. Updates in place through a configuration profile change request.
 	PostgresMajorVersion *int64 `json:"postgres_major_version,omitzero"`
-	// The PostgreSQL minor version used by this profile.
+	// The PostgreSQL minor version used by this profile. Updates in place and requires postgres_major_version when configured.
 	PostgresMinorVersion *int64 `json:"postgres_minor_version,omitzero"`
 	// The number of shards assigned to this profile.
 	Shards *int64 `json:"shards,omitzero"`

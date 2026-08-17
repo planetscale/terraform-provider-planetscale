@@ -39,8 +39,8 @@ data "planetscale_neki_configuration_profile" "my_nekiconfigurationprofile" {
 - `cluster_size` (String) The cluster size used by shards assigned to this profile.
 - `is_default` (Boolean) Whether this is the branch's default configuration profile.
 - `metal` (Boolean) Whether shards using this profile run on metal instances.
-- `postgres_major_version` (Number) The PostgreSQL major version used by this profile.
-- `postgres_minor_version` (Number) The PostgreSQL minor version used by this profile.
+- `postgres_major_version` (Number) The PostgreSQL major version used by this profile. Updates in place through a configuration profile change request.
+- `postgres_minor_version` (Number) The PostgreSQL minor version used by this profile. Updates in place and requires postgres_major_version when configured.
 - `replicas` (Number) The number of replicas for shards using this profile.
 - `shards` (Number) The number of shards assigned to this profile.
 - `state` (String) The rollout state of the profile.

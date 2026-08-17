@@ -77,6 +77,8 @@ type PlanetScale struct {
 	Roles                     *Roles
 	DatabaseBranches          *DatabaseBranches
 	NekiConfigurationProfiles *NekiConfigurationProfiles
+	NekiRouters               *NekiRouters
+	NekiShards                *NekiShards
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
@@ -192,6 +194,8 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.NekiConfigurationProfiles = newNekiConfigurationProfiles(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.NekiRouters = newNekiRouters(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.NekiShards = newNekiShards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 

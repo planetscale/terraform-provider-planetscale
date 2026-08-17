@@ -27,8 +27,8 @@ Creating a `planetscale_neki_branch` already provisions a default configuration 
 ### Optional
 
 - `cluster_size` (String) The cluster size used by shards assigned to this profile.
-- `postgres_major_version` (Number) The PostgreSQL major version used by this profile. Requires replacement if changed.
-- `postgres_minor_version` (Number) The PostgreSQL minor version used by this profile. Requires replacement if changed.
+- `postgres_major_version` (Number) The PostgreSQL major version used by this profile.
+- `postgres_minor_version` (Number) The PostgreSQL minor version used by this profile.
 - `replicas` (Number) The number of replicas for shards using this profile.
 
 ### Read-Only

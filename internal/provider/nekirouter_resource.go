@@ -14,64 +14,53 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &NekiConfigurationProfileResource{}
-var _ resource.ResourceWithImportState = &NekiConfigurationProfileResource{}
+var _ resource.Resource = &NekiRouterResource{}
+var _ resource.ResourceWithImportState = &NekiRouterResource{}
 
-func NewNekiConfigurationProfileResource() resource.Resource {
-	return &NekiConfigurationProfileResource{}
+func NewNekiRouterResource() resource.Resource {
+	return &NekiRouterResource{}
 }
 
-// NekiConfigurationProfileResource defines the resource implementation.
-type NekiConfigurationProfileResource struct {
+// NekiRouterResource defines the resource implementation.
+type NekiRouterResource struct {
 	// Provider configured SDK client.
 	client *sdk.PlanetScale
 }
 
-// NekiConfigurationProfileResourceModel describes the resource data model.
-type NekiConfigurationProfileResourceModel struct {
-	Architecture         types.String `tfsdk:"architecture"`
-	Branch               types.String `tfsdk:"branch"`
-	ClusterSize          types.String `tfsdk:"cluster_size"`
-	Database             types.String `tfsdk:"database"`
-	IsDefault            types.Bool   `tfsdk:"is_default"`
-	Metal                types.Bool   `tfsdk:"metal"`
-	Name                 types.String `tfsdk:"name"`
-	Organization         types.String `tfsdk:"organization"`
-	PostgresMajorVersion types.Int64  `tfsdk:"postgres_major_version"`
-	PostgresMinorVersion types.Int64  `tfsdk:"postgres_minor_version"`
-	Replicas             types.Int64  `tfsdk:"replicas"`
-	Shards               types.Int64  `tfsdk:"shards"`
-	State                types.String `tfsdk:"state"`
+// NekiRouterResourceModel describes the resource data model.
+type NekiRouterResourceModel struct {
+	Branch          types.String               `tfsdk:"branch"`
+	Database        types.String               `tfsdk:"database"`
+	IsDefault       types.Bool                 `tfsdk:"is_default"`
+	Name            types.String               `tfsdk:"name"`
+	Organization    types.String               `tfsdk:"organization"`
+	ReplicasPerCell types.Int64                `tfsdk:"replicas_per_cell"`
+	RouterSize      types.String               `tfsdk:"router_size"`
+	Sku             *tfTypes.NekiRouterSizeSku `tfsdk:"sku"`
+	State           types.String               `tfsdk:"state"`
 }
 
-func (r *NekiConfigurationProfileResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_neki_configuration_profile"
+func (r *NekiRouterResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_neki_router"
 }
 
-func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *NekiRouterResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage an additional Neki shard configuration profile on a branch.\nCreating a `planetscale_neki_branch` already provisions a default configuration profile. Import that profile if it needs to be managed; do not attempt to create it again.",
+		MarkdownDescription: "Manage an additional Neki router on a branch.\nCreating a `planetscale_neki_branch` already provisions a default router. Import that router if it needs to be managed; do not attempt to create it again.",
 		Attributes: map[string]schema.Attribute{
-			"architecture": schema.StringAttribute{
-				Computed:    true,
-				Description: `The architecture of the profile's cluster size.`,
-			},
 			"branch": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
-			},
-			"cluster_size": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `The cluster size used by shards assigned to this profile.`,
 			},
 			"database": schema.StringAttribute{
 				Required: true,
@@ -82,15 +71,15 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 			},
 			"is_default": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether this is the branch's default configuration profile.`,
-			},
-			"metal": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Whether shards using this profile run on metal instances.`,
+				Description: `Whether this is the branch's default router.`,
 			},
 			"name": schema.StringAttribute{
-				Required:    true,
-				Description: `The name of the shard configuration profile.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `The stable name of the router. Requires replacement if changed.`,
 			},
 			"organization": schema.StringAttribute{
 				Required: true,
@@ -99,34 +88,44 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"postgres_major_version": schema.Int64Attribute{
+			"replicas_per_cell": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The PostgreSQL major version used by this profile.`,
+				Description: `The number of router replicas in each cell.`,
 			},
-			"postgres_minor_version": schema.Int64Attribute{
-				Computed:    true,
+			"router_size": schema.StringAttribute{
 				Optional:    true,
-				Description: `The PostgreSQL minor version used by this profile.`,
+				Description: `The router size SKU, for example ` + "`" + `NKR_5` + "`" + `. The API returns current size details in the computed ` + "`" + `sku` + "`" + ` attribute.`,
 			},
-			"replicas": schema.Int64Attribute{
-				Computed:    true,
-				Optional:    true,
-				Description: `The number of replicas for shards using this profile.`,
-			},
-			"shards": schema.Int64Attribute{
-				Computed:    true,
-				Description: `The number of shards assigned to this profile.`,
+			"sku": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"cpu": schema.StringAttribute{
+						Computed: true,
+					},
+					"display_name": schema.StringAttribute{
+						Computed: true,
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+					},
+					"ram": schema.Int64Attribute{
+						Computed: true,
+					},
+					"sort_order": schema.Int64Attribute{
+						Computed: true,
+					},
+				},
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
-				Description: `The rollout state of the profile.`,
+				Description: `The rollout state of the router.`,
 			},
 		},
 	}
 }
 
-func (r *NekiConfigurationProfileResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *NekiRouterResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -146,8 +145,8 @@ func (r *NekiConfigurationProfileResource) Configure(ctx context.Context, req re
 	r.client = client
 }
 
-func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *NekiConfigurationProfileResourceModel
+func (r *NekiRouterResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *NekiRouterResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -164,13 +163,13 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateShardConfigurationProfileRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateRouterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.NekiConfigurationProfiles.CreateShardConfigurationProfile(ctx, *request)
+	res, err := r.client.NekiRouters.CreateRouter(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -186,11 +185,11 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.NekiConfigurationProfile != nil) {
+	if !(res.NekiRouter != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNekiConfigurationProfile(ctx, res.NekiConfigurationProfile)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedNekiRouter(ctx, res.NekiRouter)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -201,18 +200,18 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetShardConfigurationProfileRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetRouterRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	getShardConfigurationProfileOptions := make([]operations.Option, 0, 1)
-	getShardConfigurationProfileOptions = append(getShardConfigurationProfileOptions, operations.WithPolling(
-		r.client.NekiConfigurationProfiles.GetShardConfigurationProfileWaitForReady(),
+	getRouterOptions := make([]operations.Option, 0, 1)
+	getRouterOptions = append(getRouterOptions, operations.WithPolling(
+		r.client.NekiRouters.GetRouterWaitForReady(),
 	))
-	res1, err := r.client.NekiConfigurationProfiles.GetShardConfigurationProfile(ctx, *request1, getShardConfigurationProfileOptions...)
+	res1, err := r.client.NekiRouters.GetRouter(ctx, *request1, getRouterOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -228,11 +227,11 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.NekiConfigurationProfile != nil) {
+	if !(res1.NekiRouter != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNekiConfigurationProfile(ctx, res1.NekiConfigurationProfile)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedNekiRouter(ctx, res1.NekiRouter)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -248,8 +247,8 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *NekiConfigurationProfileResourceModel
+func (r *NekiRouterResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *NekiRouterResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -266,13 +265,13 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetShardConfigurationProfileRequest(ctx)
+	request, requestDiags := data.ToOperationsGetRouterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.NekiConfigurationProfiles.GetShardConfigurationProfile(ctx, *request)
+	res, err := r.client.NekiRouters.GetRouter(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -292,11 +291,11 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.NekiConfigurationProfile != nil) {
+	if !(res.NekiRouter != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNekiConfigurationProfile(ctx, res.NekiConfigurationProfile)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedNekiRouter(ctx, res.NekiRouter)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -306,8 +305,8 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *NekiConfigurationProfileResourceModel
+func (r *NekiRouterResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *NekiRouterResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -320,13 +319,13 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateShardConfigurationProfileRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateRouterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.NekiConfigurationProfiles.UpdateShardConfigurationProfile(ctx, *request)
+	res, err := r.client.NekiRouters.UpdateRouter(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -342,11 +341,11 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.NekiConfigurationProfile != nil) {
+	if !(res.NekiRouter != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNekiConfigurationProfile(ctx, res.NekiConfigurationProfile)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedNekiRouter(ctx, res.NekiRouter)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -357,18 +356,18 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetShardConfigurationProfileRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetRouterRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	getShardConfigurationProfileOptions := make([]operations.Option, 0, 1)
-	getShardConfigurationProfileOptions = append(getShardConfigurationProfileOptions, operations.WithPolling(
-		r.client.NekiConfigurationProfiles.GetShardConfigurationProfileWaitForReady(),
+	getRouterOptions := make([]operations.Option, 0, 1)
+	getRouterOptions = append(getRouterOptions, operations.WithPolling(
+		r.client.NekiRouters.GetRouterWaitForReady(),
 	))
-	res1, err := r.client.NekiConfigurationProfiles.GetShardConfigurationProfile(ctx, *request1, getShardConfigurationProfileOptions...)
+	res1, err := r.client.NekiRouters.GetRouter(ctx, *request1, getRouterOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -384,11 +383,11 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.NekiConfigurationProfile != nil) {
+	if !(res1.NekiRouter != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedNekiConfigurationProfile(ctx, res1.NekiConfigurationProfile)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedNekiRouter(ctx, res1.NekiRouter)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -404,8 +403,8 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *NekiConfigurationProfileResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *NekiConfigurationProfileResourceModel
+func (r *NekiRouterResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *NekiRouterResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -422,13 +421,13 @@ func (r *NekiConfigurationProfileResource) Delete(ctx context.Context, req resou
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteShardConfigurationProfileRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteRouterRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.NekiConfigurationProfiles.DeleteShardConfigurationProfile(ctx, *request)
+	res, err := r.client.NekiRouters.DeleteRouter(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -450,14 +449,14 @@ func (r *NekiConfigurationProfileResource) Delete(ctx context.Context, req resou
 
 }
 
-func (r *NekiConfigurationProfileResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *NekiRouterResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
 		Branch       string `json:"branch"`
-		Name         string `json:"name"`
 		Database     string `json:"database"`
 		Organization string `json:"organization"`
+		Name         string `json:"name"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
@@ -470,11 +469,6 @@ func (r *NekiConfigurationProfileResource) ImportState(ctx context.Context, req 
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("branch"), data.Branch)...)
-	if len(data.Name) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field name is required but was not found in the json encoded ID.`)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), data.Name)...)
 	if len(data.Database) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field database is required but was not found in the json encoded ID.`)
 		return
@@ -485,4 +479,9 @@ func (r *NekiConfigurationProfileResource) ImportState(ctx context.Context, req 
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization"), data.Organization)...)
+	if len(data.Name) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field name is required but was not found in the json encoded ID.`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), data.Name)...)
 }

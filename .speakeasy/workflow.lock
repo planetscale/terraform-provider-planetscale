@@ -2,8 +2,8 @@ speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:3d1cd827dae8096c37e2036a6cacb43ea4910a7dc5a26272911b3ede72d08d2c
-        sourceBlobDigest: sha256:6d935b11d6fb537cd93ab201957f4aaf4ffd5ac6a608f78e8ffe8ef90ddec0a3
+        sourceRevisionDigest: sha256:840aea7c9642a6545996468504527b63c08c1020be6acf94efb9f78c9ea91a0d
+        sourceBlobDigest: sha256:5c22dfedb73ef02e0da0b6b4956363eb604fc7d82080b1e3aa1e5076a9286e29
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:3d1cd827dae8096c37e2036a6cacb43ea4910a7dc5a26272911b3ede72d08d2c
-        sourceBlobDigest: sha256:6d935b11d6fb537cd93ab201957f4aaf4ffd5ac6a608f78e8ffe8ef90ddec0a3
+        sourceRevisionDigest: sha256:840aea7c9642a6545996468504527b63c08c1020be6acf94efb9f78c9ea91a0d
+        sourceBlobDigest: sha256:5c22dfedb73ef02e0da0b6b4956363eb604fc7d82080b1e3aa1e5076a9286e29
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.793.0
@@ -23,6 +23,7 @@ workflow:
             overlays:
                 - location: schemas/overlay-terraform.yaml
                 - location: schemas/overlay-terraform-neki-api.yaml
+                - location: schemas/overlay-terraform-neki-api-additions.yaml
                 - location: schemas/overlay-terraform-branches.yaml
                 - location: schemas/overlay-terraform-postgres-branch.yaml
                 - location: schemas/overlay-terraform-vitess-branch.yaml
@@ -45,6 +46,12 @@ workflow:
                 - location: schemas/overlay-terraform-vitess-keyspaces.yaml
                 - location: schemas/overlay-terraform-neki-configuration-profile.yaml
                 - location: schemas/overlay-terraform-neki-configuration-profiles.yaml
+                - location: schemas/overlay-terraform-neki-configuration-profile-parameters.yaml
+                - location: schemas/overlay-terraform-neki-router.yaml
+                - location: schemas/overlay-terraform-neki-routers.yaml
+                - location: schemas/overlay-terraform-neki-router-parameters.yaml
+                - location: schemas/overlay-terraform-neki-shards.yaml
+                - location: schemas/overlay-terraform-neki-configuration-profile-shards.yaml
                 - location: schemas/overlay-terraform-backup-policies.yaml
                 - location: schemas/overlay-terraform-vitess-backup-policy.yaml
                 - location: schemas/overlay-terraform-postgres-backup-policy.yaml

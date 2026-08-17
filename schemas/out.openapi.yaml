@@ -5038,6 +5038,12 @@ paths:
                 replicas:
                   type: integer
                   description: The new number of replicas for the profile.
+                postgres_major_version:
+                  type: integer
+                  description: The new PostgreSQL major version for the profile.
+                postgres_minor_version:
+                  type: integer
+                  description: The new PostgreSQL minor version for the profile. Requires postgres_major_version when specified.
       responses:
         "200":
           description: Returns the updated shard configuration profile.
@@ -5083,6 +5089,438 @@ paths:
         "404":
           description: The profile was not found.
       x-speakeasy-entity-operation: NekiConfigurationProfile#delete
+  /organizations/{organization}/databases/{database}/branches/{branch}/routers:
+    get:
+      operationId: list_routers
+      summary: List Neki routers
+      tags:
+        - Neki routers
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns routers for the branch.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NekiRouter"
+                x-speakeasy-entity: NekiRouters
+                x-speakeasy-entity-description: Returns Neki routers for a branch.
+      x-speakeasy-entity-operation: NekiRouters#read
+      x-speakeasy-entity-description: Returns Neki routers for a branch.
+    post:
+      operationId: create_router
+      summary: Create a Neki router
+      tags:
+        - Neki routers
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                router_size:
+                  type: string
+                  description: >-
+                    The router size SKU, for example `NKR_5`. The API returns current size details in the computed `sku` attribute.
+                replicas_per_cell:
+                  type: integer
+      responses:
+        "201":
+          description: Returns the created router.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NekiRouter"
+        "422":
+          description: The router could not be created.
+      x-speakeasy-entity-operation: NekiRouter#create
+      x-speakeasy-entity-description: >-
+        Manage an additional Neki router on a branch. The automatically created default router should be imported rather than created again.
+  /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}:
+    get:
+      operationId: get_router
+      summary: Get a Neki router
+      tags:
+        - Neki routers
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: router
+          in: path
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: name
+      responses:
+        "200":
+          description: Returns the router.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NekiRouter"
+        "404":
+          description: The router was not found.
+      x-speakeasy-entity-operation:
+        - NekiRouter#read
+        - entityOperation: NekiRouter#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: NekiRouter#update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns a Neki router.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 10
+          intervalSeconds: 10
+          limitCount: 180
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+    patch:
+      operationId: update_router
+      summary: Update a Neki router
+      tags:
+        - Neki routers
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: router
+          in: path
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                router_size:
+                  type: string
+                replicas_per_cell:
+                  type: integer
+      responses:
+        "200":
+          description: Returns the updated router.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NekiRouter"
+        "404":
+          description: The router was not found.
+        "422":
+          description: The router could not be updated.
+      x-speakeasy-entity-operation: NekiRouter#update
+    delete:
+      operationId: delete_router
+      summary: Delete a Neki router
+      tags:
+        - Neki routers
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: router
+          in: path
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: name
+      responses:
+        "204":
+          description: The router was deleted.
+        "404":
+          description: The router was not found.
+        "422":
+          description: The router could not be deleted.
+      x-speakeasy-entity-operation: NekiRouter#delete
+  /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters:
+    get:
+      operationId: list_router_parameters
+      summary: List Neki router parameters
+      tags:
+        - Neki routers
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: router
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns configurable parameters for the router.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NekiParameter"
+                x-speakeasy-entity: NekiRouterParameters
+                x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki router.
+        "404":
+          description: The router was not found.
+      x-speakeasy-entity-operation: NekiRouterParameters#read
+      x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki router.
+  /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters:
+    get:
+      operationId: list_shard_configuration_profile_parameters
+      summary: List Neki configuration profile parameters
+      tags:
+        - Neki configuration profiles
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: configuration_profile
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns configurable parameters for the profile.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NekiParameter"
+                x-speakeasy-entity: NekiConfigurationProfileParameters
+                x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki configuration profile.
+        "404":
+          description: The profile was not found.
+      x-speakeasy-entity-operation: NekiConfigurationProfileParameters#read
+      x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki configuration profile.
+  /organizations/{organization}/databases/{database}/branches/{branch}/shards:
+    get:
+      operationId: list_shards
+      summary: List Neki shards
+      tags:
+        - Neki shards
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+          x-speakeasy-terraform-ignore: true
+        - name: exclude_configuration_profile
+          in: query
+          schema:
+            type: string
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns shards for the branch.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedNekiShards"
+                x-speakeasy-entity: NekiShards
+                x-speakeasy-entity-description: Returns Neki shards for a branch.
+      x-speakeasy-entity-operation: NekiShards#read
+      x-speakeasy-entity-description: Returns Neki shards for a branch.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+  /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards:
+    get:
+      operationId: list_shard_configuration_profile_shards
+      summary: List shards in a Neki configuration profile
+      tags:
+        - Neki shards
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: configuration_profile
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+          x-speakeasy-terraform-ignore: true
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns shards for the configuration profile.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedNekiShards"
+                x-speakeasy-entity: NekiConfigurationProfileShards
+                x-speakeasy-entity-description: Returns shards assigned to a Neki configuration profile.
+      x-speakeasy-entity-operation: NekiConfigurationProfileShards#read
+      x-speakeasy-entity-description: Returns shards assigned to a Neki configuration profile.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
   /organizations/{organization}/databases/{database}/branches#postgres:
     post:
       tags:
@@ -30090,10 +30528,10 @@ components:
           description: The number of replicas for shards using this profile.
         postgres_major_version:
           type: integer
-          description: The PostgreSQL major version used by this profile.
+          description: The PostgreSQL major version used by this profile. Updates in place through a configuration profile change request.
         postgres_minor_version:
           type: integer
-          description: The PostgreSQL minor version used by this profile.
+          description: The PostgreSQL minor version used by this profile. Updates in place and requires postgres_major_version when configured.
         shards:
           type: integer
           description: The number of shards assigned to this profile.
@@ -30110,5 +30548,179 @@ components:
         Manage an additional Neki shard configuration profile on a branch.
 
         Creating a `planetscale_neki_branch` already provisions a default configuration profile. Import that profile if it needs to be managed; do not attempt to create it again.
+    NekiRouterSizeSku:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - display_name
+        - cpu
+        - ram
+        - sort_order
+      properties:
+        name:
+          type: string
+        display_name:
+          type: string
+        cpu:
+          type: string
+        ram:
+          type: integer
+        sort_order:
+          type: integer
+    NekiRouter:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - default
+        - replicas_per_cell
+        - state
+        - sku
+      properties:
+        name:
+          type: string
+          description: The stable name of the router.
+        default:
+          type: boolean
+          description: Whether this is the branch's default router.
+          x-speakeasy-name-override: is_default
+        replicas_per_cell:
+          type: integer
+          description: The number of router replicas in each cell.
+        state:
+          type: string
+          description: The rollout state of the router.
+        sku:
+          $ref: "#/components/schemas/NekiRouterSizeSku"
+      x-speakeasy-entity: NekiRouter
+      x-speakeasy-entity-description: >-
+        Manage an additional Neki router on a branch.
+
+        Creating a `planetscale_neki_branch` already provisions a default router. Import that router if it needs to be managed; do not attempt to create it again.
+    NekiParameter:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - display_name
+        - namespace
+        - advanced
+        - description
+        - parameter_type
+        - default_value
+        - value
+        - required
+        - restart
+        - url
+      properties:
+        name:
+          type: string
+        display_name:
+          type: string
+        namespace:
+          type: string
+        advanced:
+          type: boolean
+        category:
+          type: string
+          nullable: true
+        description:
+          type: string
+        parameter_type:
+          type: string
+        default_value:
+          type: string
+        value:
+          type: string
+        required:
+          type: boolean
+        restart:
+          type: boolean
+        max:
+          type: number
+          nullable: true
+        min:
+          type: number
+          nullable: true
+        step:
+          type: number
+          nullable: true
+        options:
+          type: array
+          items:
+            type: string
+          nullable: true
+        units:
+          type: string
+          nullable: true
+        url:
+          type: string
+    NekiShard:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - configuration_profile
+        - created_at
+        - ready
+      properties:
+        id:
+          type: string
+          description: The ID of the shard.
+        name:
+          type: string
+          description: The internal name of the shard.
+        display_name:
+          type: string
+          nullable: true
+          description: The display name of the shard.
+        configuration_profile:
+          type: string
+          description: The name of the shard configuration profile.
+        created_at:
+          type: string
+          format: date-time
+        ready:
+          type: boolean
+          description: Whether the shard is ready.
+    PaginatedNekiShards:
+      type: object
+      additionalProperties: false
+      required:
+        - data
+      properties:
+        type:
+          type: string
+        current_page:
+          type: integer
+          x-speakeasy-terraform-ignore: true
+        per_page:
+          type: integer
+        next_page:
+          type: integer
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        next_page_url:
+          type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        prev_page:
+          type: integer
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        prev_page_url:
+          type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        total_count:
+          type: integer
+        total_pages:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/NekiShard"
 security:
   - ServiceToken: []

@@ -203,10 +203,24 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateShardConfigura
 	} else {
 		replicas = nil
 	}
+	postgresMajorVersion := new(int64)
+	if !r.PostgresMajorVersion.IsUnknown() && !r.PostgresMajorVersion.IsNull() {
+		*postgresMajorVersion = r.PostgresMajorVersion.ValueInt64()
+	} else {
+		postgresMajorVersion = nil
+	}
+	postgresMinorVersion := new(int64)
+	if !r.PostgresMinorVersion.IsUnknown() && !r.PostgresMinorVersion.IsNull() {
+		*postgresMinorVersion = r.PostgresMinorVersion.ValueInt64()
+	} else {
+		postgresMinorVersion = nil
+	}
 	out := operations.UpdateShardConfigurationProfileRequestBody{
-		Name:        name,
-		ClusterSize: clusterSize,
-		Replicas:    replicas,
+		Name:                 name,
+		ClusterSize:          clusterSize,
+		Replicas:             replicas,
+		PostgresMajorVersion: postgresMajorVersion,
+		PostgresMinorVersion: postgresMinorVersion,
 	}
 
 	return &out, diags
