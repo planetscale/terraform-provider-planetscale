@@ -8,8 +8,10 @@ sources:
             - location: schemas/overlay-terraform.yaml
 
             - location: schemas/overlay-terraform-branches.yaml
+            # - location: schemas/overlay-terraform-neki-branches.yaml
             - location: schemas/overlay-terraform-postgres-branch.yaml
             - location: schemas/overlay-terraform-vitess-branch.yaml
+            # - location: schemas/overlay-terraform-neki-branch.yaml
 
             - location: schemas/overlay-terraform-database_vitess.yaml
             - location: schemas/overlay-terraform-database_postgres.yaml

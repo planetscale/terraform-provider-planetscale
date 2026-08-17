@@ -1,0 +1,106 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_branch
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post
+    update:
+      operationId: create_neki_branch
+      summary: Create a Neki branch
+      x-speakeasy-entity-operation: NekiBranch#create
+      x-speakeasy-entity-description: >-
+        Manage a PlanetScale Neki database branch.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.parameters[?@.name == 'organization'].schema
+    description: Moving a branch to another organization requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.parameters[?@.name == 'database'].schema
+    description: Moving a branch to another database requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties
+    update:
+      create_database_if_missing:
+        type: boolean
+        const: true
+        default: true
+        description: Create the database if it does not already exist.
+        x-speakeasy-terraform-ignore: schema
+      kind:
+        type: string
+        const: neki
+        default: neki
+        description: The database kind. Always neki for planetscale_neki_branch.
+        x-speakeasy-terraform-ignore: schema
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties.kind.enum
+    description: Remove the upstream mysql/postgresql enum because this path always sends the Neki const.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties.seed_data
+    description: Remove the Vitess-only seed option.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties['cluster_size','major_version']
+    description: Configuration profiles own cluster size and PostgreSQL version.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.requestBody.content['application/json'].schema.properties.restore_point
+    update:
+      description: Restore the Neki branch from a point-in-time recovery timestamp, for example 2026-01-01T00:00:00Z.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].get
+    update:
+      operationId: get_neki_branch
+      summary: Get a Neki branch
+      x-speakeasy-entity-operation:
+        - NekiBranch#read
+        - entityOperation: NekiBranch#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale Neki database branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 90
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch
+    update:
+      operationId: update_neki_branch
+      summary: Update a Neki branch
+      x-speakeasy-entity-operation: NekiBranch#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch.parameters[?@.name == 'branch']
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch.requestBody.content['application/json'].schema.properties.new_name
+    update:
+      x-speakeasy-name-override: name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].delete
+    update:
+      operationId: delete_neki_branch
+      summary: Delete a Neki branch
+      x-speakeasy-entity-operation: NekiBranch#delete
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki'].post.responses['201'].content['application/json'].schema.properties['actor','cluster_name','html_url','mysql_address','mysql_edge_address','keyspace_count','ready','region','safe_migrations','url','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Keep only critical Neki branch state and remove engine-specific or convenience metadata.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].get.responses['200'].content['application/json'].schema.properties['actor','cluster_name','html_url','mysql_address','mysql_edge_address','keyspace_count','ready','region','safe_migrations','url','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Keep only critical Neki branch state and remove engine-specific or convenience metadata.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki'].patch.responses['200'].content['application/json'].schema.properties['actor','cluster_name','html_url','mysql_address','mysql_edge_address','keyspace_count','ready','region','safe_migrations','url','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
+    description: Keep only critical Neki branch state and remove engine-specific or convenience metadata.
+    remove: true

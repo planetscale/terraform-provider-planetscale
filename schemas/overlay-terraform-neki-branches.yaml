@@ -1,0 +1,21 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Path split for Neki branch resources
+  version: 0.0.1
+actions:
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#neki']
+    description: Copy the normalized branch collection path as the base for Neki.
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches#postgres']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#neki']
+    description: Copy the normalized branch item path as the base for Neki.
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres']
