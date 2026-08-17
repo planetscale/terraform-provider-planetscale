@@ -13,7 +13,3 @@ actions:
     update:
       x-speakeasy-entity: NekiRouterParameters
       x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki router.
-
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters"].get.parameters[?@.name == 'router']
-    update:
-      x-speakeasy-match: name

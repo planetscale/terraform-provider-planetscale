@@ -13,7 +13,3 @@ actions:
     update:
       x-speakeasy-entity: NekiConfigurationProfileParameters
       x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki configuration profile.
-
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters"].get.parameters[?@.name == 'configuration_profile']
-    update:
-      x-speakeasy-match: name

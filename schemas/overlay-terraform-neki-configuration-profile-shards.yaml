@@ -22,10 +22,6 @@ actions:
       x-speakeasy-entity: NekiConfigurationProfileShards
       x-speakeasy-entity-description: Returns shards assigned to a Neki configuration profile.
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].get.parameters[?@.name == 'configuration_profile']
-    update:
-      x-speakeasy-match: name
-
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].get.parameters[?@.name == 'per_page']
     update:
       x-speakeasy-terraform-ignore: true
