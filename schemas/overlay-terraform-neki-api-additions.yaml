@@ -1,0 +1,549 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Temporary OpenAPI definitions for additional Neki Terraform surfaces
+  version: 0.0.1
+actions:
+  # Sources: api-bb NekiRoutersController, NekiRouterParametersController,
+  # NekiShardConfigurationProfileParametersController, NekiShardsController,
+  # and NekiShardConfigurationProfileShardsController. Remove these definitions
+  # once public_neki_api operations are included in the published OpenAPI.
+  - target: $.components.schemas
+    update:
+      NekiRouterSizeSku:
+        type: object
+        additionalProperties: false
+        required:
+          - name
+          - display_name
+          - cpu
+          - ram
+          - sort_order
+        properties:
+          name:
+            type: string
+          display_name:
+            type: string
+          cpu:
+            type: string
+          ram:
+            type: integer
+          sort_order:
+            type: integer
+
+      NekiRouter:
+        type: object
+        additionalProperties: false
+        required:
+          - name
+          - default
+          - replicas_per_cell
+          - state
+          - sku
+        properties:
+          name:
+            type: string
+            description: The stable name of the router.
+          default:
+            type: boolean
+            description: Whether this is the branch's default router.
+          replicas_per_cell:
+            type: integer
+            description: The number of router replicas in each cell.
+          state:
+            type: string
+            description: The rollout state of the router.
+          sku:
+            $ref: "#/components/schemas/NekiRouterSizeSku"
+
+      NekiParameter:
+        type: object
+        additionalProperties: false
+        required:
+          - name
+          - display_name
+          - namespace
+          - advanced
+          - description
+          - parameter_type
+          - default_value
+          - value
+          - required
+          - restart
+          - url
+        properties:
+          name:
+            type: string
+          display_name:
+            type: string
+          namespace:
+            type: string
+          advanced:
+            type: boolean
+          category:
+            type: string
+            nullable: true
+          description:
+            type: string
+          parameter_type:
+            type: string
+          default_value:
+            type: string
+          value:
+            type: string
+          required:
+            type: boolean
+          restart:
+            type: boolean
+          max:
+            type: number
+            nullable: true
+          min:
+            type: number
+            nullable: true
+          step:
+            type: number
+            nullable: true
+          options:
+            type: array
+            items:
+              type: string
+            nullable: true
+          units:
+            type: string
+            nullable: true
+          url:
+            type: string
+
+      NekiShard:
+        type: object
+        additionalProperties: false
+        required:
+          - id
+          - name
+          - configuration_profile
+          - created_at
+          - ready
+        properties:
+          id:
+            type: string
+            description: The ID of the shard.
+          name:
+            type: string
+            description: The internal name of the shard.
+          display_name:
+            type: string
+            nullable: true
+            description: The display name of the shard.
+          configuration_profile:
+            type: string
+            description: The name of the shard configuration profile.
+          created_at:
+            type: string
+            format: date-time
+          ready:
+            type: boolean
+            description: Whether the shard is ready.
+
+      PaginatedNekiShards:
+        type: object
+        additionalProperties: false
+        required:
+          - data
+        properties:
+          type:
+            type: string
+          current_page:
+            type: integer
+          per_page:
+            type: integer
+          next_page:
+            type: integer
+            nullable: true
+          next_page_url:
+            type: string
+            nullable: true
+          prev_page:
+            type: integer
+            nullable: true
+          prev_page_url:
+            type: string
+            nullable: true
+          total_count:
+            type: integer
+          total_pages:
+            type: integer
+          data:
+            type: array
+            items:
+              $ref: "#/components/schemas/NekiShard"
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/routers:
+        get:
+          operationId: list_routers
+          summary: List Neki routers
+          tags:
+            - Neki routers
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns routers for the branch.
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/NekiRouter"
+        post:
+          operationId: create_router
+          summary: Create a Neki router
+          tags:
+            - Neki routers
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - name
+                  properties:
+                    name:
+                      type: string
+                    router_size:
+                      type: string
+                    replicas_per_cell:
+                      type: integer
+          responses:
+            "201":
+              description: Returns the created router.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NekiRouter"
+            "422":
+              description: The router could not be created.
+
+      /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}:
+        get:
+          operationId: get_router
+          summary: Get a Neki router
+          tags:
+            - Neki routers
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: router
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns the router.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NekiRouter"
+            "404":
+              description: The router was not found.
+        patch:
+          operationId: update_router
+          summary: Update a Neki router
+          tags:
+            - Neki routers
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: router
+              in: path
+              required: true
+              schema:
+                type: string
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    router_size:
+                      type: string
+                    replicas_per_cell:
+                      type: integer
+          responses:
+            "200":
+              description: Returns the updated router.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/NekiRouter"
+            "404":
+              description: The router was not found.
+            "422":
+              description: The router could not be updated.
+        delete:
+          operationId: delete_router
+          summary: Delete a Neki router
+          tags:
+            - Neki routers
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: router
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "204":
+              description: The router was deleted.
+            "404":
+              description: The router was not found.
+            "422":
+              description: The router could not be deleted.
+
+      /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters:
+        get:
+          operationId: list_router_parameters
+          summary: List Neki router parameters
+          tags:
+            - Neki routers
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: router
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns configurable parameters for the router.
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/NekiParameter"
+            "404":
+              description: The router was not found.
+
+      /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters:
+        get:
+          operationId: list_shard_configuration_profile_parameters
+          summary: List Neki configuration profile parameters
+          tags:
+            - Neki configuration profiles
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: configuration_profile
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns configurable parameters for the profile.
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/NekiParameter"
+            "404":
+              description: The profile was not found.
+
+      /organizations/{organization}/databases/{database}/branches/{branch}/shards:
+        get:
+          operationId: list_shards
+          summary: List Neki shards
+          tags:
+            - Neki shards
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: page
+              in: query
+              schema:
+                type: integer
+            - name: per_page
+              in: query
+              schema:
+                type: integer
+            - name: exclude_configuration_profile
+              in: query
+              schema:
+                type: string
+            - name: q
+              in: query
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns shards for the branch.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/PaginatedNekiShards"
+
+      /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards:
+        get:
+          operationId: list_shard_configuration_profile_shards
+          summary: List shards in a Neki configuration profile
+          tags:
+            - Neki shards
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: configuration_profile
+              in: path
+              required: true
+              schema:
+                type: string
+            - name: page
+              in: query
+              schema:
+                type: integer
+            - name: per_page
+              in: query
+              schema:
+                type: integer
+            - name: q
+              in: query
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns shards for the configuration profile.
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/PaginatedNekiShards"

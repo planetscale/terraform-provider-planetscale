@@ -235,6 +235,12 @@ actions:
                     replicas:
                       type: integer
                       description: The new number of replicas for the profile.
+                    postgres_major_version:
+                      type: integer
+                      description: The new PostgreSQL major version for the profile.
+                    postgres_minor_version:
+                      type: integer
+                      description: The new PostgreSQL minor version for the profile. Requires postgres_major_version when specified.
           responses:
             "200":
               description: Returns the updated shard configuration profile.

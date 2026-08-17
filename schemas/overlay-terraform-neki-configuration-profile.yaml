@@ -22,6 +22,14 @@ actions:
     update:
       x-speakeasy-name-override: is_default
 
+  - target: $.components.schemas.NekiConfigurationProfile.properties.postgres_major_version
+    update:
+      description: The PostgreSQL major version used by this profile. Updates in place through a configuration profile change request.
+
+  - target: $.components.schemas.NekiConfigurationProfile.properties.postgres_minor_version
+    update:
+      description: The PostgreSQL minor version used by this profile. Updates in place and requires postgres_major_version when configured.
+
   - target: $.components.schemas.NekiConfigurationProfile.properties['created_at','updated_at','cluster_display_name']
     remove: true
 

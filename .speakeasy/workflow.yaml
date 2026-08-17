@@ -7,6 +7,7 @@ sources:
         overlays:
             - location: schemas/overlay-terraform.yaml
             - location: schemas/overlay-terraform-neki-api.yaml
+            - location: schemas/overlay-terraform-neki-api-additions.yaml
 
             - location: schemas/overlay-terraform-branches.yaml
             - location: schemas/overlay-terraform-postgres-branch.yaml
@@ -31,6 +32,12 @@ sources:
             - location: schemas/overlay-terraform-vitess-keyspaces.yaml
             - location: schemas/overlay-terraform-neki-configuration-profile.yaml
             - location: schemas/overlay-terraform-neki-configuration-profiles.yaml
+            - location: schemas/overlay-terraform-neki-configuration-profile-parameters.yaml
+            - location: schemas/overlay-terraform-neki-router.yaml
+            - location: schemas/overlay-terraform-neki-routers.yaml
+            - location: schemas/overlay-terraform-neki-router-parameters.yaml
+            - location: schemas/overlay-terraform-neki-shards.yaml
+            - location: schemas/overlay-terraform-neki-configuration-profile-shards.yaml
 
             - location: schemas/overlay-terraform-backup-policies.yaml
             - location: schemas/overlay-terraform-vitess-backup-policy.yaml

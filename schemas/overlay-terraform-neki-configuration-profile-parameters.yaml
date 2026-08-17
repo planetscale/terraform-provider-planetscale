@@ -1,0 +1,19 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_configuration_profile_parameters data source
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters"].get
+    update:
+      x-speakeasy-entity-operation: NekiConfigurationProfileParameters#read
+      x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki configuration profile.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters"].get.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiConfigurationProfileParameters
+      x-speakeasy-entity-description: Returns configurable parameters and their current values for a Neki configuration profile.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters"].get.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name

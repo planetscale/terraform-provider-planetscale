@@ -1,0 +1,31 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_configuration_profile_shards data source
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].get
+    update:
+      x-speakeasy-entity-operation: NekiConfigurationProfileShards#read
+      x-speakeasy-entity-description: Returns shards assigned to a Neki configuration profile.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].get.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiConfigurationProfileShards
+      x-speakeasy-entity-description: Returns shards assigned to a Neki configuration profile.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].get.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].get.parameters[?@.name == 'per_page']
+    update:
+      x-speakeasy-terraform-ignore: true

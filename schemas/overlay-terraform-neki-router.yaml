@@ -1,0 +1,78 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_router managed and data resources
+  version: 0.0.1
+actions:
+  - target: $.components.schemas.NekiRouter
+    update:
+      x-speakeasy-entity: NekiRouter
+      x-speakeasy-entity-description: >-
+        Manage an additional Neki router on a branch.
+
+        Creating a `planetscale_neki_branch` already provisions a default
+        router. Import that router if it needs to be managed; do not attempt
+        to create it again.
+
+  - target: $.components.schemas.NekiRouter.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post
+    update:
+      x-speakeasy-entity-operation: NekiRouter#create
+      x-speakeasy-entity-description: >-
+        Manage an additional Neki router on a branch. The automatically
+        created default router should be imported rather than created again.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.requestBody.content["application/json"].schema.properties.router_size
+    update:
+      description: >-
+        The router size SKU, for example `NKR_5`. The API returns current size
+        details in the computed `sku` attribute.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get
+    update:
+      x-speakeasy-entity-operation:
+        - NekiRouter#read
+        - entityOperation: NekiRouter#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: NekiRouter#update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns a Neki router.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 10
+          intervalSeconds: 10
+          limitCount: 180
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch
+    update:
+      x-speakeasy-entity-operation: NekiRouter#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].delete
+    update:
+      x-speakeasy-entity-operation: NekiRouter#delete
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].*.parameters[?@.name == 'router']
+    update:
+      x-speakeasy-match: name

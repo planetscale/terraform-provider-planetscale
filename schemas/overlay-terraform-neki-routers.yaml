@@ -1,0 +1,15 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_routers data source
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].get
+    update:
+      x-speakeasy-entity-operation: NekiRouters#read
+      x-speakeasy-entity-description: Returns Neki routers for a branch.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].get.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiRouters
+      x-speakeasy-entity-description: Returns Neki routers for a branch.
