@@ -292,8 +292,6 @@ type CreateBouncerParameterDetail struct {
 	Max float64 `json:"max"`
 	// The minimum value of the parameter
 	Min float64 `json:"min"`
-	// The step change of the parameter
-	Step float64 `json:"step"`
 	// The URL of the parameter
 	URL string `json:"url"`
 	// Valid options for the parameter value
@@ -411,13 +409,6 @@ func (c *CreateBouncerParameterDetail) GetMin() float64 {
 		return 0.0
 	}
 	return c.Min
-}
-
-func (c *CreateBouncerParameterDetail) GetStep() float64 {
-	if c == nil {
-		return 0.0
-	}
-	return c.Step
 }
 
 func (c *CreateBouncerParameterDetail) GetURL() string {

@@ -337,6 +337,8 @@ type ListRolesData struct {
 	DisabledAt *string `json:"disabled_at"`
 	// Error message available when dropping the role fails
 	DropFailed string `json:"drop_failed"`
+	// Whether the role is ready to accept connections
+	Ready bool `json:"ready"`
 	// True if the credentials are expired
 	Expired bool `json:"expired"`
 	// Whether the role is the default postgres user
@@ -464,6 +466,13 @@ func (l *ListRolesData) GetDropFailed() string {
 	return l.DropFailed
 }
 
+func (l *ListRolesData) GetReady() bool {
+	if l == nil {
+		return false
+	}
+	return l.Ready
+}
+
 func (l *ListRolesData) GetExpired() bool {
 	if l == nil {
 		return false
@@ -535,8 +544,12 @@ type ListRolesResponseBody struct {
 	// The previous page number, or null when this is the first page
 	PrevPage *int64 `json:"prev_page"`
 	// The previous page of results, or null when this is the first page
-	PrevPageURL *string         `json:"prev_page_url"`
-	Data        []ListRolesData `json:"data"`
+	PrevPageURL *string `json:"prev_page_url"`
+	// The total number of matching results
+	TotalCount int64 `json:"total_count"`
+	// The total number of pages of matching results
+	TotalPages int64           `json:"total_pages"`
+	Data       []ListRolesData `json:"data"`
 }
 
 func (l *ListRolesResponseBody) GetType() string {
@@ -586,6 +599,20 @@ func (l *ListRolesResponseBody) GetPrevPageURL() *string {
 		return nil
 	}
 	return l.PrevPageURL
+}
+
+func (l *ListRolesResponseBody) GetTotalCount() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalCount
+}
+
+func (l *ListRolesResponseBody) GetTotalPages() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalPages
 }
 
 func (l *ListRolesResponseBody) GetData() []ListRolesData {

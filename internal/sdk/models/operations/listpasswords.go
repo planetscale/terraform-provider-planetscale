@@ -512,8 +512,12 @@ type ListPasswordsResponseBody struct {
 	// The previous page number, or null when this is the first page
 	PrevPage *int64 `json:"prev_page"`
 	// The previous page of results, or null when this is the first page
-	PrevPageURL *string             `json:"prev_page_url"`
-	Data        []ListPasswordsData `json:"data"`
+	PrevPageURL *string `json:"prev_page_url"`
+	// The total number of matching results
+	TotalCount int64 `json:"total_count"`
+	// The total number of pages of matching results
+	TotalPages int64               `json:"total_pages"`
+	Data       []ListPasswordsData `json:"data"`
 }
 
 func (l *ListPasswordsResponseBody) GetType() string {
@@ -563,6 +567,20 @@ func (l *ListPasswordsResponseBody) GetPrevPageURL() *string {
 		return nil
 	}
 	return l.PrevPageURL
+}
+
+func (l *ListPasswordsResponseBody) GetTotalCount() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalCount
+}
+
+func (l *ListPasswordsResponseBody) GetTotalPages() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalPages
 }
 
 func (l *ListPasswordsResponseBody) GetData() []ListPasswordsData {

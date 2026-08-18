@@ -20,6 +20,14 @@ actions:
         outputs:
           results: $.data
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties
+    description: Ignore extraneous response properties in Terraform schema.
+    update:
+      total_count:
+        x-speakeasy-terraform-ignore: true
+      total_pages:
+        x-speakeasy-terraform-ignore: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.database_branch.properties.created_at
     remove: true
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups#vitess'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.database_branch.properties.updated_at
