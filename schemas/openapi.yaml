@@ -4416,6 +4416,12 @@ paths:
                     type: string
                     description: The previous page of results, or null when this is the first page
                     nullable: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
                   data:
                     type: array
                     items:
@@ -4679,6 +4685,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -6219,9 +6227,6 @@ paths:
                               min:
                                 type: number
                                 description: The minimum value of the parameter
-                              step:
-                                type: number
-                                description: The step change of the parameter
                               url:
                                 type: string
                                 description: The URL of the parameter
@@ -6263,7 +6268,6 @@ paths:
                               - restart
                               - max
                               - min
-                              - step
                               - url
                               - options
                               - actor
@@ -6514,9 +6518,6 @@ paths:
                         min:
                           type: number
                           description: The minimum value of the parameter
-                        step:
-                          type: number
-                          description: The step change of the parameter
                         url:
                           type: string
                           description: The URL of the parameter
@@ -6558,7 +6559,6 @@ paths:
                         - restart
                         - max
                         - min
-                        - step
                         - url
                         - options
                         - actor
@@ -6788,9 +6788,6 @@ paths:
                         min:
                           type: number
                           description: The minimum value of the parameter
-                        step:
-                          type: number
-                          description: The step change of the parameter
                         url:
                           type: string
                           description: The URL of the parameter
@@ -6832,7 +6829,6 @@ paths:
                         - restart
                         - max
                         - min
-                        - step
                         - url
                         - options
                         - actor
@@ -8725,9 +8721,6 @@ paths:
                           min:
                             type: number
                             description: The minimum value of the parameter
-                          step:
-                            type: number
-                            description: The step change of the parameter
                           url:
                             type: string
                             description: The URL of the parameter
@@ -8770,7 +8763,6 @@ paths:
                           - restart
                           - max
                           - min
-                          - step
                           - url
                           - options
                           - actor
@@ -13402,6 +13394,1131 @@ paths:
         **Service Token Accesses**
          `write_production_branch_vschema`, `write_branch_vschema`
 
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics:
+    get:
+      tags:
+        - Metrics
+      operationId: get_branch_metrics
+      summary: Get time-series metrics
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: metrics
+          in: query
+          description: Metric names to retrieve
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - avg_parallel_workers
+                - avg_shard_queries
+                - block_cache_hit_ratio
+                - blocks_dirtied
+                - blocks_hit
+                - blocks_read
+                - blocks_written
+                - connections
+                - cpu_duration_millis
+                - egress_bytes
+                - egress_bytes_per_query
+                - ingress_bytes
+                - ingress_bytes_per_query
+                - io_duration_millis
+                - latency_max
+                - latency_p50
+                - latency_p95
+                - latency_p99
+                - latency_p999
+                - max_egress_bytes
+                - max_ingress_bytes
+                - max_shard_queries
+                - planetscale_dedicated_pgbouncer_cpu_usage
+                - planetscale_dedicated_pgbouncer_current_connections
+                - planetscale_dedicated_pgbouncer_memory_usage
+                - planetscale_edge_bytes_received
+                - planetscale_edge_bytes_received_rate
+                - planetscale_edge_bytes_sent
+                - planetscale_edge_bytes_sent_rate
+                - planetscale_pgbouncer_current_connections
+                - planetscale_pgbouncer_pools_client
+                - planetscale_pgbouncer_pools_server
+                - planetscale_pods_container_ooms
+                - planetscale_pods_cpu_util_percentages
+                - planetscale_pods_iops_total
+                - planetscale_pods_mem_util_percentages
+                - planetscale_primary_memory_active_cache_bytes
+                - planetscale_primary_memory_inactive_cache_bytes
+                - planetscale_primary_memory_mmap_bytes
+                - planetscale_primary_memory_rss_bytes
+                - planetscale_primary_pgbouncer_cpu_util_percentages
+                - planetscale_primary_pgbouncer_mem_util_percentages
+                - planetscale_primary_pods_cpu_util_percentages
+                - planetscale_primary_pods_iops_total
+                - planetscale_primary_pods_mem_util_percentages
+                - planetscale_primary_postgres_connection_state
+                - planetscale_primary_storage_usage
+                - planetscale_primary_xact_commit_rate
+                - planetscale_replica_lag_seconds
+                - planetscale_replica_memory_active_cache_bytes
+                - planetscale_replica_memory_inactive_cache_bytes
+                - planetscale_replica_memory_mmap_bytes
+                - planetscale_replica_memory_rss_bytes
+                - planetscale_replica_pgbouncer_cpu_util_percentages
+                - planetscale_replica_pgbouncer_current_connections
+                - planetscale_replica_pgbouncer_mem_util_percentages
+                - planetscale_replica_pods_cpu_util_percentages
+                - planetscale_replica_pods_iops_total
+                - planetscale_replica_pods_mem_util_percentages
+                - planetscale_replica_postgres_connection_state
+                - planetscale_replica_storage_usage_bytes
+                - planetscale_replica_volume_usage_percentages
+                - planetscale_replication_slot_max_wal_retained_bytes
+                - planetscale_replication_slots_lost
+                - planetscale_settings_max_slot_wal_keep_size_bytes
+                - planetscale_storage_usage_bytes
+                - planetscale_volume_usage_percentages
+                - planetscale_wal_archiver_failed_rate
+                - planetscale_wal_archiver_last_age_succeeded
+                - planetscale_wal_archiver_succeeded_rate
+                - planetscale_wal_size_bytes
+                - queries
+                - query_errors
+                - rows_affected_per_query
+                - rows_read
+                - rows_read_per_query
+                - rows_read_per_returned
+                - rows_returned
+                - rows_returned_per_query
+                - rows_written
+                - storage_per_table
+                - total_duration_millis
+                - traffic_control_throttled
+                - traffic_control_warnings
+                - violations
+                - vtgate_cpu_avg_by_az
+                - vtgate_cpu_by_az
+                - vtgate_latency_p50
+                - vtgate_latency_p95
+                - vtgate_memory_avg_by_az
+                - vtgate_memory_by_az
+                - vtgate_requests
+        - name: period
+          in: query
+          description: Named time period to retrieve. Defaults to 12h.
+          schema:
+            type: string
+            enum:
+              - 15m
+              - 1h
+              - 3h
+              - 6h
+              - 12h
+              - 1d
+              - 2d
+              - 7d
+              - 8d
+        - name: from
+          in: query
+          description: Start of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: End of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: steps
+          in: query
+          description: Number of data points to return
+          schema:
+            type: integer
+        - name: tablet_type
+          in: query
+          description: Filter by tablet type
+          schema:
+            type: string
+            enum:
+              - primary
+              - replica
+              - rdonly
+        - name: keyspace
+          in: query
+          description: Filter by keyspace
+          schema:
+            type: string
+        - name: shard
+          in: query
+          description: Filter by shard
+          schema:
+            type: string
+        - name: role
+          in: query
+          description: Filter by Postgres role
+          schema:
+            type: string
+        - name: container
+          in: query
+          description: Filter by container
+          schema:
+            type: string
+        - name: pod
+          in: query
+          description: Filter by pod
+          schema:
+            type: string
+        - name: pods
+          in: query
+          description: Filter by pods
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: query_ids
+          in: query
+          description: Filter by query pattern IDs
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: fingerprint
+          in: query
+          description: Filter by query fingerprint
+          schema:
+            type: string
+        - name: budget_id
+          in: query
+          description: Filter by traffic budget ID
+          schema:
+            type: string
+        - name: rule_id
+          in: query
+          description: Filter by traffic rule ID
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Filter by search terms
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns time-series metrics
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The metrics response type
+                  start_date:
+                    type: string
+                    description: The start of the time range
+                  end_date:
+                    type: string
+                    description: The end of the time range
+                  interval:
+                    type: integer
+                    description: The step interval in seconds between data points
+                  series:
+                    type: array
+                    items:
+                      type: string
+                    description: The time-series metric data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+        "503":
+          description: Metrics service unavailable
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/instant:
+    get:
+      tags:
+        - Metrics
+      operationId: get_instant_branch_metrics
+      summary: Get current metric values
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: metrics
+          in: query
+          description: Metric names to retrieve
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - planetscale_backup_fetch_percent
+                - planetscale_backup_restore_active
+                - planetscale_dedicated_pgbouncer_cpu_usage
+                - planetscale_dedicated_pgbouncer_current_client_connections
+                - planetscale_dedicated_pgbouncer_current_connections
+                - planetscale_dedicated_pgbouncer_current_server_connections
+                - planetscale_dedicated_pgbouncer_max_connections
+                - planetscale_dedicated_pgbouncer_memory_usage
+                - planetscale_pgbouncer_current_client_connections
+                - planetscale_pgbouncer_current_server_connections
+                - planetscale_pgbouncer_settings_max_client_conn
+                - planetscale_postgres_connection_state
+                - planetscale_postgres_settings_max_connections
+                - planetscale_volume_capacity_bytes
+                - planetscale_volume_disk_usage_bytes
+                - planetscale_volume_usage_percentage
+        - name: role
+          in: query
+          description: Filter by Postgres role
+          schema:
+            type: string
+        - name: shard
+          in: query
+          description: Filter by shard
+          schema:
+            type: string
+        - name: container
+          in: query
+          description: Filter by container
+          schema:
+            type: string
+        - name: pod
+          in: query
+          description: Filter by pod
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns current metrics
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The metrics response type
+                  branch:
+                    type: object
+                    additionalProperties: true
+                    description: The branch these metrics belong to
+                  metrics:
+                    type: array
+                    items:
+                      type: string
+                    description: The current metric values
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+        "503":
+          description: Metrics service unavailable
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/keyspace-tables:
+    get:
+      tags:
+        - Metrics
+      operationId: get_branch_keyspace_table_metrics
+      summary: Get table storage metrics by keyspace
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns storage metrics keyed by keyspace and table name
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/query:
+    get:
+      tags:
+        - Metrics
+      operationId: get_branch_query_metrics
+      summary: Get time-series metrics for SQL queries
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: metrics
+          in: query
+          description: Metric names to retrieve
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - avg_parallel_workers
+                - avg_shard_queries
+                - block_cache_hit_ratio
+                - blocks_dirtied
+                - blocks_hit
+                - blocks_read
+                - blocks_written
+                - cpu_duration_millis
+                - egress_bytes
+                - egress_bytes_per_query
+                - index_usage_percent
+                - ingress_bytes
+                - ingress_bytes_per_query
+                - io_duration_millis
+                - latency_max
+                - latency_min
+                - latency_p50
+                - latency_p95
+                - latency_p99
+                - latency_p999
+                - max_egress_bytes
+                - max_ingress_bytes
+                - max_shard_queries
+                - plan_change_score
+                - queries
+                - query_errors
+                - routing_index_usage_percent
+                - rows_affected_per_query
+                - rows_read
+                - rows_read_per_query
+                - rows_read_per_returned
+                - rows_returned
+                - rows_returned_per_query
+                - rows_written
+                - total_duration_millis
+                - traffic_control_throttled
+                - traffic_control_warnings
+        - name: query_ids
+          in: query
+          description: Query pattern IDs to retrieve metrics for
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: fingerprint
+          in: query
+          description: Filter by query fingerprint
+          schema:
+            type: string
+        - name: keyspace
+          in: query
+          description: Keyspace for the query fingerprint
+          schema:
+            type: string
+        - name: period
+          in: query
+          description: Named time period to retrieve. Defaults to 12h.
+          schema:
+            type: string
+            enum:
+              - 15m
+              - 1h
+              - 3h
+              - 6h
+              - 12h
+              - 1d
+              - 2d
+              - 7d
+              - 8d
+        - name: from
+          in: query
+          description: Start of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: End of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: steps
+          in: query
+          description: Number of data points to return
+          schema:
+            type: integer
+        - name: tablet_type
+          in: query
+          description: Filter by tablet type
+          schema:
+            type: string
+            enum:
+              - primary
+              - replica
+              - rdonly
+        - name: budget_id
+          in: query
+          description: Filter by traffic budget ID
+          schema:
+            type: string
+        - name: rule_id
+          in: query
+          description: Filter by traffic rule ID
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Filter by search terms
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns time-series metrics for SQL queries
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The metrics response type
+                  start_date:
+                    type: string
+                    description: The start of the time range
+                  end_date:
+                    type: string
+                    description: The end of the time range
+                  interval:
+                    type: integer
+                    description: The step interval in seconds between data points
+                  series:
+                    type: array
+                    items:
+                      type: string
+                    description: The time-series metric data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tables:
+    get:
+      tags:
+        - Metrics
+      operationId: get_branch_table_metrics
+      summary: Get table storage metrics
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns storage metrics keyed by table name
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tablets:
+    get:
+      tags:
+        - Metrics
+      operationId: get_tablet_metrics
+      summary: Get time-series tablet metrics
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: metrics
+          in: query
+          description: Metric names to retrieve
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - replication_lag
+                - vreplication_lag
+                - pod_cpu_usage
+                - pod_memory_usage
+                - pod_queries
+                - pod_rows_read
+                - pod_iops
+                - primary_cpu_usage
+                - primary_memory_usage
+                - primary_iops
+                - primary_queries
+                - primary_rows_read
+                - primary_rows_written
+                - shard_storage_usage
+                - shard_storage_available
+        - name: period
+          in: query
+          description: Named time period to retrieve. Defaults to 12h.
+          schema:
+            type: string
+            enum:
+              - 15m
+              - 1h
+              - 3h
+              - 6h
+              - 12h
+              - 1d
+              - 2d
+              - 7d
+              - 8d
+        - name: from
+          in: query
+          description: Start of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: End of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: steps
+          in: query
+          description: Number of data points to return
+          schema:
+            type: integer
+        - name: keyspace
+          in: query
+          description: Filter by keyspace
+          schema:
+            type: string
+        - name: shard
+          in: query
+          description: Filter by shard
+          schema:
+            type: string
+        - name: pod
+          in: query
+          description: Filter by pod
+          schema:
+            type: string
+        - name: workflow
+          in: query
+          description: Filter by workflow ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns time-series tablet metrics
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The metrics response type
+                  start_date:
+                    type: string
+                    description: The start of the time range
+                  end_date:
+                    type: string
+                    description: The end of the time range
+                  interval:
+                    type: integer
+                    description: The step interval in seconds between data points
+                  series:
+                    type: array
+                    items:
+                      type: string
+                    description: The time-series metric data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+        "503":
+          description: Metrics service unavailable
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tablets-instant:
+    get:
+      tags:
+        - Metrics
+      operationId: get_instant_tablet_metrics
+      summary: Get current tablet metrics
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: metrics
+          in: query
+          description: Metric names to retrieve
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - replication_lag
+                - primary_cpu_usage
+                - primary_memory_usage
+                - vtgate_cpu_usage
+                - vtgate_memory_usage
+        - name: keyspace
+          in: query
+          description: Filter by keyspace
+          schema:
+            type: string
+        - name: shard
+          in: query
+          description: Filter by shard
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns current tablet metrics
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The metrics response type
+                  branch:
+                    type: object
+                    additionalProperties: true
+                    description: The branch these metrics belong to
+                  metrics:
+                    type: array
+                    items:
+                      type: string
+                    description: The current metric values
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+        "503":
+          description: Metrics service unavailable
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tag:
+    get:
+      tags:
+        - Metrics
+      operationId: get_branch_tag_metrics
+      summary: Get time-series metrics grouped by query tags
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: metrics
+          in: query
+          description: Metric names to retrieve
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - avg_parallel_workers
+                - avg_shard_queries
+                - block_cache_hit_ratio
+                - blocks_dirtied
+                - blocks_hit
+                - blocks_read
+                - blocks_written
+                - cpu_duration_millis
+                - egress_bytes
+                - egress_bytes_per_query
+                - ingress_bytes
+                - ingress_bytes_per_query
+                - io_duration_millis
+                - latency_max
+                - latency_min
+                - latency_p50
+                - latency_p95
+                - latency_p99
+                - latency_p999
+                - max_egress_bytes
+                - max_ingress_bytes
+                - max_shard_queries
+                - queries
+                - query_errors
+                - rows_affected_per_query
+                - rows_read
+                - rows_read_per_query
+                - rows_read_per_returned
+                - rows_returned
+                - rows_returned_per_query
+                - rows_written
+                - total_duration_millis
+                - traffic_control_throttled
+                - traffic_control_warnings
+        - name: tag_sets
+          in: query
+          description: Tag sets to retrieve metrics for
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: period
+          in: query
+          description: Named time period to retrieve. Defaults to 12h.
+          schema:
+            type: string
+            enum:
+              - 15m
+              - 1h
+              - 3h
+              - 6h
+              - 12h
+              - 1d
+              - 2d
+              - 7d
+              - 8d
+        - name: from
+          in: query
+          description: Start of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: End of a custom time range as an ISO 8601 timestamp
+          schema:
+            type: string
+        - name: steps
+          in: query
+          description: Number of data points to return
+          schema:
+            type: integer
+        - name: tablet_type
+          in: query
+          description: Filter by tablet type
+          schema:
+            type: string
+            enum:
+              - primary
+              - replica
+              - rdonly
+        - name: budget_id
+          in: query
+          description: Filter by traffic budget ID
+          schema:
+            type: string
+        - name: rule_id
+          in: query
+          description: Filter by traffic rule ID
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Filter by search terms
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns time-series metrics grouped by query tags
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The metrics response type
+                  start_date:
+                    type: string
+                    description: The start of the time range
+                  end_date:
+                    type: string
+                    description: The end of the time range
+                  interval:
+                    type: integer
+                    description: The step interval in seconds between data points
+                  series:
+                    type: array
+                    items:
+                      type: string
+                    description: The time-series metric data
+        "400":
+          description: Invalid tag filter
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
   /organizations/{organization}/databases/{database}/branches/{branch}/parameters:
     get:
       tags:
@@ -13503,9 +14620,6 @@ paths:
                     min:
                       type: number
                       description: The minimum value of the parameter
-                    step:
-                      type: number
-                      description: The step change of the parameter
                     url:
                       type: string
                       description: The URL of the parameter
@@ -13548,7 +14662,6 @@ paths:
                     - restart
                     - max
                     - min
-                    - step
                     - url
                     - options
                     - actor
@@ -13662,6 +14775,12 @@ paths:
                     type: string
                     description: The previous page of results, or null when this is the first page
                     nullable: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
                   data:
                     type: array
                     items:
@@ -13859,6 +14978,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -16510,6 +17631,12 @@ paths:
                     type: string
                     description: The previous page of results, or null when this is the first page
                     nullable: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
                   data:
                     type: array
                     items:
@@ -16567,6 +17694,9 @@ paths:
                         drop_failed:
                           type: string
                           description: Error message available when dropping the role fails
+                        ready:
+                          type: boolean
+                          description: Whether the role is ready to accept connections
                         expired:
                           type: boolean
                           description: True if the credentials are expired
@@ -16675,6 +17805,7 @@ paths:
                         - dropped_at
                         - disabled_at
                         - drop_failed
+                        - ready
                         - expired
                         - default
                         - ttl
@@ -16691,6 +17822,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -16839,6 +17972,9 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -16947,6 +18083,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -17064,6 +18201,9 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -17172,6 +18312,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -17365,6 +18506,9 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -17473,6 +18617,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -17610,6 +18755,9 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -17718,6 +18866,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -17972,6 +19121,9 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -18080,6 +19232,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -18203,6 +19356,9 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -18311,6 +19467,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -32925,6 +34082,12 @@ paths:
                     type: string
                     description: The previous page of results, or null when this is the first page
                     nullable: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
                   data:
                     type: array
                     items:
@@ -33044,6 +34207,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -45935,6 +47100,9 @@ tags:
   - name: MaintenanceWindows
     description: |2
                 Resources for viewing maintenance windows for a Vitess database (Enterprise only).
+  - name: Metrics
+    description: |2
+                Resources for retrieving database metrics.
   - name: OAuth applications
     description: |2
                 Resources for managing OAuth applications.
@@ -52296,6 +53464,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -52415,6 +53589,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     PostgresRole:
       type: object
@@ -52471,6 +53647,9 @@ components:
         drop_failed:
           type: string
           description: Error message available when dropping the role fails
+        ready:
+          type: boolean
+          description: Whether the role is ready to accept connections
         expired:
           type: boolean
           description: True if the credentials are expired
@@ -52579,6 +53758,7 @@ components:
         - dropped_at
         - disabled_at
         - drop_failed
+        - ready
         - expired
         - default
         - ttl
@@ -52615,6 +53795,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -52672,6 +53858,9 @@ components:
               drop_failed:
                 type: string
                 description: Error message available when dropping the role fails
+              ready:
+                type: boolean
+                description: Whether the role is ready to accept connections
               expired:
                 type: boolean
                 description: True if the credentials are expired
@@ -52780,6 +53969,7 @@ components:
               - dropped_at
               - disabled_at
               - drop_failed
+              - ready
               - expired
               - default
               - ttl
@@ -52796,6 +53986,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     PaginatedPublicPlanetscaleRegionSerializer:
       type: object
@@ -54302,9 +55494,6 @@ components:
               min:
                 type: number
                 description: The minimum value of the parameter
-              step:
-                type: number
-                description: The step change of the parameter
               url:
                 type: string
                 description: The URL of the parameter
@@ -54346,7 +55535,6 @@ components:
               - restart
               - max
               - min
-              - step
               - url
               - options
               - actor
@@ -54547,9 +55735,6 @@ components:
                     min:
                       type: number
                       description: The minimum value of the parameter
-                    step:
-                      type: number
-                      description: The step change of the parameter
                     url:
                       type: string
                       description: The URL of the parameter
@@ -54591,7 +55776,6 @@ components:
                     - restart
                     - max
                     - min
-                    - step
                     - url
                     - options
                     - actor
@@ -55878,6 +57062,41 @@ components:
         - prev_page
         - prev_page_url
         - data
+    metric_series_response:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The metrics response type
+        start_date:
+          type: string
+          description: The start of the time range
+        end_date:
+          type: string
+          description: The end of the time range
+        interval:
+          type: integer
+          description: The step interval in seconds between data points
+        series:
+          type: array
+          items:
+            type: string
+          description: The time-series metric data
+    instant_metrics_response:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The metrics response type
+        branch:
+          type: object
+          additionalProperties: true
+          description: The branch these metrics belong to
+        metrics:
+          type: array
+          items:
+            type: string
+          description: The current metric values
     PaginatedBranchMaintenanceWindow:
       type: object
       properties:
@@ -57466,6 +58685,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -57663,6 +58888,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     DatabaseBranchKeyspace:
       type: object
@@ -58136,9 +59363,6 @@ components:
         min:
           type: number
           description: The minimum value of the parameter
-        step:
-          type: number
-          description: The step change of the parameter
         url:
           type: string
           description: The URL of the parameter
@@ -58181,7 +59405,6 @@ components:
         - restart
         - max
         - min
-        - step
         - url
         - options
         - actor
@@ -58286,9 +59509,6 @@ components:
               min:
                 type: number
                 description: The minimum value of the parameter
-              step:
-                type: number
-                description: The step change of the parameter
               url:
                 type: string
                 description: The URL of the parameter
@@ -58331,7 +59551,6 @@ components:
               - restart
               - max
               - min
-              - step
               - url
               - options
               - actor
@@ -59817,6 +61036,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -60080,6 +61305,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     BackupPolicy:
       type: object

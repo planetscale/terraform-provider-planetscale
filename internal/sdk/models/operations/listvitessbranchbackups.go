@@ -415,8 +415,12 @@ type ListVitessBranchBackupsResponseBody struct {
 	// The previous page number, or null when this is the first page
 	PrevPage *int64 `json:"prev_page"`
 	// The previous page of results, or null when this is the first page
-	PrevPageURL *string                       `json:"prev_page_url"`
-	Data        []ListVitessBranchBackupsData `json:"data"`
+	PrevPageURL *string `json:"prev_page_url"`
+	// The total number of matching results
+	TotalCount int64 `json:"total_count"`
+	// The total number of pages of matching results
+	TotalPages int64                         `json:"total_pages"`
+	Data       []ListVitessBranchBackupsData `json:"data"`
 }
 
 func (l *ListVitessBranchBackupsResponseBody) GetType() string {
@@ -466,6 +470,20 @@ func (l *ListVitessBranchBackupsResponseBody) GetPrevPageURL() *string {
 		return nil
 	}
 	return l.PrevPageURL
+}
+
+func (l *ListVitessBranchBackupsResponseBody) GetTotalCount() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalCount
+}
+
+func (l *ListVitessBranchBackupsResponseBody) GetTotalPages() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalPages
 }
 
 func (l *ListVitessBranchBackupsResponseBody) GetData() []ListVitessBranchBackupsData {

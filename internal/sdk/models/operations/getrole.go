@@ -280,6 +280,8 @@ type GetRoleResponseBody struct {
 	DisabledAt *string `json:"disabled_at"`
 	// Error message available when dropping the role fails
 	DropFailed string `json:"drop_failed"`
+	// Whether the role is ready to accept connections
+	Ready bool `json:"ready"`
 	// True if the credentials are expired
 	Expired bool `json:"expired"`
 	// Whether the role is the default postgres user
@@ -398,6 +400,13 @@ func (g *GetRoleResponseBody) GetDropFailed() string {
 		return ""
 	}
 	return g.DropFailed
+}
+
+func (g *GetRoleResponseBody) GetReady() bool {
+	if g == nil {
+		return false
+	}
+	return g.Ready
 }
 
 func (g *GetRoleResponseBody) GetExpired() bool {

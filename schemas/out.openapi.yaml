@@ -864,9 +864,6 @@ paths:
                               min:
                                 type: number
                                 description: The minimum value of the parameter
-                              step:
-                                type: number
-                                description: The step change of the parameter
                               url:
                                 type: string
                                 description: The URL of the parameter
@@ -908,7 +905,6 @@ paths:
                               - restart
                               - max
                               - min
-                              - step
                               - url
                               - options
                               - actor
@@ -1127,9 +1123,6 @@ paths:
                         min:
                           type: number
                           description: The minimum value of the parameter
-                        step:
-                          type: number
-                          description: The step change of the parameter
                         url:
                           type: string
                           description: The URL of the parameter
@@ -1171,7 +1164,6 @@ paths:
                         - restart
                         - max
                         - min
-                        - step
                         - url
                         - options
                         - actor
@@ -2202,6 +2194,14 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/rollout-status: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vschema: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/instant: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/keyspace-tables: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/query: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tables: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tablets: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tablets-instant: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/metrics/tag: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/parameters: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/passwords:
     get:
@@ -2294,6 +2294,14 @@ paths:
                     type: string
                     description: The previous page of results, or null when this is the first page
                     nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                    x-speakeasy-terraform-ignore: true
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
                     x-speakeasy-terraform-ignore: true
                   data:
                     type: array
@@ -2492,6 +2500,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -3686,6 +3696,14 @@ paths:
                     description: The previous page of results, or null when this is the first page
                     nullable: true
                     x-speakeasy-terraform-ignore: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                    x-speakeasy-terraform-ignore: true
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -3743,6 +3761,10 @@ paths:
                         drop_failed:
                           type: string
                           description: Error message available when dropping the role fails
+                        ready:
+                          type: boolean
+                          description: Whether the role is ready to accept connections
+                          x-speakeasy-terraform-ignore: true
                         expired:
                           type: boolean
                           description: True if the credentials are expired
@@ -3853,6 +3875,7 @@ paths:
                         - dropped_at
                         - disabled_at
                         - drop_failed
+                        - ready
                         - expired
                         - default
                         - ttl
@@ -3869,6 +3892,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -4023,6 +4048,10 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
+                    x-speakeasy-terraform-ignore: true
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -4137,6 +4166,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -4265,6 +4295,10 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
+                    x-speakeasy-terraform-ignore: true
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -4379,6 +4413,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -4513,6 +4548,10 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
+                    x-speakeasy-terraform-ignore: true
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -4627,6 +4666,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -6994,6 +7034,10 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
+                    x-speakeasy-terraform-ignore: true
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -7108,6 +7152,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -7235,6 +7280,10 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
+                    x-speakeasy-terraform-ignore: true
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -7349,6 +7398,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -7484,6 +7534,10 @@ paths:
                   drop_failed:
                     type: string
                     description: Error message available when dropping the role fails
+                  ready:
+                    type: boolean
+                    description: Whether the role is ready to accept connections
+                    x-speakeasy-terraform-ignore: true
                   expired:
                     type: boolean
                     description: True if the credentials are expired
@@ -7598,6 +7652,7 @@ paths:
                   - dropped_at
                   - disabled_at
                   - drop_failed
+                  - ready
                   - expired
                   - default
                   - ttl
@@ -9097,6 +9152,14 @@ paths:
                     description: The previous page of results, or null when this is the first page
                     nullable: true
                     x-speakeasy-terraform-ignore: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                    x-speakeasy-terraform-ignore: true
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -9245,6 +9308,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -9883,6 +9948,14 @@ paths:
                     description: The previous page of results, or null when this is the first page
                     nullable: true
                     x-speakeasy-terraform-ignore: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                    x-speakeasy-terraform-ignore: true
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
+                    x-speakeasy-terraform-ignore: true
                   data:
                     type: array
                     items:
@@ -10031,6 +10104,8 @@ paths:
                   - next_page_url
                   - prev_page
                   - prev_page_url
+                  - total_count
+                  - total_pages
                   - data
         "401":
           description: Unauthorized
@@ -10787,6 +10862,9 @@ tags:
   - name: MaintenanceWindows
     description: |2
                 Resources for viewing maintenance windows for a Vitess database (Enterprise only).
+  - name: Metrics
+    description: |2
+                Resources for retrieving database metrics.
   - name: OAuth applications
     description: |2
                 Resources for managing OAuth applications.
@@ -17162,6 +17240,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -17281,6 +17365,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     PostgresRole:
       type: object
@@ -17337,6 +17423,9 @@ components:
         drop_failed:
           type: string
           description: Error message available when dropping the role fails
+        ready:
+          type: boolean
+          description: Whether the role is ready to accept connections
         expired:
           type: boolean
           description: True if the credentials are expired
@@ -17446,6 +17535,7 @@ components:
         - dropped_at
         - disabled_at
         - drop_failed
+        - ready
         - expired
         - default
         - ttl
@@ -17482,6 +17572,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -17539,6 +17635,9 @@ components:
               drop_failed:
                 type: string
                 description: Error message available when dropping the role fails
+              ready:
+                type: boolean
+                description: Whether the role is ready to accept connections
               expired:
                 type: boolean
                 description: True if the credentials are expired
@@ -17648,6 +17747,7 @@ components:
               - dropped_at
               - disabled_at
               - drop_failed
+              - ready
               - expired
               - default
               - ttl
@@ -17664,6 +17764,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     PaginatedPublicPlanetscaleRegionSerializer:
       type: object
@@ -19170,9 +19272,6 @@ components:
               min:
                 type: number
                 description: The minimum value of the parameter
-              step:
-                type: number
-                description: The step change of the parameter
               url:
                 type: string
                 description: The URL of the parameter
@@ -19214,7 +19313,6 @@ components:
               - restart
               - max
               - min
-              - step
               - url
               - options
               - actor
@@ -19415,9 +19513,6 @@ components:
                     min:
                       type: number
                       description: The minimum value of the parameter
-                    step:
-                      type: number
-                      description: The step change of the parameter
                     url:
                       type: string
                       description: The URL of the parameter
@@ -19459,7 +19554,6 @@ components:
                     - restart
                     - max
                     - min
-                    - step
                     - url
                     - options
                     - actor
@@ -20746,6 +20840,41 @@ components:
         - prev_page
         - prev_page_url
         - data
+    metric_series_response:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The metrics response type
+        start_date:
+          type: string
+          description: The start of the time range
+        end_date:
+          type: string
+          description: The end of the time range
+        interval:
+          type: integer
+          description: The step interval in seconds between data points
+        series:
+          type: array
+          items:
+            type: string
+          description: The time-series metric data
+    instant_metrics_response:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The metrics response type
+        branch:
+          type: object
+          additionalProperties: true
+          description: The branch these metrics belong to
+        metrics:
+          type: array
+          items:
+            type: string
+          description: The current metric values
     PaginatedBranchMaintenanceWindow:
       type: object
       properties:
@@ -22326,6 +22455,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -22523,6 +22658,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     DatabaseBranchKeyspace:
       type: object
@@ -22996,9 +23133,6 @@ components:
         min:
           type: number
           description: The minimum value of the parameter
-        step:
-          type: number
-          description: The step change of the parameter
         url:
           type: string
           description: The URL of the parameter
@@ -23041,7 +23175,6 @@ components:
         - restart
         - max
         - min
-        - step
         - url
         - options
         - actor
@@ -23146,9 +23279,6 @@ components:
               min:
                 type: number
                 description: The minimum value of the parameter
-              step:
-                type: number
-                description: The step change of the parameter
               url:
                 type: string
                 description: The URL of the parameter
@@ -23191,7 +23321,6 @@ components:
               - restart
               - max
               - min
-              - step
               - url
               - options
               - actor
@@ -24677,6 +24806,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -24940,6 +25075,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     BackupPolicy:
       type: object

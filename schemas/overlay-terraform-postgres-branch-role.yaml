@@ -120,6 +120,19 @@ actions:
     update:
       x-speakeasy-ignore: true
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties.ready
+    description: Ignore extraneous response property in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].patch.responses["200"].content["application/json"].schema.properties.ready
+    description: Ignore extraneous response property in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.responses["200"].content["application/json"].schema.properties.ready
+    description: Ignore extraneous response property in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
+
   # These need to map to the nested query_safety_settings property
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].post.requestBody.content['application/json'].schema.properties.require_where_on_delete
     remove: true

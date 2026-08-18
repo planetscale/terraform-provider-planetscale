@@ -35,6 +35,15 @@ actions:
         x-speakeasy-terraform-ignore: true
       prev_page_url:
         x-speakeasy-terraform-ignore: true
+      total_count:
+        x-speakeasy-terraform-ignore: true
+      total_pages:
+        x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.ready
+    description: Ignore extraneous response property in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.inherited_roles
     description: Mark inherited_roles as a set.

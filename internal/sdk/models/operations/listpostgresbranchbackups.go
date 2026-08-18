@@ -415,8 +415,12 @@ type ListPostgresBranchBackupsResponseBody struct {
 	// The previous page number, or null when this is the first page
 	PrevPage *int64 `json:"prev_page"`
 	// The previous page of results, or null when this is the first page
-	PrevPageURL *string                         `json:"prev_page_url"`
-	Data        []ListPostgresBranchBackupsData `json:"data"`
+	PrevPageURL *string `json:"prev_page_url"`
+	// The total number of matching results
+	TotalCount int64 `json:"total_count"`
+	// The total number of pages of matching results
+	TotalPages int64                           `json:"total_pages"`
+	Data       []ListPostgresBranchBackupsData `json:"data"`
 }
 
 func (l *ListPostgresBranchBackupsResponseBody) GetType() string {
@@ -466,6 +470,20 @@ func (l *ListPostgresBranchBackupsResponseBody) GetPrevPageURL() *string {
 		return nil
 	}
 	return l.PrevPageURL
+}
+
+func (l *ListPostgresBranchBackupsResponseBody) GetTotalCount() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalCount
+}
+
+func (l *ListPostgresBranchBackupsResponseBody) GetTotalPages() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.TotalPages
 }
 
 func (l *ListPostgresBranchBackupsResponseBody) GetData() []ListPostgresBranchBackupsData {
