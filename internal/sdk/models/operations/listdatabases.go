@@ -355,6 +355,8 @@ type ListDatabasesData struct {
 	AutomaticMigrations *bool `json:"automatic_migrations,omitzero"`
 	// Whether to restrict branch creation to one region
 	RestrictBranchRegion bool `json:"restrict_branch_region"`
+	// Whether deploy requests default to instant deploy when it is available
+	PreferInstant bool `json:"prefer_instant"`
 	// Whether raw SQL queries are collected
 	InsightsRawQueries bool `json:"insights_raw_queries"`
 	// The database plan
@@ -589,6 +591,13 @@ func (l *ListDatabasesData) GetRestrictBranchRegion() bool {
 		return false
 	}
 	return l.RestrictBranchRegion
+}
+
+func (l *ListDatabasesData) GetPreferInstant() bool {
+	if l == nil {
+		return false
+	}
+	return l.PreferInstant
 }
 
 func (l *ListDatabasesData) GetInsightsRawQueries() bool {
