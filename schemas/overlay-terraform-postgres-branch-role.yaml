@@ -120,6 +120,10 @@ actions:
     update:
       x-speakeasy-ignore: true
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.parameters[?@.name == 'replica' || @.name == 'read_only_replica' || @.name == 'bouncer']
+    description: Keep replica and bouncer connection detail parameters out of Terraform.
+    remove: true
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties.ready
     description: Ignore extraneous response property in Terraform schema.
     update:

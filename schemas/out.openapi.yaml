@@ -317,6 +317,7 @@ paths:
       x-speakeasy-entity-operation: Organization#read
       x-speakeasy-entity-description: Returns information about a PlanetScale organization.
   /organizations/{organization}/audit-log: {}
+  /organizations/{organization}/billing/payment-method: {}
   /organizations/{organization}/cluster-size-skus: {}
   /organizations/{organization}/databases:
     get:
@@ -578,6 +579,10 @@ paths:
                         restrict_branch_region:
                           type: boolean
                           description: Whether to restrict branch creation to one region
+                        prefer_instant:
+                          type: boolean
+                          description: Whether deploy requests default to instant deploy when it is available
+                          x-speakeasy-terraform-ignore: true
                         insights_raw_queries:
                           type: boolean
                           description: Whether raw SQL queries are collected
@@ -643,6 +648,7 @@ paths:
                         - allow_data_branching
                         - foreign_keys_enabled
                         - restrict_branch_region
+                        - prefer_instant
                         - insights_raw_queries
                         - plan
                         - insights_enabled
@@ -1332,11 +1338,13 @@ paths:
                   - cluster_display_name
                   - cluster_metal
                   - replicas
+                  - version
                   - parameters
                   - previous_cluster_name
                   - previous_cluster_display_name
                   - previous_cluster_metal
                   - previous_replicas
+                  - previous_version
                   - previous_parameters
                   - minimum_storage_bytes
                   - maximum_storage_bytes
@@ -1352,6 +1360,7 @@ paths:
                   - previous_storage_type
                   - previous_storage_iops
                   - previous_storage_throughput_mibs
+                  - confirm_shrink
         "401":
           description: Unauthorized
         "403":
@@ -2194,6 +2203,7 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/rollout-status: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vschema: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/maintenance: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/metrics: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/metrics/instant: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/metrics/keyspace-tables: {}
@@ -4819,6 +4829,8 @@ paths:
         - VitessBranch#update#3
   /organizations/{organization}/databases/{database}/branches/{branch}/schema: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/schema/lint: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/switchovers: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/switchovers/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{budget_id}/rules: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{budget_id}/rules/{id}: {}
@@ -6534,6 +6546,10 @@ paths:
                   restrict_branch_region:
                     type: boolean
                     description: Whether to restrict branch creation to one region
+                  prefer_instant:
+                    type: boolean
+                    description: Whether deploy requests default to instant deploy when it is available
+                    x-speakeasy-terraform-ignore: true
                   insights_raw_queries:
                     type: boolean
                     description: Whether raw SQL queries are collected
@@ -6597,6 +6613,7 @@ paths:
                   - allow_data_branching
                   - foreign_keys_enabled
                   - restrict_branch_region
+                  - prefer_instant
                   - insights_raw_queries
                   - plan
                   - insights_enabled
@@ -6824,6 +6841,10 @@ paths:
                   restrict_branch_region:
                     type: boolean
                     description: Whether to restrict branch creation to one region
+                  prefer_instant:
+                    type: boolean
+                    description: Whether deploy requests default to instant deploy when it is available
+                    x-speakeasy-terraform-ignore: true
                   insights_raw_queries:
                     type: boolean
                     description: Whether raw SQL queries are collected
@@ -6879,6 +6900,7 @@ paths:
                   - allow_data_branching
                   - foreign_keys_enabled
                   - restrict_branch_region
+                  - prefer_instant
                   - insights_raw_queries
                   - plan
                   - insights_enabled
@@ -10926,6 +10948,9 @@ tags:
   - name: AuthAttemptExports
     description: |2
                   Resources for creating and downloading organization auth attempt exports.
+  - name: Billing payment method
+    description: |2
+                  Resources for managing an organization's payment method.
   - name: Invoices
     description: |2
                   Resources for managing invoices.
@@ -11097,6 +11122,7 @@ components:
             organization:manage_production_read_only_passwords: Read, write, and delete production read only branch passwords in an organization
             organization:manage_read_only_passwords: Read, write, and delete read only branch passwords in an organization
             organization:promote_branches: Promote branches in an organization
+            organization:read_audit_logs: Read organization audit logs
             organization:read_backups: Read backups in an organization
             organization:read_branches: Read branches in an organization
             organization:read_comments: Read deploy request comments in an organization
@@ -11105,6 +11131,7 @@ components:
             organization:read_invoices: Read organization invoices
             organization:read_members: Read members in an organization
             organization:read_organization: Read organization
+            organization:read_payment_method: Read organization payment method
             organization:restore_backups: Restore backups to new branches in an organization
             organization:restore_production_branch_backups: Restore production branch backups to new branches in an organization
             organization:write_backups: Create and update backups in an organization
@@ -11114,6 +11141,7 @@ components:
             organization:write_deploy_requests: Create and update deploy requests in an organization
             organization:write_members: Write members in an organization
             organization:write_organization: Write organization
+            organization:write_payment_method: Update and delete the organization payment method
             user:read_organizations: Read a user's organizations
             user:read_user: Read user
             user:write_user: Write user
@@ -12386,6 +12414,41 @@ components:
         - prev_page
         - prev_page_url
         - data
+    BillingPaymentMethod:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - PaymentMethod
+          description: The resource type
+        id:
+          type: string
+          description: The payment method ID
+        brand:
+          type: string
+          description: The card brand, such as visa or mastercard
+        last4:
+          type: string
+          description: The final four digits of the card number
+        exp_month:
+          type: integer
+          description: The card expiration month
+        exp_year:
+          type: integer
+          description: The card expiration year
+        name:
+          type: string
+          description: The cardholder name
+          nullable: true
+      required:
+        - type
+        - id
+        - brand
+        - last4
+        - exp_month
+        - exp_year
+        - name
     DatabaseWebhook:
       type: object
       properties:
@@ -19117,6 +19180,173 @@ components:
         - prev_page
         - prev_page_url
         - data
+    PostgresSwitchover:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the switchover
+        state:
+          type: string
+          enum:
+            - pending
+            - running
+            - succeeded
+            - failed
+            - canceled
+          description: The state of the switchover
+        method:
+          type: string
+          enum:
+            - switchover
+            - restart
+          description: How the primary was moved. `switchover` promotes a replica on a highly available branch; `restart` restarts the single instance of a branch that has no replicas. Absent until the operator selects one.
+          nullable: true
+        error:
+          type: string
+          description: Why the switchover failed. A failed switchover has an unconfirmed outcome and does not imply the primary stayed put.
+          nullable: true
+        started_at:
+          type: string
+          description: When the switchover was requested
+          nullable: true
+        completed_at:
+          type: string
+          description: When the switchover finished
+          nullable: true
+        created_at:
+          type: string
+          description: When the switchover was created
+        updated_at:
+          type: string
+          description: When the switchover was last updated
+        actor:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID of the actor
+            display_name:
+              type: string
+              description: The name of the actor
+            avatar_url:
+              type: string
+              description: The URL of the actor's avatar
+          required:
+            - id
+            - display_name
+            - avatar_url
+      required:
+        - id
+        - state
+        - started_at
+        - completed_at
+        - created_at
+        - updated_at
+        - actor
+    PaginatedPostgresSwitchover:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The response type. Always "list" for paginated responses.
+        current_page:
+          type: integer
+          description: The current page number
+        per_page:
+          type: integer
+          description: The maximum number of results per page
+        next_page:
+          type: integer
+          description: The next page number, or null when this is the last page
+          nullable: true
+        next_page_url:
+          type: string
+          description: The next page of results, or null when this is the last page
+          nullable: true
+        prev_page:
+          type: integer
+          description: The previous page number, or null when this is the first page
+          nullable: true
+        prev_page_url:
+          type: string
+          description: The previous page of results, or null when this is the first page
+          nullable: true
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the switchover
+              state:
+                type: string
+                enum:
+                  - pending
+                  - running
+                  - succeeded
+                  - failed
+                  - canceled
+                description: The state of the switchover
+              method:
+                type: string
+                enum:
+                  - switchover
+                  - restart
+                description: How the primary was moved. `switchover` promotes a replica on a highly available branch; `restart` restarts the single instance of a branch that has no replicas. Absent until the operator selects one.
+                nullable: true
+              error:
+                type: string
+                description: Why the switchover failed. A failed switchover has an unconfirmed outcome and does not imply the primary stayed put.
+                nullable: true
+              started_at:
+                type: string
+                description: When the switchover was requested
+                nullable: true
+              completed_at:
+                type: string
+                description: When the switchover finished
+                nullable: true
+              created_at:
+                type: string
+                description: When the switchover was created
+              updated_at:
+                type: string
+                description: When the switchover was last updated
+              actor:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the actor
+                  display_name:
+                    type: string
+                    description: The name of the actor
+                  avatar_url:
+                    type: string
+                    description: The URL of the actor's avatar
+                required:
+                  - id
+                  - display_name
+                  - avatar_url
+            required:
+              - id
+              - state
+              - started_at
+              - completed_at
+              - created_at
+              - updated_at
+              - actor
+      required:
+        - type
+        - current_page
+        - per_page
+        - next_page
+        - next_page_url
+        - prev_page
+        - prev_page_url
+        - data
     PostgresBouncer:
       type: object
       properties:
@@ -20763,6 +20993,12 @@ components:
           type: string
           description: The previous page of results, or null when this is the first page
           nullable: true
+        total_count:
+          type: integer
+          description: The total number of matching results
+        total_pages:
+          type: integer
+          description: The total number of pages of matching results
         data:
           type: array
           items:
@@ -20839,6 +21075,8 @@ components:
         - next_page_url
         - prev_page
         - prev_page_url
+        - total_count
+        - total_pages
         - data
     metric_series_response:
       type: object
@@ -21700,6 +21938,9 @@ components:
         restrict_branch_region:
           type: boolean
           description: Whether to restrict branch creation to one region
+        prefer_instant:
+          type: boolean
+          description: Whether deploy requests default to instant deploy when it is available
         insights_raw_queries:
           type: boolean
           description: Whether raw SQL queries are collected
@@ -21765,6 +22006,7 @@ components:
         - allow_data_branching
         - foreign_keys_enabled
         - restrict_branch_region
+        - prefer_instant
         - insights_raw_queries
         - plan
         - insights_enabled
@@ -21995,6 +22237,9 @@ components:
               restrict_branch_region:
                 type: boolean
                 description: Whether to restrict branch creation to one region
+              prefer_instant:
+                type: boolean
+                description: Whether deploy requests default to instant deploy when it is available
               insights_raw_queries:
                 type: boolean
                 description: Whether raw SQL queries are collected
@@ -22060,6 +22305,7 @@ components:
               - allow_data_branching
               - foreign_keys_enabled
               - restrict_branch_region
+              - prefer_instant
               - insights_raw_queries
               - plan
               - insights_enabled
@@ -24229,6 +24475,9 @@ components:
         replicas:
           type: integer
           description: The total number of replicas
+        version:
+          type: string
+          description: The PostgreSQL version after the change
         parameters:
           type: object
           additionalProperties: true
@@ -24245,6 +24494,9 @@ components:
         previous_replicas:
           type: integer
           description: The previous total number of replicas
+        previous_version:
+          type: string
+          description: The PostgreSQL version before the change
         previous_parameters:
           type: object
           additionalProperties: true
@@ -24297,6 +24549,9 @@ components:
         previous_storage_throughput_mibs:
           type: integer
           description: The previous storage throughput in MiB/s
+        confirm_shrink:
+          type: boolean
+          description: Whether the change re-applies the current minimum disk size to shrink the provisioned disk
       required:
         - id
         - state
@@ -24309,11 +24564,13 @@ components:
         - cluster_display_name
         - cluster_metal
         - replicas
+        - version
         - parameters
         - previous_cluster_name
         - previous_cluster_display_name
         - previous_cluster_metal
         - previous_replicas
+        - previous_version
         - previous_parameters
         - minimum_storage_bytes
         - maximum_storage_bytes
@@ -24329,6 +24586,7 @@ components:
         - previous_storage_type
         - previous_storage_iops
         - previous_storage_throughput_mibs
+        - confirm_shrink
     PaginatedPostgresClusterResizeRequest:
       type: object
       properties:
@@ -24416,6 +24674,9 @@ components:
               replicas:
                 type: integer
                 description: The total number of replicas
+              version:
+                type: string
+                description: The PostgreSQL version after the change
               parameters:
                 type: object
                 additionalProperties: true
@@ -24432,6 +24693,9 @@ components:
               previous_replicas:
                 type: integer
                 description: The previous total number of replicas
+              previous_version:
+                type: string
+                description: The PostgreSQL version before the change
               previous_parameters:
                 type: object
                 additionalProperties: true
@@ -24484,6 +24748,9 @@ components:
               previous_storage_throughput_mibs:
                 type: integer
                 description: The previous storage throughput in MiB/s
+              confirm_shrink:
+                type: boolean
+                description: Whether the change re-applies the current minimum disk size to shrink the provisioned disk
             required:
               - id
               - state
@@ -24496,11 +24763,13 @@ components:
               - cluster_display_name
               - cluster_metal
               - replicas
+              - version
               - parameters
               - previous_cluster_name
               - previous_cluster_display_name
               - previous_cluster_metal
               - previous_replicas
+              - previous_version
               - previous_parameters
               - minimum_storage_bytes
               - maximum_storage_bytes
@@ -24516,6 +24785,7 @@ components:
               - previous_storage_type
               - previous_storage_iops
               - previous_storage_throughput_mibs
+              - confirm_shrink
       required:
         - type
         - current_page

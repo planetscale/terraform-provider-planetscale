@@ -40,6 +40,10 @@ actions:
       total_pages:
         x-speakeasy-terraform-ignore: true
 
+  - target: $.paths["/organizations/{organization}/databases"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.prefer_instant
+    description: Ignore extraneous response property in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.paths["/organizations/{organization}/databases"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.config_change_queued
     remove: true
   - target: $.paths["/organizations/{organization}/databases"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.config_changing

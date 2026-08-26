@@ -292,6 +292,8 @@ type GetPostgresDatabaseResponseBody struct {
 	ResizeQueued bool `json:"resize_queued"`
 	// Whether to restrict branch creation to one region
 	RestrictBranchRegion bool `json:"restrict_branch_region"`
+	// Whether deploy requests default to instant deploy when it is available
+	PreferInstant bool `json:"prefer_instant"`
 	// Whether raw SQL queries are collected
 	InsightsRawQueries bool `json:"insights_raw_queries"`
 	// The database plan
@@ -495,6 +497,13 @@ func (g *GetPostgresDatabaseResponseBody) GetRestrictBranchRegion() bool {
 		return false
 	}
 	return g.RestrictBranchRegion
+}
+
+func (g *GetPostgresDatabaseResponseBody) GetPreferInstant() bool {
+	if g == nil {
+		return false
+	}
+	return g.PreferInstant
 }
 
 func (g *GetPostgresDatabaseResponseBody) GetInsightsRawQueries() bool {
