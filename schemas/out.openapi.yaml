@@ -318,6 +318,8 @@ paths:
       x-speakeasy-entity-description: Returns information about a PlanetScale organization.
   /organizations/{organization}/audit-log: {}
   /organizations/{organization}/billing/payment-method: {}
+  /organizations/{organization}/billing/payment-method-setups: {}
+  /organizations/{organization}/billing/payment-method-setups/{id}: {}
   /organizations/{organization}/cluster-size-skus: {}
   /organizations/{organization}/databases:
     get:
@@ -681,7 +683,7 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `promote_branches`, `demote_branches`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
+         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `promote_branches`, `demote_branches`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`, `read_workflow`, `write_workflow`, `delete_workflow`
 
         **OAuth Scopes**
 
@@ -3394,6 +3396,9 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}/download: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replica-changes: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/resizes:
     put:
       tags:
@@ -4889,6 +4894,11 @@ paths:
   /organizations/{organization}/regions: {}
   /organizations/{organization}/service-tokens: {}
   /organizations/{organization}/service-tokens/{id}: {}
+  /organizations/{organization}/sso: {}
+  /organizations/{organization}/sso/configure: {}
+  /organizations/{organization}/sso/directory: {}
+  /organizations/{organization}/sso/domains: {}
+  /organizations/{organization}/sso/domains/{id}: {}
   /organizations/{organization}/teams: {}
   /organizations/{organization}/teams/{team}: {}
   /organizations/{organization}/teams/{team}/members: {}
@@ -6635,7 +6645,7 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `promote_branches`, `demote_branches`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
+         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `promote_branches`, `demote_branches`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`, `read_workflow`, `write_workflow`, `delete_workflow`
 
         **OAuth Scopes**
 
@@ -6922,7 +6932,7 @@ paths:
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
         **Service Token Accesses**
-         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `promote_branches`, `demote_branches`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`
+         `read_database`, `delete_database`, `write_database`, `read_branch`, `delete_branch`, `create_branch`, `promote_branches`, `demote_branches`, `delete_production_branch`, `connect_branch`, `connect_production_branch`, `connect_production_read_only_branch`, `delete_branch_password`, `delete_production_branch_password`, `delete_production_read_only_branch_password`, `read_deploy_request`, `create_deploy_request`, `approve_deploy_request`, `read_comment`, `create_comment`, `restore_backup`, `restore_production_branch_backup`, `read_backups`, `write_backups`, `delete_backups`, `delete_production_branch_backups`, `write_branch_vschema`, `write_production_branch_vschema`, `read_workflow`, `write_workflow`, `delete_workflow`
 
         **OAuth Scopes**
 
@@ -10948,12 +10958,21 @@ tags:
   - name: AuthAttemptExports
     description: |2
                   Resources for creating and downloading organization auth attempt exports.
+  - name: Billing payment method setup
+    description: |2
+                  Resources for adding an organization's payment method through hosted checkout.
   - name: Billing payment method
     description: |2
                   Resources for managing an organization's payment method.
   - name: Invoices
     description: |2
                   Resources for managing invoices.
+  - name: Organization SSO domains
+    description: |2
+                  Resources for listing and verifying organization email domains used for SSO.
+  - name: Organization SSO
+    description: |2
+                  Resources for enabling SSO, verifying email domains, and configuring an identity provider.
   - name: Team members
     description: |2
                   Resources for managing team memberships within an organization. Team members inherit access to databases assigned to their team.
@@ -11121,6 +11140,7 @@ components:
             organization:manage_production_branch_passwords: Read, write, and delete production branch passwords in an organization
             organization:manage_production_read_only_passwords: Read, write, and delete production read only branch passwords in an organization
             organization:manage_read_only_passwords: Read, write, and delete read only branch passwords in an organization
+            organization:manage_sso: Enable, configure, and disable organization SSO
             organization:promote_branches: Promote branches in an organization
             organization:read_audit_logs: Read organization audit logs
             organization:read_backups: Read backups in an organization
@@ -12222,6 +12242,132 @@ components:
         - total_count
         - total_pages
         - data
+    OrganizationSsoSerializer:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - OrganizationSSO
+          description: The resource type
+        id:
+          type: string
+          description: The organization ID
+        enabled:
+          type: boolean
+          description: Whether the SSO add-on is enabled for the organization
+        configured:
+          type: boolean
+          description: Whether an identity provider connection is active
+        directory:
+          type: boolean
+          description: Whether directory sync is enabled
+        has_verified_domain:
+          type: boolean
+          description: Whether the organization has at least one verified email domain
+        domains:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - OrganizationDomain
+                description: The resource type
+              id:
+                type: string
+                description: The public ID of the organization domain
+              domain:
+                type: string
+                description: The domain name
+              state:
+                type: string
+                enum:
+                  - pending
+                  - verified
+                  - failed
+                description: The verification state of the domain
+              verified_at:
+                type: string
+                description: When the domain was verified
+                nullable: true
+              failure_reason:
+                type: string
+                description: The reason domain verification failed
+                nullable: true
+              created_at:
+                type: string
+                description: When the domain was created
+              updated_at:
+                type: string
+                description: When the domain was last updated
+            required:
+              - type
+              - id
+              - domain
+              - state
+              - verified_at
+              - failure_reason
+              - created_at
+              - updated_at
+        domain_verification_url:
+          type: string
+          description: URL to open for verifying an email domain, returned when SSO is enabled
+          nullable: true
+      required:
+        - type
+        - id
+        - enabled
+        - configured
+        - directory
+        - has_verified_domain
+        - domains
+        - domain_verification_url
+    OrganizationDomain:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - OrganizationDomain
+          description: The resource type
+        id:
+          type: string
+          description: The public ID of the organization domain
+        domain:
+          type: string
+          description: The domain name
+        state:
+          type: string
+          enum:
+            - pending
+            - verified
+            - failed
+          description: The verification state of the domain
+        verified_at:
+          type: string
+          description: When the domain was verified
+          nullable: true
+        failure_reason:
+          type: string
+          description: The reason domain verification failed
+          nullable: true
+        created_at:
+          type: string
+          description: When the domain was created
+        updated_at:
+          type: string
+          description: When the domain was last updated
+      required:
+        - type
+        - id
+        - domain
+        - state
+        - verified_at
+        - failure_reason
+        - created_at
+        - updated_at
     Invoice:
       type: object
       properties:
@@ -12449,6 +12595,54 @@ components:
         - exp_month
         - exp_year
         - name
+    BillingPaymentMethodSetup:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - BillingPaymentMethodSetup
+          description: The resource type
+        id:
+          type: string
+          description: The billing payment method setup ID
+        state:
+          type: string
+          enum:
+            - pending
+            - completed
+            - failed
+            - expired
+          description: The setup state
+        checkout_url:
+          type: string
+          description: The hosted checkout URL while the setup is pending
+          nullable: true
+        error:
+          type: string
+          description: The failure message when the setup failed
+          nullable: true
+        expires_at:
+          type: string
+          description: When the pending setup expires
+          nullable: true
+        completed_at:
+          type: string
+          description: When the setup completed
+          nullable: true
+        failed_at:
+          type: string
+          description: When the setup failed
+          nullable: true
+      required:
+        - type
+        - id
+        - state
+        - checkout_url
+        - error
+        - expires_at
+        - completed_at
+        - failed_at
     DatabaseWebhook:
       type: object
       properties:
@@ -12491,6 +12685,8 @@ components:
               - branch.schema_recommendation
               - branch.sleeping
               - branch.start_maintenance
+              - backup.failed
+              - backup.succeeded
               - cluster.storage
               - database.access_request
               - deploy_request.closed
@@ -12588,6 +12784,8 @@ components:
                     - branch.schema_recommendation
                     - branch.sleeping
                     - branch.start_maintenance
+                    - backup.failed
+                    - backup.succeeded
                     - cluster.storage
                     - database.access_request
                     - deploy_request.closed
@@ -17903,6 +18101,402 @@ components:
         - prev_page
         - prev_page_url
         - data
+    PostgresReadOnlyReplica:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the read-only replica
+        name:
+          type: string
+          description: The name of the read-only replica
+        state:
+          type: string
+          description: "The state of the read-only replica: pending, ready, or deleting"
+        replicas:
+          type: integer
+          description: The number of instances serving reads in this read-only replica
+        cluster_name:
+          type: string
+          description: The SKU representing the cluster size of the read-only replica
+        cluster_display_name:
+          type: string
+          description: The SKU representing the cluster size of the read-only replica, for display
+        access_host_url:
+          type: string
+          description: The database connection host for the read-only replica
+        private_access_host_url:
+          type: string
+          description: The private database connection host for the read-only replica
+        private_connection_service_name:
+          type: string
+          description: The service name to set up private connectivity for the read-only replica
+          nullable: true
+        created_at:
+          type: string
+          description: When the read-only replica was created
+        updated_at:
+          type: string
+          description: When the read-only replica was last updated
+        ready_at:
+          type: string
+          description: When the read-only replica was ready to serve queries
+          nullable: true
+        ready:
+          type: boolean
+          description: Whether or not the read-only replica is ready to serve queries
+        actor:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID of the actor
+            display_name:
+              type: string
+              description: The name of the actor
+            avatar_url:
+              type: string
+              description: The URL of the actor's avatar
+          required:
+            - id
+            - display_name
+            - avatar_url
+        region:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The ID of the region
+            provider:
+              type: string
+              description: Provider for the region (ex. AWS)
+            enabled:
+              type: boolean
+              description: Whether or not the region is currently active
+            public_ip_addresses:
+              items:
+                type: string
+              type: array
+              description: Public IP addresses for the region
+            display_name:
+              type: string
+              description: Name of the region
+            location:
+              type: string
+              description: Location of the region
+            slug:
+              type: string
+              description: The slug of the region
+            current_default:
+              type: boolean
+              description: True if the region is the default for new branch creation
+            mysql_supported:
+              type: boolean
+              description: Whether the region supports MySQL/Vitess databases
+            postgresql_supported:
+              type: boolean
+              description: Whether the region supports PostgreSQL databases
+          required:
+            - id
+            - provider
+            - enabled
+            - public_ip_addresses
+            - display_name
+            - location
+            - slug
+            - current_default
+            - mysql_supported
+            - postgresql_supported
+        parameters:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the parameter
+              namespace:
+                type: string
+                enum:
+                  - pgconf
+                description: The namespace of the parameter
+              name:
+                type: string
+                description: The name of the parameter
+              display_name:
+                type: string
+                description: The display name of the parameter
+              category:
+                type: string
+                description: The category of the parameter
+              description:
+                type: string
+                description: The description of the parameter
+              immutable:
+                type: boolean
+                description: Whether the parameter can be changed
+              parameter_type:
+                type: string
+                enum:
+                  - integer
+                  - time
+                description: The type of the parameter
+              default_value:
+                type: string
+                description: The default value of the parameter, which is the primary's current value
+              disabled_reason:
+                type: string
+                description: Why the parameter cannot be changed
+                nullable: true
+              value:
+                type: string
+                description: The configured value of the parameter
+              required:
+                type: boolean
+                description: Whether the parameter is required
+              created_at:
+                type: string
+                description: When the parameter was created
+                nullable: true
+              updated_at:
+                type: string
+                description: When the parameter was last updated
+                nullable: true
+              restart:
+                type: boolean
+                description: True if processes require a server restart on change
+              max:
+                type: number
+                description: The maximum value of the parameter
+              min:
+                type: number
+                description: The minimum value of the parameter, floored at the primary's current value
+              url:
+                type: string
+                description: The URL of the parameter
+              options:
+                items:
+                  type: string
+                type: array
+                description: Valid options for the parameter value
+              units:
+                items:
+                  type: string
+                type: array
+                description: Display units for the parameter value
+              actor:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the actor
+                  display_name:
+                    type: string
+                    description: The name of the actor
+                  avatar_url:
+                    type: string
+                    description: The URL of the actor's avatar
+                required:
+                  - id
+                  - display_name
+                  - avatar_url
+            required:
+              - id
+              - namespace
+              - name
+              - display_name
+              - category
+              - description
+              - immutable
+              - parameter_type
+              - default_value
+              - value
+              - required
+              - created_at
+              - updated_at
+              - restart
+              - max
+              - min
+              - url
+              - options
+              - units
+              - actor
+      required:
+        - id
+        - name
+        - state
+        - replicas
+        - cluster_name
+        - cluster_display_name
+        - access_host_url
+        - private_access_host_url
+        - private_connection_service_name
+        - created_at
+        - updated_at
+        - ready_at
+        - ready
+        - actor
+        - region
+        - parameters
+    PaginatedPostgresReadOnlyReplicaChangeRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The response type. Always "list" for paginated responses.
+        current_page:
+          type: integer
+          description: The current page number
+        per_page:
+          type: integer
+          description: The maximum number of results per page
+        next_page:
+          type: integer
+          description: The next page number, or null when this is the last page
+          nullable: true
+        next_page_url:
+          type: string
+          description: The next page of results, or null when this is the last page
+          nullable: true
+        prev_page:
+          type: integer
+          description: The previous page number, or null when this is the first page
+          nullable: true
+        prev_page_url:
+          type: string
+          description: The previous page of results, or null when this is the first page
+          nullable: true
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the read-only replica change request
+              state:
+                type: string
+                enum:
+                  - pending
+                  - resizing
+                  - canceled
+                  - completed
+                description: The state of the change request
+              cluster_name:
+                type: string
+                description: The new cluster size SKU
+              cluster_display_name:
+                type: string
+                description: The new cluster size for display
+              cluster_rank:
+                type: integer
+                description: The new cluster size sort order
+              replicas:
+                type: integer
+                description: The new instance count
+              parameters:
+                type: object
+                additionalProperties: true
+                description: The new parameters
+              previous_cluster_name:
+                type: string
+                description: The previous cluster size SKU
+              previous_cluster_display_name:
+                type: string
+                description: The previous cluster size for display
+              previous_cluster_rank:
+                type: integer
+                description: The previous cluster size sort order
+              previous_replicas:
+                type: integer
+                description: The previous instance count
+              previous_parameters:
+                type: object
+                additionalProperties: true
+                description: The previous parameters
+              started_at:
+                type: string
+                description: When the change started
+                nullable: true
+              completed_at:
+                type: string
+                description: When the change completed
+                nullable: true
+              created_at:
+                type: string
+                description: When the change request was created
+              updated_at:
+                type: string
+                description: When the change request was last updated
+              actor:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the actor
+                  display_name:
+                    type: string
+                    description: The name of the actor
+                  avatar_url:
+                    type: string
+                    description: The URL of the actor's avatar
+                required:
+                  - id
+                  - display_name
+                  - avatar_url
+              replica:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID for the resource
+                  name:
+                    type: string
+                    description: The name for the resource
+                  created_at:
+                    type: string
+                    description: When the resource was created
+                  updated_at:
+                    type: string
+                    description: When the resource was last updated
+                  deleted_at:
+                    type: string
+                    description: When the resource was deleted, if deleted
+                    nullable: true
+                required:
+                  - id
+                  - name
+                  - created_at
+                  - updated_at
+                  - deleted_at
+            required:
+              - id
+              - state
+              - cluster_name
+              - cluster_display_name
+              - cluster_rank
+              - replicas
+              - parameters
+              - previous_cluster_name
+              - previous_cluster_display_name
+              - previous_cluster_rank
+              - previous_replicas
+              - previous_parameters
+              - started_at
+              - completed_at
+              - created_at
+              - updated_at
+              - actor
+              - replica
+      required:
+        - type
+        - current_page
+        - per_page
+        - next_page
+        - next_page_url
+        - prev_page
+        - prev_page_url
+        - data
     QueryPatternsDownload:
       type: object
       properties:
@@ -20949,6 +21543,13 @@ components:
           type: object
           additionalProperties: true
           description: All available scopes grouped by resource type with scope, description, selected, and admin flags
+        mcp_tool_groups:
+          items:
+            type: object
+            additionalProperties: true
+          type: array
+          description: MCP tool groups (id, label, section, tools, scopes, parent_id, default_enabled, roles) selectable when authorizing a DCR app; only present for DCR apps. Database-section groups also carry org_scopes (the organization-tier scope names granting the group across all databases in an organization) and org_roles (the organization roles allowed to grant them); both are null for organization-section groups
+          nullable: true
       required:
         - id
         - name
@@ -21051,6 +21652,13 @@ components:
                 type: object
                 additionalProperties: true
                 description: All available scopes grouped by resource type with scope, description, selected, and admin flags
+              mcp_tool_groups:
+                items:
+                  type: object
+                  additionalProperties: true
+                type: array
+                description: MCP tool groups (id, label, section, tools, scopes, parent_id, default_enabled, roles) selectable when authorizing a DCR app; only present for DCR apps. Database-section groups also carry org_scopes (the organization-tier scope names granting the group across all databases in an organization) and org_roles (the organization roles allowed to grant them); both are null for organization-section groups
+                nullable: true
             required:
               - id
               - name
@@ -21078,41 +21686,6 @@ components:
         - total_count
         - total_pages
         - data
-    metric_series_response:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The metrics response type
-        start_date:
-          type: string
-          description: The start of the time range
-        end_date:
-          type: string
-          description: The end of the time range
-        interval:
-          type: integer
-          description: The step interval in seconds between data points
-        series:
-          type: array
-          items:
-            type: string
-          description: The time-series metric data
-    instant_metrics_response:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The metrics response type
-        branch:
-          type: object
-          additionalProperties: true
-          description: The branch these metrics belong to
-        metrics:
-          type: array
-          items:
-            type: string
-          description: The current metric values
     PaginatedBranchMaintenanceWindow:
       type: object
       properties:
