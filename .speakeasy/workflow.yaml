@@ -39,6 +39,9 @@ sources:
             - location: schemas/overlay-terraform-postgres-bouncer.yaml
             - location: schemas/overlay-terraform-postgres-bouncers.yaml
 
+            - location: schemas/overlay-terraform-postgres-read-only-replica.yaml
+            - location: schemas/overlay-terraform-postgres-read-only-replicas.yaml
+
             - location: schemas/overlay-terraform-cleanup.yaml
         output: schemas/out.openapi.yaml
         registry:
