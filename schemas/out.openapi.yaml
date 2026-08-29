@@ -3755,6 +3755,10 @@ paths:
           options:
             polling:
               name: WaitForReady
+        - entityOperation: PostgresReadOnlyReplica#update#2
+          options:
+            polling:
+              name: WaitForReady
       x-speakeasy-entity-description: Returns information about a read-only replica for a PlanetScale Postgres branch.
       x-speakeasy-polling:
         - name: WaitForReady

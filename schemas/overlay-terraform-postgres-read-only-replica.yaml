@@ -65,14 +65,20 @@ actions:
         - private_access_host_url
         - private_connection_service_name
 
-  # Reads are also chained onto create to wait for the replica to finish
-  # provisioning before Terraform reports the resource as created.
+  # Reads are also chained onto create and update to wait for the replica to
+  # finish provisioning or resizing before Terraform reports the operation as
+  # complete. If the replica never leaves the ready state during a resize,
+  # the update poll returns immediately.
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get
     description: API operation for managed resource read.
     update:
       x-speakeasy-entity-operation:
         - PostgresReadOnlyReplica#read
         - entityOperation: PostgresReadOnlyReplica#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: PostgresReadOnlyReplica#update#2
           options:
             polling:
               name: WaitForReady

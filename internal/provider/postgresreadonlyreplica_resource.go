@@ -351,7 +351,12 @@ func (r *PostgresReadOnlyReplicaResource) Update(ctx context.Context, req resour
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1)
+
+	getReadOnlyReplicaOptions := make([]operations.Option, 0, 1)
+	getReadOnlyReplicaOptions = append(getReadOnlyReplicaOptions, operations.WithPolling(
+		r.client.ReadOnlyReplicas.GetReadOnlyReplicaWaitForReady(),
+	))
+	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
