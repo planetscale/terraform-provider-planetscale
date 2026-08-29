@@ -36,6 +36,7 @@ type PostgresReadOnlyReplicaDataSourceModel struct {
 	Organization                 types.String `tfsdk:"organization"`
 	PrivateAccessHostURL         types.String `tfsdk:"private_access_host_url"`
 	PrivateConnectionServiceName types.String `tfsdk:"private_connection_service_name"`
+	Region                       types.String `tfsdk:"region"`
 	Replicas                     types.Int64  `tfsdk:"replicas"`
 }
 
@@ -81,6 +82,10 @@ func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req data
 			"private_connection_service_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `The service name to set up private connectivity for the read-only replica`,
+			},
+			"region": schema.StringAttribute{
+				Computed:    true,
+				Description: `The region slug for the read-only replica, e.g. ` + "`" + `us-east` + "`" + `. The replica can run in a different region than the primary.`,
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,

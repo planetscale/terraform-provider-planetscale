@@ -33,6 +33,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) RefreshFromOperationsGetReadOnlyR
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringPointerValue(resp.PrivateConnectionServiceName)
+		r.Region = types.StringValue(resp.Region)
 		r.Replicas = types.Int64Value(resp.Replicas)
 	}
 

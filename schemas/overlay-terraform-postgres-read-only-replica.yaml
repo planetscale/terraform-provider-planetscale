@@ -91,6 +91,18 @@ actions:
     update:
       x-speakeasy-match: name
 
+  # region_slug is not returned by the API: the ReadOnlyReplicaRegionSlugHook
+  # copies it out of the nested region object so reads and imports refresh the
+  # region attribute the create request configures.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties
+    update:
+      region_slug:
+        type: string
+        x-speakeasy-name-override: region
+        description: >-
+          The region slug for the read-only replica, e.g. `us-east`. The
+          replica can run in a different region than the primary.
+
   # Response shaping for read, mirroring create.
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.cluster_name
     update:
@@ -110,6 +122,7 @@ actions:
         - state
         - replicas
         - cluster_name
+        - region_slug
         - access_host_url
         - private_access_host_url
         - private_connection_service_name

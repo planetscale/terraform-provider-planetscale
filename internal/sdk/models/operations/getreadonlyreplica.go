@@ -62,6 +62,8 @@ type GetReadOnlyReplicaResponseBody struct {
 	PrivateAccessHostURL string `json:"private_access_host_url"`
 	// The service name to set up private connectivity for the read-only replica
 	PrivateConnectionServiceName *string `json:"private_connection_service_name"`
+	// The region slug for the read-only replica, e.g. `us-east`. The replica can run in a different region than the primary.
+	Region string `json:"region_slug"`
 }
 
 func (g *GetReadOnlyReplicaResponseBody) GetName() string {
@@ -111,6 +113,13 @@ func (g *GetReadOnlyReplicaResponseBody) GetPrivateConnectionServiceName() *stri
 		return nil
 	}
 	return g.PrivateConnectionServiceName
+}
+
+func (g *GetReadOnlyReplicaResponseBody) GetRegion() string {
+	if g == nil {
+		return ""
+	}
+	return g.Region
 }
 
 type GetReadOnlyReplicaResponse struct {

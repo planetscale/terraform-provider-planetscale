@@ -37,4 +37,5 @@ data "planetscale_postgres_read_only_replica" "my_postgresreadonlyreplica" {
 - `cluster_size` (String) The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
 - `private_access_host_url` (String) The private database connection host for the read-only replica
 - `private_connection_service_name` (String) The service name to set up private connectivity for the read-only replica
+- `region` (String) The region slug for the read-only replica, e.g. `us-east`. The replica can run in a different region than the primary.
 - `replicas` (Number) The number of instances serving reads in this read-only replica

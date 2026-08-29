@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: ad81c6375fb22139da8dda29787b8dae
+  docChecksum: fb080528ebd1bab51b6637b5f46bbad7
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -2674,7 +2674,7 @@ examples:
           read_only_replica: "<value>"
       responses:
         "200":
-          application/json: {"name": "<value>", "state": "Nebraska", "replicas": 342854, "cluster_name": "<value>", "access_host_url": "https://hospitable-membership.com/", "private_access_host_url": "https://short-cutlet.net", "private_connection_service_name": "<value>"}
+          application/json: {"name": "<value>", "state": "Nebraska", "replicas": 342854, "cluster_name": "<value>", "access_host_url": "https://hospitable-membership.com/", "private_access_host_url": "https://short-cutlet.net", "private_connection_service_name": "<value>", "region_slug": "<value>"}
   update_read_only_replica:
     speakeasy-default-update-read-only-replica:
       parameters:

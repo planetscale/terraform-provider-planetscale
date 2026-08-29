@@ -3697,6 +3697,11 @@ paths:
                     type: string
                     description: The service name to set up private connectivity for the read-only replica
                     nullable: true
+                  region_slug:
+                    type: string
+                    x-speakeasy-name-override: region
+                    description: >-
+                      The region slug for the read-only replica, e.g. `us-east`. The replica can run in a different region than the primary.
                 required:
                   - id
                   - name
@@ -3718,6 +3723,7 @@ paths:
                   - state
                   - replicas
                   - cluster_name
+                  - region_slug
                   - access_host_url
                   - private_access_host_url
                   - private_connection_service_name

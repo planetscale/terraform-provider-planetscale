@@ -101,6 +101,7 @@ func (r *PostgresReadOnlyReplicaResource) Schema(ctx context.Context, req resour
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `The region slug for the read-only replica, e.g. ` + "`" + `us-east` + "`" + `. The replica can run in a different region than the primary. Requires replacement if changed.`,
 			},
@@ -334,6 +335,43 @@ func (r *PostgresReadOnlyReplicaResource) Update(ctx context.Context, req resour
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateReadOnlyReplicaResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -102,9 +102,6 @@ func TestAccPostgresReadOnlyReplicaResource_Lifecycle(t *testing.T) {
 					return string(jsonBytes), err
 				},
 				ImportStateVerify: true,
-				// The read endpoint returns the region as the region_data
-				// object, so the region slug attribute is not refreshed.
-				ImportStateVerifyIgnore: []string{"region"},
 			},
 		},
 	})
