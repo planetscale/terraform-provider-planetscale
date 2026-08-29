@@ -3398,7 +3398,7 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}/download: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replica-changes: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{id}: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/resizes:
     put:
       tags:
