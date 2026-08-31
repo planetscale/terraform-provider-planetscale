@@ -17,7 +17,7 @@ func TestAccPostgresReadOnlyReplicaResource_Lifecycle(t *testing.T) {
 
 	databaseName := "testacc-postgres"
 	branchName := "main"
-	replicaName := randomWithPrefix("test-replica")
+	replicaName := randomWithPrefix("tfrr")
 	resourceAddress := "planetscale_postgres_read_only_replica.test"
 
 	resource.Test(t, resource.TestCase{
