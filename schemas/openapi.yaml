@@ -18341,7 +18341,303 @@ paths:
         | :------- | :---------- |
         | Organization | `write_databases` |
         | Database | `write_database` |
-  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{id}:
+  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}:
+    get:
+      tags:
+        - Read-only replicas
+      operationId: get_read_only_replica
+      summary: Get a read-only replica
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: read_only_replica
+          in: path
+          required: true
+          description: The name of the read-only replica
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns the read-only replica
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the read-only replica
+                  name:
+                    type: string
+                    description: The name of the read-only replica
+                  state:
+                    type: string
+                    description: "The state of the read-only replica: pending, ready, or deleting"
+                  replicas:
+                    type: integer
+                    description: The number of instances serving reads in this read-only replica
+                  cluster_name:
+                    type: string
+                    description: The SKU representing the cluster size of the read-only replica
+                  cluster_display_name:
+                    type: string
+                    description: The SKU representing the cluster size of the read-only replica, for display
+                  access_host_url:
+                    type: string
+                    description: The database connection host for the read-only replica
+                  private_access_host_url:
+                    type: string
+                    description: The private database connection host for the read-only replica
+                  private_connection_service_name:
+                    type: string
+                    description: The service name to set up private connectivity for the read-only replica
+                    nullable: true
+                  created_at:
+                    type: string
+                    description: When the read-only replica was created
+                  updated_at:
+                    type: string
+                    description: When the read-only replica was last updated
+                  ready_at:
+                    type: string
+                    description: When the read-only replica was ready to serve queries
+                    nullable: true
+                  ready:
+                    type: boolean
+                    description: Whether or not the read-only replica is ready to serve queries
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                      display_name:
+                        type: string
+                        description: The name of the actor
+                      avatar_url:
+                        type: string
+                        description: The URL of the actor's avatar
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                  region:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the region
+                      provider:
+                        type: string
+                        description: Provider for the region (ex. AWS)
+                      enabled:
+                        type: boolean
+                        description: Whether or not the region is currently active
+                      public_ip_addresses:
+                        items:
+                          type: string
+                        type: array
+                        description: Public IP addresses for the region
+                      display_name:
+                        type: string
+                        description: Name of the region
+                      location:
+                        type: string
+                        description: Location of the region
+                      slug:
+                        type: string
+                        description: The slug of the region
+                      current_default:
+                        type: boolean
+                        description: True if the region is the default for new branch creation
+                      mysql_supported:
+                        type: boolean
+                        description: Whether the region supports MySQL/Vitess databases
+                      postgresql_supported:
+                        type: boolean
+                        description: Whether the region supports PostgreSQL databases
+                    required:
+                      - id
+                      - provider
+                      - enabled
+                      - public_ip_addresses
+                      - display_name
+                      - location
+                      - slug
+                      - current_default
+                      - mysql_supported
+                      - postgresql_supported
+                  parameters:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the parameter
+                        namespace:
+                          type: string
+                          enum:
+                            - pgconf
+                          description: The namespace of the parameter
+                        name:
+                          type: string
+                          description: The name of the parameter
+                        display_name:
+                          type: string
+                          description: The display name of the parameter
+                        category:
+                          type: string
+                          description: The category of the parameter
+                        description:
+                          type: string
+                          description: The description of the parameter
+                        immutable:
+                          type: boolean
+                          description: Whether the parameter can be changed
+                        parameter_type:
+                          type: string
+                          enum:
+                            - integer
+                            - time
+                          description: The type of the parameter
+                        default_value:
+                          type: string
+                          description: The default value of the parameter, which is the primary's current value
+                        disabled_reason:
+                          type: string
+                          description: Why the parameter cannot be changed
+                          nullable: true
+                        value:
+                          type: string
+                          description: The configured value of the parameter
+                        required:
+                          type: boolean
+                          description: Whether the parameter is required
+                        created_at:
+                          type: string
+                          description: When the parameter was created
+                          nullable: true
+                        updated_at:
+                          type: string
+                          description: When the parameter was last updated
+                          nullable: true
+                        restart:
+                          type: boolean
+                          description: True if processes require a server restart on change
+                        max:
+                          type: number
+                          description: The maximum value of the parameter
+                        min:
+                          type: number
+                          description: The minimum value of the parameter, floored at the primary's current value
+                        url:
+                          type: string
+                          description: The URL of the parameter
+                        options:
+                          items:
+                            type: string
+                          type: array
+                          description: Valid options for the parameter value
+                        units:
+                          items:
+                            type: string
+                          type: array
+                          description: Display units for the parameter value
+                        actor:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the actor
+                            display_name:
+                              type: string
+                              description: The name of the actor
+                            avatar_url:
+                              type: string
+                              description: The URL of the actor's avatar
+                          required:
+                            - id
+                            - display_name
+                            - avatar_url
+                      required:
+                        - id
+                        - namespace
+                        - name
+                        - display_name
+                        - category
+                        - description
+                        - immutable
+                        - parameter_type
+                        - default_value
+                        - value
+                        - required
+                        - created_at
+                        - updated_at
+                        - restart
+                        - max
+                        - min
+                        - url
+                        - options
+                        - units
+                        - actor
+                required:
+                  - id
+                  - name
+                  - state
+                  - replicas
+                  - cluster_name
+                  - cluster_display_name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+                  - created_at
+                  - updated_at
+                  - ready_at
+                  - ready
+                  - actor
+                  - region
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
     patch:
       tags:
         - Read-only replicas
@@ -18366,10 +18662,10 @@ paths:
           description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
-        - name: id
+        - name: read_only_replica
           in: path
           required: true
-          description: The ID of the read-only replica
+          description: The name of the read-only replica
           schema:
             type: string
       requestBody:
@@ -18677,10 +18973,10 @@ paths:
           description: "Branch name from `list_branches`. Example: `main`."
           schema:
             type: string
-        - name: id
+        - name: read_only_replica
           in: path
           required: true
-          description: The ID of the read-only replica
+          description: The name of the read-only replica
           schema:
             type: string
       responses:

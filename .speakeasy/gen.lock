@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 3774f8a16c0d5b8b4060d3532b45bc86
+  docChecksum: 08d597de19d8ef6fc57d410edbaf7859
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -59,6 +59,8 @@ trackedFiles:
   examples/data-sources/planetscale_postgres_branch_roles/data-source.tf:
     id: b0a7630c0f80
     pristine_git_object: db4928f864e1065b1079b9ab9b87536cbec6c41f
+  examples/data-sources/planetscale_postgres_read_only_replica/data-source.tf: {}
+  examples/data-sources/planetscale_postgres_read_only_replicas/data-source.tf: {}
   examples/data-sources/planetscale_postgres_redacted_branch_role/data-source.tf: {}
   examples/data-sources/planetscale_vitess_backup_policies/data-source.tf: {}
   examples/data-sources/planetscale_vitess_backup_policy/data-source.tf: {}
@@ -96,6 +98,8 @@ trackedFiles:
   examples/resources/planetscale_postgres_branch_role/import.sh:
     id: e56202502423
     pristine_git_object: 06aae354a87031b23f6da8a3d618711d4412e1cf
+  examples/resources/planetscale_postgres_read_only_replica/import-by-string-id.tf: {}
+  examples/resources/planetscale_postgres_read_only_replica/import.sh: {}
   examples/resources/planetscale_postgres_redacted_branch_role/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_redacted_branch_role/import.sh: {}
   examples/resources/planetscale_vitess_backup_policy/import-by-string-id.tf: {}
@@ -256,6 +260,12 @@ trackedFiles:
   internal/provider/postgresbranchroles_data_source_sdk.go:
     id: 1f5d16bb3dd7
     pristine_git_object: 742cc9f5207b5c30ed21b0aae674ac8302c237e8
+  internal/provider/postgresreadonlyreplica_data_source.go: {}
+  internal/provider/postgresreadonlyreplica_data_source_sdk.go: {}
+  internal/provider/postgresreadonlyreplica_resource.go: {}
+  internal/provider/postgresreadonlyreplica_resource_sdk.go: {}
+  internal/provider/postgresreadonlyreplicas_data_source.go: {}
+  internal/provider/postgresreadonlyreplicas_data_source_sdk.go: {}
   internal/provider/postgresredactedbranchrole_data_source.go: {}
   internal/provider/postgresredactedbranchrole_data_source_sdk.go: {}
   internal/provider/postgresredactedbranchrole_resource.go: {}
@@ -425,6 +435,7 @@ trackedFiles:
   internal/provider/types/list_vitess_branch_backups_backup_policy.go: {}
   internal/provider/types/list_vitess_branch_backups_data.go: {}
   internal/provider/types/list_vitess_branch_backups_database_branch.go: {}
+  internal/provider/types/response_body.go: {}
   internal/provider/utils.go:
     id: 312d50f148af
     pristine_git_object: 2b167edfe9b7df08d35bacb896143fd8c6e3bf8c
@@ -555,6 +566,7 @@ trackedFiles:
     id: 952731e87008
     pristine_git_object: 70b0fa5325c1ee8e97b19848d8c365d2b713f0e6
   internal/sdk/models/operations/createpostgresbranchbackup.go: {}
+  internal/sdk/models/operations/createreadonlyreplica.go: {}
   internal/sdk/models/operations/createredactedrole.go: {}
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
@@ -574,6 +586,7 @@ trackedFiles:
     id: 556d141a1131
     pristine_git_object: b8a9f3fe537dea60e156cb97855e3052870be2eb
   internal/sdk/models/operations/deletepostgresbranchbackup.go: {}
+  internal/sdk/models/operations/deletereadonlyreplica.go: {}
   internal/sdk/models/operations/deleteredactedrole.go: {}
   internal/sdk/models/operations/deleterole.go:
     id: 63abc80d4993
@@ -601,6 +614,7 @@ trackedFiles:
   internal/sdk/models/operations/getpostgresdatabase.go:
     id: 71f9d1711996
     pristine_git_object: 7cd4acb7ff08eda01a3578b71067a823d309a8e1
+  internal/sdk/models/operations/getreadonlyreplica.go: {}
   internal/sdk/models/operations/getredactedrole.go: {}
   internal/sdk/models/operations/getrole.go:
     id: a854350465dd
@@ -626,6 +640,7 @@ trackedFiles:
     pristine_git_object: 9671f2dd9a77b1d0045665c26e0aa2f66aa8fcd4
   internal/sdk/models/operations/listpostgresbackuppolicies.go: {}
   internal/sdk/models/operations/listpostgresbranchbackups.go: {}
+  internal/sdk/models/operations/listreadonlyreplicas.go: {}
   internal/sdk/models/operations/listroles.go:
     id: ba1976927ea8
     pristine_git_object: 2759d9ffe5333235ea0787dc880ea888ed739c68
@@ -641,6 +656,7 @@ trackedFiles:
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
   internal/sdk/models/operations/updatepostgresbackuppolicy.go: {}
   internal/sdk/models/operations/updatepostgresbranch.go: {}
+  internal/sdk/models/operations/updatereadonlyreplica.go: {}
   internal/sdk/models/operations/updateredactedrole.go: {}
   internal/sdk/models/operations/updaterole.go:
     id: eaca616a88af
@@ -672,6 +688,7 @@ trackedFiles:
   internal/sdk/polling/option.go:
     id: cea423d87d1b
     pristine_git_object: 418bc4790e0c5ed403cfa771fd9c5b745e4f1af2
+  internal/sdk/readonlyreplicas.go: {}
   internal/sdk/retry/config.go:
     id: 7ea5fa9128b6
     pristine_git_object: aa809fccb3445b1e2530a979dad620512f50e70f
@@ -2627,6 +2644,56 @@ examples:
       responses:
         "200":
           application/json: {"id": "<id>", "state": "<value>"}
+  list_read_only_replicas:
+    speakeasy-default-list-read-only-replicas:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: [{"name": "<value>", "state": "South Carolina", "replicas": 296013, "cluster_name": "<value>", "access_host_url": "https://webbed-intent.net/", "private_access_host_url": "https://fuzzy-paintwork.org/", "private_connection_service_name": "<value>"}]
+  create_read_only_replica:
+    speakeasy-default-create-read-only-replica:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"name": "<value>", "state": "Massachusetts", "replicas": 624021, "cluster_name": "<value>", "access_host_url": "https://earnest-pants.net/", "private_access_host_url": "https://ill-fort.net", "private_connection_service_name": "<value>"}
+  get_read_only_replica:
+    speakeasy-default-get-read-only-replica:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          read_only_replica: "<value>"
+      responses:
+        "200":
+          application/json: {"name": "<value>", "state": "Nebraska", "replicas": 342854, "cluster_name": "<value>", "access_host_url": "https://hospitable-membership.com/", "private_access_host_url": "https://short-cutlet.net", "private_connection_service_name": "<value>", "region_slug": "<value>"}
+  update_read_only_replica:
+    speakeasy-default-update-read-only-replica:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          read_only_replica: "<value>"
+      responses:
+        "200":
+          application/json: {"name": "<value>", "state": "Maryland", "replicas": 524459, "cluster_name": "<value>", "access_host_url": "https://surprised-maestro.name/", "private_access_host_url": "https://lumpy-meander.biz/", "private_connection_service_name": "<value>"}
+  delete_read_only_replica:
+    speakeasy-default-delete-read-only-replica:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          read_only_replica: "<value>"
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

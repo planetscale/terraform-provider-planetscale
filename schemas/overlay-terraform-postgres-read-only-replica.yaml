@@ -1,0 +1,206 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_read_only_replica managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: PostgresReadOnlyReplica#create
+      x-speakeasy-entity-description: >-
+        Manage a read-only replica for a PlanetScale Postgres branch. A
+        read-only replica serves reads through its own connection host, and
+        can run in a different region than the primary to serve reads close
+        to your application.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.requestBody.content['application/json'].schema.properties.name
+    description: Practitioner-facing attribute description.
+    update:
+      description: The name of the read-only replica.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.requestBody.content['application/json'].schema.properties.region
+    description: Practitioner-facing attribute description.
+    update:
+      description: >-
+        The region slug for the read-only replica, e.g. `us-east`. The
+        replica can run in a different region than the primary.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.requestBody.content['application/json'].schema.properties.replicas
+    description: Practitioner-facing attribute description.
+    update:
+      description: The number of instances serving reads. Defaults to 1.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.requestBody.content['application/json'].schema.properties.cluster_size
+    description: Practitioner-facing attribute description.
+    update:
+      x-speakeasy-plan-validators: ClusterSizeValidator
+      description: >-
+        The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's
+        cluster size.
+
+  # Response shaping for create: the Terraform surface is kept to the
+  # configured inputs plus the connection attributes. cluster_name is renamed
+  # to match the cluster_size request attribute. state stays in the SDK model
+  # for the create poller but is hidden from the Terraform schema.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+      description: >-
+        The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's
+        cluster size.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.state
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties['id','cluster_display_name','parameters','created_at','updated_at','ready_at','ready','actor','region']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - name
+        - state
+        - replicas
+        - cluster_name
+        - access_host_url
+        - private_access_host_url
+        - private_connection_service_name
+
+  # Reads are also chained onto create and update to wait for the replica to
+  # finish provisioning or resizing before Terraform reports the operation as
+  # complete. If the replica never leaves the ready state during a resize,
+  # the update poll returns immediately.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get
+    description: API operation for managed resource read.
+    update:
+      x-speakeasy-entity-operation:
+        - PostgresReadOnlyReplica#read
+        - entityOperation: PostgresReadOnlyReplica#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: PostgresReadOnlyReplica#update#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: PostgresReadOnlyReplica#delete#2
+          options:
+            polling:
+              name: WaitForDeleted
+      x-speakeasy-entity-description: Returns information about a read-only replica for a PlanetScale Postgres branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 90 # 15 minutes at a 10 second interval, plus initial 30 second delay
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+        - name: WaitForDeleted
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 90 # 15 minutes at a 10 second interval
+          successCriteria:
+            - condition: $statusCode == 404
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.parameters[?@.name == 'read_only_replica']
+    description: The read_only_replica path parameter is the replica name.
+    update:
+      x-speakeasy-match: name
+
+  # region_slug is not returned by the API: the ReadOnlyReplicaRegionSlugHook
+  # copies it out of the nested region object so reads and imports refresh the
+  # region attribute the create request configures.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties
+    update:
+      region_slug:
+        type: string
+        x-speakeasy-name-override: region
+        description: >-
+          The region slug for the read-only replica, e.g. `us-east`. The
+          replica can run in a different region than the primary.
+
+  # Response shaping for read, mirroring create.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+      description: >-
+        The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's
+        cluster size.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.state
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties['id','cluster_display_name','parameters','created_at','updated_at','ready_at','ready','actor','region']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - name
+        - state
+        - replicas
+        - cluster_name
+        - region_slug
+        - access_host_url
+        - private_access_host_url
+        - private_connection_service_name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation: PostgresReadOnlyReplica#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.parameters[?@.name == 'read_only_replica']
+    description: The read_only_replica path parameter is the replica name.
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.requestBody.content['application/json'].schema.properties.parameters
+    description: >-
+      Defer Postgres parameter support: the map-shaped request cannot
+      reconcile with the rich parameters array the read endpoints return.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.requestBody.content['application/json'].schema.properties.replicas
+    description: Practitioner-facing attribute description.
+    update:
+      description: The number of instances serving reads. Defaults to 1.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.requestBody.content['application/json'].schema.properties.cluster_size
+    description: Practitioner-facing attribute description.
+    update:
+      x-speakeasy-plan-validators: ClusterSizeValidator
+      description: >-
+        The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's
+        cluster size.
+
+  # Response shaping for update, mirroring create.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+      description: >-
+        The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's
+        cluster size.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.state
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties['id','cluster_display_name','parameters','created_at','updated_at','ready_at','ready','actor','region']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - name
+        - state
+        - replicas
+        - cluster_name
+        - access_host_url
+        - private_access_host_url
+        - private_connection_service_name
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: PostgresReadOnlyReplica#delete
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].delete.parameters[?@.name == 'read_only_replica']
+    description: The read_only_replica path parameter is the replica name.
+    update:
+      x-speakeasy-match: name

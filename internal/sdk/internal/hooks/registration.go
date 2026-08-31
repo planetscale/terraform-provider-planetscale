@@ -14,6 +14,7 @@ func initHooks(h *Hooks) {
 	h.registerSDKInitHook(NewPostgresBranchNoContentSkipHook())
 	h.registerSDKInitHook(NewPostgresBouncerNoContentSkipHook())
 	h.registerSDKInitHook(NewVitessBranchNoContentSkipHook())
+	h.registerSDKInitHook(NewReadOnlyReplicaRegionSlugHook())
 	h.registerBeforeRequestHook(customSecurityHook)
 	// h.registerAfterErrorHook(exampleHook)
 	// h.registerAfterSuccessHook(exampleHook)
