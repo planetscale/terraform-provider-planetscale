@@ -101,7 +101,8 @@ func TestAccPostgresReadOnlyReplicaResource_Lifecycle(t *testing.T) {
 					})
 					return string(jsonBytes), err
 				},
-				ImportStateVerify: true,
+				ImportStateVerify:                    true,
+				ImportStateVerifyIdentifierAttribute: "name",
 			},
 		},
 	})
