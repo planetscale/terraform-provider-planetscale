@@ -1,0 +1,35 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_read_only_replicas data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].get
+    description: API operation for read.
+    update:
+      x-speakeasy-entity-operation: PostgresReadOnlyReplicas#read
+      x-speakeasy-entity-description: Returns information about the read-only replicas for a PlanetScale Postgres branch.
+
+  # Response shaping, mirroring the planetscale_postgres_read_only_replica
+  # managed resource attribute conventions.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].get.responses['200'].content['application/json'].schema.items.properties.cluster_name
+    update:
+      x-speakeasy-name-override: cluster_size
+      description: >-
+        The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's
+        cluster size.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].get.responses['200'].content['application/json'].schema.items.properties.state
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].get.responses['200'].content['application/json'].schema.items.properties['id','cluster_display_name','parameters','created_at','updated_at','ready_at','ready','actor','region']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].get.responses['200'].content['application/json'].schema.items
+    update:
+      required:
+        - name
+        - state
+        - replicas
+        - cluster_name
+        - access_host_url
+        - private_access_host_url
+        - private_connection_service_name

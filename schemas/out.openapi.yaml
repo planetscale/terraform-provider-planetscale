@@ -3397,8 +3397,567 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/query-patterns/{id}/download: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replica-changes: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas:
+    get:
+      tags:
+        - Read-only replicas
+      operationId: list_read_only_replicas
+      summary: List read-only replicas
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns read-only replicas
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: The name of the read-only replica
+                    state:
+                      type: string
+                      description: "The state of the read-only replica: pending, ready, or deleting"
+                      x-speakeasy-terraform-ignore: true
+                    replicas:
+                      type: integer
+                      description: The number of instances serving reads in this read-only replica
+                    cluster_name:
+                      type: string
+                      description: The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
+                      x-speakeasy-name-override: cluster_size
+                    access_host_url:
+                      type: string
+                      description: The database connection host for the read-only replica
+                    private_access_host_url:
+                      type: string
+                      description: The private database connection host for the read-only replica
+                    private_connection_service_name:
+                      type: string
+                      description: The service name to set up private connectivity for the read-only replica
+                      nullable: true
+                  required:
+                    - id
+                    - name
+                    - state
+                    - replicas
+                    - cluster_name
+                    - cluster_display_name
+                    - access_host_url
+                    - private_access_host_url
+                    - private_connection_service_name
+                    - created_at
+                    - updated_at
+                    - ready_at
+                    - ready
+                    - actor
+                    - region
+                    - parameters
+                    - name
+                    - state
+                    - replicas
+                    - cluster_name
+                    - access_host_url
+                    - private_access_host_url
+                    - private_connection_service_name
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation: PostgresReadOnlyReplicas#read
+      x-speakeasy-entity-description: Returns information about the read-only replicas for a PlanetScale Postgres branch.
+    post:
+      tags:
+        - Read-only replicas
+      operationId: create_read_only_replica
+      summary: Create a read-only replica
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the read-only replica.
+                region:
+                  type: string
+                  description: The region slug for the read-only replica, e.g. `us-east`. The replica can run in a different region than the primary.
+                replicas:
+                  type: integer
+                  description: The number of instances serving reads. Defaults to 1.
+                cluster_size:
+                  type: string
+                  description: The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
+                  x-speakeasy-plan-validators: ClusterSizeValidator
+              required:
+                - name
+                - region
+      responses:
+        "200":
+          description: Returns the new read-only replica
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the read-only replica
+                  state:
+                    type: string
+                    description: "The state of the read-only replica: pending, ready, or deleting"
+                    x-speakeasy-terraform-ignore: true
+                  replicas:
+                    type: integer
+                    description: The number of instances serving reads in this read-only replica
+                  cluster_name:
+                    type: string
+                    description: The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
+                    x-speakeasy-name-override: cluster_size
+                  access_host_url:
+                    type: string
+                    description: The database connection host for the read-only replica
+                  private_access_host_url:
+                    type: string
+                    description: The private database connection host for the read-only replica
+                  private_connection_service_name:
+                    type: string
+                    description: The service name to set up private connectivity for the read-only replica
+                    nullable: true
+                required:
+                  - id
+                  - name
+                  - state
+                  - replicas
+                  - cluster_name
+                  - cluster_display_name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+                  - created_at
+                  - updated_at
+                  - ready_at
+                  - ready
+                  - actor
+                  - region
+                  - parameters
+                  - name
+                  - state
+                  - replicas
+                  - cluster_name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresReadOnlyReplica#create
+      x-speakeasy-entity-description: >-
+        Manage a read-only replica for a PlanetScale Postgres branch. A read-only replica serves reads through its own connection host, and can run in a different region than the primary to serve reads close to your application.
+  /organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}:
+    get:
+      tags:
+        - Read-only replicas
+      operationId: get_read_only_replica
+      summary: Get a read-only replica
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: read_only_replica
+          in: path
+          required: true
+          description: The name of the read-only replica
+          schema:
+            type: string
+          x-speakeasy-match: name
+      responses:
+        "200":
+          description: Returns the read-only replica
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the read-only replica
+                  state:
+                    type: string
+                    description: "The state of the read-only replica: pending, ready, or deleting"
+                    x-speakeasy-terraform-ignore: true
+                  replicas:
+                    type: integer
+                    description: The number of instances serving reads in this read-only replica
+                  cluster_name:
+                    type: string
+                    description: The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
+                    x-speakeasy-name-override: cluster_size
+                  access_host_url:
+                    type: string
+                    description: The database connection host for the read-only replica
+                  private_access_host_url:
+                    type: string
+                    description: The private database connection host for the read-only replica
+                  private_connection_service_name:
+                    type: string
+                    description: The service name to set up private connectivity for the read-only replica
+                    nullable: true
+                  region_slug:
+                    type: string
+                    x-speakeasy-name-override: region
+                    description: >-
+                      The region slug for the read-only replica, e.g. `us-east`. The replica can run in a different region than the primary.
+                required:
+                  - id
+                  - name
+                  - state
+                  - replicas
+                  - cluster_name
+                  - cluster_display_name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+                  - created_at
+                  - updated_at
+                  - ready_at
+                  - ready
+                  - actor
+                  - region
+                  - parameters
+                  - name
+                  - state
+                  - replicas
+                  - cluster_name
+                  - region_slug
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        - PostgresReadOnlyReplica#read
+        - entityOperation: PostgresReadOnlyReplica#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: PostgresReadOnlyReplica#update#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: PostgresReadOnlyReplica#delete#2
+          options:
+            polling:
+              name: WaitForDeleted
+      x-speakeasy-entity-description: Returns information about a read-only replica for a PlanetScale Postgres branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 90 # 15 minutes at a 10 second interval, plus initial 30 second delay
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+        - name: WaitForDeleted
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 90 # 15 minutes at a 10 second interval
+          successCriteria:
+            - condition: $statusCode == 404
+    patch:
+      tags:
+        - Read-only replicas
+      operationId: update_read_only_replica
+      summary: Update a read-only replica
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: read_only_replica
+          in: path
+          required: true
+          description: The name of the read-only replica
+          schema:
+            type: string
+          x-speakeasy-match: name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                replicas:
+                  type: integer
+                  description: The number of instances serving reads. Defaults to 1.
+                cluster_size:
+                  type: string
+                  description: The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
+                  x-speakeasy-plan-validators: ClusterSizeValidator
+      responses:
+        "200":
+          description: Returns the updated read-only replica
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the read-only replica
+                  state:
+                    type: string
+                    description: "The state of the read-only replica: pending, ready, or deleting"
+                    x-speakeasy-terraform-ignore: true
+                  replicas:
+                    type: integer
+                    description: The number of instances serving reads in this read-only replica
+                  cluster_name:
+                    type: string
+                    description: The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
+                    x-speakeasy-name-override: cluster_size
+                  access_host_url:
+                    type: string
+                    description: The database connection host for the read-only replica
+                  private_access_host_url:
+                    type: string
+                    description: The private database connection host for the read-only replica
+                  private_connection_service_name:
+                    type: string
+                    description: The service name to set up private connectivity for the read-only replica
+                    nullable: true
+                required:
+                  - id
+                  - name
+                  - state
+                  - replicas
+                  - cluster_name
+                  - cluster_display_name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+                  - created_at
+                  - updated_at
+                  - ready_at
+                  - ready
+                  - actor
+                  - region
+                  - parameters
+                  - name
+                  - state
+                  - replicas
+                  - cluster_name
+                  - access_host_url
+                  - private_access_host_url
+                  - private_connection_service_name
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresReadOnlyReplica#update
+    delete:
+      tags:
+        - Read-only replicas
+      operationId: delete_read_only_replica
+      summary: Delete a read-only replica
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: read_only_replica
+          in: path
+          required: true
+          description: The name of the read-only replica
+          schema:
+            type: string
+          x-speakeasy-match: name
+      responses:
+        "204":
+          description: Deletes the read-only replica
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresReadOnlyReplica#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/resizes:
     put:
       tags:
