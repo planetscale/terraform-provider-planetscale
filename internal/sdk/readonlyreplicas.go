@@ -421,6 +421,8 @@ func (s *ReadOnlyReplicas) GetReadOnlyReplica(ctx context.Context, request opera
 		switch o.Polling.Name {
 		case "WaitForReady":
 			return s.getReadOnlyReplicaWaitForReady(ctx, hookCtx, req, o)
+		case "WaitForDeleted":
+			return s.getReadOnlyReplicaWaitForDeleted(ctx, hookCtx, req, o)
 		}
 	}
 
@@ -576,6 +578,85 @@ func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForReady(ctx context.Context, h
 
 		if successCriteriaMet {
 			successCriteriaMet = res.Object.State == "ready"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
+}
+
+// Use with GetReadOnlyReplica by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *ReadOnlyReplicas) GetReadOnlyReplicaWaitForDeleted() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 0
+		defaultIntervalSeconds := 10
+		defaultLimitCount := 90
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForDeleted",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForDeleted(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetReadOnlyReplicaResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getReadOnlyReplica(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetReadOnlyReplicaResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getReadOnlyReplica(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 404
 		}
 
 		if successCriteriaMet {

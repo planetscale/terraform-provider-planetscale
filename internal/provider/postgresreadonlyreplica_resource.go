@@ -435,6 +435,36 @@ func (r *PostgresReadOnlyReplicaResource) Delete(ctx context.Context, req resour
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
+	request1, request1Diags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	getReadOnlyReplicaOptions := make([]operations.Option, 0, 1)
+	getReadOnlyReplicaOptions = append(getReadOnlyReplicaOptions, operations.WithPolling(
+		r.client.ReadOnlyReplicas.GetReadOnlyReplicaWaitForDeleted(),
+	))
+	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	switch res1.StatusCode {
+	case 200, 404:
+		break
+	default:
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
 
 }
 

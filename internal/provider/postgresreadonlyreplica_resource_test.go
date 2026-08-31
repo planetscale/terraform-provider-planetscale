@@ -80,6 +80,31 @@ func TestAccPostgresReadOnlyReplicaResource_Lifecycle(t *testing.T) {
 					),
 				},
 			},
+			// Force a same-name replacement to verify delete waits for the
+			// asynchronous teardown before create begins.
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization":  config.StringVariable(testAccOrg),
+					"database_name": config.StringVariable(databaseName),
+					"branch_name":   config.StringVariable(branchName),
+					"replica_name":  config.StringVariable(replicaName),
+					"replicas":      config.IntegerVariable(2),
+				},
+				Taint: []string{resourceAddress},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("name"),
+						knownvalue.StringExact(replicaName),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("replicas"),
+						knownvalue.Int64Exact(2),
+					),
+				},
+			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{

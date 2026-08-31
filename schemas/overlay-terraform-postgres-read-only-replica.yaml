@@ -82,6 +82,10 @@ actions:
           options:
             polling:
               name: WaitForReady
+        - entityOperation: PostgresReadOnlyReplica#delete#2
+          options:
+            polling:
+              name: WaitForDeleted
       x-speakeasy-entity-description: Returns information about a read-only replica for a PlanetScale Postgres branch.
       x-speakeasy-polling:
         - name: WaitForReady
@@ -91,6 +95,12 @@ actions:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
+        - name: WaitForDeleted
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 90 # 15 minutes at a 10 second interval
+          successCriteria:
+            - condition: $statusCode == 404
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.parameters[?@.name == 'read_only_replica']
     description: The read_only_replica path parameter is the replica name.
