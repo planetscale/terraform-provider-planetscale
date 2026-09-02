@@ -64,6 +64,19 @@ actions:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties
+    description: >-
+      Add a synthetic region slug populated from the nested API region object
+      by a client hook so reads and imports refresh the configured region.
+    update:
+      region_slug:
+        type: string
+        x-speakeasy-name-override: region
+        description: The region slug where the branch is hosted.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.required
+    update:
+      - region_slug
+
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties
     description: Add Postgres response fields

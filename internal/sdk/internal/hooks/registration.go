@@ -12,6 +12,7 @@ func initHooks(h *Hooks) {
 	customSecurityHook := &CustomSecurityHook{}
 
 	h.registerSDKInitHook(NewPostgresBranchNoContentSkipHook())
+	h.registerSDKInitHook(NewPostgresBranchRegionSlugHook())
 	h.registerSDKInitHook(NewPostgresBouncerNoContentSkipHook())
 	h.registerSDKInitHook(NewVitessBranchNoContentSkipHook())
 	h.registerSDKInitHook(NewReadOnlyReplicaRegionSlugHook())
