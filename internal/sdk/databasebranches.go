@@ -492,7 +492,7 @@ func (s *DatabaseBranches) GetPostgresBranchWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 30
 		defaultIntervalSeconds := 10
-		defaultLimitCount := 90
+		defaultLimitCount := 4320
 		result := &polling.Config{
 			DelaySeconds:    &defaultDelaySeconds,
 			IntervalSeconds: &defaultIntervalSeconds,
