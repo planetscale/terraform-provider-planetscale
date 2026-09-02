@@ -5501,12 +5501,14 @@ paths:
                 backup_id:
                   type: string
                   description: If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this.
+                  x-speakeasy-terraform-write-only: true
                 region:
                   type: string
                   description: The region to create the branch in. If not provided, the branch will be created in the default region for its database.
                 restore_point:
                   type: string
                   description: Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases.
+                  x-speakeasy-terraform-write-only: true
                 cluster_size:
                   type: string
                   description: "The database cluster size. Required if a backup_id is provided (unless keyspace_cluster_sizes covers every keyspace), optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800"
@@ -5780,6 +5782,10 @@ paths:
                     type: string
                     description: The name of the parent branch from which the branch was created
                     nullable: true
+                  region_slug:
+                    type: string
+                    x-speakeasy-name-override: region
+                    description: The region slug where the branch is hosted.
                   replicas:
                     type: integer
                     description: The number of replicas for the branch
@@ -5833,6 +5839,7 @@ paths:
                   - region
                   - parent_branch
                   - vtgate_options
+                  - region_slug
         "401":
           description: Unauthorized
         "403":

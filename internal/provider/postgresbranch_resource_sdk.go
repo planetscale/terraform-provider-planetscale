@@ -10,6 +10,12 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
+// PostgresBranchResourceModelOptions enables patch sdk method construction.
+type PostgresBranchResourceModelOptions struct {
+	Config *PostgresBranchResourceModel
+	State  *PostgresBranchResourceModel
+}
+
 func (r *PostgresBranchResourceModel) RefreshFromOperationsApplyPostgresBranchTerraformChangesResponseBody(ctx context.Context, resp *operations.ApplyPostgresBranchTerraformChangesResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -91,6 +97,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		}
 		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.Region = types.StringValue(resp.Region)
 		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
@@ -131,7 +138,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdatePostgresBranchR
 	return diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequest(ctx context.Context) (*operations.ApplyPostgresBranchTerraformChangesRequest, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.ApplyPostgresBranchTerraformChangesRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -143,7 +150,7 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 	var branch string
 	branch = r.ID.ValueString()
 
-	body, bodyDiags := r.ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx)
+	body, bodyDiags := r.ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx, opts)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
@@ -160,7 +167,7 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx context.Context) (*operations.ApplyPostgresBranchTerraformChangesRequestBody, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.ApplyPostgresBranchTerraformChangesRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	clusterSize := new(string)
@@ -191,7 +198,7 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequest(ctx context.Context) (*operations.CreatePostgresBranchRequest, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.CreatePostgresBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -200,7 +207,7 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequest(ct
 	var database string
 	database = r.Database.ValueString()
 
-	body, bodyDiags := r.ToOperationsCreatePostgresBranchRequestBody(ctx)
+	body, bodyDiags := r.ToOperationsCreatePostgresBranchRequestBody(ctx, opts)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
@@ -216,7 +223,7 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequest(ct
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBody(ctx context.Context) (*operations.CreatePostgresBranchRequestBody, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBody(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.CreatePostgresBranchRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var name string
@@ -235,8 +242,8 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 		parentBranch = nil
 	}
 	backupID := new(string)
-	if !r.BackupID.IsUnknown() && !r.BackupID.IsNull() {
-		*backupID = r.BackupID.ValueString()
+	if !opts.Config.BackupID.IsUnknown() && !opts.Config.BackupID.IsNull() {
+		*backupID = opts.Config.BackupID.ValueString()
 	} else {
 		backupID = nil
 	}
@@ -247,8 +254,8 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 		region = nil
 	}
 	restorePoint := new(string)
-	if !r.RestorePoint.IsUnknown() && !r.RestorePoint.IsNull() {
-		*restorePoint = r.RestorePoint.ValueString()
+	if !opts.Config.RestorePoint.IsUnknown() && !opts.Config.RestorePoint.IsNull() {
+		*restorePoint = opts.Config.RestorePoint.ValueString()
 	} else {
 		restorePoint = nil
 	}
@@ -278,7 +285,7 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsDeletePostgresBranchRequest(ctx context.Context) (*operations.DeletePostgresBranchRequest, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsDeletePostgresBranchRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.DeletePostgresBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -306,7 +313,7 @@ func (r *PostgresBranchResourceModel) ToOperationsDeletePostgresBranchRequest(ct
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsGetBranchChangeRequestRequest(ctx context.Context) (*operations.GetBranchChangeRequestRequest, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsGetBranchChangeRequestRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.GetBranchChangeRequestRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -331,7 +338,7 @@ func (r *PostgresBranchResourceModel) ToOperationsGetBranchChangeRequestRequest(
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx context.Context) (*operations.GetPostgresBranchRequest, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.GetPostgresBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -352,7 +359,7 @@ func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx c
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequest(ctx context.Context) (*operations.UpdatePostgresBranchRequest, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.UpdatePostgresBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -364,7 +371,7 @@ func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequest(ct
 	var branch string
 	branch = r.ID.ValueString()
 
-	body, bodyDiags := r.ToOperationsUpdatePostgresBranchRequestBody(ctx)
+	body, bodyDiags := r.ToOperationsUpdatePostgresBranchRequestBody(ctx, opts)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
@@ -381,7 +388,7 @@ func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequest(ct
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequestBody(ctx context.Context) (*operations.UpdatePostgresBranchRequestBody, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsUpdatePostgresBranchRequestBody(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.UpdatePostgresBranchRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	name := new(string)

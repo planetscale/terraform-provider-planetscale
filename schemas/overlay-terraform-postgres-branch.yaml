@@ -16,6 +16,14 @@ actions:
     description: Remove seed_data (Vitess-only field)
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties['backup_id','restore_point']
+    description: >-
+      Treat backup restore inputs as create-only values. Terraform passes them
+      to Create but does not persist them in plan or state, so later reads and
+      imports do not attempt to reconcile restore provenance.
+    update:
+      x-speakeasy-terraform-write-only: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties.cluster_size
     update:
       x-speakeasy-plan-validators: ClusterSizeValidator
@@ -63,6 +71,19 @@ actions:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/state == "ready"
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties
+    description: >-
+      Add a synthetic region slug populated from the nested API region object
+      by a client hook so reads and imports refresh the configured region.
+    update:
+      region_slug:
+        type: string
+        x-speakeasy-name-override: region
+        description: The region slug where the branch is hosted.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.required
+    update:
+      - region_slug
 
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.responses['200'].content['application/json'].schema.properties

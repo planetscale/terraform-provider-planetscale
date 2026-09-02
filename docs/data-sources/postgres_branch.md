@@ -39,6 +39,7 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `parameters` (Map of Map of String) Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 - `parent_branch` (String) The name of the parent branch from which the branch was created
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
+- `region` (String) The region slug where the branch is hosted.
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
 - `replicas` (Number) The number of replicas for the branch
 - `state` (String) The current state of the branch
