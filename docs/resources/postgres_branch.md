@@ -42,7 +42,9 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 
 ### Optional
 
-- `backup_id` (String) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
+- `backup_id` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
 - `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 - `delete_descendants` (Boolean) If true, recursively delete all descendant branches along with this branch
 - `deletion_protected` (Boolean) Whether deletion protection is enabled for the branch
@@ -50,7 +52,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `parameters` (Map of Map of String) Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
-- `restore_point` (String) Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.
+- `restore_point` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.
 
 ### Read-Only
 

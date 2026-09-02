@@ -2,8 +2,13 @@ speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
+<<<<<<< HEAD
         sourceRevisionDigest: sha256:6e525f9a2bb948ba3055171d44017c258b4ad163749580f4d9cce4b4fdd3e578
         sourceBlobDigest: sha256:242f257685327fb453034c0e98f5a5b52bbc0317cf9a073be9ffafa07ccaccc5
+=======
+        sourceRevisionDigest: sha256:bf83f9d37ad796742fed0fbf68612069c63bfa27d71156072b83753a25ac2e4e
+        sourceBlobDigest: sha256:77d3b9c2bc685a47b85533698350ae0f6fdfbe40f4aee79292b886cdb5e60421
+>>>>>>> 001e0bd (make generate)
         tags:
             - latest
             - v1
@@ -11,8 +16,13 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
+<<<<<<< HEAD
         sourceRevisionDigest: sha256:6e525f9a2bb948ba3055171d44017c258b4ad163749580f4d9cce4b4fdd3e578
         sourceBlobDigest: sha256:242f257685327fb453034c0e98f5a5b52bbc0317cf9a073be9ffafa07ccaccc5
+=======
+        sourceRevisionDigest: sha256:bf83f9d37ad796742fed0fbf68612069c63bfa27d71156072b83753a25ac2e4e
+        sourceBlobDigest: sha256:77d3b9c2bc685a47b85533698350ae0f6fdfbe40f4aee79292b886cdb5e60421
+>>>>>>> 001e0bd (make generate)
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.793.0

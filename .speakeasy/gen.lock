@@ -1,12 +1,16 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
+<<<<<<< HEAD
   docChecksum: 845c7c2c5e617c10afd737e441029001
+=======
+  docChecksum: 4b3dafa8899c1cda9ade6e2307d1c3d2
+>>>>>>> 001e0bd (make generate)
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
-  releaseVersion: 1.8.0
-  configChecksum: f26063e122d67bffa72f5e8f9e7a5384
+  releaseVersion: 1.11.0
+  configChecksum: fbca83d7ddcdff365077535f4236e5d8
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
