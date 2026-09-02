@@ -156,9 +156,11 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Description: `Whether or not the branch is ready to serve queries`,
 			},
 			"region": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.`,
 			},

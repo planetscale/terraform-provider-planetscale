@@ -40,6 +40,7 @@ type PostgresBranchDataSourceModel struct {
 	Parameters        map[string]map[string]types.String   `tfsdk:"parameters"`
 	ParentBranch      types.String                         `tfsdk:"parent_branch"`
 	Ready             types.Bool                           `tfsdk:"ready"`
+	Region            types.String                         `tfsdk:"region"`
 	RegionData        *tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
 	Replicas          types.Int64                          `tfsdk:"replicas"`
 	State             types.String                         `tfsdk:"state"`
@@ -108,6 +109,10 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"ready": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the branch is ready to serve queries`,
+			},
+			"region": schema.StringAttribute{
+				Computed:    true,
+				Description: `The region slug where the branch is hosted.`,
 			},
 			"region_data": schema.SingleNestedAttribute{
 				Computed: true,

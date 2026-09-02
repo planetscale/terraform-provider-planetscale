@@ -2,8 +2,8 @@ speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:d5089612424f0664bd2d7e613fc4fe1432cb3daa422b29c72b4679aa20e2c061
-        sourceBlobDigest: sha256:a6a5ac3741c4b13539d1cdb8009e59ef0d56649be164e12ee9465a7be919a1f6
+        sourceRevisionDigest: sha256:6e525f9a2bb948ba3055171d44017c258b4ad163749580f4d9cce4b4fdd3e578
+        sourceBlobDigest: sha256:242f257685327fb453034c0e98f5a5b52bbc0317cf9a073be9ffafa07ccaccc5
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:d5089612424f0664bd2d7e613fc4fe1432cb3daa422b29c72b4679aa20e2c061
-        sourceBlobDigest: sha256:a6a5ac3741c4b13539d1cdb8009e59ef0d56649be164e12ee9465a7be919a1f6
+        sourceRevisionDigest: sha256:6e525f9a2bb948ba3055171d44017c258b4ad163749580f4d9cce4b4fdd3e578
+        sourceBlobDigest: sha256:242f257685327fb453034c0e98f5a5b52bbc0317cf9a073be9ffafa07ccaccc5
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.793.0

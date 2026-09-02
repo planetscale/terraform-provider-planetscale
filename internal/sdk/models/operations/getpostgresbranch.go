@@ -139,6 +139,8 @@ type GetPostgresBranchResponseBody struct {
 	RegionData GetPostgresBranchRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch *string `json:"parent_branch"`
+	// The region slug where the branch is hosted.
+	Region string `json:"region_slug"`
 	// The number of replicas for the branch
 	Replicas *int64 `json:"replicas,omitzero"`
 	// Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
@@ -231,6 +233,13 @@ func (g *GetPostgresBranchResponseBody) GetParentBranch() *string {
 		return nil
 	}
 	return g.ParentBranch
+}
+
+func (g *GetPostgresBranchResponseBody) GetRegion() string {
+	if g == nil {
+		return ""
+	}
+	return g.Region
 }
 
 func (g *GetPostgresBranchResponseBody) GetReplicas() *int64 {

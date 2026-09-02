@@ -91,6 +91,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		}
 		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
+		r.Region = types.StringValue(resp.Region)
 		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
