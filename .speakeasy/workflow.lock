@@ -2,13 +2,8 @@ speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-<<<<<<< HEAD
-        sourceRevisionDigest: sha256:6e525f9a2bb948ba3055171d44017c258b4ad163749580f4d9cce4b4fdd3e578
-        sourceBlobDigest: sha256:242f257685327fb453034c0e98f5a5b52bbc0317cf9a073be9ffafa07ccaccc5
-=======
-        sourceRevisionDigest: sha256:bf83f9d37ad796742fed0fbf68612069c63bfa27d71156072b83753a25ac2e4e
-        sourceBlobDigest: sha256:77d3b9c2bc685a47b85533698350ae0f6fdfbe40f4aee79292b886cdb5e60421
->>>>>>> 001e0bd (make generate)
+        sourceRevisionDigest: sha256:9ae57c93c362ff67582ec076b819d0a8de6fe0dbc91b4d4552f2a011d927c056
+        sourceBlobDigest: sha256:d68c2341875890e7fa5e856f93429a636316cbe4f9eac632f13bf952f8ac0f7f
         tags:
             - latest
             - v1
@@ -16,13 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-<<<<<<< HEAD
-        sourceRevisionDigest: sha256:6e525f9a2bb948ba3055171d44017c258b4ad163749580f4d9cce4b4fdd3e578
-        sourceBlobDigest: sha256:242f257685327fb453034c0e98f5a5b52bbc0317cf9a073be9ffafa07ccaccc5
-=======
-        sourceRevisionDigest: sha256:bf83f9d37ad796742fed0fbf68612069c63bfa27d71156072b83753a25ac2e4e
-        sourceBlobDigest: sha256:77d3b9c2bc685a47b85533698350ae0f6fdfbe40f4aee79292b886cdb5e60421
->>>>>>> 001e0bd (make generate)
+        sourceRevisionDigest: sha256:9ae57c93c362ff67582ec076b819d0a8de6fe0dbc91b4d4552f2a011d927c056
+        sourceBlobDigest: sha256:d68c2341875890e7fa5e856f93429a636316cbe4f9eac632f13bf952f8ac0f7f
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.793.0

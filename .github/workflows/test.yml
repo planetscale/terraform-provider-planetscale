@@ -43,7 +43,7 @@ jobs:
           go-version-file: "go.mod"
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
-          terraform_version: 1.9.*
+          terraform_version: 1.11.*
           terraform_wrapper: false
       - run: go generate -x ./...
       - name: git diff

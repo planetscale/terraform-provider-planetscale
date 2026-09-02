@@ -1,11 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-<<<<<<< HEAD
-  docChecksum: 845c7c2c5e617c10afd737e441029001
-=======
-  docChecksum: 4b3dafa8899c1cda9ade6e2307d1c3d2
->>>>>>> 001e0bd (make generate)
+  docChecksum: 8edf47ae8b655cfa70ba058941f05184
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
