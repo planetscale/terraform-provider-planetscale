@@ -16,6 +16,14 @@ actions:
     description: Remove seed_data (Vitess-only field)
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties['backup_id','restore_point']
+    description: >-
+      Treat backup restore inputs as create-only values. Terraform passes them
+      to Create but does not persist them in plan or state, so later reads and
+      imports do not attempt to reconcile restore provenance.
+    update:
+      x-speakeasy-terraform-write-only: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties.cluster_size
     update:
       x-speakeasy-plan-validators: ClusterSizeValidator
