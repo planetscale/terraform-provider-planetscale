@@ -403,6 +403,8 @@ type CreatePasswordResponseBody struct {
 	PlainText *string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`
+	// Whether or not the password is scoped to a read-only region
+	ReadOnlyRegion bool `json:"read_only_region"`
 	// Whether or not the password can be renewed
 	Renewable      bool                         `json:"renewable"`
 	DatabaseBranch CreatePasswordDatabaseBranch `json:"database_branch"`
@@ -546,6 +548,13 @@ func (c *CreatePasswordResponseBody) GetReplica() bool {
 		return false
 	}
 	return c.Replica
+}
+
+func (c *CreatePasswordResponseBody) GetReadOnlyRegion() bool {
+	if c == nil {
+		return false
+	}
+	return c.ReadOnlyRegion
 }
 
 func (c *CreatePasswordResponseBody) GetRenewable() bool {

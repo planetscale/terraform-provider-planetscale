@@ -209,6 +209,8 @@ type CreateKeyspaceResponseBody struct {
 	Shards int64 `json:"shards"`
 	// If the keyspace is sharded
 	Sharded bool `json:"sharded"`
+	// If the keyspace uses an external datasource
+	External bool `json:"external"`
 	// Total number of replicas in the keyspace
 	Replicas int64 `json:"replicas"`
 	// The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
@@ -271,6 +273,13 @@ func (c *CreateKeyspaceResponseBody) GetSharded() bool {
 		return false
 	}
 	return c.Sharded
+}
+
+func (c *CreateKeyspaceResponseBody) GetExternal() bool {
+	if c == nil {
+		return false
+	}
+	return c.External
 }
 
 func (c *CreateKeyspaceResponseBody) GetReplicas() int64 {

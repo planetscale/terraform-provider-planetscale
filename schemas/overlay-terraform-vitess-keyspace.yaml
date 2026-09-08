@@ -212,6 +212,14 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.required[?@ == 'vttablet_options']
     remove: true
 
+  # `external` (external datasource keyspaces) is not exposed in this provider version.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.external
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.external
+    update:
+      x-speakeasy-terraform-ignore: true
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get
     description: API operation for data and managed resource read, with create/update polling until ready.
     update:

@@ -3592,6 +3592,9 @@ paths:
                 restore_point:
                   type: string
                   description: Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases.
+                replicas:
+                  type: integer
+                  description: For PostgreSQL backup restores and point-in-time recovery, the number of additional replicas from 0 to 8, subject to the target cluster size. 0 creates a single-node branch. If omitted, the target cluster size's minimum is used.
                 seed_data:
                   type: string
                   enum:
@@ -12216,6 +12219,9 @@ paths:
                         sharded:
                           type: boolean
                           description: If the keyspace is sharded
+                        external:
+                          type: boolean
+                          description: If the keyspace uses an external datasource
                         replicas:
                           type: integer
                           description: Total number of replicas in the keyspace
@@ -12309,6 +12315,7 @@ paths:
                         - name
                         - shards
                         - sharded
+                        - external
                         - replicas
                         - extra_replicas
                         - created_at
@@ -12420,6 +12427,9 @@ paths:
                   sharded:
                     type: boolean
                     description: If the keyspace is sharded
+                  external:
+                    type: boolean
+                    description: If the keyspace uses an external datasource
                   replicas:
                     type: integer
                     description: Total number of replicas in the keyspace
@@ -12513,6 +12523,7 @@ paths:
                   - name
                   - shards
                   - sharded
+                  - external
                   - replicas
                   - extra_replicas
                   - created_at
@@ -12601,6 +12612,9 @@ paths:
                   sharded:
                     type: boolean
                     description: If the keyspace is sharded
+                  external:
+                    type: boolean
+                    description: If the keyspace uses an external datasource
                   replicas:
                     type: integer
                     description: Total number of replicas in the keyspace
@@ -12694,6 +12708,7 @@ paths:
                   - name
                   - shards
                   - sharded
+                  - external
                   - replicas
                   - extra_replicas
                   - created_at
@@ -12805,6 +12820,9 @@ paths:
                   sharded:
                     type: boolean
                     description: If the keyspace is sharded
+                  external:
+                    type: boolean
+                    description: If the keyspace uses an external datasource
                   replicas:
                     type: integer
                     description: Total number of replicas in the keyspace
@@ -12898,6 +12916,7 @@ paths:
                   - name
                   - shards
                   - sharded
+                  - external
                   - replicas
                   - extra_replicas
                   - created_at
@@ -13758,6 +13777,77 @@ paths:
         **Service Token Accesses**
          `write_production_branch_vschema`, `write_branch_vschema`
 
+  /organizations/{organization}/databases/{database}/branches/{branch}/logs/signatures:
+    post:
+      tags:
+        - Branch log signatures
+      operationId: create_branch_log_signature
+      summary: Create a log signature
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns a log signature
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sig:
+                    type: string
+                    description: The signature token
+                  exp:
+                    type: string
+                    description: The expiration timestamp
+                  url:
+                    type: string
+                    description: The signed branch logs query URL
+                required:
+                  - sig
+                  - exp
+                  - url
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      description: |2-
+                Creates a signed token that can be used to access branch logs.
+
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
   /organizations/{organization}/databases/{database}/branches/{branch}/maintenance:
     post:
       tags:
@@ -15481,6 +15571,9 @@ paths:
                         replica:
                           type: boolean
                           description: Whether or not the password is for a read replica
+                        read_only_region:
+                          type: boolean
+                          description: Whether or not the password is scoped to a read-only region
                         renewable:
                           type: boolean
                           description: Whether or not the password can be renewed
@@ -15529,6 +15622,7 @@ paths:
                         - username
                         - plain_text
                         - replica
+                        - read_only_region
                         - renewable
                         - database_branch
                 required:
@@ -15763,6 +15857,9 @@ paths:
                   replica:
                     type: boolean
                     description: Whether or not the password is for a read replica
+                  read_only_region:
+                    type: boolean
+                    description: Whether or not the password is scoped to a read-only region
                   renewable:
                     type: boolean
                     description: Whether or not the password can be renewed
@@ -15811,6 +15908,7 @@ paths:
                   - username
                   - plain_text
                   - replica
+                  - read_only_region
                   - renewable
                   - database_branch
         "401":
@@ -16012,6 +16110,9 @@ paths:
                   replica:
                     type: boolean
                     description: Whether or not the password is for a read replica
+                  read_only_region:
+                    type: boolean
+                    description: Whether or not the password is scoped to a read-only region
                   renewable:
                     type: boolean
                     description: Whether or not the password can be renewed
@@ -16060,6 +16161,7 @@ paths:
                   - username
                   - plain_text
                   - replica
+                  - read_only_region
                   - renewable
                   - database_branch
         "401":
@@ -16272,6 +16374,9 @@ paths:
                   replica:
                     type: boolean
                     description: Whether or not the password is for a read replica
+                  read_only_region:
+                    type: boolean
+                    description: Whether or not the password is scoped to a read-only region
                   renewable:
                     type: boolean
                     description: Whether or not the password can be renewed
@@ -16320,6 +16425,7 @@ paths:
                   - username
                   - plain_text
                   - replica
+                  - read_only_region
                   - renewable
                   - database_branch
         "401":
@@ -16576,6 +16682,9 @@ paths:
                   replica:
                     type: boolean
                     description: Whether or not the password is for a read replica
+                  read_only_region:
+                    type: boolean
+                    description: Whether or not the password is scoped to a read-only region
                   renewable:
                     type: boolean
                     description: Whether or not the password can be renewed
@@ -16624,6 +16733,7 @@ paths:
                   - username
                   - plain_text
                   - replica
+                  - read_only_region
                   - renewable
                   - database_branch
         "401":
@@ -35479,6 +35589,9 @@ paths:
                           has_enough:
                             type: boolean
                             description: Whether this shard has enough remaining storage for the deployment
+                          blocked_by_in_flight:
+                            type: boolean
+                            description: Whether this shard lacks storage only because a competing in-flight deployment is still copying
                     description: Per-keyspace and per-shard storage report. Keys are keyspace names.
                 required:
                   - enough_storage
@@ -37374,6 +37487,9 @@ paths:
                         secret:
                           type: string
                           description: The secret used to sign the webhook payloads
+                        authorization_header_configured:
+                          type: boolean
+                          description: Whether the webhook sends an Authorization header
                         enabled:
                           type: boolean
                           description: Whether the webhook is enabled
@@ -37401,6 +37517,7 @@ paths:
                               - branch.anomaly
                               - branch.out_of_memory
                               - branch.primary_promoted
+                              - branch.primary_switchover_imminent
                               - branch.schema_recommendation
                               - branch.sleeping
                               - branch.start_maintenance
@@ -37424,6 +37541,7 @@ paths:
                         - id
                         - url
                         - secret
+                        - authorization_header_configured
                         - enabled
                         - last_sent_result
                         - last_sent_success
@@ -37489,6 +37607,9 @@ paths:
                 url:
                   type: string
                   description: The URL the webhook will send events to
+                authorization_header:
+                  type: string
+                  description: The value to send in the Authorization header
                 enabled:
                   type: boolean
                   description: Whether the webhook should be enabled
@@ -37517,6 +37638,9 @@ paths:
                   secret:
                     type: string
                     description: The secret used to sign the webhook payloads
+                  authorization_header_configured:
+                    type: boolean
+                    description: Whether the webhook sends an Authorization header
                   enabled:
                     type: boolean
                     description: Whether the webhook is enabled
@@ -37544,6 +37668,7 @@ paths:
                         - branch.anomaly
                         - branch.out_of_memory
                         - branch.primary_promoted
+                        - branch.primary_switchover_imminent
                         - branch.schema_recommendation
                         - branch.sleeping
                         - branch.start_maintenance
@@ -37567,6 +37692,7 @@ paths:
                   - id
                   - url
                   - secret
+                  - authorization_header_configured
                   - enabled
                   - last_sent_result
                   - last_sent_success
@@ -37639,6 +37765,9 @@ paths:
                   secret:
                     type: string
                     description: The secret used to sign the webhook payloads
+                  authorization_header_configured:
+                    type: boolean
+                    description: Whether the webhook sends an Authorization header
                   enabled:
                     type: boolean
                     description: Whether the webhook is enabled
@@ -37666,6 +37795,7 @@ paths:
                         - branch.anomaly
                         - branch.out_of_memory
                         - branch.primary_promoted
+                        - branch.primary_switchover_imminent
                         - branch.schema_recommendation
                         - branch.sleeping
                         - branch.start_maintenance
@@ -37689,6 +37819,7 @@ paths:
                   - id
                   - url
                   - secret
+                  - authorization_header_configured
                   - enabled
                   - last_sent_result
                   - last_sent_success
@@ -37751,6 +37882,9 @@ paths:
                 url:
                   type: string
                   description: The URL the webhook will send events to
+                authorization_header:
+                  type: string
+                  description: The value to send in the Authorization header
                 enabled:
                   type: boolean
                   description: Whether the webhook should be enabled
@@ -37777,6 +37911,9 @@ paths:
                   secret:
                     type: string
                     description: The secret used to sign the webhook payloads
+                  authorization_header_configured:
+                    type: boolean
+                    description: Whether the webhook sends an Authorization header
                   enabled:
                     type: boolean
                     description: Whether the webhook is enabled
@@ -37804,6 +37941,7 @@ paths:
                         - branch.anomaly
                         - branch.out_of_memory
                         - branch.primary_promoted
+                        - branch.primary_switchover_imminent
                         - branch.schema_recommendation
                         - branch.sleeping
                         - branch.start_maintenance
@@ -37827,6 +37965,7 @@ paths:
                   - id
                   - url
                   - secret
+                  - authorization_header_configured
                   - enabled
                   - last_sent_result
                   - last_sent_success
@@ -49360,6 +49499,9 @@ paths:
                               replica:
                                 type: boolean
                                 description: Whether or not the password is for a read replica
+                              read_only_region:
+                                type: boolean
+                                description: Whether or not the password is scoped to a read-only region
                               renewable:
                                 type: boolean
                                 description: Whether or not the password can be renewed
@@ -49408,6 +49550,7 @@ paths:
                               - username
                               - plain_text
                               - replica
+                              - read_only_region
                               - renewable
                               - database_branch
                       required:
@@ -49733,6 +49876,9 @@ paths:
                         replica:
                           type: boolean
                           description: Whether or not the password is for a read replica
+                        read_only_region:
+                          type: boolean
+                          description: Whether or not the password is scoped to a read-only region
                         renewable:
                           type: boolean
                           description: Whether or not the password can be renewed
@@ -49781,6 +49927,7 @@ paths:
                         - username
                         - plain_text
                         - replica
+                        - read_only_region
                         - renewable
                         - database_branch
                 required:
@@ -50091,6 +50238,9 @@ paths:
                         replica:
                           type: boolean
                           description: Whether or not the password is for a read replica
+                        read_only_region:
+                          type: boolean
+                          description: Whether or not the password is scoped to a read-only region
                         renewable:
                           type: boolean
                           description: Whether or not the password can be renewed
@@ -50139,6 +50289,7 @@ paths:
                         - username
                         - plain_text
                         - replica
+                        - read_only_region
                         - renewable
                         - database_branch
                 required:
@@ -50683,7 +50834,7 @@ components:
       type: oauth2
       flows:
         authorizationCode:
-          authorizationUrl: https://auth.planetscale.com/oauth/authorize
+          authorizationUrl: https://app.planetscale.com/oauth/authorize
           tokenUrl: https://auth.planetscale.com/oauth/token
           scopes:
             email: Read user email
@@ -51426,6 +51577,9 @@ components:
               replica:
                 type: boolean
                 description: Whether or not the password is for a read replica
+              read_only_region:
+                type: boolean
+                description: Whether or not the password is scoped to a read-only region
               renewable:
                 type: boolean
                 description: Whether or not the password can be renewed
@@ -51474,6 +51628,7 @@ components:
               - username
               - plain_text
               - replica
+              - read_only_region
               - renewable
               - database_branch
       required:
@@ -51764,6 +51919,9 @@ components:
                     replica:
                       type: boolean
                       description: Whether or not the password is for a read replica
+                    read_only_region:
+                      type: boolean
+                      description: Whether or not the password is scoped to a read-only region
                     renewable:
                       type: boolean
                       description: Whether or not the password can be renewed
@@ -51812,6 +51970,7 @@ components:
                     - username
                     - plain_text
                     - replica
+                    - read_only_region
                     - renewable
                     - database_branch
             required:
@@ -52245,6 +52404,9 @@ components:
         secret:
           type: string
           description: The secret used to sign the webhook payloads
+        authorization_header_configured:
+          type: boolean
+          description: Whether the webhook sends an Authorization header
         enabled:
           type: boolean
           description: Whether the webhook is enabled
@@ -52272,6 +52434,7 @@ components:
               - branch.anomaly
               - branch.out_of_memory
               - branch.primary_promoted
+              - branch.primary_switchover_imminent
               - branch.schema_recommendation
               - branch.sleeping
               - branch.start_maintenance
@@ -52295,6 +52458,7 @@ components:
         - id
         - url
         - secret
+        - authorization_header_configured
         - enabled
         - last_sent_result
         - last_sent_success
@@ -52344,6 +52508,9 @@ components:
               secret:
                 type: string
                 description: The secret used to sign the webhook payloads
+              authorization_header_configured:
+                type: boolean
+                description: Whether the webhook sends an Authorization header
               enabled:
                 type: boolean
                 description: Whether the webhook is enabled
@@ -52371,6 +52538,7 @@ components:
                     - branch.anomaly
                     - branch.out_of_memory
                     - branch.primary_promoted
+                    - branch.primary_switchover_imminent
                     - branch.schema_recommendation
                     - branch.sleeping
                     - branch.start_maintenance
@@ -52394,6 +52562,7 @@ components:
               - id
               - url
               - secret
+              - authorization_header_configured
               - enabled
               - last_sent_result
               - last_sent_success
@@ -62792,6 +62961,9 @@ components:
         replica:
           type: boolean
           description: Whether or not the password is for a read replica
+        read_only_region:
+          type: boolean
+          description: Whether or not the password is scoped to a read-only region
         renewable:
           type: boolean
           description: Whether or not the password can be renewed
@@ -62840,6 +63012,7 @@ components:
         - username
         - plain_text
         - replica
+        - read_only_region
         - renewable
         - database_branch
     PaginatedDatabaseBranchPassword:
@@ -63015,6 +63188,9 @@ components:
               replica:
                 type: boolean
                 description: Whether or not the password is for a read replica
+              read_only_region:
+                type: boolean
+                description: Whether or not the password is scoped to a read-only region
               renewable:
                 type: boolean
                 description: Whether or not the password can be renewed
@@ -63063,6 +63239,7 @@ components:
               - username
               - plain_text
               - replica
+              - read_only_region
               - renewable
               - database_branch
       required:
@@ -63091,6 +63268,9 @@ components:
         sharded:
           type: boolean
           description: If the keyspace is sharded
+        external:
+          type: boolean
+          description: If the keyspace uses an external datasource
         replicas:
           type: integer
           description: Total number of replicas in the keyspace
@@ -63184,6 +63364,7 @@ components:
         - name
         - shards
         - sharded
+        - external
         - replicas
         - extra_replicas
         - created_at
@@ -63249,6 +63430,9 @@ components:
               sharded:
                 type: boolean
                 description: If the keyspace is sharded
+              external:
+                type: boolean
+                description: If the keyspace uses an external datasource
               replicas:
                 type: integer
                 description: Total number of replicas in the keyspace
@@ -63342,6 +63526,7 @@ components:
               - name
               - shards
               - sharded
+              - external
               - replicas
               - extra_replicas
               - created_at

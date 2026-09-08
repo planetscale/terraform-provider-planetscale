@@ -179,6 +179,8 @@ type ListKeyspacesData struct {
 	Shards int64 `json:"shards"`
 	// If the keyspace is sharded
 	Sharded bool `json:"sharded"`
+	// If the keyspace uses an external datasource
+	External bool `json:"external"`
 	// Total number of replicas in the keyspace
 	Replicas int64 `json:"replicas"`
 	// The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
@@ -241,6 +243,13 @@ func (l *ListKeyspacesData) GetSharded() bool {
 		return false
 	}
 	return l.Sharded
+}
+
+func (l *ListKeyspacesData) GetExternal() bool {
+	if l == nil {
+		return false
+	}
+	return l.External
 }
 
 func (l *ListKeyspacesData) GetReplicas() int64 {
