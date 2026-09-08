@@ -11,6 +11,14 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.requestBody.content['application/json'].schema.properties.keyspace_cluster_sizes
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.requestBody.content['application/json'].schema.properties.replicas
+    description: >-
+      Not exposed yet. Remove rather than x-speakeasy-terraform-ignore: the
+      ignore would merge across the entity and also hide the computed
+      `replicas` attribute that overlay-terraform-postgres-branch.yaml adds
+      from the branch read response.
+    remove: true
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.parameters[?@.name == 'branch']
     description: Add x-speakeasy-match to branch parameter
     update:
