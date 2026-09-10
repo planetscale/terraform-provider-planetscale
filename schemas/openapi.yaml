@@ -12275,6 +12275,22 @@ paths:
                             - node_ttl_always
                             - node_ttl_off
                           description: Controls when node TTL drains are allowed
+                        disk_autoscaling:
+                          type: object
+                          properties:
+                            strategy:
+                              type: string
+                              enum:
+                                - grow
+                                - disable
+                                - shrink
+                              description: The disk autoscaling strategy
+                            storage_limit_bytes:
+                              type: integer
+                              description: The maximum size in bytes disks may autoscale to
+                          required:
+                            - strategy
+                            - storage_limit_bytes
                         replication_durability_constraints:
                           type: object
                           properties:
@@ -12332,6 +12348,7 @@ paths:
                         - imported
                         - vector_pool_allocation
                         - node_ttl_strategy
+                        - disk_autoscaling
                         - replication_durability_constraints
                         - vreplication_flags
                         - mysqld_options
@@ -12483,6 +12500,22 @@ paths:
                       - node_ttl_always
                       - node_ttl_off
                     description: Controls when node TTL drains are allowed
+                  disk_autoscaling:
+                    type: object
+                    properties:
+                      strategy:
+                        type: string
+                        enum:
+                          - grow
+                          - disable
+                          - shrink
+                        description: The disk autoscaling strategy
+                      storage_limit_bytes:
+                        type: integer
+                        description: The maximum size in bytes disks may autoscale to
+                    required:
+                      - strategy
+                      - storage_limit_bytes
                   replication_durability_constraints:
                     type: object
                     properties:
@@ -12540,6 +12573,7 @@ paths:
                   - imported
                   - vector_pool_allocation
                   - node_ttl_strategy
+                  - disk_autoscaling
                   - replication_durability_constraints
                   - vreplication_flags
                   - mysqld_options
@@ -12668,6 +12702,22 @@ paths:
                       - node_ttl_always
                       - node_ttl_off
                     description: Controls when node TTL drains are allowed
+                  disk_autoscaling:
+                    type: object
+                    properties:
+                      strategy:
+                        type: string
+                        enum:
+                          - grow
+                          - disable
+                          - shrink
+                        description: The disk autoscaling strategy
+                      storage_limit_bytes:
+                        type: integer
+                        description: The maximum size in bytes disks may autoscale to
+                    required:
+                      - strategy
+                      - storage_limit_bytes
                   replication_durability_constraints:
                     type: object
                     properties:
@@ -12725,6 +12775,7 @@ paths:
                   - imported
                   - vector_pool_allocation
                   - node_ttl_strategy
+                  - disk_autoscaling
                   - replication_durability_constraints
                   - vreplication_flags
                   - mysqld_options
@@ -12876,6 +12927,22 @@ paths:
                       - node_ttl_always
                       - node_ttl_off
                     description: Controls when node TTL drains are allowed
+                  disk_autoscaling:
+                    type: object
+                    properties:
+                      strategy:
+                        type: string
+                        enum:
+                          - grow
+                          - disable
+                          - shrink
+                        description: The disk autoscaling strategy
+                      storage_limit_bytes:
+                        type: integer
+                        description: The maximum size in bytes disks may autoscale to
+                    required:
+                      - strategy
+                      - storage_limit_bytes
                   replication_durability_constraints:
                     type: object
                     properties:
@@ -12933,6 +13000,7 @@ paths:
                   - imported
                   - vector_pool_allocation
                   - node_ttl_strategy
+                  - disk_autoscaling
                   - replication_durability_constraints
                   - vreplication_flags
                   - mysqld_options
@@ -14153,17 +14221,44 @@ paths:
                     description: The metrics response type
                   start_date:
                     type: string
-                    description: The start of the time range
+                    description: The start of the time range for the metric series
                   end_date:
                     type: string
-                    description: The end of the time range
+                    description: The end of the time range for the metric series
                   interval:
                     type: integer
                     description: The step interval in seconds between data points
                   series:
-                    items:
-                      type: string
                     type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: The time-series response type
+                        metric:
+                          type: string
+                          description: The name of the metric
+                        label:
+                          type: string
+                          description: A human-readable label for the time series
+                        labels:
+                          type: object
+                          additionalProperties: true
+                          description: Key/value labels, also known as tags, identifying the time series
+                        points:
+                          items:
+                            type: array
+                            items:
+                              type: number
+                          type: array
+                          description: Sampled data points as [Unix timestamp, value] pairs
+                      required:
+                        - type
+                        - metric
+                        - label
+                        - labels
+                        - points
                 required:
                   - type
                   - start_date
@@ -14183,7 +14278,36 @@ paths:
         "503":
           description: Metrics service unavailable
       description: |-
-        
+        Retrieve time-series metrics for a database branch.
+
+        ```sh
+        curl --get \
+          --header "Authorization: $PLANETSCALE_SERVICE_TOKEN" \
+          --data-urlencode "metrics=queries" \
+          --data-urlencode "period=15m" \
+          "https://api.planetscale.com/v1/organizations/acme/databases/app-db/branches/main/metrics"
+        ```
+
+        Each series contains its metric name, display label, identifying labels, and sampled `[Unix timestamp, value]` points:
+
+        ```json
+        {
+          "type": "MetricSeries",
+          "start_date": "2026-09-09T17:00:00Z",
+          "end_date": "2026-09-09T17:15:00Z",
+          "interval": 60,
+          "series": [
+            {
+              "type": "TimeSeries",
+              "metric": "queries",
+              "label": "Queries",
+              "labels": { "tablet_type": "primary" },
+              "points": [[1788973200, 42.0]]
+            }
+          ]
+        }
+        ```
+
         ### Authorization
         A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 
@@ -14579,17 +14703,44 @@ paths:
                     description: The metrics response type
                   start_date:
                     type: string
-                    description: The start of the time range
+                    description: The start of the time range for the metric series
                   end_date:
                     type: string
-                    description: The end of the time range
+                    description: The end of the time range for the metric series
                   interval:
                     type: integer
                     description: The step interval in seconds between data points
                   series:
-                    items:
-                      type: string
                     type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: The time-series response type
+                        metric:
+                          type: string
+                          description: The name of the metric
+                        label:
+                          type: string
+                          description: A human-readable label for the time series
+                        labels:
+                          type: object
+                          additionalProperties: true
+                          description: Key/value labels, also known as tags, identifying the time series
+                        points:
+                          items:
+                            type: array
+                            items:
+                              type: number
+                          type: array
+                          description: Sampled data points as [Unix timestamp, value] pairs
+                      required:
+                        - type
+                        - metric
+                        - label
+                        - labels
+                        - points
                 required:
                   - type
                   - start_date
@@ -14788,17 +14939,44 @@ paths:
                     description: The metrics response type
                   start_date:
                     type: string
-                    description: The start of the time range
+                    description: The start of the time range for the metric series
                   end_date:
                     type: string
-                    description: The end of the time range
+                    description: The end of the time range for the metric series
                   interval:
                     type: integer
                     description: The step interval in seconds between data points
                   series:
-                    items:
-                      type: string
                     type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: The time-series response type
+                        metric:
+                          type: string
+                          description: The name of the metric
+                        label:
+                          type: string
+                          description: A human-readable label for the time series
+                        labels:
+                          type: object
+                          additionalProperties: true
+                          description: Key/value labels, also known as tags, identifying the time series
+                        points:
+                          items:
+                            type: array
+                            items:
+                              type: number
+                          type: array
+                          description: Sampled data points as [Unix timestamp, value] pairs
+                      required:
+                        - type
+                        - metric
+                        - label
+                        - labels
+                        - points
                 required:
                   - type
                   - start_date
@@ -15128,17 +15306,44 @@ paths:
                     description: The metrics response type
                   start_date:
                     type: string
-                    description: The start of the time range
+                    description: The start of the time range for the metric series
                   end_date:
                     type: string
-                    description: The end of the time range
+                    description: The end of the time range for the metric series
                   interval:
                     type: integer
                     description: The step interval in seconds between data points
                   series:
-                    items:
-                      type: string
                     type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: The time-series response type
+                        metric:
+                          type: string
+                          description: The name of the metric
+                        label:
+                          type: string
+                          description: A human-readable label for the time series
+                        labels:
+                          type: object
+                          additionalProperties: true
+                          description: Key/value labels, also known as tags, identifying the time series
+                        points:
+                          items:
+                            type: array
+                            items:
+                              type: number
+                          type: array
+                          description: Sampled data points as [Unix timestamp, value] pairs
+                      required:
+                        - type
+                        - metric
+                        - label
+                        - labels
+                        - points
                 required:
                   - type
                   - start_date
@@ -61443,6 +61648,58 @@ components:
         - total_count
         - total_pages
         - data
+    MetricSeries:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The metrics response type
+        start_date:
+          type: string
+          description: The start of the time range for the metric series
+        end_date:
+          type: string
+          description: The end of the time range for the metric series
+        interval:
+          type: integer
+          description: The step interval in seconds between data points
+        series:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The time-series response type
+              metric:
+                type: string
+                description: The name of the metric
+              label:
+                type: string
+                description: A human-readable label for the time series
+              labels:
+                type: object
+                additionalProperties: true
+                description: Key/value labels, also known as tags, identifying the time series
+              points:
+                items:
+                  type: array
+                  items:
+                    type: number
+                type: array
+                description: Sampled data points as [Unix timestamp, value] pairs
+            required:
+              - type
+              - metric
+              - label
+              - labels
+              - points
+      required:
+        - type
+        - start_date
+        - end_date
+        - interval
+        - series
     PaginatedBranchMaintenanceWindow:
       type: object
       properties:
@@ -63324,6 +63581,22 @@ components:
             - node_ttl_always
             - node_ttl_off
           description: Controls when node TTL drains are allowed
+        disk_autoscaling:
+          type: object
+          properties:
+            strategy:
+              type: string
+              enum:
+                - grow
+                - disable
+                - shrink
+              description: The disk autoscaling strategy
+            storage_limit_bytes:
+              type: integer
+              description: The maximum size in bytes disks may autoscale to
+          required:
+            - strategy
+            - storage_limit_bytes
         replication_durability_constraints:
           type: object
           properties:
@@ -63381,6 +63654,7 @@ components:
         - imported
         - vector_pool_allocation
         - node_ttl_strategy
+        - disk_autoscaling
         - replication_durability_constraints
         - vreplication_flags
         - mysqld_options
@@ -63486,6 +63760,22 @@ components:
                   - node_ttl_always
                   - node_ttl_off
                 description: Controls when node TTL drains are allowed
+              disk_autoscaling:
+                type: object
+                properties:
+                  strategy:
+                    type: string
+                    enum:
+                      - grow
+                      - disable
+                      - shrink
+                    description: The disk autoscaling strategy
+                  storage_limit_bytes:
+                    type: integer
+                    description: The maximum size in bytes disks may autoscale to
+                required:
+                  - strategy
+                  - storage_limit_bytes
               replication_durability_constraints:
                 type: object
                 properties:
@@ -63543,6 +63833,7 @@ components:
               - imported
               - vector_pool_allocation
               - node_ttl_strategy
+              - disk_autoscaling
               - replication_durability_constraints
               - vreplication_flags
               - mysqld_options
