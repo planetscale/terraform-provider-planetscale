@@ -1,0 +1,21 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_routers data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].get
+    description: API operation for read. The list endpoint returns a raw array, so no pagination is declared.
+    update:
+      x-speakeasy-entity-operation: NekiRouters#read
+      x-speakeasy-entity-description: Returns the router groups for a PlanetScale Neki branch.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].get.responses["200"].content["application/json"].schema.items.properties.created_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].get.responses["200"].content["application/json"].schema.items.properties.updated_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].get.responses["200"].content["application/json"].schema.items.properties.sku
+    description: Trim the sku object; the flat router_size string replaces it.
+    remove: true

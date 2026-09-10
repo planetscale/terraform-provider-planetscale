@@ -1,0 +1,188 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_backup_policy managed resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post.parameters[?@.name == 'organization'].schema
+    description: Moving a backup policy to another organization requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post.parameters[?@.name == 'database'].schema
+    description: Moving a backup policy to another database requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post.requestBody.content['application/json'].schema
+    description: Require the fields the API needs to create a valid backup policy.
+    update:
+      required:
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post.requestBody.content['application/json'].schema.properties
+    description: Validate backup policy values during Terraform planning.
+    update:
+      retention_value:
+        minimum: 1
+        maximum: 999
+      frequency_value:
+        minimum: 1
+        maximum: 999
+      schedule_time:
+        pattern: '^(?:[01]\d|2[0-3]):[0-5]\d$'
+      schedule_day:
+        minimum: 0
+        maximum: 6
+        description: Day of the week that the backup is scheduled. Required for weekly and monthly schedules. 0 is Sunday, 6 is Saturday.
+      schedule_week:
+        minimum: 0
+        maximum: 3
+        description: Week of the month that the backup is scheduled. Required for monthly schedules. 0 is the first week, 3 is the fourth week.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].patch.requestBody.content['application/json'].schema.properties
+    description: Validate backup policy values during Terraform planning.
+    update:
+      retention_value:
+        minimum: 1
+        maximum: 999
+      frequency_value:
+        minimum: 1
+        maximum: 999
+      schedule_time:
+        pattern: '^(?:[01]\d|2[0-3]):[0-5]\d$'
+      schedule_day:
+        minimum: 0
+        maximum: 6
+        description: Day of the week that the backup is scheduled. Required for weekly and monthly schedules. 0 is Sunday, 6 is Saturday.
+      schedule_week:
+        minimum: 0
+        maximum: 3
+        description: Week of the month that the backup is scheduled. Required for monthly schedules. 0 is the first week, 3 is the fourth week.
+
+  # The API display name is always derived from name, so omit it from Terraform.
+  # Expose whether a policy is a required system policy so data source users can
+  # distinguish policies that cannot be updated or deleted.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].get.responses['200'].content['application/json'].schema.properties.data.items.properties
+    update:
+      display_name:
+        x-speakeasy-terraform-ignore: true
+      required:
+        type: boolean
+        description: Whether the policy is a required system backup that cannot be updated or deleted.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].get.responses['200'].content['application/json'].schema.properties.data.items
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+        - required
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post.responses['201'].content['application/json'].schema.properties
+    update:
+      display_name:
+        x-speakeasy-terraform-ignore: true
+      required:
+        type: boolean
+        description: Whether the policy is a required system backup that cannot be updated or deleted.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post.responses['201'].content['application/json'].schema
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+        - required
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].get.responses['200'].content['application/json'].schema.properties
+    update:
+      display_name:
+        x-speakeasy-terraform-ignore: true
+      required:
+        type: boolean
+        description: Whether the policy is a required system backup that cannot be updated or deleted.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].get.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+        - required
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].patch.responses['200'].content['application/json'].schema.properties
+    update:
+      display_name:
+        x-speakeasy-terraform-ignore: true
+      required:
+        type: boolean
+        description: Whether the policy is a required system backup that cannot be updated or deleted.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].patch.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+        - required
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].post
+    description: API operation for managed resource create
+    update:
+      operationId: create_neki_backup_policy
+      summary: Create a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#create
+      x-speakeasy-entity-description: >-
+        Manage a custom PlanetScale Neki database backup policy. Required
+        system policies cannot be updated or deleted and should not be imported
+        into this resource.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].get
+    description: API operation for managed resource read
+    update:
+      operationId: get_neki_backup_policy
+      summary: Get a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#read
+      x-speakeasy-entity-description: >-
+        Returns information about a PlanetScale Neki database backup policy,
+        including whether it is a required system policy.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].patch
+    description: API operation for managed resource update
+    update:
+      operationId: update_neki_backup_policy
+      summary: Update a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#update
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki'].delete
+    description: API operation for managed resource delete
+    update:
+      operationId: delete_neki_backup_policy
+      summary: Delete a Neki backup policy
+      x-speakeasy-entity-operation: NekiBackupPolicy#delete

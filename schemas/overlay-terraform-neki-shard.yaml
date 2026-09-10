@@ -1,0 +1,278 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_shard
+  version: 0.0.1
+actions:
+  - target: $.components.schemas.NekiShard
+    description: Mark the canonical shard response as the Terraform entity.
+    update:
+      x-speakeasy-entity: NekiShard
+      x-speakeasy-entity-description: >-
+        Manage an individual shard on a PlanetScale Neki branch.
+
+        Creating a `planetscale_neki_branch` already provisions its default
+        shard. Do not recreate that shard with this resource; import it if
+        Terraform should manage its display name.
+
+        Changing `configuration_profile` reassigns the shard in place and waits
+        for the asynchronous configuration change to complete.
+
+  - target: $.components.schemas.NekiShard.properties.created_at
+    description: Omit generic timestamp metadata from Terraform.
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.components.schemas.NekiShard.properties.name
+    description: >-
+      Hide the server-assigned shard name from Terraform for now; display_name
+      is the user-facing label.
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  # The published OpenAPI document still describes count-based creation.
+  # Shape this operation to the singular contract introduced by api-bb#21404.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post
+    description: API operation for managed resource create.
+    update:
+      operationId: create_neki_shard
+      summary: Create a shard in a Neki configuration profile
+      x-speakeasy-entity-operation: NekiShard#create
+      x-speakeasy-entity-description: >-
+        Manage an individual shard on a PlanetScale Neki branch.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.requestBody.content["application/json"].schema
+    description: Replace the legacy count body with the singular create body.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.requestBody.content["application/json"]
+    update:
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          display_name:
+            type: string
+            nullable: true
+            description: Optional human-readable display name for the shard.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.responses["201"].content["application/json"].schema
+    description: Replace the legacy bulk response with the canonical shard.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.responses["201"]
+    update:
+      description: Returns the created shard
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NekiShard"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].post.parameters[?@.name == 'configuration_profile']
+    update:
+      description: >-
+        Configuration profile that owns the shard. Changing this value
+        reassigns the shard in place and waits for the asynchronous
+        configuration change to complete.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].patch
+    description: Reassign the shard to the requested configuration profile.
+    update:
+      operationId: reassign_neki_shard
+      x-speakeasy-entity-operation: NekiShard#update
+
+  # The API accepts a bulk shard_ids array and returns an assignment array.
+  # Terraform manages one shard, so an SDK hook translates this singular
+  # request/response shape to the wire format.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].patch.requestBody.content["application/json"].schema
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].patch.requestBody.content["application/json"]
+    update:
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: The ID of the shard to reassign.
+        required:
+          - id
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].patch.responses["200"].content["application/json"].schema
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards"].patch.responses["200"].content["application/json"]
+    update:
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: The ID of the reassigned shard.
+        required:
+          - id
+
+  # api-bb#21166 adds a branch-scoped canonical read. Inject it until the
+  # published OpenAPI document contains the operation.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards/{id}"]
+    update:
+      get:
+        tags:
+          - api-neki_shards
+        operationId: get_neki_shard
+        summary: Get a shard for a Neki branch
+        parameters:
+          - name: organization
+            in: path
+            required: true
+            description: "Organization name slug from `list_organizations`. Example: `acme`."
+            schema:
+              type: string
+          - name: database
+            in: path
+            required: true
+            description: "Database name slug from `list_databases`. Example: `app-db`."
+            schema:
+              type: string
+          - name: branch
+            in: path
+            required: true
+            description: "Branch name from `list_branches`. Example: `main`."
+            schema:
+              type: string
+          - name: id
+            in: path
+            required: true
+            description: The ID of the shard.
+            schema:
+              type: string
+        responses:
+          "200":
+            description: Returns the shard
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NekiShard"
+          "401":
+            description: Unauthorized
+          "403":
+            description: Forbidden
+          "404":
+            description: Shard not found
+          "500":
+            description: Internal Server Error
+        x-speakeasy-entity-operation:
+          - NekiShard#read
+          - entityOperation: NekiShard#create#2
+            options:
+              polling:
+                name: WaitForReady
+          - NekiShard#update#4
+        x-speakeasy-entity-description: >-
+          Look up an individual shard on a PlanetScale Neki branch.
+        x-speakeasy-polling:
+          - name: WaitForReady
+            delaySeconds: 0
+            intervalSeconds: 10
+            limitCount: 90
+            successCriteria:
+              - condition: $statusCode == 200
+              - condition: $response.body#/ready == true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards/{id}"].patch
+    description: API operation for managed resource display-name updates.
+    update:
+      operationId: update_neki_shard
+      x-speakeasy-entity-operation: NekiShard#update#2
+
+  # Poll the destination profile because shard readiness only indicates that
+  # the shard exists, not that its profile reassignment has been reconciled.
+  - target: $.paths
+    description: Add a profile-state read dedicated to shard reassignment polling.
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}#shard-reassignment:
+        get:
+          tags:
+            - api-neki_shard_configuration_profiles
+          operationId: wait_for_neki_shard_reassignment
+          summary: Wait for a Neki shard reassignment
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              description: "Organization name slug from `list_organizations`. Example: `acme`."
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              description: "Database name slug from `list_databases`. Example: `app-db`."
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              description: "Branch name from `list_branches`. Example: `main`."
+              schema:
+                type: string
+            - name: configuration_profile
+              in: path
+              required: true
+              description: The destination configuration profile name.
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns the destination configuration profile state.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    additionalProperties: true
+                    properties:
+                      state:
+                        type: string
+                        x-speakeasy-terraform-ignore: schema
+                    required:
+                      - state
+            "401":
+              description: Unauthorized
+            "403":
+              description: Forbidden
+            "404":
+              description: Shard configuration profile not found
+            "500":
+              description: Internal Server Error
+          x-speakeasy-entity-operation:
+            - entityOperation: NekiShard#update#3
+              options:
+                polling:
+                  name: WaitForReassignment
+          x-speakeasy-polling:
+            - name: WaitForReassignment
+              delaySeconds: 0
+              intervalSeconds: 10
+              limitCount: 90
+              successCriteria:
+                - condition: $statusCode == 200
+                - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/shards/{id}"].delete
+    description: API operation for managed resource delete.
+    update:
+      operationId: delete_neki_shard
+      x-speakeasy-entity-operation: NekiShard#delete

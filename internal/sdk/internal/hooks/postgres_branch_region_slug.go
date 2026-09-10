@@ -11,8 +11,9 @@ import (
 var postgresBranchGetPathPattern = regexp.MustCompile(`^/v1/organizations/[^/]+/databases/[^/]+/branches/[^/]+$`)
 
 // PostgresBranchRegionSlugHook copies the nested region slug to a synthetic
-// top-level field on PostgreSQL branch GET responses. The generated Terraform
-// resource maps that field to the region attribute used by create and import.
+// top-level field on branch GET responses. PostgreSQL and Neki branches share
+// this HTTP path, so both generated Terraform resources map that field to the
+// region attribute used by create and import.
 type PostgresBranchRegionSlugHook struct{}
 
 var _ sdkInitHook = (*PostgresBranchRegionSlugHook)(nil)

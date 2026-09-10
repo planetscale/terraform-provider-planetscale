@@ -16,6 +16,15 @@ actions:
     description: Remove seed_data (Vitess-only field)
     remove: true
 
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties['configuration_profile_sizes','router_sizes']
+    description: Remove the Neki-only backup restore sizing inputs.
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties.major_version
+    description: Drop the upstream Neki mention; this resource is Postgres-only.
+    update:
+      description: The PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
+
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties['backup_id','restore_point']
     description: >-
       Treat backup restore inputs as create-only values. Terraform passes them

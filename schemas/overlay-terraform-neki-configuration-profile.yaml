@@ -1,0 +1,325 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_configuration_profile
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post
+    description: API operation for managed resource create.
+    update:
+      operationId: create_neki_configuration_profile
+      x-speakeasy-entity-operation: NekiConfigurationProfile#create
+      x-speakeasy-entity-description: >-
+        Manage a shard configuration profile for a PlanetScale Neki branch.
+
+        Creating a `planetscale_neki_branch` already provisions a default
+        configuration profile and shard. Do not recreate that profile with
+        this resource; import it if Terraform should manage its configuration.
+
+        Cluster size, replica, parameter, and PostgreSQL version changes update
+        in place. The provider starts maintenance and waits until the profile
+        reaches the `ready` state. PostgreSQL extensions are managed through
+        `parameters`: list enabled extensions in
+        `parameters.pgconf.session_preload_libraries`, and configure extension
+        parameters under `parameters` (for example,
+        `parameters.pgconf.auto_explain.log_level`).
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.responses["201"].content["application/json"].schema
+    description: Mark the create response as the managed entity.
+    update:
+      x-speakeasy-entity: NekiConfigurationProfile
+      x-speakeasy-entity-description: >-
+        Manage a shard configuration profile for a PlanetScale Neki branch.
+
+        Creating a `planetscale_neki_branch` already provisions a default
+        configuration profile and shard. Do not recreate that profile with
+        this resource; import it if Terraform should manage its configuration.
+
+        Cluster size, replica, parameter, and PostgreSQL version changes update
+        in place. The provider starts maintenance and waits until the profile
+        reaches the `ready` state. PostgreSQL extensions are managed through
+        `parameters`: list enabled extensions in
+        `parameters.pgconf.session_preload_libraries`, and configure extension
+        parameters under `parameters` (for example,
+        `parameters.pgconf.auto_explain.log_level`).
+
+  # A configuration profile belongs to one branch. Its name is also its API
+  # identity, so moving or renaming it creates a different Terraform resource.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.requestBody.content["application/json"].schema.properties.name
+    update:
+      description: >-
+        The profile name. The API uses this as the profile identity, so
+        changing it requires replacement.
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.requestBody.content["application/json"].schema.properties.cluster_size
+    update:
+      description: >-
+        The database cluster size name for shards assigned to this profile.
+        Updates in place through Neki maintenance.
+      x-speakeasy-plan-validators: ClusterSizeValidator
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties.cluster_size
+    update:
+      description: >-
+        The database cluster size name for shards assigned to this profile.
+        Updates in place through Neki maintenance.
+      x-speakeasy-plan-validators: ClusterSizeValidator
+
+  # The API accepts version values as strings but returns them as integers.
+  # Normalize the write schemas to the response type so Terraform has one
+  # stable attribute for planning and refresh.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.requestBody.content["application/json"].schema.properties.postgres_major_version
+    update:
+      type: integer
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.requestBody.content["application/json"].schema.properties.postgres_minor_version
+    update:
+      type: integer
+      x-speakeasy-plan-validators: PostgresMinorVersionValidator
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties.postgres_major_version
+    update:
+      type: integer
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties.postgres_minor_version
+    update:
+      type: integer
+      x-speakeasy-plan-validators: PostgresMinorVersionValidator
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties.parameters
+    description: Replace the untyped parameter object with Terraform's nested string map.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties
+    description: Model parameter overrides as a nested string map and warn when configured overrides are removed.
+    update:
+      parameters:
+        type: object
+        nullable: true
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: string
+        x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+        description: >-
+          Desired effective parameter values nested by namespace, e.g.
+          { pgconf = { max_connections = "200" } }. Enabled PostgreSQL
+          extensions are listed in `pgconf.session_preload_libraries`, and
+          extension parameters use their `pgconf` keys (for example,
+          `pgconf.auto_explain.log_level`). When configured, Terraform sends
+          the complete map and resets omitted customer-configurable parameters
+          to their current target defaults. The API identifies Terraform
+          requests by the provider User-Agent.
+
+  # Renaming cannot be modeled safely because the API path is keyed by the old
+  # name and there is no stable profile ID. Name is replacement-only instead.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties.name
+    remove: true
+
+  # Omit presentation-only, derived, internal rollout, and timestamp fields
+  # from Terraform while retaining them in the generated API client.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.responses["201"].content["application/json"].schema.properties['architecture','cluster_display_name','created_at','latest_postgres_image_version','latest_postgres_minor_version','metal','postgres_image_version','updated_at']
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].get.responses["200"].content["application/json"].schema.properties['architecture','cluster_display_name','created_at','latest_postgres_image_version','latest_postgres_minor_version','metal','postgres_image_version','updated_at']
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.responses["200"].content["application/json"].schema.properties['architecture','cluster_display_name','created_at','latest_postgres_image_version','latest_postgres_minor_version','metal','postgres_image_version','updated_at']
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].get
+    description: API operation for data and managed resource read, with create/update polling until ready.
+    update:
+      operationId: get_neki_configuration_profile
+      x-speakeasy-entity-operation:
+        - NekiConfigurationProfile#read
+        - entityOperation: NekiConfigurationProfile#create#2
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: NekiConfigurationProfile#create#5
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: NekiConfigurationProfile#update#3
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: >-
+        Look up a shard configuration profile for a PlanetScale Neki branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 90
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].get.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name
+
+  # The API returns rich parameter details rather than the nested map exposed
+  # by Terraform. A custom SDK hook uses the client-only managed-parameters
+  # query value to retain previously managed default-valued keys, adds remote
+  # non-default values, and rewrites the response to this Terraform shape.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters"].get.parameters
+    description: Replace the API parameter list with Terraform path parameters and client-only reconciliation context.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters"].get.responses["200"].content["application/json"].schema
+    description: Replace the wire array schema with the object emitted by the reconciliation hook.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/parameters"].get
+    description: Read effective customer parameters for Terraform state reconciliation.
+    update:
+      operationId: get_neki_configuration_profile_parameters
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: configuration_profile
+          in: path
+          required: true
+          description: Name from `list_shard_configuration_profiles`.
+          x-speakeasy-match: name
+          schema:
+            type: string
+        - name: internal
+          in: query
+          required: false
+          description: Include internal parameters. Terraform always excludes them.
+          schema:
+            type: boolean
+            const: false
+            default: false
+            x-speakeasy-terraform-ignore: schema
+        - name: parameters
+          in: query
+          required: false
+          description: >-
+            Desired effective parameter values nested by namespace, e.g.
+            { pgconf = { max_connections = "200" } }. Enabled PostgreSQL
+            extensions are listed in `pgconf.session_preload_libraries`, and
+            extension parameters use their `pgconf` keys (for example,
+            `pgconf.auto_explain.log_level`). The SDK hook uses the prior
+            Terraform value for reconciliation and removes this query parameter
+            before sending the API request.
+          content:
+            application/json:
+              schema:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        "200":
+          description: Returns reconciled effective parameter values for Terraform.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      Managed effective parameter values nested by namespace.
+                      Remote non-default values are adopted during reads.
+                required:
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Shard configuration profile not found
+        "500":
+          description: Internal Server Error
+      x-speakeasy-entity-operation:
+        - NekiConfigurationProfile#read#2
+        - NekiConfigurationProfile#create#6
+        - NekiConfigurationProfile#update#4
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch
+    description: Stage managed configuration changes.
+    update:
+      operationId: update_neki_configuration_profile
+      x-speakeasy-entity-operation:
+        - NekiConfigurationProfile#create#3
+        - NekiConfigurationProfile#update
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/maintenance"].post
+    description: Apply the draft created by an update before polling the profile state.
+    update:
+      operationId: run_neki_configuration_profile_maintenance
+      x-speakeasy-entity-operation:
+        - NekiConfigurationProfile#create#4
+        - NekiConfigurationProfile#update#2
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/maintenance"].post.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].delete
+    description: API operation for managed resource delete.
+    update:
+      operationId: delete_neki_configuration_profile
+      x-speakeasy-entity-operation: NekiConfigurationProfile#delete
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].delete.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name
+
+  # Keep response names practitioner-facing and consistent across create,
+  # read, and update.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.responses["201"].content["application/json"].schema.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].get.responses["200"].content["application/json"].schema.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.responses["200"].content["application/json"].schema.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.responses["201"].content["application/json"].schema.properties.shards
+    update:
+      x-speakeasy-name-override: shard_count
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].get.responses["200"].content["application/json"].schema.properties.shards
+    update:
+      x-speakeasy-name-override: shard_count
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.responses["200"].content["application/json"].schema.properties.shards
+    update:
+      x-speakeasy-name-override: shard_count
