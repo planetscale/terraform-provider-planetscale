@@ -10,13 +10,13 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresReadOnlyReplicasDataSourceModel) RefreshFromOperationsResponseBody(ctx context.Context, resp []operations.ResponseBody) diag.Diagnostics {
+func (r *PostgresReadOnlyReplicasDataSourceModel) RefreshFromOperationsListReadOnlyReplicasResponseBody(ctx context.Context, resp []operations.ListReadOnlyReplicasResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Data = []tfTypes.ResponseBody{}
+	r.Data = []tfTypes.ListReadOnlyReplicasResponseBody{}
 
 	for _, dataItem := range resp {
-		var data tfTypes.ResponseBody
+		var data tfTypes.ListReadOnlyReplicasResponseBody
 
 		data.AccessHostURL = types.StringValue(dataItem.AccessHostURL)
 		data.ClusterSize = types.StringValue(dataItem.ClusterSize)

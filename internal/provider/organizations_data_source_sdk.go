@@ -41,6 +41,7 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 			data.KeyspaceShardLimit = types.Int64Value(dataItem.KeyspaceShardLimit)
 			data.ManagedTenancy = types.BoolValue(dataItem.ManagedTenancy)
 			data.Name = types.StringValue(dataItem.Name)
+			data.NekiRouterReplicasPerCellLimit = types.Int64Value(dataItem.NekiRouterReplicasPerCellLimit)
 			data.PaymentInfoRequired = types.BoolValue(dataItem.PaymentInfoRequired)
 			data.Plan = types.StringValue(dataItem.Plan)
 			data.SingleTenancy = types.BoolValue(dataItem.SingleTenancy)

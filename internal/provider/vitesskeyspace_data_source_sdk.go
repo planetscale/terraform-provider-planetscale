@@ -38,6 +38,9 @@ func (r *VitessKeyspaceDataSourceModel) RefreshFromOperationsGetKeyspaceResponse
 		r.Resizing = types.BoolValue(resp.Resizing)
 		r.Sharded = types.BoolValue(resp.Sharded)
 		r.Shards = types.Int64Value(resp.Shards)
+		r.Throttler = &tfTypes.GetKeyspaceThrottler{}
+		r.Throttler.Enabled = types.BoolValue(resp.Throttler.Enabled)
+		r.Throttler.Threshold = types.Float64PointerValue(resp.Throttler.Threshold)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.VectorPoolAllocation = types.Float64PointerValue(resp.VectorPoolAllocation)
 		r.VreplicationFlags = &tfTypes.GetKeyspaceVreplicationFlags{}

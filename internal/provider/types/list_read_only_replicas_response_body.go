@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ResponseBody struct {
+type ListReadOnlyReplicasResponseBody struct {
 	AccessHostURL                types.String `tfsdk:"access_host_url"`
 	ClusterSize                  types.String `tfsdk:"cluster_size"`
 	Name                         types.String `tfsdk:"name"`

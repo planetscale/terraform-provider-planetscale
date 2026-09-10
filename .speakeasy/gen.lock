@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 164447b48b36358bf1ab5ae0d4948041
+  docChecksum: e94a5192de1d55ba9bd543c914f1e82e
   docVersion: v1
   speakeasyVersion: 1.793.0
   generationVersion: 2.928.0
@@ -14,6 +14,7 @@ persistentEdits:
 features:
   terraform:
     additionalDependencies: 0.1.0
+    additionalProperties: 0.1.5
     constsAndDefaults: 0.3.2
     core: 3.47.11
     customSecuritySchemes: 0.1.2
@@ -38,6 +39,19 @@ trackedFiles:
   examples/data-sources/planetscale_databases/data-source.tf:
     id: 57d3e2281913
     pristine_git_object: 24383b2da1ebc70258141e25e64456a8af0fb022
+  examples/data-sources/planetscale_neki_admin/data-source.tf: {}
+  examples/data-sources/planetscale_neki_backup_policies/data-source.tf: {}
+  examples/data-sources/planetscale_neki_backup_policy/data-source.tf: {}
+  examples/data-sources/planetscale_neki_branch/data-source.tf: {}
+  examples/data-sources/planetscale_neki_configuration_profile/data-source.tf: {}
+  examples/data-sources/planetscale_neki_configuration_profiles/data-source.tf: {}
+  examples/data-sources/planetscale_neki_role/data-source.tf: {}
+  examples/data-sources/planetscale_neki_roles/data-source.tf: {}
+  examples/data-sources/planetscale_neki_router/data-source.tf: {}
+  examples/data-sources/planetscale_neki_routers/data-source.tf: {}
+  examples/data-sources/planetscale_neki_shard/data-source.tf: {}
+  examples/data-sources/planetscale_neki_shards/data-source.tf: {}
+  examples/data-sources/planetscale_neki_sidecar/data-source.tf: {}
   examples/data-sources/planetscale_organization/data-source.tf:
     id: 66920cabf1a1
     pristine_git_object: 9f31bb76143f3c25afdb3c8befaa55d7da62d6e0
@@ -80,6 +94,22 @@ trackedFiles:
   examples/provider/provider.tf:
     id: 954e955c0240
     pristine_git_object: 66664be2637146405147ef9bc663d13b453ce3f8
+  examples/resources/planetscale_neki_admin/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_admin/import.sh: {}
+  examples/resources/planetscale_neki_backup_policy/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_backup_policy/import.sh: {}
+  examples/resources/planetscale_neki_branch/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_branch/import.sh: {}
+  examples/resources/planetscale_neki_configuration_profile/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_configuration_profile/import.sh: {}
+  examples/resources/planetscale_neki_role/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_role/import.sh: {}
+  examples/resources/planetscale_neki_router/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_router/import.sh: {}
+  examples/resources/planetscale_neki_shard/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_shard/import.sh: {}
+  examples/resources/planetscale_neki_sidecar/import-by-string-id.tf: {}
+  examples/resources/planetscale_neki_sidecar/import.sh: {}
   examples/resources/planetscale_postgres_backup_policy/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_backup_policy/import.sh: {}
   examples/resources/planetscale_postgres_bouncer/import-by-string-id.tf: {}
@@ -200,6 +230,48 @@ trackedFiles:
   internal/provider/databasevitess_data_source_sdk.go:
     id: 10eed77db4ed
     pristine_git_object: c078ca2e83ba8a926f395997aa4daee4ddc9d637
+  internal/provider/nekiadmin_data_source.go: {}
+  internal/provider/nekiadmin_data_source_sdk.go: {}
+  internal/provider/nekiadmin_resource.go: {}
+  internal/provider/nekiadmin_resource_sdk.go: {}
+  internal/provider/nekibackuppolicies_data_source.go: {}
+  internal/provider/nekibackuppolicies_data_source_sdk.go: {}
+  internal/provider/nekibackuppolicy_data_source.go: {}
+  internal/provider/nekibackuppolicy_data_source_sdk.go: {}
+  internal/provider/nekibackuppolicy_resource.go: {}
+  internal/provider/nekibackuppolicy_resource_sdk.go: {}
+  internal/provider/nekibranch_data_source.go: {}
+  internal/provider/nekibranch_data_source_sdk.go: {}
+  internal/provider/nekibranch_resource.go: {}
+  internal/provider/nekibranch_resource_sdk.go: {}
+  internal/provider/nekiconfigurationprofile_data_source.go: {}
+  internal/provider/nekiconfigurationprofile_data_source_sdk.go: {}
+  internal/provider/nekiconfigurationprofile_resource.go: {}
+  internal/provider/nekiconfigurationprofile_resource_sdk.go: {}
+  internal/provider/nekiconfigurationprofiles_data_source.go: {}
+  internal/provider/nekiconfigurationprofiles_data_source_sdk.go: {}
+  internal/provider/nekirole_data_source.go: {}
+  internal/provider/nekirole_data_source_sdk.go: {}
+  internal/provider/nekirole_resource.go: {}
+  internal/provider/nekirole_resource_sdk.go: {}
+  internal/provider/nekiroles_data_source.go: {}
+  internal/provider/nekiroles_data_source_sdk.go: {}
+  internal/provider/nekirouter_data_source.go: {}
+  internal/provider/nekirouter_data_source_sdk.go: {}
+  internal/provider/nekirouter_resource.go: {}
+  internal/provider/nekirouter_resource_sdk.go: {}
+  internal/provider/nekirouters_data_source.go: {}
+  internal/provider/nekirouters_data_source_sdk.go: {}
+  internal/provider/nekishard_data_source.go: {}
+  internal/provider/nekishard_data_source_sdk.go: {}
+  internal/provider/nekishard_resource.go: {}
+  internal/provider/nekishard_resource_sdk.go: {}
+  internal/provider/nekishards_data_source.go: {}
+  internal/provider/nekishards_data_source_sdk.go: {}
+  internal/provider/nekisidecar_data_source.go: {}
+  internal/provider/nekisidecar_data_source_sdk.go: {}
+  internal/provider/nekisidecar_resource.go: {}
+  internal/provider/nekisidecar_resource_sdk.go: {}
   internal/provider/organization_data_source.go:
     id: d22d005e3012
     pristine_git_object: 82a33d8488b23f60aa73688e445ce1e5c225c871
@@ -324,12 +396,13 @@ trackedFiles:
   internal/provider/typeconvert/int.go:
     id: c44fcd78fccc
     pristine_git_object: 54763e7a7555fae6d8bf51c4590220ff610202aa
-  internal/provider/types/branch.go:
-    id: 72a03805427f
-    pristine_git_object: ea5786b8bbcb244f690025648dfa5ec5fbe52bca
+  internal/provider/types/branch.go: {}
   internal/provider/types/create_bouncer_actor.go: {}
+  internal/provider/types/create_neki_configuration_profile_storage_request.go: {}
   internal/provider/types/get_keyspace_replication_durability_constraints.go: {}
+  internal/provider/types/get_keyspace_throttler.go: {}
   internal/provider/types/get_keyspace_vreplication_flags.go: {}
+  internal/provider/types/get_neki_configuration_profile_storage.go: {}
   internal/provider/types/get_password_actor.go:
     id: 34086949be0f
     pristine_git_object: 09f2e6106da7aaf78681c662708280a334e0ae77
@@ -402,7 +475,13 @@ trackedFiles:
     pristine_git_object: 670933e4a82a97a3d332a447686e439f7ac2c402
   internal/provider/types/list_keyspaces_data.go: {}
   internal/provider/types/list_keyspaces_replication_durability_constraints.go: {}
+  internal/provider/types/list_keyspaces_throttler.go: {}
   internal/provider/types/list_keyspaces_vreplication_flags.go: {}
+  internal/provider/types/list_neki_backup_policies_data.go: {}
+  internal/provider/types/list_neki_configuration_profiles_response_body.go: {}
+  internal/provider/types/list_neki_configuration_profiles_storage.go: {}
+  internal/provider/types/list_neki_roles_data.go: {}
+  internal/provider/types/list_neki_shards_data.go: {}
   internal/provider/types/list_organizations_data.go:
     id: 18371e48c5b0
     pristine_git_object: acbee94fd837e34920350b6246cc4740fb4911a3
@@ -423,6 +502,7 @@ trackedFiles:
   internal/provider/types/list_postgres_branch_backups_backup_policy.go: {}
   internal/provider/types/list_postgres_branch_backups_data.go: {}
   internal/provider/types/list_postgres_branch_backups_database_branch.go: {}
+  internal/provider/types/list_read_only_replicas_response_body.go: {}
   internal/provider/types/list_roles_actor.go:
     id: 34a6e1993469
     pristine_git_object: 330389882a22ba2344c0af11908f55f7c364731c
@@ -430,12 +510,12 @@ trackedFiles:
     id: efa9512f3de4
     pristine_git_object: bc9fb8d5b39bf7238b248003c48f073b5cc57b2b
   internal/provider/types/list_roles_query_safety_settings.go: {}
+  internal/provider/types/list_routers_response_body.go: {}
   internal/provider/types/list_vitess_backup_policies_data.go: {}
   internal/provider/types/list_vitess_branch_backups_actor.go: {}
   internal/provider/types/list_vitess_branch_backups_backup_policy.go: {}
   internal/provider/types/list_vitess_branch_backups_data.go: {}
   internal/provider/types/list_vitess_branch_backups_database_branch.go: {}
-  internal/provider/types/response_body.go: {}
   internal/provider/utils.go:
     id: 312d50f148af
     pristine_git_object: 2b167edfe9b7df08d35bacb896143fd8c6e3bf8c
@@ -488,6 +568,15 @@ trackedFiles:
   internal/provider/vitesskeyspaces_data_source.go: {}
   internal/provider/vitesskeyspaces_data_source_sdk.go: {}
   internal/sdk/apibranchresizes.go: {}
+  internal/sdk/apinekiadminparameters.go: {}
+  internal/sdk/apinekiadmins.go: {}
+  internal/sdk/apinekirouters.go: {}
+  internal/sdk/apinekishardconfigurationprofileparameters.go: {}
+  internal/sdk/apinekishardconfigurationprofiles.go: {}
+  internal/sdk/apinekishardconfigurationprofileshards.go: {}
+  internal/sdk/apinekishards.go: {}
+  internal/sdk/apinekisidecarparameters.go: {}
+  internal/sdk/apinekisidecars.go: {}
   internal/sdk/backuppolicies.go: {}
   internal/sdk/backups.go: {}
   internal/sdk/bouncers.go: {}
@@ -558,6 +647,11 @@ trackedFiles:
   internal/sdk/models/operations/applypostgresbranchterraformchanges.go: {}
   internal/sdk/models/operations/createbouncer.go: {}
   internal/sdk/models/operations/createkeyspace.go: {}
+  internal/sdk/models/operations/createnekibackuppolicy.go: {}
+  internal/sdk/models/operations/createnekibranch.go: {}
+  internal/sdk/models/operations/createnekiconfigurationprofile.go: {}
+  internal/sdk/models/operations/createnekirole.go: {}
+  internal/sdk/models/operations/createnekishard.go: {}
   internal/sdk/models/operations/createpassword.go:
     id: 9f61008ec29b
     pristine_git_object: e84cf733d521e8be177285c0496c8540f011c362
@@ -571,6 +665,7 @@ trackedFiles:
   internal/sdk/models/operations/createrole.go:
     id: c1b593dedb4d
     pristine_git_object: 46c6df8ef44c7bc304429dd8bb84759e8af96a73
+  internal/sdk/models/operations/createrouter.go: {}
   internal/sdk/models/operations/createvitessbackuppolicy.go: {}
   internal/sdk/models/operations/createvitessbranch.go:
     id: 25d25805a79a
@@ -578,6 +673,11 @@ trackedFiles:
   internal/sdk/models/operations/createvitessbranchbackup.go: {}
   internal/sdk/models/operations/deletebouncer.go: {}
   internal/sdk/models/operations/deletekeyspace.go: {}
+  internal/sdk/models/operations/deletenekibackuppolicy.go: {}
+  internal/sdk/models/operations/deletenekibranch.go: {}
+  internal/sdk/models/operations/deletenekiconfigurationprofile.go: {}
+  internal/sdk/models/operations/deletenekirole.go: {}
+  internal/sdk/models/operations/deletenekishard.go: {}
   internal/sdk/models/operations/deletepassword.go:
     id: 491914016b46
     pristine_git_object: 00fb90f9f8cb86916ff644e893dc5db362c004cf
@@ -591,6 +691,7 @@ trackedFiles:
   internal/sdk/models/operations/deleterole.go:
     id: 63abc80d4993
     pristine_git_object: 26de167508a6ba14741fd13262ec8137c8d70023
+  internal/sdk/models/operations/deleterouter.go: {}
   internal/sdk/models/operations/deletevitessbackuppolicy.go: {}
   internal/sdk/models/operations/deletevitessbranch.go:
     id: d38f63b60ddf
@@ -599,6 +700,16 @@ trackedFiles:
   internal/sdk/models/operations/getbranchchangerequest.go: {}
   internal/sdk/models/operations/getbranchresizerequest.go: {}
   internal/sdk/models/operations/getkeyspace.go: {}
+  internal/sdk/models/operations/getnekiadmin.go: {}
+  internal/sdk/models/operations/getnekiadminparameters.go: {}
+  internal/sdk/models/operations/getnekibackuppolicy.go: {}
+  internal/sdk/models/operations/getnekibranch.go: {}
+  internal/sdk/models/operations/getnekiconfigurationprofile.go: {}
+  internal/sdk/models/operations/getnekiconfigurationprofileparameters.go: {}
+  internal/sdk/models/operations/getnekirole.go: {}
+  internal/sdk/models/operations/getnekishard.go: {}
+  internal/sdk/models/operations/getnekisidecar.go: {}
+  internal/sdk/models/operations/getnekisidecarparameters.go: {}
   internal/sdk/models/operations/getorganization.go:
     id: ebae13951225
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
@@ -619,6 +730,7 @@ trackedFiles:
   internal/sdk/models/operations/getrole.go:
     id: a854350465dd
     pristine_git_object: 019cd3b4fa0b8af2ac8f806b8f0b8ce776a2588e
+  internal/sdk/models/operations/getrouter.go: {}
   internal/sdk/models/operations/getvitessbackuppolicy.go: {}
   internal/sdk/models/operations/getvitessbranch.go:
     id: 91f8cc51ecc6
@@ -632,6 +744,10 @@ trackedFiles:
     id: 9a615ba562a7
     pristine_git_object: 3b63c0cbb7a174e2c27699547377755e941ee9f2
   internal/sdk/models/operations/listkeyspaces.go: {}
+  internal/sdk/models/operations/listnekibackuppolicies.go: {}
+  internal/sdk/models/operations/listnekiconfigurationprofiles.go: {}
+  internal/sdk/models/operations/listnekiroles.go: {}
+  internal/sdk/models/operations/listnekishards.go: {}
   internal/sdk/models/operations/listorganizations.go:
     id: 4fe6c8fc6771
     pristine_git_object: bbd5afa074ed22ba3b63edc28064bbb039d72db0
@@ -644,13 +760,23 @@ trackedFiles:
   internal/sdk/models/operations/listroles.go:
     id: ba1976927ea8
     pristine_git_object: 2759d9ffe5333235ea0787dc880ea888ed739c68
+  internal/sdk/models/operations/listrouters.go: {}
   internal/sdk/models/operations/listvitessbackuppolicies.go: {}
   internal/sdk/models/operations/listvitessbranchbackups.go: {}
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
+  internal/sdk/models/operations/reassignnekishard.go: {}
+  internal/sdk/models/operations/runnekiconfigurationprofilemaintenance.go: {}
   internal/sdk/models/operations/updatebranchresizerequest.go: {}
   internal/sdk/models/operations/updatekeyspaceresizerequest.go: {}
+  internal/sdk/models/operations/updatenekiadmin.go: {}
+  internal/sdk/models/operations/updatenekibackuppolicy.go: {}
+  internal/sdk/models/operations/updatenekibranch.go: {}
+  internal/sdk/models/operations/updatenekiconfigurationprofile.go: {}
+  internal/sdk/models/operations/updatenekirole.go: {}
+  internal/sdk/models/operations/updatenekishard.go: {}
+  internal/sdk/models/operations/updatenekisidecar.go: {}
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b
@@ -661,9 +787,12 @@ trackedFiles:
   internal/sdk/models/operations/updaterole.go:
     id: eaca616a88af
     pristine_git_object: d16c3c3770dbf917646fadce28c09285f689eb23
+  internal/sdk/models/operations/updaterouter.go: {}
   internal/sdk/models/operations/updatesafemigrations.go: {}
   internal/sdk/models/operations/updatevitessbackuppolicy.go: {}
   internal/sdk/models/operations/updatevitessbranch.go: {}
+  internal/sdk/models/operations/waitfornekishardreassignment.go: {}
+  internal/sdk/models/shared/nekishard.go: {}
   internal/sdk/models/shared/security.go:
     id: 9098af98367e
     pristine_git_object: 5bbf429fa7c73f8213d34abbf017df9f6d45b04c
@@ -770,7 +899,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9917.69, "per_page": 991769, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "has_card": false, "payment_info_required": false}]}
+          application/json: {"type": "<value>", "current_page": 9917.69, "per_page": 991769, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "neki_router_replicas_per_cell_limit": 991769, "has_card": false, "payment_info_required": false}]}
   get_organization:
     speakeasy-default-get-organization:
       parameters:
@@ -779,7 +908,7 @@ examples:
           organization: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "database_count": 1578.34, "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": "9516.88", "keyspace_shard_limit": 6999.24, "has_card": false, "payment_info_required": true}
+          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "database_count": 1578.34, "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": "9516.88", "keyspace_shard_limit": 6999.24, "neki_router_replicas_per_cell_limit": 276162, "has_card": false, "payment_info_required": true}
   update_organization:
     speakeasy-default-update-organization:
       parameters:
@@ -1215,7 +1344,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 1511.55, "per_page": 151155, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "external": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "node_ttl_strategy": "node_ttl_always", "disk_autoscaling": {"strategy": "grow", "storage_limit_bytes": 99231}, "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}, "resize_in_progress": true}]}
+          application/json: {"type": "<value>", "current_page": 1511.55, "per_page": 151155, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "external": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "node_ttl_strategy": "node_ttl_always", "disk_autoscaling": {"strategy": "grow", "storage_limit_bytes": 99231}, "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}, "throttler": {"enabled": true, "threshold": null}, "resize_in_progress": true}]}
   create_keyspace:
     speakeasy-default-create-keyspace:
       parameters:
@@ -1225,7 +1354,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "external": false, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": false, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "node_ttl_strategy": "node_ttl_always", "disk_autoscaling": {"strategy": "shrink", "storage_limit_bytes": 453872}, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}, "resize_in_progress": false}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "external": false, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": false, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "node_ttl_strategy": "node_ttl_always", "disk_autoscaling": {"strategy": "shrink", "storage_limit_bytes": 453872}, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}, "throttler": {"enabled": false, "threshold": 7774.08}, "resize_in_progress": false}
   get_keyspace:
     speakeasy-default-get-keyspace:
       parameters:
@@ -1237,7 +1366,7 @@ examples:
           keyspace: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "external": false, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "config_change_in_progress": false, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "node_ttl_strategy": "node_ttl_follow_maintenance", "disk_autoscaling": {"strategy": "shrink", "storage_limit_bytes": 268130}, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}, "resize_in_progress": false}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "external": false, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "config_change_in_progress": false, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "node_ttl_strategy": "node_ttl_follow_maintenance", "disk_autoscaling": {"strategy": "shrink", "storage_limit_bytes": 268130}, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}, "throttler": {"enabled": false, "threshold": 2097.96}, "resize_in_progress": false}
   update_keyspace:
     speakeasy-default-update-keyspace:
       parameters:
@@ -2694,6 +2823,409 @@ examples:
           database: "<value>"
           branch: "<value>"
           read_only_replica: "<value>"
+  get_neki_admin:
+    speakeasy-default-get-neki-admin:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "admin_size": "<value>", "state": "applying"}
+  update_neki_admin:
+    speakeasy-default-update-neki-admin:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "admin_size": "<value>", "state": "pending"}
+  get_neki_admin_parameters:
+    speakeasy-default-get-neki-admin-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          internal: false
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>"}, "key2": {"key": "<value>", "key1": "<value>", "key2": "<value>"}}}
+  list_neki_configuration_profiles:
+    speakeasy-default-list-neki-configuration-profiles:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: [{"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": false, "metal": true, "replicas": 734946, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 511573, "postgres_minor_version": 41372, "latest_postgres_minor_version": 300612, "shards": 876174, "storage": {"minimum_storage_bytes": null, "maximum_storage_bytes": 934308, "storage_autoscaling": false, "storage_iops": 159013, "storage_throughput_mibs": 146288}, "state": "draft", "created_at": "1722619314672", "updated_at": "1735688022241"}]
+  create_neki_configuration_profile:
+    speakeasy-default-create-neki-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": true, "metal": true, "replicas": 569300, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 375445, "postgres_minor_version": 250895, "latest_postgres_minor_version": 324060, "shards": 636462, "storage": {"minimum_storage_bytes": 96088, "maximum_storage_bytes": null, "storage_autoscaling": false, "storage_iops": 685717, "storage_throughput_mibs": 912257}, "state": "pending", "created_at": "1727993120123", "updated_at": "1735625063997"}
+  get_neki_configuration_profile:
+    speakeasy-default-get-neki-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": false, "metal": false, "replicas": 404380, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 448418, "postgres_minor_version": 425520, "latest_postgres_minor_version": 876821, "shards": 482639, "storage": {"minimum_storage_bytes": 890040, "maximum_storage_bytes": 298073, "storage_autoscaling": true, "storage_iops": 200103, "storage_throughput_mibs": 772172}, "state": "ready", "created_at": "1712689687289", "updated_at": "1735652716084"}
+  update_neki_configuration_profile:
+    speakeasy-default-update-neki-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": true, "metal": false, "replicas": 704075, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 452954, "postgres_minor_version": 899499, "latest_postgres_minor_version": 722322, "shards": 24935, "storage": {"minimum_storage_bytes": 935139, "maximum_storage_bytes": null, "storage_autoscaling": true, "storage_iops": 215763, "storage_throughput_mibs": 528577}, "state": "ready", "created_at": "1724411181532", "updated_at": "1735647900622"}
+  delete_neki_configuration_profile:
+    speakeasy-default-delete-neki-configuration-profile:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+  run_neki_configuration_profile_maintenance:
+    speakeasy-default-run-neki-configuration-profile-maintenance:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+  wait_for_neki_shard_reassignment:
+    speakeasy-default-wait-for-neki-shard-reassignment:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "200":
+          application/json: {"state": "Georgia"}
+  get_neki_configuration_profile_parameters:
+    speakeasy-default-get-neki-configuration-profile-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+        query:
+          internal: false
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>", "key2": "<value>"}}}
+  create_neki_shard:
+    speakeasy-default-create-neki-shard:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "display_name": "Vincenzo84", "configuration_profile": "<value>", "created_at": "1730764158910", "ready": false, "authoritative": true}
+  reassign_neki_shard:
+    speakeasy-default-reassign-neki-shard:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>"}
+  update_neki_shard:
+    speakeasy-default-update-neki-shard:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "display_name": "Elisha.Kunde25", "configuration_profile": "<value>", "created_at": "1711996138517", "ready": false, "authoritative": true}
+  delete_neki_shard:
+    speakeasy-default-delete-neki-shard:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          configuration_profile: "<value>"
+          id: "<id>"
+  list_neki_roles:
+    speakeasy-default-list-neki-roles:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"type": "<value>", "current_page": 226589, "per_page": 687256, "next_page": 259507, "next_page_url": "https://putrid-pick.info", "prev_page": 946582, "prev_page_url": "https://animated-granny.net", "total_count": 443674, "total_pages": 542731, "data": []}
+  create_neki_role:
+    speakeasy-default-create-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://shoddy-abacus.net/", "private_access_host_url": "https://faint-pharmacopoeia.biz/", "private_connection_service_name": "<value>", "username": "Johathan50", "password": "OgaDK0SvtRI_qUt", "expires_at": "1751324213316", "ready": false, "ttl": 989685, "inherited_roles": [], "with_replication": false}
+  get_neki_role:
+    speakeasy-default-get-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://practical-community.org/", "private_access_host_url": "https://sugary-antelope.net", "private_connection_service_name": "<value>", "username": "Alexandria.Rippin76", "expires_at": "1758832472359", "ready": true, "ttl": 439258, "inherited_roles": [], "with_replication": false}
+  update_neki_role:
+    speakeasy-default-update-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "access_host_url": "https://jam-packed-sonar.net/", "private_access_host_url": "https://quarrelsome-ferret.biz/", "private_connection_service_name": "<value>", "username": "Gretchen.Keeling97", "expires_at": "1746413963051", "ready": false, "ttl": 410359, "inherited_roles": ["pg_checkpoint"], "with_replication": true}
+  delete_neki_role:
+    speakeasy-default-delete-neki-role:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+  list_routers:
+    speakeasy-default-list-routers:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: [{"id": "<id>", "name": "<value>", "default": true, "router_size": "<value>", "replicas_per_cell": 467949, "autoscaling": false, "max_replicas_per_cell": null, "target_cpu_utilization": 297741, "state": "pending"}]
+  create_router:
+    speakeasy-default-create-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "default": true, "router_size": "<value>", "replicas_per_cell": 496306, "autoscaling": true, "max_replicas_per_cell": null, "target_cpu_utilization": 722262, "state": "ready"}
+  get_router:
+    speakeasy-default-get-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "default": false, "router_size": "<value>", "replicas_per_cell": 977530, "autoscaling": false, "max_replicas_per_cell": 810566, "target_cpu_utilization": 118709, "state": "pending"}
+  update_router:
+    speakeasy-default-update-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "default": true, "router_size": "<value>", "replicas_per_cell": 46483, "autoscaling": false, "max_replicas_per_cell": 260040, "target_cpu_utilization": 386760, "state": "pending"}
+  delete_router:
+    speakeasy-default-delete-router:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+  create_neki_branch:
+    speakeasy-default-create-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "name": "<value>", "state": "ready", "deletion_protected": false, "parent_branch": "<value>"}
+  get_neki_branch:
+    speakeasy-default-get-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "sleeping", "deletion_protected": true, "parent_branch": "<value>", "region_slug": "<value>"}
+  update_neki_branch:
+    speakeasy-default-update-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "pending", "deletion_protected": false, "parent_branch": "<value>"}
+  delete_neki_branch:
+    speakeasy-default-delete-neki-branch:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+  list_neki_shards:
+    speakeasy-default-list-neki-shards:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"type": "<value>", "current_page": 34830, "per_page": 762033, "next_page": 552403, "next_page_url": "https://regal-coliseum.name/", "prev_page": 231015, "prev_page_url": "https://sniveling-slide.org/", "total_count": 813456, "total_pages": 721085, "data": [{"id": "<id>", "name": "<value>", "display_name": "Eileen28", "configuration_profile": "<value>", "created_at": "1724877536102", "ready": true, "authoritative": true}]}
+  get_neki_shard:
+    speakeasy-default-get-neki-shard:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "display_name": "Roxane.Fahey59", "configuration_profile": "<value>", "created_at": "1707011590492", "ready": false, "authoritative": true}
+  get_neki_sidecar:
+    speakeasy-default-get-neki-sidecar:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          sidecar: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "configuration_profile": "<value>", "state": "pending"}
+  update_neki_sidecar:
+    speakeasy-default-update-neki-sidecar:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          sidecar: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "configuration_profile": "<value>", "state": "ready"}
+  get_neki_sidecar_parameters:
+    speakeasy-default-get-neki-sidecar-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          sidecar: "<value>"
+        query:
+          internal: false
+      responses:
+        "200":
+          application/json: {"parameters": {}}
+  list_neki_backup_policies:
+    speakeasy-default-list-neki-backup-policies:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+        query:
+          page: 1
+          per_page: 25
+      responses:
+        "200":
+          application/json: {"type": "<value>", "current_page": 160793, "per_page": 498956, "next_page": 248923, "next_page_url": "https://squiggly-stool.com", "prev_page": 893368, "prev_page_url": "https://competent-mousse.biz", "data": [{"id": "<id>", "display_name": "Alaina_Casper", "name": "<value>", "target": "development", "retention_value": 791245, "retention_unit": "<value>", "frequency_value": 456043, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 970940, "schedule_week": 575188, "required": false}]}
+  create_neki_backup_policy:
+    speakeasy-default-create-neki-backup-policy:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "201":
+          application/json: {"id": "<id>", "display_name": "Hosea.DAmore", "name": "<value>", "target": "development", "retention_value": 123701, "retention_unit": "<value>", "frequency_value": 646039, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 301337, "schedule_week": 740682, "required": false}
+  get_neki_backup_policy:
+    speakeasy-default-get-neki-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Lincoln_Lemke", "name": "<value>", "target": "production", "retention_value": 325460, "retention_unit": "<value>", "frequency_value": 134184, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 134492, "schedule_week": 242614, "required": false}
+  update_neki_backup_policy:
+    speakeasy-default-update-neki-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "display_name": "Wilhelmine_Wyman", "name": "<value>", "target": "production", "retention_value": 693898, "retention_unit": "<value>", "frequency_value": 539927, "frequency_unit": "<value>", "schedule_time": "<value>", "schedule_day": 573053, "schedule_week": 741675, "required": false}
+  delete_neki_backup_policy:
+    speakeasy-default-delete-neki-backup-policy:
+      parameters:
+        path:
+          id: "<id>"
+          organization: "<value>"
+          database: "<value>"
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

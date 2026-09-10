@@ -45,6 +45,9 @@ func (r *VitessKeyspacesDataSourceModel) RefreshFromOperationsListKeyspacesRespo
 			data.Resizing = types.BoolValue(dataItem.Resizing)
 			data.Sharded = types.BoolValue(dataItem.Sharded)
 			data.Shards = types.Int64Value(dataItem.Shards)
+			data.Throttler = &tfTypes.ListKeyspacesThrottler{}
+			data.Throttler.Enabled = types.BoolValue(dataItem.Throttler.Enabled)
+			data.Throttler.Threshold = types.Float64PointerValue(dataItem.Throttler.Threshold)
 			data.UpdatedAt = types.StringValue(dataItem.UpdatedAt)
 			data.VectorPoolAllocation = types.Float64PointerValue(dataItem.VectorPoolAllocation)
 			data.VreplicationFlags = &tfTypes.ListKeyspacesVreplicationFlags{}

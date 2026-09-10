@@ -221,6 +221,27 @@ func (l *ListKeyspacesVreplicationFlags) GetVplayerBatching() bool {
 	return l.VplayerBatching
 }
 
+type ListKeyspacesThrottler struct {
+	// Whether the keyspace throttler is enabled
+	Enabled bool `json:"enabled"`
+	// Replication lag in seconds that trips the throttler
+	Threshold *float64 `json:"threshold"`
+}
+
+func (l *ListKeyspacesThrottler) GetEnabled() bool {
+	if l == nil {
+		return false
+	}
+	return l.Enabled
+}
+
+func (l *ListKeyspacesThrottler) GetThreshold() *float64 {
+	if l == nil {
+		return nil
+	}
+	return l.Threshold
+}
+
 type ListKeyspacesData struct {
 	// The ID of the keyspace
 	ID string `json:"id"`
@@ -265,6 +286,7 @@ type ListKeyspacesData struct {
 	DiskAutoscaling                  ListKeyspacesDiskAutoscaling                  `json:"disk_autoscaling"`
 	ReplicationDurabilityConstraints ListKeyspacesReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                ListKeyspacesVreplicationFlags                `json:"vreplication_flags"`
+	Throttler                        ListKeyspacesThrottler                        `json:"throttler"`
 	// True while any unfinished resize request exists for the keyspace.
 	ResizeInProgress bool `json:"resize_in_progress"`
 }
@@ -428,6 +450,13 @@ func (l *ListKeyspacesData) GetVreplicationFlags() ListKeyspacesVreplicationFlag
 		return ListKeyspacesVreplicationFlags{}
 	}
 	return l.VreplicationFlags
+}
+
+func (l *ListKeyspacesData) GetThrottler() ListKeyspacesThrottler {
+	if l == nil {
+		return ListKeyspacesThrottler{}
+	}
+	return l.Throttler
 }
 
 func (l *ListKeyspacesData) GetResizeInProgress() bool {

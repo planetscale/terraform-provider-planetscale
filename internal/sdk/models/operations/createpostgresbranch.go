@@ -16,6 +16,7 @@ type CreatePostgresBranchKind string
 const (
 	CreatePostgresBranchKindMysql      CreatePostgresBranchKind = "mysql"
 	CreatePostgresBranchKindPostgresql CreatePostgresBranchKind = "postgresql"
+	CreatePostgresBranchKindNeki       CreatePostgresBranchKind = "neki"
 )
 
 func (e CreatePostgresBranchKind) ToPointer() *CreatePostgresBranchKind {
@@ -30,6 +31,8 @@ func (e *CreatePostgresBranchKind) UnmarshalJSON(data []byte) error {
 	case "mysql":
 		fallthrough
 	case "postgresql":
+		fallthrough
+	case "neki":
 		*e = CreatePostgresBranchKind(v)
 		return nil
 	default:
@@ -52,7 +55,7 @@ type CreatePostgresBranchRequestBody struct {
 	RestorePoint *string `json:"restore_point,omitzero"`
 	// The database cluster size. Required if a backup_id is provided (unless keyspace_cluster_sizes covers every keyspace), optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800
 	ClusterSize *string `json:"cluster_size,omitzero"`
-	// For PostgreSQL databases, the PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
+	// The PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups.
 	MajorVersion *string `json:"major_version,omitzero"`
 	// Create the database if it does not already exist. The Terraform provider always sends this so that branch resources transparently provision the database on first apply.
 	//lint:ignore U1000 accessed via reflection for JSON marshaling

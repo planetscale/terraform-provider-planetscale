@@ -39,6 +39,7 @@ data "planetscale_organization" "my_organization" {
 - `keyspace_shard_limit` (Number) The keyspace shard limit for the organization
 - `managed_tenancy` (Boolean) Whether or not the organization has managed tenancy enabled
 - `name` (String) The name of the organization
+- `neki_router_replicas_per_cell_limit` (Number) The Neki router replica limit per cell for the organization
 - `payment_info_required` (Boolean) Whether or not the organization requires payment information
 - `plan` (String) The billing plan of the organization
 - `single_tenancy` (Boolean) Whether or not the organization has single tenancy enabled

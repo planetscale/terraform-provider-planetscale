@@ -2,8 +2,8 @@ speakeasyVersion: 1.793.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:685bd4b05f4fcd33a83c46295b17c85b007df66d2785a5bd2541288b09930822
-        sourceBlobDigest: sha256:3746e440fd30155b5cee0771248658507fee0034b40c3daf7bb9b2769709ebde
+        sourceRevisionDigest: sha256:0d1eb7246bc3a6be0107075f33dea7ad05164ecfc32ca2cf287bed05395ed640
+        sourceBlobDigest: sha256:9e312f420dbe78037fc82b994bcb13178bcab525417d33cdf6750145d90505e6
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:685bd4b05f4fcd33a83c46295b17c85b007df66d2785a5bd2541288b09930822
-        sourceBlobDigest: sha256:3746e440fd30155b5cee0771248658507fee0034b40c3daf7bb9b2769709ebde
+        sourceRevisionDigest: sha256:0d1eb7246bc3a6be0107075f33dea7ad05164ecfc32ca2cf287bed05395ed640
+        sourceBlobDigest: sha256:9e312f420dbe78037fc82b994bcb13178bcab525417d33cdf6750145d90505e6
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.793.0
@@ -23,8 +23,16 @@ workflow:
             overlays:
                 - location: schemas/overlay-terraform.yaml
                 - location: schemas/overlay-terraform-branches.yaml
+                - location: schemas/overlay-terraform-neki-branches.yaml
                 - location: schemas/overlay-terraform-postgres-branch.yaml
                 - location: schemas/overlay-terraform-vitess-branch.yaml
+                - location: schemas/overlay-terraform-neki-branch.yaml
+                - location: schemas/overlay-terraform-neki-admin.yaml
+                - location: schemas/overlay-terraform-neki-configuration-profile.yaml
+                - location: schemas/overlay-terraform-neki-configuration-profiles.yaml
+                - location: schemas/overlay-terraform-neki-shard.yaml
+                - location: schemas/overlay-terraform-neki-shards.yaml
+                - location: schemas/overlay-terraform-neki-sidecar.yaml
                 - location: schemas/overlay-terraform-database_vitess.yaml
                 - location: schemas/overlay-terraform-database_postgres.yaml
                 - location: schemas/overlay-terraform-databases.yaml
@@ -33,6 +41,8 @@ workflow:
                 - location: schemas/overlay-terraform-postgres-branch-role.yaml
                 - location: schemas/overlay-terraform-postgres-redacted-branch-role.yaml
                 - location: schemas/overlay-terraform-postgres-branch-roles.yaml
+                - location: schemas/overlay-terraform-neki-role.yaml
+                - location: schemas/overlay-terraform-neki-roles.yaml
                 - location: schemas/overlay-terraform-vitess-branch-password.yaml
                 - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
                 - location: schemas/overlay-terraform-vitess-keyspace.yaml
@@ -40,8 +50,10 @@ workflow:
                 - location: schemas/overlay-terraform-backup-policies.yaml
                 - location: schemas/overlay-terraform-vitess-backup-policy.yaml
                 - location: schemas/overlay-terraform-postgres-backup-policy.yaml
+                - location: schemas/overlay-terraform-neki-backup-policy.yaml
                 - location: schemas/overlay-terraform-vitess-backup-policies.yaml
                 - location: schemas/overlay-terraform-postgres-backup-policies.yaml
+                - location: schemas/overlay-terraform-neki-backup-policies.yaml
                 - location: schemas/overlay-terraform-backups.yaml
                 - location: schemas/overlay-terraform-vitess-branch-backup.yaml
                 - location: schemas/overlay-terraform-postgres-branch-backup.yaml
@@ -49,6 +61,8 @@ workflow:
                 - location: schemas/overlay-terraform-postgres-branch-backups.yaml
                 - location: schemas/overlay-terraform-postgres-bouncer.yaml
                 - location: schemas/overlay-terraform-postgres-bouncers.yaml
+                - location: schemas/overlay-terraform-neki-router.yaml
+                - location: schemas/overlay-terraform-neki-routers.yaml
                 - location: schemas/overlay-terraform-postgres-read-only-replica.yaml
                 - location: schemas/overlay-terraform-postgres-read-only-replicas.yaml
                 - location: schemas/overlay-terraform-cleanup.yaml

@@ -26,6 +26,7 @@ type ListKeyspacesData struct {
 	Resizing                         types.Bool                                     `tfsdk:"resizing"`
 	Sharded                          types.Bool                                     `tfsdk:"sharded"`
 	Shards                           types.Int64                                    `tfsdk:"shards"`
+	Throttler                        *ListKeyspacesThrottler                        `tfsdk:"throttler"`
 	UpdatedAt                        types.String                                   `tfsdk:"updated_at"`
 	VectorPoolAllocation             types.Float64                                  `tfsdk:"vector_pool_allocation"`
 	VreplicationFlags                *ListKeyspacesVreplicationFlags                `tfsdk:"vreplication_flags"`

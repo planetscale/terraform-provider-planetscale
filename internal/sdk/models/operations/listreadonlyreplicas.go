@@ -37,7 +37,7 @@ func (l *ListReadOnlyReplicasRequest) GetBranch() string {
 	return l.Branch
 }
 
-type ResponseBody struct {
+type ListReadOnlyReplicasResponseBody struct {
 	// The name of the read-only replica
 	Name string `json:"name"`
 	// The state of the read-only replica: pending, ready, or deleting
@@ -54,53 +54,53 @@ type ResponseBody struct {
 	PrivateConnectionServiceName *string `json:"private_connection_service_name"`
 }
 
-func (r *ResponseBody) GetName() string {
-	if r == nil {
+func (l *ListReadOnlyReplicasResponseBody) GetName() string {
+	if l == nil {
 		return ""
 	}
-	return r.Name
+	return l.Name
 }
 
-func (r *ResponseBody) GetState() string {
-	if r == nil {
+func (l *ListReadOnlyReplicasResponseBody) GetState() string {
+	if l == nil {
 		return ""
 	}
-	return r.State
+	return l.State
 }
 
-func (r *ResponseBody) GetReplicas() int64 {
-	if r == nil {
+func (l *ListReadOnlyReplicasResponseBody) GetReplicas() int64 {
+	if l == nil {
 		return 0
 	}
-	return r.Replicas
+	return l.Replicas
 }
 
-func (r *ResponseBody) GetClusterSize() string {
-	if r == nil {
+func (l *ListReadOnlyReplicasResponseBody) GetClusterSize() string {
+	if l == nil {
 		return ""
 	}
-	return r.ClusterSize
+	return l.ClusterSize
 }
 
-func (r *ResponseBody) GetAccessHostURL() string {
-	if r == nil {
+func (l *ListReadOnlyReplicasResponseBody) GetAccessHostURL() string {
+	if l == nil {
 		return ""
 	}
-	return r.AccessHostURL
+	return l.AccessHostURL
 }
 
-func (r *ResponseBody) GetPrivateAccessHostURL() string {
-	if r == nil {
+func (l *ListReadOnlyReplicasResponseBody) GetPrivateAccessHostURL() string {
+	if l == nil {
 		return ""
 	}
-	return r.PrivateAccessHostURL
+	return l.PrivateAccessHostURL
 }
 
-func (r *ResponseBody) GetPrivateConnectionServiceName() *string {
-	if r == nil {
+func (l *ListReadOnlyReplicasResponseBody) GetPrivateConnectionServiceName() *string {
+	if l == nil {
 		return nil
 	}
-	return r.PrivateConnectionServiceName
+	return l.PrivateConnectionServiceName
 }
 
 type ListReadOnlyReplicasResponse struct {
@@ -111,7 +111,7 @@ type ListReadOnlyReplicasResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Returns read-only replicas
-	ResponseBodies []ResponseBody
+	ResponseBodies []ListReadOnlyReplicasResponseBody
 }
 
 func (l ListReadOnlyReplicasResponse) MarshalJSON() ([]byte, error) {
@@ -146,7 +146,7 @@ func (l *ListReadOnlyReplicasResponse) GetRawResponse() *http.Response {
 	return l.RawResponse
 }
 
-func (l *ListReadOnlyReplicasResponse) GetResponseBodies() []ResponseBody {
+func (l *ListReadOnlyReplicasResponse) GetResponseBodies() []ListReadOnlyReplicasResponseBody {
 	if l == nil {
 		return nil
 	}

@@ -57,6 +57,8 @@ type GetOrganizationResponseBody struct {
 	InvoiceBudgetAmount string `json:"invoice_budget_amount"`
 	// The keyspace shard limit for the organization
 	KeyspaceShardLimit int64 `json:"keyspace_shard_limit"`
+	// The Neki router replica limit per cell for the organization
+	NekiRouterReplicasPerCellLimit int64 `json:"neki_router_replicas_per_cell_limit"`
 	// Whether or not the organization has a payment method on file
 	HasCard bool `json:"has_card"`
 	// Whether or not the organization requires payment information
@@ -187,6 +189,13 @@ func (g *GetOrganizationResponseBody) GetKeyspaceShardLimit() int64 {
 		return 0
 	}
 	return g.KeyspaceShardLimit
+}
+
+func (g *GetOrganizationResponseBody) GetNekiRouterReplicasPerCellLimit() int64 {
+	if g == nil {
+		return 0
+	}
+	return g.NekiRouterReplicasPerCellLimit
 }
 
 func (g *GetOrganizationResponseBody) GetHasCard() bool {
