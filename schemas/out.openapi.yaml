@@ -1570,6 +1570,23 @@ paths:
                             - node_ttl_always
                             - node_ttl_off
                           description: Controls when node TTL drains are allowed
+                        disk_autoscaling:
+                          type: object
+                          properties:
+                            strategy:
+                              type: string
+                              enum:
+                                - grow
+                                - disable
+                                - shrink
+                              description: The disk autoscaling strategy
+                            storage_limit_bytes:
+                              type: integer
+                              description: The maximum size in bytes disks may autoscale to
+                          required:
+                            - strategy
+                            - storage_limit_bytes
+                          x-speakeasy-terraform-ignore: true
                         replication_durability_constraints:
                           type: object
                           properties:
@@ -1622,6 +1639,7 @@ paths:
                         - imported
                         - vector_pool_allocation
                         - node_ttl_strategy
+                        - disk_autoscaling
                         - replication_durability_constraints
                         - vreplication_flags
                         - resize_in_progress
@@ -1789,6 +1807,23 @@ paths:
                       - node_ttl_always
                       - node_ttl_off
                     description: Controls when node TTL drains are allowed
+                  disk_autoscaling:
+                    type: object
+                    properties:
+                      strategy:
+                        type: string
+                        enum:
+                          - grow
+                          - disable
+                          - shrink
+                        description: The disk autoscaling strategy
+                      storage_limit_bytes:
+                        type: integer
+                        description: The maximum size in bytes disks may autoscale to
+                    required:
+                      - strategy
+                      - storage_limit_bytes
+                    x-speakeasy-terraform-ignore: true
                   replication_durability_constraints:
                     type: object
                     properties:
@@ -1841,6 +1876,7 @@ paths:
                   - imported
                   - vector_pool_allocation
                   - node_ttl_strategy
+                  - disk_autoscaling
                   - replication_durability_constraints
                   - vreplication_flags
                   - resize_in_progress
@@ -1986,6 +2022,23 @@ paths:
                       - node_ttl_always
                       - node_ttl_off
                     description: Controls when node TTL drains are allowed
+                  disk_autoscaling:
+                    type: object
+                    properties:
+                      strategy:
+                        type: string
+                        enum:
+                          - grow
+                          - disable
+                          - shrink
+                        description: The disk autoscaling strategy
+                      storage_limit_bytes:
+                        type: integer
+                        description: The maximum size in bytes disks may autoscale to
+                    required:
+                      - strategy
+                      - storage_limit_bytes
+                    x-speakeasy-terraform-ignore: true
                   replication_durability_constraints:
                     type: object
                     properties:
@@ -2038,6 +2091,7 @@ paths:
                   - imported
                   - vector_pool_allocation
                   - node_ttl_strategy
+                  - disk_autoscaling
                   - replication_durability_constraints
                   - vreplication_flags
                   - resize_in_progress
@@ -22306,6 +22360,58 @@ components:
         - total_count
         - total_pages
         - data
+    MetricSeries:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The metrics response type
+        start_date:
+          type: string
+          description: The start of the time range for the metric series
+        end_date:
+          type: string
+          description: The end of the time range for the metric series
+        interval:
+          type: integer
+          description: The step interval in seconds between data points
+        series:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The time-series response type
+              metric:
+                type: string
+                description: The name of the metric
+              label:
+                type: string
+                description: A human-readable label for the time series
+              labels:
+                type: object
+                additionalProperties: true
+                description: Key/value labels, also known as tags, identifying the time series
+              points:
+                items:
+                  type: array
+                  items:
+                    type: number
+                type: array
+                description: Sampled data points as [Unix timestamp, value] pairs
+            required:
+              - type
+              - metric
+              - label
+              - labels
+              - points
+      required:
+        - type
+        - start_date
+        - end_date
+        - interval
+        - series
     PaginatedBranchMaintenanceWindow:
       type: object
       properties:
@@ -24179,6 +24285,22 @@ components:
             - node_ttl_always
             - node_ttl_off
           description: Controls when node TTL drains are allowed
+        disk_autoscaling:
+          type: object
+          properties:
+            strategy:
+              type: string
+              enum:
+                - grow
+                - disable
+                - shrink
+              description: The disk autoscaling strategy
+            storage_limit_bytes:
+              type: integer
+              description: The maximum size in bytes disks may autoscale to
+          required:
+            - strategy
+            - storage_limit_bytes
         replication_durability_constraints:
           type: object
           properties:
@@ -24236,6 +24358,7 @@ components:
         - imported
         - vector_pool_allocation
         - node_ttl_strategy
+        - disk_autoscaling
         - replication_durability_constraints
         - vreplication_flags
         - mysqld_options
@@ -24341,6 +24464,22 @@ components:
                   - node_ttl_always
                   - node_ttl_off
                 description: Controls when node TTL drains are allowed
+              disk_autoscaling:
+                type: object
+                properties:
+                  strategy:
+                    type: string
+                    enum:
+                      - grow
+                      - disable
+                      - shrink
+                    description: The disk autoscaling strategy
+                  storage_limit_bytes:
+                    type: integer
+                    description: The maximum size in bytes disks may autoscale to
+                required:
+                  - strategy
+                  - storage_limit_bytes
               replication_durability_constraints:
                 type: object
                 properties:
@@ -24398,6 +24537,7 @@ components:
               - imported
               - vector_pool_allocation
               - node_ttl_strategy
+              - disk_autoscaling
               - replication_durability_constraints
               - vreplication_flags
               - mysqld_options

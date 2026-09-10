@@ -98,19 +98,70 @@ func (e *ListKeyspacesNodeTTLStrategy) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// ListKeyspacesStrategy - The replication durability strategy
-type ListKeyspacesStrategy string
+// ListKeyspacesDiskAutoscalingStrategy - The disk autoscaling strategy
+type ListKeyspacesDiskAutoscalingStrategy string
 
 const (
-	ListKeyspacesStrategyAvailable ListKeyspacesStrategy = "available"
-	ListKeyspacesStrategyLag       ListKeyspacesStrategy = "lag"
-	ListKeyspacesStrategyAlways    ListKeyspacesStrategy = "always"
+	ListKeyspacesDiskAutoscalingStrategyGrow    ListKeyspacesDiskAutoscalingStrategy = "grow"
+	ListKeyspacesDiskAutoscalingStrategyDisable ListKeyspacesDiskAutoscalingStrategy = "disable"
+	ListKeyspacesDiskAutoscalingStrategyShrink  ListKeyspacesDiskAutoscalingStrategy = "shrink"
 )
 
-func (e ListKeyspacesStrategy) ToPointer() *ListKeyspacesStrategy {
+func (e ListKeyspacesDiskAutoscalingStrategy) ToPointer() *ListKeyspacesDiskAutoscalingStrategy {
 	return &e
 }
-func (e *ListKeyspacesStrategy) UnmarshalJSON(data []byte) error {
+func (e *ListKeyspacesDiskAutoscalingStrategy) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "grow":
+		fallthrough
+	case "disable":
+		fallthrough
+	case "shrink":
+		*e = ListKeyspacesDiskAutoscalingStrategy(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListKeyspacesDiskAutoscalingStrategy: %v", v)
+	}
+}
+
+type ListKeyspacesDiskAutoscaling struct {
+	// The disk autoscaling strategy
+	Strategy ListKeyspacesDiskAutoscalingStrategy `json:"strategy"`
+	// The maximum size in bytes disks may autoscale to
+	StorageLimitBytes int64 `json:"storage_limit_bytes"`
+}
+
+func (l *ListKeyspacesDiskAutoscaling) GetStrategy() ListKeyspacesDiskAutoscalingStrategy {
+	if l == nil {
+		return ListKeyspacesDiskAutoscalingStrategy("")
+	}
+	return l.Strategy
+}
+
+func (l *ListKeyspacesDiskAutoscaling) GetStorageLimitBytes() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.StorageLimitBytes
+}
+
+// ListKeyspacesReplicationDurabilityConstraintsStrategy - The replication durability strategy
+type ListKeyspacesReplicationDurabilityConstraintsStrategy string
+
+const (
+	ListKeyspacesReplicationDurabilityConstraintsStrategyAvailable ListKeyspacesReplicationDurabilityConstraintsStrategy = "available"
+	ListKeyspacesReplicationDurabilityConstraintsStrategyLag       ListKeyspacesReplicationDurabilityConstraintsStrategy = "lag"
+	ListKeyspacesReplicationDurabilityConstraintsStrategyAlways    ListKeyspacesReplicationDurabilityConstraintsStrategy = "always"
+)
+
+func (e ListKeyspacesReplicationDurabilityConstraintsStrategy) ToPointer() *ListKeyspacesReplicationDurabilityConstraintsStrategy {
+	return &e
+}
+func (e *ListKeyspacesReplicationDurabilityConstraintsStrategy) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -121,19 +172,19 @@ func (e *ListKeyspacesStrategy) UnmarshalJSON(data []byte) error {
 	case "lag":
 		fallthrough
 	case "always":
-		*e = ListKeyspacesStrategy(v)
+		*e = ListKeyspacesReplicationDurabilityConstraintsStrategy(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ListKeyspacesStrategy: %v", v)
+		return fmt.Errorf("invalid value for ListKeyspacesReplicationDurabilityConstraintsStrategy: %v", v)
 	}
 }
 
 type ListKeyspacesReplicationDurabilityConstraints struct {
 	// The replication durability strategy
-	Strategy *ListKeyspacesStrategy `json:"strategy,omitzero"`
+	Strategy *ListKeyspacesReplicationDurabilityConstraintsStrategy `json:"strategy,omitzero"`
 }
 
-func (l *ListKeyspacesReplicationDurabilityConstraints) GetStrategy() *ListKeyspacesStrategy {
+func (l *ListKeyspacesReplicationDurabilityConstraints) GetStrategy() *ListKeyspacesReplicationDurabilityConstraintsStrategy {
 	if l == nil {
 		return nil
 	}
@@ -211,6 +262,7 @@ type ListKeyspacesData struct {
 	VectorPoolAllocation *float64 `json:"vector_pool_allocation"`
 	// Controls when node TTL drains are allowed
 	NodeTTLStrategy                  ListKeyspacesNodeTTLStrategy                  `json:"node_ttl_strategy"`
+	DiskAutoscaling                  ListKeyspacesDiskAutoscaling                  `json:"disk_autoscaling"`
 	ReplicationDurabilityConstraints ListKeyspacesReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                ListKeyspacesVreplicationFlags                `json:"vreplication_flags"`
 	// True while any unfinished resize request exists for the keyspace.
@@ -355,6 +407,13 @@ func (l *ListKeyspacesData) GetNodeTTLStrategy() ListKeyspacesNodeTTLStrategy {
 		return ListKeyspacesNodeTTLStrategy("")
 	}
 	return l.NodeTTLStrategy
+}
+
+func (l *ListKeyspacesData) GetDiskAutoscaling() ListKeyspacesDiskAutoscaling {
+	if l == nil {
+		return ListKeyspacesDiskAutoscaling{}
+	}
+	return l.DiskAutoscaling
 }
 
 func (l *ListKeyspacesData) GetReplicationDurabilityConstraints() ListKeyspacesReplicationDurabilityConstraints {

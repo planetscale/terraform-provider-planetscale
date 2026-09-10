@@ -127,19 +127,70 @@ func (e *CreateKeyspaceNodeTTLStrategy) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// CreateKeyspaceStrategy - The replication durability strategy
-type CreateKeyspaceStrategy string
+// CreateKeyspaceDiskAutoscalingStrategy - The disk autoscaling strategy
+type CreateKeyspaceDiskAutoscalingStrategy string
 
 const (
-	CreateKeyspaceStrategyAvailable CreateKeyspaceStrategy = "available"
-	CreateKeyspaceStrategyLag       CreateKeyspaceStrategy = "lag"
-	CreateKeyspaceStrategyAlways    CreateKeyspaceStrategy = "always"
+	CreateKeyspaceDiskAutoscalingStrategyGrow    CreateKeyspaceDiskAutoscalingStrategy = "grow"
+	CreateKeyspaceDiskAutoscalingStrategyDisable CreateKeyspaceDiskAutoscalingStrategy = "disable"
+	CreateKeyspaceDiskAutoscalingStrategyShrink  CreateKeyspaceDiskAutoscalingStrategy = "shrink"
 )
 
-func (e CreateKeyspaceStrategy) ToPointer() *CreateKeyspaceStrategy {
+func (e CreateKeyspaceDiskAutoscalingStrategy) ToPointer() *CreateKeyspaceDiskAutoscalingStrategy {
 	return &e
 }
-func (e *CreateKeyspaceStrategy) UnmarshalJSON(data []byte) error {
+func (e *CreateKeyspaceDiskAutoscalingStrategy) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "grow":
+		fallthrough
+	case "disable":
+		fallthrough
+	case "shrink":
+		*e = CreateKeyspaceDiskAutoscalingStrategy(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for CreateKeyspaceDiskAutoscalingStrategy: %v", v)
+	}
+}
+
+type CreateKeyspaceDiskAutoscaling struct {
+	// The disk autoscaling strategy
+	Strategy CreateKeyspaceDiskAutoscalingStrategy `json:"strategy"`
+	// The maximum size in bytes disks may autoscale to
+	StorageLimitBytes int64 `json:"storage_limit_bytes"`
+}
+
+func (c *CreateKeyspaceDiskAutoscaling) GetStrategy() CreateKeyspaceDiskAutoscalingStrategy {
+	if c == nil {
+		return CreateKeyspaceDiskAutoscalingStrategy("")
+	}
+	return c.Strategy
+}
+
+func (c *CreateKeyspaceDiskAutoscaling) GetStorageLimitBytes() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.StorageLimitBytes
+}
+
+// CreateKeyspaceReplicationDurabilityConstraintsStrategy - The replication durability strategy
+type CreateKeyspaceReplicationDurabilityConstraintsStrategy string
+
+const (
+	CreateKeyspaceReplicationDurabilityConstraintsStrategyAvailable CreateKeyspaceReplicationDurabilityConstraintsStrategy = "available"
+	CreateKeyspaceReplicationDurabilityConstraintsStrategyLag       CreateKeyspaceReplicationDurabilityConstraintsStrategy = "lag"
+	CreateKeyspaceReplicationDurabilityConstraintsStrategyAlways    CreateKeyspaceReplicationDurabilityConstraintsStrategy = "always"
+)
+
+func (e CreateKeyspaceReplicationDurabilityConstraintsStrategy) ToPointer() *CreateKeyspaceReplicationDurabilityConstraintsStrategy {
+	return &e
+}
+func (e *CreateKeyspaceReplicationDurabilityConstraintsStrategy) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -150,19 +201,19 @@ func (e *CreateKeyspaceStrategy) UnmarshalJSON(data []byte) error {
 	case "lag":
 		fallthrough
 	case "always":
-		*e = CreateKeyspaceStrategy(v)
+		*e = CreateKeyspaceReplicationDurabilityConstraintsStrategy(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreateKeyspaceStrategy: %v", v)
+		return fmt.Errorf("invalid value for CreateKeyspaceReplicationDurabilityConstraintsStrategy: %v", v)
 	}
 }
 
 type CreateKeyspaceReplicationDurabilityConstraints struct {
 	// The replication durability strategy
-	Strategy *CreateKeyspaceStrategy `json:"strategy,omitzero"`
+	Strategy *CreateKeyspaceReplicationDurabilityConstraintsStrategy `json:"strategy,omitzero"`
 }
 
-func (c *CreateKeyspaceReplicationDurabilityConstraints) GetStrategy() *CreateKeyspaceStrategy {
+func (c *CreateKeyspaceReplicationDurabilityConstraints) GetStrategy() *CreateKeyspaceReplicationDurabilityConstraintsStrategy {
 	if c == nil {
 		return nil
 	}
@@ -241,6 +292,7 @@ type CreateKeyspaceResponseBody struct {
 	VectorPoolAllocation *float64 `json:"vector_pool_allocation"`
 	// Controls when node TTL drains are allowed
 	NodeTTLStrategy                  CreateKeyspaceNodeTTLStrategy                  `json:"node_ttl_strategy"`
+	DiskAutoscaling                  CreateKeyspaceDiskAutoscaling                  `json:"disk_autoscaling"`
 	ReplicationDurabilityConstraints CreateKeyspaceReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                CreateKeyspaceVreplicationFlags                `json:"vreplication_flags"`
 	// True while any unfinished resize request exists for the keyspace. Computed for observability; apply waits on ready, resizing, resize_pending, and config_change_in_progress instead, because this flag can lag after the resize has already applied.
@@ -385,6 +437,13 @@ func (c *CreateKeyspaceResponseBody) GetNodeTTLStrategy() CreateKeyspaceNodeTTLS
 		return CreateKeyspaceNodeTTLStrategy("")
 	}
 	return c.NodeTTLStrategy
+}
+
+func (c *CreateKeyspaceResponseBody) GetDiskAutoscaling() CreateKeyspaceDiskAutoscaling {
+	if c == nil {
+		return CreateKeyspaceDiskAutoscaling{}
+	}
+	return c.DiskAutoscaling
 }
 
 func (c *CreateKeyspaceResponseBody) GetReplicationDurabilityConstraints() CreateKeyspaceReplicationDurabilityConstraints {
