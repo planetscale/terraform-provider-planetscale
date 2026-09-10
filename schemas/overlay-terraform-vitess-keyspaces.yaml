@@ -109,3 +109,8 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.external
     update:
       x-speakeasy-terraform-ignore: true
+
+  # `disk_autoscaling` is not exposed in this provider version.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.disk_autoscaling
+    update:
+      x-speakeasy-terraform-ignore: true

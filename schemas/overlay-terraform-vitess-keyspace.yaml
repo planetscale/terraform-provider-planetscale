@@ -220,6 +220,14 @@ actions:
     update:
       x-speakeasy-terraform-ignore: true
 
+  # `disk_autoscaling` is not exposed in this provider version.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.disk_autoscaling
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.disk_autoscaling
+    update:
+      x-speakeasy-terraform-ignore: true
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get
     description: API operation for data and managed resource read, with create/update polling until ready.
     update:
