@@ -250,6 +250,27 @@ func (c *CreateKeyspaceVreplicationFlags) GetVplayerBatching() bool {
 	return c.VplayerBatching
 }
 
+type CreateKeyspaceThrottler struct {
+	// Whether the keyspace throttler is enabled
+	Enabled bool `json:"enabled"`
+	// Replication lag in seconds that trips the throttler
+	Threshold *float64 `json:"threshold"`
+}
+
+func (c *CreateKeyspaceThrottler) GetEnabled() bool {
+	if c == nil {
+		return false
+	}
+	return c.Enabled
+}
+
+func (c *CreateKeyspaceThrottler) GetThreshold() *float64 {
+	if c == nil {
+		return nil
+	}
+	return c.Threshold
+}
+
 // CreateKeyspaceResponseBody - Returns a created keyspace
 type CreateKeyspaceResponseBody struct {
 	// The ID of the keyspace
@@ -295,6 +316,7 @@ type CreateKeyspaceResponseBody struct {
 	DiskAutoscaling                  CreateKeyspaceDiskAutoscaling                  `json:"disk_autoscaling"`
 	ReplicationDurabilityConstraints CreateKeyspaceReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                CreateKeyspaceVreplicationFlags                `json:"vreplication_flags"`
+	Throttler                        CreateKeyspaceThrottler                        `json:"throttler"`
 	// True while any unfinished resize request exists for the keyspace. Computed for observability; apply waits on ready, resizing, resize_pending, and config_change_in_progress instead, because this flag can lag after the resize has already applied.
 	ResizeInProgress bool `json:"resize_in_progress"`
 }
@@ -458,6 +480,13 @@ func (c *CreateKeyspaceResponseBody) GetVreplicationFlags() CreateKeyspaceVrepli
 		return CreateKeyspaceVreplicationFlags{}
 	}
 	return c.VreplicationFlags
+}
+
+func (c *CreateKeyspaceResponseBody) GetThrottler() CreateKeyspaceThrottler {
+	if c == nil {
+		return CreateKeyspaceThrottler{}
+	}
+	return c.Throttler
 }
 
 func (c *CreateKeyspaceResponseBody) GetResizeInProgress() bool {

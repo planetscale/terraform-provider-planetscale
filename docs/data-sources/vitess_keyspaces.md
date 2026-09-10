@@ -58,6 +58,7 @@ Read-Only:
 - `resizing` (Boolean) True while the keyspace is actively resizing.
 - `sharded` (Boolean) If the keyspace is sharded
 - `shards` (Number) The number of keyspace shards
+- `throttler` (Attributes) (see [below for nested schema](#nestedatt--data--throttler))
 - `updated_at` (String) When the keyspace was last updated
 - `vector_pool_allocation` (Number) Percentage of buffer pool memory allocated to vector indexes
 - `vreplication_flags` (Attributes) (see [below for nested schema](#nestedatt--data--vreplication_flags))
@@ -68,6 +69,15 @@ Read-Only:
 Read-Only:
 
 - `strategy` (String) The replication durability strategy
+
+
+<a id="nestedatt--data--throttler"></a>
+### Nested Schema for `data.throttler`
+
+Read-Only:
+
+- `enabled` (Boolean) Whether the keyspace throttler is enabled
+- `threshold` (Number) Replication lag in seconds that trips the throttler
 
 
 <a id="nestedatt--data--vreplication_flags"></a>

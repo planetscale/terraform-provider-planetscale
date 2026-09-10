@@ -1,0 +1,32 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_configuration_profiles
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].get
+    description: API operation for the plural data source.
+    update:
+      operationId: list_neki_configuration_profiles
+      x-speakeasy-entity-operation: NekiConfigurationProfiles#read
+      x-speakeasy-entity-description: >-
+        List shard configuration profiles for a PlanetScale Neki branch.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].get.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiConfigurationProfiles
+      x-speakeasy-entity-description: >-
+        List shard configuration profiles for a PlanetScale Neki branch.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].get.responses["200"].content["application/json"].schema.items.properties.default
+    update:
+      x-speakeasy-name-override: is_default
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].get.responses["200"].content["application/json"].schema.items.properties.shards
+    update:
+      x-speakeasy-name-override: shard_count
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].get.responses["200"].content["application/json"].schema.items.properties['architecture','cluster_display_name','created_at','latest_postgres_image_version','latest_postgres_minor_version','metal','postgres_image_version','updated_at']
+    description: Omit presentation-only, derived, internal rollout, and timestamp fields from Terraform.
+    update:
+      x-speakeasy-terraform-ignore: true

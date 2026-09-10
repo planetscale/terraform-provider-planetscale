@@ -1,0 +1,116 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_role managed and data resources.
+  version: 0.0.1
+actions:
+  # The public API uses the same role endpoints for Postgres and Neki branches.
+  # Copy the already-normalized Postgres paths so each Terraform entity has
+  # distinct operations while both still call the same HTTP paths.
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post
+    description: API operation for managed resource create.
+    update:
+      operationId: create_neki_role
+      summary: Create Neki role credentials
+      x-speakeasy-entity-operation: NekiRole#create
+      x-speakeasy-entity-description: Manage credentials for a PlanetScale Neki branch role.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.parameters[?@.name == 'organization'].schema
+    description: Moving a role to another organization requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.parameters[?@.name == 'database'].schema
+    description: Moving a role to another database requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.parameters[?@.name == 'branch'].schema
+    description: Moving a role to another branch requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get
+    description: API operation for managed resource read and create-time readiness polling.
+    update:
+      operationId: get_neki_role
+      summary: Get a Neki role
+      x-speakeasy-entity-operation:
+        - NekiRole#read
+        - entityOperation: NekiRole#create#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: Returns information about a PlanetScale Neki branch role.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 90
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/ready == true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch
+    description: API operation for managed resource update.
+    update:
+      operationId: update_neki_role
+      summary: Update a Neki role name
+      x-speakeasy-entity-operation: NekiRole#update
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].delete
+    description: API operation for managed resource delete.
+    update:
+      operationId: delete_neki_role
+      summary: Delete Neki role credentials
+      x-speakeasy-entity-operation: NekiRole#delete
+
+  # The shared OpenAPI operations are described with the Postgres serializer.
+  # Neki responses intentionally omit query_safety_settings.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses["200"].content["application/json"].schema.properties.query_safety_settings
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses["200"].content["application/json"].schema.required[?@ == 'query_safety_settings']
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses["200"].content["application/json"].schema.properties.query_safety_settings
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses["200"].content["application/json"].schema.required[?@ == 'query_safety_settings']
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses["200"].content["application/json"].schema.properties.query_safety_settings
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses["200"].content["application/json"].schema.required[?@ == 'query_safety_settings']
+    remove: true
+
+  # Keep the managed resource focused on configurable role behavior and the
+  # values needed to connect. The removed fields are duplicate branch/actor
+  # metadata, lifecycle timestamps, or server-side deletion/status details
+  # that Terraform cannot configure or act on. `ready` remains in the response
+  # solely for the create poller and is hidden from Terraform by the inherited
+  # x-speakeasy-terraform-ignore annotation.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses["200"].content["application/json"].schema.properties['actor','base_username','branch','created_at','database_name','default','deleted_at','disabled_at','drop_failed','dropped_at','expired','updated_at']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].post.responses["200"].content["application/json"].schema.required[?@ == 'actor' || @ == 'base_username' || @ == 'branch' || @ == 'created_at' || @ == 'database_name' || @ == 'default' || @ == 'deleted_at' || @ == 'disabled_at' || @ == 'drop_failed' || @ == 'dropped_at' || @ == 'expired' || @ == 'updated_at']
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses["200"].content["application/json"].schema.properties['actor','base_username','branch','created_at','database_name','default','deleted_at','disabled_at','drop_failed','dropped_at','expired','updated_at']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].get.responses["200"].content["application/json"].schema.required[?@ == 'actor' || @ == 'base_username' || @ == 'branch' || @ == 'created_at' || @ == 'database_name' || @ == 'default' || @ == 'deleted_at' || @ == 'disabled_at' || @ == 'drop_failed' || @ == 'dropped_at' || @ == 'expired' || @ == 'updated_at']
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses["200"].content["application/json"].schema.properties['actor','base_username','branch','created_at','database_name','default','deleted_at','disabled_at','drop_failed','dropped_at','expired','updated_at']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}#neki'].patch.responses["200"].content["application/json"].schema.required[?@ == 'actor' || @ == 'base_username' || @ == 'branch' || @ == 'created_at' || @ == 'database_name' || @ == 'default' || @ == 'deleted_at' || @ == 'disabled_at' || @ == 'drop_failed' || @ == 'dropped_at' || @ == 'expired' || @ == 'updated_at']
+    remove: true

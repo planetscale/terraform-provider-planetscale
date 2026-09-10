@@ -1,0 +1,123 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_router managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: NekiRouter#create
+      x-speakeasy-entity-description: >-
+        Manage a router group for a PlanetScale Neki branch. Clients connect
+        through the group by appending it to the username, e.g.
+        `user|my-router`. Every branch has a `default` group that cannot be
+        deleted; this resource manages additional groups. Size, replica,
+        autoscaling, and parameter changes are applied asynchronously through
+        a change request; the resource waits for the group to return to the
+        `ready` state.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.parameters[?@.name == 'organization'].schema
+    description: Moving a router group to another organization requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.parameters[?@.name == 'database'].schema
+    description: Moving a router group to another database requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.parameters[?@.name == 'branch'].schema
+    description: Moving a router group to another branch requires replacement.
+    update:
+      x-speakeasy-param-force-new: true
+
+  # Updates double as create#2: create accepts only name, size, and replicas,
+  # so autoscaling and other update-only attributes are applied by the chained
+  # PATCH. The change-request flow treats a PATCH whose values all match the
+  # current configuration as a no-op, so plain creates do not produce spurious
+  # change requests.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch
+    description: API operation for managed resource update and create-time completion.
+    update:
+      x-speakeasy-entity-operation:
+        - NekiRouter#update
+        - NekiRouter#create#2
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch.parameters[?@.name == 'router']
+    description: The router path parameter is the router name.
+    update:
+      x-speakeasy-match: name
+
+  # Router parameters have no read-back in the resource responses (the
+  # parameters endpoint returns rich definitions that cannot reconcile with the
+  # map-shaped request), so Terraform cannot manage them without drift.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch.requestBody.content["application/json"].schema.properties.parameters
+    description: Hide parameters; no drift-safe read-back exists.
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get
+    description: API operation for managed resource read, and the polling step for create and update.
+    update:
+      x-speakeasy-entity-operation:
+        - NekiRouter#read
+        - entityOperation: NekiRouter#create#3
+          options:
+            polling:
+              name: WaitForReady
+        - entityOperation: NekiRouter#update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 10
+          intervalSeconds: 10
+          limitCount: 90 # 15 minutes at a 10 second interval, plus initial 10 second delay
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get.parameters[?@.name == 'router']
+    description: The router path parameter is the router name.
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: NekiRouter#delete
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].delete.parameters[?@.name == 'router']
+    description: The router path parameter is the router name.
+    update:
+      x-speakeasy-match: name
+
+  # Response shaping, applied to create, update, and read: the sku object
+  # duplicates the flat router_size string, and the timestamps are noise.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.responses["201"].content["application/json"].schema.properties.created_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.responses["201"].content["application/json"].schema.properties.updated_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers"].post.responses["201"].content["application/json"].schema.properties.sku
+    description: Trim the sku object; the flat router_size string replaces it.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch.responses["200"].content["application/json"].schema.properties.created_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch.responses["200"].content["application/json"].schema.properties.updated_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch.responses["200"].content["application/json"].schema.properties.sku
+    description: Trim the sku object; the flat router_size string replaces it.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get.responses["200"].content["application/json"].schema.properties.created_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get.responses["200"].content["application/json"].schema.properties.updated_at
+    description: Trim noisy response field, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get.responses["200"].content["application/json"].schema.properties.sku
+    description: Trim the sku object; the flat router_size string replaces it.
+    remove: true

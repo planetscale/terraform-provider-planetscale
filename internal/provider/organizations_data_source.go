@@ -98,6 +98,10 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 							Computed:    true,
 							Description: `The name of the organization`,
 						},
+						"neki_router_replicas_per_cell_limit": schema.Int64Attribute{
+							Computed:    true,
+							Description: `The Neki router replica limit per cell for the organization`,
+						},
 						"payment_info_required": schema.BoolAttribute{
 							Computed:    true,
 							Description: `Whether or not the organization requires payment information`,

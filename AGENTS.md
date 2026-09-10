@@ -24,3 +24,4 @@
 * Tests use `config.TestNameDirectory()` to automatically load the matching testdata directory
 * Add an acceptance test for every new resource/data source covering create, update-in-place, and import (see `internal/provider/vitessbranch_resource_test.go`); run with `make testacc` (creates real resources)
 * Prefer testify `require` over explicit checks and `t.Fatalf` in unit tests; run with `make test`
+* Provisioning a Neki branch takes minutes, so `TestAccNeki_Lifecycle` is the single Neki acceptance test: it creates one branch and covers roles, backup policies, and every Neki data source against it. The admin, sidecar, router, shard, and configuration profile resources have no acceptance tests because their create/update paths wait on provisioning or change requests

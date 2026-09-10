@@ -1,0 +1,71 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_shards
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get
+    description: API operation for the plural data source.
+    update:
+      operationId: list_neki_shards
+      x-speakeasy-entity-operation: NekiShards#read
+      x-speakeasy-entity-description: >-
+        List shards on a PlanetScale Neki branch.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiShards
+      x-speakeasy-entity-description: >-
+        List shards on a PlanetScale Neki branch.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get.parameters[?@.name == 'per_page']
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get.parameters[?@.name == 'exclude_configuration_profile']
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get.parameters[?@.name == 'q']
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get.responses["200"].content["application/json"].schema.properties
+    description: Ignore pagination metadata that Terraform does not need.
+    update:
+      current_page:
+        x-speakeasy-terraform-ignore: true
+      per_page:
+        x-speakeasy-terraform-ignore: true
+      next_page:
+        x-speakeasy-terraform-ignore: true
+      next_page_url:
+        x-speakeasy-terraform-ignore: true
+      prev_page:
+        x-speakeasy-terraform-ignore: true
+      prev_page_url:
+        x-speakeasy-terraform-ignore: true
+      total_count:
+        x-speakeasy-terraform-ignore: true
+      total_pages:
+        x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.created_at
+    description: Omit generic timestamp metadata from Terraform.
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/shards"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.name
+    description: >-
+      Hide the server-assigned shard name from Terraform for now; display_name
+      is the user-facing label.
+    update:
+      x-speakeasy-terraform-ignore: true

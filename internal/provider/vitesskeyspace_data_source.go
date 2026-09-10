@@ -51,6 +51,7 @@ type VitessKeyspaceDataSourceModel struct {
 	Resizing                         types.Bool                                           `tfsdk:"resizing"`
 	Sharded                          types.Bool                                           `tfsdk:"sharded"`
 	Shards                           types.Int64                                          `tfsdk:"shards"`
+	Throttler                        *tfTypes.GetKeyspaceThrottler                        `tfsdk:"throttler"`
 	UpdatedAt                        types.String                                         `tfsdk:"updated_at"`
 	VectorPoolAllocation             types.Float64                                        `tfsdk:"vector_pool_allocation"`
 	VreplicationFlags                *tfTypes.GetKeyspaceVreplicationFlags                `tfsdk:"vreplication_flags"`
@@ -159,6 +160,19 @@ func (r *VitessKeyspaceDataSource) Schema(ctx context.Context, req datasource.Sc
 			"shards": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The number of shards. Set only at create time; changing this value requires replacement.`,
+			},
+			"throttler": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"enabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether the keyspace throttler is enabled`,
+					},
+					"threshold": schema.Float64Attribute{
+						Computed:    true,
+						Description: `Replication lag in seconds that trips the throttler`,
+					},
+				},
 			},
 			"updated_at": schema.StringAttribute{
 				Computed:    true,

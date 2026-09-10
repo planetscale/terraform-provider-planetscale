@@ -55,13 +55,18 @@ type PlanetScale struct {
 	Organizations *Organizations
 	//             Resources for managing databases within an organization.
 	//
-	Databases *Databases
+	Databases              *Databases
+	APINekiAdmins          *APINekiAdmins
+	APINekiAdminParameters *APINekiAdminParameters
 	//           Resources for managing postgres bouncers.
 	//
 	Bouncers *Bouncers
 	//           Resources for managing cluster changes.
 	//
-	BranchChanges *BranchChanges
+	BranchChanges                              *BranchChanges
+	APINekiShardConfigurationProfiles          *APINekiShardConfigurationProfiles
+	APINekiShardConfigurationProfileParameters *APINekiShardConfigurationProfileParameters
+	APINekiShardConfigurationProfileShards     *APINekiShardConfigurationProfileShards
 	//           Resources for managing keyspaces.
 	//
 	DatabaseBranchKeyspaces *DatabaseBranchKeyspaces
@@ -77,8 +82,12 @@ type PlanetScale struct {
 	APIBranchResizes *APIBranchResizes
 	//           Resources for managing role credentials.
 	//
-	Roles            *Roles
-	DatabaseBranches *DatabaseBranches
+	Roles                    *Roles
+	APINekiRouters           *APINekiRouters
+	DatabaseBranches         *DatabaseBranches
+	APINekiShards            *APINekiShards
+	APINekiSidecars          *APINekiSidecars
+	APINekiSidecarParameters *APINekiSidecarParameters
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
@@ -185,15 +194,24 @@ func New(opts ...SDKOption) *PlanetScale {
 
 	sdk.Organizations = newOrganizations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Databases = newDatabases(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiAdmins = newAPINekiAdmins(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiAdminParameters = newAPINekiAdminParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Bouncers = newBouncers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiShardConfigurationProfiles = newAPINekiShardConfigurationProfiles(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiShardConfigurationProfileParameters = newAPINekiShardConfigurationProfileParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiShardConfigurationProfileShards = newAPINekiShardConfigurationProfileShards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchKeyspaces = newDatabaseBranchKeyspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.KeyspaceResizes = newKeyspaceResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ReadOnlyReplicas = newReadOnlyReplicas(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiRouters = newAPINekiRouters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiShards = newAPINekiShards(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiSidecars = newAPINekiSidecars(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiSidecarParameters = newAPINekiSidecarParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 

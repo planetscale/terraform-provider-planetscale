@@ -1,0 +1,29 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_roles data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].get
+    description: API operation for the plural data source.
+    update:
+      operationId: list_neki_roles
+      summary: List Neki roles
+      x-speakeasy-entity-operation: NekiRoles#read
+      x-speakeasy-entity-description: Returns the roles for a PlanetScale Neki branch.
+
+  # The shared OpenAPI operation is described with the Postgres serializer.
+  # Neki role collection responses intentionally omit query_safety_settings.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].get.responses["200"].content["application/json"].schema.properties.data.items.properties.query_safety_settings
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].get.responses["200"].content["application/json"].schema.properties.data.items.required[?@ == 'query_safety_settings']
+    remove: true
+
+  # Mirror the planetscale_neki_role data source: keep the values needed to
+  # identify and connect to a role, and drop duplicate branch/actor metadata,
+  # lifecycle timestamps, and server-side deletion/status details. `password`
+  # is only populated on create, so it is always null in list responses.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].get.responses["200"].content["application/json"].schema.properties.data.items.properties['actor','base_username','branch','created_at','database_name','default','deleted_at','disabled_at','drop_failed','dropped_at','expired','password','updated_at']
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/roles#neki'].get.responses["200"].content["application/json"].schema.properties.data.items.required[?@ == 'actor' || @ == 'base_username' || @ == 'branch' || @ == 'created_at' || @ == 'database_name' || @ == 'default' || @ == 'deleted_at' || @ == 'disabled_at' || @ == 'drop_failed' || @ == 'dropped_at' || @ == 'expired' || @ == 'password' || @ == 'updated_at']
+    remove: true

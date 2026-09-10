@@ -29,10 +29,10 @@ type PostgresReadOnlyReplicasDataSource struct {
 
 // PostgresReadOnlyReplicasDataSourceModel describes the data model.
 type PostgresReadOnlyReplicasDataSourceModel struct {
-	Branch       types.String           `tfsdk:"branch"`
-	Data         []tfTypes.ResponseBody `tfsdk:"data"`
-	Database     types.String           `tfsdk:"database"`
-	Organization types.String           `tfsdk:"organization"`
+	Branch       types.String                               `tfsdk:"branch"`
+	Data         []tfTypes.ListReadOnlyReplicasResponseBody `tfsdk:"data"`
+	Database     types.String                               `tfsdk:"database"`
+	Organization types.String                               `tfsdk:"organization"`
 }
 
 // Metadata returns the data source type name.
@@ -158,7 +158,7 @@ func (r *PostgresReadOnlyReplicasDataSource) Read(ctx context.Context, req datas
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsResponseBody(ctx, res.ResponseBodies)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListReadOnlyReplicasResponseBody(ctx, res.ResponseBodies)...)
 
 	if resp.Diagnostics.HasError() {
 		return

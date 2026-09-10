@@ -33,6 +33,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 		r.KeyspaceShardLimit = types.Int64Value(resp.KeyspaceShardLimit)
 		r.ManagedTenancy = types.BoolValue(resp.ManagedTenancy)
 		r.Name = types.StringValue(resp.Name)
+		r.NekiRouterReplicasPerCellLimit = types.Int64Value(resp.NekiRouterReplicasPerCellLimit)
 		r.PaymentInfoRequired = types.BoolValue(resp.PaymentInfoRequired)
 		r.Plan = types.StringValue(resp.Plan)
 		r.SingleTenancy = types.BoolValue(resp.SingleTenancy)

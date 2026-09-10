@@ -1,0 +1,202 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_sidecar
+  version: 0.0.1
+actions:
+  # Sidecars are provisioned with configuration profiles. Terraform therefore
+  # uses PATCH for both create and update and does not delete the API object.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch
+    description: API operation for singleton resource create and update.
+    update:
+      operationId: update_neki_sidecar
+      x-speakeasy-entity-operation: NekiSidecar#create,update
+      x-speakeasy-entity-description: >-
+        Manage the singleton sidecar for a PlanetScale Neki configuration
+        profile. The sidecar is provisioned with the profile; creating this
+        Terraform resource adopts and configures it, while removing the
+        resource only stops managing it.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  # Expose the API's sidecar path parameter as configuration_profile in
+  # Terraform. Speakeasy merges it with the response property of the same name,
+  # so that response property must remain visible.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.parameters[?@.name == 'sidecar']
+    description: Use the configuration profile name as the singleton identity.
+    update:
+      x-speakeasy-name-override: configuration_profile
+      description: >-
+        The name of the shard configuration profile that owns the sidecar.
+        The API also accepts a sidecar ID here, but Terraform stores the
+        profile name returned by the API, so configure the profile name.
+      schema:
+        type: string
+        x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.requestBody.content["application/json"].schema.properties.parameters
+    description: Replace the untyped parameter object with Terraform's nested string map.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.requestBody.content["application/json"].schema.properties
+    description: Model sidecar parameter overrides as a nested string map.
+    update:
+      parameters:
+        type: object
+        nullable: true
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: string
+        x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+        description: >-
+          Desired effective sidecar parameter values nested by namespace, e.g.
+          { sidecar = { pool-capacity = "100" } }. When configured, Terraform
+          sends the complete map and resets omitted customer-configurable
+          parameters to their defaults. The API identifies Terraform requests
+          by the provider User-Agent.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiSidecar
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.responses["200"].content["application/json"].schema.properties['created_at','updated_at']
+    description: Omit sidecar timestamps from Terraform state.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].patch.responses["200"].content["application/json"].schema.required[?@ == 'created_at' || @ == 'updated_at']
+    description: Remove omitted sidecar fields from the required list.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].get
+    description: API operation for resource read and create/update polling.
+    update:
+      operationId: get_neki_sidecar
+      x-speakeasy-entity-operation:
+        - NekiSidecar#read
+        - entityOperation: NekiSidecar#create,update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: >-
+        Look up the singleton sidecar for a PlanetScale Neki configuration
+        profile.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 10
+          intervalSeconds: 10
+          limitCount: 90
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].get.parameters[?@.name == 'sidecar']
+    description: Use the configuration profile name as the singleton identity.
+    update:
+      x-speakeasy-match: configuration_profile
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].get.responses["200"].content["application/json"].schema.properties['created_at','updated_at']
+    description: Omit sidecar timestamps from Terraform state.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}"].get.responses["200"].content["application/json"].schema.required[?@ == 'created_at' || @ == 'updated_at']
+    description: Remove omitted sidecar fields from the required list.
+    remove: true
+
+  # Terraform stores parameters as a nested map, while the API returns parameter
+  # metadata. The SDK hook converts the response and preserves managed values.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}/parameters"].get.parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}/parameters"].get.responses["200"].content["application/json"].schema
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}/parameters"].get
+    description: Read effective customer sidecar parameters for Terraform state reconciliation.
+    update:
+      operationId: get_neki_sidecar_parameters
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: sidecar
+          in: path
+          required: true
+          description: The configuration profile name.
+          x-speakeasy-match: configuration_profile
+          schema:
+            type: string
+        - name: internal
+          in: query
+          required: false
+          description: Include internal parameters. Terraform always excludes them.
+          schema:
+            type: boolean
+            const: false
+            default: false
+            x-speakeasy-terraform-ignore: schema
+        - name: parameters
+          in: query
+          required: false
+          description: >-
+            Desired effective parameter values nested by namespace. The SDK
+            hook uses the prior Terraform value for reconciliation and removes
+            this query parameter before sending the API request.
+          content:
+            application/json:
+              schema:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        "200":
+          description: Returns reconciled effective sidecar parameter values for Terraform.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      Managed effective sidecar parameter values nested by
+                      namespace. Remote non-default values are adopted during
+                      reads.
+                required:
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Sidecar not found
+        "500":
+          description: Internal Server Error
+      x-speakeasy-entity-operation:
+        - NekiSidecar#read#2
+        - NekiSidecar#create,update#3

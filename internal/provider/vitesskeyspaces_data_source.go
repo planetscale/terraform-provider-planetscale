@@ -136,6 +136,19 @@ func (r *VitessKeyspacesDataSource) Schema(ctx context.Context, req datasource.S
 							Computed:    true,
 							Description: `The number of keyspace shards`,
 						},
+						"throttler": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"enabled": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Whether the keyspace throttler is enabled`,
+								},
+								"threshold": schema.Float64Attribute{
+									Computed:    true,
+									Description: `Replication lag in seconds that trips the throttler`,
+								},
+							},
+						},
 						"updated_at": schema.StringAttribute{
 							Computed:    true,
 							Description: `When the keyspace was last updated`,

@@ -35,6 +35,9 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties.major_version
     description: Remove major_version (Postgres-only field)
     remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties['configuration_profile_sizes','router_sizes']
+    description: Remove the Neki-only backup restore sizing inputs.
+    remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#vitess'].post.requestBody.content['application/json'].schema.properties
     description: Add Vitess create-time fields and constants.

@@ -51,6 +51,7 @@ data "planetscale_vitess_keyspace" "my_vitesskeyspace" {
 - `resizing` (Boolean) True while the keyspace is actively resizing. The provider waits for this to become false after create and update.
 - `sharded` (Boolean) If the keyspace is sharded
 - `shards` (Number) The number of shards. Set only at create time; changing this value requires replacement.
+- `throttler` (Attributes) (see [below for nested schema](#nestedatt--throttler))
 - `updated_at` (String) When the keyspace was last updated
 - `vector_pool_allocation` (Number) Percentage of buffer pool memory allocated to vector indexes
 - `vreplication_flags` (Attributes) (see [below for nested schema](#nestedatt--vreplication_flags))
@@ -61,6 +62,15 @@ data "planetscale_vitess_keyspace" "my_vitesskeyspace" {
 Read-Only:
 
 - `strategy` (String) The replication durability strategy
+
+
+<a id="nestedatt--throttler"></a>
+### Nested Schema for `throttler`
+
+Read-Only:
+
+- `enabled` (Boolean) Whether the keyspace throttler is enabled
+- `threshold` (Number) Replication lag in seconds that trips the throttler
 
 
 <a id="nestedatt--vreplication_flags"></a>

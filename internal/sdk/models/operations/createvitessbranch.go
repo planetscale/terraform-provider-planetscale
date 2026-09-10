@@ -40,6 +40,7 @@ type CreateVitessBranchKind string
 const (
 	CreateVitessBranchKindMysql      CreateVitessBranchKind = "mysql"
 	CreateVitessBranchKindPostgresql CreateVitessBranchKind = "postgresql"
+	CreateVitessBranchKindNeki       CreateVitessBranchKind = "neki"
 )
 
 func (e CreateVitessBranchKind) ToPointer() *CreateVitessBranchKind {
@@ -54,6 +55,8 @@ func (e *CreateVitessBranchKind) UnmarshalJSON(data []byte) error {
 	case "mysql":
 		fallthrough
 	case "postgresql":
+		fallthrough
+	case "neki":
 		*e = CreateVitessBranchKind(v)
 		return nil
 	default:

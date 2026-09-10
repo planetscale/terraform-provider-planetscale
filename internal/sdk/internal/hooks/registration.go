@@ -10,13 +10,18 @@ package hooks
 
 func initHooks(h *Hooks) {
 	customSecurityHook := &CustomSecurityHook{}
+	nekiShardReassignmentHook := NewNekiShardReassignmentHook()
 
 	h.registerSDKInitHook(NewPostgresBranchNoContentSkipHook())
 	h.registerSDKInitHook(NewPostgresBranchRegionSlugHook())
 	h.registerSDKInitHook(NewPostgresBouncerNoContentSkipHook())
 	h.registerSDKInitHook(NewVitessBranchNoContentSkipHook())
+	h.registerSDKInitHook(NewNekiParametersHook())
 	h.registerSDKInitHook(NewReadOnlyReplicaRegionSlugHook())
 	h.registerBeforeRequestHook(customSecurityHook)
+	h.registerBeforeRequestHook(nekiShardReassignmentHook)
+	h.registerAfterSuccessHook(nekiShardReassignmentHook)
+	h.registerAfterSuccessHook(NewClientErrorHook())
 	// h.registerAfterErrorHook(exampleHook)
 	// h.registerAfterSuccessHook(exampleHook)
 }

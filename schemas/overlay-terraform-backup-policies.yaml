@@ -63,7 +63,65 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema.properties.required
     remove: true
 
-  # Copy and split backup policy paths for Vitess and Postgres resources
+  # Keep response required lists aligned with the operational fields retained for Terraform.
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].get.responses['200'].content['application/json'].schema.properties.data.items
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies'].post.responses['201'].content['application/json'].schema
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].get.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}'].patch.responses['200'].content['application/json'].schema
+    update:
+      required:
+        - id
+        - display_name
+        - name
+        - target
+        - retention_value
+        - retention_unit
+        - frequency_value
+        - frequency_unit
+        - schedule_time
+        - schedule_day
+        - schedule_week
+
+  # Copy and split backup policy paths for Vitess, Postgres, and Neki resources
   - target: $.paths
     description: Add Vitess backup policy path entries
     update:
@@ -96,6 +154,23 @@ actions:
 
   - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#postgres']
     description: Copy backup policy item path as base for postgres
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}']
+
+  - target: $.paths
+    description: Add Neki backup policy path entries
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki']
+    description: Copy backup policies collection path as base for Neki
+    copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies']
+
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/backup-policies/{id}#neki: {}
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}#neki']
+    description: Copy backup policy item path as base for Neki
     copy: $.paths['/organizations/{organization}/databases/{database}/backup-policies/{id}']
 
   # Remove copied base backup policy paths

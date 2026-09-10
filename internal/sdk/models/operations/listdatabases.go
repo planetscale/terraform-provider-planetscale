@@ -277,6 +277,7 @@ type ListDatabasesKind string
 const (
 	ListDatabasesKindMysql      ListDatabasesKind = "mysql"
 	ListDatabasesKindPostgresql ListDatabasesKind = "postgresql"
+	ListDatabasesKindNeki       ListDatabasesKind = "neki"
 )
 
 func (e ListDatabasesKind) ToPointer() *ListDatabasesKind {
@@ -291,6 +292,8 @@ func (e *ListDatabasesKind) UnmarshalJSON(data []byte) error {
 	case "mysql":
 		fallthrough
 	case "postgresql":
+		fallthrough
+	case "neki":
 		*e = ListDatabasesKind(v)
 		return nil
 	default:

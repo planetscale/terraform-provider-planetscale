@@ -1,0 +1,176 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_admin
+  version: 0.0.1
+actions:
+  # A Neki branch always owns exactly one admin. PATCH is idempotent and
+  # therefore adopts and configures the existing singleton for both Terraform
+  # create and update operations.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch
+    description: API operation for singleton resource create and update.
+    update:
+      operationId: update_neki_admin
+      x-speakeasy-entity-operation: NekiAdmin#create,update
+      x-speakeasy-entity-description: >-
+        Manage the singleton admin for a PlanetScale Neki branch. The admin is
+        provisioned with the branch; creating this Terraform resource adopts
+        and configures it, while removing the resource only stops managing it.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.requestBody.content["application/json"].schema.properties.parameters
+    description: Replace the untyped parameter object with Terraform's nested string map.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.requestBody.content["application/json"].schema.properties
+    description: Model admin parameter overrides as a nested string map.
+    update:
+      parameters:
+        type: object
+        nullable: true
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: string
+        x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+        description: >-
+          Desired effective admin parameter values nested by namespace, e.g.
+          { admin = { recovery-poll-interval = "10s" } }. When configured,
+          Terraform sends the complete map and resets omitted
+          customer-configurable parameters to their defaults. The API
+          identifies Terraform requests by the provider User-Agent.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: NekiAdmin
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.responses["200"].content["application/json"].schema.properties['sku','created_at','updated_at']
+    description: Omit duplicate SKU details and timestamps from Terraform state.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].patch.responses["200"].content["application/json"].schema.required[?@ == 'sku' || @ == 'created_at' || @ == 'updated_at']
+    description: Remove omitted admin fields from the required list.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].get
+    description: API operation for resource read and create/update polling.
+    update:
+      operationId: get_neki_admin
+      x-speakeasy-entity-operation:
+        - NekiAdmin#read
+        - entityOperation: NekiAdmin#create,update#2
+          options:
+            polling:
+              name: WaitForReady
+      x-speakeasy-entity-description: >-
+        Look up the singleton admin for a PlanetScale Neki branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 10
+          intervalSeconds: 10
+          limitCount: 90
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].get.responses["200"].content["application/json"].schema.properties['sku','created_at','updated_at']
+    description: Omit duplicate SKU details and timestamps from Terraform state.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin"].get.responses["200"].content["application/json"].schema.required[?@ == 'sku' || @ == 'created_at' || @ == 'updated_at']
+    description: Remove omitted admin fields from the required list.
+    remove: true
+
+  # The API returns rich parameter details. A custom SDK hook retains
+  # previously managed default-valued keys, adopts remote non-default values,
+  # and rewrites the response to Terraform's nested map.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin/parameters"].get.parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin/parameters"].get.responses["200"].content["application/json"].schema
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/admin/parameters"].get
+    description: Read effective customer admin parameters for Terraform state reconciliation.
+    update:
+      operationId: get_neki_admin_parameters
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: internal
+          in: query
+          required: false
+          description: Include internal parameters. Terraform always excludes them.
+          schema:
+            type: boolean
+            const: false
+            default: false
+            x-speakeasy-terraform-ignore: schema
+        - name: parameters
+          in: query
+          required: false
+          description: >-
+            Desired effective parameter values nested by namespace. The SDK
+            hook uses the prior Terraform value for reconciliation and removes
+            this query parameter before sending the API request.
+          content:
+            application/json:
+              schema:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        "200":
+          description: Returns reconciled effective admin parameter values for Terraform.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      Managed effective admin parameter values nested by
+                      namespace. Remote non-default values are adopted during
+                      reads.
+                required:
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Admin not found
+        "500":
+          description: Internal Server Error
+      x-speakeasy-entity-operation:
+        - NekiAdmin#read#2
+        - NekiAdmin#create,update#3

@@ -1,0 +1,24 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_neki_backup_policies data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths['/organizations/{organization}/databases/{database}/backup-policies#neki'].get
+    description: API operation for read and enable pagination
+    update:
+      operationId: list_neki_backup_policies
+      summary: List Neki backup policies
+      x-speakeasy-entity-operation: NekiBackupPolicies#read
+      x-speakeasy-entity-description: >-
+        Returns PlanetScale Neki database backup policies, including whether
+        each policy is a required system policy that cannot be updated or
+        deleted.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data

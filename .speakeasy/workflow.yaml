@@ -8,8 +8,16 @@ sources:
             - location: schemas/overlay-terraform.yaml
 
             - location: schemas/overlay-terraform-branches.yaml
+            - location: schemas/overlay-terraform-neki-branches.yaml
             - location: schemas/overlay-terraform-postgres-branch.yaml
             - location: schemas/overlay-terraform-vitess-branch.yaml
+            - location: schemas/overlay-terraform-neki-branch.yaml
+            - location: schemas/overlay-terraform-neki-admin.yaml
+            - location: schemas/overlay-terraform-neki-configuration-profile.yaml
+            - location: schemas/overlay-terraform-neki-configuration-profiles.yaml
+            - location: schemas/overlay-terraform-neki-shard.yaml
+            - location: schemas/overlay-terraform-neki-shards.yaml
+            - location: schemas/overlay-terraform-neki-sidecar.yaml
 
             - location: schemas/overlay-terraform-database_vitess.yaml
             - location: schemas/overlay-terraform-database_postgres.yaml
@@ -19,6 +27,8 @@ sources:
             - location: schemas/overlay-terraform-postgres-branch-role.yaml
             - location: schemas/overlay-terraform-postgres-redacted-branch-role.yaml
             - location: schemas/overlay-terraform-postgres-branch-roles.yaml
+            - location: schemas/overlay-terraform-neki-role.yaml
+            - location: schemas/overlay-terraform-neki-roles.yaml
             - location: schemas/overlay-terraform-vitess-branch-password.yaml
             - location: schemas/overlay-terraform-vitess-branch-passwords.yaml
             - location: schemas/overlay-terraform-vitess-keyspace.yaml
@@ -27,8 +37,10 @@ sources:
             - location: schemas/overlay-terraform-backup-policies.yaml
             - location: schemas/overlay-terraform-vitess-backup-policy.yaml
             - location: schemas/overlay-terraform-postgres-backup-policy.yaml
+            - location: schemas/overlay-terraform-neki-backup-policy.yaml
             - location: schemas/overlay-terraform-vitess-backup-policies.yaml
             - location: schemas/overlay-terraform-postgres-backup-policies.yaml
+            - location: schemas/overlay-terraform-neki-backup-policies.yaml
 
             - location: schemas/overlay-terraform-backups.yaml
             - location: schemas/overlay-terraform-vitess-branch-backup.yaml
@@ -38,6 +50,9 @@ sources:
 
             - location: schemas/overlay-terraform-postgres-bouncer.yaml
             - location: schemas/overlay-terraform-postgres-bouncers.yaml
+
+            - location: schemas/overlay-terraform-neki-router.yaml
+            - location: schemas/overlay-terraform-neki-routers.yaml
 
             - location: schemas/overlay-terraform-postgres-read-only-replica.yaml
             - location: schemas/overlay-terraform-postgres-read-only-replicas.yaml

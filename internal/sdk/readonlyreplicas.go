@@ -150,7 +150,7 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out []operations.ResponseBody
+			var out []operations.ListReadOnlyReplicasResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

@@ -76,6 +76,8 @@ type ListOrganizationsData struct {
 	InvoiceBudgetAmount string `json:"invoice_budget_amount"`
 	// The keyspace shard limit for the organization
 	KeyspaceShardLimit int64 `json:"keyspace_shard_limit"`
+	// The Neki router replica limit per cell for the organization
+	NekiRouterReplicasPerCellLimit int64 `json:"neki_router_replicas_per_cell_limit"`
 	// Whether or not the organization has a payment method on file
 	HasCard bool `json:"has_card"`
 	// Whether or not the organization requires payment information
@@ -206,6 +208,13 @@ func (l *ListOrganizationsData) GetKeyspaceShardLimit() int64 {
 		return 0
 	}
 	return l.KeyspaceShardLimit
+}
+
+func (l *ListOrganizationsData) GetNekiRouterReplicasPerCellLimit() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.NekiRouterReplicasPerCellLimit
 }
 
 func (l *ListOrganizationsData) GetHasCard() bool {
