@@ -1244,6 +1244,9 @@ paths:
                             postgresql_supported:
                               type: boolean
                               description: Whether the region supports PostgreSQL databases
+                            neki_supported:
+                              type: boolean
+                              description: Whether the region supports Neki databases
                           required:
                             - id
                             - provider
@@ -1255,6 +1258,7 @@ paths:
                             - current_default
                             - mysql_supported
                             - postgresql_supported
+                            - neki_supported
                         html_url:
                           type: string
                           description: The URL to see this database's branches in the web UI
@@ -1602,6 +1606,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -1613,6 +1620,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   html_url:
                     type: string
                     description: The URL to see this database's branches in the web UI
@@ -1916,6 +1924,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -1927,6 +1938,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   html_url:
                     type: string
                     description: The URL to see this database's branches in the web UI
@@ -2272,6 +2284,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -2283,6 +2298,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   html_url:
                     type: string
                     description: The URL to see this database's branches in the web UI
@@ -3483,6 +3499,9 @@ paths:
                             postgresql_supported:
                               type: boolean
                               description: Whether the region supports PostgreSQL databases
+                            neki_supported:
+                              type: boolean
+                              description: Whether the region supports Neki databases
                           required:
                             - id
                             - provider
@@ -3494,6 +3513,7 @@ paths:
                             - current_default
                             - mysql_supported
                             - postgresql_supported
+                            - neki_supported
                         parent_branch:
                           type: string
                           description: The name of the parent branch from which the branch was created
@@ -3878,6 +3898,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -3889,6 +3912,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -4195,6 +4219,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -4206,6 +4233,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -4523,6 +4551,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -4534,6 +4565,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -12496,6 +12528,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -12507,6 +12542,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -16526,6 +16562,15 @@ paths:
                     vplayer_batching:
                       type: boolean
                       description: Enable VPlayer batching
+                throttler:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                      description: Whether the keyspace throttler is enabled
+                    threshold:
+                      type: number
+                      description: Replication lag in seconds that trips the throttler. Must be >= 0
       responses:
         "200":
           description: Returns the keyspace
@@ -20362,6 +20407,9 @@ paths:
                             postgresql_supported:
                               type: boolean
                               description: Whether the region supports PostgreSQL databases
+                            neki_supported:
+                              type: boolean
+                              description: Whether the region supports Neki databases
                           required:
                             - id
                             - provider
@@ -20373,6 +20421,7 @@ paths:
                             - current_default
                             - mysql_supported
                             - postgresql_supported
+                            - neki_supported
                         username:
                           type: string
                           description: The username for the password
@@ -20648,6 +20697,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -20659,6 +20711,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   username:
                     type: string
                     description: The username for the password
@@ -20901,6 +20954,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -20912,6 +20968,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   username:
                     type: string
                     description: The username for the password
@@ -21165,6 +21222,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -21176,6 +21236,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   username:
                     type: string
                     description: The username for the password
@@ -21473,6 +21534,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -21484,6 +21548,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   username:
                     type: string
                     description: The username for the password
@@ -21805,6 +21870,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -21816,6 +21884,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -22789,6 +22858,9 @@ paths:
                         postgresql_supported:
                           type: boolean
                           description: Whether the region supports PostgreSQL databases
+                        neki_supported:
+                          type: boolean
+                          description: Whether the region supports Neki databases
                       required:
                         - id
                         - provider
@@ -22800,6 +22872,7 @@ paths:
                         - current_default
                         - mysql_supported
                         - postgresql_supported
+                        - neki_supported
                     parameters:
                       type: array
                       items:
@@ -23100,6 +23173,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -23111,6 +23187,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parameters:
                     type: array
                     items:
@@ -23396,6 +23473,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -23407,6 +23487,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parameters:
                     type: array
                     items:
@@ -23708,6 +23789,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -23719,6 +23803,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parameters:
                     type: array
                     items:
@@ -26567,6 +26652,9 @@ paths:
                       type: number
                       description: The monthly rate for the SKU
                       nullable: true
+                    enabled:
+                      type: boolean
+                      description: Whether or not the router SKU is enabled for the organization
                   required:
                     - name
                     - display_name
@@ -26574,6 +26662,7 @@ paths:
                     - ram
                     - sort_order
                     - rate
+                    - enabled
         "401":
           description: Unauthorized
         "403":
@@ -26664,6 +26753,9 @@ paths:
                           type: number
                           description: The monthly rate for the SKU
                           nullable: true
+                        enabled:
+                          type: boolean
+                          description: Whether or not the router SKU is enabled for the organization
                       required:
                         - name
                         - display_name
@@ -26671,6 +26763,7 @@ paths:
                         - ram
                         - sort_order
                         - rate
+                        - enabled
                     router_size:
                       type: string
                       description: The router size SKU name
@@ -26818,6 +26911,9 @@ paths:
                         type: number
                         description: The monthly rate for the SKU
                         nullable: true
+                      enabled:
+                        type: boolean
+                        description: Whether or not the router SKU is enabled for the organization
                     required:
                       - name
                       - display_name
@@ -26825,6 +26921,7 @@ paths:
                       - ram
                       - sort_order
                       - rate
+                      - enabled
                   router_size:
                     type: string
                     description: The router size SKU name
@@ -26963,6 +27060,9 @@ paths:
                         type: number
                         description: The monthly rate for the SKU
                         nullable: true
+                      enabled:
+                        type: boolean
+                        description: Whether or not the router SKU is enabled for the organization
                     required:
                       - name
                       - display_name
@@ -26970,6 +27070,7 @@ paths:
                       - ram
                       - sort_order
                       - rate
+                      - enabled
                   router_size:
                     type: string
                     description: The router size SKU name
@@ -27132,6 +27233,9 @@ paths:
                         type: number
                         description: The monthly rate for the SKU
                         nullable: true
+                      enabled:
+                        type: boolean
+                        description: Whether or not the router SKU is enabled for the organization
                     required:
                       - name
                       - display_name
@@ -27139,6 +27243,7 @@ paths:
                       - ram
                       - sort_order
                       - rate
+                      - enabled
                   router_size:
                     type: string
                     description: The router size SKU name
@@ -27895,6 +28000,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -27906,6 +28014,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -28209,6 +28318,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -28220,6 +28332,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -28512,6 +28625,9 @@ paths:
                       postgresql_supported:
                         type: boolean
                         description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
                     required:
                       - id
                       - provider
@@ -28523,6 +28639,7 @@ paths:
                       - current_default
                       - mysql_supported
                       - postgresql_supported
+                      - neki_supported
                   parent_branch:
                     type: string
                     description: The name of the parent branch from which the branch was created
@@ -43496,6 +43613,9 @@ paths:
                             postgresql_supported:
                               type: boolean
                               description: Whether the region supports PostgreSQL databases
+                            neki_supported:
+                              type: boolean
+                              description: Whether the region supports Neki databases
                           required:
                             - id
                             - provider
@@ -43507,6 +43627,7 @@ paths:
                             - current_default
                             - mysql_supported
                             - postgresql_supported
+                            - neki_supported
                       required:
                         - id
                         - display_name
@@ -43649,6 +43770,9 @@ paths:
                         postgresql_supported:
                           type: boolean
                           description: Whether the region supports PostgreSQL databases
+                        neki_supported:
+                          type: boolean
+                          description: Whether the region supports Neki databases
                       required:
                         - id
                         - provider
@@ -43660,6 +43784,7 @@ paths:
                         - current_default
                         - mysql_supported
                         - postgresql_supported
+                        - neki_supported
                 required:
                   - type
                   - current_page
@@ -53210,6 +53335,9 @@ paths:
                         postgresql_supported:
                           type: boolean
                           description: Whether the region supports PostgreSQL databases
+                        neki_supported:
+                          type: boolean
+                          description: Whether the region supports Neki databases
                       required:
                         - id
                         - provider
@@ -53221,6 +53349,7 @@ paths:
                         - current_default
                         - mysql_supported
                         - postgresql_supported
+                        - neki_supported
                 required:
                   - type
                   - current_page
@@ -56526,6 +56655,9 @@ paths:
                                   postgresql_supported:
                                     type: boolean
                                     description: Whether the region supports PostgreSQL databases
+                                  neki_supported:
+                                    type: boolean
+                                    description: Whether the region supports Neki databases
                                 required:
                                   - id
                                   - provider
@@ -56537,6 +56669,7 @@ paths:
                                   - current_default
                                   - mysql_supported
                                   - postgresql_supported
+                                  - neki_supported
                               username:
                                 type: string
                                 description: The username for the password
@@ -56903,6 +57036,9 @@ paths:
                             postgresql_supported:
                               type: boolean
                               description: Whether the region supports PostgreSQL databases
+                            neki_supported:
+                              type: boolean
+                              description: Whether the region supports Neki databases
                           required:
                             - id
                             - provider
@@ -56914,6 +57050,7 @@ paths:
                             - current_default
                             - mysql_supported
                             - postgresql_supported
+                            - neki_supported
                         username:
                           type: string
                           description: The username for the password
@@ -57265,6 +57402,9 @@ paths:
                             postgresql_supported:
                               type: boolean
                               description: Whether the region supports PostgreSQL databases
+                            neki_supported:
+                              type: boolean
+                              description: Whether the region supports Neki databases
                           required:
                             - id
                             - provider
@@ -57276,6 +57416,7 @@ paths:
                             - current_default
                             - mysql_supported
                             - postgresql_supported
+                            - neki_supported
                         username:
                           type: string
                           description: The username for the password
@@ -59785,6 +59926,9 @@ components:
                   postgresql_supported:
                     type: boolean
                     description: Whether the region supports PostgreSQL databases
+                  neki_supported:
+                    type: boolean
+                    description: Whether the region supports Neki databases
                 required:
                   - id
                   - provider
@@ -59796,6 +59940,7 @@ components:
                   - current_default
                   - mysql_supported
                   - postgresql_supported
+                  - neki_supported
               parent_branch:
                 type: string
                 description: The name of the parent branch from which the branch was created
@@ -60059,6 +60204,9 @@ components:
             postgresql_supported:
               type: boolean
               description: Whether the region supports PostgreSQL databases
+            neki_supported:
+              type: boolean
+              description: Whether the region supports Neki databases
           required:
             - id
             - provider
@@ -60070,6 +60218,7 @@ components:
             - current_default
             - mysql_supported
             - postgresql_supported
+            - neki_supported
         parent_branch:
           type: string
           description: The name of the parent branch from which the branch was created
@@ -61295,6 +61444,9 @@ components:
                   postgresql_supported:
                     type: boolean
                     description: Whether the region supports PostgreSQL databases
+                  neki_supported:
+                    type: boolean
+                    description: Whether the region supports Neki databases
                 required:
                   - id
                   - provider
@@ -61306,6 +61458,7 @@ components:
                   - current_default
                   - mysql_supported
                   - postgresql_supported
+                  - neki_supported
               username:
                 type: string
                 description: The username for the password
@@ -61497,6 +61650,9 @@ components:
             postgresql_supported:
               type: boolean
               description: Whether the region supports PostgreSQL databases
+            neki_supported:
+              type: boolean
+              description: Whether the region supports Neki databases
           required:
             - id
             - provider
@@ -61508,6 +61664,7 @@ components:
             - current_default
             - mysql_supported
             - postgresql_supported
+            - neki_supported
         username:
           type: string
           description: The username for the password
@@ -61884,6 +62041,9 @@ components:
                   postgresql_supported:
                     type: boolean
                     description: Whether the region supports PostgreSQL databases
+                  neki_supported:
+                    type: boolean
+                    description: Whether the region supports Neki databases
                 required:
                   - id
                   - provider
@@ -61895,6 +62055,7 @@ components:
                   - current_default
                   - mysql_supported
                   - postgresql_supported
+                  - neki_supported
               html_url:
                 type: string
                 description: The URL to see this database's branches in the web UI
@@ -62163,6 +62324,9 @@ components:
             postgresql_supported:
               type: boolean
               description: Whether the region supports PostgreSQL databases
+            neki_supported:
+              type: boolean
+              description: Whether the region supports Neki databases
           required:
             - id
             - provider
@@ -62174,6 +62338,7 @@ components:
             - current_default
             - mysql_supported
             - postgresql_supported
+            - neki_supported
         html_url:
           type: string
           description: The URL to see this database's branches in the web UI
@@ -62381,6 +62546,9 @@ components:
               postgresql_supported:
                 type: boolean
                 description: Whether the region supports PostgreSQL databases
+              neki_supported:
+                type: boolean
+                description: Whether the region supports Neki databases
             required:
               - id
               - provider
@@ -62392,6 +62560,7 @@ components:
               - current_default
               - mysql_supported
               - postgresql_supported
+              - neki_supported
       required:
         - type
         - current_page
@@ -62504,6 +62673,9 @@ components:
                   postgresql_supported:
                     type: boolean
                     description: Whether the region supports PostgreSQL databases
+                  neki_supported:
+                    type: boolean
+                    description: Whether the region supports Neki databases
                 required:
                   - id
                   - provider
@@ -62515,6 +62687,7 @@ components:
                   - current_default
                   - mysql_supported
                   - postgresql_supported
+                  - neki_supported
             required:
               - id
               - display_name
@@ -64121,6 +64294,9 @@ components:
               type: number
               description: The monthly rate for the SKU
               nullable: true
+            enabled:
+              type: boolean
+              description: Whether or not the router SKU is enabled for the organization
           required:
             - name
             - display_name
@@ -64128,6 +64304,7 @@ components:
             - ram
             - sort_order
             - rate
+            - enabled
         router_size:
           type: string
           description: The router size SKU name
@@ -64193,6 +64370,9 @@ components:
           type: number
           description: The monthly rate for the SKU
           nullable: true
+        enabled:
+          type: boolean
+          description: Whether or not the router SKU is enabled for the organization
       required:
         - name
         - display_name
@@ -64200,6 +64380,7 @@ components:
         - ram
         - sort_order
         - rate
+        - enabled
     NekiExtensionDefinition:
       type: object
       properties:
@@ -68507,6 +68688,9 @@ components:
             postgresql_supported:
               type: boolean
               description: Whether the region supports PostgreSQL databases
+            neki_supported:
+              type: boolean
+              description: Whether the region supports Neki databases
           required:
             - id
             - provider
@@ -68518,6 +68702,7 @@ components:
             - current_default
             - mysql_supported
             - postgresql_supported
+            - neki_supported
         parameters:
           type: array
           items:
@@ -73917,6 +74102,9 @@ components:
                         postgresql_supported:
                           type: boolean
                           description: Whether the region supports PostgreSQL databases
+                        neki_supported:
+                          type: boolean
+                          description: Whether the region supports Neki databases
                       required:
                         - id
                         - provider
@@ -73928,6 +74116,7 @@ components:
                         - current_default
                         - mysql_supported
                         - postgresql_supported
+                        - neki_supported
                     username:
                       type: string
                       description: The username for the password
@@ -74234,6 +74423,9 @@ components:
                   postgresql_supported:
                     type: boolean
                     description: Whether the region supports PostgreSQL databases
+                  neki_supported:
+                    type: boolean
+                    description: Whether the region supports Neki databases
                 required:
                   - id
                   - provider
@@ -74245,6 +74437,7 @@ components:
                   - current_default
                   - mysql_supported
                   - postgresql_supported
+                  - neki_supported
               username:
                 type: string
                 description: The username for the password
