@@ -10,6 +10,19 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
+func (r *NekiConfigurationProfileDataSourceModel) RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx context.Context, resp *operations.GetNekiConfigurationProfileExtensionsResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Extensions = make([]types.String, 0, len(resp.Extensions))
+		for _, v := range resp.Extensions {
+			r.Extensions = append(r.Extensions, types.StringValue(v))
+		}
+	}
+
+	return diags
+}
+
 func (r *NekiConfigurationProfileDataSourceModel) RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx context.Context, resp *operations.GetNekiConfigurationProfileParametersResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -57,6 +70,36 @@ func (r *NekiConfigurationProfileDataSourceModel) RefreshFromOperationsGetNekiCo
 	return diags
 }
 
+func (r *NekiConfigurationProfileDataSourceModel) ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx context.Context) (*operations.GetNekiConfigurationProfileExtensionsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var configurationProfile string
+	configurationProfile = r.Name.ValueString()
+
+	extensions := make([]string, 0, len(r.Extensions))
+	for extensionsIndex := range r.Extensions {
+		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	}
+	out := operations.GetNekiConfigurationProfileExtensionsRequest{
+		Organization:         organization,
+		Database:             database,
+		Branch:               branch,
+		ConfigurationProfile: configurationProfile,
+		Extensions:           extensions,
+	}
+
+	return &out, diags
+}
+
 func (r *NekiConfigurationProfileDataSourceModel) ToOperationsGetNekiConfigurationProfileParametersRequest(ctx context.Context) (*operations.GetNekiConfigurationProfileParametersRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -86,12 +129,17 @@ func (r *NekiConfigurationProfileDataSourceModel) ToOperationsGetNekiConfigurati
 			parameters[parametersKey] = parametersInst
 		}
 	}
+	extensions := make([]string, 0, len(r.Extensions))
+	for extensionsIndex := range r.Extensions {
+		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	}
 	out := operations.GetNekiConfigurationProfileParametersRequest{
 		Organization:         organization,
 		Database:             database,
 		Branch:               branch,
 		ConfigurationProfile: configurationProfile,
 		Parameters:           parameters,
+		Extensions:           extensions,
 	}
 
 	return &out, diags

@@ -5,14 +5,14 @@ subcategory: ""
 description: |-
   Manage a shard configuration profile for a PlanetScale Neki branch.
   Creating a planetscale_neki_branch already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.
-  Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the ready state. PostgreSQL extensions are managed through parameters: list enabled extensions in parameters.pgconf.session_preload_libraries, and configure extension parameters under parameters (for example, parameters.pgconf.auto_explain.log_level).
+  Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the ready state. Use extensions to select enabled PostgreSQL extensions and parameters for their settings (for example, parameters.pgconf.auto_explain.log_level). Omit extensions to leave the enabled set unchanged, or use an empty set to disable them.
 ---
 
 # planetscale_neki_configuration_profile (Resource)
 
 Manage a shard configuration profile for a PlanetScale Neki branch.
 Creating a `planetscale_neki_branch` already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.
-Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. PostgreSQL extensions are managed through `parameters`: list enabled extensions in `parameters.pgconf.session_preload_libraries`, and configure extension parameters under `parameters` (for example, `parameters.pgconf.auto_explain.log_level`).
+Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. Use `extensions` to select enabled PostgreSQL extensions and `parameters` for their settings (for example, `parameters.pgconf.auto_explain.log_level`). Omit `extensions` to leave the enabled set unchanged, or use an empty set to disable them.
 
 
 
@@ -29,7 +29,8 @@ Cluster size, replica, parameter, and PostgreSQL version changes update in place
 ### Optional
 
 - `cluster_size` (String) The database cluster size name for shards assigned to this profile. Updates in place through Neki maintenance.
-- `parameters` (Map of Map of String) Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Enabled PostgreSQL extensions are listed in `pgconf.session_preload_libraries`, and extension parameters use their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.
+- `extensions` (List of String) Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
+- `parameters` (Map of Map of String) Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.
 - `postgres_major_version` (Number) The PostgreSQL major version for the shard configuration profile
 - `postgres_minor_version` (Number) The PostgreSQL minor version for the shard configuration profile. Requires postgres_major_version when specified.
 - `replicas` (Number) The new number of replicas for the shard configuration profile

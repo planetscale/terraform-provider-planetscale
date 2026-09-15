@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -43,6 +44,7 @@ type NekiConfigurationProfileResourceModel struct {
 	Branch               types.String                                          `tfsdk:"branch"`
 	ClusterSize          types.String                                          `tfsdk:"cluster_size"`
 	Database             types.String                                          `tfsdk:"database"`
+	Extensions           []types.String                                        `tfsdk:"extensions"`
 	ID                   types.String                                          `tfsdk:"id"`
 	IsDefault            types.Bool                                            `tfsdk:"is_default"`
 	Name                 types.String                                          `tfsdk:"name"`
@@ -62,7 +64,7 @@ func (r *NekiConfigurationProfileResource) Metadata(ctx context.Context, req res
 
 func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage a shard configuration profile for a PlanetScale Neki branch.\nCreating a `planetscale_neki_branch` already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.\nCluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. PostgreSQL extensions are managed through `parameters`: list enabled extensions in `parameters.pgconf.session_preload_libraries`, and configure extension parameters under `parameters` (for example, `parameters.pgconf.auto_explain.log_level`).",
+		MarkdownDescription: "Manage a shard configuration profile for a PlanetScale Neki branch.\nCreating a `planetscale_neki_branch` already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.\nCluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. Use `extensions` to select enabled PostgreSQL extensions and `parameters` for their settings (for example, `parameters.pgconf.auto_explain.log_level`). Omit `extensions` to leave the enabled set unchanged, or use an empty set to disable them.",
 		Attributes: map[string]schema.Attribute{
 			"branch": schema.StringAttribute{
 				Required: true,
@@ -85,6 +87,14 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `. Requires replacement if changed.`,
+			},
+			"extensions": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.`,
+				Validators: []validator.List{
+					listvalidator.UniqueValues(),
+				},
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -118,7 +128,7 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 				ElementType: types.MapType{
 					ElemType: types.StringType,
 				},
-				Description: `Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Enabled PostgreSQL extensions are listed in ` + "`" + `pgconf.session_preload_libraries` + "`" + `, and extension parameters use their ` + "`" + `pgconf` + "`" + ` keys (for example, ` + "`" + `pgconf.auto_explain.log_level` + "`" + `). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.`,
+				Description: `Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their ` + "`" + `pgconf` + "`" + ` keys (for example, ` + "`" + `pgconf.auto_explain.log_level` + "`" + `). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.`,
 			},
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,
@@ -442,6 +452,43 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request6, request6Diags := data.ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx)
+	resp.Diagnostics.Append(request6Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res6, err := r.client.APINekiShardConfigurationProfileExtensions.GetNekiConfigurationProfileExtensions(ctx, *request6)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res6 != nil && res6.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res6.RawResponse))
+		}
+		return
+	}
+	if res6 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res6))
+		return
+	}
+	if res6.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res6.StatusCode), debugResponse(res6.RawResponse))
+		return
+	}
+	if !(res6.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res6.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx, res6.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -531,6 +578,41 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request2, request2Diags := data.ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.APINekiShardConfigurationProfileExtensions.GetNekiConfigurationProfileExtensions(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+	if !(res2.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -688,6 +770,43 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx, res3.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request4, request4Diags := data.ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx)
+	resp.Diagnostics.Append(request4Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res4, err := r.client.APINekiShardConfigurationProfileExtensions.GetNekiConfigurationProfileExtensions(ctx, *request4)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res4 != nil && res4.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
+		}
+		return
+	}
+	if res4 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res4))
+		return
+	}
+	if res4.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res4.StatusCode), debugResponse(res4.RawResponse))
+		return
+	}
+	if !(res4.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res4.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx, res4.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
