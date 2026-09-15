@@ -48,6 +48,10 @@ func (c *nekiParametersClient) Do(req *http.Request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	extensions, err := takeTerraformManagedExtensions(req)
+	if err != nil {
+		return nil, err
+	}
 
 	res, err := c.client.Do(req)
 	if err != nil || res == nil {
@@ -66,7 +70,7 @@ func (c *nekiParametersClient) Do(req *http.Request) (*http.Response, error) {
 		return res, nil
 	}
 
-	return reconcileNekiParametersResponse(res, managed)
+	return reconcileNekiParametersResponse(res, managed, extensions != nil)
 }
 
 func isNekiParametersRequest(req *http.Request) bool {
@@ -125,6 +129,7 @@ func reconcileNekiParameters(
 func reconcileNekiParametersResponse(
 	res *http.Response,
 	managed map[string]map[string]string,
+	managesExtensions bool,
 ) (*http.Response, error) {
 	defer func() {
 		_ = res.Body.Close()
@@ -135,9 +140,15 @@ func reconcileNekiParametersResponse(
 		return nil, fmt.Errorf("decode Neki configuration profile parameters response: %w", err)
 	}
 
-	payload, err := json.Marshal(map[string]any{
-		"parameters": reconcileNekiParameters(details, managed),
-	})
+	parameters := reconcileNekiParameters(details, managed)
+	if managesExtensions {
+		delete(parameters["pgconf"], "shared_preload_libraries")
+		delete(parameters["pgconf"], "session_preload_libraries")
+		if len(parameters["pgconf"]) == 0 {
+			delete(parameters, "pgconf")
+		}
+	}
+	payload, err := json.Marshal(map[string]any{"parameters": parameters})
 	if err != nil {
 		return nil, fmt.Errorf("encode reconciled Neki configuration profile parameters response: %w", err)
 	}

@@ -18,11 +18,10 @@ actions:
 
         Cluster size, replica, parameter, and PostgreSQL version changes update
         in place. The provider starts maintenance and waits until the profile
-        reaches the `ready` state. PostgreSQL extensions are managed through
-        `parameters`: list enabled extensions in
-        `parameters.pgconf.session_preload_libraries`, and configure extension
-        parameters under `parameters` (for example,
-        `parameters.pgconf.auto_explain.log_level`).
+        reaches the `ready` state. Use `extensions` to select enabled PostgreSQL
+        extensions and `parameters` for their settings (for example,
+        `parameters.pgconf.auto_explain.log_level`). Omit `extensions` to leave
+        the enabled set unchanged, or use an empty set to disable them.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles"].post.responses["201"].content["application/json"].schema
     description: Mark the create response as the managed entity.
@@ -37,11 +36,10 @@ actions:
 
         Cluster size, replica, parameter, and PostgreSQL version changes update
         in place. The provider starts maintenance and waits until the profile
-        reaches the `ready` state. PostgreSQL extensions are managed through
-        `parameters`: list enabled extensions in
-        `parameters.pgconf.session_preload_libraries`, and configure extension
-        parameters under `parameters` (for example,
-        `parameters.pgconf.auto_explain.log_level`).
+        reaches the `ready` state. Use `extensions` to select enabled PostgreSQL
+        extensions and `parameters` for their settings (for example,
+        `parameters.pgconf.auto_explain.log_level`). Omit `extensions` to leave
+        the enabled set unchanged, or use an empty set to disable them.
 
   # A configuration profile belongs to one branch. Its name is also its API
   # identity, so moving or renaming it creates a different Terraform resource.
@@ -98,6 +96,16 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch.requestBody.content["application/json"].schema.properties
     description: Model parameter overrides as a nested string map and warn when configured overrides are removed.
     update:
+      extensions:
+        type: array
+        uniqueItems: true
+        x-speakeasy-param-computed: false
+        items:
+          type: string
+        description: >-
+          Extensions to enable. This replaces the current set; omit it to leave
+          them unchanged. Use an empty set to disable them. Do not combine this
+          with shared_preload_libraries or session_preload_libraries parameters.
       parameters:
         type: object
         nullable: true
@@ -108,10 +116,9 @@ actions:
         x-speakeasy-plan-modifiers: WarnOnRemovedParameters
         description: >-
           Desired effective parameter values nested by namespace, e.g.
-          { pgconf = { max_connections = "200" } }. Enabled PostgreSQL
-          extensions are listed in `pgconf.session_preload_libraries`, and
-          extension parameters use their `pgconf` keys (for example,
-          `pgconf.auto_explain.log_level`). When configured, Terraform sends
+          { pgconf = { max_connections = "200" } }. Configure extension settings
+          using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`).
+          When configured, Terraform sends
           the complete map and resets omitted customer-configurable parameters
           to their current target defaults. The API identifies Terraform
           requests by the provider User-Agent.
@@ -220,10 +227,9 @@ actions:
           required: false
           description: >-
             Desired effective parameter values nested by namespace, e.g.
-            { pgconf = { max_connections = "200" } }. Enabled PostgreSQL
-            extensions are listed in `pgconf.session_preload_libraries`, and
-            extension parameters use their `pgconf` keys (for example,
-            `pgconf.auto_explain.log_level`). The SDK hook uses the prior
+            { pgconf = { max_connections = "200" } }. Configure extension settings
+            using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`).
+            The SDK hook uses the prior
             Terraform value for reconciliation and removes this query parameter
             before sending the API request.
           content:
@@ -235,6 +241,18 @@ actions:
                   type: object
                   additionalProperties:
                     type: string
+        - name: extensions
+          in: query
+          required: false
+          description: Extensions managed separately from preload parameters.
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                x-speakeasy-param-computed: false
+                items:
+                  type: string
       responses:
         "200":
           description: Returns reconciled effective parameter values for Terraform.
@@ -267,6 +285,56 @@ actions:
         - NekiConfigurationProfile#read#2
         - NekiConfigurationProfile#create#6
         - NekiConfigurationProfile#update#4
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions"].get.parameters[?@.name == 'configuration_profile']
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions"].get.parameters
+    update:
+      - name: extensions
+        in: query
+        required: false
+        description: >-
+          Extensions to enable. This replaces the current set; omit it to leave
+          them unchanged. Use an empty set to disable them. Do not combine this
+          with shared_preload_libraries or session_preload_libraries parameters.
+        content:
+          application/json:
+            schema:
+              type: array
+              uniqueItems: true
+              x-speakeasy-param-computed: false
+              items:
+                type: string
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions"].get.responses["200"].content["application/json"].schema
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions"].get
+    description: Read enabled extensions when Terraform manages the selection.
+    update:
+      operationId: get_neki_configuration_profile_extensions
+      x-speakeasy-entity-operation:
+        - NekiConfigurationProfile#read#3
+        - NekiConfigurationProfile#create#7
+        - NekiConfigurationProfile#update#5
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extensions:
+                    type: array
+                    nullable: true
+                    uniqueItems: true
+                    x-speakeasy-param-computed: false
+                    items:
+                      type: string
+                required:
+                  - extensions
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}"].patch
     description: Stage managed configuration changes.
