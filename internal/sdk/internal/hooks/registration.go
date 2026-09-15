@@ -17,6 +17,7 @@ func initHooks(h *Hooks) {
 	h.registerSDKInitHook(NewPostgresBouncerNoContentSkipHook())
 	h.registerSDKInitHook(NewVitessBranchNoContentSkipHook())
 	h.registerSDKInitHook(NewNekiParametersHook())
+	h.registerSDKInitHook(&NekiExtensionsHook{})
 	h.registerSDKInitHook(NewReadOnlyReplicaRegionSlugHook())
 	h.registerBeforeRequestHook(customSecurityHook)
 	h.registerBeforeRequestHook(nekiShardReassignmentHook)

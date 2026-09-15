@@ -20,8 +20,10 @@ type GetNekiConfigurationProfileParametersRequest struct {
 	// Include internal parameters. Terraform always excludes them.
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	internal *bool `const:"false" queryParam:"style=form,explode=true,name=internal"`
-	// Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Enabled PostgreSQL extensions are listed in `pgconf.session_preload_libraries`, and extension parameters use their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.
+	// Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.
 	Parameters map[string]map[string]string `queryParam:"serialization=json,name=parameters"`
+	// Extensions managed separately from preload parameters.
+	Extensions []string `queryParam:"serialization=json,name=extensions"`
 }
 
 func (g GetNekiConfigurationProfileParametersRequest) MarshalJSON() ([]byte, error) {
@@ -72,6 +74,13 @@ func (g *GetNekiConfigurationProfileParametersRequest) GetParameters() map[strin
 		return nil
 	}
 	return g.Parameters
+}
+
+func (g *GetNekiConfigurationProfileParametersRequest) GetExtensions() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Extensions
 }
 
 // GetNekiConfigurationProfileParametersResponseBody - Returns reconciled effective parameter values for Terraform.

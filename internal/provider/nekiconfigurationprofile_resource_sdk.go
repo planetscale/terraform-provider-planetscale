@@ -36,6 +36,19 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsCreateNekiC
 	return diags
 }
 
+func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx context.Context, resp *operations.GetNekiConfigurationProfileExtensionsResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Extensions = make([]types.String, 0, len(resp.Extensions))
+		for _, v := range resp.Extensions {
+			r.Extensions = append(r.Extensions, types.StringValue(v))
+		}
+	}
+
+	return diags
+}
+
 func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx context.Context, resp *operations.GetNekiConfigurationProfileParametersResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -247,6 +260,36 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsDeleteNekiConfigurat
 	return &out, diags
 }
 
+func (r *NekiConfigurationProfileResourceModel) ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx context.Context) (*operations.GetNekiConfigurationProfileExtensionsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var configurationProfile string
+	configurationProfile = r.Name.ValueString()
+
+	extensions := make([]string, 0, len(r.Extensions))
+	for extensionsIndex := range r.Extensions {
+		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	}
+	out := operations.GetNekiConfigurationProfileExtensionsRequest{
+		Organization:         organization,
+		Database:             database,
+		Branch:               branch,
+		ConfigurationProfile: configurationProfile,
+		Extensions:           extensions,
+	}
+
+	return &out, diags
+}
+
 func (r *NekiConfigurationProfileResourceModel) ToOperationsGetNekiConfigurationProfileParametersRequest(ctx context.Context) (*operations.GetNekiConfigurationProfileParametersRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -276,12 +319,17 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsGetNekiConfiguration
 			parameters[parametersKey] = parametersInst
 		}
 	}
+	extensions := make([]string, 0, len(r.Extensions))
+	for extensionsIndex := range r.Extensions {
+		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	}
 	out := operations.GetNekiConfigurationProfileParametersRequest{
 		Organization:         organization,
 		Database:             database,
 		Branch:               branch,
 		ConfigurationProfile: configurationProfile,
 		Parameters:           parameters,
+		Extensions:           extensions,
 	}
 
 	return &out, diags
@@ -437,6 +485,10 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 			StorageThroughputMibs: storageThroughputMibs,
 		}
 	}
+	extensions := make([]string, 0, len(r.Extensions))
+	for extensionsIndex := range r.Extensions {
+		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	}
 	var parameters map[string]map[string]string
 	if r.Parameters != nil {
 		parameters = make(map[string]map[string]string)
@@ -457,6 +509,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 		PostgresMajorVersion: postgresMajorVersion,
 		PostgresMinorVersion: postgresMinorVersion,
 		Storage:              storage,
+		Extensions:           extensions,
 		Parameters:           parameters,
 	}
 

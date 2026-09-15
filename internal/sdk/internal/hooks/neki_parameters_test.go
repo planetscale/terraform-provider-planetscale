@@ -111,6 +111,34 @@ func TestNekiConfigurationProfileParametersHookReconcilesAndStripsClientState(t 
 	}, payload.Parameters)
 }
 
+func TestNekiParametersExcludesLoadersWhenExtensionsAreManaged(t *testing.T) {
+	t.Parallel()
+
+	hook := NewNekiParametersHook()
+	_, client := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
+		require.False(t, req.URL.Query().Has("extensions"))
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body: io.NopCloser(strings.NewReader(`[
+				{"namespace":"pgconf","name":"session_preload_libraries","value":"hll,pg_readonly","default_value":"pg_readonly"},
+				{"namespace":"pgconf","name":"shared_preload_libraries","value":"pg_cron,pgextwlist","default_value":"pgextwlist"},
+				{"namespace":"pgconf","name":"max_connections","value":"50","default_value":"30"}
+			]`)),
+		}, nil
+	}))
+	req, err := http.NewRequest(http.MethodGet,
+		"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/configuration-profiles/default/parameters?extensions=%5B%5D", nil)
+	require.NoError(t, err)
+
+	res, err := client.Do(req)
+
+	require.NoError(t, err)
+	body, err := io.ReadAll(res.Body)
+	require.NoError(t, err)
+	require.JSONEq(t, `{"parameters":{"pgconf":{"max_connections":"50"}}}`, string(body))
+}
+
 func TestNekiAdminParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	t.Parallel()
 
