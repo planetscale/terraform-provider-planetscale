@@ -16,19 +16,6 @@ type GetNekiConfigurationProfileExtensionsRequest struct {
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
 	// Name from `list_shard_configuration_profiles`.
 	ConfigurationProfile string `pathParam:"style=simple,explode=false,name=configuration_profile"`
-	// Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
-	Extensions []string `queryParam:"serialization=json,name=extensions"`
-}
-
-func (g GetNekiConfigurationProfileExtensionsRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetNekiConfigurationProfileExtensionsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (g *GetNekiConfigurationProfileExtensionsRequest) GetOrganization() string {
@@ -59,21 +46,15 @@ func (g *GetNekiConfigurationProfileExtensionsRequest) GetConfigurationProfile()
 	return g.ConfigurationProfile
 }
 
-func (g *GetNekiConfigurationProfileExtensionsRequest) GetExtensions() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Extensions
-}
-
 // GetNekiConfigurationProfileExtensionsResponseBody - Returns extensions for the shard configuration profile
 type GetNekiConfigurationProfileExtensionsResponseBody struct {
+	// Enabled extensions, excluding those required by PlanetScale.
 	Extensions []string `json:"extensions"`
 }
 
 func (g *GetNekiConfigurationProfileExtensionsResponseBody) GetExtensions() []string {
 	if g == nil {
-		return nil
+		return []string{}
 	}
 	return g.Extensions
 }

@@ -72,9 +72,10 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
 			},
 			"extensions": schema.ListAttribute{
+				Computed:    true,
 				Optional:    true,
 				ElementType: types.StringType,
-				Description: `Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.`,
+				Description: `Enabled extensions, excluding those required by PlanetScale.`,
 				Validators: []validator.List{
 					listvalidator.UniqueValues(),
 				},

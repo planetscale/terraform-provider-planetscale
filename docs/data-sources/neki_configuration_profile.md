@@ -14,18 +14,14 @@ NekiConfigurationProfile DataSource
 
 ```terraform
 data "planetscale_neki_configuration_profile" "my_nekiconfigurationprofile" {
-  branch   = "...my_branch..."
-  database = "...my_database..."
-  extensions = [
-    "..."
-  ]
-  name         = "...my_name..."
-  organization = "...my_organization..."
-  parameters = {
-    key = {
-      # ...
-    }
-  }
+  organization = "acme"
+  database = "app"
+  branch = "main"
+  name = "default"
+}
+
+output "enabled_extensions" {
+  value = data.planetscale_neki_configuration_profile.my_nekiconfigurationprofile.extensions
 }
 ```
 
@@ -41,7 +37,7 @@ data "planetscale_neki_configuration_profile" "my_nekiconfigurationprofile" {
 
 ### Optional
 
-- `extensions` (List of String) Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
+- `extensions` (List of String) Enabled extensions, excluding those required by PlanetScale.
 - `parameters` (Map of Map of String) Managed effective parameter values nested by namespace. Remote non-default values are adopted during reads. Preload library parameters are only included when managed directly.
 
 ### Read-Only

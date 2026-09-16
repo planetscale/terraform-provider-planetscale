@@ -2646,20 +2646,6 @@ paths:
           schema:
             type: string
           x-speakeasy-match: name
-        - name: extensions
-          in: query
-          required: false
-          description: >-
-            Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
-          content:
-            application/json:
-              schema:
-                type: array
-                nullable: true
-                uniqueItems: true
-                x-speakeasy-param-computed: false
-                items:
-                  type: string
       responses:
         "200":
           description: Returns extensions for the shard configuration profile
@@ -2671,9 +2657,8 @@ paths:
                 properties:
                   extensions:
                     type: array
-                    nullable: true
                     uniqueItems: true
-                    x-speakeasy-param-computed: false
+                    description: Enabled extensions, excluding those required by PlanetScale.
                     items:
                       type: string
                 required:
@@ -2702,9 +2687,8 @@ paths:
         | Database | `read_branches` |
         | Branch | `read_branch` |
       x-speakeasy-entity-operation:
-        - NekiConfigurationProfile#read#3
-        - NekiConfigurationProfile#create#7
-        - NekiConfigurationProfile#update#5
+        terraform-datasource: NekiConfigurationProfile#read#3
+        terraform-resource: null
   ? /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions/{extension}
   : {}
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/maintenance:
@@ -2783,6 +2767,11 @@ paths:
               schema:
                 type: object
                 properties:
+                  extensions:
+                    type: array
+                    nullable: true
+                    items:
+                      type: string
                   parameters:
                     type: object
                     nullable: true
@@ -2869,14 +2858,14 @@ paths:
         - name: extensions
           in: query
           required: false
-          description: Extensions managed separately from preload parameters.
+          description: >-
+            Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
           content:
             application/json:
               schema:
                 type: array
                 nullable: true
                 uniqueItems: true
-                x-speakeasy-param-computed: false
                 items:
                   type: string
       x-speakeasy-entity-operation:

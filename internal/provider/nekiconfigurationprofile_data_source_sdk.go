@@ -31,6 +31,14 @@ func (r *NekiConfigurationProfileDataSourceModel) RefreshFromOperationsGetNekiCo
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Extensions != nil {
+			r.Extensions = make([]types.String, 0, len(resp.Extensions))
+			for _, v := range resp.Extensions {
+				r.Extensions = append(r.Extensions, types.StringValue(v))
+			}
+		} else {
+			r.Extensions = nil
+		}
 		if resp.Parameters != nil {
 			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
 			for parametersKey, parametersValue := range resp.Parameters {
@@ -89,19 +97,11 @@ func (r *NekiConfigurationProfileDataSourceModel) ToOperationsGetNekiConfigurati
 	var configurationProfile string
 	configurationProfile = r.Name.ValueString()
 
-	var extensions []string
-	if r.Extensions != nil {
-		extensions = make([]string, 0, len(r.Extensions))
-		for extensionsIndex := range r.Extensions {
-			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
-		}
-	}
 	out := operations.GetNekiConfigurationProfileExtensionsRequest{
 		Organization:         organization,
 		Database:             database,
 		Branch:               branch,
 		ConfigurationProfile: configurationProfile,
-		Extensions:           extensions,
 	}
 
 	return &out, diags

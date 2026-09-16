@@ -89,7 +89,7 @@ func TestNekiExtensionsPreservesEmptySelection(t *testing.T) {
 	require.JSONEq(t, `{"extensions":[]}`, string(body))
 }
 
-func TestNekiExtensionsLeavesOmittedSelectionUnmanaged(t *testing.T) {
+func TestNekiExtensionsReadsWithoutPriorSelection(t *testing.T) {
 	t.Parallel()
 
 	hook := &NekiExtensionsHook{}
@@ -109,5 +109,5 @@ func TestNekiExtensionsLeavesOmittedSelectionUnmanaged(t *testing.T) {
 	require.NoError(t, err)
 	body, err := io.ReadAll(res.Body)
 	require.NoError(t, err)
-	require.JSONEq(t, `{"extensions":null}`, string(body))
+	require.JSONEq(t, `{"extensions":["hll"]}`, string(body))
 }

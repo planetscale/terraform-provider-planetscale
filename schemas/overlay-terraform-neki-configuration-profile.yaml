@@ -246,14 +246,16 @@ actions:
         - name: extensions
           in: query
           required: false
-          description: Extensions managed separately from preload parameters.
+          description: >-
+            Extensions to enable. This replaces the current set; omit it to leave
+            them unchanged. Use an empty set to disable them. Do not combine this
+            with shared_preload_libraries or session_preload_libraries parameters.
           content:
             application/json:
               schema:
                 type: array
                 nullable: true
                 uniqueItems: true
-                x-speakeasy-param-computed: false
                 items:
                   type: string
       responses:
@@ -264,6 +266,11 @@ actions:
               schema:
                 type: object
                 properties:
+                  extensions:
+                    type: array
+                    nullable: true
+                    items:
+                      type: string
                   parameters:
                     type: object
                     nullable: true
@@ -294,36 +301,16 @@ actions:
     update:
       x-speakeasy-match: name
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions"].get.parameters
-    update:
-      - name: extensions
-        in: query
-        required: false
-        description: >-
-          Extensions to enable. This replaces the current set; omit it to leave
-          them unchanged. Use an empty set to disable them. Do not combine this
-          with shared_preload_libraries or session_preload_libraries parameters.
-        content:
-          application/json:
-            schema:
-              type: array
-              nullable: true
-              uniqueItems: true
-              x-speakeasy-param-computed: false
-              items:
-                type: string
-
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions"].get.responses["200"].content["application/json"].schema
     remove: true
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions"].get
-    description: Read enabled extensions when Terraform manages the selection.
+    description: Read enabled extensions for the data source.
     update:
       operationId: get_neki_configuration_profile_extensions
       x-speakeasy-entity-operation:
-        - NekiConfigurationProfile#read#3
-        - NekiConfigurationProfile#create#7
-        - NekiConfigurationProfile#update#5
+        terraform-datasource: NekiConfigurationProfile#read#3
+        terraform-resource: null
       responses:
         "200":
           content:
@@ -333,9 +320,8 @@ actions:
                 properties:
                   extensions:
                     type: array
-                    nullable: true
                     uniqueItems: true
-                    x-speakeasy-param-computed: false
+                    description: Enabled extensions, excluding those required by PlanetScale.
                     items:
                       type: string
                 required:

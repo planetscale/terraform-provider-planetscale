@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"regexp"
+	"strings"
 )
 
 const terraformManagedParametersQuery = "parameters"
@@ -70,7 +72,31 @@ func (c *nekiParametersClient) Do(req *http.Request) (*http.Response, error) {
 		return res, nil
 	}
 
-	return reconcileNekiParametersResponse(res, managed, extensions != nil)
+	if extensions != nil {
+		extensionsRequest := req.Clone(req.Context())
+		extensionsRequest.URL.Path = strings.TrimSuffix(req.URL.Path, "/parameters") + "/extensions"
+		encoded, _ := json.Marshal(extensions)
+		extensionsRequest.URL.RawQuery = "extensions=" + url.QueryEscape(string(encoded))
+		extensionsResponse, err := (&nekiExtensionsClient{client: c.client}).Do(extensionsRequest)
+		if err != nil {
+			_ = res.Body.Close()
+			return nil, err
+		}
+		if extensionsResponse.StatusCode != http.StatusOK {
+			_ = res.Body.Close()
+			return extensionsResponse, nil
+		}
+		var selection struct {
+			Extensions []string `json:"extensions"`
+		}
+		if err := decodeAndClose(extensionsResponse.Body, &selection); err != nil {
+			_ = res.Body.Close()
+			return nil, err
+		}
+		extensions = selection.Extensions
+	}
+
+	return reconcileNekiParametersResponse(res, managed, extensions)
 }
 
 func isNekiParametersRequest(req *http.Request) bool {
@@ -133,7 +159,7 @@ func reconcileNekiParameters(
 func reconcileNekiParametersResponse(
 	res *http.Response,
 	managed map[string]map[string]string,
-	managesExtensions bool,
+	extensions []string,
 ) (*http.Response, error) {
 	defer func() {
 		_ = res.Body.Close()
@@ -145,14 +171,18 @@ func reconcileNekiParametersResponse(
 	}
 
 	parameters := reconcileNekiParameters(details, managed)
-	if managesExtensions {
+	if extensions != nil {
 		delete(parameters["pgconf"], "shared_preload_libraries")
 		delete(parameters["pgconf"], "session_preload_libraries")
 		if len(parameters["pgconf"]) == 0 {
 			delete(parameters, "pgconf")
 		}
 	}
-	payload, err := json.Marshal(map[string]any{"parameters": parameters})
+	attributes := map[string]any{"parameters": parameters}
+	if extensions != nil {
+		attributes["extensions"] = extensions
+	}
+	payload, err := json.Marshal(attributes)
 	if err != nil {
 		return nil, fmt.Errorf("encode reconciled Neki configuration profile parameters response: %w", err)
 	}

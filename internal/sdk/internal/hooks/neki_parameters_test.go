@@ -124,8 +124,10 @@ func TestNekiConfigurationProfileParametersHookReconcilesAndStripsClientState(t 
 
 	var payload struct {
 		Parameters map[string]map[string]string `json:"parameters"`
+		Extensions []string                     `json:"extensions"`
 	}
 	require.NoError(t, json.NewDecoder(res.Body).Decode(&payload))
+	require.Nil(t, payload.Extensions)
 	require.Equal(t, map[string]map[string]string{
 		"pgconf": {
 			"archive_timeout": "1min",
@@ -140,6 +142,13 @@ func TestNekiParametersExcludesLoadersWhenExtensionsAreManaged(t *testing.T) {
 	hook := NewNekiParametersHook()
 	_, client := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
 		require.False(t, req.URL.Query().Has("extensions"))
+		if strings.HasSuffix(req.URL.Path, "/extensions") {
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(strings.NewReader(`[{"name":"hll","enabled":true,"can_enable":true}]`)),
+			}, nil
+		}
 		return &http.Response{
 			StatusCode: http.StatusOK,
 			Header:     make(http.Header),
@@ -159,7 +168,32 @@ func TestNekiParametersExcludesLoadersWhenExtensionsAreManaged(t *testing.T) {
 	require.NoError(t, err)
 	body, err := io.ReadAll(res.Body)
 	require.NoError(t, err)
-	require.JSONEq(t, `{"parameters":{"pgconf":{"max_connections":"50"}}}`, string(body))
+	require.JSONEq(t, `{"extensions":["hll"],"parameters":{"pgconf":{"max_connections":"50"}}}`, string(body))
+}
+
+func TestNekiParametersFailsWhenExtensionsEndpointIsMissing(t *testing.T) {
+	t.Parallel()
+
+	hook := NewNekiParametersHook()
+	_, client := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
+		status := http.StatusOK
+		if strings.HasSuffix(req.URL.Path, "/extensions") {
+			status = http.StatusNotFound
+		}
+		return &http.Response{
+			StatusCode: status,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`[]`)),
+		}, nil
+	}))
+	req, err := http.NewRequest(http.MethodGet,
+		"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/configuration-profiles/default/parameters?extensions=%5B%5D", nil)
+	require.NoError(t, err)
+
+	res, err := client.Do(req)
+
+	require.Nil(t, res)
+	require.EqualError(t, err, "neki extensions endpoint returned HTTP 404; refusing to treat its configuration profile as missing")
 }
 
 func TestNekiAdminParametersHookReconcilesAndStripsClientState(t *testing.T) {

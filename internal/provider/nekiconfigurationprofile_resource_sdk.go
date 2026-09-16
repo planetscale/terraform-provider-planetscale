@@ -36,7 +36,7 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsCreateNekiC
 	return diags
 }
 
-func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx context.Context, resp *operations.GetNekiConfigurationProfileExtensionsResponseBody) diag.Diagnostics {
+func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx context.Context, resp *operations.GetNekiConfigurationProfileParametersResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -48,15 +48,6 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConf
 		} else {
 			r.Extensions = nil
 		}
-	}
-
-	return diags
-}
-
-func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx context.Context, resp *operations.GetNekiConfigurationProfileParametersResponseBody) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
 		if resp.Parameters != nil {
 			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
 			for parametersKey, parametersValue := range resp.Parameters {
@@ -259,39 +250,6 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsDeleteNekiConfigurat
 		Database:             database,
 		Branch:               branch,
 		ConfigurationProfile: configurationProfile,
-	}
-
-	return &out, diags
-}
-
-func (r *NekiConfigurationProfileResourceModel) ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx context.Context) (*operations.GetNekiConfigurationProfileExtensionsRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var organization string
-	organization = r.Organization.ValueString()
-
-	var database string
-	database = r.Database.ValueString()
-
-	var branch string
-	branch = r.Branch.ValueString()
-
-	var configurationProfile string
-	configurationProfile = r.Name.ValueString()
-
-	var extensions []string
-	if r.Extensions != nil {
-		extensions = make([]string, 0, len(r.Extensions))
-		for extensionsIndex := range r.Extensions {
-			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
-		}
-	}
-	out := operations.GetNekiConfigurationProfileExtensionsRequest{
-		Organization:         organization,
-		Database:             database,
-		Branch:               branch,
-		ConfigurationProfile: configurationProfile,
-		Extensions:           extensions,
 	}
 
 	return &out, diags

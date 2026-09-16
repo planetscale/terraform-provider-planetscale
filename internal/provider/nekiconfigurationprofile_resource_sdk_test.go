@@ -37,8 +37,8 @@ func TestNekiConfigurationProfilePreservesEmptyExtensions(t *testing.T) {
 	require.NoError(t, json.Unmarshal(encoded, &attributes))
 	require.JSONEq(t, "[]", string(attributes["extensions"]))
 
-	diags = model.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(
-		context.Background(), &operations.GetNekiConfigurationProfileExtensionsResponseBody{Extensions: []string{}},
+	diags = model.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(
+		context.Background(), &operations.GetNekiConfigurationProfileParametersResponseBody{Extensions: []string{}},
 	)
 
 	require.False(t, diags.HasError(), diags.Errors())
@@ -48,11 +48,6 @@ func TestNekiConfigurationProfilePreservesEmptyExtensions(t *testing.T) {
 func TestNekiConfigurationProfileReadOmitsUnmanagedExtensions(t *testing.T) {
 	t.Parallel()
 	model := &NekiConfigurationProfileResourceModel{}
-
-	request, diags := model.ToOperationsGetNekiConfigurationProfileExtensionsRequest(context.Background())
-
-	require.False(t, diags.HasError(), diags.Errors())
-	require.Nil(t, request.Extensions)
 
 	parameters, diags := model.ToOperationsGetNekiConfigurationProfileParametersRequest(context.Background())
 
@@ -64,8 +59,8 @@ func TestNekiConfigurationProfileRefreshPreservesNullExtensions(t *testing.T) {
 	t.Parallel()
 	model := &NekiConfigurationProfileResourceModel{Extensions: []types.String{types.StringValue("hll")}}
 
-	diags := model.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(
-		context.Background(), &operations.GetNekiConfigurationProfileExtensionsResponseBody{},
+	diags := model.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(
+		context.Background(), &operations.GetNekiConfigurationProfileParametersResponseBody{},
 	)
 
 	require.False(t, diags.HasError(), diags.Errors())
@@ -76,8 +71,8 @@ func TestNekiConfigurationProfileRefreshUpdatesManagedExtensions(t *testing.T) {
 	t.Parallel()
 	model := &NekiConfigurationProfileResourceModel{Extensions: []types.String{types.StringValue("hll")}}
 
-	diags := model.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(
-		context.Background(), &operations.GetNekiConfigurationProfileExtensionsResponseBody{Extensions: []string{"auto_explain", "hll"}},
+	diags := model.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(
+		context.Background(), &operations.GetNekiConfigurationProfileParametersResponseBody{Extensions: []string{"auto_explain", "hll"}},
 	)
 
 	require.False(t, diags.HasError(), diags.Errors())

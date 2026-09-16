@@ -452,43 +452,6 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request6, request6Diags := data.ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx)
-	resp.Diagnostics.Append(request6Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res6, err := r.client.APINekiShardConfigurationProfileExtensions.GetNekiConfigurationProfileExtensions(ctx, *request6)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res6 != nil && res6.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res6.RawResponse))
-		}
-		return
-	}
-	if res6 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res6))
-		return
-	}
-	if res6.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res6.StatusCode), debugResponse(res6.RawResponse))
-		return
-	}
-	if !(res6.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res6.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx, res6.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -578,41 +541,6 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx, res1.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request2, request2Diags := data.ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx)
-	resp.Diagnostics.Append(request2Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res2, err := r.client.APINekiShardConfigurationProfileExtensions.GetNekiConfigurationProfileExtensions(ctx, *request2)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res2 != nil && res2.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
-		}
-		return
-	}
-	if res2 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
-		return
-	}
-	if res2.StatusCode == 404 {
-		resp.State.RemoveResource(ctx)
-		return
-	}
-	if res2.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
-		return
-	}
-	if !(res2.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -770,43 +698,6 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx, res3.Object)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request4, request4Diags := data.ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx)
-	resp.Diagnostics.Append(request4Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res4, err := r.client.APINekiShardConfigurationProfileExtensions.GetNekiConfigurationProfileExtensions(ctx, *request4)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res4 != nil && res4.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
-		}
-		return
-	}
-	if res4 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res4))
-		return
-	}
-	if res4.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res4.StatusCode), debugResponse(res4.RawResponse))
-		return
-	}
-	if !(res4.Object != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res4.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx, res4.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -61,23 +61,20 @@ func (c *nekiExtensionsClient) Do(req *http.Request) (*http.Response, error) {
 		return nil, fmt.Errorf("decode Neki extensions response: %w", err)
 	}
 
-	var enabled []string
-	if managed != nil {
-		enabled = []string{}
-		remaining := make(map[string]bool)
-		for _, extension := range extensions {
-			if extension.Enabled && extension.CanEnable {
-				remaining[extension.Name] = true
-			}
+	enabled := []string{}
+	remaining := make(map[string]bool)
+	for _, extension := range extensions {
+		if extension.Enabled && extension.CanEnable {
+			remaining[extension.Name] = true
 		}
-		for _, name := range managed {
-			if remaining[name] {
-				enabled = append(enabled, name)
-				delete(remaining, name)
-			}
-		}
-		enabled = append(enabled, slices.Sorted(maps.Keys(remaining))...)
 	}
+	for _, name := range managed {
+		if remaining[name] {
+			enabled = append(enabled, name)
+			delete(remaining, name)
+		}
+	}
+	enabled = append(enabled, slices.Sorted(maps.Keys(remaining))...)
 	return res, replaceResponseBody(res, map[string]any{"extensions": enabled})
 }
 
