@@ -3,9 +3,10 @@ package hooks
 import (
 	"encoding/json"
 	"fmt"
+	"maps"
 	"net/http"
 	"regexp"
-	"sort"
+	"slices"
 )
 
 var nekiExtensionsPathPattern = regexp.MustCompile(
@@ -63,12 +64,19 @@ func (c *nekiExtensionsClient) Do(req *http.Request) (*http.Response, error) {
 	var enabled []string
 	if managed != nil {
 		enabled = []string{}
+		remaining := make(map[string]bool)
 		for _, extension := range extensions {
 			if extension.Enabled && extension.CanEnable {
-				enabled = append(enabled, extension.Name)
+				remaining[extension.Name] = true
 			}
 		}
-		sort.Strings(enabled)
+		for _, name := range managed {
+			if remaining[name] {
+				enabled = append(enabled, name)
+				delete(remaining, name)
+			}
+		}
+		enabled = append(enabled, slices.Sorted(maps.Keys(remaining))...)
 	}
 	return res, replaceResponseBody(res, map[string]any{"extensions": enabled})
 }
