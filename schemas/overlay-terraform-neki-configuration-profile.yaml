@@ -98,6 +98,7 @@ actions:
     update:
       extensions:
         type: array
+        nullable: true
         uniqueItems: true
         x-speakeasy-param-computed: false
         items:
@@ -249,6 +250,7 @@ actions:
             application/json:
               schema:
                 type: array
+                nullable: true
                 uniqueItems: true
                 x-speakeasy-param-computed: false
                 items:
@@ -303,6 +305,7 @@ actions:
           application/json:
             schema:
               type: array
+              nullable: true
               uniqueItems: true
               x-speakeasy-param-computed: false
               items:

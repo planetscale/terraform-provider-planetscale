@@ -40,9 +40,13 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConf
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Extensions = make([]types.String, 0, len(resp.Extensions))
-		for _, v := range resp.Extensions {
-			r.Extensions = append(r.Extensions, types.StringValue(v))
+		if resp.Extensions != nil {
+			r.Extensions = make([]types.String, 0, len(resp.Extensions))
+			for _, v := range resp.Extensions {
+				r.Extensions = append(r.Extensions, types.StringValue(v))
+			}
+		} else {
+			r.Extensions = nil
 		}
 	}
 
@@ -275,9 +279,12 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsGetNekiConfiguration
 	var configurationProfile string
 	configurationProfile = r.Name.ValueString()
 
-	extensions := make([]string, 0, len(r.Extensions))
-	for extensionsIndex := range r.Extensions {
-		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
 	}
 	out := operations.GetNekiConfigurationProfileExtensionsRequest{
 		Organization:         organization,
@@ -319,9 +326,12 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsGetNekiConfiguration
 			parameters[parametersKey] = parametersInst
 		}
 	}
-	extensions := make([]string, 0, len(r.Extensions))
-	for extensionsIndex := range r.Extensions {
-		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
 	}
 	out := operations.GetNekiConfigurationProfileParametersRequest{
 		Organization:         organization,
@@ -485,9 +495,12 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 			StorageThroughputMibs: storageThroughputMibs,
 		}
 	}
-	extensions := make([]string, 0, len(r.Extensions))
-	for extensionsIndex := range r.Extensions {
-		extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
 	}
 	var parameters map[string]map[string]string
 	if r.Parameters != nil {

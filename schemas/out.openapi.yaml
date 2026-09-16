@@ -2385,6 +2385,7 @@ paths:
                       description: The storage throughput in MiB/s.
                 extensions:
                   type: array
+                  nullable: true
                   uniqueItems: true
                   x-speakeasy-param-computed: false
                   items:
@@ -2654,6 +2655,7 @@ paths:
             application/json:
               schema:
                 type: array
+                nullable: true
                 uniqueItems: true
                 x-speakeasy-param-computed: false
                 items:
@@ -2872,6 +2874,7 @@ paths:
             application/json:
               schema:
                 type: array
+                nullable: true
                 uniqueItems: true
                 x-speakeasy-param-computed: false
                 items:
