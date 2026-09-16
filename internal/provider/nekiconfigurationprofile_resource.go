@@ -123,7 +123,7 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.Map{
-					custom_mapplanmodifier.WarnOnRemovedParameters(),
+					custom_mapplanmodifier.WarnOnRemovedNekiParameters(),
 				},
 				ElementType: types.MapType{
 					ElemType: types.StringType,

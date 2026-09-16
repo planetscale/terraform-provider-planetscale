@@ -2399,7 +2399,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: string
-                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  x-speakeasy-plan-modifiers: WarnOnRemovedNekiParameters
                   description: >-
                     Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
       responses:

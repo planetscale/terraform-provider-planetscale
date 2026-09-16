@@ -12,11 +12,13 @@ import (
 
 var _ planmodifier.Map = MapWarnOnRemovedParametersPlanModifier{}
 
-type MapWarnOnRemovedParametersPlanModifier struct{}
+type MapWarnOnRemovedParametersPlanModifier struct {
+	preservePreloads bool
+}
 
 // Description describes the plan modification in plain text formatting.
 func (v MapWarnOnRemovedParametersPlanModifier) Description(_ context.Context) string {
-	return "Warns when removed parameters are reset to their defaults. Removed preload library parameters remain unchanged."
+	return "Warns when removed parameters are reset to their defaults."
 }
 
 // MarkdownDescription describes the plan modification in Markdown formatting.
@@ -69,7 +71,7 @@ func (v MapWarnOnRemovedParametersPlanModifier) PlanModifyMap(ctx context.Contex
 			continue
 		}
 		for key, value := range params {
-			if namespace == "pgconf" && (key == "shared_preload_libraries" || key == "session_preload_libraries") {
+			if v.preservePreloads && namespace == "pgconf" && (key == "shared_preload_libraries" || key == "session_preload_libraries") {
 				continue
 			}
 			if _, ok := keys[key]; !ok {

@@ -114,7 +114,7 @@ actions:
           type: object
           additionalProperties:
             type: string
-        x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+        x-speakeasy-plan-modifiers: WarnOnRemovedNekiParameters
         description: >-
           Desired effective parameter values nested by namespace, e.g.
           { pgconf = { max_connections = "200" } }. Configure extension settings

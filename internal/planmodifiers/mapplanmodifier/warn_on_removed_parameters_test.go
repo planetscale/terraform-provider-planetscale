@@ -28,7 +28,29 @@ func parametersValue(t *testing.T, params map[string]map[string]string) types.Ma
 	return types.MapValueMust(parametersElemType, outer)
 }
 
-func TestWarnOnRemovedParametersExcludesPreloadLibraries(t *testing.T) {
+func TestWarnOnRemovedNekiParametersExcludesPreloadLibraries(t *testing.T) {
+	t.Parallel()
+
+	req := planmodifier.MapRequest{
+		Path: path.Root("parameters"),
+		StateValue: parametersValue(t, map[string]map[string]string{
+			"pgconf": {
+				"shared_preload_libraries":  "pg_cron,pgextwlist",
+				"session_preload_libraries": "hll,pg_readonly",
+			},
+		}),
+		ConfigValue: parametersValue(t, map[string]map[string]string{}),
+		PlanValue:   parametersValue(t, map[string]map[string]string{}),
+	}
+	resp := &planmodifier.MapResponse{PlanValue: req.PlanValue}
+
+	WarnOnRemovedNekiParameters().PlanModifyMap(context.Background(), req, resp)
+
+	require.Equal(t, req.PlanValue, resp.PlanValue)
+	require.Empty(t, resp.Diagnostics)
+}
+
+func TestWarnOnRemovedParametersIncludesPreloadLibraries(t *testing.T) {
 	t.Parallel()
 
 	req := planmodifier.MapRequest{
@@ -47,7 +69,13 @@ func TestWarnOnRemovedParametersExcludesPreloadLibraries(t *testing.T) {
 	WarnOnRemovedParameters().PlanModifyMap(context.Background(), req, resp)
 
 	require.Equal(t, req.PlanValue, resp.PlanValue)
-	require.Empty(t, resp.Diagnostics)
+	require.Len(t, resp.Diagnostics, 1)
+	require.Equal(t, diag.SeverityWarning, resp.Diagnostics[0].Severity())
+	require.Equal(t, "The following parameters were removed from the configuration, so on apply each "+
+		"will be reset to its default value:\n\n  - pgconf.session_preload_libraries (currently \"hll,pg_readonly\")"+
+		"\n  - pgconf.shared_preload_libraries (currently \"pg_cron,pgextwlist\")"+
+		"\n\nTo keep a parameter at its current value, add it back to the parameters attribute.",
+		resp.Diagnostics[0].Detail())
 }
 
 func TestWarnOnRemovedParameters(t *testing.T) {
