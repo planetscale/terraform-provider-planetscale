@@ -58,6 +58,29 @@ func TestReconcileNekiParameters(t *testing.T) {
 	}, reconcileNekiParameters(details, managed))
 }
 
+func TestReconcileNekiPreloadParameters(t *testing.T) {
+	t.Parallel()
+
+	details := []nekiParameterDetail{
+		{Namespace: "pgconf", Name: "shared_preload_libraries", Value: "pg_cron,pgextwlist", DefaultValue: "pgextwlist"},
+		{Namespace: "pgconf", Name: "session_preload_libraries", Value: "hll,pg_readonly", DefaultValue: "pg_readonly"},
+	}
+	managed := map[string]map[string]string{
+		"pgconf": {
+			"shared_preload_libraries":  "pgextwlist",
+			"session_preload_libraries": "pg_readonly",
+		},
+	}
+
+	require.Empty(t, reconcileNekiParameters(details, nil))
+	require.Equal(t, map[string]map[string]string{
+		"pgconf": {
+			"shared_preload_libraries":  "pg_cron,pgextwlist",
+			"session_preload_libraries": "hll,pg_readonly",
+		},
+	}, reconcileNekiParameters(details, managed))
+}
+
 func TestNekiConfigurationProfileParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	t.Parallel()
 
@@ -101,14 +124,76 @@ func TestNekiConfigurationProfileParametersHookReconcilesAndStripsClientState(t 
 
 	var payload struct {
 		Parameters map[string]map[string]string `json:"parameters"`
+		Extensions []string                     `json:"extensions"`
 	}
 	require.NoError(t, json.NewDecoder(res.Body).Decode(&payload))
+	require.Nil(t, payload.Extensions)
 	require.Equal(t, map[string]map[string]string{
 		"pgconf": {
 			"archive_timeout": "1min",
 			"max_connections": "25",
 		},
 	}, payload.Parameters)
+}
+
+func TestNekiParametersExcludesLoadersWhenExtensionsAreManaged(t *testing.T) {
+	t.Parallel()
+
+	hook := NewNekiParametersHook()
+	_, client := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
+		require.False(t, req.URL.Query().Has("extensions"))
+		if strings.HasSuffix(req.URL.Path, "/extensions") {
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(strings.NewReader(`[{"name":"hll","enabled":true,"can_enable":true}]`)),
+			}, nil
+		}
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body: io.NopCloser(strings.NewReader(`[
+				{"namespace":"pgconf","name":"session_preload_libraries","value":"hll,pg_readonly","default_value":"pg_readonly"},
+				{"namespace":"pgconf","name":"shared_preload_libraries","value":"pg_cron,pgextwlist","default_value":"pgextwlist"},
+				{"namespace":"pgconf","name":"max_connections","value":"50","default_value":"30"}
+			]`)),
+		}, nil
+	}))
+	req, err := http.NewRequest(http.MethodGet,
+		"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/configuration-profiles/default/parameters?extensions=%5B%5D", nil)
+	require.NoError(t, err)
+
+	res, err := client.Do(req)
+
+	require.NoError(t, err)
+	body, err := io.ReadAll(res.Body)
+	require.NoError(t, err)
+	require.JSONEq(t, `{"extensions":["hll"],"parameters":{"pgconf":{"max_connections":"50"}}}`, string(body))
+}
+
+func TestNekiParametersFailsWhenExtensionsEndpointIsMissing(t *testing.T) {
+	t.Parallel()
+
+	hook := NewNekiParametersHook()
+	_, client := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
+		status := http.StatusOK
+		if strings.HasSuffix(req.URL.Path, "/extensions") {
+			status = http.StatusNotFound
+		}
+		return &http.Response{
+			StatusCode: status,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`[]`)),
+		}, nil
+	}))
+	req, err := http.NewRequest(http.MethodGet,
+		"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/configuration-profiles/default/parameters?extensions=%5B%5D", nil)
+	require.NoError(t, err)
+
+	res, err := client.Do(req)
+
+	require.Nil(t, res)
+	require.EqualError(t, err, "neki extensions endpoint returned HTTP 404; refusing to treat its configuration profile as missing")
 }
 
 func TestNekiAdminParametersHookReconcilesAndStripsClientState(t *testing.T) {

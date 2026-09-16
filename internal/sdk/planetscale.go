@@ -65,6 +65,7 @@ type PlanetScale struct {
 	//
 	BranchChanges                              *BranchChanges
 	APINekiShardConfigurationProfiles          *APINekiShardConfigurationProfiles
+	APINekiShardConfigurationProfileExtensions *APINekiShardConfigurationProfileExtensions
 	APINekiShardConfigurationProfileParameters *APINekiShardConfigurationProfileParameters
 	APINekiShardConfigurationProfileShards     *APINekiShardConfigurationProfileShards
 	//           Resources for managing keyspaces.
@@ -199,6 +200,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.Bouncers = newBouncers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfiles = newAPINekiShardConfigurationProfiles(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiShardConfigurationProfileExtensions = newAPINekiShardConfigurationProfileExtensions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfileParameters = newAPINekiShardConfigurationProfileParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfileShards = newAPINekiShardConfigurationProfileShards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchKeyspaces = newDatabaseBranchKeyspaces(sdk, sdk.sdkConfiguration, sdk.hooks)

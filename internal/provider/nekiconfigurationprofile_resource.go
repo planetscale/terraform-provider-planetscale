@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -43,6 +44,7 @@ type NekiConfigurationProfileResourceModel struct {
 	Branch               types.String                                          `tfsdk:"branch"`
 	ClusterSize          types.String                                          `tfsdk:"cluster_size"`
 	Database             types.String                                          `tfsdk:"database"`
+	Extensions           []types.String                                        `tfsdk:"extensions"`
 	ID                   types.String                                          `tfsdk:"id"`
 	IsDefault            types.Bool                                            `tfsdk:"is_default"`
 	Name                 types.String                                          `tfsdk:"name"`
@@ -62,7 +64,7 @@ func (r *NekiConfigurationProfileResource) Metadata(ctx context.Context, req res
 
 func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage a shard configuration profile for a PlanetScale Neki branch.\nCreating a `planetscale_neki_branch` already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.\nCluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. PostgreSQL extensions are managed through `parameters`: list enabled extensions in `parameters.pgconf.session_preload_libraries`, and configure extension parameters under `parameters` (for example, `parameters.pgconf.auto_explain.log_level`).",
+		MarkdownDescription: "Manage a shard configuration profile for a PlanetScale Neki branch.\nCreating a `planetscale_neki_branch` already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.\nCluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. Use `extensions` to select enabled PostgreSQL extensions and `parameters` for their settings (for example, `parameters.pgconf.auto_explain.log_level`). Omit `extensions` to leave the enabled set unchanged, or use an empty set to disable them.",
 		Attributes: map[string]schema.Attribute{
 			"branch": schema.StringAttribute{
 				Required: true,
@@ -85,6 +87,14 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `. Requires replacement if changed.`,
+			},
+			"extensions": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.`,
+				Validators: []validator.List{
+					listvalidator.UniqueValues(),
+				},
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -113,12 +123,12 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.Map{
-					custom_mapplanmodifier.WarnOnRemovedParameters(),
+					custom_mapplanmodifier.WarnOnRemovedNekiParameters(),
 				},
 				ElementType: types.MapType{
 					ElemType: types.StringType,
 				},
-				Description: `Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Enabled PostgreSQL extensions are listed in ` + "`" + `pgconf.session_preload_libraries` + "`" + `, and extension parameters use their ` + "`" + `pgconf` + "`" + ` keys (for example, ` + "`" + `pgconf.auto_explain.log_level` + "`" + `). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.`,
+				Description: `Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their ` + "`" + `pgconf` + "`" + ` keys (for example, ` + "`" + `pgconf.auto_explain.log_level` + "`" + `). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.`,
 			},
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,

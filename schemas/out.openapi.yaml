@@ -2080,7 +2080,7 @@ paths:
 
                   Creating a `planetscale_neki_branch` already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.
 
-                  Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. PostgreSQL extensions are managed through `parameters`: list enabled extensions in `parameters.pgconf.session_preload_libraries`, and configure extension parameters under `parameters` (for example, `parameters.pgconf.auto_explain.log_level`).
+                  Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. Use `extensions` to select enabled PostgreSQL extensions and `parameters` for their settings (for example, `parameters.pgconf.auto_explain.log_level`). Omit `extensions` to leave the enabled set unchanged, or use an empty set to disable them.
         "401":
           description: Unauthorized
         "403":
@@ -2110,7 +2110,7 @@ paths:
 
         Creating a `planetscale_neki_branch` already provisions a default configuration profile and shard. Do not recreate that profile with this resource; import it if Terraform should manage its configuration.
 
-        Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. PostgreSQL extensions are managed through `parameters`: list enabled extensions in `parameters.pgconf.session_preload_libraries`, and configure extension parameters under `parameters` (for example, `parameters.pgconf.auto_explain.log_level`).
+        Cluster size, replica, parameter, and PostgreSQL version changes update in place. The provider starts maintenance and waits until the profile reaches the `ready` state. Use `extensions` to select enabled PostgreSQL extensions and `parameters` for their settings (for example, `parameters.pgconf.auto_explain.log_level`). Omit `extensions` to leave the enabled set unchanged, or use an empty set to disable them.
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/maintenance: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}:
     get:
@@ -2383,6 +2383,15 @@ paths:
                     storage_throughput_mibs:
                       type: integer
                       description: The storage throughput in MiB/s.
+                extensions:
+                  type: array
+                  nullable: true
+                  uniqueItems: true
+                  x-speakeasy-param-computed: false
+                  items:
+                    type: string
+                  description: >-
+                    Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
                 parameters:
                   type: object
                   nullable: true
@@ -2390,9 +2399,9 @@ paths:
                     type: object
                     additionalProperties:
                       type: string
-                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  x-speakeasy-plan-modifiers: WarnOnRemovedNekiParameters
                   description: >-
-                    Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Enabled PostgreSQL extensions are listed in `pgconf.session_preload_libraries`, and extension parameters use their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). When configured, Terraform sends the complete map and resets omitted customer-configurable parameters to their current target defaults. The API identifies Terraform requests by the provider User-Agent.
+                    Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
       responses:
         "200":
           description: Returns the updated shard configuration profile
@@ -2605,7 +2614,81 @@ paths:
       x-speakeasy-entity-operation: NekiConfigurationProfile#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/changes: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/changes/{id}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions:
+    get:
+      tags:
+        - api-neki_shard_configuration_profile_extensions
+      operationId: get_neki_configuration_profile_extensions
+      summary: List extensions for a Neki shard configuration profile
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: configuration_profile
+          in: path
+          required: true
+          description: Name from `list_shard_configuration_profiles`.
+          schema:
+            type: string
+          x-speakeasy-match: name
+      responses:
+        "200":
+          description: Returns extensions for the shard configuration profile
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extensions:
+                    type: array
+                    uniqueItems: true
+                    description: Enabled extensions, excluding those required by PlanetScale.
+                    items:
+                      type: string
+                required:
+                  - extensions
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Shard configuration profile not found
+          headers: {}
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        terraform-datasource: NekiConfigurationProfile#read#3
+        terraform-resource: null
   ? /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions/{extension}
   : {}
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/maintenance:
@@ -2684,6 +2767,11 @@ paths:
               schema:
                 type: object
                 properties:
+                  extensions:
+                    type: array
+                    nullable: true
+                    items:
+                      type: string
                   parameters:
                     type: object
                     nullable: true
@@ -2692,7 +2780,7 @@ paths:
                       additionalProperties:
                         type: string
                     description: >-
-                      Managed effective parameter values nested by namespace. Remote non-default values are adopted during reads.
+                      Managed effective parameter values nested by namespace. Remote non-default values are adopted during reads. Preload library parameters are only included when managed directly.
                 required:
                   - parameters
         "401":
@@ -2757,7 +2845,7 @@ paths:
           in: query
           required: false
           description: >-
-            Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Enabled PostgreSQL extensions are listed in `pgconf.session_preload_libraries`, and extension parameters use their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.
+            Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
           content:
             application/json:
               schema:
@@ -2767,6 +2855,19 @@ paths:
                   type: object
                   additionalProperties:
                     type: string
+        - name: extensions
+          in: query
+          required: false
+          description: >-
+            Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
+          content:
+            application/json:
+              schema:
+                type: array
+                nullable: true
+                uniqueItems: true
+                items:
+                  type: string
       x-speakeasy-entity-operation:
         - NekiConfigurationProfile#read#2
         - NekiConfigurationProfile#create#6

@@ -1,3 +1,4 @@
 examples/resources/*/resource.tf
+examples/data-sources/planetscale_neki_configuration_profile/data-source.tf
 .gitattributes
 internal/sdk/.gitattributes

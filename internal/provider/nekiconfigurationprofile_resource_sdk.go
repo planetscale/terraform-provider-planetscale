@@ -40,6 +40,14 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConf
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Extensions != nil {
+			r.Extensions = make([]types.String, 0, len(resp.Extensions))
+			for _, v := range resp.Extensions {
+				r.Extensions = append(r.Extensions, types.StringValue(v))
+			}
+		} else {
+			r.Extensions = nil
+		}
 		if resp.Parameters != nil {
 			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
 			for parametersKey, parametersValue := range resp.Parameters {
@@ -276,12 +284,20 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsGetNekiConfiguration
 			parameters[parametersKey] = parametersInst
 		}
 	}
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
+	}
 	out := operations.GetNekiConfigurationProfileParametersRequest{
 		Organization:         organization,
 		Database:             database,
 		Branch:               branch,
 		ConfigurationProfile: configurationProfile,
 		Parameters:           parameters,
+		Extensions:           extensions,
 	}
 
 	return &out, diags
@@ -437,6 +453,13 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 			StorageThroughputMibs: storageThroughputMibs,
 		}
 	}
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
+	}
 	var parameters map[string]map[string]string
 	if r.Parameters != nil {
 		parameters = make(map[string]map[string]string)
@@ -457,6 +480,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 		PostgresMajorVersion: postgresMajorVersion,
 		PostgresMinorVersion: postgresMinorVersion,
 		Storage:              storage,
+		Extensions:           extensions,
 		Parameters:           parameters,
 	}
 

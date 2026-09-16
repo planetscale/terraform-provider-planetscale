@@ -5,8 +5,10 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
@@ -32,6 +34,7 @@ type NekiConfigurationProfileDataSourceModel struct {
 	Branch               types.String                                `tfsdk:"branch"`
 	ClusterSize          types.String                                `tfsdk:"cluster_size"`
 	Database             types.String                                `tfsdk:"database"`
+	Extensions           []types.String                              `queryParam:"serialization=json,name=extensions" tfsdk:"extensions"`
 	ID                   types.String                                `tfsdk:"id"`
 	IsDefault            types.Bool                                  `tfsdk:"is_default"`
 	Name                 types.String                                `tfsdk:"name"`
@@ -68,6 +71,15 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 				Required:    true,
 				Description: `Database name slug from ` + "`" + `list_databases` + "`" + `. Example: ` + "`" + `app-db` + "`" + `.`,
 			},
+			"extensions": schema.ListAttribute{
+				Computed:    true,
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `Enabled extensions, excluding those required by PlanetScale.`,
+				Validators: []validator.List{
+					listvalidator.UniqueValues(),
+				},
+			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `The ID of the shard configuration profile`,
@@ -90,7 +102,7 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 				ElementType: types.MapType{
 					ElemType: types.StringType,
 				},
-				Description: `Managed effective parameter values nested by namespace. Remote non-default values are adopted during reads.`,
+				Description: `Managed effective parameter values nested by namespace. Remote non-default values are adopted during reads. Preload library parameters are only included when managed directly.`,
 			},
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,
@@ -237,6 +249,37 @@ func (r *NekiConfigurationProfileDataSource) Read(ctx context.Context, req datas
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileParametersResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request2, request2Diags := data.ToOperationsGetNekiConfigurationProfileExtensionsRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.APINekiShardConfigurationProfileExtensions.GetNekiConfigurationProfileExtensions(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+	if !(res2.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiConfigurationProfileExtensionsResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
