@@ -113,6 +113,10 @@ func reconcileNekiParameters(
 
 	for _, detail := range details {
 		_, wasManaged := managed[detail.Namespace][detail.Name]
+		if detail.Namespace == "pgconf" &&
+			(detail.Name == "shared_preload_libraries" || detail.Name == "session_preload_libraries") && !wasManaged {
+			continue
+		}
 		if detail.Value == detail.DefaultValue && !wasManaged {
 			continue
 		}

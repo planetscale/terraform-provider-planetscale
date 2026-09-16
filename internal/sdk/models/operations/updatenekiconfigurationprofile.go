@@ -69,7 +69,7 @@ type UpdateNekiConfigurationProfileRequestBody struct {
 	Storage              *UpdateNekiConfigurationProfileStorageRequest `json:"storage,omitzero"`
 	// Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
 	Extensions []string `json:"extensions,omitzero"`
-	// Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). When configured, Terraform sends the complete map and resets omitted customer-configurable parameters to their current target defaults. The API identifies Terraform requests by the provider User-Agent.
+	// Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
 	Parameters map[string]map[string]string `json:"parameters,omitzero"`
 }
 

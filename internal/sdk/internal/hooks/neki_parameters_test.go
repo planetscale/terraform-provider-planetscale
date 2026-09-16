@@ -58,6 +58,29 @@ func TestReconcileNekiParameters(t *testing.T) {
 	}, reconcileNekiParameters(details, managed))
 }
 
+func TestReconcileNekiPreloadParameters(t *testing.T) {
+	t.Parallel()
+
+	details := []nekiParameterDetail{
+		{Namespace: "pgconf", Name: "shared_preload_libraries", Value: "pg_cron,pgextwlist", DefaultValue: "pgextwlist"},
+		{Namespace: "pgconf", Name: "session_preload_libraries", Value: "hll,pg_readonly", DefaultValue: "pg_readonly"},
+	}
+	managed := map[string]map[string]string{
+		"pgconf": {
+			"shared_preload_libraries":  "pgextwlist",
+			"session_preload_libraries": "pg_readonly",
+		},
+	}
+
+	require.Empty(t, reconcileNekiParameters(details, nil))
+	require.Equal(t, map[string]map[string]string{
+		"pgconf": {
+			"shared_preload_libraries":  "pg_cron,pgextwlist",
+			"session_preload_libraries": "hll,pg_readonly",
+		},
+	}, reconcileNekiParameters(details, managed))
+}
+
 func TestNekiConfigurationProfileParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	t.Parallel()
 

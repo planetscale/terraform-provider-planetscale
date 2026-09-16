@@ -101,7 +101,7 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 				ElementType: types.MapType{
 					ElemType: types.StringType,
 				},
-				Description: `Managed effective parameter values nested by namespace. Remote non-default values are adopted during reads.`,
+				Description: `Managed effective parameter values nested by namespace. Remote non-default values are adopted during reads. Preload library parameters are only included when managed directly.`,
 			},
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,

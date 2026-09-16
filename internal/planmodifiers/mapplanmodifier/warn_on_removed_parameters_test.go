@@ -28,6 +28,28 @@ func parametersValue(t *testing.T, params map[string]map[string]string) types.Ma
 	return types.MapValueMust(parametersElemType, outer)
 }
 
+func TestWarnOnRemovedParametersExcludesPreloadLibraries(t *testing.T) {
+	t.Parallel()
+
+	req := planmodifier.MapRequest{
+		Path: path.Root("parameters"),
+		StateValue: parametersValue(t, map[string]map[string]string{
+			"pgconf": {
+				"shared_preload_libraries":  "pg_cron,pgextwlist",
+				"session_preload_libraries": "hll,pg_readonly",
+			},
+		}),
+		ConfigValue: parametersValue(t, map[string]map[string]string{}),
+		PlanValue:   parametersValue(t, map[string]map[string]string{}),
+	}
+	resp := &planmodifier.MapResponse{PlanValue: req.PlanValue}
+
+	WarnOnRemovedParameters().PlanModifyMap(context.Background(), req, resp)
+
+	require.Equal(t, req.PlanValue, resp.PlanValue)
+	require.Empty(t, resp.Diagnostics)
+}
+
 func TestWarnOnRemovedParameters(t *testing.T) {
 	t.Parallel()
 

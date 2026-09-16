@@ -16,7 +16,7 @@ type MapWarnOnRemovedParametersPlanModifier struct{}
 
 // Description describes the plan modification in plain text formatting.
 func (v MapWarnOnRemovedParametersPlanModifier) Description(_ context.Context) string {
-	return "Warns when previously configured parameters are removed from the configuration, since removed parameters are reset to their defaults."
+	return "Warns when removed parameters are reset to their defaults. Removed preload library parameters remain unchanged."
 }
 
 // MarkdownDescription describes the plan modification in Markdown formatting.
@@ -69,6 +69,9 @@ func (v MapWarnOnRemovedParametersPlanModifier) PlanModifyMap(ctx context.Contex
 			continue
 		}
 		for key, value := range params {
+			if namespace == "pgconf" && (key == "shared_preload_libraries" || key == "session_preload_libraries") {
+				continue
+			}
 			if _, ok := keys[key]; !ok {
 				removed = append(removed, fmt.Sprintf("%s.%s (currently %q)", namespace, key, value))
 			}

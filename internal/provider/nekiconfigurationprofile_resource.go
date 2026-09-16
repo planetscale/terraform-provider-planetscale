@@ -128,7 +128,7 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 				ElementType: types.MapType{
 					ElemType: types.StringType,
 				},
-				Description: `Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their ` + "`" + `pgconf` + "`" + ` keys (for example, ` + "`" + `pgconf.auto_explain.log_level` + "`" + `). The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.`,
+				Description: `Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their ` + "`" + `pgconf` + "`" + ` keys (for example, ` + "`" + `pgconf.auto_explain.log_level` + "`" + `). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.`,
 			},
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,
