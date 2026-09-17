@@ -34,6 +34,9 @@ for dbname in testacc-vitess testacc-postgres; do
       if [ "$DRY_RUN" = "true" ]; then
         echo "[DRY RUN] Would delete branch: $dbname/$branch"
       else
+        # The branch lifecycle tests create branches with deletion protection
+        # enabled, so a cancelled run can leave a protected branch behind.
+        pscale branch update "$dbname" "$branch" --org "$ORG" --deletion-protected=false
         pscale branch delete "$dbname" "$branch" --org "$ORG" --force
       fi
     done
