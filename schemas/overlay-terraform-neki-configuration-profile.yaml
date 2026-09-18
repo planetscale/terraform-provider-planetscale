@@ -101,6 +101,7 @@ actions:
         nullable: true
         uniqueItems: true
         x-speakeasy-param-computed: false
+        x-speakeasy-plan-validators: NekiExtensionsValidator
         items:
           type: string
         description: >-

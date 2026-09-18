@@ -22,6 +22,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 	custom_int64validators "github.com/planetscale/terraform-provider-planetscale/internal/validators/int64validators"
+	custom_listvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/listvalidators"
 	custom_stringvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/stringvalidators"
 )
 
@@ -94,6 +95,7 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 				Description: `Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.`,
 				Validators: []validator.List{
 					listvalidator.UniqueValues(),
+					custom_listvalidators.NekiExtensionsValidator(),
 				},
 			},
 			"id": schema.StringAttribute{
