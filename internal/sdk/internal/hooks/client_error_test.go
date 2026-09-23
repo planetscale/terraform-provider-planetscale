@@ -32,6 +32,11 @@ func TestClientErrorHookReportsCodeAndMessage(t *testing.T) {
 	require.JSONEq(t, `{"code":"unprocessable","message":"Minimum storage bytes must be greater than or equal to 10 GB"}`, string(body), "body should be restored for downstream consumers")
 }
 
+func TestClientErrorHookRedactsCredentialsInRawBody(t *testing.T) {
+	_, err := NewClientErrorHook().AfterSuccess(AfterSuccessContext{}, clientErrorResponse(http.StatusForbidden, `{"password":"should-not-leak"}`))
+	require.EqualError(t, err, `PlanetScale API returned HTTP 403: {"password":"(sensitive)"}`)
+}
+
 func TestClientErrorHookFallsBackToRawBody(t *testing.T) {
 	_, err := NewClientErrorHook().AfterSuccess(AfterSuccessContext{}, clientErrorResponse(http.StatusForbidden, "<html>forbidden</html>"))
 	require.EqualError(t, err, "PlanetScale API returned HTTP 403: <html>forbidden</html>")

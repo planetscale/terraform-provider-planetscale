@@ -42,7 +42,8 @@ func debugResponse(response *http.Response) string {
 			return err.Error()
 		}
 	}
-	return fmt.Sprintf("**Request**:\n%s\n**Response**:\n%s", string(dumpReq), string(dumpRes))
+	// Credential fields are redacted by script/patchsensitive after generation.
+	return redactSensitiveHTTP(fmt.Sprintf("**Request**:\n%s\n**Response**:\n%s", string(dumpReq), string(dumpRes)))
 }
 
 func merge(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse, target interface{}) {
@@ -211,7 +212,8 @@ func decomposeRequestForLogging(req *http.Request) (map[string]interface{}, erro
 	}
 
 	// Read the rest of the body content
-	fields[FieldHttpRequestBody] = bodyFromRestOfRequestReader(reqReader)
+	// Credential fields are redacted by script/patchsensitive after generation.
+	fields[FieldHttpRequestBody] = redactSensitiveHTTP(bodyFromRestOfRequestReader(reqReader))
 	return fields, nil
 }
 
@@ -287,7 +289,8 @@ func decomposeResponseForLogging(res *http.Response) (map[string]interface{}, er
 	// http.Client
 	res.Body = io.NopCloser(bytes.NewBuffer(resBody))
 
-	fields[FieldHttpResponseBody] = string(resBody)
+	// Credential fields are redacted by script/patchsensitive after generation.
+	fields[FieldHttpResponseBody] = redactSensitiveHTTP(string(resBody))
 
 	return fields, nil
 }

@@ -28,7 +28,8 @@ func NewAPIError(message string, statusCode int, body string, httpRes *http.Resp
 func (e *APIError) Error() string {
 	body := ""
 	if len(e.Body) > 0 {
-		body = fmt.Sprintf("\n%s", e.Body)
+		// Credential fields are redacted by script/patchsensitive after generation.
+		body = fmt.Sprintf("\n%s", redactBody(e.Body))
 	}
 
 	return fmt.Sprintf("%s: Status %d%s", e.Message, e.StatusCode, body)

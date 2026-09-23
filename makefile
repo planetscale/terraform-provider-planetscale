@@ -11,6 +11,7 @@ download-openapi:
 .PHONY: generate
 generate:
 	speakeasy run --skip-versioning
+	go run ./script/patchsensitive
 
 .PHONY: update-speakeasy
 update-speakeasy:

@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/planetscale/terraform-provider-planetscale/internal/redact"
 )
 
 // maxClientErrorBodyLength bounds how much of a non-JSON error body is echoed
@@ -75,7 +77,7 @@ func (h *ClientErrorHook) AfterSuccess(_ AfterSuccessContext, res *http.Response
 			clientErr.Code = payload.Code
 			clientErr.Message = payload.Message
 		} else {
-			clientErr.Body = truncate(strings.TrimSpace(string(raw)), maxClientErrorBodyLength)
+			clientErr.Body = truncate(redact.RedactCredentialFields(strings.TrimSpace(string(raw))), maxClientErrorBodyLength)
 		}
 	}
 

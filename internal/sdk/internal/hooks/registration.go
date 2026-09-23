@@ -22,6 +22,8 @@ func initHooks(h *Hooks) {
 	h.registerBeforeRequestHook(customSecurityHook)
 	h.registerBeforeRequestHook(nekiShardReassignmentHook)
 	h.registerAfterSuccessHook(nekiShardReassignmentHook)
+	// Strip passwords before ClientErrorHook reads the response body.
+	h.registerAfterSuccessHook(NewRedactedRolePasswordHook())
 	h.registerAfterSuccessHook(NewClientErrorHook())
 	// h.registerAfterErrorHook(exampleHook)
 	// h.registerAfterSuccessHook(exampleHook)
