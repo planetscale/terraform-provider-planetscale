@@ -115,7 +115,6 @@ func (s *APINekiAdmins) GetNekiAdmin(ctx context.Context, request operations.Get
 
 	return s.getNekiAdmin(ctx, hookCtx, req, o)
 }
-
 func (s *APINekiAdmins) getNekiAdmin(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetNekiAdminResponse, error) {
 	var err error
 

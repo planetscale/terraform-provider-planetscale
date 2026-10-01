@@ -271,6 +271,8 @@ func (r *VitessKeyspaceResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateKeyspaceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -279,7 +281,7 @@ func (r *VitessKeyspaceResource) Create(ctx context.Context, req resource.Create
 	}
 	res, err := r.client.DatabaseBranchKeyspaces.CreateKeyspace(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -321,7 +323,7 @@ func (r *VitessKeyspaceResource) Create(ctx context.Context, req resource.Create
 	))
 	res1, err := r.client.DatabaseBranchKeyspaces.GetKeyspace(ctx, *request1, getKeyspaceOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -373,6 +375,8 @@ func (r *VitessKeyspaceResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetKeyspaceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -381,7 +385,7 @@ func (r *VitessKeyspaceResource) Read(ctx context.Context, req resource.ReadRequ
 	}
 	res, err := r.client.DatabaseBranchKeyspaces.GetKeyspace(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -427,6 +431,8 @@ func (r *VitessKeyspaceResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateKeyspaceResizeRequestRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -435,7 +441,7 @@ func (r *VitessKeyspaceResource) Update(ctx context.Context, req resource.Update
 	}
 	res, err := r.client.KeyspaceResizes.UpdateKeyspaceResizeRequest(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -472,7 +478,7 @@ func (r *VitessKeyspaceResource) Update(ctx context.Context, req resource.Update
 	))
 	res1, err := r.client.DatabaseBranchKeyspaces.GetKeyspace(ctx, *request1, getKeyspaceOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -524,6 +530,8 @@ func (r *VitessKeyspaceResource) Delete(ctx context.Context, req resource.Delete
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteKeyspaceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -532,7 +540,7 @@ func (r *VitessKeyspaceResource) Delete(ctx context.Context, req resource.Delete
 	}
 	res, err := r.client.DatabaseBranchKeyspaces.DeleteKeyspace(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

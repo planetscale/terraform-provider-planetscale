@@ -76,6 +76,7 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -168,8 +169,9 @@ func (s *DatabaseBranchKeyspaces) ListKeyspaces(ctx context.Context, request ope
 		request.Page = &nP
 
 		return s.ListKeyspaces(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -441,7 +443,6 @@ func (s *DatabaseBranchKeyspaces) GetKeyspace(ctx context.Context, request opera
 
 	return s.getKeyspace(ctx, hookCtx, req, o)
 }
-
 func (s *DatabaseBranchKeyspaces) getKeyspace(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetKeyspaceResponse, error) {
 	var err error
 

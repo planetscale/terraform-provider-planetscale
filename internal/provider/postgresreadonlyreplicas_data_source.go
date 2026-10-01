@@ -132,6 +132,8 @@ func (r *PostgresReadOnlyReplicasDataSource) Read(ctx context.Context, req datas
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config)
+
 	request, requestDiags := data.ToOperationsListReadOnlyReplicasRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -140,7 +142,7 @@ func (r *PostgresReadOnlyReplicasDataSource) Read(ctx context.Context, req datas
 	}
 	res, err := r.client.ReadOnlyReplicas.ListReadOnlyReplicas(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

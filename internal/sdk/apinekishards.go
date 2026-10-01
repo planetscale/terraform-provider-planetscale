@@ -85,6 +85,7 @@ func (s *APINekiShards) ListNekiShards(ctx context.Context, request operations.L
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -177,8 +178,9 @@ func (s *APINekiShards) ListNekiShards(ctx context.Context, request operations.L
 		request.Page = &nP
 
 		return s.ListNekiShards(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -309,7 +311,6 @@ func (s *APINekiShards) GetNekiShard(ctx context.Context, request operations.Get
 
 	return s.getNekiShard(ctx, hookCtx, req, o)
 }
-
 func (s *APINekiShards) getNekiShard(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetNekiShardResponse, error) {
 	var err error
 

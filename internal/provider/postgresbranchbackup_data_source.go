@@ -193,6 +193,8 @@ func (r *PostgresBranchBackupDataSource) Read(ctx context.Context, req datasourc
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config)
+
 	request, requestDiags := data.ToOperationsGetPostgresBranchBackupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -201,7 +203,7 @@ func (r *PostgresBranchBackupDataSource) Read(ctx context.Context, req datasourc
 	}
 	res, err := r.client.Backups.GetPostgresBranchBackup(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

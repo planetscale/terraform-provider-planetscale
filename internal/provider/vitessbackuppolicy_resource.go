@@ -182,6 +182,8 @@ func (r *VitessBackupPolicyResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateVitessBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -190,7 +192,7 @@ func (r *VitessBackupPolicyResource) Create(ctx context.Context, req resource.Cr
 	}
 	res, err := r.client.BackupPolicies.CreateVitessBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -242,6 +244,8 @@ func (r *VitessBackupPolicyResource) Read(ctx context.Context, req resource.Read
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetVitessBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -250,7 +254,7 @@ func (r *VitessBackupPolicyResource) Read(ctx context.Context, req resource.Read
 	}
 	res, err := r.client.BackupPolicies.GetVitessBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -296,6 +300,8 @@ func (r *VitessBackupPolicyResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateVitessBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -304,7 +310,7 @@ func (r *VitessBackupPolicyResource) Update(ctx context.Context, req resource.Up
 	}
 	res, err := r.client.BackupPolicies.UpdateVitessBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -356,6 +362,8 @@ func (r *VitessBackupPolicyResource) Delete(ctx context.Context, req resource.De
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteVitessBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -364,7 +372,7 @@ func (r *VitessBackupPolicyResource) Delete(ctx context.Context, req resource.De
 	}
 	res, err := r.client.BackupPolicies.DeleteVitessBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

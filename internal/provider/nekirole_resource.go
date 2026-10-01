@@ -194,6 +194,8 @@ func (r *NekiRoleResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateNekiRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -202,7 +204,7 @@ func (r *NekiRoleResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	res, err := r.client.Roles.CreateNekiRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -244,7 +246,7 @@ func (r *NekiRoleResource) Create(ctx context.Context, req resource.CreateReques
 	))
 	res1, err := r.client.Roles.GetNekiRole(ctx, *request1, getNekiRoleOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -296,6 +298,8 @@ func (r *NekiRoleResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetNekiRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -304,7 +308,7 @@ func (r *NekiRoleResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 	res, err := r.client.Roles.GetNekiRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -350,6 +354,8 @@ func (r *NekiRoleResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateNekiRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -358,7 +364,7 @@ func (r *NekiRoleResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 	res, err := r.client.Roles.UpdateNekiRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -410,6 +416,8 @@ func (r *NekiRoleResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteNekiRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -418,7 +426,7 @@ func (r *NekiRoleResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 	res, err := r.client.Roles.DeleteNekiRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

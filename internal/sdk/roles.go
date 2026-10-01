@@ -85,6 +85,7 @@ func (s *Roles) ListRoles(ctx context.Context, request operations.ListRolesReque
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -177,8 +178,9 @@ func (s *Roles) ListRoles(ctx context.Context, request operations.ListRolesReque
 		request.Page = &nP
 
 		return s.ListRoles(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -1491,6 +1493,7 @@ func (s *Roles) ListNekiRoles(ctx context.Context, request operations.ListNekiRo
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -1583,8 +1586,9 @@ func (s *Roles) ListNekiRoles(ctx context.Context, request operations.ListNekiRo
 		request.Page = &nP
 
 		return s.ListNekiRoles(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -1874,7 +1878,6 @@ func (s *Roles) GetNekiRole(ctx context.Context, request operations.GetNekiRoleR
 
 	return s.getNekiRole(ctx, hookCtx, req, o)
 }
-
 func (s *Roles) getNekiRole(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetNekiRoleResponse, error) {
 	var err error
 

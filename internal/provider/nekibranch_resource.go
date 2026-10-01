@@ -180,6 +180,8 @@ func (r *NekiBranchResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateNekiBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -188,7 +190,7 @@ func (r *NekiBranchResource) Create(ctx context.Context, req resource.CreateRequ
 	}
 	res, err := r.client.DatabaseBranches.CreateNekiBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -230,7 +232,7 @@ func (r *NekiBranchResource) Create(ctx context.Context, req resource.CreateRequ
 	))
 	res1, err := r.client.DatabaseBranches.GetNekiBranch(ctx, *request1, getNekiBranchOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -282,6 +284,8 @@ func (r *NekiBranchResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetNekiBranchRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -290,7 +294,7 @@ func (r *NekiBranchResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 	res, err := r.client.DatabaseBranches.GetNekiBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -357,6 +361,8 @@ func (r *NekiBranchResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateNekiBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -365,7 +371,7 @@ func (r *NekiBranchResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	res, err := r.client.DatabaseBranches.UpdateNekiBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -402,7 +408,7 @@ func (r *NekiBranchResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	res1, err := r.client.DatabaseBranches.GetNekiBranch(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -454,6 +460,8 @@ func (r *NekiBranchResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteNekiBranchRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -462,7 +470,7 @@ func (r *NekiBranchResource) Delete(ctx context.Context, req resource.DeleteRequ
 	}
 	res, err := r.client.DatabaseBranches.DeleteNekiBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

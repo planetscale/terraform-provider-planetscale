@@ -330,6 +330,8 @@ func (r *VitessBranchPasswordResource) Create(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreatePasswordRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -338,7 +340,7 @@ func (r *VitessBranchPasswordResource) Create(ctx context.Context, req resource.
 	}
 	res, err := r.client.DatabaseBranchPasswords.CreatePassword(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -390,6 +392,8 @@ func (r *VitessBranchPasswordResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetPasswordRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -398,7 +402,7 @@ func (r *VitessBranchPasswordResource) Read(ctx context.Context, req resource.Re
 	}
 	res, err := r.client.DatabaseBranchPasswords.GetPassword(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -444,6 +448,8 @@ func (r *VitessBranchPasswordResource) Update(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdatePasswordRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -452,7 +458,7 @@ func (r *VitessBranchPasswordResource) Update(ctx context.Context, req resource.
 	}
 	res, err := r.client.DatabaseBranchPasswords.UpdatePassword(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -504,6 +510,8 @@ func (r *VitessBranchPasswordResource) Delete(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeletePasswordRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -512,7 +520,7 @@ func (r *VitessBranchPasswordResource) Delete(ctx context.Context, req resource.
 	}
 	res, err := r.client.DatabaseBranchPasswords.DeletePassword(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

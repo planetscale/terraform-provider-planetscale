@@ -83,6 +83,7 @@ func (s *DatabaseBranchPasswords) ListPasswords(ctx context.Context, request ope
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -175,8 +176,9 @@ func (s *DatabaseBranchPasswords) ListPasswords(ctx context.Context, request ope
 		request.Page = &nP
 
 		return s.ListPasswords(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 

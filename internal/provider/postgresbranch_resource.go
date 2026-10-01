@@ -257,6 +257,8 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreatePostgresBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -265,7 +267,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	}
 	res, err := r.client.DatabaseBranches.CreatePostgresBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -307,7 +309,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	))
 	res1, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request1, getPostgresBranchOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -344,7 +346,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	}
 	res2, err := r.client.BranchChanges.ApplyPostgresBranchTerraformChanges(ctx, *request2)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -389,7 +391,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	))
 	res3, err := r.client.BranchChanges.GetBranchChangeRequest(ctx, *request3, getBranchChangeRequestOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res3 != nil && res3.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
 		}
@@ -441,6 +443,8 @@ func (r *PostgresBranchResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetPostgresBranchRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -449,7 +453,7 @@ func (r *PostgresBranchResource) Read(ctx context.Context, req resource.ReadRequ
 	}
 	res, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -516,6 +520,8 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdatePostgresBranchRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -524,7 +530,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	}
 	res, err := r.client.DatabaseBranches.UpdatePostgresBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -561,7 +567,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	}
 	res1, err := r.client.BranchChanges.ApplyPostgresBranchTerraformChanges(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -606,7 +612,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	))
 	res2, err := r.client.BranchChanges.GetBranchChangeRequest(ctx, *request2, getBranchChangeRequestOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -643,7 +649,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	}
 	res3, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request3)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res3 != nil && res3.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
 		}
@@ -695,6 +701,8 @@ func (r *PostgresBranchResource) Delete(ctx context.Context, req resource.Delete
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeletePostgresBranchRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -703,7 +711,7 @@ func (r *PostgresBranchResource) Delete(ctx context.Context, req resource.Delete
 	}
 	res, err := r.client.DatabaseBranches.DeletePostgresBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

@@ -275,6 +275,8 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateVitessBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -283,7 +285,7 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	res, err := r.client.DatabaseBranches.CreateVitessBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -325,7 +327,7 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 	))
 	res1, err := r.client.DatabaseBranches.GetVitessBranch(ctx, *request1, getVitessBranchOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -362,7 +364,7 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	res2, err := r.client.DatabaseBranches.UpdateSafeMigrations(ctx, *request2)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -390,7 +392,7 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	res3, err := r.client.APIBranchResizes.UpdateBranchResizeRequest(ctx, *request3)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res3 != nil && res3.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
 		}
@@ -435,7 +437,7 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 	))
 	res4, err := r.client.APIBranchResizes.GetBranchResizeRequest(ctx, *request4, getBranchResizeRequestOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res4 != nil && res4.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
 		}
@@ -487,6 +489,8 @@ func (r *VitessBranchResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetVitessBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -495,7 +499,7 @@ func (r *VitessBranchResource) Read(ctx context.Context, req resource.ReadReques
 	}
 	res, err := r.client.DatabaseBranches.GetVitessBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -541,6 +545,8 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateBranchResizeRequestRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -549,7 +555,7 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 	res, err := r.client.APIBranchResizes.UpdateBranchResizeRequest(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -594,7 +600,7 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 	))
 	res1, err := r.client.APIBranchResizes.GetBranchResizeRequest(ctx, *request1, getBranchResizeRequestOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -631,7 +637,7 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 	res2, err := r.client.DatabaseBranches.UpdateSafeMigrations(ctx, *request2)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -659,7 +665,7 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 	res3, err := r.client.DatabaseBranches.UpdateVitessBranch(ctx, *request3)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res3 != nil && res3.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
 		}
@@ -711,6 +717,8 @@ func (r *VitessBranchResource) Delete(ctx context.Context, req resource.DeleteRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteVitessBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -719,7 +727,7 @@ func (r *VitessBranchResource) Delete(ctx context.Context, req resource.DeleteRe
 	}
 	res, err := r.client.DatabaseBranches.DeleteVitessBranch(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

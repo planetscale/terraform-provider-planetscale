@@ -399,7 +399,6 @@ func (s *DatabaseBranches) GetPostgresBranch(ctx context.Context, request operat
 
 	return s.getPostgresBranch(ctx, hookCtx, req, o)
 }
-
 func (s *DatabaseBranches) getPostgresBranch(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchResponse, error) {
 	var err error
 
@@ -1103,7 +1102,6 @@ func (s *DatabaseBranches) GetVitessBranch(ctx context.Context, request operatio
 
 	return s.getVitessBranch(ctx, hookCtx, req, o)
 }
-
 func (s *DatabaseBranches) getVitessBranch(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessBranchResponse, error) {
 	var err error
 
@@ -1807,7 +1805,6 @@ func (s *DatabaseBranches) GetNekiBranch(ctx context.Context, request operations
 
 	return s.getNekiBranch(ctx, hookCtx, req, o)
 }
-
 func (s *DatabaseBranches) getNekiBranch(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetNekiBranchResponse, error) {
 	var err error
 

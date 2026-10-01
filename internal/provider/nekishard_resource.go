@@ -136,6 +136,8 @@ func (r *NekiShardResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -144,7 +146,7 @@ func (r *NekiShardResource) Create(ctx context.Context, req resource.CreateReque
 	}
 	res, err := r.client.APINekiShardConfigurationProfileShards.CreateNekiShard(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -186,7 +188,7 @@ func (r *NekiShardResource) Create(ctx context.Context, req resource.CreateReque
 	))
 	res1, err := r.client.APINekiShards.GetNekiShard(ctx, *request1, getNekiShardOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -238,6 +240,8 @@ func (r *NekiShardResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -246,7 +250,7 @@ func (r *NekiShardResource) Read(ctx context.Context, req resource.ReadRequest, 
 	}
 	res, err := r.client.APINekiShards.GetNekiShard(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -292,6 +296,8 @@ func (r *NekiShardResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsReassignNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -300,7 +306,7 @@ func (r *NekiShardResource) Update(ctx context.Context, req resource.UpdateReque
 	}
 	res, err := r.client.APINekiShardConfigurationProfileShards.ReassignNekiShard(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -337,7 +343,7 @@ func (r *NekiShardResource) Update(ctx context.Context, req resource.UpdateReque
 	}
 	res1, err := r.client.APINekiShardConfigurationProfileShards.UpdateNekiShard(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -379,7 +385,7 @@ func (r *NekiShardResource) Update(ctx context.Context, req resource.UpdateReque
 	))
 	res2, err := r.client.APINekiShardConfigurationProfiles.WaitForNekiShardReassignment(ctx, *request2, waitForNekiShardReassignmentOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -411,7 +417,7 @@ func (r *NekiShardResource) Update(ctx context.Context, req resource.UpdateReque
 	}
 	res3, err := r.client.APINekiShards.GetNekiShard(ctx, *request3)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res3 != nil && res3.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
 		}
@@ -463,6 +469,8 @@ func (r *NekiShardResource) Delete(ctx context.Context, req resource.DeleteReque
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -471,7 +479,7 @@ func (r *NekiShardResource) Delete(ctx context.Context, req resource.DeleteReque
 	}
 	res, err := r.client.APINekiShardConfigurationProfileShards.DeleteNekiShard(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

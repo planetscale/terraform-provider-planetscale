@@ -59,6 +59,8 @@ terraform:
     - env: PLANETSCALE_SERVICE_TOKEN_ID
       providerAttribute: service_token_id
   excludeEmptyObjectSchemas: false
+  fixFlags:
+    encodePathParams: false
   forwardCompatibleEnumsByDefault: false
   includeEmptyObjects: true
   inferUnionDiscriminators: false
@@ -67,4 +69,5 @@ terraform:
   providerTypeNameOverride: ""
   respectRequiredFields: false
   respectTitlesForPrimitiveUnionMembers: false
+  serverVariableProviderAttributes: {}
   unionStrategy: populated-fields
