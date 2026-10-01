@@ -81,6 +81,7 @@ func (s *Databases) ListDatabases(ctx context.Context, request operations.ListDa
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -173,8 +174,9 @@ func (s *Databases) ListDatabases(ctx context.Context, request operations.ListDa
 		request.Page = &nP
 
 		return s.ListDatabases(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 

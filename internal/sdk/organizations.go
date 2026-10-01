@@ -79,6 +79,7 @@ func (s *Organizations) ListOrganizations(ctx context.Context, request operation
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -171,8 +172,9 @@ func (s *Organizations) ListOrganizations(ctx context.Context, request operation
 		request.Page = &nP
 
 		return s.ListOrganizations(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 

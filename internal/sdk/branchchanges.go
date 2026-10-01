@@ -117,7 +117,6 @@ func (s *BranchChanges) GetBranchChangeRequest(ctx context.Context, request oper
 
 	return s.getBranchChangeRequest(ctx, hookCtx, req, o)
 }
-
 func (s *BranchChanges) getBranchChangeRequest(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchChangeRequestResponse, error) {
 	var err error
 

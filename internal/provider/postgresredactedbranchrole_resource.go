@@ -278,6 +278,8 @@ func (r *PostgresRedactedBranchRoleResource) Create(ctx context.Context, req res
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -286,7 +288,7 @@ func (r *PostgresRedactedBranchRoleResource) Create(ctx context.Context, req res
 	}
 	res, err := r.client.Roles.CreateRedactedRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -338,6 +340,8 @@ func (r *PostgresRedactedBranchRoleResource) Read(ctx context.Context, req resou
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -346,7 +350,7 @@ func (r *PostgresRedactedBranchRoleResource) Read(ctx context.Context, req resou
 	}
 	res, err := r.client.Roles.GetRedactedRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -392,6 +396,8 @@ func (r *PostgresRedactedBranchRoleResource) Update(ctx context.Context, req res
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -400,7 +406,7 @@ func (r *PostgresRedactedBranchRoleResource) Update(ctx context.Context, req res
 	}
 	res, err := r.client.Roles.UpdateRedactedRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -452,6 +458,8 @@ func (r *PostgresRedactedBranchRoleResource) Delete(ctx context.Context, req res
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -460,7 +468,7 @@ func (r *PostgresRedactedBranchRoleResource) Delete(ctx context.Context, req res
 	}
 	res, err := r.client.Roles.DeleteRedactedRole(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

@@ -175,6 +175,8 @@ func (r *PostgresBouncerResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateBouncerRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -183,7 +185,7 @@ func (r *PostgresBouncerResource) Create(ctx context.Context, req resource.Creat
 	}
 	res, err := r.client.Bouncers.CreateBouncer(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -220,7 +222,7 @@ func (r *PostgresBouncerResource) Create(ctx context.Context, req resource.Creat
 	}
 	res1, err := r.client.Bouncers.ApplyPostgresBouncerTerraformChanges(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -260,7 +262,7 @@ func (r *PostgresBouncerResource) Create(ctx context.Context, req resource.Creat
 	}
 	res2, err := r.client.Bouncers.GetPostgresBouncerTerraformState(ctx, *request2)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -312,6 +314,8 @@ func (r *PostgresBouncerResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetPostgresBouncerTerraformStateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -320,7 +324,7 @@ func (r *PostgresBouncerResource) Read(ctx context.Context, req resource.ReadReq
 	}
 	res, err := r.client.Bouncers.GetPostgresBouncerTerraformState(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -366,6 +370,8 @@ func (r *PostgresBouncerResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsApplyPostgresBouncerTerraformChangesRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -374,7 +380,7 @@ func (r *PostgresBouncerResource) Update(ctx context.Context, req resource.Updat
 	}
 	res, err := r.client.Bouncers.ApplyPostgresBouncerTerraformChanges(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -414,7 +420,7 @@ func (r *PostgresBouncerResource) Update(ctx context.Context, req resource.Updat
 	}
 	res1, err := r.client.Bouncers.GetPostgresBouncerTerraformState(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -466,6 +472,8 @@ func (r *PostgresBouncerResource) Delete(ctx context.Context, req resource.Delet
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteBouncerRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -474,7 +482,7 @@ func (r *PostgresBouncerResource) Delete(ctx context.Context, req resource.Delet
 	}
 	res, err := r.client.Bouncers.DeleteBouncer(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

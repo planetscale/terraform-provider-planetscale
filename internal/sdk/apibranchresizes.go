@@ -276,7 +276,6 @@ func (s *APIBranchResizes) GetBranchResizeRequest(ctx context.Context, request o
 
 	return s.getBranchResizeRequest(ctx, hookCtx, req, o)
 }
-
 func (s *APIBranchResizes) getBranchResizeRequest(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchResizeRequestResponse, error) {
 	var err error
 

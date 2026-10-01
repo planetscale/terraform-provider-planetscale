@@ -428,7 +428,6 @@ func (s *ReadOnlyReplicas) GetReadOnlyReplica(ctx context.Context, request opera
 
 	return s.getReadOnlyReplica(ctx, hookCtx, req, o)
 }
-
 func (s *ReadOnlyReplicas) getReadOnlyReplica(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetReadOnlyReplicaResponse, error) {
 	var err error
 

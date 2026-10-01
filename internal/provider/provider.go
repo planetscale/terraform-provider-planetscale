@@ -115,6 +115,7 @@ func (p *PlanetscaleProvider) Configure(ctx context.Context, req provider.Config
 			"Either the environment variable PLANETSCALE_SERVICE_TOKEN_ID or provider configuration service_token_id attribute must be configured.",
 		)
 	}
+	registerSensitiveValues(security.ServiceToken, security.ServiceTokenID)
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),

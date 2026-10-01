@@ -294,6 +294,8 @@ func (r *VitessBranchPasswordsDataSource) Read(ctx context.Context, req datasour
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config)
+
 	request, requestDiags := data.ToOperationsListPasswordsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -302,7 +304,7 @@ func (r *VitessBranchPasswordsDataSource) Read(ctx context.Context, req datasour
 	}
 	res, err := r.client.DatabaseBranchPasswords.ListPasswords(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -332,7 +334,7 @@ func (r *VitessBranchPasswordsDataSource) Read(ctx context.Context, req datasour
 		res, err = res.Next()
 
 		if err != nil {
-			resp.Diagnostics.AddError("failed to retrieve next page of results", err.Error())
+			resp.Diagnostics.AddError("failed to retrieve next page of results", redactSensitiveValues(ctx, err.Error()))
 			if res != nil && res.RawResponse != nil {
 				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 			}

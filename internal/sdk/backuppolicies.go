@@ -82,6 +82,7 @@ func (s *BackupPolicies) ListVitessBackupPolicies(ctx context.Context, request o
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -174,8 +175,9 @@ func (s *BackupPolicies) ListVitessBackupPolicies(ctx context.Context, request o
 		request.Page = &nP
 
 		return s.ListVitessBackupPolicies(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -872,6 +874,7 @@ func (s *BackupPolicies) ListPostgresBackupPolicies(ctx context.Context, request
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -964,8 +967,9 @@ func (s *BackupPolicies) ListPostgresBackupPolicies(ctx context.Context, request
 		request.Page = &nP
 
 		return s.ListPostgresBackupPolicies(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -1662,6 +1666,7 @@ func (s *BackupPolicies) ListNekiBackupPolicies(ctx context.Context, request ope
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -1754,8 +1759,9 @@ func (s *BackupPolicies) ListNekiBackupPolicies(ctx context.Context, request ope
 		request.Page = &nP
 
 		return s.ListNekiBackupPolicies(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 

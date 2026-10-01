@@ -427,7 +427,6 @@ func (s *APINekiShardConfigurationProfiles) GetNekiConfigurationProfile(ctx cont
 
 	return s.getNekiConfigurationProfile(ctx, hookCtx, req, o)
 }
-
 func (s *APINekiShardConfigurationProfiles) getNekiConfigurationProfile(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetNekiConfigurationProfileResponse, error) {
 	var err error
 
@@ -1087,7 +1086,6 @@ func (s *APINekiShardConfigurationProfiles) WaitForNekiShardReassignment(ctx con
 
 	return s.waitForNekiShardReassignment(ctx, hookCtx, req, o)
 }
-
 func (s *APINekiShardConfigurationProfiles) waitForNekiShardReassignment(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.WaitForNekiShardReassignmentResponse, error) {
 	var err error
 

@@ -182,6 +182,8 @@ func (r *PostgresBackupPolicyResource) Create(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreatePostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -190,7 +192,7 @@ func (r *PostgresBackupPolicyResource) Create(ctx context.Context, req resource.
 	}
 	res, err := r.client.BackupPolicies.CreatePostgresBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -242,6 +244,8 @@ func (r *PostgresBackupPolicyResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetPostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -250,7 +254,7 @@ func (r *PostgresBackupPolicyResource) Read(ctx context.Context, req resource.Re
 	}
 	res, err := r.client.BackupPolicies.GetPostgresBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -296,6 +300,8 @@ func (r *PostgresBackupPolicyResource) Update(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdatePostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -304,7 +310,7 @@ func (r *PostgresBackupPolicyResource) Update(ctx context.Context, req resource.
 	}
 	res, err := r.client.BackupPolicies.UpdatePostgresBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -356,6 +362,8 @@ func (r *PostgresBackupPolicyResource) Delete(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeletePostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -364,7 +372,7 @@ func (r *PostgresBackupPolicyResource) Delete(ctx context.Context, req resource.
 	}
 	res, err := r.client.BackupPolicies.DeletePostgresBackupPolicy(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

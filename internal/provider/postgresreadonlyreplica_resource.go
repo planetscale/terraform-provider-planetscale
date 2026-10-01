@@ -152,6 +152,8 @@ func (r *PostgresReadOnlyReplicaResource) Create(ctx context.Context, req resour
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateReadOnlyReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -160,7 +162,7 @@ func (r *PostgresReadOnlyReplicaResource) Create(ctx context.Context, req resour
 	}
 	res, err := r.client.ReadOnlyReplicas.CreateReadOnlyReplica(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -202,7 +204,7 @@ func (r *PostgresReadOnlyReplicaResource) Create(ctx context.Context, req resour
 	))
 	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -254,6 +256,8 @@ func (r *PostgresReadOnlyReplicaResource) Read(ctx context.Context, req resource
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -262,7 +266,7 @@ func (r *PostgresReadOnlyReplicaResource) Read(ctx context.Context, req resource
 	}
 	res, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -308,6 +312,8 @@ func (r *PostgresReadOnlyReplicaResource) Update(ctx context.Context, req resour
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateReadOnlyReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -316,7 +322,7 @@ func (r *PostgresReadOnlyReplicaResource) Update(ctx context.Context, req resour
 	}
 	res, err := r.client.ReadOnlyReplicas.UpdateReadOnlyReplica(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -358,7 +364,7 @@ func (r *PostgresReadOnlyReplicaResource) Update(ctx context.Context, req resour
 	))
 	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -410,6 +416,8 @@ func (r *PostgresReadOnlyReplicaResource) Delete(ctx context.Context, req resour
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteReadOnlyReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -418,7 +426,7 @@ func (r *PostgresReadOnlyReplicaResource) Delete(ctx context.Context, req resour
 	}
 	res, err := r.client.ReadOnlyReplicas.DeleteReadOnlyReplica(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -448,7 +456,7 @@ func (r *PostgresReadOnlyReplicaResource) Delete(ctx context.Context, req resour
 	))
 	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}

@@ -86,6 +86,7 @@ func (s *Backups) ListVitessBranchBackups(ctx context.Context, request operation
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -178,8 +179,9 @@ func (s *Backups) ListVitessBranchBackups(ctx context.Context, request operation
 		request.Page = &nP
 
 		return s.ListVitessBranchBackups(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -469,7 +471,6 @@ func (s *Backups) GetVitessBranchBackup(ctx context.Context, request operations.
 
 	return s.getVitessBranchBackup(ctx, hookCtx, req, o)
 }
-
 func (s *Backups) getVitessBranchBackup(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetVitessBranchBackupResponse, error) {
 	var err error
 
@@ -836,6 +837,7 @@ func (s *Backups) ListPostgresBranchBackups(ctx context.Context, request operati
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -928,8 +930,9 @@ func (s *Backups) ListPostgresBranchBackups(ctx context.Context, request operati
 		request.Page = &nP
 
 		return s.ListPostgresBranchBackups(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
@@ -1219,7 +1222,6 @@ func (s *Backups) GetPostgresBranchBackup(ctx context.Context, request operation
 
 	return s.getPostgresBranchBackup(ctx, hookCtx, req, o)
 }
-
 func (s *Backups) getPostgresBranchBackup(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchBackupResponse, error) {
 	var err error
 

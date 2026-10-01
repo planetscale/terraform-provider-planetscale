@@ -143,6 +143,8 @@ func (r *NekiSidecarResource) Create(ctx context.Context, req resource.CreateReq
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsUpdateNekiSidecarRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -151,7 +153,7 @@ func (r *NekiSidecarResource) Create(ctx context.Context, req resource.CreateReq
 	}
 	res, err := r.client.APINekiSidecars.UpdateNekiSidecar(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -193,7 +195,7 @@ func (r *NekiSidecarResource) Create(ctx context.Context, req resource.CreateReq
 	))
 	res1, err := r.client.APINekiSidecars.GetNekiSidecar(ctx, *request1, getNekiSidecarOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -230,7 +232,7 @@ func (r *NekiSidecarResource) Create(ctx context.Context, req resource.CreateReq
 	}
 	res2, err := r.client.APINekiSidecarParameters.GetNekiSidecarParameters(ctx, *request2)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -282,6 +284,8 @@ func (r *NekiSidecarResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetNekiSidecarRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -290,7 +294,7 @@ func (r *NekiSidecarResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 	res, err := r.client.APINekiSidecars.GetNekiSidecar(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -325,7 +329,7 @@ func (r *NekiSidecarResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 	res1, err := r.client.APINekiSidecarParameters.GetNekiSidecarParameters(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -371,6 +375,8 @@ func (r *NekiSidecarResource) Update(ctx context.Context, req resource.UpdateReq
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateNekiSidecarRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -379,7 +385,7 @@ func (r *NekiSidecarResource) Update(ctx context.Context, req resource.UpdateReq
 	}
 	res, err := r.client.APINekiSidecars.UpdateNekiSidecar(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -421,7 +427,7 @@ func (r *NekiSidecarResource) Update(ctx context.Context, req resource.UpdateReq
 	))
 	res1, err := r.client.APINekiSidecars.GetNekiSidecar(ctx, *request1, getNekiSidecarOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -458,7 +464,7 @@ func (r *NekiSidecarResource) Update(ctx context.Context, req resource.UpdateReq
 	}
 	res2, err := r.client.APINekiSidecarParameters.GetNekiSidecarParameters(ctx, *request2)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}

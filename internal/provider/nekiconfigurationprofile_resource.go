@@ -231,6 +231,8 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -239,7 +241,7 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	}
 	res, err := r.client.APINekiShardConfigurationProfiles.CreateNekiConfigurationProfile(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -281,7 +283,7 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	))
 	res1, err := r.client.APINekiShardConfigurationProfiles.GetNekiConfigurationProfile(ctx, *request1, getNekiConfigurationProfileOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -318,7 +320,7 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	}
 	res2, err := r.client.APINekiShardConfigurationProfiles.UpdateNekiConfigurationProfile(ctx, *request2)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -355,7 +357,7 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	}
 	res3, err := r.client.APINekiShardConfigurationProfiles.RunNekiConfigurationProfileMaintenance(ctx, *request3)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res3 != nil && res3.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
 		}
@@ -388,7 +390,7 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	))
 	res4, err := r.client.APINekiShardConfigurationProfiles.GetNekiConfigurationProfile(ctx, *request4, getNekiConfigurationProfileOptions1...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res4 != nil && res4.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
 		}
@@ -425,7 +427,7 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 	}
 	res5, err := r.client.APINekiShardConfigurationProfileParameters.GetNekiConfigurationProfileParameters(ctx, *request5)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res5 != nil && res5.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res5.RawResponse))
 		}
@@ -477,6 +479,8 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -485,7 +489,7 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 	}
 	res, err := r.client.APINekiShardConfigurationProfiles.GetNekiConfigurationProfile(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -520,7 +524,7 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 	}
 	res1, err := r.client.APINekiShardConfigurationProfileParameters.GetNekiConfigurationProfileParameters(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -566,6 +570,8 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -574,7 +580,7 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 	}
 	res, err := r.client.APINekiShardConfigurationProfiles.UpdateNekiConfigurationProfile(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -611,7 +617,7 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 	}
 	res1, err := r.client.APINekiShardConfigurationProfiles.RunNekiConfigurationProfileMaintenance(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -644,7 +650,7 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 	))
 	res2, err := r.client.APINekiShardConfigurationProfiles.GetNekiConfigurationProfile(ctx, *request2, getNekiConfigurationProfileOptions...)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
 		}
@@ -681,7 +687,7 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 	}
 	res3, err := r.client.APINekiShardConfigurationProfileParameters.GetNekiConfigurationProfileParameters(ctx, *request3)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res3 != nil && res3.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
 		}
@@ -733,6 +739,8 @@ func (r *NekiConfigurationProfileResource) Delete(ctx context.Context, req resou
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -741,7 +749,7 @@ func (r *NekiConfigurationProfileResource) Delete(ctx context.Context, req resou
 	}
 	res, err := r.client.APINekiShardConfigurationProfiles.DeleteNekiConfigurationProfile(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

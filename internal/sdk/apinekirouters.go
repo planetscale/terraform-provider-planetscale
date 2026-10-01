@@ -427,7 +427,6 @@ func (s *APINekiRouters) GetRouter(ctx context.Context, request operations.GetRo
 
 	return s.getRouter(ctx, hookCtx, req, o)
 }
-
 func (s *APINekiRouters) getRouter(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetRouterResponse, error) {
 	var err error
 

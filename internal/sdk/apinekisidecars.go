@@ -115,7 +115,6 @@ func (s *APINekiSidecars) GetNekiSidecar(ctx context.Context, request operations
 
 	return s.getNekiSidecar(ctx, hookCtx, req, o)
 }
-
 func (s *APINekiSidecars) getNekiSidecar(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetNekiSidecarResponse, error) {
 	var err error
 

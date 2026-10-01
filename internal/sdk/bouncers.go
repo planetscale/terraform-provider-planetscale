@@ -83,6 +83,7 @@ func (s *Bouncers) ListBouncers(ctx context.Context, request operations.ListBoun
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	if timeout != nil {
 		var cancel context.CancelFunc
@@ -175,8 +176,9 @@ func (s *Bouncers) ListBouncers(ctx context.Context, request operations.ListBoun
 		request.Page = &nP
 
 		return s.ListBouncers(
-			ctx,
+			paginationCtx,
 			request,
+			opts...,
 		)
 	}
 
