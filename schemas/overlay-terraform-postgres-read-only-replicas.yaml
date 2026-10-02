@@ -7,7 +7,7 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].get
     description: API operation for read.
     update:
-      x-speakeasy-entity-operation: PostgresDedicatedReadReplicas#read
+      x-speakeasy-entity-operation: PostgresReadOnlyReplicas#read
       x-speakeasy-entity-description: Returns information about the dedicated read replicas for a PlanetScale Postgres branch.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].get.responses['200']

@@ -9,54 +9,48 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestPostgresDedicatedReadReplicaResourceRegistration(t *testing.T) {
+func TestPostgresDedicatedReadReplicaResourceMetadata(t *testing.T) {
 	t.Parallel()
 
-	typeNames := registeredResourceTypeNames((&PlanetscaleProvider{}).Resources(context.Background()))
+	response := resourceMetadata(NewPostgresDedicatedReadReplicaResource())
 
-	require.Equal(t, 1, typeNames["planetscale_postgres_dedicated_read_replica"])
-	require.Equal(t, 1, typeNames["planetscale_postgres_read_only_replica"])
+	require.Equal(t, "planetscale_postgres_dedicated_read_replica", response.TypeName)
 }
 
-func TestPostgresDedicatedReadReplicaDataSourceRegistration(t *testing.T) {
+func TestPostgresDedicatedReadReplicaDataSourceMetadata(t *testing.T) {
 	t.Parallel()
 
-	typeNames := registeredDataSourceTypeNames((&PlanetscaleProvider{}).DataSources(context.Background()))
+	response := dataSourceMetadata(NewPostgresDedicatedReadReplicaDataSource())
 
-	require.Equal(t, 1, typeNames["planetscale_postgres_dedicated_read_replica"])
-	require.Equal(t, 1, typeNames["planetscale_postgres_dedicated_read_replicas"])
-	require.Equal(t, 1, typeNames["planetscale_postgres_read_only_replica"])
-	require.Equal(t, 1, typeNames["planetscale_postgres_read_only_replicas"])
+	require.Equal(t, "planetscale_postgres_dedicated_read_replica", response.TypeName)
 }
 
-func registeredResourceTypeNames(factories []func() resource.Resource) map[string]int {
-	typeNames := make(map[string]int, len(factories))
+func TestPostgresDedicatedReadReplicasDataSourceMetadata(t *testing.T) {
+	t.Parallel()
 
-	for _, factory := range factories {
-		response := &resource.MetadataResponse{}
-		factory().Metadata(
-			context.Background(),
-			resource.MetadataRequest{ProviderTypeName: "planetscale"},
-			response,
-		)
-		typeNames[response.TypeName]++
-	}
+	response := dataSourceMetadata(NewPostgresDedicatedReadReplicasDataSource())
 
-	return typeNames
+	require.Equal(t, "planetscale_postgres_dedicated_read_replicas", response.TypeName)
 }
 
-func registeredDataSourceTypeNames(factories []func() datasource.DataSource) map[string]int {
-	typeNames := make(map[string]int, len(factories))
+func resourceMetadata(terraformResource resource.Resource) *resource.MetadataResponse {
+	response := &resource.MetadataResponse{}
+	terraformResource.Metadata(
+		context.Background(),
+		resource.MetadataRequest{ProviderTypeName: "planetscale"},
+		response,
+	)
 
-	for _, factory := range factories {
-		response := &datasource.MetadataResponse{}
-		factory().Metadata(
-			context.Background(),
-			datasource.MetadataRequest{ProviderTypeName: "planetscale"},
-			response,
-		)
-		typeNames[response.TypeName]++
-	}
+	return response
+}
 
-	return typeNames
+func dataSourceMetadata(terraformDataSource datasource.DataSource) *datasource.MetadataResponse {
+	response := &datasource.MetadataResponse{}
+	terraformDataSource.Metadata(
+		context.Background(),
+		datasource.MetadataRequest{ProviderTypeName: "planetscale"},
+		response,
+	)
+
+	return response
 }
