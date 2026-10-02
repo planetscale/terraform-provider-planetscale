@@ -7,7 +7,7 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post
     description: API operation for managed resource create.
     update:
-      x-speakeasy-entity-operation: PostgresReadOnlyReplica#create
+      x-speakeasy-entity-operation: PostgresDedicatedReadReplica#create
       x-speakeasy-entity-description: >-
         Manage a dedicated read replica for a PlanetScale Postgres branch. A
         dedicated read replica serves reads through its own connection host,
@@ -88,16 +88,16 @@ actions:
     description: API operation for managed resource read.
     update:
       x-speakeasy-entity-operation:
-        - PostgresReadOnlyReplica#read
-        - entityOperation: PostgresReadOnlyReplica#create#2
+        - PostgresDedicatedReadReplica#read
+        - entityOperation: PostgresDedicatedReadReplica#create#2
           options:
             polling:
               name: WaitForReady
-        - entityOperation: PostgresReadOnlyReplica#update#2
+        - entityOperation: PostgresDedicatedReadReplica#update#2
           options:
             polling:
               name: WaitForReady
-        - entityOperation: PostgresReadOnlyReplica#delete#2
+        - entityOperation: PostgresDedicatedReadReplica#delete#2
           options:
             polling:
               name: WaitForDeleted
@@ -177,7 +177,7 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch
     description: API operation for managed resource update.
     update:
-      x-speakeasy-entity-operation: PostgresReadOnlyReplica#update
+      x-speakeasy-entity-operation: PostgresDedicatedReadReplica#update
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.parameters[?@.name == 'read_only_replica']
     description: The read_only_replica path parameter is the dedicated read replica name.
@@ -245,7 +245,7 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].delete
     description: API operation for managed resource delete.
     update:
-      x-speakeasy-entity-operation: PostgresReadOnlyReplica#delete
+      x-speakeasy-entity-operation: PostgresDedicatedReadReplica#delete
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].delete.parameters[?@.name == 'read_only_replica']
     description: The read_only_replica path parameter is the dedicated read replica name.
