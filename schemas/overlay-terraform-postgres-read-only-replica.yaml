@@ -1,30 +1,30 @@
 overlay: 1.1.0
 x-speakeasy-jsonpath: rfc9535
 info:
-  title: Terraform generation overlay for planetscale_postgres_read_only_replica managed and data resources.
+  title: Terraform generation overlay for planetscale_postgres_dedicated_read_replica managed and data resources.
   version: 0.0.1
 actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post
     description: API operation for managed resource create.
     update:
-      x-speakeasy-entity-operation: PostgresReadOnlyReplica#create
+      x-speakeasy-entity-operation: PostgresDedicatedReadReplica#create
       x-speakeasy-entity-description: >-
-        Manage a read-only replica for a PlanetScale Postgres branch. A
-        read-only replica serves reads through its own connection host, and
-        can run in a different region than the primary to serve reads close
-        to your application.
+        Manage a dedicated read replica for a PlanetScale Postgres branch. A
+        dedicated read replica serves reads through its own connection host,
+        and can run in a different region than the primary to serve reads
+        close to your application.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.requestBody.content['application/json'].schema.properties.name
     description: Practitioner-facing attribute description.
     update:
-      description: The name of the read-only replica.
+      description: The name of the dedicated read replica.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.requestBody.content['application/json'].schema.properties.region
     description: Practitioner-facing attribute description.
     update:
       description: >-
-        The region slug for the read-only replica, e.g. `us-east`. The
-        replica can run in a different region than the primary.
+        The region slug for the dedicated read replica, e.g. `us-east`. The
+        dedicated read replica can run in a different region than the primary.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.requestBody.content['application/json'].schema.properties.replicas
     description: Practitioner-facing attribute description.
@@ -43,6 +43,21 @@ actions:
   # configured inputs plus the connection attributes. cluster_name is renamed
   # to match the cluster_size request attribute. state stays in the SDK model
   # for the create poller but is hidden from the Terraform schema.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.name
+    update:
+      description: The name of the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.replicas
+    update:
+      description: The number of instances serving reads in this dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.access_host_url
+    update:
+      description: The database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.private_access_host_url
+    update:
+      description: The private database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.private_connection_service_name
+    update:
+      description: The service name to set up private connectivity for the dedicated read replica.
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas'].post.responses['200'].content['application/json'].schema.properties.cluster_name
     update:
       x-speakeasy-name-override: cluster_size
@@ -73,20 +88,20 @@ actions:
     description: API operation for managed resource read.
     update:
       x-speakeasy-entity-operation:
-        - PostgresReadOnlyReplica#read
-        - entityOperation: PostgresReadOnlyReplica#create#2
+        - PostgresDedicatedReadReplica#read
+        - entityOperation: PostgresDedicatedReadReplica#create#2
           options:
             polling:
               name: WaitForReady
-        - entityOperation: PostgresReadOnlyReplica#update#2
+        - entityOperation: PostgresDedicatedReadReplica#update#2
           options:
             polling:
               name: WaitForReady
-        - entityOperation: PostgresReadOnlyReplica#delete#2
+        - entityOperation: PostgresDedicatedReadReplica#delete#2
           options:
             polling:
               name: WaitForDeleted
-      x-speakeasy-entity-description: Returns information about a read-only replica for a PlanetScale Postgres branch.
+      x-speakeasy-entity-description: Returns information about a dedicated read replica for a PlanetScale Postgres branch.
       x-speakeasy-polling:
         - name: WaitForReady
           delaySeconds: 30
@@ -103,8 +118,9 @@ actions:
             - condition: $statusCode == 404
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.parameters[?@.name == 'read_only_replica']
-    description: The read_only_replica path parameter is the replica name.
+    description: The read_only_replica path parameter is the dedicated read replica name.
     update:
+      description: The name of the dedicated read replica.
       x-speakeasy-match: name
 
   # region_slug is not returned by the API: the ReadOnlyReplicaRegionSlugHook
@@ -116,10 +132,25 @@ actions:
         type: string
         x-speakeasy-name-override: region
         description: >-
-          The region slug for the read-only replica, e.g. `us-east`. The
-          replica can run in a different region than the primary.
+          The region slug for the dedicated read replica, e.g. `us-east`. The
+          dedicated read replica can run in a different region than the primary.
 
   # Response shaping for read, mirroring create.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.name
+    update:
+      description: The name of the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.replicas
+    update:
+      description: The number of instances serving reads in this dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.access_host_url
+    update:
+      description: The database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.private_access_host_url
+    update:
+      description: The private database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.private_connection_service_name
+    update:
+      description: The service name to set up private connectivity for the dedicated read replica.
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].get.responses['200'].content['application/json'].schema.properties.cluster_name
     update:
       x-speakeasy-name-override: cluster_size
@@ -146,11 +177,12 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch
     description: API operation for managed resource update.
     update:
-      x-speakeasy-entity-operation: PostgresReadOnlyReplica#update
+      x-speakeasy-entity-operation: PostgresDedicatedReadReplica#update
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.parameters[?@.name == 'read_only_replica']
-    description: The read_only_replica path parameter is the replica name.
+    description: The read_only_replica path parameter is the dedicated read replica name.
     update:
+      description: The name of the dedicated read replica.
       x-speakeasy-match: name
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.requestBody.content['application/json'].schema.properties.parameters
@@ -173,6 +205,21 @@ actions:
         cluster size.
 
   # Response shaping for update, mirroring create.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.name
+    update:
+      description: The name of the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.replicas
+    update:
+      description: The number of instances serving reads in this dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.access_host_url
+    update:
+      description: The database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.private_access_host_url
+    update:
+      description: The private database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.private_connection_service_name
+    update:
+      description: The service name to set up private connectivity for the dedicated read replica.
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].patch.responses['200'].content['application/json'].schema.properties.cluster_name
     update:
       x-speakeasy-name-override: cluster_size
@@ -198,9 +245,10 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].delete
     description: API operation for managed resource delete.
     update:
-      x-speakeasy-entity-operation: PostgresReadOnlyReplica#delete
+      x-speakeasy-entity-operation: PostgresDedicatedReadReplica#delete
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}'].delete.parameters[?@.name == 'read_only_replica']
-    description: The read_only_replica path parameter is the replica name.
+    description: The read_only_replica path parameter is the dedicated read replica name.
     update:
+      description: The name of the dedicated read replica.
       x-speakeasy-match: name

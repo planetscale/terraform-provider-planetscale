@@ -34,7 +34,9 @@ generation:
 terraform:
   version: 1.11.1
   additionalActions: []
-  additionalDataSources: []
+  additionalDataSources:
+    - datasource: NewPostgresReadOnlyReplicaCompatibilityDataSource
+    - datasource: NewPostgresReadOnlyReplicasCompatibilityDataSource
   additionalDependencies: []
   additionalEphemeralResources: []
   additionalFunctions: []
@@ -42,7 +44,8 @@ terraform:
   additionalProviderAttributes:
     httpHeaders: ""
     tlsSkipVerify: ""
-  additionalResources: []
+  additionalResources:
+    - resource: NewPostgresReadOnlyReplicaCompatibilityResource
   author: planetscale
   baseErrorName: PlanetScaleError
   debugLogging: {}

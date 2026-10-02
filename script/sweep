@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # delete old testacc databases, sweep non-main branches from persistent testacc
-# databases, and delete stale read-only replicas from testacc-postgres/main
+# databases, and delete stale dedicated read replicas from testacc-postgres/main
 
 set -eou pipefail
 
@@ -42,10 +42,9 @@ for dbname in testacc-vitess testacc-postgres; do
     done
 done
 
-# The Postgres read-only replica acceptance test creates tfrr-* replicas on
-# testacc-postgres/main, which the branch sweep above never deletes. Requires
-# pscale >= 0.329.0 for the read-only-replica command.
-pscale read-only-replica list testacc-postgres main --org "$ORG" --format json |
+# The Postgres dedicated read replica acceptance test creates tfrr-* replicas
+# on testacc-postgres/main, which the branch sweep above never deletes.
+pscale dedicated-read-replica list testacc-postgres main --org "$ORG" --format json |
   jq --arg age "$AGE_SECS" \
     -r '.[] | select(
     (.name | startswith("tfrr")) and
@@ -53,8 +52,8 @@ pscale read-only-replica list testacc-postgres main --org "$ORG" --format json |
     .name' |
   while read -r replica; do
     if [ "$DRY_RUN" = "true" ]; then
-      echo "[DRY RUN] Would delete read-only replica: testacc-postgres/main/$replica"
+      echo "[DRY RUN] Would delete dedicated read replica: testacc-postgres/main/$replica"
     else
-      pscale read-only-replica delete testacc-postgres main "$replica" --org "$ORG" --force
+      pscale dedicated-read-replica delete testacc-postgres main "$replica" --org "$ORG" --force
     fi
   done
