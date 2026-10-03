@@ -208,6 +208,10 @@ func (s *BackupPolicies) ListVitessBackupPolicies(ctx context.Context, request o
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -366,6 +370,10 @@ func (s *BackupPolicies) CreateVitessBackupPolicy(ctx context.Context, request o
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -517,6 +525,10 @@ func (s *BackupPolicies) GetVitessBackupPolicy(ctx context.Context, request oper
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -675,6 +687,10 @@ func (s *BackupPolicies) UpdateVitessBackupPolicy(ctx context.Context, request o
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -807,6 +823,10 @@ func (s *BackupPolicies) DeleteVitessBackupPolicy(ctx context.Context, request o
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1000,6 +1020,10 @@ func (s *BackupPolicies) ListPostgresBackupPolicies(ctx context.Context, request
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1158,6 +1182,10 @@ func (s *BackupPolicies) CreatePostgresBackupPolicy(ctx context.Context, request
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1309,6 +1337,10 @@ func (s *BackupPolicies) GetPostgresBackupPolicy(ctx context.Context, request op
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1467,6 +1499,10 @@ func (s *BackupPolicies) UpdatePostgresBackupPolicy(ctx context.Context, request
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1599,6 +1635,10 @@ func (s *BackupPolicies) DeletePostgresBackupPolicy(ctx context.Context, request
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1792,6 +1832,10 @@ func (s *BackupPolicies) ListNekiBackupPolicies(ctx context.Context, request ope
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1950,6 +1994,10 @@ func (s *BackupPolicies) CreateNekiBackupPolicy(ctx context.Context, request ope
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -2101,6 +2149,10 @@ func (s *BackupPolicies) GetNekiBackupPolicy(ctx context.Context, request operat
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -2259,6 +2311,10 @@ func (s *BackupPolicies) UpdateNekiBackupPolicy(ctx context.Context, request ope
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -2391,6 +2447,10 @@ func (s *BackupPolicies) DeleteNekiBackupPolicy(ctx context.Context, request ope
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)

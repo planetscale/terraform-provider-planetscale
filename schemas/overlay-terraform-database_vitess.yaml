@@ -141,3 +141,18 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].delete.parameters[?@.name == 'database']
     update:
       x-speakeasy-match: id
+
+  # development_branches_limit and region.neki_supported arrived upstream;
+  # not exposed yet.
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.development_branches_limit
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases#vitess'].post.responses['201'].content['application/json'].schema.properties.region.properties.neki_supported
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.responses['200'].content['application/json'].schema.properties.development_branches_limit
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}#vitess'].get.responses['200'].content['application/json'].schema.properties.region.properties.neki_supported
+    update:
+      x-speakeasy-terraform-ignore: true

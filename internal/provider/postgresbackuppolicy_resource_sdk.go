@@ -21,7 +21,7 @@ func (r *PostgresBackupPolicyResourceModel) RefreshFromOperationsCreatePostgresB
 		r.RetentionUnit = types.StringValue(string(resp.RetentionUnit))
 		r.RetentionValue = types.Int64Value(resp.RetentionValue)
 		r.ScheduleDay = types.Int64PointerValue(resp.ScheduleDay)
-		r.ScheduleTime = types.StringValue(resp.ScheduleTime)
+		r.ScheduleTime = types.StringPointerValue(resp.ScheduleTime)
 		r.ScheduleWeek = types.Int64PointerValue(resp.ScheduleWeek)
 		r.Target = types.StringValue(string(resp.Target))
 	}
@@ -41,7 +41,7 @@ func (r *PostgresBackupPolicyResourceModel) RefreshFromOperationsGetPostgresBack
 		r.RetentionUnit = types.StringValue(string(resp.RetentionUnit))
 		r.RetentionValue = types.Int64Value(resp.RetentionValue)
 		r.ScheduleDay = types.Int64PointerValue(resp.ScheduleDay)
-		r.ScheduleTime = types.StringValue(resp.ScheduleTime)
+		r.ScheduleTime = types.StringPointerValue(resp.ScheduleTime)
 		r.ScheduleWeek = types.Int64PointerValue(resp.ScheduleWeek)
 		r.Target = types.StringValue(string(resp.Target))
 	}
@@ -61,7 +61,7 @@ func (r *PostgresBackupPolicyResourceModel) RefreshFromOperationsUpdatePostgresB
 		r.RetentionUnit = types.StringValue(string(resp.RetentionUnit))
 		r.RetentionValue = types.Int64Value(resp.RetentionValue)
 		r.ScheduleDay = types.Int64PointerValue(resp.ScheduleDay)
-		r.ScheduleTime = types.StringValue(resp.ScheduleTime)
+		r.ScheduleTime = types.StringPointerValue(resp.ScheduleTime)
 		r.ScheduleWeek = types.Int64PointerValue(resp.ScheduleWeek)
 		r.Target = types.StringValue(string(resp.Target))
 	}

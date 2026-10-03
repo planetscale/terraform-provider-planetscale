@@ -176,6 +176,10 @@ func (s *APIBranchResizes) UpdateBranchResizeRequest(ctx context.Context, reques
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -341,6 +345,10 @@ func (s *APIBranchResizes) getBranchResizeRequest(ctx context.Context, hookCtx h
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)

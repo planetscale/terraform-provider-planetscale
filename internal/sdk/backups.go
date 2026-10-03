@@ -212,6 +212,10 @@ func (s *Backups) ListVitessBranchBackups(ctx context.Context, request operation
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -371,6 +375,10 @@ func (s *Backups) CreateVitessBranchBackup(ctx context.Context, request operatio
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -536,6 +544,10 @@ func (s *Backups) getVitessBranchBackup(ctx context.Context, hookCtx hooks.HookC
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -769,6 +781,10 @@ func (s *Backups) DeleteVitessBranchBackup(ctx context.Context, request operatio
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -963,6 +979,10 @@ func (s *Backups) ListPostgresBranchBackups(ctx context.Context, request operati
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1122,6 +1142,10 @@ func (s *Backups) CreatePostgresBranchBackup(ctx context.Context, request operat
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1287,6 +1311,10 @@ func (s *Backups) getPostgresBranchBackup(ctx context.Context, hookCtx hooks.Hoo
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -1520,6 +1548,10 @@ func (s *Backups) DeletePostgresBranchBackup(ctx context.Context, request operat
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)

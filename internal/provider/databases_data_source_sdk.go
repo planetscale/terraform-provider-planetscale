@@ -28,19 +28,6 @@ func (r *DatabasesDataSourceModel) RefreshFromOperationsListDatabasesResponseBod
 			data.BranchesCount = types.Int64Value(dataItem.BranchesCount)
 			data.BranchesURL = types.StringValue(dataItem.BranchesURL)
 			data.CreatedAt = types.StringValue(dataItem.CreatedAt)
-			if dataItem.DataImport == nil {
-				data.DataImport = nil
-			} else {
-				data.DataImport = &tfTypes.ListDatabasesDataImport{}
-				data.DataImport.DataSource = &tfTypes.ListDatabasesDataSource{}
-				data.DataImport.DataSource.Database = types.StringValue(dataItem.DataImport.DataSource.Database)
-				data.DataImport.DataSource.Hostname = types.StringValue(dataItem.DataImport.DataSource.Hostname)
-				data.DataImport.DataSource.Port = types.Int64Value(dataItem.DataImport.DataSource.Port)
-				data.DataImport.FinishedAt = types.StringPointerValue(dataItem.DataImport.FinishedAt)
-				data.DataImport.ImportCheckErrors = types.StringValue(dataItem.DataImport.ImportCheckErrors)
-				data.DataImport.StartedAt = types.StringPointerValue(dataItem.DataImport.StartedAt)
-				data.DataImport.State = types.StringValue(dataItem.DataImport.State)
-			}
 			data.DefaultBranch = types.StringValue(dataItem.DefaultBranch)
 			data.DefaultBranchReadOnlyRegionsCount = types.Int64Value(dataItem.DefaultBranchReadOnlyRegionsCount)
 			data.DefaultBranchShardCount = types.Int64Value(dataItem.DefaultBranchShardCount)

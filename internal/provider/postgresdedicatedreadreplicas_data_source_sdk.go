@@ -10,13 +10,13 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresDedicatedReadReplicasDataSourceModel) RefreshFromOperationsListReadOnlyReplicasResponseBody(ctx context.Context, resp []operations.ListReadOnlyReplicasResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicasDataSourceModel) RefreshFromOperationsListDedicatedReadReplicasResponseBody(ctx context.Context, resp []operations.ListDedicatedReadReplicasResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.Data = []tfTypes.ListReadOnlyReplicasResponseBody{}
+	r.Data = []tfTypes.ListDedicatedReadReplicasResponseBody{}
 
 	for _, dataItem := range resp {
-		var data tfTypes.ListReadOnlyReplicasResponseBody
+		var data tfTypes.ListDedicatedReadReplicasResponseBody
 
 		data.AccessHostURL = types.StringValue(dataItem.AccessHostURL)
 		data.ClusterSize = types.StringValue(dataItem.ClusterSize)
@@ -31,7 +31,7 @@ func (r *PostgresDedicatedReadReplicasDataSourceModel) RefreshFromOperationsList
 	return diags
 }
 
-func (r *PostgresDedicatedReadReplicasDataSourceModel) ToOperationsListReadOnlyReplicasRequest(ctx context.Context) (*operations.ListReadOnlyReplicasRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicasDataSourceModel) ToOperationsListDedicatedReadReplicasRequest(ctx context.Context) (*operations.ListDedicatedReadReplicasRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -43,7 +43,7 @@ func (r *PostgresDedicatedReadReplicasDataSourceModel) ToOperationsListReadOnlyR
 	var branch string
 	branch = r.Branch.ValueString()
 
-	out := operations.ListReadOnlyReplicasRequest{
+	out := operations.ListDedicatedReadReplicasRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,

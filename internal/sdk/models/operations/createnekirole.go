@@ -241,13 +241,13 @@ type CreateNekiRoleResponseBody struct {
 	// The database user name
 	Username string `json:"username"`
 	// The plaintext password, available only after create
-	Password string `json:"password"`
+	Password *string `json:"password"`
 	// When the role expires
 	ExpiresAt *string `json:"expires_at"`
 	// Whether the role is ready to accept connections
 	Ready bool `json:"ready"`
 	// Number of seconds before the credentials expire
-	TTL int64 `json:"ttl"`
+	TTL *int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []CreateNekiRoleInheritedRoleResponse `json:"inherited_roles"`
 	// Whether the role has the REPLICATION attribute
@@ -296,9 +296,9 @@ func (c *CreateNekiRoleResponseBody) GetUsername() string {
 	return c.Username
 }
 
-func (c *CreateNekiRoleResponseBody) GetPassword() string {
+func (c *CreateNekiRoleResponseBody) GetPassword() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.Password
 }
@@ -317,9 +317,9 @@ func (c *CreateNekiRoleResponseBody) GetReady() bool {
 	return c.Ready
 }
 
-func (c *CreateNekiRoleResponseBody) GetTTL() int64 {
+func (c *CreateNekiRoleResponseBody) GetTTL() *int64 {
 	if c == nil {
-		return 0
+		return nil
 	}
 	return c.TTL
 }

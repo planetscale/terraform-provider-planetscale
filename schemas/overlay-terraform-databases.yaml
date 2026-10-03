@@ -67,3 +67,12 @@ actions:
   - target: $.components.schemas.PaginatedDatabase.properties.data.items.required[?@ == 'deletion_protected' || @ == 'deletion_protection_managed']
     description: Remove ignored database deletion protection fields from the required list.
     remove: true
+
+  # development_branches_limit and region.neki_supported arrived upstream;
+  # not exposed yet.
+  - target: $.paths["/organizations/{organization}/databases"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.development_branches_limit
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.region.properties.neki_supported
+    update:
+      x-speakeasy-terraform-ignore: true

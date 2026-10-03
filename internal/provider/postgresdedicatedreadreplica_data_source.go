@@ -135,13 +135,13 @@ func (r *PostgresDedicatedReadReplicaDataSource) Read(ctx context.Context, req d
 
 	ctx = withSensitiveValues(ctx, req.Config)
 
-	request, requestDiags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	request, requestDiags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request)
+	res, err := r.client.DedicatedReadReplicas.GetDedicatedReadReplica(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -161,7 +161,7 @@ func (r *PostgresDedicatedReadReplicaDataSource) Read(ctx context.Context, req d
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

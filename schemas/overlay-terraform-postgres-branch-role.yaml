@@ -120,8 +120,8 @@ actions:
     update:
       x-speakeasy-ignore: true
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.parameters[?@.name == 'replica' || @.name == 'read_only_replica' || @.name == 'bouncer']
-    description: Keep replica and bouncer connection detail parameters out of Terraform.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.parameters[?@.name == 'replica' || @.name == 'dedicated_read_replica' || @.name == 'bouncer' || @.name == 'router' || @.name == 'shard']
+    description: Keep replica, bouncer, router, and shard connection detail parameters out of Terraform.
     remove: true
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/roles/{id}"].get.responses["200"].content["application/json"].schema.properties.ready

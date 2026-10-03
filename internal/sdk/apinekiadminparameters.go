@@ -169,6 +169,10 @@ func (s *APINekiAdminParameters) GetNekiAdminParameters(ctx context.Context, req
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)

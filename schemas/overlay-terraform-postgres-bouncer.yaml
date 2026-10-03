@@ -309,3 +309,9 @@ actions:
           x-speakeasy-entity-operation:
             - PostgresBouncer#create#2
             - PostgresBouncer#update
+
+  # dedicated_read_replica_id arrived upstream; bouncers on replicas are not
+  # supported by this provider yet.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.requestBody.content["application/json"].schema.properties.dedicated_read_replica_id
+    update:
+      x-speakeasy-terraform-ignore: true

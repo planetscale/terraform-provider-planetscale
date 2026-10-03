@@ -154,13 +154,13 @@ func (r *PostgresDedicatedReadReplicaResource) Create(ctx context.Context, req r
 
 	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
 
-	request, requestDiags := data.ToOperationsCreateReadOnlyReplicaRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ReadOnlyReplicas.CreateReadOnlyReplica(ctx, *request)
+	res, err := r.client.DedicatedReadReplicas.CreateDedicatedReadReplica(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -180,7 +180,7 @@ func (r *PostgresDedicatedReadReplicaResource) Create(ctx context.Context, req r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsCreateReadOnlyReplicaResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsCreateDedicatedReadReplicaResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -191,18 +191,18 @@ func (r *PostgresDedicatedReadReplicaResource) Create(ctx context.Context, req r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	getReadOnlyReplicaOptions := make([]operations.Option, 0, 1)
-	getReadOnlyReplicaOptions = append(getReadOnlyReplicaOptions, operations.WithPolling(
-		r.client.ReadOnlyReplicas.GetReadOnlyReplicaWaitForReady(),
+	getDedicatedReadReplicaOptions := make([]operations.Option, 0, 1)
+	getDedicatedReadReplicaOptions = append(getDedicatedReadReplicaOptions, operations.WithPolling(
+		r.client.DedicatedReadReplicas.GetDedicatedReadReplicaWaitForReady(),
 	))
-	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
+	res1, err := r.client.DedicatedReadReplicas.GetDedicatedReadReplica(ctx, *request1, getDedicatedReadReplicaOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
@@ -222,7 +222,7 @@ func (r *PostgresDedicatedReadReplicaResource) Create(ctx context.Context, req r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -258,13 +258,13 @@ func (r *PostgresDedicatedReadReplicaResource) Read(ctx context.Context, req res
 
 	ctx = withSensitiveValues(ctx, req.State)
 
-	request, requestDiags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	request, requestDiags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request)
+	res, err := r.client.DedicatedReadReplicas.GetDedicatedReadReplica(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -288,7 +288,7 @@ func (r *PostgresDedicatedReadReplicaResource) Read(ctx context.Context, req res
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -314,13 +314,13 @@ func (r *PostgresDedicatedReadReplicaResource) Update(ctx context.Context, req r
 
 	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
-	request, requestDiags := data.ToOperationsUpdateReadOnlyReplicaRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ReadOnlyReplicas.UpdateReadOnlyReplica(ctx, *request)
+	res, err := r.client.DedicatedReadReplicas.UpdateDedicatedReadReplica(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -340,7 +340,7 @@ func (r *PostgresDedicatedReadReplicaResource) Update(ctx context.Context, req r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateReadOnlyReplicaResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateDedicatedReadReplicaResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -351,18 +351,18 @@ func (r *PostgresDedicatedReadReplicaResource) Update(ctx context.Context, req r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	getReadOnlyReplicaOptions := make([]operations.Option, 0, 1)
-	getReadOnlyReplicaOptions = append(getReadOnlyReplicaOptions, operations.WithPolling(
-		r.client.ReadOnlyReplicas.GetReadOnlyReplicaWaitForReady(),
+	getDedicatedReadReplicaOptions := make([]operations.Option, 0, 1)
+	getDedicatedReadReplicaOptions = append(getDedicatedReadReplicaOptions, operations.WithPolling(
+		r.client.DedicatedReadReplicas.GetDedicatedReadReplicaWaitForReady(),
 	))
-	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
+	res1, err := r.client.DedicatedReadReplicas.GetDedicatedReadReplica(ctx, *request1, getDedicatedReadReplicaOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
@@ -382,7 +382,7 @@ func (r *PostgresDedicatedReadReplicaResource) Update(ctx context.Context, req r
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -418,13 +418,13 @@ func (r *PostgresDedicatedReadReplicaResource) Delete(ctx context.Context, req r
 
 	ctx = withSensitiveValues(ctx, req.State)
 
-	request, requestDiags := data.ToOperationsDeleteReadOnlyReplicaRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ReadOnlyReplicas.DeleteReadOnlyReplica(ctx, *request)
+	res, err := r.client.DedicatedReadReplicas.DeleteDedicatedReadReplica(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -443,18 +443,18 @@ func (r *PostgresDedicatedReadReplicaResource) Delete(ctx context.Context, req r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	request1, request1Diags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	request1, request1Diags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	getReadOnlyReplicaOptions := make([]operations.Option, 0, 1)
-	getReadOnlyReplicaOptions = append(getReadOnlyReplicaOptions, operations.WithPolling(
-		r.client.ReadOnlyReplicas.GetReadOnlyReplicaWaitForDeleted(),
+	getDedicatedReadReplicaOptions := make([]operations.Option, 0, 1)
+	getDedicatedReadReplicaOptions = append(getDedicatedReadReplicaOptions, operations.WithPolling(
+		r.client.DedicatedReadReplicas.GetDedicatedReadReplicaWaitForDeleted(),
 	))
-	res1, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request1, getReadOnlyReplicaOptions...)
+	res1, err := r.client.DedicatedReadReplicas.GetDedicatedReadReplica(ctx, *request1, getDedicatedReadReplicaOptions...)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
@@ -482,8 +482,8 @@ func (r *PostgresDedicatedReadReplicaResource) ImportState(ctx context.Context, 
 	var data struct {
 		Branch       string `json:"branch"`
 		Database     string `json:"database"`
-		Organization string `json:"organization"`
 		Name         string `json:"name"`
+		Organization string `json:"organization"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
@@ -501,14 +501,14 @@ func (r *PostgresDedicatedReadReplicaResource) ImportState(ctx context.Context, 
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("database"), data.Database)...)
-	if len(data.Organization) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field organization is required but was not found in the json encoded ID.`)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization"), data.Organization)...)
 	if len(data.Name) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field name is required but was not found in the json encoded ID.`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), data.Name)...)
+	if len(data.Organization) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field organization is required but was not found in the json encoded ID.`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization"), data.Organization)...)
 }

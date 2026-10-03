@@ -68,6 +68,9 @@ type PlanetScale struct {
 	APINekiShardConfigurationProfileExtensions *APINekiShardConfigurationProfileExtensions
 	APINekiShardConfigurationProfileParameters *APINekiShardConfigurationProfileParameters
 	APINekiShardConfigurationProfileShards     *APINekiShardConfigurationProfileShards
+	//           Resources for managing Postgres dedicated read replicas.
+	//
+	DedicatedReadReplicas *DedicatedReadReplicas
 	//           Resources for managing keyspaces.
 	//
 	DatabaseBranchKeyspaces *DatabaseBranchKeyspaces
@@ -77,10 +80,7 @@ type PlanetScale struct {
 	//           Resources for managing database branch passwords.
 	//
 	DatabaseBranchPasswords *DatabaseBranchPasswords
-	//           Resources for managing Postgres read-only replicas.
-	//
-	ReadOnlyReplicas *ReadOnlyReplicas
-	APIBranchResizes *APIBranchResizes
+	APIBranchResizes        *APIBranchResizes
 	//           Resources for managing role credentials.
 	//
 	Roles                    *Roles
@@ -206,10 +206,10 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.APINekiShardConfigurationProfileExtensions = newAPINekiShardConfigurationProfileExtensions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfileParameters = newAPINekiShardConfigurationProfileParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfileShards = newAPINekiShardConfigurationProfileShards(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.DedicatedReadReplicas = newDedicatedReadReplicas(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchKeyspaces = newDatabaseBranchKeyspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.KeyspaceResizes = newKeyspaceResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.ReadOnlyReplicas = newReadOnlyReplicas(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiRouters = newAPINekiRouters(sdk, sdk.sdkConfiguration, sdk.hooks)

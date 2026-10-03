@@ -9,7 +9,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsCreateReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.CreateReadOnlyReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsCreateDedicatedReadReplicaResponseBody(ctx context.Context, resp *operations.CreateDedicatedReadReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -24,7 +24,7 @@ func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsCreateR
 	return diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.GetReadOnlyReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx context.Context, resp *operations.GetDedicatedReadReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -40,7 +40,7 @@ func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsGetRead
 	return diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsUpdateReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.UpdateReadOnlyReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsUpdateDedicatedReadReplicaResponseBody(ctx context.Context, resp *operations.UpdateDedicatedReadReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -55,7 +55,7 @@ func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsUpdateR
 	return diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyReplicaRequest(ctx context.Context) (*operations.CreateReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateDedicatedReadReplicaRequest(ctx context.Context) (*operations.CreateDedicatedReadReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -67,14 +67,14 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyRe
 	var branch string
 	branch = r.Branch.ValueString()
 
-	body, bodyDiags := r.ToOperationsCreateReadOnlyReplicaRequestBody(ctx)
+	body, bodyDiags := r.ToOperationsCreateDedicatedReadReplicaRequestBody(ctx)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.CreateReadOnlyReplicaRequest{
+	out := operations.CreateDedicatedReadReplicaRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
@@ -84,7 +84,7 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyRe
 	return &out, diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyReplicaRequestBody(ctx context.Context) (*operations.CreateReadOnlyReplicaRequestBody, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateDedicatedReadReplicaRequestBody(ctx context.Context) (*operations.CreateDedicatedReadReplicaRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var name string
@@ -105,7 +105,7 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyRe
 	} else {
 		clusterSize = nil
 	}
-	out := operations.CreateReadOnlyReplicaRequestBody{
+	out := operations.CreateDedicatedReadReplicaRequestBody{
 		Name:        name,
 		Region:      region,
 		Replicas:    replicas,
@@ -115,7 +115,7 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyRe
 	return &out, diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsDeleteReadOnlyReplicaRequest(ctx context.Context) (*operations.DeleteReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsDeleteDedicatedReadReplicaRequest(ctx context.Context) (*operations.DeleteDedicatedReadReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -127,20 +127,20 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsDeleteReadOnlyRe
 	var branch string
 	branch = r.Branch.ValueString()
 
-	var readOnlyReplica string
-	readOnlyReplica = r.Name.ValueString()
+	var dedicatedReadReplica string
+	dedicatedReadReplica = r.Name.ValueString()
 
-	out := operations.DeleteReadOnlyReplicaRequest{
-		Organization:    organization,
-		Database:        database,
-		Branch:          branch,
-		ReadOnlyReplica: readOnlyReplica,
+	out := operations.DeleteDedicatedReadReplicaRequest{
+		Organization:         organization,
+		Database:             database,
+		Branch:               branch,
+		DedicatedReadReplica: dedicatedReadReplica,
 	}
 
 	return &out, diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsGetReadOnlyReplicaRequest(ctx context.Context) (*operations.GetReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsGetDedicatedReadReplicaRequest(ctx context.Context) (*operations.GetDedicatedReadReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -152,20 +152,20 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsGetReadOnlyRepli
 	var branch string
 	branch = r.Branch.ValueString()
 
-	var readOnlyReplica string
-	readOnlyReplica = r.Name.ValueString()
+	var dedicatedReadReplica string
+	dedicatedReadReplica = r.Name.ValueString()
 
-	out := operations.GetReadOnlyReplicaRequest{
-		Organization:    organization,
-		Database:        database,
-		Branch:          branch,
-		ReadOnlyReplica: readOnlyReplica,
+	out := operations.GetDedicatedReadReplicaRequest{
+		Organization:         organization,
+		Database:             database,
+		Branch:               branch,
+		DedicatedReadReplica: dedicatedReadReplica,
 	}
 
 	return &out, diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateReadOnlyReplicaRequest(ctx context.Context) (*operations.UpdateReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateDedicatedReadReplicaRequest(ctx context.Context) (*operations.UpdateDedicatedReadReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -177,28 +177,28 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateReadOnlyRe
 	var branch string
 	branch = r.Branch.ValueString()
 
-	var readOnlyReplica string
-	readOnlyReplica = r.Name.ValueString()
+	var dedicatedReadReplica string
+	dedicatedReadReplica = r.Name.ValueString()
 
-	body, bodyDiags := r.ToOperationsUpdateReadOnlyReplicaRequestBody(ctx)
+	body, bodyDiags := r.ToOperationsUpdateDedicatedReadReplicaRequestBody(ctx)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.UpdateReadOnlyReplicaRequest{
-		Organization:    organization,
-		Database:        database,
-		Branch:          branch,
-		ReadOnlyReplica: readOnlyReplica,
-		Body:            body,
+	out := operations.UpdateDedicatedReadReplicaRequest{
+		Organization:         organization,
+		Database:             database,
+		Branch:               branch,
+		DedicatedReadReplica: dedicatedReadReplica,
+		Body:                 body,
 	}
 
 	return &out, diags
 }
 
-func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateReadOnlyReplicaRequestBody(ctx context.Context) (*operations.UpdateReadOnlyReplicaRequestBody, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateDedicatedReadReplicaRequestBody(ctx context.Context) (*operations.UpdateDedicatedReadReplicaRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	replicas := new(int64)
@@ -213,7 +213,7 @@ func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateReadOnlyRe
 	} else {
 		clusterSize = nil
 	}
-	out := operations.UpdateReadOnlyReplicaRequestBody{
+	out := operations.UpdateDedicatedReadReplicaRequestBody{
 		Replicas:    replicas,
 		ClusterSize: clusterSize,
 	}

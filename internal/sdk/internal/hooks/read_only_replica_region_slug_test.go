@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const readOnlyReplicaGetURL = "https://api.planetscale.com/v1/organizations/org/databases/db/branches/br/read-only-replicas/my-replica"
+const readOnlyReplicaGetURL = "https://api.planetscale.com/v1/organizations/org/databases/db/branches/br/dedicated-read-replicas/my-replica"
 
 func replicaGetClient(status int, body string) HTTPClient {
 	hook := NewReadOnlyReplicaRegionSlugHook()
