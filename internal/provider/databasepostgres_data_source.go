@@ -34,7 +34,6 @@ type DatabasePostgresDataSourceModel struct {
 	BranchesCount                     types.Int64                            `tfsdk:"branches_count"`
 	BranchesURL                       types.String                           `tfsdk:"branches_url"`
 	CreatedAt                         types.String                           `tfsdk:"created_at"`
-	DataImport                        *tfTypes.GetPostgresDatabaseDataImport `tfsdk:"data_import"`
 	DefaultBranch                     types.String                           `tfsdk:"default_branch"`
 	DefaultBranchReadOnlyRegionsCount types.Int64                            `tfsdk:"default_branch_read_only_regions_count"`
 	DefaultBranchShardCount           types.Int64                            `tfsdk:"default_branch_shard_count"`
@@ -94,44 +93,6 @@ func (r *DatabasePostgresDataSource) Schema(ctx context.Context, req datasource.
 			"created_at": schema.StringAttribute{
 				Computed:    true,
 				Description: `When the database was created`,
-			},
-			"data_import": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"data_source": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"database": schema.StringAttribute{
-								Computed:    true,
-								Description: `Database name of the data source`,
-							},
-							"hostname": schema.StringAttribute{
-								Computed:    true,
-								Description: `Hostname of the data source`,
-							},
-							"port": schema.Int64Attribute{
-								Computed:    true,
-								Description: `Port of the data source`,
-							},
-						},
-					},
-					"finished_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the import finished`,
-					},
-					"import_check_errors": schema.StringAttribute{
-						Computed:    true,
-						Description: `Errors encountered during the import check`,
-					},
-					"started_at": schema.StringAttribute{
-						Computed:    true,
-						Description: `When the import started`,
-					},
-					"state": schema.StringAttribute{
-						Computed:    true,
-						Description: `State of the data import`,
-					},
-				},
 			},
 			"default_branch": schema.StringAttribute{
 				Computed:    true,

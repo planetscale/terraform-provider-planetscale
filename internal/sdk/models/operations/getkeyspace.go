@@ -78,19 +78,19 @@ func (e *GetKeyspaceNodeTTLStrategy) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// GetKeyspaceDiskAutoscalingStrategy - The disk autoscaling strategy
-type GetKeyspaceDiskAutoscalingStrategy string
+// GetKeyspaceDiskScalingStrategy - The disk scaling strategy
+type GetKeyspaceDiskScalingStrategy string
 
 const (
-	GetKeyspaceDiskAutoscalingStrategyGrow    GetKeyspaceDiskAutoscalingStrategy = "grow"
-	GetKeyspaceDiskAutoscalingStrategyDisable GetKeyspaceDiskAutoscalingStrategy = "disable"
-	GetKeyspaceDiskAutoscalingStrategyShrink  GetKeyspaceDiskAutoscalingStrategy = "shrink"
+	GetKeyspaceDiskScalingStrategyGrow    GetKeyspaceDiskScalingStrategy = "grow"
+	GetKeyspaceDiskScalingStrategyDisable GetKeyspaceDiskScalingStrategy = "disable"
+	GetKeyspaceDiskScalingStrategyShrink  GetKeyspaceDiskScalingStrategy = "shrink"
 )
 
-func (e GetKeyspaceDiskAutoscalingStrategy) ToPointer() *GetKeyspaceDiskAutoscalingStrategy {
+func (e GetKeyspaceDiskScalingStrategy) ToPointer() *GetKeyspaceDiskScalingStrategy {
 	return &e
 }
-func (e *GetKeyspaceDiskAutoscalingStrategy) UnmarshalJSON(data []byte) error {
+func (e *GetKeyspaceDiskScalingStrategy) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -101,47 +101,56 @@ func (e *GetKeyspaceDiskAutoscalingStrategy) UnmarshalJSON(data []byte) error {
 	case "disable":
 		fallthrough
 	case "shrink":
-		*e = GetKeyspaceDiskAutoscalingStrategy(v)
+		*e = GetKeyspaceDiskScalingStrategy(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for GetKeyspaceDiskAutoscalingStrategy: %v", v)
+		return fmt.Errorf("invalid value for GetKeyspaceDiskScalingStrategy: %v", v)
 	}
 }
 
-type GetKeyspaceDiskAutoscaling struct {
-	// The disk autoscaling strategy
-	Strategy GetKeyspaceDiskAutoscalingStrategy `json:"strategy"`
+type GetKeyspaceStorage struct {
+	// The current provisioned disk size in bytes. Disks grow from and shrink to this size. Custom shards may have staff-set overrides
+	StorageBytes int64 `json:"storage_bytes"`
 	// The maximum size in bytes disks may autoscale to
-	StorageLimitBytes int64 `json:"storage_limit_bytes"`
+	MaxStorageBytes int64 `json:"max_storage_bytes"`
+	// The disk scaling strategy
+	DiskScalingStrategy GetKeyspaceDiskScalingStrategy `json:"disk_scaling_strategy"`
 }
 
-func (g *GetKeyspaceDiskAutoscaling) GetStrategy() GetKeyspaceDiskAutoscalingStrategy {
-	if g == nil {
-		return GetKeyspaceDiskAutoscalingStrategy("")
-	}
-	return g.Strategy
-}
-
-func (g *GetKeyspaceDiskAutoscaling) GetStorageLimitBytes() int64 {
+func (g *GetKeyspaceStorage) GetStorageBytes() int64 {
 	if g == nil {
 		return 0
 	}
-	return g.StorageLimitBytes
+	return g.StorageBytes
 }
 
-// GetKeyspaceReplicationDurabilityConstraintsStrategy - The replication durability strategy
-type GetKeyspaceReplicationDurabilityConstraintsStrategy string
+func (g *GetKeyspaceStorage) GetMaxStorageBytes() int64 {
+	if g == nil {
+		return 0
+	}
+	return g.MaxStorageBytes
+}
+
+func (g *GetKeyspaceStorage) GetDiskScalingStrategy() GetKeyspaceDiskScalingStrategy {
+	if g == nil {
+		return GetKeyspaceDiskScalingStrategy("")
+	}
+	return g.DiskScalingStrategy
+}
+
+// GetKeyspaceStrategy - The replication durability strategy
+type GetKeyspaceStrategy string
 
 const (
-	GetKeyspaceReplicationDurabilityConstraintsStrategyAvailable GetKeyspaceReplicationDurabilityConstraintsStrategy = "available"
-	GetKeyspaceReplicationDurabilityConstraintsStrategyLag       GetKeyspaceReplicationDurabilityConstraintsStrategy = "lag"
-	GetKeyspaceReplicationDurabilityConstraintsStrategyAlways    GetKeyspaceReplicationDurabilityConstraintsStrategy = "always"
+	GetKeyspaceStrategyAvailable GetKeyspaceStrategy = "available"
+	GetKeyspaceStrategyLag       GetKeyspaceStrategy = "lag"
+	GetKeyspaceStrategyAlways    GetKeyspaceStrategy = "always"
 )
 
-func (e GetKeyspaceReplicationDurabilityConstraintsStrategy) ToPointer() *GetKeyspaceReplicationDurabilityConstraintsStrategy {
+func (e GetKeyspaceStrategy) ToPointer() *GetKeyspaceStrategy {
 	return &e
 }
-func (e *GetKeyspaceReplicationDurabilityConstraintsStrategy) UnmarshalJSON(data []byte) error {
+func (e *GetKeyspaceStrategy) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -152,19 +161,19 @@ func (e *GetKeyspaceReplicationDurabilityConstraintsStrategy) UnmarshalJSON(data
 	case "lag":
 		fallthrough
 	case "always":
-		*e = GetKeyspaceReplicationDurabilityConstraintsStrategy(v)
+		*e = GetKeyspaceStrategy(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for GetKeyspaceReplicationDurabilityConstraintsStrategy: %v", v)
+		return fmt.Errorf("invalid value for GetKeyspaceStrategy: %v", v)
 	}
 }
 
 type GetKeyspaceReplicationDurabilityConstraints struct {
 	// The replication durability strategy
-	Strategy *GetKeyspaceReplicationDurabilityConstraintsStrategy `json:"strategy,omitzero"`
+	Strategy *GetKeyspaceStrategy `json:"strategy,omitzero"`
 }
 
-func (g *GetKeyspaceReplicationDurabilityConstraints) GetStrategy() *GetKeyspaceReplicationDurabilityConstraintsStrategy {
+func (g *GetKeyspaceReplicationDurabilityConstraints) GetStrategy() *GetKeyspaceStrategy {
 	if g == nil {
 		return nil
 	}
@@ -263,8 +272,10 @@ type GetKeyspaceResponseBody struct {
 	// Percentage of buffer pool memory allocated to vector indexes
 	VectorPoolAllocation *float64 `json:"vector_pool_allocation"`
 	// Controls when node TTL drains are allowed
-	NodeTTLStrategy                  GetKeyspaceNodeTTLStrategy                  `json:"node_ttl_strategy"`
-	DiskAutoscaling                  GetKeyspaceDiskAutoscaling                  `json:"disk_autoscaling"`
+	NodeTTLStrategy GetKeyspaceNodeTTLStrategy `json:"node_ttl_strategy"`
+	Storage         GetKeyspaceStorage         `json:"storage"`
+	// The maximum number of shards rolled out in parallel. Null uses the infrastructure default of 1. Effective concurrency is capped at 32.
+	MaxRollout                       *int64                                      `json:"max_rollout"`
 	ReplicationDurabilityConstraints GetKeyspaceReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                GetKeyspaceVreplicationFlags                `json:"vreplication_flags"`
 	Throttler                        GetKeyspaceThrottler                        `json:"throttler"`
@@ -412,11 +423,18 @@ func (g *GetKeyspaceResponseBody) GetNodeTTLStrategy() GetKeyspaceNodeTTLStrateg
 	return g.NodeTTLStrategy
 }
 
-func (g *GetKeyspaceResponseBody) GetDiskAutoscaling() GetKeyspaceDiskAutoscaling {
+func (g *GetKeyspaceResponseBody) GetStorage() GetKeyspaceStorage {
 	if g == nil {
-		return GetKeyspaceDiskAutoscaling{}
+		return GetKeyspaceStorage{}
 	}
-	return g.DiskAutoscaling
+	return g.Storage
+}
+
+func (g *GetKeyspaceResponseBody) GetMaxRollout() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.MaxRollout
 }
 
 func (g *GetKeyspaceResponseBody) GetReplicationDurabilityConstraints() GetKeyspaceReplicationDurabilityConstraints {

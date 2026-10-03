@@ -85,7 +85,7 @@ type GetVitessBackupPolicyResponseBody struct {
 	// The unit for the frequency of the backup policy
 	FrequencyUnit string `json:"frequency_unit"`
 	// The time of day that the backup is scheduled, in HH:MM format
-	ScheduleTime string `json:"schedule_time"`
+	ScheduleTime *string `json:"schedule_time"`
 	// Day of the week that the backup is scheduled. 0 is Sunday, 6 is Saturday
 	ScheduleDay *int64 `json:"schedule_day"`
 	// Week of the month that the backup is scheduled. 0 is the first week, 3 is the fourth week
@@ -148,9 +148,9 @@ func (g *GetVitessBackupPolicyResponseBody) GetFrequencyUnit() string {
 	return g.FrequencyUnit
 }
 
-func (g *GetVitessBackupPolicyResponseBody) GetScheduleTime() string {
+func (g *GetVitessBackupPolicyResponseBody) GetScheduleTime() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.ScheduleTime
 }

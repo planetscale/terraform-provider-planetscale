@@ -21,10 +21,10 @@ func (r *NekiRoleResourceModel) RefreshFromOperationsCreateNekiRoleResponseBody(
 			r.InheritedRoles = append(r.InheritedRoles, types.StringValue(string(v)))
 		}
 		r.Name = types.StringValue(resp.Name)
-		r.Password = types.StringValue(resp.Password)
+		r.Password = types.StringPointerValue(resp.Password)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.TTL = types.Int64Value(resp.TTL)
+		r.TTL = types.Int64PointerValue(resp.TTL)
 		r.Username = types.StringValue(resp.Username)
 		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}
@@ -46,7 +46,7 @@ func (r *NekiRoleResourceModel) RefreshFromOperationsGetNekiRoleResponseBody(ctx
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.TTL = types.Int64Value(resp.TTL)
+		r.TTL = types.Int64PointerValue(resp.TTL)
 		r.Username = types.StringValue(resp.Username)
 		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}
@@ -68,7 +68,7 @@ func (r *NekiRoleResourceModel) RefreshFromOperationsUpdateNekiRoleResponseBody(
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.TTL = types.Int64Value(resp.TTL)
+		r.TTL = types.Int64PointerValue(resp.TTL)
 		r.Username = types.StringValue(resp.Username)
 		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}

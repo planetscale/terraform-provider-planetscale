@@ -30,83 +30,6 @@ func (g *GetVitessDatabaseRequest) GetDatabase() string {
 	return g.Database
 }
 
-type GetVitessDatabaseDataSource struct {
-	// Hostname of the data source
-	Hostname string `json:"hostname"`
-	// Port of the data source
-	Port int64 `json:"port"`
-	// Database name of the data source
-	Database string `json:"database"`
-}
-
-func (g *GetVitessDatabaseDataSource) GetHostname() string {
-	if g == nil {
-		return ""
-	}
-	return g.Hostname
-}
-
-func (g *GetVitessDatabaseDataSource) GetPort() int64 {
-	if g == nil {
-		return 0
-	}
-	return g.Port
-}
-
-func (g *GetVitessDatabaseDataSource) GetDatabase() string {
-	if g == nil {
-		return ""
-	}
-	return g.Database
-}
-
-type GetVitessDatabaseDataImport struct {
-	// State of the data import
-	State string `json:"state"`
-	// Errors encountered during the import check
-	ImportCheckErrors string `json:"import_check_errors"`
-	// When the import started
-	StartedAt *string `json:"started_at"`
-	// When the import finished
-	FinishedAt *string                     `json:"finished_at"`
-	DataSource GetVitessDatabaseDataSource `json:"data_source"`
-}
-
-func (g *GetVitessDatabaseDataImport) GetState() string {
-	if g == nil {
-		return ""
-	}
-	return g.State
-}
-
-func (g *GetVitessDatabaseDataImport) GetImportCheckErrors() string {
-	if g == nil {
-		return ""
-	}
-	return g.ImportCheckErrors
-}
-
-func (g *GetVitessDatabaseDataImport) GetStartedAt() *string {
-	if g == nil {
-		return nil
-	}
-	return g.StartedAt
-}
-
-func (g *GetVitessDatabaseDataImport) GetFinishedAt() *string {
-	if g == nil {
-		return nil
-	}
-	return g.FinishedAt
-}
-
-func (g *GetVitessDatabaseDataImport) GetDataSource() GetVitessDatabaseDataSource {
-	if g == nil {
-		return GetVitessDatabaseDataSource{}
-	}
-	return g.DataSource
-}
-
 type GetVitessDatabaseRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
@@ -128,6 +51,8 @@ type GetVitessDatabaseRegionData struct {
 	MysqlSupported bool `json:"mysql_supported"`
 	// Whether the region supports PostgreSQL databases
 	PostgresqlSupported bool `json:"postgresql_supported"`
+	// Whether the region supports Neki databases
+	NekiSupported bool `json:"neki_supported"`
 }
 
 func (g *GetVitessDatabaseRegionData) GetID() string {
@@ -200,6 +125,13 @@ func (g *GetVitessDatabaseRegionData) GetPostgresqlSupported() bool {
 	return g.PostgresqlSupported
 }
 
+func (g *GetVitessDatabaseRegionData) GetNekiSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.NekiSupported
+}
+
 // GetVitessDatabaseState - State of the database
 type GetVitessDatabaseState string
 
@@ -256,6 +188,8 @@ type GetVitessDatabaseResponseBody struct {
 	OpenSchemaRecommendationsCount int64 `json:"open_schema_recommendations_count"`
 	// The total number of database development branches
 	DevelopmentBranchesCount int64 `json:"development_branches_count"`
+	// The current maximum number of development branches. Change it with development_branches_limit on the database PATCH endpoint, up to 5000.
+	DevelopmentBranchesLimit int64 `json:"development_branches_limit"`
 	// The total number of database production branches
 	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
@@ -267,9 +201,8 @@ type GetVitessDatabaseResponseBody struct {
 	// If the database has reached its backup restored branch limit
 	AtBackupRestoreBranchesLimit bool `json:"at_backup_restore_branches_limit"`
 	// If the database has reached its development branch limit
-	AtDevelopmentBranchUsageLimit bool                         `json:"at_development_branch_usage_limit"`
-	DataImport                    *GetVitessDatabaseDataImport `json:"data_import,omitzero"`
-	RegionData                    GetVitessDatabaseRegionData  `json:"region"`
+	AtDevelopmentBranchUsageLimit bool                        `json:"at_development_branch_usage_limit"`
+	RegionData                    GetVitessDatabaseRegionData `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -378,6 +311,13 @@ func (g *GetVitessDatabaseResponseBody) GetDevelopmentBranchesCount() int64 {
 	return g.DevelopmentBranchesCount
 }
 
+func (g *GetVitessDatabaseResponseBody) GetDevelopmentBranchesLimit() int64 {
+	if g == nil {
+		return 0
+	}
+	return g.DevelopmentBranchesLimit
+}
+
 func (g *GetVitessDatabaseResponseBody) GetProductionBranchesCount() int64 {
 	if g == nil {
 		return 0
@@ -418,13 +358,6 @@ func (g *GetVitessDatabaseResponseBody) GetAtDevelopmentBranchUsageLimit() bool 
 		return false
 	}
 	return g.AtDevelopmentBranchUsageLimit
-}
-
-func (g *GetVitessDatabaseResponseBody) GetDataImport() *GetVitessDatabaseDataImport {
-	if g == nil {
-		return nil
-	}
-	return g.DataImport
 }
 
 func (g *GetVitessDatabaseResponseBody) GetRegionData() GetVitessDatabaseRegionData {

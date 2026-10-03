@@ -157,7 +157,7 @@ type UpdateNekiRoleResponseBody struct {
 	// Whether the role is ready to accept connections
 	Ready bool `json:"ready"`
 	// Number of seconds before the credentials expire
-	TTL int64 `json:"ttl"`
+	TTL *int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []UpdateNekiRoleInheritedRole `json:"inherited_roles"`
 	// Whether the role has the REPLICATION attribute
@@ -220,9 +220,9 @@ func (u *UpdateNekiRoleResponseBody) GetReady() bool {
 	return u.Ready
 }
 
-func (u *UpdateNekiRoleResponseBody) GetTTL() int64 {
+func (u *UpdateNekiRoleResponseBody) GetTTL() *int64 {
 	if u == nil {
-		return 0
+		return nil
 	}
 	return u.TTL
 }

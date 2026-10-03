@@ -384,7 +384,7 @@ type CreateRedactedRoleResponseBody struct {
 	// The base username without branch routing suffix
 	BaseUsername string `json:"base_username"`
 	// The plaintext password, available only after create
-	Password string `json:"password"`
+	Password *string `json:"password"`
 	// The database name
 	DatabaseName string `json:"database_name"`
 	// When the role was created
@@ -400,7 +400,7 @@ type CreateRedactedRoleResponseBody struct {
 	// When the role was disabled
 	DisabledAt *string `json:"disabled_at"`
 	// Error message available when dropping the role fails
-	DropFailed string `json:"drop_failed"`
+	DropFailed *string `json:"drop_failed"`
 	// Whether the role is ready to accept connections
 	Ready bool `json:"ready"`
 	// True if the credentials are expired
@@ -408,7 +408,7 @@ type CreateRedactedRoleResponseBody struct {
 	// Whether the role is the default postgres user
 	Default bool `json:"default"`
 	// Number of seconds before the credentials expire
-	TTL int64 `json:"ttl"`
+	TTL *int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []CreateRedactedRoleInheritedRoleResponse `json:"inherited_roles"`
 	// Whether the role has the REPLICATION attribute
@@ -467,9 +467,9 @@ func (c *CreateRedactedRoleResponseBody) GetBaseUsername() string {
 	return c.BaseUsername
 }
 
-func (c *CreateRedactedRoleResponseBody) GetPassword() string {
+func (c *CreateRedactedRoleResponseBody) GetPassword() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.Password
 }
@@ -523,9 +523,9 @@ func (c *CreateRedactedRoleResponseBody) GetDisabledAt() *string {
 	return c.DisabledAt
 }
 
-func (c *CreateRedactedRoleResponseBody) GetDropFailed() string {
+func (c *CreateRedactedRoleResponseBody) GetDropFailed() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.DropFailed
 }
@@ -551,9 +551,9 @@ func (c *CreateRedactedRoleResponseBody) GetDefault() bool {
 	return c.Default
 }
 
-func (c *CreateRedactedRoleResponseBody) GetTTL() int64 {
+func (c *CreateRedactedRoleResponseBody) GetTTL() *int64 {
 	if c == nil {
-		return 0
+		return nil
 	}
 	return c.TTL
 }

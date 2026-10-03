@@ -16,22 +16,22 @@ import (
 	"time"
 )
 
-// ReadOnlyReplicas -           Resources for managing Postgres read-only replicas.
-type ReadOnlyReplicas struct {
+// DedicatedReadReplicas -           Resources for managing Postgres dedicated read replicas.
+type DedicatedReadReplicas struct {
 	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newReadOnlyReplicas(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *ReadOnlyReplicas {
-	return &ReadOnlyReplicas{
+func newDedicatedReadReplicas(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *DedicatedReadReplicas {
+	return &DedicatedReadReplicas{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
 	}
 }
 
-// ListReadOnlyReplicas - List read-only replicas
+// ListDedicatedReadReplicas - List dedicated read replicas
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -47,7 +47,7 @@ func newReadOnlyReplicas(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration
 // | Organization | `read_branches` |
 // | Database | `read_branches` |
 // | Branch | `read_branch` |
-func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request operations.ListReadOnlyReplicasRequest, opts ...operations.Option) (*operations.ListReadOnlyReplicasResponse, error) {
+func (s *DedicatedReadReplicas) ListDedicatedReadReplicas(ctx context.Context, request operations.ListDedicatedReadReplicasRequest, opts ...operations.Option) (*operations.ListDedicatedReadReplicasResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -65,7 +65,7 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -75,7 +75,7 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "list_read_only_replicas",
+		OperationID:      "list_dedicated_read_replicas",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -135,7 +135,7 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 		}
 	}
 
-	res := &operations.ListReadOnlyReplicasResponse{
+	res := &operations.ListDedicatedReadReplicasResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -150,7 +150,7 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out []operations.ListReadOnlyReplicasResponseBody
+			var out []operations.ListDedicatedReadReplicasResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -168,6 +168,10 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -183,7 +187,7 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 
 }
 
-// CreateReadOnlyReplica - Create a read-only replica
+// CreateDedicatedReadReplica - Create a dedicated read replica
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -198,7 +202,7 @@ func (s *ReadOnlyReplicas) ListReadOnlyReplicas(ctx context.Context, request ope
 // | :------- | :---------- |
 // | Organization | `write_databases` |
 // | Database | `write_database` |
-func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request operations.CreateReadOnlyReplicaRequest, opts ...operations.Option) (*operations.CreateReadOnlyReplicaResponse, error) {
+func (s *DedicatedReadReplicas) CreateDedicatedReadReplica(ctx context.Context, request operations.CreateDedicatedReadReplicaRequest, opts ...operations.Option) (*operations.CreateDedicatedReadReplicaResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -216,7 +220,7 @@ func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -226,7 +230,7 @@ func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "create_read_only_replica",
+		OperationID:      "create_dedicated_read_replica",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -293,7 +297,7 @@ func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.CreateReadOnlyReplicaResponse{
+	res := &operations.CreateDedicatedReadReplicaResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -308,7 +312,7 @@ func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request op
 				return nil, err
 			}
 
-			var out operations.CreateReadOnlyReplicaResponseBody
+			var out operations.CreateDedicatedReadReplicaResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -326,6 +330,10 @@ func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request op
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -341,7 +349,7 @@ func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request op
 
 }
 
-// GetReadOnlyReplica - Get a read-only replica
+// GetDedicatedReadReplica - Get a dedicated read replica
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -357,7 +365,7 @@ func (s *ReadOnlyReplicas) CreateReadOnlyReplica(ctx context.Context, request op
 // | Organization | `read_branches` |
 // | Database | `read_branches` |
 // | Branch | `read_branch` |
-func (s *ReadOnlyReplicas) GetReadOnlyReplica(ctx context.Context, request operations.GetReadOnlyReplicaRequest, opts ...operations.Option) (*operations.GetReadOnlyReplicaResponse, error) {
+func (s *DedicatedReadReplicas) GetDedicatedReadReplica(ctx context.Context, request operations.GetDedicatedReadReplicaRequest, opts ...operations.Option) (*operations.GetDedicatedReadReplicaResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionPolling,
@@ -376,7 +384,7 @@ func (s *ReadOnlyReplicas) GetReadOnlyReplica(ctx context.Context, request opera
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas/{dedicated_read_replica}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -386,7 +394,7 @@ func (s *ReadOnlyReplicas) GetReadOnlyReplica(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "get_read_only_replica",
+		OperationID:      "get_dedicated_read_replica",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -420,15 +428,15 @@ func (s *ReadOnlyReplicas) GetReadOnlyReplica(ctx context.Context, request opera
 	if o.Polling != nil {
 		switch o.Polling.Name {
 		case "WaitForReady":
-			return s.getReadOnlyReplicaWaitForReady(ctx, hookCtx, req, o)
+			return s.getDedicatedReadReplicaWaitForReady(ctx, hookCtx, req, o)
 		case "WaitForDeleted":
-			return s.getReadOnlyReplicaWaitForDeleted(ctx, hookCtx, req, o)
+			return s.getDedicatedReadReplicaWaitForDeleted(ctx, hookCtx, req, o)
 		}
 	}
 
-	return s.getReadOnlyReplica(ctx, hookCtx, req, o)
+	return s.getDedicatedReadReplica(ctx, hookCtx, req, o)
 }
-func (s *ReadOnlyReplicas) getReadOnlyReplica(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetReadOnlyReplicaResponse, error) {
+func (s *DedicatedReadReplicas) getDedicatedReadReplica(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetDedicatedReadReplicaResponse, error) {
 	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
@@ -460,7 +468,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplica(ctx context.Context, hookCtx hooks
 		}
 	}
 
-	res := &operations.GetReadOnlyReplicaResponse{
+	res := &operations.GetDedicatedReadReplicaResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -475,7 +483,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplica(ctx context.Context, hookCtx hooks
 				return nil, err
 			}
 
-			var out operations.GetReadOnlyReplicaResponseBody
+			var out operations.GetDedicatedReadReplicaResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -493,6 +501,10 @@ func (s *ReadOnlyReplicas) getReadOnlyReplica(ctx context.Context, hookCtx hooks
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -508,7 +520,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplica(ctx context.Context, hookCtx hooks
 
 }
 
-// Use with GetReadOnlyReplica by adding the operations.WithPolling option.
+// Use with GetDedicatedReadReplica by adding the operations.WithPolling option.
 // Responses are returned when enabling polling, however additional errors may
 // be returned:
 //   - polling.FailureCriteriaError: If the polling option has explicit failure
@@ -516,7 +528,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplica(ctx context.Context, hookCtx hooks
 //   - polling.LimitCountError: When polling has reached the maximum number of
 //     attempts. Use the polling.WithLimitCountOverride polling option to
 //     override the predefined limit.
-func (s *ReadOnlyReplicas) GetReadOnlyReplicaWaitForReady() polling.ConfigFunc {
+func (s *DedicatedReadReplicas) GetDedicatedReadReplicaWaitForReady() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 30
 		defaultIntervalSeconds := 10
@@ -538,16 +550,16 @@ func (s *ReadOnlyReplicas) GetReadOnlyReplicaWaitForReady() polling.ConfigFunc {
 	}
 }
 
-func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetReadOnlyReplicaResponse, error) {
+func (s *DedicatedReadReplicas) getDedicatedReadReplicaWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetDedicatedReadReplicaResponse, error) {
 	if o.Polling == nil || o.Polling.LimitCount == nil {
-		return s.getReadOnlyReplica(ctx, hookCtx, req, o)
+		return s.getDedicatedReadReplica(ctx, hookCtx, req, o)
 	}
 
 	if o.Polling.DelaySeconds != nil {
 		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
 	}
 
-	var res *operations.GetReadOnlyReplicaResponse
+	var res *operations.GetDedicatedReadReplicaResponse
 
 	for i := 1; i <= *o.Polling.LimitCount; i++ {
 		// Ensure request body, if exists, is not empty on subsequent requests.
@@ -563,7 +575,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForReady(ctx context.Context, h
 
 		var err error
 
-		res, err = s.getReadOnlyReplica(ctx, hookCtx, req, o)
+		res, err = s.getDedicatedReadReplica(ctx, hookCtx, req, o)
 
 		if err != nil {
 			return res, err
@@ -591,7 +603,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForReady(ctx context.Context, h
 	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
-// Use with GetReadOnlyReplica by adding the operations.WithPolling option.
+// Use with GetDedicatedReadReplica by adding the operations.WithPolling option.
 // Responses are returned when enabling polling, however additional errors may
 // be returned:
 //   - polling.FailureCriteriaError: If the polling option has explicit failure
@@ -599,7 +611,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForReady(ctx context.Context, h
 //   - polling.LimitCountError: When polling has reached the maximum number of
 //     attempts. Use the polling.WithLimitCountOverride polling option to
 //     override the predefined limit.
-func (s *ReadOnlyReplicas) GetReadOnlyReplicaWaitForDeleted() polling.ConfigFunc {
+func (s *DedicatedReadReplicas) GetDedicatedReadReplicaWaitForDeleted() polling.ConfigFunc {
 	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
 		defaultDelaySeconds := 0
 		defaultIntervalSeconds := 10
@@ -621,16 +633,16 @@ func (s *ReadOnlyReplicas) GetReadOnlyReplicaWaitForDeleted() polling.ConfigFunc
 	}
 }
 
-func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForDeleted(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetReadOnlyReplicaResponse, error) {
+func (s *DedicatedReadReplicas) getDedicatedReadReplicaWaitForDeleted(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetDedicatedReadReplicaResponse, error) {
 	if o.Polling == nil || o.Polling.LimitCount == nil {
-		return s.getReadOnlyReplica(ctx, hookCtx, req, o)
+		return s.getDedicatedReadReplica(ctx, hookCtx, req, o)
 	}
 
 	if o.Polling.DelaySeconds != nil {
 		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
 	}
 
-	var res *operations.GetReadOnlyReplicaResponse
+	var res *operations.GetDedicatedReadReplicaResponse
 
 	for i := 1; i <= *o.Polling.LimitCount; i++ {
 		// Ensure request body, if exists, is not empty on subsequent requests.
@@ -646,7 +658,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForDeleted(ctx context.Context,
 
 		var err error
 
-		res, err = s.getReadOnlyReplica(ctx, hookCtx, req, o)
+		res, err = s.getDedicatedReadReplica(ctx, hookCtx, req, o)
 
 		if err != nil {
 			return res, err
@@ -670,7 +682,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForDeleted(ctx context.Context,
 	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
-// UpdateReadOnlyReplica - Update a read-only replica
+// UpdateDedicatedReadReplica - Update a dedicated read replica
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -685,7 +697,7 @@ func (s *ReadOnlyReplicas) getReadOnlyReplicaWaitForDeleted(ctx context.Context,
 // | :------- | :---------- |
 // | Organization | `write_databases` |
 // | Database | `write_database` |
-func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request operations.UpdateReadOnlyReplicaRequest, opts ...operations.Option) (*operations.UpdateReadOnlyReplicaResponse, error) {
+func (s *DedicatedReadReplicas) UpdateDedicatedReadReplica(ctx context.Context, request operations.UpdateDedicatedReadReplicaRequest, opts ...operations.Option) (*operations.UpdateDedicatedReadReplicaResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -703,7 +715,7 @@ func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas/{dedicated_read_replica}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -713,7 +725,7 @@ func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "update_read_only_replica",
+		OperationID:      "update_dedicated_read_replica",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -780,7 +792,7 @@ func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.UpdateReadOnlyReplicaResponse{
+	res := &operations.UpdateDedicatedReadReplicaResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -795,7 +807,7 @@ func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request op
 				return nil, err
 			}
 
-			var out operations.UpdateReadOnlyReplicaResponseBody
+			var out operations.UpdateDedicatedReadReplicaResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -813,6 +825,10 @@ func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request op
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
@@ -828,7 +844,7 @@ func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request op
 
 }
 
-// DeleteReadOnlyReplica - Delete a read-only replica
+// DeleteDedicatedReadReplica - Delete a dedicated read replica
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -843,7 +859,7 @@ func (s *ReadOnlyReplicas) UpdateReadOnlyReplica(ctx context.Context, request op
 // | :------- | :---------- |
 // | Organization | `write_databases` |
 // | Database | `write_database` |
-func (s *ReadOnlyReplicas) DeleteReadOnlyReplica(ctx context.Context, request operations.DeleteReadOnlyReplicaRequest, opts ...operations.Option) (*operations.DeleteReadOnlyReplicaResponse, error) {
+func (s *DedicatedReadReplicas) DeleteDedicatedReadReplica(ctx context.Context, request operations.DeleteDedicatedReadReplicaRequest, opts ...operations.Option) (*operations.DeleteDedicatedReadReplicaResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -861,7 +877,7 @@ func (s *ReadOnlyReplicas) DeleteReadOnlyReplica(ctx context.Context, request op
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/read-only-replicas/{read_only_replica}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas/{dedicated_read_replica}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -871,7 +887,7 @@ func (s *ReadOnlyReplicas) DeleteReadOnlyReplica(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "delete_read_only_replica",
+		OperationID:      "delete_dedicated_read_replica",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -931,7 +947,7 @@ func (s *ReadOnlyReplicas) DeleteReadOnlyReplica(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.DeleteReadOnlyReplicaResponse{
+	res := &operations.DeleteDedicatedReadReplicaResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -945,6 +961,10 @@ func (s *ReadOnlyReplicas) DeleteReadOnlyReplica(ctx context.Context, request op
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)

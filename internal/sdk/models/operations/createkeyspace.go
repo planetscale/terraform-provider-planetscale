@@ -127,19 +127,19 @@ func (e *CreateKeyspaceNodeTTLStrategy) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// CreateKeyspaceDiskAutoscalingStrategy - The disk autoscaling strategy
-type CreateKeyspaceDiskAutoscalingStrategy string
+// CreateKeyspaceDiskScalingStrategy - The disk scaling strategy
+type CreateKeyspaceDiskScalingStrategy string
 
 const (
-	CreateKeyspaceDiskAutoscalingStrategyGrow    CreateKeyspaceDiskAutoscalingStrategy = "grow"
-	CreateKeyspaceDiskAutoscalingStrategyDisable CreateKeyspaceDiskAutoscalingStrategy = "disable"
-	CreateKeyspaceDiskAutoscalingStrategyShrink  CreateKeyspaceDiskAutoscalingStrategy = "shrink"
+	CreateKeyspaceDiskScalingStrategyGrow    CreateKeyspaceDiskScalingStrategy = "grow"
+	CreateKeyspaceDiskScalingStrategyDisable CreateKeyspaceDiskScalingStrategy = "disable"
+	CreateKeyspaceDiskScalingStrategyShrink  CreateKeyspaceDiskScalingStrategy = "shrink"
 )
 
-func (e CreateKeyspaceDiskAutoscalingStrategy) ToPointer() *CreateKeyspaceDiskAutoscalingStrategy {
+func (e CreateKeyspaceDiskScalingStrategy) ToPointer() *CreateKeyspaceDiskScalingStrategy {
 	return &e
 }
-func (e *CreateKeyspaceDiskAutoscalingStrategy) UnmarshalJSON(data []byte) error {
+func (e *CreateKeyspaceDiskScalingStrategy) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -150,47 +150,56 @@ func (e *CreateKeyspaceDiskAutoscalingStrategy) UnmarshalJSON(data []byte) error
 	case "disable":
 		fallthrough
 	case "shrink":
-		*e = CreateKeyspaceDiskAutoscalingStrategy(v)
+		*e = CreateKeyspaceDiskScalingStrategy(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreateKeyspaceDiskAutoscalingStrategy: %v", v)
+		return fmt.Errorf("invalid value for CreateKeyspaceDiskScalingStrategy: %v", v)
 	}
 }
 
-type CreateKeyspaceDiskAutoscaling struct {
-	// The disk autoscaling strategy
-	Strategy CreateKeyspaceDiskAutoscalingStrategy `json:"strategy"`
+type CreateKeyspaceStorage struct {
+	// The current provisioned disk size in bytes. Disks grow from and shrink to this size. Custom shards may have staff-set overrides
+	StorageBytes int64 `json:"storage_bytes"`
 	// The maximum size in bytes disks may autoscale to
-	StorageLimitBytes int64 `json:"storage_limit_bytes"`
+	MaxStorageBytes int64 `json:"max_storage_bytes"`
+	// The disk scaling strategy
+	DiskScalingStrategy CreateKeyspaceDiskScalingStrategy `json:"disk_scaling_strategy"`
 }
 
-func (c *CreateKeyspaceDiskAutoscaling) GetStrategy() CreateKeyspaceDiskAutoscalingStrategy {
-	if c == nil {
-		return CreateKeyspaceDiskAutoscalingStrategy("")
-	}
-	return c.Strategy
-}
-
-func (c *CreateKeyspaceDiskAutoscaling) GetStorageLimitBytes() int64 {
+func (c *CreateKeyspaceStorage) GetStorageBytes() int64 {
 	if c == nil {
 		return 0
 	}
-	return c.StorageLimitBytes
+	return c.StorageBytes
 }
 
-// CreateKeyspaceReplicationDurabilityConstraintsStrategy - The replication durability strategy
-type CreateKeyspaceReplicationDurabilityConstraintsStrategy string
+func (c *CreateKeyspaceStorage) GetMaxStorageBytes() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.MaxStorageBytes
+}
+
+func (c *CreateKeyspaceStorage) GetDiskScalingStrategy() CreateKeyspaceDiskScalingStrategy {
+	if c == nil {
+		return CreateKeyspaceDiskScalingStrategy("")
+	}
+	return c.DiskScalingStrategy
+}
+
+// CreateKeyspaceStrategy - The replication durability strategy
+type CreateKeyspaceStrategy string
 
 const (
-	CreateKeyspaceReplicationDurabilityConstraintsStrategyAvailable CreateKeyspaceReplicationDurabilityConstraintsStrategy = "available"
-	CreateKeyspaceReplicationDurabilityConstraintsStrategyLag       CreateKeyspaceReplicationDurabilityConstraintsStrategy = "lag"
-	CreateKeyspaceReplicationDurabilityConstraintsStrategyAlways    CreateKeyspaceReplicationDurabilityConstraintsStrategy = "always"
+	CreateKeyspaceStrategyAvailable CreateKeyspaceStrategy = "available"
+	CreateKeyspaceStrategyLag       CreateKeyspaceStrategy = "lag"
+	CreateKeyspaceStrategyAlways    CreateKeyspaceStrategy = "always"
 )
 
-func (e CreateKeyspaceReplicationDurabilityConstraintsStrategy) ToPointer() *CreateKeyspaceReplicationDurabilityConstraintsStrategy {
+func (e CreateKeyspaceStrategy) ToPointer() *CreateKeyspaceStrategy {
 	return &e
 }
-func (e *CreateKeyspaceReplicationDurabilityConstraintsStrategy) UnmarshalJSON(data []byte) error {
+func (e *CreateKeyspaceStrategy) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -201,19 +210,19 @@ func (e *CreateKeyspaceReplicationDurabilityConstraintsStrategy) UnmarshalJSON(d
 	case "lag":
 		fallthrough
 	case "always":
-		*e = CreateKeyspaceReplicationDurabilityConstraintsStrategy(v)
+		*e = CreateKeyspaceStrategy(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CreateKeyspaceReplicationDurabilityConstraintsStrategy: %v", v)
+		return fmt.Errorf("invalid value for CreateKeyspaceStrategy: %v", v)
 	}
 }
 
 type CreateKeyspaceReplicationDurabilityConstraints struct {
 	// The replication durability strategy
-	Strategy *CreateKeyspaceReplicationDurabilityConstraintsStrategy `json:"strategy,omitzero"`
+	Strategy *CreateKeyspaceStrategy `json:"strategy,omitzero"`
 }
 
-func (c *CreateKeyspaceReplicationDurabilityConstraints) GetStrategy() *CreateKeyspaceReplicationDurabilityConstraintsStrategy {
+func (c *CreateKeyspaceReplicationDurabilityConstraints) GetStrategy() *CreateKeyspaceStrategy {
 	if c == nil {
 		return nil
 	}
@@ -312,8 +321,10 @@ type CreateKeyspaceResponseBody struct {
 	// Percentage of buffer pool memory allocated to vector indexes
 	VectorPoolAllocation *float64 `json:"vector_pool_allocation"`
 	// Controls when node TTL drains are allowed
-	NodeTTLStrategy                  CreateKeyspaceNodeTTLStrategy                  `json:"node_ttl_strategy"`
-	DiskAutoscaling                  CreateKeyspaceDiskAutoscaling                  `json:"disk_autoscaling"`
+	NodeTTLStrategy CreateKeyspaceNodeTTLStrategy `json:"node_ttl_strategy"`
+	Storage         CreateKeyspaceStorage         `json:"storage"`
+	// The maximum number of shards rolled out in parallel. Null uses the infrastructure default of 1. Effective concurrency is capped at 32.
+	MaxRollout                       *int64                                         `json:"max_rollout"`
 	ReplicationDurabilityConstraints CreateKeyspaceReplicationDurabilityConstraints `json:"replication_durability_constraints"`
 	VreplicationFlags                CreateKeyspaceVreplicationFlags                `json:"vreplication_flags"`
 	Throttler                        CreateKeyspaceThrottler                        `json:"throttler"`
@@ -461,11 +472,18 @@ func (c *CreateKeyspaceResponseBody) GetNodeTTLStrategy() CreateKeyspaceNodeTTLS
 	return c.NodeTTLStrategy
 }
 
-func (c *CreateKeyspaceResponseBody) GetDiskAutoscaling() CreateKeyspaceDiskAutoscaling {
+func (c *CreateKeyspaceResponseBody) GetStorage() CreateKeyspaceStorage {
 	if c == nil {
-		return CreateKeyspaceDiskAutoscaling{}
+		return CreateKeyspaceStorage{}
 	}
-	return c.DiskAutoscaling
+	return c.Storage
+}
+
+func (c *CreateKeyspaceResponseBody) GetMaxRollout() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.MaxRollout
 }
 
 func (c *CreateKeyspaceResponseBody) GetReplicationDurabilityConstraints() CreateKeyspaceReplicationDurabilityConstraints {

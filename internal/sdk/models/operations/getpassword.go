@@ -132,6 +132,8 @@ type GetPasswordRegion struct {
 	MysqlSupported bool `json:"mysql_supported"`
 	// Whether the region supports PostgreSQL databases
 	PostgresqlSupported bool `json:"postgresql_supported"`
+	// Whether the region supports Neki databases
+	NekiSupported bool `json:"neki_supported"`
 }
 
 func (g *GetPasswordRegion) GetID() string {
@@ -202,6 +204,13 @@ func (g *GetPasswordRegion) GetPostgresqlSupported() bool {
 		return false
 	}
 	return g.PostgresqlSupported
+}
+
+func (g *GetPasswordRegion) GetNekiSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.NekiSupported
 }
 
 type GetPasswordDatabaseBranch struct {

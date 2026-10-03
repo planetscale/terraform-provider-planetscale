@@ -21,19 +21,6 @@ func (r *DatabaseVitessDataSourceModel) RefreshFromOperationsGetVitessDatabaseRe
 		r.BranchesCount = types.Int64Value(resp.BranchesCount)
 		r.BranchesURL = types.StringValue(resp.BranchesURL)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
-		if resp.DataImport == nil {
-			r.DataImport = nil
-		} else {
-			r.DataImport = &tfTypes.GetVitessDatabaseDataImport{}
-			r.DataImport.DataSource = &tfTypes.GetVitessDatabaseDataSource{}
-			r.DataImport.DataSource.Database = types.StringValue(resp.DataImport.DataSource.Database)
-			r.DataImport.DataSource.Hostname = types.StringValue(resp.DataImport.DataSource.Hostname)
-			r.DataImport.DataSource.Port = types.Int64Value(resp.DataImport.DataSource.Port)
-			r.DataImport.FinishedAt = types.StringPointerValue(resp.DataImport.FinishedAt)
-			r.DataImport.ImportCheckErrors = types.StringValue(resp.DataImport.ImportCheckErrors)
-			r.DataImport.StartedAt = types.StringPointerValue(resp.DataImport.StartedAt)
-			r.DataImport.State = types.StringValue(resp.DataImport.State)
-		}
 		r.DefaultBranch = types.StringValue(resp.DefaultBranch)
 		r.DefaultBranchReadOnlyRegionsCount = types.Int64Value(resp.DefaultBranchReadOnlyRegionsCount)
 		r.DefaultBranchShardCount = types.Int64Value(resp.DefaultBranchShardCount)

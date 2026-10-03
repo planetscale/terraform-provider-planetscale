@@ -78,44 +78,6 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `When the database was created`,
 						},
-						"data_import": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"data_source": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"database": schema.StringAttribute{
-											Computed:    true,
-											Description: `Database name of the data source`,
-										},
-										"hostname": schema.StringAttribute{
-											Computed:    true,
-											Description: `Hostname of the data source`,
-										},
-										"port": schema.Int64Attribute{
-											Computed:    true,
-											Description: `Port of the data source`,
-										},
-									},
-								},
-								"finished_at": schema.StringAttribute{
-									Computed:    true,
-									Description: `When the import finished`,
-								},
-								"import_check_errors": schema.StringAttribute{
-									Computed:    true,
-									Description: `Errors encountered during the import check`,
-								},
-								"started_at": schema.StringAttribute{
-									Computed:    true,
-									Description: `When the import started`,
-								},
-								"state": schema.StringAttribute{
-									Computed:    true,
-									Description: `State of the data import`,
-								},
-							},
-						},
 						"default_branch": schema.StringAttribute{
 							Computed:    true,
 							Description: `The default branch for the database`,

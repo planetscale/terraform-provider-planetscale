@@ -235,6 +235,8 @@ type CreatePostgresBranchRegionData struct {
 	MysqlSupported bool `json:"mysql_supported"`
 	// Whether the region supports PostgreSQL databases
 	PostgresqlSupported bool `json:"postgresql_supported"`
+	// Whether the region supports Neki databases
+	NekiSupported bool `json:"neki_supported"`
 }
 
 func (c *CreatePostgresBranchRegionData) GetID() string {
@@ -256,6 +258,13 @@ func (c *CreatePostgresBranchRegionData) GetPostgresqlSupported() bool {
 		return false
 	}
 	return c.PostgresqlSupported
+}
+
+func (c *CreatePostgresBranchRegionData) GetNekiSupported() bool {
+	if c == nil {
+		return false
+	}
+	return c.NekiSupported
 }
 
 // CreatePostgresBranchResponseBody - Returns the created branch

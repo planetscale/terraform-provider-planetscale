@@ -243,6 +243,8 @@ type CreatePasswordRegion struct {
 	MysqlSupported bool `json:"mysql_supported"`
 	// Whether the region supports PostgreSQL databases
 	PostgresqlSupported bool `json:"postgresql_supported"`
+	// Whether the region supports Neki databases
+	NekiSupported bool `json:"neki_supported"`
 }
 
 func (c *CreatePasswordRegion) GetID() string {
@@ -313,6 +315,13 @@ func (c *CreatePasswordRegion) GetPostgresqlSupported() bool {
 		return false
 	}
 	return c.PostgresqlSupported
+}
+
+func (c *CreatePasswordRegion) GetNekiSupported() bool {
+	if c == nil {
+		return false
+	}
+	return c.NekiSupported
 }
 
 type CreatePasswordDatabaseBranch struct {
@@ -400,7 +409,7 @@ type CreatePasswordResponseBody struct {
 	// The username for the password
 	Username string `json:"username"`
 	// The plaintext password. Null except in the response from the create endpoint.
-	PlainText *string `json:"plain_text"`
+	PlainText string `json:"plain_text"`
 	// Whether or not the password is for a read replica
 	Replica bool `json:"replica"`
 	// Whether or not the password is scoped to a read-only region
@@ -536,9 +545,9 @@ func (c *CreatePasswordResponseBody) GetUsername() string {
 	return c.Username
 }
 
-func (c *CreatePasswordResponseBody) GetPlainText() *string {
+func (c *CreatePasswordResponseBody) GetPlainText() string {
 	if c == nil {
-		return nil
+		return ""
 	}
 	return c.PlainText
 }

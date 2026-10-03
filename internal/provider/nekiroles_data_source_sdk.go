@@ -33,7 +33,7 @@ func (r *NekiRolesDataSourceModel) RefreshFromOperationsListNekiRolesResponseBod
 			data.Name = types.StringValue(dataItem.Name)
 			data.PrivateAccessHostURL = types.StringValue(dataItem.PrivateAccessHostURL)
 			data.PrivateConnectionServiceName = types.StringValue(dataItem.PrivateConnectionServiceName)
-			data.TTL = types.Int64Value(dataItem.TTL)
+			data.TTL = types.Int64PointerValue(dataItem.TTL)
 			data.Username = types.StringValue(dataItem.Username)
 			data.WithReplication = types.BoolValue(dataItem.WithReplication)
 

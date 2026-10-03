@@ -23,7 +23,7 @@ func (r *NekiRoleDataSourceModel) RefreshFromOperationsGetNekiRoleResponseBody(c
 		r.Name = types.StringValue(resp.Name)
 		r.PrivateAccessHostURL = types.StringValue(resp.PrivateAccessHostURL)
 		r.PrivateConnectionServiceName = types.StringValue(resp.PrivateConnectionServiceName)
-		r.TTL = types.Int64Value(resp.TTL)
+		r.TTL = types.Int64PointerValue(resp.TTL)
 		r.Username = types.StringValue(resp.Username)
 		r.WithReplication = types.BoolValue(resp.WithReplication)
 	}

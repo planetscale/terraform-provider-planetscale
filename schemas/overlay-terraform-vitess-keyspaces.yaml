@@ -114,3 +114,8 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.disk_autoscaling
     update:
       x-speakeasy-terraform-ignore: true
+
+  # max_rollout and storage arrived upstream; not exposed yet.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].get.responses["200"].content["application/json"].schema.properties.data.items.properties['max_rollout','storage']
+    update:
+      x-speakeasy-terraform-ignore: true
