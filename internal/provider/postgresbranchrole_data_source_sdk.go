@@ -29,7 +29,7 @@ func (r *PostgresBranchRoleDataSourceModel) RefreshFromOperationsGetRoleResponse
 		r.Default = types.BoolValue(resp.Default)
 		r.DeletedAt = types.StringPointerValue(resp.DeletedAt)
 		r.DisabledAt = types.StringPointerValue(resp.DisabledAt)
-		r.DropFailed = types.StringValue(resp.DropFailed)
+		r.DropFailed = types.StringPointerValue(resp.DropFailed)
 		r.DroppedAt = types.StringPointerValue(resp.DroppedAt)
 		r.Expired = types.BoolValue(resp.Expired)
 		r.ExpiresAt = types.StringPointerValue(resp.ExpiresAt)
@@ -44,7 +44,7 @@ func (r *PostgresBranchRoleDataSourceModel) RefreshFromOperationsGetRoleResponse
 		r.QuerySafetySettings = &tfTypes.GetRoleQuerySafetySettings{}
 		r.QuerySafetySettings.RequireWhereOnDelete = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnDelete))
 		r.QuerySafetySettings.RequireWhereOnUpdate = types.StringValue(string(resp.QuerySafetySettings.RequireWhereOnUpdate))
-		r.TTL = types.Int64Value(resp.TTL)
+		r.TTL = types.Int64PointerValue(resp.TTL)
 		r.UpdatedAt = types.StringValue(resp.UpdatedAt)
 		r.Username = types.StringValue(resp.Username)
 		r.WithReplication = types.BoolValue(resp.WithReplication)

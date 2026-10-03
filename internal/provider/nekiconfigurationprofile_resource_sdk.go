@@ -395,6 +395,13 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 	} else {
 		clusterSize = nil
 	}
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
+	}
 	replicas := new(int64)
 	if !r.Replicas.IsUnknown() && !r.Replicas.IsNull() {
 		*replicas = r.Replicas.ValueInt64()
@@ -453,13 +460,6 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 			StorageThroughputMibs: storageThroughputMibs,
 		}
 	}
-	var extensions []string
-	if r.Extensions != nil {
-		extensions = make([]string, 0, len(r.Extensions))
-		for extensionsIndex := range r.Extensions {
-			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
-		}
-	}
 	var parameters map[string]map[string]string
 	if r.Parameters != nil {
 		parameters = make(map[string]map[string]string)
@@ -476,11 +476,11 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 	}
 	out := operations.UpdateNekiConfigurationProfileRequestBody{
 		ClusterSize:          clusterSize,
+		Extensions:           extensions,
 		Replicas:             replicas,
 		PostgresMajorVersion: postgresMajorVersion,
 		PostgresMinorVersion: postgresMinorVersion,
 		Storage:              storage,
-		Extensions:           extensions,
 		Parameters:           parameters,
 	}
 

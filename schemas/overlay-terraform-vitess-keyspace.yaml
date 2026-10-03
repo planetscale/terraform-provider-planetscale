@@ -325,3 +325,17 @@ actions:
         required:
           - id
           - state
+
+  # max_rollout and storage arrived upstream; not exposed yet.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties['max_rollout','storage']
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties['max_rollout','storage']
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].patch.responses["200"].content["application/json"].schema.properties['max_rollout','storage']
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].patch.requestBody.content["application/json"].schema.properties.max_rollout
+    update:
+      x-speakeasy-terraform-ignore: true

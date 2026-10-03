@@ -29,10 +29,10 @@ type PostgresReadOnlyReplicasDataSource struct {
 
 // PostgresReadOnlyReplicasDataSourceModel describes the data model.
 type PostgresReadOnlyReplicasDataSourceModel struct {
-	Branch       types.String                               `tfsdk:"branch"`
-	Data         []tfTypes.ListReadOnlyReplicasResponseBody `tfsdk:"data"`
-	Database     types.String                               `tfsdk:"database"`
-	Organization types.String                               `tfsdk:"organization"`
+	Branch       types.String                                    `tfsdk:"branch"`
+	Data         []tfTypes.ListDedicatedReadReplicasResponseBody `tfsdk:"data"`
+	Database     types.String                                    `tfsdk:"database"`
+	Organization types.String                                    `tfsdk:"organization"`
 }
 
 // Metadata returns the data source type name.
@@ -56,7 +56,7 @@ func (r *PostgresReadOnlyReplicasDataSource) Schema(ctx context.Context, req dat
 					Attributes: map[string]schema.Attribute{
 						"access_host_url": schema.StringAttribute{
 							Computed:    true,
-							Description: `The database connection host for the read-only replica`,
+							Description: `The database connection host for the dedicated read replica`,
 						},
 						"cluster_size": schema.StringAttribute{
 							Computed:    true,
@@ -64,23 +64,23 @@ func (r *PostgresReadOnlyReplicasDataSource) Schema(ctx context.Context, req dat
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
-							Description: `The name of the read-only replica`,
+							Description: `The name of the dedicated read replica`,
 						},
 						"private_access_host_url": schema.StringAttribute{
 							Computed:    true,
-							Description: `The private database connection host for the read-only replica`,
+							Description: `The private database connection host for the dedicated read replica`,
 						},
 						"private_connection_service_name": schema.StringAttribute{
 							Computed:    true,
-							Description: `The service name to set up private connectivity for the read-only replica`,
+							Description: `The service name to set up private connectivity for the dedicated read replica`,
 						},
 						"replicas": schema.Int64Attribute{
 							Computed:    true,
-							Description: `The number of instances serving reads in this read-only replica`,
+							Description: `The number of instances serving reads in this dedicated read replica`,
 						},
 					},
 				},
-				Description: `Returns read-only replicas`,
+				Description: `Returns dedicated read replicas`,
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
@@ -134,13 +134,13 @@ func (r *PostgresReadOnlyReplicasDataSource) Read(ctx context.Context, req datas
 
 	ctx = withSensitiveValues(ctx, req.Config)
 
-	request, requestDiags := data.ToOperationsListReadOnlyReplicasRequest(ctx)
+	request, requestDiags := data.ToOperationsListDedicatedReadReplicasRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ReadOnlyReplicas.ListReadOnlyReplicas(ctx, *request)
+	res, err := r.client.DedicatedReadReplicas.ListDedicatedReadReplicas(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -160,7 +160,7 @@ func (r *PostgresReadOnlyReplicasDataSource) Read(ctx context.Context, req datas
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsListReadOnlyReplicasResponseBody(ctx, res.ResponseBodies)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsListDedicatedReadReplicasResponseBody(ctx, res.ResponseBodies)...)
 
 	if resp.Diagnostics.HasError() {
 		return

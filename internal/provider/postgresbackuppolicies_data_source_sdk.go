@@ -29,7 +29,7 @@ func (r *PostgresBackupPoliciesDataSourceModel) RefreshFromOperationsListPostgre
 			data.RetentionUnit = types.StringValue(dataItem.RetentionUnit)
 			data.RetentionValue = types.Int64Value(dataItem.RetentionValue)
 			data.ScheduleDay = types.Int64PointerValue(dataItem.ScheduleDay)
-			data.ScheduleTime = types.StringValue(dataItem.ScheduleTime)
+			data.ScheduleTime = types.StringPointerValue(dataItem.ScheduleTime)
 			data.ScheduleWeek = types.Int64PointerValue(dataItem.ScheduleWeek)
 			data.Target = types.StringValue(string(dataItem.Target))
 

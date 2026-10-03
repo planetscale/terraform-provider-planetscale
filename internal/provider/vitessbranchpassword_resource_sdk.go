@@ -50,7 +50,7 @@ func (r *VitessBranchPasswordResourceModel) RefreshFromOperationsCreatePasswordR
 		r.ID = types.StringValue(resp.ID)
 		r.LastUsedAt = types.StringPointerValue(resp.LastUsedAt)
 		r.Name = types.StringValue(resp.Name)
-		r.PlainText = types.StringPointerValue(resp.PlainText)
+		r.PlainText = types.StringValue(resp.PlainText)
 		r.Region = &tfTypes.GetPasswordRegion{}
 		r.Region.CurrentDefault = types.BoolValue(resp.Region.CurrentDefault)
 		r.Region.DisplayName = types.StringValue(resp.Region.DisplayName)

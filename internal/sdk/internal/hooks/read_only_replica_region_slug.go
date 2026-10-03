@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var readOnlyReplicaGetPathPattern = regexp.MustCompile(`^/v1/organizations/[^/]+/databases/[^/]+/branches/[^/]+/read-only-replicas/[^/]+$`)
+var readOnlyReplicaGetPathPattern = regexp.MustCompile(`^/v1/organizations/[^/]+/databases/[^/]+/branches/[^/]+/dedicated-read-replicas/[^/]+$`)
 
 // ReadOnlyReplicaRegionSlugHook wraps the SDK HTTP client and copies the
 // nested region slug to a top-level region_slug field on read-only replica

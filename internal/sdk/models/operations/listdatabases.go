@@ -59,83 +59,6 @@ func (l *ListDatabasesRequest) GetPerPage() *int64 {
 	return l.PerPage
 }
 
-type ListDatabasesDataSource struct {
-	// Hostname of the data source
-	Hostname string `json:"hostname"`
-	// Port of the data source
-	Port int64 `json:"port"`
-	// Database name of the data source
-	Database string `json:"database"`
-}
-
-func (l *ListDatabasesDataSource) GetHostname() string {
-	if l == nil {
-		return ""
-	}
-	return l.Hostname
-}
-
-func (l *ListDatabasesDataSource) GetPort() int64 {
-	if l == nil {
-		return 0
-	}
-	return l.Port
-}
-
-func (l *ListDatabasesDataSource) GetDatabase() string {
-	if l == nil {
-		return ""
-	}
-	return l.Database
-}
-
-type ListDatabasesDataImport struct {
-	// State of the data import
-	State string `json:"state"`
-	// Errors encountered during the import check
-	ImportCheckErrors string `json:"import_check_errors"`
-	// When the import started
-	StartedAt *string `json:"started_at"`
-	// When the import finished
-	FinishedAt *string                 `json:"finished_at"`
-	DataSource ListDatabasesDataSource `json:"data_source"`
-}
-
-func (l *ListDatabasesDataImport) GetState() string {
-	if l == nil {
-		return ""
-	}
-	return l.State
-}
-
-func (l *ListDatabasesDataImport) GetImportCheckErrors() string {
-	if l == nil {
-		return ""
-	}
-	return l.ImportCheckErrors
-}
-
-func (l *ListDatabasesDataImport) GetStartedAt() *string {
-	if l == nil {
-		return nil
-	}
-	return l.StartedAt
-}
-
-func (l *ListDatabasesDataImport) GetFinishedAt() *string {
-	if l == nil {
-		return nil
-	}
-	return l.FinishedAt
-}
-
-func (l *ListDatabasesDataImport) GetDataSource() ListDatabasesDataSource {
-	if l == nil {
-		return ListDatabasesDataSource{}
-	}
-	return l.DataSource
-}
-
 type ListDatabasesRegion struct {
 	// The ID of the region
 	ID string `json:"id"`
@@ -157,6 +80,8 @@ type ListDatabasesRegion struct {
 	MysqlSupported bool `json:"mysql_supported"`
 	// Whether the region supports PostgreSQL databases
 	PostgresqlSupported bool `json:"postgresql_supported"`
+	// Whether the region supports Neki databases
+	NekiSupported bool `json:"neki_supported"`
 }
 
 func (l *ListDatabasesRegion) GetID() string {
@@ -227,6 +152,13 @@ func (l *ListDatabasesRegion) GetPostgresqlSupported() bool {
 		return false
 	}
 	return l.PostgresqlSupported
+}
+
+func (l *ListDatabasesRegion) GetNekiSupported() bool {
+	if l == nil {
+		return false
+	}
+	return l.NekiSupported
 }
 
 // ListDatabasesState - State of the database
@@ -314,6 +246,8 @@ type ListDatabasesData struct {
 	OpenSchemaRecommendationsCount int64 `json:"open_schema_recommendations_count"`
 	// The total number of database development branches
 	DevelopmentBranchesCount int64 `json:"development_branches_count"`
+	// The current maximum number of development branches. Change it with development_branches_limit on the database PATCH endpoint, up to 5000.
+	DevelopmentBranchesLimit int64 `json:"development_branches_limit"`
 	// The total number of database production branches
 	ProductionBranchesCount int64 `json:"production_branches_count"`
 	// The total number of ongoing issues within a database
@@ -325,9 +259,8 @@ type ListDatabasesData struct {
 	// If the database has reached its backup restored branch limit
 	AtBackupRestoreBranchesLimit bool `json:"at_backup_restore_branches_limit"`
 	// If the database has reached its development branch limit
-	AtDevelopmentBranchUsageLimit bool                     `json:"at_development_branch_usage_limit"`
-	DataImport                    *ListDatabasesDataImport `json:"data_import,omitzero"`
-	Region                        ListDatabasesRegion      `json:"region"`
+	AtDevelopmentBranchUsageLimit bool                `json:"at_development_branch_usage_limit"`
+	Region                        ListDatabasesRegion `json:"region"`
 	// The URL to see this database's branches in the web UI
 	HTMLURL string `json:"html_url"`
 	// Name of the database
@@ -382,17 +315,6 @@ type ListDatabasesData struct {
 	Kind ListDatabasesKind `json:"kind"`
 }
 
-func (l ListDatabasesData) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
-}
-
-func (l *ListDatabasesData) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
 func (l *ListDatabasesData) GetID() string {
 	if l == nil {
 		return ""
@@ -435,6 +357,13 @@ func (l *ListDatabasesData) GetDevelopmentBranchesCount() int64 {
 	return l.DevelopmentBranchesCount
 }
 
+func (l *ListDatabasesData) GetDevelopmentBranchesLimit() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.DevelopmentBranchesLimit
+}
+
 func (l *ListDatabasesData) GetProductionBranchesCount() int64 {
 	if l == nil {
 		return 0
@@ -475,13 +404,6 @@ func (l *ListDatabasesData) GetAtDevelopmentBranchUsageLimit() bool {
 		return false
 	}
 	return l.AtDevelopmentBranchUsageLimit
-}
-
-func (l *ListDatabasesData) GetDataImport() *ListDatabasesDataImport {
-	if l == nil {
-		return nil
-	}
-	return l.DataImport
 }
 
 func (l *ListDatabasesData) GetRegion() ListDatabasesRegion {

@@ -60,6 +60,8 @@ func (u *UpdateNekiConfigurationProfileStorageRequest) GetStorageThroughputMibs(
 type UpdateNekiConfigurationProfileRequestBody struct {
 	// The database cluster size name for shards assigned to this profile. Updates in place through Neki maintenance.
 	ClusterSize *string `json:"cluster_size,omitzero"`
+	// Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
+	Extensions []string `json:"extensions,omitzero"`
 	// The new number of replicas for the shard configuration profile
 	Replicas *int64 `json:"replicas,omitzero"`
 	// The PostgreSQL major version for the shard configuration profile
@@ -67,8 +69,6 @@ type UpdateNekiConfigurationProfileRequestBody struct {
 	// The PostgreSQL minor version for the shard configuration profile. Requires postgres_major_version when specified.
 	PostgresMinorVersion *int64                                        `json:"postgres_minor_version,omitzero"`
 	Storage              *UpdateNekiConfigurationProfileStorageRequest `json:"storage,omitzero"`
-	// Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
-	Extensions []string `json:"extensions,omitzero"`
 	// Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
 	Parameters map[string]map[string]string `json:"parameters,omitzero"`
 }
@@ -89,6 +89,13 @@ func (u *UpdateNekiConfigurationProfileRequestBody) GetClusterSize() *string {
 		return nil
 	}
 	return u.ClusterSize
+}
+
+func (u *UpdateNekiConfigurationProfileRequestBody) GetExtensions() []string {
+	if u == nil {
+		return nil
+	}
+	return u.Extensions
 }
 
 func (u *UpdateNekiConfigurationProfileRequestBody) GetReplicas() *int64 {
@@ -117,13 +124,6 @@ func (u *UpdateNekiConfigurationProfileRequestBody) GetStorage() *UpdateNekiConf
 		return nil
 	}
 	return u.Storage
-}
-
-func (u *UpdateNekiConfigurationProfileRequestBody) GetExtensions() []string {
-	if u == nil {
-		return nil
-	}
-	return u.Extensions
 }
 
 func (u *UpdateNekiConfigurationProfileRequestBody) GetParameters() map[string]map[string]string {

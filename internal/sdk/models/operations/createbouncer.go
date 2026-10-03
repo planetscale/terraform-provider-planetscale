@@ -48,6 +48,8 @@ type CreateBouncerRequestBody struct {
 	BouncerSize *string `json:"bouncer_size,omitzero"`
 	// The number of PgBouncer instances per availability zone. Defaults to 1.
 	ReplicasPerCell *int64 `json:"replicas_per_cell,omitzero"`
+	// The ID of the dedicated read replica where the bouncer should run
+	DedicatedReadReplicaID *string `json:"dedicated_read_replica_id,omitzero"`
 }
 
 func (c *CreateBouncerRequestBody) GetName() string {
@@ -76,6 +78,13 @@ func (c *CreateBouncerRequestBody) GetReplicasPerCell() *int64 {
 		return nil
 	}
 	return c.ReplicasPerCell
+}
+
+func (c *CreateBouncerRequestBody) GetDedicatedReadReplicaID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.DedicatedReadReplicaID
 }
 
 type CreateBouncerRequest struct {

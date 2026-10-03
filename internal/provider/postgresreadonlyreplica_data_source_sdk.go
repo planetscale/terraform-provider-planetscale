@@ -9,7 +9,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresReadOnlyReplicaDataSourceModel) RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.GetReadOnlyReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresReadOnlyReplicaDataSourceModel) RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx context.Context, resp *operations.GetDedicatedReadReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -25,7 +25,7 @@ func (r *PostgresReadOnlyReplicaDataSourceModel) RefreshFromOperationsGetReadOnl
 	return diags
 }
 
-func (r *PostgresReadOnlyReplicaDataSourceModel) ToOperationsGetReadOnlyReplicaRequest(ctx context.Context) (*operations.GetReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresReadOnlyReplicaDataSourceModel) ToOperationsGetDedicatedReadReplicaRequest(ctx context.Context) (*operations.GetDedicatedReadReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -37,14 +37,14 @@ func (r *PostgresReadOnlyReplicaDataSourceModel) ToOperationsGetReadOnlyReplicaR
 	var branch string
 	branch = r.Branch.ValueString()
 
-	var readOnlyReplica string
-	readOnlyReplica = r.Name.ValueString()
+	var dedicatedReadReplica string
+	dedicatedReadReplica = r.Name.ValueString()
 
-	out := operations.GetReadOnlyReplicaRequest{
-		Organization:    organization,
-		Database:        database,
-		Branch:          branch,
-		ReadOnlyReplica: readOnlyReplica,
+	out := operations.GetDedicatedReadReplicaRequest{
+		Organization:         organization,
+		Database:             database,
+		Branch:               branch,
+		DedicatedReadReplica: dedicatedReadReplica,
 	}
 
 	return &out, diags

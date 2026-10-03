@@ -47,7 +47,6 @@ Read-Only:
 - `branches_count` (Number) The total number of database branches
 - `branches_url` (String) The URL to retrieve this database's branches via the API
 - `created_at` (String) When the database was created
-- `data_import` (Attributes) (see [below for nested schema](#nestedatt--data--data_import))
 - `default_branch` (String) The default branch for the database
 - `default_branch_read_only_regions_count` (Number) Number of read only regions in the default branch
 - `default_branch_shard_count` (Number) Number of shards in the default branch
@@ -79,28 +78,6 @@ Read-Only:
 - `state` (String) State of the database
 - `updated_at` (String) When the database was last updated
 - `url` (String) The URL to the database API endpoint
-
-<a id="nestedatt--data--data_import"></a>
-### Nested Schema for `data.data_import`
-
-Read-Only:
-
-- `data_source` (Attributes) (see [below for nested schema](#nestedatt--data--data_import--data_source))
-- `finished_at` (String) When the import finished
-- `import_check_errors` (String) Errors encountered during the import check
-- `started_at` (String) When the import started
-- `state` (String) State of the data import
-
-<a id="nestedatt--data--data_import--data_source"></a>
-### Nested Schema for `data.data_import.data_source`
-
-Read-Only:
-
-- `database` (String) Database name of the data source
-- `hostname` (String) Hostname of the data source
-- `port` (Number) Port of the data source
-
-
 
 <a id="nestedatt--data--region"></a>
 ### Nested Schema for `data.region`

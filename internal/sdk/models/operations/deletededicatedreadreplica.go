@@ -6,46 +6,46 @@ import (
 	"net/http"
 )
 
-type DeleteReadOnlyReplicaRequest struct {
+type DeleteDedicatedReadReplicaRequest struct {
 	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
-	// The name of the read-only replica
-	ReadOnlyReplica string `pathParam:"style=simple,explode=false,name=read_only_replica"`
+	// The name of the dedicated read replica
+	DedicatedReadReplica string `pathParam:"style=simple,explode=false,name=dedicated_read_replica"`
 }
 
-func (d *DeleteReadOnlyReplicaRequest) GetOrganization() string {
+func (d *DeleteDedicatedReadReplicaRequest) GetOrganization() string {
 	if d == nil {
 		return ""
 	}
 	return d.Organization
 }
 
-func (d *DeleteReadOnlyReplicaRequest) GetDatabase() string {
+func (d *DeleteDedicatedReadReplicaRequest) GetDatabase() string {
 	if d == nil {
 		return ""
 	}
 	return d.Database
 }
 
-func (d *DeleteReadOnlyReplicaRequest) GetBranch() string {
+func (d *DeleteDedicatedReadReplicaRequest) GetBranch() string {
 	if d == nil {
 		return ""
 	}
 	return d.Branch
 }
 
-func (d *DeleteReadOnlyReplicaRequest) GetReadOnlyReplica() string {
+func (d *DeleteDedicatedReadReplicaRequest) GetDedicatedReadReplica() string {
 	if d == nil {
 		return ""
 	}
-	return d.ReadOnlyReplica
+	return d.DedicatedReadReplica
 }
 
-type DeleteReadOnlyReplicaResponse struct {
+type DeleteDedicatedReadReplicaResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -54,21 +54,21 @@ type DeleteReadOnlyReplicaResponse struct {
 	RawResponse *http.Response
 }
 
-func (d *DeleteReadOnlyReplicaResponse) GetContentType() string {
+func (d *DeleteDedicatedReadReplicaResponse) GetContentType() string {
 	if d == nil {
 		return ""
 	}
 	return d.ContentType
 }
 
-func (d *DeleteReadOnlyReplicaResponse) GetStatusCode() int {
+func (d *DeleteDedicatedReadReplicaResponse) GetStatusCode() int {
 	if d == nil {
 		return 0
 	}
 	return d.StatusCode
 }
 
-func (d *DeleteReadOnlyReplicaResponse) GetRawResponse() *http.Response {
+func (d *DeleteDedicatedReadReplicaResponse) GetRawResponse() *http.Response {
 	if d == nil {
 		return nil
 	}

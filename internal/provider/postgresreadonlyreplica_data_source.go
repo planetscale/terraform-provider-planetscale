@@ -53,7 +53,7 @@ func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req data
 		Attributes: map[string]schema.Attribute{
 			"access_host_url": schema.StringAttribute{
 				Computed:    true,
-				Description: `The database connection host for the read-only replica`,
+				Description: `The database connection host for the dedicated read replica`,
 			},
 			"branch": schema.StringAttribute{
 				Required:    true,
@@ -69,7 +69,7 @@ func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req data
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the read-only replica`,
+				Description: `The name of the dedicated read replica`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
@@ -77,11 +77,11 @@ func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req data
 			},
 			"private_access_host_url": schema.StringAttribute{
 				Computed:    true,
-				Description: `The private database connection host for the read-only replica`,
+				Description: `The private database connection host for the dedicated read replica`,
 			},
 			"private_connection_service_name": schema.StringAttribute{
 				Computed:    true,
-				Description: `The service name to set up private connectivity for the read-only replica`,
+				Description: `The service name to set up private connectivity for the dedicated read replica`,
 			},
 			"region": schema.StringAttribute{
 				Computed:    true,
@@ -89,7 +89,7 @@ func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req data
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The number of instances serving reads in this read-only replica`,
+				Description: `The number of instances serving reads in this dedicated read replica`,
 			},
 		},
 	}
@@ -135,13 +135,13 @@ func (r *PostgresReadOnlyReplicaDataSource) Read(ctx context.Context, req dataso
 
 	ctx = withSensitiveValues(ctx, req.Config)
 
-	request, requestDiags := data.ToOperationsGetReadOnlyReplicaRequest(ctx)
+	request, requestDiags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ReadOnlyReplicas.GetReadOnlyReplica(ctx, *request)
+	res, err := r.client.DedicatedReadReplicas.GetDedicatedReadReplica(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -161,7 +161,7 @@ func (r *PostgresReadOnlyReplicaDataSource) Read(ctx context.Context, req dataso
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx, res.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

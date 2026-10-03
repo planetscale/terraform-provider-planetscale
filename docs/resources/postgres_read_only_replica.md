@@ -30,9 +30,9 @@ PostgresReadOnlyReplica Resource
 
 ### Read-Only
 
-- `access_host_url` (String) The database connection host for the read-only replica
-- `private_access_host_url` (String) The private database connection host for the read-only replica
-- `private_connection_service_name` (String) The service name to set up private connectivity for the read-only replica
+- `access_host_url` (String) The database connection host for the dedicated read replica
+- `private_access_host_url` (String) The private database connection host for the dedicated read replica
+- `private_connection_service_name` (String) The service name to set up private connectivity for the dedicated read replica
 
 ## Import
 

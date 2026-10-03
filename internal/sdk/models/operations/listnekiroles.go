@@ -163,7 +163,7 @@ type ListNekiRolesData struct {
 	// Whether the role is ready to accept connections
 	Ready bool `json:"ready"`
 	// Number of seconds before the credentials expire
-	TTL int64 `json:"ttl"`
+	TTL *int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []ListNekiRolesInheritedRole `json:"inherited_roles"`
 	// Whether the role has the REPLICATION attribute
@@ -226,9 +226,9 @@ func (l *ListNekiRolesData) GetReady() bool {
 	return l.Ready
 }
 
-func (l *ListNekiRolesData) GetTTL() int64 {
+func (l *ListNekiRolesData) GetTTL() *int64 {
 	if l == nil {
-		return 0
+		return nil
 	}
 	return l.TTL
 }

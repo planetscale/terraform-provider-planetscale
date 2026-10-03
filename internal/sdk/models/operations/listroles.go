@@ -320,7 +320,7 @@ type ListRolesData struct {
 	// The base username without branch routing suffix
 	BaseUsername string `json:"base_username"`
 	// The plaintext password, available only after create
-	Password string `json:"password"`
+	Password *string `json:"password"`
 	// The database name
 	DatabaseName string `json:"database_name"`
 	// When the role was created
@@ -336,7 +336,7 @@ type ListRolesData struct {
 	// When the role was disabled
 	DisabledAt *string `json:"disabled_at"`
 	// Error message available when dropping the role fails
-	DropFailed string `json:"drop_failed"`
+	DropFailed *string `json:"drop_failed"`
 	// Whether the role is ready to accept connections
 	Ready bool `json:"ready"`
 	// True if the credentials are expired
@@ -344,7 +344,7 @@ type ListRolesData struct {
 	// Whether the role is the default postgres user
 	Default bool `json:"default"`
 	// Number of seconds before the credentials expire
-	TTL int64 `json:"ttl"`
+	TTL *int64 `json:"ttl"`
 	// Database roles these credentials inherit
 	InheritedRoles []ListRolesInheritedRole `json:"inherited_roles"`
 	// Whether the role has the REPLICATION attribute
@@ -403,9 +403,9 @@ func (l *ListRolesData) GetBaseUsername() string {
 	return l.BaseUsername
 }
 
-func (l *ListRolesData) GetPassword() string {
+func (l *ListRolesData) GetPassword() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.Password
 }
@@ -459,9 +459,9 @@ func (l *ListRolesData) GetDisabledAt() *string {
 	return l.DisabledAt
 }
 
-func (l *ListRolesData) GetDropFailed() string {
+func (l *ListRolesData) GetDropFailed() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.DropFailed
 }
@@ -487,9 +487,9 @@ func (l *ListRolesData) GetDefault() bool {
 	return l.Default
 }
 
-func (l *ListRolesData) GetTTL() int64 {
+func (l *ListRolesData) GetTTL() *int64 {
 	if l == nil {
-		return 0
+		return nil
 	}
 	return l.TTL
 }

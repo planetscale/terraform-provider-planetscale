@@ -94,6 +94,8 @@ type GetVitessBranchRegionData struct {
 	MysqlSupported bool `json:"mysql_supported"`
 	// Whether the region supports PostgreSQL databases
 	PostgresqlSupported bool `json:"postgresql_supported"`
+	// Whether the region supports Neki databases
+	NekiSupported bool `json:"neki_supported"`
 }
 
 func (g *GetVitessBranchRegionData) GetID() string {
@@ -117,6 +119,13 @@ func (g *GetVitessBranchRegionData) GetPostgresqlSupported() bool {
 	return g.PostgresqlSupported
 }
 
+func (g *GetVitessBranchRegionData) GetNekiSupported() bool {
+	if g == nil {
+		return false
+	}
+	return g.NekiSupported
+}
+
 // GetVitessBranchResponseBody - Returns information about a branch
 type GetVitessBranchResponseBody struct {
 	// The ID of the branch
@@ -124,21 +133,21 @@ type GetVitessBranchResponseBody struct {
 	// The name of the branch
 	Name string `json:"name"`
 	// The MySQL address for the branch
-	MysqlAddress string `json:"mysql_address"`
+	MysqlAddress *string `json:"mysql_address,omitzero"`
 	// The address of the MySQL provider for the branch
-	MysqlEdgeAddress string `json:"mysql_edge_address"`
+	MysqlEdgeAddress *string `json:"mysql_edge_address,omitzero"`
 	// The current state of the branch
 	State GetVitessBranchState `json:"state"`
 	// The public SKU representing the VTGate size
-	VtgateSize *string `json:"vtgate_name"`
+	VtgateSize *string `json:"vtgate_name,omitzero"`
 	// The number of vtgate instances in the branch
-	VtgateCount int64 `json:"vtgate_count"`
+	VtgateCount *int64 `json:"vtgate_count,omitzero"`
 	// Whether VTGate autoscaling is enabled
-	VtgateAutoscaling bool `json:"vtgate_autoscaling"`
+	VtgateAutoscaling *bool `json:"vtgate_autoscaling,omitzero"`
 	// The maximum number of VTGate instances when autoscaling is enabled
-	VtgateMaxCount *int64 `json:"vtgate_max_count"`
+	VtgateMaxCount *int64 `json:"vtgate_max_count,omitzero"`
 	// The target CPU utilization for VTGate autoscaling
-	VtgateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization"`
+	VtgateTargetCPUUtilization *int64 `json:"vtgate_target_cpu_utilization,omitzero"`
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
@@ -173,16 +182,16 @@ func (g *GetVitessBranchResponseBody) GetName() string {
 	return g.Name
 }
 
-func (g *GetVitessBranchResponseBody) GetMysqlAddress() string {
+func (g *GetVitessBranchResponseBody) GetMysqlAddress() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.MysqlAddress
 }
 
-func (g *GetVitessBranchResponseBody) GetMysqlEdgeAddress() string {
+func (g *GetVitessBranchResponseBody) GetMysqlEdgeAddress() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.MysqlEdgeAddress
 }
@@ -201,16 +210,16 @@ func (g *GetVitessBranchResponseBody) GetVtgateSize() *string {
 	return g.VtgateSize
 }
 
-func (g *GetVitessBranchResponseBody) GetVtgateCount() int64 {
+func (g *GetVitessBranchResponseBody) GetVtgateCount() *int64 {
 	if g == nil {
-		return 0
+		return nil
 	}
 	return g.VtgateCount
 }
 
-func (g *GetVitessBranchResponseBody) GetVtgateAutoscaling() bool {
+func (g *GetVitessBranchResponseBody) GetVtgateAutoscaling() *bool {
 	if g == nil {
-		return false
+		return nil
 	}
 	return g.VtgateAutoscaling
 }
