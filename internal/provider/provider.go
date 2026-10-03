@@ -162,13 +162,14 @@ func (p *PlanetscaleProvider) Resources(ctx context.Context) []func() resource.R
 		NewPostgresBranchResource,
 		NewPostgresBranchBackupResource,
 		NewPostgresBranchRoleResource,
-		NewPostgresReadOnlyReplicaResource,
+		NewPostgresDedicatedReadReplicaResource,
 		NewPostgresRedactedBranchRoleResource,
 		NewVitessBackupPolicyResource,
 		NewVitessBranchResource,
 		NewVitessBranchBackupResource,
 		NewVitessBranchPasswordResource,
 		NewVitessKeyspaceResource,
+		NewDeprecatedPostgresReadOnlyReplicaResource,
 	}
 }
 
@@ -201,8 +202,8 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewPostgresBranchBackupsDataSource,
 		NewPostgresBranchRoleDataSource,
 		NewPostgresBranchRolesDataSource,
-		NewPostgresReadOnlyReplicaDataSource,
-		NewPostgresReadOnlyReplicasDataSource,
+		NewPostgresDedicatedReadReplicaDataSource,
+		NewPostgresDedicatedReadReplicasDataSource,
 		NewPostgresRedactedBranchRoleDataSource,
 		NewVitessBackupPoliciesDataSource,
 		NewVitessBackupPolicyDataSource,
@@ -213,6 +214,8 @@ func (p *PlanetscaleProvider) DataSources(ctx context.Context) []func() datasour
 		NewVitessBranchPasswordsDataSource,
 		NewVitessKeyspaceDataSource,
 		NewVitessKeyspacesDataSource,
+		NewDeprecatedPostgresReadOnlyReplicaDataSource,
+		NewDeprecatedPostgresReadOnlyReplicasDataSource,
 	}
 }
 

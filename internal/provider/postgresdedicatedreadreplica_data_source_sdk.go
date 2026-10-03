@@ -9,7 +9,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresReadOnlyReplicaDataSourceModel) RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx context.Context, resp *operations.GetDedicatedReadReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicaDataSourceModel) RefreshFromOperationsGetDedicatedReadReplicaResponseBody(ctx context.Context, resp *operations.GetDedicatedReadReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -25,7 +25,7 @@ func (r *PostgresReadOnlyReplicaDataSourceModel) RefreshFromOperationsGetDedicat
 	return diags
 }
 
-func (r *PostgresReadOnlyReplicaDataSourceModel) ToOperationsGetDedicatedReadReplicaRequest(ctx context.Context) (*operations.GetDedicatedReadReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaDataSourceModel) ToOperationsGetDedicatedReadReplicaRequest(ctx context.Context) (*operations.GetDedicatedReadReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string

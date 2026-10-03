@@ -13,21 +13,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &PostgresReadOnlyReplicaDataSource{}
-var _ datasource.DataSourceWithConfigure = &PostgresReadOnlyReplicaDataSource{}
+var _ datasource.DataSource = &PostgresDedicatedReadReplicaDataSource{}
+var _ datasource.DataSourceWithConfigure = &PostgresDedicatedReadReplicaDataSource{}
 
-func NewPostgresReadOnlyReplicaDataSource() datasource.DataSource {
-	return &PostgresReadOnlyReplicaDataSource{}
+func NewPostgresDedicatedReadReplicaDataSource() datasource.DataSource {
+	return &PostgresDedicatedReadReplicaDataSource{}
 }
 
-// PostgresReadOnlyReplicaDataSource is the data source implementation.
-type PostgresReadOnlyReplicaDataSource struct {
+// PostgresDedicatedReadReplicaDataSource is the data source implementation.
+type PostgresDedicatedReadReplicaDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.PlanetScale
 }
 
-// PostgresReadOnlyReplicaDataSourceModel describes the data model.
-type PostgresReadOnlyReplicaDataSourceModel struct {
+// PostgresDedicatedReadReplicaDataSourceModel describes the data model.
+type PostgresDedicatedReadReplicaDataSourceModel struct {
 	AccessHostURL                types.String `tfsdk:"access_host_url"`
 	Branch                       types.String `tfsdk:"branch"`
 	ClusterSize                  types.String `tfsdk:"cluster_size"`
@@ -41,19 +41,19 @@ type PostgresReadOnlyReplicaDataSourceModel struct {
 }
 
 // Metadata returns the data source type name.
-func (r *PostgresReadOnlyReplicaDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_postgres_read_only_replica"
+func (r *PostgresDedicatedReadReplicaDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_postgres_dedicated_read_replica"
 }
 
 // Schema defines the schema for the data source.
-func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *PostgresDedicatedReadReplicaDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PostgresReadOnlyReplica DataSource",
+		MarkdownDescription: "PostgresDedicatedReadReplica DataSource",
 
 		Attributes: map[string]schema.Attribute{
 			"access_host_url": schema.StringAttribute{
 				Computed:    true,
-				Description: `The database connection host for the dedicated read replica`,
+				Description: `The database connection host for the dedicated read replica.`,
 			},
 			"branch": schema.StringAttribute{
 				Required:    true,
@@ -69,7 +69,7 @@ func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req data
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the dedicated read replica`,
+				Description: `The name of the dedicated read replica.`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
@@ -77,25 +77,25 @@ func (r *PostgresReadOnlyReplicaDataSource) Schema(ctx context.Context, req data
 			},
 			"private_access_host_url": schema.StringAttribute{
 				Computed:    true,
-				Description: `The private database connection host for the dedicated read replica`,
+				Description: `The private database connection host for the dedicated read replica.`,
 			},
 			"private_connection_service_name": schema.StringAttribute{
 				Computed:    true,
-				Description: `The service name to set up private connectivity for the dedicated read replica`,
+				Description: `The service name to set up private connectivity for the dedicated read replica.`,
 			},
 			"region": schema.StringAttribute{
 				Computed:    true,
-				Description: `The region slug for the read-only replica, e.g. ` + "`" + `us-east` + "`" + `. The replica can run in a different region than the primary.`,
+				Description: `The region slug for the dedicated read replica, e.g. ` + "`" + `us-east` + "`" + `. The dedicated read replica can run in a different region than the primary.`,
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The number of instances serving reads in this dedicated read replica`,
+				Description: `The number of instances serving reads in this dedicated read replica.`,
 			},
 		},
 	}
 }
 
-func (r *PostgresReadOnlyReplicaDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *PostgresDedicatedReadReplicaDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -115,8 +115,8 @@ func (r *PostgresReadOnlyReplicaDataSource) Configure(ctx context.Context, req d
 	r.client = client
 }
 
-func (r *PostgresReadOnlyReplicaDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *PostgresReadOnlyReplicaDataSourceModel
+func (r *PostgresDedicatedReadReplicaDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *PostgresDedicatedReadReplicaDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)

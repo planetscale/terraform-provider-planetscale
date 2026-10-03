@@ -14,21 +14,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &PostgresReadOnlyReplicasDataSource{}
-var _ datasource.DataSourceWithConfigure = &PostgresReadOnlyReplicasDataSource{}
+var _ datasource.DataSource = &PostgresDedicatedReadReplicasDataSource{}
+var _ datasource.DataSourceWithConfigure = &PostgresDedicatedReadReplicasDataSource{}
 
-func NewPostgresReadOnlyReplicasDataSource() datasource.DataSource {
-	return &PostgresReadOnlyReplicasDataSource{}
+func NewPostgresDedicatedReadReplicasDataSource() datasource.DataSource {
+	return &PostgresDedicatedReadReplicasDataSource{}
 }
 
-// PostgresReadOnlyReplicasDataSource is the data source implementation.
-type PostgresReadOnlyReplicasDataSource struct {
+// PostgresDedicatedReadReplicasDataSource is the data source implementation.
+type PostgresDedicatedReadReplicasDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.PlanetScale
 }
 
-// PostgresReadOnlyReplicasDataSourceModel describes the data model.
-type PostgresReadOnlyReplicasDataSourceModel struct {
+// PostgresDedicatedReadReplicasDataSourceModel describes the data model.
+type PostgresDedicatedReadReplicasDataSourceModel struct {
 	Branch       types.String                                    `tfsdk:"branch"`
 	Data         []tfTypes.ListDedicatedReadReplicasResponseBody `tfsdk:"data"`
 	Database     types.String                                    `tfsdk:"database"`
@@ -36,14 +36,14 @@ type PostgresReadOnlyReplicasDataSourceModel struct {
 }
 
 // Metadata returns the data source type name.
-func (r *PostgresReadOnlyReplicasDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_postgres_read_only_replicas"
+func (r *PostgresDedicatedReadReplicasDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_postgres_dedicated_read_replicas"
 }
 
 // Schema defines the schema for the data source.
-func (r *PostgresReadOnlyReplicasDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *PostgresDedicatedReadReplicasDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PostgresReadOnlyReplicas DataSource",
+		MarkdownDescription: "PostgresDedicatedReadReplicas DataSource",
 
 		Attributes: map[string]schema.Attribute{
 			"branch": schema.StringAttribute{
@@ -56,7 +56,7 @@ func (r *PostgresReadOnlyReplicasDataSource) Schema(ctx context.Context, req dat
 					Attributes: map[string]schema.Attribute{
 						"access_host_url": schema.StringAttribute{
 							Computed:    true,
-							Description: `The database connection host for the dedicated read replica`,
+							Description: `The database connection host for the dedicated read replica.`,
 						},
 						"cluster_size": schema.StringAttribute{
 							Computed:    true,
@@ -64,23 +64,23 @@ func (r *PostgresReadOnlyReplicasDataSource) Schema(ctx context.Context, req dat
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
-							Description: `The name of the dedicated read replica`,
+							Description: `The name of the dedicated read replica.`,
 						},
 						"private_access_host_url": schema.StringAttribute{
 							Computed:    true,
-							Description: `The private database connection host for the dedicated read replica`,
+							Description: `The private database connection host for the dedicated read replica.`,
 						},
 						"private_connection_service_name": schema.StringAttribute{
 							Computed:    true,
-							Description: `The service name to set up private connectivity for the dedicated read replica`,
+							Description: `The service name to set up private connectivity for the dedicated read replica.`,
 						},
 						"replicas": schema.Int64Attribute{
 							Computed:    true,
-							Description: `The number of instances serving reads in this dedicated read replica`,
+							Description: `The number of instances serving reads in this dedicated read replica.`,
 						},
 					},
 				},
-				Description: `Returns dedicated read replicas`,
+				Description: `Returns dedicated read replicas.`,
 			},
 			"database": schema.StringAttribute{
 				Required:    true,
@@ -94,7 +94,7 @@ func (r *PostgresReadOnlyReplicasDataSource) Schema(ctx context.Context, req dat
 	}
 }
 
-func (r *PostgresReadOnlyReplicasDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *PostgresDedicatedReadReplicasDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -114,8 +114,8 @@ func (r *PostgresReadOnlyReplicasDataSource) Configure(ctx context.Context, req 
 	r.client = client
 }
 
-func (r *PostgresReadOnlyReplicasDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *PostgresReadOnlyReplicasDataSourceModel
+func (r *PostgresDedicatedReadReplicasDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *PostgresDedicatedReadReplicasDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)

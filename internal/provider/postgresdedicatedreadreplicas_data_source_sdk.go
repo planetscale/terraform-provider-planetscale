@@ -10,7 +10,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresReadOnlyReplicasDataSourceModel) RefreshFromOperationsListDedicatedReadReplicasResponseBody(ctx context.Context, resp []operations.ListDedicatedReadReplicasResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicasDataSourceModel) RefreshFromOperationsListDedicatedReadReplicasResponseBody(ctx context.Context, resp []operations.ListDedicatedReadReplicasResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	r.Data = []tfTypes.ListDedicatedReadReplicasResponseBody{}
@@ -31,7 +31,7 @@ func (r *PostgresReadOnlyReplicasDataSourceModel) RefreshFromOperationsListDedic
 	return diags
 }
 
-func (r *PostgresReadOnlyReplicasDataSourceModel) ToOperationsListDedicatedReadReplicasRequest(ctx context.Context) (*operations.ListDedicatedReadReplicasRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicasDataSourceModel) ToOperationsListDedicatedReadReplicasRequest(ctx context.Context) (*operations.ListDedicatedReadReplicasRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
