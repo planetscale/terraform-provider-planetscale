@@ -22,21 +22,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &PostgresReadOnlyReplicaResource{}
-var _ resource.ResourceWithImportState = &PostgresReadOnlyReplicaResource{}
+var _ resource.Resource = &PostgresDedicatedReadReplicaResource{}
+var _ resource.ResourceWithImportState = &PostgresDedicatedReadReplicaResource{}
 
-func NewPostgresReadOnlyReplicaResource() resource.Resource {
-	return &PostgresReadOnlyReplicaResource{}
+func NewPostgresDedicatedReadReplicaResource() resource.Resource {
+	return &PostgresDedicatedReadReplicaResource{}
 }
 
-// PostgresReadOnlyReplicaResource defines the resource implementation.
-type PostgresReadOnlyReplicaResource struct {
+// PostgresDedicatedReadReplicaResource defines the resource implementation.
+type PostgresDedicatedReadReplicaResource struct {
 	// Provider configured SDK client.
 	client *sdk.PlanetScale
 }
 
-// PostgresReadOnlyReplicaResourceModel describes the resource data model.
-type PostgresReadOnlyReplicaResourceModel struct {
+// PostgresDedicatedReadReplicaResourceModel describes the resource data model.
+type PostgresDedicatedReadReplicaResourceModel struct {
 	AccessHostURL                types.String `tfsdk:"access_host_url"`
 	Branch                       types.String `tfsdk:"branch"`
 	ClusterSize                  types.String `tfsdk:"cluster_size"`
@@ -49,17 +49,17 @@ type PostgresReadOnlyReplicaResourceModel struct {
 	Replicas                     types.Int64  `tfsdk:"replicas"`
 }
 
-func (r *PostgresReadOnlyReplicaResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_postgres_read_only_replica"
+func (r *PostgresDedicatedReadReplicaResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_postgres_dedicated_read_replica"
 }
 
-func (r *PostgresReadOnlyReplicaResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *PostgresDedicatedReadReplicaResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PostgresReadOnlyReplica Resource",
+		MarkdownDescription: "PostgresDedicatedReadReplica Resource",
 		Attributes: map[string]schema.Attribute{
 			"access_host_url": schema.StringAttribute{
 				Computed:    true,
-				Description: `The database connection host for the dedicated read replica`,
+				Description: `The database connection host for the dedicated read replica.`,
 			},
 			"branch": schema.StringAttribute{
 				Required:    true,
@@ -83,7 +83,7 @@ func (r *PostgresReadOnlyReplicaResource) Schema(ctx context.Context, req resour
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The name of the read-only replica. Requires replacement if changed.`,
+				Description: `The name of the dedicated read replica. Requires replacement if changed.`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
@@ -91,11 +91,11 @@ func (r *PostgresReadOnlyReplicaResource) Schema(ctx context.Context, req resour
 			},
 			"private_access_host_url": schema.StringAttribute{
 				Computed:    true,
-				Description: `The private database connection host for the dedicated read replica`,
+				Description: `The private database connection host for the dedicated read replica.`,
 			},
 			"private_connection_service_name": schema.StringAttribute{
 				Computed:    true,
-				Description: `The service name to set up private connectivity for the dedicated read replica`,
+				Description: `The service name to set up private connectivity for the dedicated read replica.`,
 			},
 			"region": schema.StringAttribute{
 				Required: true,
@@ -103,7 +103,7 @@ func (r *PostgresReadOnlyReplicaResource) Schema(ctx context.Context, req resour
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The region slug for the read-only replica, e.g. ` + "`" + `us-east` + "`" + `. The replica can run in a different region than the primary. Requires replacement if changed.`,
+				Description: `The region slug for the dedicated read replica, e.g. ` + "`" + `us-east` + "`" + `. The dedicated read replica can run in a different region than the primary. Requires replacement if changed.`,
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
@@ -114,7 +114,7 @@ func (r *PostgresReadOnlyReplicaResource) Schema(ctx context.Context, req resour
 	}
 }
 
-func (r *PostgresReadOnlyReplicaResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *PostgresDedicatedReadReplicaResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -134,8 +134,8 @@ func (r *PostgresReadOnlyReplicaResource) Configure(ctx context.Context, req res
 	r.client = client
 }
 
-func (r *PostgresReadOnlyReplicaResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *PostgresReadOnlyReplicaResourceModel
+func (r *PostgresDedicatedReadReplicaResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *PostgresDedicatedReadReplicaResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -238,8 +238,8 @@ func (r *PostgresReadOnlyReplicaResource) Create(ctx context.Context, req resour
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *PostgresReadOnlyReplicaResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *PostgresReadOnlyReplicaResourceModel
+func (r *PostgresDedicatedReadReplicaResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *PostgresDedicatedReadReplicaResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -298,8 +298,8 @@ func (r *PostgresReadOnlyReplicaResource) Read(ctx context.Context, req resource
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *PostgresReadOnlyReplicaResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *PostgresReadOnlyReplicaResourceModel
+func (r *PostgresDedicatedReadReplicaResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *PostgresDedicatedReadReplicaResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -398,8 +398,8 @@ func (r *PostgresReadOnlyReplicaResource) Update(ctx context.Context, req resour
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *PostgresReadOnlyReplicaResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *PostgresReadOnlyReplicaResourceModel
+func (r *PostgresDedicatedReadReplicaResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *PostgresDedicatedReadReplicaResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -476,7 +476,7 @@ func (r *PostgresReadOnlyReplicaResource) Delete(ctx context.Context, req resour
 
 }
 
-func (r *PostgresReadOnlyReplicaResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *PostgresDedicatedReadReplicaResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {

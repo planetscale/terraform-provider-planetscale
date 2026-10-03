@@ -76,19 +76,19 @@ func (e *ListDedicatedReadReplicasStorageType) UnmarshalJSON(data []byte) error 
 }
 
 type ListDedicatedReadReplicasResponseBody struct {
-	// The name of the dedicated read replica
+	// The name of the dedicated read replica.
 	Name string `json:"name"`
 	// The state of the dedicated read replica: pending, ready, or deleting
 	State string `json:"state"`
-	// The number of instances serving reads in this dedicated read replica
+	// The number of instances serving reads in this dedicated read replica.
 	Replicas int64 `json:"replicas"`
 	// The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
 	ClusterSize string `json:"cluster_name"`
-	// The database connection host for the dedicated read replica
+	// The database connection host for the dedicated read replica.
 	AccessHostURL string `json:"access_host_url"`
-	// The private database connection host for the dedicated read replica
+	// The private database connection host for the dedicated read replica.
 	PrivateAccessHostURL string `json:"private_access_host_url"`
-	// The service name to set up private connectivity for the dedicated read replica
+	// The service name to set up private connectivity for the dedicated read replica.
 	PrivateConnectionServiceName *string `json:"private_connection_service_name"`
 	// The minimum storage size in bytes
 	MinimumStorageBytes *int64 `json:"minimum_storage_bytes"`
@@ -211,7 +211,7 @@ type ListDedicatedReadReplicasResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Returns dedicated read replicas
+	// Returns dedicated read replicas.
 	ResponseBodies []ListDedicatedReadReplicasResponseBody
 }
 

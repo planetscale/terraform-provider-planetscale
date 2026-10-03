@@ -7,11 +7,30 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get
     description: API operation for read.
     update:
-      x-speakeasy-entity-operation: PostgresReadOnlyReplicas#read
-      x-speakeasy-entity-description: Returns information about the read-only replicas for a PlanetScale Postgres branch.
+      x-speakeasy-entity-operation: PostgresDedicatedReadReplicas#read
+      x-speakeasy-entity-description: Returns information about the dedicated read replicas for a PlanetScale Postgres branch.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get.responses['200']
+    update:
+      description: Returns dedicated read replicas.
 
   # Response shaping, mirroring the planetscale_postgres_dedicated_read_replica
   # managed resource attribute conventions.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get.responses['200'].content['application/json'].schema.items.properties.name
+    update:
+      description: The name of the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get.responses['200'].content['application/json'].schema.items.properties.replicas
+    update:
+      description: The number of instances serving reads in this dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get.responses['200'].content['application/json'].schema.items.properties.access_host_url
+    update:
+      description: The database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get.responses['200'].content['application/json'].schema.items.properties.private_access_host_url
+    update:
+      description: The private database connection host for the dedicated read replica.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get.responses['200'].content['application/json'].schema.items.properties.private_connection_service_name
+    update:
+      description: The service name to set up private connectivity for the dedicated read replica.
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/dedicated-read-replicas'].get.responses['200'].content['application/json'].schema.items.properties.cluster_name
     update:
       x-speakeasy-name-override: cluster_size

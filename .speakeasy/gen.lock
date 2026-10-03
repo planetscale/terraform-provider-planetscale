@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: bc109f7c558c7963bd3fb3b137ecaee7
+  docChecksum: 8611f2b1105567e9c8e3d95909bebf51
   docVersion: v1
   speakeasyVersion: 1.800.0
   generationVersion: 2.943.0
   releaseVersion: 1.11.1
-  configChecksum: dd88efd3ec197dabdf80de6934caee44
+  configChecksum: 27b1b27524803f646f485f6bcb1cd0f4
 persistentEdits:
   generation_id: 60e31278-cdaa-4542-9c58-f63a48b53d1a
   pristine_commit_hash: 0f48b87acc4799dd3898ffc3569dccdf1e31fb15
@@ -72,8 +72,8 @@ trackedFiles:
   examples/data-sources/planetscale_postgres_branch_roles/data-source.tf:
     id: b0a7630c0f80
     pristine_git_object: db4928f864e1065b1079b9ab9b87536cbec6c41f
-  examples/data-sources/planetscale_postgres_read_only_replica/data-source.tf: {}
-  examples/data-sources/planetscale_postgres_read_only_replicas/data-source.tf: {}
+  examples/data-sources/planetscale_postgres_dedicated_read_replica/data-source.tf: {}
+  examples/data-sources/planetscale_postgres_dedicated_read_replicas/data-source.tf: {}
   examples/data-sources/planetscale_postgres_redacted_branch_role/data-source.tf: {}
   examples/data-sources/planetscale_vitess_backup_policies/data-source.tf: {}
   examples/data-sources/planetscale_vitess_backup_policy/data-source.tf: {}
@@ -127,8 +127,8 @@ trackedFiles:
   examples/resources/planetscale_postgres_branch_role/import.sh:
     id: e56202502423
     pristine_git_object: 06aae354a87031b23f6da8a3d618711d4412e1cf
-  examples/resources/planetscale_postgres_read_only_replica/import-by-string-id.tf: {}
-  examples/resources/planetscale_postgres_read_only_replica/import.sh: {}
+  examples/resources/planetscale_postgres_dedicated_read_replica/import-by-string-id.tf: {}
+  examples/resources/planetscale_postgres_dedicated_read_replica/import.sh: {}
   examples/resources/planetscale_postgres_redacted_branch_role/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_redacted_branch_role/import.sh: {}
   examples/resources/planetscale_vitess_backup_policy/import-by-string-id.tf: {}
@@ -331,12 +331,12 @@ trackedFiles:
   internal/provider/postgresbranchroles_data_source_sdk.go:
     id: 1f5d16bb3dd7
     pristine_git_object: 742cc9f5207b5c30ed21b0aae674ac8302c237e8
-  internal/provider/postgresreadonlyreplica_data_source.go: {}
-  internal/provider/postgresreadonlyreplica_data_source_sdk.go: {}
-  internal/provider/postgresreadonlyreplica_resource.go: {}
-  internal/provider/postgresreadonlyreplica_resource_sdk.go: {}
-  internal/provider/postgresreadonlyreplicas_data_source.go: {}
-  internal/provider/postgresreadonlyreplicas_data_source_sdk.go: {}
+  internal/provider/postgresdedicatedreadreplica_data_source.go: {}
+  internal/provider/postgresdedicatedreadreplica_data_source_sdk.go: {}
+  internal/provider/postgresdedicatedreadreplica_resource.go: {}
+  internal/provider/postgresdedicatedreadreplica_resource_sdk.go: {}
+  internal/provider/postgresdedicatedreadreplicas_data_source.go: {}
+  internal/provider/postgresdedicatedreadreplicas_data_source_sdk.go: {}
   internal/provider/postgresredactedbranchrole_data_source.go: {}
   internal/provider/postgresredactedbranchrole_data_source_sdk.go: {}
   internal/provider/postgresredactedbranchrole_resource.go: {}
