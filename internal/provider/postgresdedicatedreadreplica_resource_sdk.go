@@ -9,7 +9,7 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresReadOnlyReplicaResourceModel) RefreshFromOperationsCreateReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.CreateReadOnlyReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsCreateReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.CreateReadOnlyReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -24,7 +24,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) RefreshFromOperationsCreateReadOn
 	return diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.GetReadOnlyReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsGetReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.GetReadOnlyReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -40,7 +40,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) RefreshFromOperationsGetReadOnlyR
 	return diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) RefreshFromOperationsUpdateReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.UpdateReadOnlyReplicaResponseBody) diag.Diagnostics {
+func (r *PostgresDedicatedReadReplicaResourceModel) RefreshFromOperationsUpdateReadOnlyReplicaResponseBody(ctx context.Context, resp *operations.UpdateReadOnlyReplicaResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -55,7 +55,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) RefreshFromOperationsUpdateReadOn
 	return diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsCreateReadOnlyReplicaRequest(ctx context.Context) (*operations.CreateReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyReplicaRequest(ctx context.Context) (*operations.CreateReadOnlyReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -84,7 +84,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsCreateReadOnlyReplica
 	return &out, diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsCreateReadOnlyReplicaRequestBody(ctx context.Context) (*operations.CreateReadOnlyReplicaRequestBody, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsCreateReadOnlyReplicaRequestBody(ctx context.Context) (*operations.CreateReadOnlyReplicaRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var name string
@@ -115,7 +115,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsCreateReadOnlyReplica
 	return &out, diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsDeleteReadOnlyReplicaRequest(ctx context.Context) (*operations.DeleteReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsDeleteReadOnlyReplicaRequest(ctx context.Context) (*operations.DeleteReadOnlyReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -140,7 +140,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsDeleteReadOnlyReplica
 	return &out, diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsGetReadOnlyReplicaRequest(ctx context.Context) (*operations.GetReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsGetReadOnlyReplicaRequest(ctx context.Context) (*operations.GetReadOnlyReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -165,7 +165,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsGetReadOnlyReplicaReq
 	return &out, diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsUpdateReadOnlyReplicaRequest(ctx context.Context) (*operations.UpdateReadOnlyReplicaRequest, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateReadOnlyReplicaRequest(ctx context.Context) (*operations.UpdateReadOnlyReplicaRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -198,7 +198,7 @@ func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsUpdateReadOnlyReplica
 	return &out, diags
 }
 
-func (r *PostgresReadOnlyReplicaResourceModel) ToOperationsUpdateReadOnlyReplicaRequestBody(ctx context.Context) (*operations.UpdateReadOnlyReplicaRequestBody, diag.Diagnostics) {
+func (r *PostgresDedicatedReadReplicaResourceModel) ToOperationsUpdateReadOnlyReplicaRequestBody(ctx context.Context) (*operations.UpdateReadOnlyReplicaRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	replicas := new(int64)

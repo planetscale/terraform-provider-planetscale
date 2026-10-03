@@ -12,13 +12,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 )
 
-func TestAccPostgresReadOnlyReplicaResource_Lifecycle(t *testing.T) {
+func TestAccPostgresDedicatedReadReplicaResource_Lifecycle(t *testing.T) {
 	t.Parallel()
 
 	databaseName := "testacc-postgres"
 	branchName := "main"
 	replicaName := randomWithPrefix("tfrr")
-	resourceAddress := "planetscale_postgres_read_only_replica.test"
+	resourceAddress := "planetscale_postgres_dedicated_read_replica.test"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

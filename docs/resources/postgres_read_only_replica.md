@@ -3,12 +3,65 @@
 page_title: "planetscale_postgres_read_only_replica Resource - terraform-provider-planetscale"
 subcategory: ""
 description: |-
-  PostgresReadOnlyReplica Resource
+  Deprecated. Use planetscale_postgres_dedicated_read_replica instead. This resource keeps working for existing configurations.
+  To switch an existing replica to the new resource type without recreating it, remove it from state and import it under the new type. In Terraform v1.7.0 and later, a removed block and an import block can do this in a single apply:
+  
+  removed {
+    from = planetscale_postgres_read_only_replica.example
+  
+    lifecycle {
+      destroy = false
+    }
+  }
+  
+  import {
+    to = planetscale_postgres_dedicated_read_replica.example
+    id = jsonencode({
+      organization = "acme"
+      database     = "app-db"
+      branch       = "main"
+      name         = "example"
+    })
+  }
+  
+  The equivalent commands are:
+  
+  terraform state rm planetscale_postgres_read_only_replica.example
+  terraform import planetscale_postgres_dedicated_read_replica.example '{"organization": "acme", "database": "app-db", "branch": "main", "name": "example"}'
 ---
 
 # planetscale_postgres_read_only_replica (Resource)
 
-PostgresReadOnlyReplica Resource
+**Deprecated.** Use `planetscale_postgres_dedicated_read_replica` instead. This resource keeps working for existing configurations.
+
+To switch an existing replica to the new resource type without recreating it, remove it from state and import it under the new type. In Terraform v1.7.0 and later, a `removed` block and an `import` block can do this in a single apply:
+
+```terraform
+removed {
+  from = planetscale_postgres_read_only_replica.example
+
+  lifecycle {
+    destroy = false
+  }
+}
+
+import {
+  to = planetscale_postgres_dedicated_read_replica.example
+  id = jsonencode({
+    organization = "acme"
+    database     = "app-db"
+    branch       = "main"
+    name         = "example"
+  })
+}
+```
+
+The equivalent commands are:
+
+```shell
+terraform state rm planetscale_postgres_read_only_replica.example
+terraform import planetscale_postgres_dedicated_read_replica.example '{"organization": "acme", "database": "app-db", "branch": "main", "name": "example"}'
+```
 
 
 
@@ -19,9 +72,9 @@ PostgresReadOnlyReplica Resource
 
 - `branch` (String) Branch name from `list_branches`. Example: `main`.
 - `database` (String) Database name slug from `list_databases`. Example: `app-db`.
-- `name` (String) The name of the read-only replica. Requires replacement if changed.
+- `name` (String) The name of the dedicated read replica. Requires replacement if changed.
 - `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
-- `region` (String) The region slug for the read-only replica, e.g. `us-east`. The replica can run in a different region than the primary. Requires replacement if changed.
+- `region` (String) The region slug for the dedicated read replica, e.g. `us-east`. The dedicated read replica can run in a different region than the primary. Requires replacement if changed.
 
 ### Optional
 
@@ -30,30 +83,6 @@ PostgresReadOnlyReplica Resource
 
 ### Read-Only
 
-- `access_host_url` (String) The database connection host for the read-only replica
-- `private_access_host_url` (String) The private database connection host for the read-only replica
-- `private_connection_service_name` (String) The service name to set up private connectivity for the read-only replica
-
-## Import
-
-Import is supported using the following syntax:
-
-In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
-
-```terraform
-import {
-  to = planetscale_postgres_read_only_replica.my_planetscale_postgres_read_only_replica
-  id = jsonencode({
-    branch       = "..."
-    database     = "..."
-    name         = "..."
-    organization = "..."
-  })
-}
-```
-
-The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
-
-```shell
-terraform import planetscale_postgres_read_only_replica.my_planetscale_postgres_read_only_replica '{"branch": "...", "database": "...", "name": "...", "organization": "..."}'
-```
+- `access_host_url` (String) The database connection host for the dedicated read replica.
+- `private_access_host_url` (String) The private database connection host for the dedicated read replica.
+- `private_connection_service_name` (String) The service name to set up private connectivity for the dedicated read replica.

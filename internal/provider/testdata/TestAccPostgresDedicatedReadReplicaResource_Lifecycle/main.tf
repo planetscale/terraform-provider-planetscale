@@ -26,7 +26,7 @@ data "planetscale_database_postgres" "test" {
   id           = var.database_name
 }
 
-resource "planetscale_postgres_read_only_replica" "test" {
+resource "planetscale_postgres_dedicated_read_replica" "test" {
   organization = var.organization
   database     = var.database_name
   branch       = var.branch_name

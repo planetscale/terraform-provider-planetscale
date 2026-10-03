@@ -1,4 +1,4 @@
-data "planetscale_postgres_read_only_replica" "my_postgresreadonlyreplica" {
+data "planetscale_postgres_dedicated_read_replica" "my_postgresdedicatedreadreplica" {
   branch       = "...my_branch..."
   database     = "...my_database..."
   name         = "...my_name..."

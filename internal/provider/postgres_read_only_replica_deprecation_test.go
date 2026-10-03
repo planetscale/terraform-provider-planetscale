@@ -66,3 +66,23 @@ func dataSourceMetadata(terraformDataSource datasource.DataSource) *datasource.M
 
 	return response
 }
+
+func TestDeprecatedPostgresReadOnlyReplicaTypesDocumentTheReplacement(t *testing.T) {
+	t.Parallel()
+
+	resourceSchema := &resource.SchemaResponse{}
+	NewDeprecatedPostgresReadOnlyReplicaResource().Schema(context.Background(), resource.SchemaRequest{}, resourceSchema)
+	require.Contains(t, resourceSchema.Schema.MarkdownDescription, "**Deprecated.**")
+	require.Contains(t, resourceSchema.Schema.MarkdownDescription, "import {\n  to = planetscale_postgres_dedicated_read_replica.example")
+	require.Contains(t, resourceSchema.Schema.MarkdownDescription, "terraform import planetscale_postgres_dedicated_read_replica.example")
+
+	dataSourceSchema := &datasource.SchemaResponse{}
+	NewDeprecatedPostgresReadOnlyReplicaDataSource().Schema(context.Background(), datasource.SchemaRequest{}, dataSourceSchema)
+	require.Contains(t, dataSourceSchema.Schema.MarkdownDescription, "**Deprecated.**")
+	require.Contains(t, dataSourceSchema.Schema.MarkdownDescription, "planetscale_postgres_dedicated_read_replica")
+
+	dataSourcesSchema := &datasource.SchemaResponse{}
+	NewDeprecatedPostgresReadOnlyReplicasDataSource().Schema(context.Background(), datasource.SchemaRequest{}, dataSourcesSchema)
+	require.Contains(t, dataSourcesSchema.Schema.MarkdownDescription, "**Deprecated.**")
+	require.Contains(t, dataSourcesSchema.Schema.MarkdownDescription, "planetscale_postgres_dedicated_read_replicas")
+}

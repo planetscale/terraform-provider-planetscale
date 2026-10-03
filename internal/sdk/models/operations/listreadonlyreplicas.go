@@ -38,19 +38,19 @@ func (l *ListReadOnlyReplicasRequest) GetBranch() string {
 }
 
 type ListReadOnlyReplicasResponseBody struct {
-	// The name of the read-only replica
+	// The name of the dedicated read replica.
 	Name string `json:"name"`
 	// The state of the read-only replica: pending, ready, or deleting
 	State string `json:"state"`
-	// The number of instances serving reads in this read-only replica
+	// The number of instances serving reads in this dedicated read replica.
 	Replicas int64 `json:"replicas"`
 	// The cluster size SKU, e.g. `PS_10_AWS_ARM`. Defaults to the primary's cluster size.
 	ClusterSize string `json:"cluster_name"`
-	// The database connection host for the read-only replica
+	// The database connection host for the dedicated read replica.
 	AccessHostURL string `json:"access_host_url"`
-	// The private database connection host for the read-only replica
+	// The private database connection host for the dedicated read replica.
 	PrivateAccessHostURL string `json:"private_access_host_url"`
-	// The service name to set up private connectivity for the read-only replica
+	// The service name to set up private connectivity for the dedicated read replica.
 	PrivateConnectionServiceName *string `json:"private_connection_service_name"`
 }
 
@@ -110,7 +110,7 @@ type ListReadOnlyReplicasResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Returns read-only replicas
+	// Returns dedicated read replicas.
 	ResponseBodies []ListReadOnlyReplicasResponseBody
 }
 

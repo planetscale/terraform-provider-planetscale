@@ -13,7 +13,7 @@ type DeleteReadOnlyReplicaRequest struct {
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
-	// The name of the read-only replica
+	// The name of the dedicated read replica.
 	ReadOnlyReplica string `pathParam:"style=simple,explode=false,name=read_only_replica"`
 }
 
