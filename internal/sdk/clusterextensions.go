@@ -11,28 +11,25 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/errors"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
-	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/polling"
 	"net/http"
-	"strings"
-	"time"
 )
 
-// BranchChanges -           Resources for managing cluster changes.
-type BranchChanges struct {
+// ClusterExtensions -           Resources for managing cluster extension configuration.
+type ClusterExtensions struct {
 	rootSDK          *PlanetScale
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newBranchChanges(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *BranchChanges {
-	return &BranchChanges{
+func newClusterExtensions(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *ClusterExtensions {
+	return &ClusterExtensions{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
 	}
 }
 
-// GetBranchChangeRequest - Get a branch change request
+// GetPostgresBranchManagedExtensions - List cluster extensions
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -48,10 +45,9 @@ func newBranchChanges(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, h
 // | Organization | `read_branches` |
 // | Database | `read_branches` |
 // | Branch | `read_branch` |
-func (s *BranchChanges) GetBranchChangeRequest(ctx context.Context, request operations.GetBranchChangeRequestRequest, opts ...operations.Option) (*operations.GetBranchChangeRequestResponse, error) {
+func (s *ClusterExtensions) GetPostgresBranchManagedExtensions(ctx context.Context, request operations.GetPostgresBranchManagedExtensionsRequest, opts ...operations.Option) (*operations.GetPostgresBranchManagedExtensionsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
-		operations.SupportedOptionPolling,
 		operations.SupportedOptionTimeout,
 	}
 
@@ -67,7 +63,7 @@ func (s *BranchChanges) GetBranchChangeRequest(ctx context.Context, request oper
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/extensions", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -77,7 +73,7 @@ func (s *BranchChanges) GetBranchChangeRequest(ctx context.Context, request oper
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "get_branch_change_request",
+		OperationID:      "get_postgres_branch_managed_extensions",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -100,6 +96,10 @@ func (s *BranchChanges) GetBranchChangeRequest(ctx context.Context, request oper
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
 	}
@@ -107,18 +107,6 @@ func (s *BranchChanges) GetBranchChangeRequest(ctx context.Context, request oper
 	for k, v := range o.SetHeaders {
 		req.Header.Set(k, v)
 	}
-
-	if o.Polling != nil {
-		switch o.Polling.Name {
-		case "WaitForChangeRequestComplete":
-			return s.getBranchChangeRequestWaitForChangeRequestComplete(ctx, hookCtx, req, o)
-		}
-	}
-
-	return s.getBranchChangeRequest(ctx, hookCtx, req, o)
-}
-func (s *BranchChanges) getBranchChangeRequest(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchChangeRequestResponse, error) {
-	var err error
 
 	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 	if err != nil {
@@ -149,7 +137,7 @@ func (s *BranchChanges) getBranchChangeRequest(ctx context.Context, hookCtx hook
 		}
 	}
 
-	res := &operations.GetBranchChangeRequestResponse{
+	res := &operations.GetPostgresBranchManagedExtensionsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -164,7 +152,7 @@ func (s *BranchChanges) getBranchChangeRequest(ctx context.Context, hookCtx hook
 				return nil, err
 			}
 
-			var out operations.GetBranchChangeRequestResponseBody
+			var out operations.GetPostgresBranchManagedExtensionsResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -201,108 +189,23 @@ func (s *BranchChanges) getBranchChangeRequest(ctx context.Context, hookCtx hook
 
 }
 
-// Use with GetBranchChangeRequest by adding the operations.WithPolling option.
-// Responses are returned when enabling polling, however additional errors may
-// be returned:
-//   - polling.FailureCriteriaError: If the polling option has explicit failure
-//     criteria defined, polling will immediately stop and return this error.
-//   - polling.LimitCountError: When polling has reached the maximum number of
-//     attempts. Use the polling.WithLimitCountOverride polling option to
-//     override the predefined limit.
-func (s *BranchChanges) GetBranchChangeRequestWaitForChangeRequestComplete() polling.ConfigFunc {
-	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
-		defaultDelaySeconds := 30
-		defaultIntervalSeconds := 10
-		defaultLimitCount := 90
-		result := &polling.Config{
-			DelaySeconds:    &defaultDelaySeconds,
-			IntervalSeconds: &defaultIntervalSeconds,
-			LimitCount:      &defaultLimitCount,
-			Name:            "WaitForChangeRequestComplete",
-		}
-
-		for _, pollingOpt := range pollingOpts {
-			if err := pollingOpt(result); err != nil {
-				return nil, err
-			}
-		}
-
-		return result, nil
-	}
-}
-
-func (s *BranchChanges) getBranchChangeRequestWaitForChangeRequestComplete(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetBranchChangeRequestResponse, error) {
-	if o.Polling == nil || o.Polling.LimitCount == nil {
-		return s.getBranchChangeRequest(ctx, hookCtx, req, o)
-	}
-
-	if o.Polling.DelaySeconds != nil {
-		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
-	}
-
-	var res *operations.GetBranchChangeRequestResponse
-
-	for i := 1; i <= *o.Polling.LimitCount; i++ {
-		// Ensure request body, if exists, is not empty on subsequent requests.
-		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
-			copyBody, err := req.GetBody()
-
-			if err != nil {
-				return nil, err
-			}
-
-			req.Body = copyBody
-		}
-
-		var err error
-
-		res, err = s.getBranchChangeRequest(ctx, hookCtx, req, o)
-
-		if err != nil {
-			return res, err
-		}
-
-		failureCriteriaMessage := make([]string, 0, 2)
-		failureCriteriaMet := true
-
-		if failureCriteriaMet {
-			failureCriteriaMet = res.StatusCode == 200
-			failureCriteriaMessage = append(failureCriteriaMessage, "HTTP status code was 200")
-		}
-
-		if failureCriteriaMet {
-			failureCriteriaMet = res.Object.ChangeRequestState == "canceled"
-			failureCriteriaMessage = append(failureCriteriaMessage, "Response body at /change_request_state was \"canceled\"")
-		}
-
-		if failureCriteriaMet {
-			return res, &polling.FailureCriteriaError{Message: strings.Join(failureCriteriaMessage, " and ")}
-		}
-
-		successCriteriaMet := true
-
-		if successCriteriaMet {
-			successCriteriaMet = res.StatusCode == 200
-		}
-
-		if successCriteriaMet {
-			successCriteriaMet = res.Object.ChangeRequestState == "completed"
-		}
-
-		if successCriteriaMet {
-			return res, nil
-		}
-
-		if o.Polling.IntervalSeconds != nil {
-			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
-		}
-	}
-
-	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
-}
-
-// ApplyPostgresBranchTerraformChanges - Apply a PostgreSQL branch's cluster size, parameters, and extensions
-func (s *BranchChanges) ApplyPostgresBranchTerraformChanges(ctx context.Context, request operations.ApplyPostgresBranchTerraformChangesRequest, opts ...operations.Option) (*operations.ApplyPostgresBranchTerraformChangesResponse, error) {
+// GetPostgresBranchExtensions - List cluster extensions
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `read_branches` |
+// | Database | `read_branches` |
+// | Branch | `read_branch` |
+func (s *ClusterExtensions) GetPostgresBranchExtensions(ctx context.Context, request operations.GetPostgresBranchExtensionsRequest, opts ...operations.Option) (*operations.GetPostgresBranchExtensionsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -320,7 +223,7 @@ func (s *BranchChanges) ApplyPostgresBranchTerraformChanges(ctx context.Context,
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/terraform-changes", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}/extensions", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -330,13 +233,9 @@ func (s *BranchChanges) ApplyPostgresBranchTerraformChanges(ctx context.Context,
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "apply_postgres_branch_terraform_changes",
+		OperationID:      "get_postgres_branch_extensions",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Body", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
 	}
 
 	timeout := o.Timeout
@@ -350,15 +249,12 @@ func (s *BranchChanges) ApplyPostgresBranchTerraformChanges(ctx context.Context,
 		defer cancel()
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -397,7 +293,7 @@ func (s *BranchChanges) ApplyPostgresBranchTerraformChanges(ctx context.Context,
 		}
 	}
 
-	res := &operations.ApplyPostgresBranchTerraformChangesResponse{
+	res := &operations.GetPostgresBranchExtensionsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -412,7 +308,7 @@ func (s *BranchChanges) ApplyPostgresBranchTerraformChanges(ctx context.Context,
 				return nil, err
 			}
 
-			var out operations.ApplyPostgresBranchTerraformChangesResponseBody
+			var out operations.GetPostgresBranchExtensionsResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -425,7 +321,17 @@ func (s *BranchChanges) ApplyPostgresBranchTerraformChanges(ctx context.Context,
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 204:
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
+		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 500:
 		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)

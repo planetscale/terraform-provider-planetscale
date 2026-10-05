@@ -390,6 +390,10 @@ func (s *DatabaseBranches) GetPostgresBranch(ctx context.Context, request operat
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
 	}
@@ -2314,4 +2318,256 @@ func (s *DatabaseBranches) DeleteNekiBranch(ctx context.Context, request operati
 
 	return res, nil
 
+}
+
+// GetPostgresBranchDataSource - Get a PostgreSQL branch
+// ### Authorization
+// A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+//
+// **Service Token Accesses**
+//
+//	`read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+//
+// **OAuth Scopes**
+//
+//	| Resource | Scopes |
+//
+// | :------- | :---------- |
+// | Organization | `read_branches` |
+// | Database | `read_branches` |
+// | Branch | `read_branch` |
+func (s *DatabaseBranches) GetPostgresBranchDataSource(ctx context.Context, request operations.GetPostgresBranchDataSourceRequest, opts ...operations.Option) (*operations.GetPostgresBranchDataSourceResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionPolling,
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{organization}/databases/{database}/branches/{branch}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "get_postgres_branch_data_source",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	if o.Polling != nil {
+		switch o.Polling.Name {
+		case "WaitForReady":
+			return s.getPostgresBranchDataSourceWaitForReady(ctx, hookCtx, req, o)
+		}
+	}
+
+	return s.getPostgresBranchDataSource(ctx, hookCtx, req, o)
+}
+func (s *DatabaseBranches) getPostgresBranchDataSource(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchDataSourceResponse, error) {
+	var err error
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.GetPostgresBranchDataSourceResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out operations.GetPostgresBranchDataSourceResponseBody
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Object = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		fallthrough
+	case httpRes.StatusCode == 429:
+		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 500:
+		utils.DrainBody(httpRes)
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// Use with GetPostgresBranchDataSource by adding the operations.WithPolling option.
+// Responses are returned when enabling polling, however additional errors may
+// be returned:
+//   - polling.FailureCriteriaError: If the polling option has explicit failure
+//     criteria defined, polling will immediately stop and return this error.
+//   - polling.LimitCountError: When polling has reached the maximum number of
+//     attempts. Use the polling.WithLimitCountOverride polling option to
+//     override the predefined limit.
+func (s *DatabaseBranches) GetPostgresBranchDataSourceWaitForReady() polling.ConfigFunc {
+	return func(pollingOpts ...polling.Option) (*polling.Config, error) {
+		defaultDelaySeconds := 30
+		defaultIntervalSeconds := 10
+		defaultLimitCount := 4320
+		result := &polling.Config{
+			DelaySeconds:    &defaultDelaySeconds,
+			IntervalSeconds: &defaultIntervalSeconds,
+			LimitCount:      &defaultLimitCount,
+			Name:            "WaitForReady",
+		}
+
+		for _, pollingOpt := range pollingOpts {
+			if err := pollingOpt(result); err != nil {
+				return nil, err
+			}
+		}
+
+		return result, nil
+	}
+}
+
+func (s *DatabaseBranches) getPostgresBranchDataSourceWaitForReady(ctx context.Context, hookCtx hooks.HookContext, req *http.Request, o operations.Options) (*operations.GetPostgresBranchDataSourceResponse, error) {
+	if o.Polling == nil || o.Polling.LimitCount == nil {
+		return s.getPostgresBranchDataSource(ctx, hookCtx, req, o)
+	}
+
+	if o.Polling.DelaySeconds != nil {
+		time.Sleep(time.Duration(*o.Polling.DelaySeconds) * time.Second)
+	}
+
+	var res *operations.GetPostgresBranchDataSourceResponse
+
+	for i := 1; i <= *o.Polling.LimitCount; i++ {
+		// Ensure request body, if exists, is not empty on subsequent requests.
+		if i > 1 && req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+			copyBody, err := req.GetBody()
+
+			if err != nil {
+				return nil, err
+			}
+
+			req.Body = copyBody
+		}
+
+		var err error
+
+		res, err = s.getPostgresBranchDataSource(ctx, hookCtx, req, o)
+
+		if err != nil {
+			return res, err
+		}
+
+		successCriteriaMet := true
+
+		if successCriteriaMet {
+			successCriteriaMet = res.StatusCode == 200
+		}
+
+		if successCriteriaMet {
+			successCriteriaMet = res.Object.State == "ready"
+		}
+
+		if successCriteriaMet {
+			return res, nil
+		}
+
+		if o.Polling.IntervalSeconds != nil {
+			time.Sleep(time.Duration(*o.Polling.IntervalSeconds) * time.Second)
+		}
+	}
+
+	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }

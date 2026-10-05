@@ -66,6 +66,23 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetBranchChangeReques
 	return diags
 }
 
+func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchManagedExtensionsResponseBody(ctx context.Context, resp *operations.GetPostgresBranchManagedExtensionsResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.Extensions != nil {
+			r.Extensions = make([]types.String, 0, len(resp.Extensions))
+			for _, v := range resp.Extensions {
+				r.Extensions = append(r.Extensions, types.StringValue(v))
+			}
+		} else {
+			r.Extensions = nil
+		}
+	}
+
+	return diags
+}
+
 func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResponseBody(ctx context.Context, resp *operations.GetPostgresBranchResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -176,6 +193,13 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 	} else {
 		clusterSize = nil
 	}
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
+	}
 	var parameters map[string]map[string]string
 	if r.Parameters != nil {
 		parameters = make(map[string]map[string]string)
@@ -192,6 +216,7 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 	}
 	out := operations.ApplyPostgresBranchTerraformChangesRequestBody{
 		ClusterSize: clusterSize,
+		Extensions:  extensions,
 		Parameters:  parameters,
 	}
 
@@ -338,6 +363,35 @@ func (r *PostgresBranchResourceModel) ToOperationsGetBranchChangeRequestRequest(
 	return &out, diags
 }
 
+func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchManagedExtensionsRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.GetPostgresBranchManagedExtensionsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
+	}
+	out := operations.GetPostgresBranchManagedExtensionsRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Extensions:   extensions,
+	}
+
+	return &out, diags
+}
+
 func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.GetPostgresBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -350,10 +404,18 @@ func (r *PostgresBranchResourceModel) ToOperationsGetPostgresBranchRequest(ctx c
 	var branch string
 	branch = r.ID.ValueString()
 
+	var extensions []string
+	if r.Extensions != nil {
+		extensions = make([]string, 0, len(r.Extensions))
+		for extensionsIndex := range r.Extensions {
+			extensions = append(extensions, r.Extensions[extensionsIndex].ValueString())
+		}
+	}
 	out := operations.GetPostgresBranchRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
+		Extensions:   extensions,
 	}
 
 	return &out, diags

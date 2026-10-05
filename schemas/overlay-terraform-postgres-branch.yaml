@@ -217,12 +217,12 @@ actions:
       x-speakeasy-entity-operation: PostgresBranch#update
 
   - target: $.paths
-    description: Add the undocumented terraform-changes endpoint, which applies cluster_size and parameters with replace semantics and returns a change request to poll.
+    description: Add the undocumented terraform-changes endpoint, which applies cluster_size, parameters, and extensions and returns a change request to poll.
     update:
       /organizations/{organization}/databases/{database}/branches/{branch}/terraform-changes:
         put:
           operationId: apply_postgres_branch_terraform_changes
-          summary: Apply a PostgreSQL branch's cluster size and parameters
+          summary: Apply a PostgreSQL branch's cluster size, parameters, and extensions
           tags:
             - Branch changes
           parameters:
@@ -256,6 +256,18 @@ actions:
                     cluster_size:
                       type: string
                       description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+                    extensions:
+                      type: array
+                      nullable: true
+                      uniqueItems: true
+                      x-speakeasy-param-computed: false
+                      x-speakeasy-plan-validators: PostgresExtensionsValidator
+                      items:
+                        type: string
+                      description: >-
+                        Extensions to enable. This replaces the current set; omit it to leave
+                        them unchanged. Use an empty list to disable them. Do not combine this
+                        with shared_preload_libraries or session_preload_libraries parameters.
                     parameters:
                       type: object
                       nullable: true
@@ -293,3 +305,139 @@ actions:
           x-speakeasy-entity-operation:
             - PostgresBranch#create#3
             - PostgresBranch#update#2
+
+  # The API returns extension details. Terraform needs the enabled customer
+  # extension names, preserving the configured order for stable list state.
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-resource: {}
+      /organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-datasource: {}
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-resource']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions']
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-datasource']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions']
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-resource'].get.parameters[?@.name == 'branch']
+    update:
+      x-speakeasy-match: id
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-resource'].get.parameters
+    update:
+      - name: terraform_managed
+        in: query
+        required: false
+        description: Client-only marker for the managed resource read.
+        schema:
+          type: boolean
+          const: true
+          default: true
+          x-speakeasy-terraform-ignore: schema
+      - name: extensions
+        in: query
+        required: false
+        description: >-
+          Extensions to enable. This replaces the current set; omit it to leave
+          them unchanged. Use an empty list to disable them. Do not combine this
+          with shared_preload_libraries or session_preload_libraries parameters.
+        content:
+          application/json:
+            schema:
+              type: array
+              nullable: true
+              items:
+                type: string
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-resource'].get.responses['200'].content['application/json'].schema
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-resource'].get
+    update:
+      operationId: get_postgres_branch_managed_extensions
+      x-speakeasy-entity-operation:
+        terraform-resource:
+          - PostgresBranch#read#2
+          - PostgresBranch#create#5
+        terraform-datasource: null
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extensions:
+                    type: array
+                    nullable: true
+                    uniqueItems: true
+                    items:
+                      type: string
+                required:
+                  - extensions
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-datasource'].get.parameters[?@.name == 'branch']
+    update:
+      x-speakeasy-match: id
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-datasource'].get.responses['200'].content['application/json'].schema
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-datasource'].get
+    update:
+      operationId: get_postgres_branch_extensions
+      x-speakeasy-entity-operation:
+        terraform-datasource: PostgresBranch#read#2
+        terraform-resource: null
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extensions:
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: string
+                required:
+                  - extensions
+
+  # Keep the data source on a separate operation so its extension attribute
+  # remains read-only while resource reads carry prior extension state.
+  - target: $.paths
+    update:
+      /organizations/{organization}/databases/{database}/branches/{branch}#postgres-datasource: {}
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres-datasource']
+    copy: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres']
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres-datasource'].patch
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres-datasource'].delete
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres-datasource'].get
+    update:
+      operationId: get_postgres_branch_data_source
+      x-speakeasy-entity-operation:
+        terraform-datasource: PostgresBranch#read
+        terraform-resource: null
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get.parameters
+    update:
+      - name: extensions
+        in: query
+        required: false
+        description: >-
+          Extensions to enable. This replaces the current set; omit it to leave
+          them unchanged. Use an empty list to disable them. Do not combine this
+          with shared_preload_libraries or session_preload_libraries parameters.
+        content:
+          application/json:
+            schema:
+              type: array
+              nullable: true
+              items:
+                type: string
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get
+    update:
+      x-speakeasy-entity-operation:
+        terraform-resource:
+          - PostgresBranch#read
+          - entityOperation: PostgresBranch#create#2
+            options:
+              polling:
+                name: WaitForReady
+        terraform-datasource: null

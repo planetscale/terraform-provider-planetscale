@@ -9307,6 +9307,18 @@ paths:
           schema:
             type: string
           x-speakeasy-match: id
+        - name: extensions
+          in: query
+          required: false
+          description: >-
+            Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty list to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
+          content:
+            application/json:
+              schema:
+                type: array
+                nullable: true
+                items:
+                  type: string
       responses:
         "200":
           description: Returns information about a branch
@@ -9464,11 +9476,13 @@ paths:
         | Database | `read_branches` |
         | Branch | `read_branch` |
       x-speakeasy-entity-operation:
-        - PostgresBranch#read
-        - entityOperation: PostgresBranch#create#2
-          options:
-            polling:
-              name: WaitForReady
+        terraform-resource:
+          - PostgresBranch#read
+          - entityOperation: PostgresBranch#create#2
+            options:
+              polling:
+                name: WaitForReady
+        terraform-datasource: null
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
       x-speakeasy-polling:
         - name: WaitForReady
@@ -10935,7 +10949,7 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/terraform-changes:
     put:
       operationId: apply_postgres_branch_terraform_changes
-      summary: Apply a PostgreSQL branch's cluster size and parameters
+      summary: Apply a PostgreSQL branch's cluster size, parameters, and extensions
       tags:
         - Branch changes
       parameters:
@@ -10969,6 +10983,16 @@ paths:
                 cluster_size:
                   type: string
                   description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+                extensions:
+                  type: array
+                  nullable: true
+                  uniqueItems: true
+                  x-speakeasy-param-computed: false
+                  x-speakeasy-plan-validators: PostgresExtensionsValidator
+                  items:
+                    type: string
+                  description: >-
+                    Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty list to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
                 parameters:
                   type: object
                   nullable: true
@@ -11004,6 +11028,366 @@ paths:
       x-speakeasy-entity-operation:
         - PostgresBranch#create#3
         - PostgresBranch#update#2
+  /organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-resource:
+    get:
+      tags:
+        - Cluster extensions
+      operationId: get_postgres_branch_managed_extensions
+      summary: List cluster extensions
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: terraform_managed
+          in: query
+          required: false
+          description: Client-only marker for the managed resource read.
+          schema:
+            type: boolean
+            const: true
+            default: true
+            x-speakeasy-terraform-ignore: schema
+        - name: extensions
+          in: query
+          required: false
+          description: >-
+            Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty list to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
+          content:
+            application/json:
+              schema:
+                type: array
+                nullable: true
+                items:
+                  type: string
+      responses:
+        "200":
+          description: Returns cluster extensions
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extensions:
+                    type: array
+                    nullable: true
+                    uniqueItems: true
+                    items:
+                      type: string
+                required:
+                  - extensions
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        terraform-resource:
+          - PostgresBranch#read#2
+          - PostgresBranch#create#5
+        terraform-datasource: null
+  /organizations/{organization}/databases/{database}/branches/{branch}/extensions#postgres-datasource:
+    get:
+      tags:
+        - Cluster extensions
+      operationId: get_postgres_branch_extensions
+      summary: List cluster extensions
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+          x-speakeasy-match: id
+      responses:
+        "200":
+          description: Returns cluster extensions
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extensions:
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: string
+                required:
+                  - extensions
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        terraform-datasource: PostgresBranch#read#2
+        terraform-resource: null
+  /organizations/{organization}/databases/{database}/branches/{branch}#postgres-datasource:
+    get:
+      tags:
+        - Database branches
+      operationId: get_postgres_branch_data_source
+      summary: Get a PostgreSQL branch
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+          x-speakeasy-match: id
+      responses:
+        "200":
+          description: Returns information about a branch
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the branch
+                  name:
+                    type: string
+                    description: The name of the branch
+                  state:
+                    type: string
+                    enum:
+                      - pending
+                      - sleep_in_progress
+                      - sleeping
+                      - awakening
+                      - ready
+                    description: The current state of the branch
+                  cluster_name:
+                    type: string
+                    description: The SKU representing the branch's cluster size
+                    x-speakeasy-name-override: cluster_size
+                  ready:
+                    type: boolean
+                    description: Whether or not the branch is ready to serve queries
+                  deletion_protected:
+                    type: boolean
+                    description: Whether deletion protection is enabled for the branch
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                    nullable: true
+                  html_url:
+                    type: string
+                    description: Planetscale app URL for the branch
+                  url:
+                    type: string
+                    description: Planetscale API URL for the branch
+                  region:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the region
+                      mysql_supported:
+                        type: boolean
+                        description: Whether the region supports MySQL/Vitess databases
+                      postgresql_supported:
+                        type: boolean
+                        description: Whether the region supports PostgreSQL databases
+                      neki_supported:
+                        type: boolean
+                        description: Whether the region supports Neki databases
+                        x-speakeasy-terraform-ignore: true
+                    required:
+                      - id
+                      - provider
+                      - enabled
+                      - public_ip_addresses
+                      - display_name
+                      - location
+                      - slug
+                      - current_default
+                      - mysql_supported
+                      - postgresql_supported
+                      - neki_supported
+                    x-speakeasy-name-override: region_data
+                  parent_branch:
+                    type: string
+                    description: The name of the parent branch from which the branch was created
+                    nullable: true
+                  region_slug:
+                    type: string
+                    x-speakeasy-name-override: region
+                    description: The region slug where the branch is hosted.
+                  replicas:
+                    type: integer
+                    description: The number of replicas for the branch
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
+                required:
+                  - id
+                  - name
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - restore_checklist_completed_at
+                  - schema_last_updated_at
+                  - kind
+                  - state
+                  - cluster_name
+                  - cluster_iops
+                  - ready
+                  - metal
+                  - production
+                  - safe_migrations
+                  - deletion_protected
+                  - sharded
+                  - keyspace_count
+                  - stale_schema
+                  - actor
+                  - restored_from_branch
+                  - private_edge_connectivity
+                  - has_replicas
+                  - has_read_only_replicas
+                  - html_url
+                  - url
+                  - region
+                  - parent_branch
+                  - region_slug
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        terraform-datasource: PostgresBranch#read
+        terraform-resource: null
+      x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
+      x-speakeasy-polling:
+        - name: WaitForReady
+          delaySeconds: 30
+          intervalSeconds: 10
+          limitCount: 4320 # 12 hours at a 10 second interval, plus initial 30 second delay
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/state == "ready"
   ? /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}#shard-reassignment
   : get:
       tags:

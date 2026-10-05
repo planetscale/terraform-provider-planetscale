@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	datasourceschema "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -26,6 +28,28 @@ func TestPostgresBranchResource_ParametersPlanModifiers(t *testing.T) {
 	require.True(t, ok)
 
 	require.NotEmpty(t, parametersAttr.PlanModifiers)
+}
+
+func TestPostgresBranchExtensionsSchemas(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+
+	managedResource := NewPostgresBranchResource()
+	var resourceSchema resource.SchemaResponse
+	managedResource.Schema(ctx, resource.SchemaRequest{}, &resourceSchema)
+	configured, ok := resourceSchema.Schema.Attributes["extensions"].(schema.ListAttribute)
+	require.True(t, ok)
+	require.True(t, configured.IsOptional())
+	require.False(t, configured.IsComputed())
+	require.NotEmpty(t, configured.Validators)
+
+	source := NewPostgresBranchDataSource()
+	var sourceSchema datasource.SchemaResponse
+	source.Schema(ctx, datasource.SchemaRequest{}, &sourceSchema)
+	remote, ok := sourceSchema.Schema.Attributes["extensions"].(datasourceschema.ListAttribute)
+	require.True(t, ok)
+	require.True(t, remote.IsComputed())
+	require.False(t, remote.IsOptional())
 }
 
 func TestPostgresBranchResource_ClusterSizeValidation(t *testing.T) {

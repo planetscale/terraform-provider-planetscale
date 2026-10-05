@@ -9,71 +9,51 @@ import (
 	"net/http"
 )
 
-type GetPostgresBranchRequest struct {
+type GetPostgresBranchDataSourceRequest struct {
 	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// Database name slug from `list_databases`. Example: `app-db`.
 	Database string `pathParam:"style=simple,explode=false,name=database"`
 	// Branch name from `list_branches`. Example: `main`.
 	Branch string `pathParam:"style=simple,explode=false,name=branch"`
-	// Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty list to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
-	Extensions []string `queryParam:"serialization=json,name=extensions"`
 }
 
-func (g GetPostgresBranchRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GetPostgresBranchRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GetPostgresBranchRequest) GetOrganization() string {
+func (g *GetPostgresBranchDataSourceRequest) GetOrganization() string {
 	if g == nil {
 		return ""
 	}
 	return g.Organization
 }
 
-func (g *GetPostgresBranchRequest) GetDatabase() string {
+func (g *GetPostgresBranchDataSourceRequest) GetDatabase() string {
 	if g == nil {
 		return ""
 	}
 	return g.Database
 }
 
-func (g *GetPostgresBranchRequest) GetBranch() string {
+func (g *GetPostgresBranchDataSourceRequest) GetBranch() string {
 	if g == nil {
 		return ""
 	}
 	return g.Branch
 }
 
-func (g *GetPostgresBranchRequest) GetExtensions() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Extensions
-}
-
-// GetPostgresBranchState - The current state of the branch
-type GetPostgresBranchState string
+// GetPostgresBranchDataSourceState - The current state of the branch
+type GetPostgresBranchDataSourceState string
 
 const (
-	GetPostgresBranchStatePending         GetPostgresBranchState = "pending"
-	GetPostgresBranchStateSleepInProgress GetPostgresBranchState = "sleep_in_progress"
-	GetPostgresBranchStateSleeping        GetPostgresBranchState = "sleeping"
-	GetPostgresBranchStateAwakening       GetPostgresBranchState = "awakening"
-	GetPostgresBranchStateReady           GetPostgresBranchState = "ready"
+	GetPostgresBranchDataSourceStatePending         GetPostgresBranchDataSourceState = "pending"
+	GetPostgresBranchDataSourceStateSleepInProgress GetPostgresBranchDataSourceState = "sleep_in_progress"
+	GetPostgresBranchDataSourceStateSleeping        GetPostgresBranchDataSourceState = "sleeping"
+	GetPostgresBranchDataSourceStateAwakening       GetPostgresBranchDataSourceState = "awakening"
+	GetPostgresBranchDataSourceStateReady           GetPostgresBranchDataSourceState = "ready"
 )
 
-func (e GetPostgresBranchState) ToPointer() *GetPostgresBranchState {
+func (e GetPostgresBranchDataSourceState) ToPointer() *GetPostgresBranchDataSourceState {
 	return &e
 }
-func (e *GetPostgresBranchState) UnmarshalJSON(data []byte) error {
+func (e *GetPostgresBranchDataSourceState) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -88,26 +68,26 @@ func (e *GetPostgresBranchState) UnmarshalJSON(data []byte) error {
 	case "awakening":
 		fallthrough
 	case "ready":
-		*e = GetPostgresBranchState(v)
+		*e = GetPostgresBranchDataSourceState(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for GetPostgresBranchState: %v", v)
+		return fmt.Errorf("invalid value for GetPostgresBranchDataSourceState: %v", v)
 	}
 }
 
-type GetPostgresBranchActor struct {
+type GetPostgresBranchDataSourceActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
 }
 
-func (g *GetPostgresBranchActor) GetID() string {
+func (g *GetPostgresBranchDataSourceActor) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-type GetPostgresBranchRegionData struct {
+type GetPostgresBranchDataSourceRegionData struct {
 	// The ID of the region
 	ID string `json:"id"`
 	// Whether the region supports MySQL/Vitess databases
@@ -118,54 +98,54 @@ type GetPostgresBranchRegionData struct {
 	NekiSupported bool `json:"neki_supported"`
 }
 
-func (g *GetPostgresBranchRegionData) GetID() string {
+func (g *GetPostgresBranchDataSourceRegionData) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetPostgresBranchRegionData) GetMysqlSupported() bool {
+func (g *GetPostgresBranchDataSourceRegionData) GetMysqlSupported() bool {
 	if g == nil {
 		return false
 	}
 	return g.MysqlSupported
 }
 
-func (g *GetPostgresBranchRegionData) GetPostgresqlSupported() bool {
+func (g *GetPostgresBranchDataSourceRegionData) GetPostgresqlSupported() bool {
 	if g == nil {
 		return false
 	}
 	return g.PostgresqlSupported
 }
 
-func (g *GetPostgresBranchRegionData) GetNekiSupported() bool {
+func (g *GetPostgresBranchDataSourceRegionData) GetNekiSupported() bool {
 	if g == nil {
 		return false
 	}
 	return g.NekiSupported
 }
 
-// GetPostgresBranchResponseBody - Returns information about a branch
-type GetPostgresBranchResponseBody struct {
+// GetPostgresBranchDataSourceResponseBody - Returns information about a branch
+type GetPostgresBranchDataSourceResponseBody struct {
 	// The ID of the branch
 	ID string `json:"id"`
 	// The name of the branch
 	Name string `json:"name"`
 	// The current state of the branch
-	State GetPostgresBranchState `json:"state"`
+	State GetPostgresBranchDataSourceState `json:"state"`
 	// The SKU representing the branch's cluster size
 	ClusterSize string `json:"cluster_name"`
 	// Whether or not the branch is ready to serve queries
 	Ready bool `json:"ready"`
 	// Whether deletion protection is enabled for the branch
-	DeletionProtected bool                    `json:"deletion_protected"`
-	Actor             *GetPostgresBranchActor `json:"actor"`
+	DeletionProtected bool                              `json:"deletion_protected"`
+	Actor             *GetPostgresBranchDataSourceActor `json:"actor"`
 	// Planetscale app URL for the branch
 	HTMLURL string `json:"html_url"`
 	// Planetscale API URL for the branch
-	URL        string                      `json:"url"`
-	RegionData GetPostgresBranchRegionData `json:"region"`
+	URL        string                                `json:"url"`
+	RegionData GetPostgresBranchDataSourceRegionData `json:"region"`
 	// The name of the parent branch from which the branch was created
 	ParentBranch *string `json:"parent_branch"`
 	// The region slug where the branch is hosted.
@@ -176,116 +156,116 @@ type GetPostgresBranchResponseBody struct {
 	Parameters map[string]map[string]string `json:"parameters,omitzero"`
 }
 
-func (g GetPostgresBranchResponseBody) MarshalJSON() ([]byte, error) {
+func (g GetPostgresBranchDataSourceResponseBody) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GetPostgresBranchResponseBody) UnmarshalJSON(data []byte) error {
+func (g *GetPostgresBranchDataSourceResponseBody) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (g *GetPostgresBranchResponseBody) GetID() string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetID() string {
 	if g == nil {
 		return ""
 	}
 	return g.ID
 }
 
-func (g *GetPostgresBranchResponseBody) GetName() string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GetPostgresBranchResponseBody) GetState() GetPostgresBranchState {
+func (g *GetPostgresBranchDataSourceResponseBody) GetState() GetPostgresBranchDataSourceState {
 	if g == nil {
-		return GetPostgresBranchState("")
+		return GetPostgresBranchDataSourceState("")
 	}
 	return g.State
 }
 
-func (g *GetPostgresBranchResponseBody) GetClusterSize() string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetClusterSize() string {
 	if g == nil {
 		return ""
 	}
 	return g.ClusterSize
 }
 
-func (g *GetPostgresBranchResponseBody) GetReady() bool {
+func (g *GetPostgresBranchDataSourceResponseBody) GetReady() bool {
 	if g == nil {
 		return false
 	}
 	return g.Ready
 }
 
-func (g *GetPostgresBranchResponseBody) GetDeletionProtected() bool {
+func (g *GetPostgresBranchDataSourceResponseBody) GetDeletionProtected() bool {
 	if g == nil {
 		return false
 	}
 	return g.DeletionProtected
 }
 
-func (g *GetPostgresBranchResponseBody) GetActor() *GetPostgresBranchActor {
+func (g *GetPostgresBranchDataSourceResponseBody) GetActor() *GetPostgresBranchDataSourceActor {
 	if g == nil {
 		return nil
 	}
 	return g.Actor
 }
 
-func (g *GetPostgresBranchResponseBody) GetHTMLURL() string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetHTMLURL() string {
 	if g == nil {
 		return ""
 	}
 	return g.HTMLURL
 }
 
-func (g *GetPostgresBranchResponseBody) GetURL() string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetURL() string {
 	if g == nil {
 		return ""
 	}
 	return g.URL
 }
 
-func (g *GetPostgresBranchResponseBody) GetRegionData() GetPostgresBranchRegionData {
+func (g *GetPostgresBranchDataSourceResponseBody) GetRegionData() GetPostgresBranchDataSourceRegionData {
 	if g == nil {
-		return GetPostgresBranchRegionData{}
+		return GetPostgresBranchDataSourceRegionData{}
 	}
 	return g.RegionData
 }
 
-func (g *GetPostgresBranchResponseBody) GetParentBranch() *string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetParentBranch() *string {
 	if g == nil {
 		return nil
 	}
 	return g.ParentBranch
 }
 
-func (g *GetPostgresBranchResponseBody) GetRegion() string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetRegion() string {
 	if g == nil {
 		return ""
 	}
 	return g.Region
 }
 
-func (g *GetPostgresBranchResponseBody) GetReplicas() *int64 {
+func (g *GetPostgresBranchDataSourceResponseBody) GetReplicas() *int64 {
 	if g == nil {
 		return nil
 	}
 	return g.Replicas
 }
 
-func (g *GetPostgresBranchResponseBody) GetParameters() map[string]map[string]string {
+func (g *GetPostgresBranchDataSourceResponseBody) GetParameters() map[string]map[string]string {
 	if g == nil {
 		return nil
 	}
 	return g.Parameters
 }
 
-type GetPostgresBranchResponse struct {
+type GetPostgresBranchDataSourceResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -293,42 +273,42 @@ type GetPostgresBranchResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Returns information about a branch
-	Object *GetPostgresBranchResponseBody
+	Object *GetPostgresBranchDataSourceResponseBody
 }
 
-func (g GetPostgresBranchResponse) MarshalJSON() ([]byte, error) {
+func (g GetPostgresBranchDataSourceResponse) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GetPostgresBranchResponse) UnmarshalJSON(data []byte) error {
+func (g *GetPostgresBranchDataSourceResponse) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (g *GetPostgresBranchResponse) GetContentType() string {
+func (g *GetPostgresBranchDataSourceResponse) GetContentType() string {
 	if g == nil {
 		return ""
 	}
 	return g.ContentType
 }
 
-func (g *GetPostgresBranchResponse) GetStatusCode() int {
+func (g *GetPostgresBranchDataSourceResponse) GetStatusCode() int {
 	if g == nil {
 		return 0
 	}
 	return g.StatusCode
 }
 
-func (g *GetPostgresBranchResponse) GetRawResponse() *http.Response {
+func (g *GetPostgresBranchDataSourceResponse) GetRawResponse() *http.Response {
 	if g == nil {
 		return nil
 	}
 	return g.RawResponse
 }
 
-func (g *GetPostgresBranchResponse) GetObject() *GetPostgresBranchResponseBody {
+func (g *GetPostgresBranchDataSourceResponse) GetObject() *GetPostgresBranchDataSourceResponseBody {
 	if g == nil {
 		return nil
 	}

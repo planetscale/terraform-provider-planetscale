@@ -12,6 +12,9 @@ import (
 var nekiExtensionsPathPattern = regexp.MustCompile(
 	`^/v1/organizations/[^/]+/databases/[^/]+/branches/[^/]+/configuration-profiles/[^/]+/extensions$`,
 )
+var postgresExtensionsPathPattern = regexp.MustCompile(
+	`^/v1/organizations/[^/]+/databases/[^/]+/branches/[^/]+/extensions$`,
+)
 
 type NekiExtensionsHook struct{}
 
@@ -29,9 +32,15 @@ type nekiExtensionsClient struct {
 }
 
 func (c *nekiExtensionsClient) Do(req *http.Request) (*http.Response, error) {
-	if req == nil || req.URL == nil || req.Method != http.MethodGet || !nekiExtensionsPathPattern.MatchString(req.URL.Path) {
+	if req == nil || req.URL == nil || req.Method != http.MethodGet ||
+		(!nekiExtensionsPathPattern.MatchString(req.URL.Path) && !postgresExtensionsPathPattern.MatchString(req.URL.Path)) {
 		return c.client.Do(req)
 	}
+
+	query := req.URL.Query()
+	terraformManaged := query.Get("terraform_managed") == "true"
+	query.Del("terraform_managed")
+	req.URL.RawQuery = query.Encode()
 
 	managed, err := takeTerraformManagedExtensions(req)
 	if err != nil {
@@ -46,7 +55,10 @@ func (c *nekiExtensionsClient) Do(req *http.Request) (*http.Response, error) {
 		if res.Body != nil {
 			_ = res.Body.Close()
 		}
-		return nil, fmt.Errorf("neki extensions endpoint returned HTTP 404; refusing to treat its configuration profile as missing")
+		if nekiExtensionsPathPattern.MatchString(req.URL.Path) {
+			return nil, fmt.Errorf("neki extensions endpoint returned HTTP 404; refusing to treat its configuration profile as missing")
+		}
+		return nil, fmt.Errorf("extensions endpoint returned HTTP 404; refusing to treat its parent resource as missing")
 	}
 	if res.StatusCode != http.StatusOK {
 		return res, nil
@@ -58,7 +70,10 @@ func (c *nekiExtensionsClient) Do(req *http.Request) (*http.Response, error) {
 		CanEnable bool   `json:"can_enable"`
 	}
 	if err := decodeAndClose(res.Body, &extensions); err != nil {
-		return nil, fmt.Errorf("decode Neki extensions response: %w", err)
+		return nil, fmt.Errorf("decode extensions response: %w", err)
+	}
+	if terraformManaged && managed == nil {
+		return res, replaceResponseBody(res, map[string]any{"extensions": nil})
 	}
 
 	enabled := []string{}
@@ -87,7 +102,7 @@ func takeTerraformManagedExtensions(req *http.Request) ([]string, error) {
 	var managed []string
 	if encoded != "" {
 		if err := json.Unmarshal([]byte(encoded), &managed); err != nil {
-			return nil, fmt.Errorf("decode prior Terraform Neki extensions: %w", err)
+			return nil, fmt.Errorf("decode prior Terraform extensions: %w", err)
 		}
 	}
 	return managed, nil

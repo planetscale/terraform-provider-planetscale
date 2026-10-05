@@ -14,6 +14,7 @@ func initHooks(h *Hooks) {
 
 	h.registerSDKInitHook(NewPostgresBranchNoContentSkipHook())
 	h.registerSDKInitHook(NewPostgresBranchRegionSlugHook())
+	h.registerSDKInitHook(&PostgresBranchExtensionsParametersHook{})
 	h.registerSDKInitHook(NewPostgresBouncerNoContentSkipHook())
 	h.registerSDKInitHook(NewVitessBranchNoContentSkipHook())
 	h.registerSDKInitHook(NewNekiParametersHook())

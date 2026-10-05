@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -20,6 +21,7 @@ import (
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	custom_listvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/listvalidators"
 	custom_stringvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/stringvalidators"
 )
 
@@ -47,6 +49,7 @@ type PostgresBranchResourceModel struct {
 	Database           types.String                         `tfsdk:"database"`
 	DeleteDescendants  types.Bool                           `queryParam:"style=form,explode=true,name=delete_descendants" tfsdk:"delete_descendants"`
 	DeletionProtected  types.Bool                           `tfsdk:"deletion_protected"`
+	Extensions         []types.String                       `queryParam:"serialization=json,name=extensions" tfsdk:"extensions"`
 	HTMLURL            types.String                         `tfsdk:"html_url"`
 	ID                 types.String                         `tfsdk:"id"`
 	MajorVersion       types.String                         `tfsdk:"major_version"`
@@ -108,6 +111,15 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 				Computed:    true,
 				Optional:    true,
 				Description: `Whether deletion protection is enabled for the branch`,
+			},
+			"extensions": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty list to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.`,
+				Validators: []validator.List{
+					listvalidator.UniqueValues(),
+					custom_listvalidators.PostgresExtensionsValidator(),
+				},
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
@@ -420,6 +432,43 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request4, request4Diags := data.ToOperationsGetPostgresBranchManagedExtensionsRequest(ctx, opts)
+	resp.Diagnostics.Append(request4Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res4, err := r.client.ClusterExtensions.GetPostgresBranchManagedExtensions(ctx, *request4)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res4 != nil && res4.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
+		}
+		return
+	}
+	if res4 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res4))
+		return
+	}
+	if res4.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res4.StatusCode), debugResponse(res4.RawResponse))
+		return
+	}
+	if !(res4.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res4.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchManagedExtensionsResponseBody(ctx, res4.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -476,6 +525,41 @@ func (r *PostgresBranchResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetPostgresBranchManagedExtensionsRequest(ctx, nil)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.ClusterExtensions.GetPostgresBranchManagedExtensions(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchManagedExtensionsResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -668,6 +752,43 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res3.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request4, request4Diags := data.ToOperationsGetPostgresBranchManagedExtensionsRequest(ctx, opts)
+	resp.Diagnostics.Append(request4Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res4, err := r.client.ClusterExtensions.GetPostgresBranchManagedExtensions(ctx, *request4)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res4 != nil && res4.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
+		}
+		return
+	}
+	if res4 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res4))
+		return
+	}
+	if res4.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res4.StatusCode), debugResponse(res4.RawResponse))
+		return
+	}
+	if !(res4.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res4.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchManagedExtensionsResponseBody(ctx, res4.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

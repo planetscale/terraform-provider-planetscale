@@ -89,6 +89,9 @@ type PlanetScale struct {
 	APINekiShards            *APINekiShards
 	APINekiSidecars          *APINekiSidecars
 	APINekiSidecarParameters *APINekiSidecarParameters
+	//           Resources for managing cluster extension configuration.
+	//
+	ClusterExtensions *ClusterExtensions
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
@@ -217,6 +220,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.APINekiShards = newAPINekiShards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiSidecars = newAPINekiSidecars(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiSidecarParameters = newAPINekiSidecarParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ClusterExtensions = newClusterExtensions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 

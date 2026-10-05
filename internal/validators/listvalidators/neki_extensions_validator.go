@@ -7,6 +7,10 @@ import (
 )
 
 func NekiExtensionsValidator() validator.List {
+	return extensionsValidator()
+}
+
+func extensionsValidator() validator.List {
 	return listvalidator.ConflictsWith(
 		path.MatchRoot("parameters").AtMapKey("pgconf").AtMapKey("shared_preload_libraries"),
 		path.MatchRoot("parameters").AtMapKey("pgconf").AtMapKey("session_preload_libraries"),

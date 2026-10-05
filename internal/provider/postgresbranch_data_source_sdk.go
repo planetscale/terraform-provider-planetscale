@@ -10,14 +10,14 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
-func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchResponseBody(ctx context.Context, resp *operations.GetPostgresBranchResponseBody) diag.Diagnostics {
+func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchDataSourceResponseBody(ctx context.Context, resp *operations.GetPostgresBranchDataSourceResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		if resp.Actor == nil {
 			r.Actor = nil
 		} else {
-			r.Actor = &tfTypes.GetPostgresBranchActor{}
+			r.Actor = &tfTypes.GetPostgresBranchDataSourceActor{}
 			r.Actor.ID = types.StringValue(resp.Actor.ID)
 		}
 		r.ClusterSize = types.StringValue(resp.ClusterSize)
@@ -42,7 +42,7 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 		r.ParentBranch = types.StringPointerValue(resp.ParentBranch)
 		r.Ready = types.BoolValue(resp.Ready)
 		r.Region = types.StringValue(resp.Region)
-		r.RegionData = &tfTypes.GetPostgresBranchRegionData{}
+		r.RegionData = &tfTypes.GetPostgresBranchDataSourceRegionData{}
 		r.RegionData.ID = types.StringValue(resp.RegionData.ID)
 		r.RegionData.MysqlSupported = types.BoolValue(resp.RegionData.MysqlSupported)
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
@@ -54,7 +54,20 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 	return diags
 }
 
-func (r *PostgresBranchDataSourceModel) ToOperationsGetPostgresBranchRequest(ctx context.Context) (*operations.GetPostgresBranchRequest, diag.Diagnostics) {
+func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchExtensionsResponseBody(ctx context.Context, resp *operations.GetPostgresBranchExtensionsResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Extensions = make([]types.String, 0, len(resp.Extensions))
+		for _, v := range resp.Extensions {
+			r.Extensions = append(r.Extensions, types.StringValue(v))
+		}
+	}
+
+	return diags
+}
+
+func (r *PostgresBranchDataSourceModel) ToOperationsGetPostgresBranchDataSourceRequest(ctx context.Context) (*operations.GetPostgresBranchDataSourceRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -66,7 +79,28 @@ func (r *PostgresBranchDataSourceModel) ToOperationsGetPostgresBranchRequest(ctx
 	var branch string
 	branch = r.ID.ValueString()
 
-	out := operations.GetPostgresBranchRequest{
+	out := operations.GetPostgresBranchDataSourceRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+	}
+
+	return &out, diags
+}
+
+func (r *PostgresBranchDataSourceModel) ToOperationsGetPostgresBranchExtensionsRequest(ctx context.Context) (*operations.GetPostgresBranchExtensionsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	out := operations.GetPostgresBranchExtensionsRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
