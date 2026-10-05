@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 8611f2b1105567e9c8e3d95909bebf51
+  docChecksum: 5e75d04ff472b528d38e72839fdd43e5
   docVersion: v1
   speakeasyVersion: 1.800.0
   generationVersion: 2.943.0
@@ -61,9 +61,6 @@ trackedFiles:
   examples/data-sources/planetscale_postgres_backup_policy/data-source.tf: {}
   examples/data-sources/planetscale_postgres_bouncer/data-source.tf: {}
   examples/data-sources/planetscale_postgres_bouncers/data-source.tf: {}
-  examples/data-sources/planetscale_postgres_branch/data-source.tf:
-    id: e8498c910cc4
-    pristine_git_object: 3b6090c12e19ba0ae03c38072b012e34da39cc8b
   examples/data-sources/planetscale_postgres_branch_backup/data-source.tf: {}
   examples/data-sources/planetscale_postgres_branch_backups/data-source.tf: {}
   examples/data-sources/planetscale_postgres_branch_role/data-source.tf:
@@ -419,6 +416,8 @@ trackedFiles:
   internal/provider/types/get_postgres_branch_backup_actor.go: {}
   internal/provider/types/get_postgres_branch_backup_backup_policy.go: {}
   internal/provider/types/get_postgres_branch_backup_database_branch.go: {}
+  internal/provider/types/get_postgres_branch_data_source_actor.go: {}
+  internal/provider/types/get_postgres_branch_data_source_region_data.go: {}
   internal/provider/types/get_postgres_branch_region_data.go:
     id: 9ca03d131b98
     pristine_git_object: a0a26641b386b0da4fef7870e5683938c018a259
@@ -564,6 +563,7 @@ trackedFiles:
   internal/sdk/backups.go: {}
   internal/sdk/bouncers.go: {}
   internal/sdk/branchchanges.go: {}
+  internal/sdk/clusterextensions.go: {}
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
     pristine_git_object: fa7fcf53770dfab66ff0b41fb2abc57deae178e0
@@ -709,6 +709,9 @@ trackedFiles:
     id: e4f92de0a1c5
     pristine_git_object: 4029ccd13069ed892087aa806e0f167d8744c1db
   internal/sdk/models/operations/getpostgresbranchbackup.go: {}
+  internal/sdk/models/operations/getpostgresbranchdatasource.go: {}
+  internal/sdk/models/operations/getpostgresbranchextensions.go: {}
+  internal/sdk/models/operations/getpostgresbranchmanagedextensions.go: {}
   internal/sdk/models/operations/getpostgresdatabase.go:
     id: 71f9d1711996
     pristine_git_object: 7cd4acb7ff08eda01a3578b71067a823d309a8e1
@@ -3272,6 +3275,38 @@ examples:
           database: "<value>"
           branch: "<value>"
           dedicated_read_replica: "<value>"
+  get_postgres_branch_managed_extensions:
+    speakeasy-default-get-postgres-branch-managed-extensions:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+        query:
+          terraform_managed: true
+      responses:
+        "200":
+          application/json: {"extensions": ["<value 1>"]}
+  get_postgres_branch_extensions:
+    speakeasy-default-get-postgres-branch-extensions:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"extensions": []}
+  get_postgres_branch_data_source:
+    speakeasy-default-get-postgres-branch-data-source:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "name": "<value>", "state": "ready", "cluster_name": "<value>", "ready": false, "deletion_protected": false, "actor": {"id": "<id>"}, "html_url": "https://affectionate-reporter.net/", "url": "https://wavy-possession.info", "region": {"id": "<id>", "mysql_supported": false, "postgresql_supported": true, "neki_supported": false}, "parent_branch": "<value>", "region_slug": "<value>"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

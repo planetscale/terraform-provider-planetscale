@@ -3,3 +3,7 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
   id           = "...my_id..."
   organization = "...my_organization..."
 }
+
+output "enabled_extensions" {
+  value = data.planetscale_postgres_branch.my_postgresbranch.extensions
+}

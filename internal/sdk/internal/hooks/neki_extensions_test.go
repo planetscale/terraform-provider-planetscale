@@ -111,3 +111,35 @@ func TestNekiExtensionsReadsWithoutPriorSelection(t *testing.T) {
 	require.NoError(t, err)
 	require.JSONEq(t, `{"extensions":["hll"]}`, string(body))
 }
+
+func TestPostgresExtensionsManagedReadPreservesUnsetAndEmpty(t *testing.T) {
+	t.Parallel()
+
+	hook := &NekiExtensionsHook{}
+	_, client := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
+		require.Empty(t, req.URL.RawQuery)
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`[{"name":"hll","enabled":true,"can_enable":true}]`)),
+		}, nil
+	}))
+
+	for _, tc := range []struct {
+		query string
+		want  string
+	}{
+		{query: "terraform_managed=true", want: `{"extensions":null}`},
+		{query: "terraform_managed=true&extensions=%5B%5D", want: `{"extensions":["hll"]}`},
+		{query: "", want: `{"extensions":["hll"]}`},
+	} {
+		req, err := http.NewRequest(http.MethodGet,
+			"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/extensions?"+tc.query, nil)
+		require.NoError(t, err)
+		res, err := client.Do(req)
+		require.NoError(t, err)
+		body, err := io.ReadAll(res.Body)
+		require.NoError(t, err)
+		require.JSONEq(t, tc.want, string(body))
+	}
+}

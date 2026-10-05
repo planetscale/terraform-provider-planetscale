@@ -14,12 +14,13 @@ PostgresBranch Resource
 
 ```terraform
 resource "planetscale_postgres_branch" "my_postgresbranch" {
-  organization  = "my-organization"
-  database      = "ru00w3vqvfr9"
+  organization = "my-organization"
+  database     = "ru00w3vqvfr9"
 
   name               = "my-branch"
   cluster_size       = "PS_10_AWS_ARM"
   deletion_protected = true
+  extensions         = ["auto_explain"]
 
   # Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
   # patroni). Omitted parameters are reset to their defaults.
@@ -48,6 +49,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 - `delete_descendants` (Boolean) If true, recursively delete all descendant branches along with this branch
 - `deletion_protected` (Boolean) Whether deletion protection is enabled for the branch
+- `extensions` (List of String) Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty list to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
 - `major_version` (String) The PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.
 - `parameters` (Map of Map of String) Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.

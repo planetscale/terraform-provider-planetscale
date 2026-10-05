@@ -29,22 +29,23 @@ type PostgresBranchDataSource struct {
 
 // PostgresBranchDataSourceModel describes the data model.
 type PostgresBranchDataSourceModel struct {
-	Actor             *tfTypes.GetPostgresBranchActor      `tfsdk:"actor"`
-	ClusterSize       types.String                         `tfsdk:"cluster_size"`
-	Database          types.String                         `tfsdk:"database"`
-	DeletionProtected types.Bool                           `tfsdk:"deletion_protected"`
-	HTMLURL           types.String                         `tfsdk:"html_url"`
-	ID                types.String                         `tfsdk:"id"`
-	Name              types.String                         `tfsdk:"name"`
-	Organization      types.String                         `tfsdk:"organization"`
-	Parameters        map[string]map[string]types.String   `tfsdk:"parameters"`
-	ParentBranch      types.String                         `tfsdk:"parent_branch"`
-	Ready             types.Bool                           `tfsdk:"ready"`
-	Region            types.String                         `tfsdk:"region"`
-	RegionData        *tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
-	Replicas          types.Int64                          `tfsdk:"replicas"`
-	State             types.String                         `tfsdk:"state"`
-	URL               types.String                         `tfsdk:"url"`
+	Actor             *tfTypes.GetPostgresBranchDataSourceActor      `tfsdk:"actor"`
+	ClusterSize       types.String                                   `tfsdk:"cluster_size"`
+	Database          types.String                                   `tfsdk:"database"`
+	DeletionProtected types.Bool                                     `tfsdk:"deletion_protected"`
+	Extensions        []types.String                                 `tfsdk:"extensions"`
+	HTMLURL           types.String                                   `tfsdk:"html_url"`
+	ID                types.String                                   `tfsdk:"id"`
+	Name              types.String                                   `tfsdk:"name"`
+	Organization      types.String                                   `tfsdk:"organization"`
+	Parameters        map[string]map[string]types.String             `tfsdk:"parameters"`
+	ParentBranch      types.String                                   `tfsdk:"parent_branch"`
+	Ready             types.Bool                                     `tfsdk:"ready"`
+	Region            types.String                                   `tfsdk:"region"`
+	RegionData        *tfTypes.GetPostgresBranchDataSourceRegionData `tfsdk:"region_data"`
+	Replicas          types.Int64                                    `tfsdk:"replicas"`
+	State             types.String                                   `tfsdk:"state"`
+	URL               types.String                                   `tfsdk:"url"`
 }
 
 // Metadata returns the data source type name.
@@ -78,6 +79,10 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"deletion_protected": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether deletion protection is enabled for the branch`,
+			},
+			"extensions": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
 			},
 			"html_url": schema.StringAttribute{
 				Computed:    true,
@@ -187,13 +192,13 @@ func (r *PostgresBranchDataSource) Read(ctx context.Context, req datasource.Read
 
 	ctx = withSensitiveValues(ctx, req.Config)
 
-	request, requestDiags := data.ToOperationsGetPostgresBranchRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPostgresBranchDataSourceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request)
+	res, err := r.client.DatabaseBranches.GetPostgresBranchDataSource(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -213,7 +218,38 @@ func (r *PostgresBranchDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchDataSourceResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetPostgresBranchExtensionsRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.ClusterExtensions.GetPostgresBranchExtensions(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchExtensionsResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

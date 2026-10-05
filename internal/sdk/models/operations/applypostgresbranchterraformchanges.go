@@ -10,6 +10,8 @@ import (
 type ApplyPostgresBranchTerraformChangesRequestBody struct {
 	// The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
 	ClusterSize *string `json:"cluster_size,omitzero"`
+	// Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty list to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
+	Extensions []string `json:"extensions,omitzero"`
 	// Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 	Parameters map[string]map[string]string `json:"parameters,omitzero"`
 }
@@ -30,6 +32,13 @@ func (a *ApplyPostgresBranchTerraformChangesRequestBody) GetClusterSize() *strin
 		return nil
 	}
 	return a.ClusterSize
+}
+
+func (a *ApplyPostgresBranchTerraformChangesRequestBody) GetExtensions() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Extensions
 }
 
 func (a *ApplyPostgresBranchTerraformChangesRequestBody) GetParameters() map[string]map[string]string {
