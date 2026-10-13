@@ -20,8 +20,8 @@ type UpdateRouterRequestBody struct {
 	MaxReplicasPerCell *int64 `json:"max_replicas_per_cell,omitzero"`
 	// The target average CPU utilization percentage when autoscaling
 	TargetCPUUtilization *int64 `json:"target_cpu_utilization,omitzero"`
-	// Router parameters nested by namespace (e.g., {"router": {"replication-lag-tolerable-max": "15m"}})
-	Parameters map[string]any `json:"parameters,omitzero"`
+	// Desired effective router parameter values nested by namespace, e.g. { router = { replication-lag-tolerable-max = "15m" } }. When configured, Terraform sends the complete map and resets omitted customer-configurable parameters to their defaults. The API identifies Terraform requests by the provider User-Agent.
+	Parameters map[string]map[string]string `json:"parameters,omitzero"`
 }
 
 func (u UpdateRouterRequestBody) MarshalJSON() ([]byte, error) {
@@ -70,7 +70,7 @@ func (u *UpdateRouterRequestBody) GetTargetCPUUtilization() *int64 {
 	return u.TargetCPUUtilization
 }
 
-func (u *UpdateRouterRequestBody) GetParameters() map[string]any {
+func (u *UpdateRouterRequestBody) GetParameters() map[string]map[string]string {
 	if u == nil {
 		return nil
 	}

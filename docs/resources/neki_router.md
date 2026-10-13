@@ -26,6 +26,7 @@ NekiRouter Resource
 
 - `autoscaling` (Boolean) Whether the router scales horizontally within each cell
 - `max_replicas_per_cell` (Number) The maximum number of replicas in each cell when autoscaling
+- `parameters` (Map of Map of String) Desired effective parameter values nested by namespace. The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.
 - `replicas_per_cell` (Number) The new number of replicas in each cell
 - `router_size` (String) The new router size for the router
 - `target_cpu_utilization` (Number) The target average CPU utilization percentage when autoscaling

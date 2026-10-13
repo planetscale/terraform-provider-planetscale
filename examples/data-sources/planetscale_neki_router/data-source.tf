@@ -3,4 +3,9 @@ data "planetscale_neki_router" "my_nekirouter" {
   database     = "...my_database..."
   name         = "...my_name..."
   organization = "...my_organization..."
+  parameters = {
+    key = {
+      # ...
+    }
+  }
 }

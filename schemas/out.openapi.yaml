@@ -8140,9 +8140,14 @@ paths:
                   description: The target average CPU utilization percentage when autoscaling
                 parameters:
                   type: object
-                  additionalProperties: true
-                  description: 'Router parameters nested by namespace (e.g., {"router": {"replication-lag-tolerable-max": "15m"}})'
-                  x-speakeasy-terraform-ignore: true
+                  nullable: true
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  description: >-
+                    Desired effective router parameter values nested by namespace, e.g. { router = { replication-lag-tolerable-max = "15m" } }. When configured, Terraform sends the complete map and resets omitted customer-configurable parameters to their defaults. The API identifies Terraform requests by the provider User-Agent.
       responses:
         "200":
           description: Returns the router
@@ -8291,7 +8296,112 @@ paths:
       x-speakeasy-entity-operation: NekiRouter#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/changes: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/changes/{id}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters:
+    get:
+      tags:
+        - api-neki_router_parameters
+      operationId: get_neki_router_parameters
+      summary: List parameters for a Neki router
+      responses:
+        "200":
+          description: Returns reconciled effective router parameter values for Terraform.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      Managed effective router parameter values nested by namespace. Remote non-default values are adopted during reads.
+                required:
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Router not found
+          headers: {}
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: router
+          in: path
+          required: true
+          description: Name from `list_routers`.
+          x-speakeasy-match: name
+          schema:
+            type: string
+        - name: internal
+          in: query
+          required: false
+          description: Include internal parameters. Terraform always excludes them.
+          schema:
+            type: boolean
+            const: false
+            default: false
+            x-speakeasy-terraform-ignore: schema
+        - name: parameters
+          in: query
+          required: false
+          description: >-
+            Desired effective parameter values nested by namespace. The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.
+          content:
+            application/json:
+              schema:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: string
+      x-speakeasy-entity-operation:
+        - NekiRouter#read#2
+        - NekiRouter#create#4
+        - NekiRouter#update#3
   /organizations/{organization}/databases/{database}/branches/{branch}/safe-migrations:
     put:
       tags:

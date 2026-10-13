@@ -18,6 +18,11 @@ data "planetscale_neki_router" "my_nekirouter" {
   database     = "...my_database..."
   name         = "...my_name..."
   organization = "...my_organization..."
+  parameters = {
+    key = {
+      # ...
+    }
+  }
 }
 ```
 
@@ -30,6 +35,10 @@ data "planetscale_neki_router" "my_nekirouter" {
 - `database` (String) Database name slug from `list_databases`. Example: `app-db`.
 - `name` (String) The name of the router
 - `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
+
+### Optional
+
+- `parameters` (Map of Map of String) Managed effective router parameter values nested by namespace. Remote non-default values are adopted during reads.
 
 ### Read-Only
 
