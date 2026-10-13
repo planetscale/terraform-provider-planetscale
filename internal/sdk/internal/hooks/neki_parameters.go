@@ -14,7 +14,7 @@ import (
 const terraformManagedParametersQuery = "parameters"
 
 var nekiParametersPathPattern = regexp.MustCompile(
-	`^/v1/organizations/[^/]+/databases/[^/]+/branches/[^/]+/(?:admin|configuration-profiles/[^/]+|sidecars/[^/]+)/parameters$`,
+	`^/v1/organizations/[^/]+/databases/[^/]+/branches/[^/]+/(?:admin|configuration-profiles/[^/]+|routers/[^/]+|sidecars/[^/]+)/parameters$`,
 )
 
 // NekiParametersHook reconciles parameter-detail responses with the keys
