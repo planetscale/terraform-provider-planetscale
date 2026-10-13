@@ -81,6 +81,22 @@ func TestReconcileNekiPreloadParameters(t *testing.T) {
 	}, reconcileNekiParameters(details, managed))
 }
 
+func TestReconcileNekiLockedParameters(t *testing.T) {
+	t.Parallel()
+
+	details := []nekiParameterDetail{
+		{Namespace: "pgconf", Name: "unmanaged_update", Value: "", DefaultValue: "25", RequiresUpdate: "configuration_profile"},
+		{Namespace: "pgconf", Name: "managed_update", Value: "1min", DefaultValue: "5min", RequiresUpdate: "cluster"},
+	}
+	managed := map[string]map[string]string{
+		"pgconf": {"managed_update": "1min"},
+	}
+
+	require.Equal(t, map[string]map[string]string{
+		"pgconf": {"managed_update": "1min"},
+	}, reconcileNekiParameters(details, managed))
+}
+
 func TestNekiConfigurationProfileParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	t.Parallel()
 
