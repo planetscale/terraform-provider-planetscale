@@ -125,10 +125,11 @@ func takeTerraformManagedParameters(req *http.Request) (map[string]map[string]st
 }
 
 type nekiParameterDetail struct {
-	Namespace    string `json:"namespace"`
-	Name         string `json:"name"`
-	Value        string `json:"value"`
-	DefaultValue string `json:"default_value"`
+	Namespace      string `json:"namespace"`
+	Name           string `json:"name"`
+	Value          string `json:"value"`
+	DefaultValue   string `json:"default_value"`
+	RequiresUpdate string `json:"requires_update"`
 }
 
 func reconcileNekiParameters(
@@ -144,6 +145,11 @@ func reconcileNekiParameters(
 			continue
 		}
 		if detail.Value == detail.DefaultValue && !wasManaged {
+			continue
+		}
+		// The API rejects changes to locked parameters until an update runs, so
+		// Terraform can't clear their drift.
+		if detail.RequiresUpdate != "" && !wasManaged {
 			continue
 		}
 
