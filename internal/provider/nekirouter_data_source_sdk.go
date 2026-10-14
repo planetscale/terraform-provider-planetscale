@@ -9,6 +9,29 @@ import (
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
 )
 
+func (r *NekiRouterDataSourceModel) RefreshFromOperationsGetNekiRouterParametersResponseBody(ctx context.Context, resp *operations.GetNekiRouterParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
 func (r *NekiRouterDataSourceModel) RefreshFromOperationsGetRouterResponseBody(ctx context.Context, resp *operations.GetRouterResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -25,6 +48,46 @@ func (r *NekiRouterDataSourceModel) RefreshFromOperationsGetRouterResponseBody(c
 	}
 
 	return diags
+}
+
+func (r *NekiRouterDataSourceModel) ToOperationsGetNekiRouterParametersRequest(ctx context.Context) (*operations.GetNekiRouterParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var router string
+	router = r.Name.ValueString()
+
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
+
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
+		}
+	}
+	out := operations.GetNekiRouterParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Router:       router,
+		Parameters:   parameters,
+	}
+
+	return &out, diags
 }
 
 func (r *NekiRouterDataSourceModel) ToOperationsGetRouterRequest(ctx context.Context) (*operations.GetRouterRequest, diag.Diagnostics) {

@@ -47,13 +47,26 @@ actions:
     update:
       x-speakeasy-match: name
 
-  # Router parameters have no read-back in the resource responses (the
-  # parameters endpoint returns rich definitions that cannot reconcile with the
-  # map-shaped request), so Terraform cannot manage them without drift.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch.requestBody.content["application/json"].schema.properties.parameters
-    description: Hide parameters; no drift-safe read-back exists.
+    description: Replace the untyped parameter object with Terraform's nested string map.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].patch.requestBody.content["application/json"].schema.properties
+    description: Model router parameter overrides as a nested string map.
     update:
-      x-speakeasy-terraform-ignore: true
+      parameters:
+        type: object
+        nullable: true
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: string
+        x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+        description: >-
+          Desired effective router parameter values nested by namespace, e.g.
+          { router = { replication-lag-tolerable-max = "15m" } }. When
+          configured, Terraform sends the complete map and resets omitted
+          customer-configurable parameters to their defaults. The API
+          identifies Terraform requests by the provider User-Agent.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get
     description: API operation for managed resource read, and the polling step for create and update.
@@ -121,3 +134,98 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}"].get.responses["200"].content["application/json"].schema.properties.sku
     description: Trim the sku object; the flat router_size string replaces it.
     remove: true
+
+  # Terraform stores parameters as a nested map, while the API returns parameter
+  # metadata. The SDK hook converts the response and preserves managed values.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters"].get.parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters"].get.responses["200"].content["application/json"].schema
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/routers/{router}/parameters"].get
+    description: Read effective customer router parameters for Terraform state reconciliation.
+    update:
+      operationId: get_neki_router_parameters
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+        - name: router
+          in: path
+          required: true
+          description: Name from `list_routers`.
+          x-speakeasy-match: name
+          schema:
+            type: string
+        - name: internal
+          in: query
+          required: false
+          description: Include internal parameters. Terraform always excludes them.
+          schema:
+            type: boolean
+            const: false
+            default: false
+            x-speakeasy-terraform-ignore: schema
+        - name: parameters
+          in: query
+          required: false
+          description: >-
+            Desired effective parameter values nested by namespace. The SDK
+            hook uses the prior Terraform value for reconciliation and removes
+            this query parameter before sending the API request.
+          content:
+            application/json:
+              schema:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: string
+      responses:
+        "200":
+          description: Returns reconciled effective router parameter values for Terraform.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      Managed effective router parameter values nested by
+                      namespace. Remote non-default values are adopted during
+                      reads.
+                required:
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Router not found
+        "500":
+          description: Internal Server Error
+      x-speakeasy-entity-operation:
+        - NekiRouter#read#2
+        - NekiRouter#create#4
+        - NekiRouter#update#3

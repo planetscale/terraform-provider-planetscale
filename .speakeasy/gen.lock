@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 8611f2b1105567e9c8e3d95909bebf51
+  docChecksum: 6ab90f4b0aea8f0e2b523d510c644b38
   docVersion: v1
   speakeasyVersion: 1.800.0
   generationVersion: 2.943.0
@@ -552,6 +552,7 @@ trackedFiles:
   internal/sdk/apibranchresizes.go: {}
   internal/sdk/apinekiadminparameters.go: {}
   internal/sdk/apinekiadmins.go: {}
+  internal/sdk/apinekirouterparameters.go: {}
   internal/sdk/apinekirouters.go: {}
   internal/sdk/apinekishardconfigurationprofileextensions.go: {}
   internal/sdk/apinekishardconfigurationprofileparameters.go: {}
@@ -694,6 +695,7 @@ trackedFiles:
   internal/sdk/models/operations/getnekiconfigurationprofileextensions.go: {}
   internal/sdk/models/operations/getnekiconfigurationprofileparameters.go: {}
   internal/sdk/models/operations/getnekirole.go: {}
+  internal/sdk/models/operations/getnekirouterparameters.go: {}
   internal/sdk/models/operations/getnekishard.go: {}
   internal/sdk/models/operations/getnekisidecar.go: {}
   internal/sdk/models/operations/getnekisidecarparameters.go: {}
@@ -3272,6 +3274,19 @@ examples:
           database: "<value>"
           branch: "<value>"
           dedicated_read_replica: "<value>"
+  get_neki_router_parameters:
+    speakeasy-default-get-neki-router-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          router: "<value>"
+        query:
+          internal: false
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>", "key2": "<value>"}}}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

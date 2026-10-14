@@ -85,6 +85,7 @@ type PlanetScale struct {
 	//
 	Roles                    *Roles
 	APINekiRouters           *APINekiRouters
+	APINekiRouterParameters  *APINekiRouterParameters
 	DatabaseBranches         *DatabaseBranches
 	APINekiShards            *APINekiShards
 	APINekiSidecars          *APINekiSidecars
@@ -213,6 +214,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiRouters = newAPINekiRouters(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APINekiRouterParameters = newAPINekiRouterParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShards = newAPINekiShards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiSidecars = newAPINekiSidecars(sdk, sdk.sdkConfiguration, sdk.hooks)

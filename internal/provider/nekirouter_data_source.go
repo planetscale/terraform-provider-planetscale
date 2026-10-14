@@ -28,18 +28,19 @@ type NekiRouterDataSource struct {
 
 // NekiRouterDataSourceModel describes the data model.
 type NekiRouterDataSourceModel struct {
-	Autoscaling          types.Bool   `tfsdk:"autoscaling"`
-	Branch               types.String `tfsdk:"branch"`
-	Database             types.String `tfsdk:"database"`
-	Default              types.Bool   `tfsdk:"default"`
-	ID                   types.String `tfsdk:"id"`
-	MaxReplicasPerCell   types.Int64  `tfsdk:"max_replicas_per_cell"`
-	Name                 types.String `tfsdk:"name"`
-	Organization         types.String `tfsdk:"organization"`
-	ReplicasPerCell      types.Int64  `tfsdk:"replicas_per_cell"`
-	RouterSize           types.String `tfsdk:"router_size"`
-	State                types.String `tfsdk:"state"`
-	TargetCPUUtilization types.Int64  `tfsdk:"target_cpu_utilization"`
+	Autoscaling          types.Bool                         `tfsdk:"autoscaling"`
+	Branch               types.String                       `tfsdk:"branch"`
+	Database             types.String                       `tfsdk:"database"`
+	Default              types.Bool                         `tfsdk:"default"`
+	ID                   types.String                       `tfsdk:"id"`
+	MaxReplicasPerCell   types.Int64                        `tfsdk:"max_replicas_per_cell"`
+	Name                 types.String                       `tfsdk:"name"`
+	Organization         types.String                       `tfsdk:"organization"`
+	Parameters           map[string]map[string]types.String `queryParam:"serialization=json,name=parameters" tfsdk:"parameters"`
+	ReplicasPerCell      types.Int64                        `tfsdk:"replicas_per_cell"`
+	RouterSize           types.String                       `tfsdk:"router_size"`
+	State                types.String                       `tfsdk:"state"`
+	TargetCPUUtilization types.Int64                        `tfsdk:"target_cpu_utilization"`
 }
 
 // Metadata returns the data source type name.
@@ -84,6 +85,14 @@ func (r *NekiRouterDataSource) Schema(ctx context.Context, req datasource.Schema
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
+			},
+			"parameters": schema.MapAttribute{
+				Computed: true,
+				Optional: true,
+				ElementType: types.MapType{
+					ElemType: types.StringType,
+				},
+				Description: `Managed effective router parameter values nested by namespace. Remote non-default values are adopted during reads.`,
 			},
 			"replicas_per_cell": schema.Int64Attribute{
 				Computed:    true,
@@ -172,6 +181,37 @@ func (r *NekiRouterDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetRouterResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetNekiRouterParametersRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.APINekiRouterParameters.GetNekiRouterParameters(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiRouterParametersResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

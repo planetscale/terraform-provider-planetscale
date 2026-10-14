@@ -316,6 +316,58 @@ func TestNekiSidecarParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	}, payload.Parameters)
 }
 
+func TestNekiRouterParametersHookReconcilesAndStripsClientState(t *testing.T) {
+	t.Parallel()
+
+	var calls int
+	hook := NewNekiParametersHook()
+	_, wrappedClient := hook.SDKInit("https://api.planetscale.com", testHTTPClient(func(req *http.Request) (*http.Response, error) {
+		calls++
+		require.Equal(t, "false", req.URL.Query().Get("internal"))
+		require.False(t, req.URL.Query().Has(terraformManagedParametersQuery))
+
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body: io.NopCloser(strings.NewReader(`[
+				{"namespace":"router","name":"replication-lag-tolerable-min","value":"0ms","default_value":"0ms"},
+				{"namespace":"router","name":"replication-lag-tolerable-max","value":"15m","default_value":"5m"}
+			]`)),
+			Request: req,
+		}, nil
+	}))
+
+	managedJSON, err := json.Marshal(map[string]map[string]string{
+		"router": {"replication-lag-tolerable-min": "0ms"},
+	})
+	require.NoError(t, err)
+	query := url.Values{
+		"internal":                      {"false"},
+		terraformManagedParametersQuery: {string(managedJSON)},
+	}
+	req, err := http.NewRequest(
+		http.MethodGet,
+		"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/routers/analytics/parameters?"+query.Encode(),
+		nil,
+	)
+	require.NoError(t, err)
+
+	res, err := wrappedClient.Do(req)
+	require.NoError(t, err)
+	require.Equal(t, 1, calls)
+
+	var payload struct {
+		Parameters map[string]map[string]string `json:"parameters"`
+	}
+	require.NoError(t, json.NewDecoder(res.Body).Decode(&payload))
+	require.Equal(t, map[string]map[string]string{
+		"router": {
+			"replication-lag-tolerable-max": "15m",
+			"replication-lag-tolerable-min": "0ms",
+		},
+	}, payload.Parameters)
+}
+
 func TestNekiConfigurationProfileParametersHookReturnsEmptyMapWithoutRelevantParameters(t *testing.T) {
 	t.Parallel()
 

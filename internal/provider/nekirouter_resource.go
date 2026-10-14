@@ -14,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	custom_mapplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/mapplanmodifier"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
@@ -35,18 +36,19 @@ type NekiRouterResource struct {
 
 // NekiRouterResourceModel describes the resource data model.
 type NekiRouterResourceModel struct {
-	Autoscaling          types.Bool   `tfsdk:"autoscaling"`
-	Branch               types.String `tfsdk:"branch"`
-	Database             types.String `tfsdk:"database"`
-	Default              types.Bool   `tfsdk:"default"`
-	ID                   types.String `tfsdk:"id"`
-	MaxReplicasPerCell   types.Int64  `tfsdk:"max_replicas_per_cell"`
-	Name                 types.String `tfsdk:"name"`
-	Organization         types.String `tfsdk:"organization"`
-	ReplicasPerCell      types.Int64  `tfsdk:"replicas_per_cell"`
-	RouterSize           types.String `tfsdk:"router_size"`
-	State                types.String `tfsdk:"state"`
-	TargetCPUUtilization types.Int64  `tfsdk:"target_cpu_utilization"`
+	Autoscaling          types.Bool                         `tfsdk:"autoscaling"`
+	Branch               types.String                       `tfsdk:"branch"`
+	Database             types.String                       `tfsdk:"database"`
+	Default              types.Bool                         `tfsdk:"default"`
+	ID                   types.String                       `tfsdk:"id"`
+	MaxReplicasPerCell   types.Int64                        `tfsdk:"max_replicas_per_cell"`
+	Name                 types.String                       `tfsdk:"name"`
+	Organization         types.String                       `tfsdk:"organization"`
+	Parameters           map[string]map[string]types.String `tfsdk:"parameters"`
+	ReplicasPerCell      types.Int64                        `tfsdk:"replicas_per_cell"`
+	RouterSize           types.String                       `tfsdk:"router_size"`
+	State                types.String                       `tfsdk:"state"`
+	TargetCPUUtilization types.Int64                        `tfsdk:"target_cpu_utilization"`
 }
 
 func (r *NekiRouterResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -103,6 +105,17 @@ func (r *NekiRouterResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `. Requires replacement if changed.`,
+			},
+			"parameters": schema.MapAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Map{
+					custom_mapplanmodifier.WarnOnRemovedParameters(),
+				},
+				ElementType: types.MapType{
+					ElemType: types.StringType,
+				},
+				Description: `Desired effective parameter values nested by namespace. The SDK hook uses the prior Terraform value for reconciliation and removes this query parameter before sending the API request.`,
 			},
 			"replicas_per_cell": schema.Int64Attribute{
 				Computed:    true,
@@ -283,6 +296,43 @@ func (r *NekiRouterResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request3, request3Diags := data.ToOperationsGetNekiRouterParametersRequest(ctx)
+	resp.Diagnostics.Append(request3Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res3, err := r.client.APINekiRouterParameters.GetNekiRouterParameters(ctx, *request3)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res3 != nil && res3.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
+		}
+		return
+	}
+	if res3 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res3))
+		return
+	}
+	if res3.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res3.StatusCode), debugResponse(res3.RawResponse))
+		return
+	}
+	if !(res3.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res3.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiRouterParametersResponseBody(ctx, res3.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -339,6 +389,41 @@ func (r *NekiRouterResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetRouterResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetNekiRouterParametersRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.APINekiRouterParameters.GetNekiRouterParameters(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiRouterParametersResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -433,6 +518,43 @@ func (r *NekiRouterResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetRouterResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request2, request2Diags := data.ToOperationsGetNekiRouterParametersRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.APINekiRouterParameters.GetNekiRouterParameters(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+	if !(res2.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetNekiRouterParametersResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

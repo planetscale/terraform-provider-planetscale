@@ -27,6 +27,29 @@ func (r *NekiRouterResourceModel) RefreshFromOperationsCreateRouterResponseBody(
 	return diags
 }
 
+func (r *NekiRouterResourceModel) RefreshFromOperationsGetNekiRouterParametersResponseBody(ctx context.Context, resp *operations.GetNekiRouterParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
 func (r *NekiRouterResourceModel) RefreshFromOperationsGetRouterResponseBody(ctx context.Context, resp *operations.GetRouterResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -144,6 +167,46 @@ func (r *NekiRouterResourceModel) ToOperationsDeleteRouterRequest(ctx context.Co
 	return &out, diags
 }
 
+func (r *NekiRouterResourceModel) ToOperationsGetNekiRouterParametersRequest(ctx context.Context) (*operations.GetNekiRouterParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var router string
+	router = r.Name.ValueString()
+
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
+
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
+		}
+	}
+	out := operations.GetNekiRouterParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Router:       router,
+		Parameters:   parameters,
+	}
+
+	return &out, diags
+}
+
 func (r *NekiRouterResourceModel) ToOperationsGetRouterRequest(ctx context.Context) (*operations.GetRouterRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -235,12 +298,27 @@ func (r *NekiRouterResourceModel) ToOperationsUpdateRouterRequestBody(ctx contex
 	} else {
 		targetCPUUtilization = nil
 	}
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
+
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
+		}
+	}
 	out := operations.UpdateRouterRequestBody{
 		RouterSize:           routerSize,
 		ReplicasPerCell:      replicasPerCell,
 		Autoscaling:          autoscaling,
 		MaxReplicasPerCell:   maxReplicasPerCell,
 		TargetCPUUtilization: targetCPUUtilization,
+		Parameters:           parameters,
 	}
 
 	return &out, diags
