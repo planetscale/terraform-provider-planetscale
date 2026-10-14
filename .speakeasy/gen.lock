@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 6ab90f4b0aea8f0e2b523d510c644b38
+  docChecksum: 817d646acd5c5f9a5fd4650091b5aa8a
   docVersion: v1
   speakeasyVersion: 1.800.0
   generationVersion: 2.943.0
@@ -886,7 +886,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9917.69, "per_page": 991769, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "neki_router_replicas_per_cell_limit": 991769, "has_card": false, "payment_info_required": false}]}
+          application/json: {"type": "<value>", "current_page": 9917.69, "per_page": 991769, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "neki_router_replicas_per_cell_limit": 991769, "has_card": false, "payment_info_required": false, "mcp_access_level": "<value>"}]}
   get_organization:
     speakeasy-default-get-organization:
       parameters:
@@ -895,7 +895,7 @@ examples:
           organization: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "database_count": 1578.34, "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": "9516.88", "keyspace_shard_limit": 6999.24, "neki_router_replicas_per_cell_limit": 276162, "has_card": false, "payment_info_required": true}
+          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "database_count": 1578.34, "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": "9516.88", "keyspace_shard_limit": 6999.24, "neki_router_replicas_per_cell_limit": 276162, "has_card": false, "payment_info_required": true, "mcp_access_level": "<value>"}
   update_organization:
     speakeasy-default-update-organization:
       parameters:
@@ -1211,7 +1211,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9096.15, "per_page": 909615, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "namespace": "pgbouncer", "name": "<value>", "display_name": "Janick38", "category": "<value>", "description": "till precedent wear unwilling gee", "immutable": false, "parameter_type": "array", "default_value": "<value>", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "url": "https://noteworthy-jury.com/", "options": [], "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}], "parameter_overrides": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>"}}}]}
+          application/json: {"type": "<value>", "current_page": 9096.15, "per_page": 909615, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "name": "<value>", "display_name": "Janick38", "namespace": "pgbouncer", "advanced": false, "category": "<value>", "description": "till precedent wear unwilling gee", "parameter_type": "array", "default_value": "<value>", "requires_update": "cluster", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "options": [], "url": "https://noteworthy-jury.com/", "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}], "parameter_overrides": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>"}}}]}
   create_bouncer:
     speakeasy-default-create-bouncer:
       parameters:
@@ -1331,7 +1331,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 1511.55, "per_page": 151155, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "external": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "node_ttl_strategy": "node_ttl_always", "storage": {"storage_bytes": 151155, "max_storage_bytes": 99231, "disk_scaling_strategy": "disable"}, "max_rollout": 430821, "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}, "throttler": {"enabled": true, "threshold": null}, "resize_in_progress": true}]}
+          application/json: {"type": "<value>", "current_page": 1511.55, "per_page": 151155, "next_page": 992.31, "next_page_url": "https://valuable-horst.org", "prev_page": 9159.99, "prev_page_url": "https://blue-pile.info", "data": [{"id": "<id>", "name": "<value>", "shards": 9424.89, "sharded": true, "external": true, "replicas": 3380.95, "extra_replicas": 6639.1, "created_at": "1731544994695", "updated_at": "1735607926051", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": true, "ready": false, "metal": true, "default": false, "imported": true, "vector_pool_allocation": 6859.78, "node_ttl_strategy": "node_ttl_always", "storage": {"storage_bytes": 151155, "max_storage_bytes": 99231, "max_storage_bytes_managed_by_staff": true, "disk_scaling_strategy": "disable"}, "max_rollout": 430821, "replication_durability_constraints": {"strategy": "always"}, "vreplication_flags": {"optimize_inserts": true, "allow_no_blob_binlog_row_image": true, "vplayer_batching": false}, "throttler": {"enabled": true, "threshold": null}, "resize_in_progress": true}]}
   create_keyspace:
     speakeasy-default-create-keyspace:
       parameters:
@@ -1341,7 +1341,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "external": false, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": false, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "node_ttl_strategy": "node_ttl_always", "storage": {"storage_bytes": 853972, "max_storage_bytes": 453872, "disk_scaling_strategy": "shrink"}, "max_rollout": 392090, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}, "throttler": {"enabled": false, "threshold": 7774.08}, "resize_in_progress": false}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8539.72, "sharded": true, "external": false, "replicas": 7774.08, "extra_replicas": 4059.71, "created_at": "1716518546451", "updated_at": "1735621637248", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": true, "resize_pending": true, "config_change_in_progress": false, "ready": false, "metal": false, "default": false, "imported": false, "vector_pool_allocation": 6085.93, "node_ttl_strategy": "node_ttl_always", "storage": {"storage_bytes": 853972, "max_storage_bytes": 453872, "max_storage_bytes_managed_by_staff": false, "disk_scaling_strategy": "shrink"}, "max_rollout": 392090, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": true, "vplayer_batching": true}, "throttler": {"enabled": false, "threshold": 7774.08}, "resize_in_progress": false}
   get_keyspace:
     speakeasy-default-get-keyspace:
       parameters:
@@ -1353,7 +1353,7 @@ examples:
           keyspace: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "external": false, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "config_change_in_progress": false, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "node_ttl_strategy": "node_ttl_follow_maintenance", "storage": {"storage_bytes": 818694, "max_storage_bytes": 268130, "disk_scaling_strategy": "grow"}, "max_rollout": 738848, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}, "throttler": {"enabled": false, "threshold": 2097.96}, "resize_in_progress": false}
+          application/json: {"id": "<id>", "name": "<value>", "shards": 8186.94, "sharded": true, "external": false, "replicas": 2097.96, "extra_replicas": 6000.53, "created_at": "1727453898551", "updated_at": "1735643571553", "cluster_name": "<value>", "cluster_display_name": "<value>", "resizing": false, "resize_pending": true, "config_change_in_progress": false, "ready": true, "metal": false, "default": true, "imported": true, "vector_pool_allocation": 7117.62, "node_ttl_strategy": "node_ttl_follow_maintenance", "storage": {"storage_bytes": 818694, "max_storage_bytes": 268130, "max_storage_bytes_managed_by_staff": false, "disk_scaling_strategy": "grow"}, "max_rollout": 738848, "replication_durability_constraints": {}, "vreplication_flags": {"optimize_inserts": false, "allow_no_blob_binlog_row_image": false, "vplayer_batching": false}, "throttler": {"enabled": false, "threshold": 2097.96}, "resize_in_progress": false}
   update_keyspace:
     speakeasy-default-update-keyspace:
       parameters:

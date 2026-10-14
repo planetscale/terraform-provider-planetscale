@@ -61,7 +61,7 @@ func (r *NekiShardsDataSource) Schema(ctx context.Context, req datasource.Schema
 						},
 						"configuration_profile": schema.StringAttribute{
 							Computed:    true,
-							Description: `The name of the shard configuration profile`,
+							Description: `The name of the configuration profile`,
 						},
 						"display_name": schema.StringAttribute{
 							Computed:    true,

@@ -38,6 +38,6 @@ data "planetscale_neki_shard" "my_nekishard" {
 ### Read-Only
 
 - `authoritative` (Boolean) Whether the shard is the authoritative shard of the cluster
-- `configuration_profile` (String) The name of the shard configuration profile
+- `configuration_profile` (String) The name of the configuration profile
 - `display_name` (String) The display name of the shard
 - `ready` (Boolean) Whether the shard has been created on the cluster

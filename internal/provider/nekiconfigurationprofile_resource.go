@@ -100,11 +100,11 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `The ID of the shard configuration profile`,
+				Description: `The ID of the configuration profile`,
 			},
 			"is_default": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether this is the default shard configuration profile`,
+				Description: `Whether this is the default configuration profile`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -135,12 +135,12 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The PostgreSQL major version for the shard configuration profile`,
+				Description: `The PostgreSQL major version for the configuration profile`,
 			},
 			"postgres_minor_version": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The PostgreSQL minor version for the shard configuration profile. Requires postgres_major_version when specified.`,
+				Description: `The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.`,
 				Validators: []validator.Int64{
 					custom_int64validators.PostgresMinorVersionValidator(),
 				},
@@ -148,7 +148,7 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The new number of replicas for the shard configuration profile`,
+				Description: `The new number of replicas for the configuration profile`,
 			},
 			"shard_count": schema.Int64Attribute{
 				Computed:    true,
@@ -156,7 +156,7 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
-				Description: `The current state of the shard configuration profile`,
+				Description: `The current state of the configuration profile`,
 			},
 			"storage": schema.SingleNestedAttribute{
 				Computed: true,

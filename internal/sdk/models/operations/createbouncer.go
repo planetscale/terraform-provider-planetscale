@@ -182,6 +182,8 @@ func (c *CreateBouncerActor) GetID() string {
 type CreateBouncerNamespace string
 
 const (
+	CreateBouncerNamespacePatroni   CreateBouncerNamespace = "patroni"
+	CreateBouncerNamespacePgconf    CreateBouncerNamespace = "pgconf"
 	CreateBouncerNamespacePgbouncer CreateBouncerNamespace = "pgbouncer"
 )
 
@@ -194,6 +196,10 @@ func (e *CreateBouncerNamespace) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "patroni":
+		fallthrough
+	case "pgconf":
+		fallthrough
 	case "pgbouncer":
 		*e = CreateBouncerNamespace(v)
 		return nil
@@ -207,10 +213,14 @@ type CreateBouncerParameterType string
 
 const (
 	CreateBouncerParameterTypeArray   CreateBouncerParameterType = "array"
+	CreateBouncerParameterTypeBoolean CreateBouncerParameterType = "boolean"
+	CreateBouncerParameterTypeBytes   CreateBouncerParameterType = "bytes"
+	CreateBouncerParameterTypeFloat   CreateBouncerParameterType = "float"
 	CreateBouncerParameterTypeInteger CreateBouncerParameterType = "integer"
 	CreateBouncerParameterTypeSeconds CreateBouncerParameterType = "seconds"
 	CreateBouncerParameterTypeSelect  CreateBouncerParameterType = "select"
 	CreateBouncerParameterTypeString  CreateBouncerParameterType = "string"
+	CreateBouncerParameterTypeTime    CreateBouncerParameterType = "time"
 )
 
 func (e CreateBouncerParameterType) ToPointer() *CreateBouncerParameterType {
@@ -224,6 +234,12 @@ func (e *CreateBouncerParameterType) UnmarshalJSON(data []byte) error {
 	switch v {
 	case "array":
 		fallthrough
+	case "boolean":
+		fallthrough
+	case "bytes":
+		fallthrough
+	case "float":
+		fallthrough
 	case "integer":
 		fallthrough
 	case "seconds":
@@ -231,6 +247,8 @@ func (e *CreateBouncerParameterType) UnmarshalJSON(data []byte) error {
 	case "select":
 		fallthrough
 	case "string":
+		fallthrough
+	case "time":
 		*e = CreateBouncerParameterType(v)
 		return nil
 	default:
@@ -238,7 +256,31 @@ func (e *CreateBouncerParameterType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type CreateBouncerActorPgbouncer struct {
+// CreateBouncerRequiresUpdate - The update required before the parameter can be configured
+type CreateBouncerRequiresUpdate string
+
+const (
+	CreateBouncerRequiresUpdateCluster CreateBouncerRequiresUpdate = "cluster"
+)
+
+func (e CreateBouncerRequiresUpdate) ToPointer() *CreateBouncerRequiresUpdate {
+	return &e
+}
+func (e *CreateBouncerRequiresUpdate) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "cluster":
+		*e = CreateBouncerRequiresUpdate(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for CreateBouncerRequiresUpdate: %v", v)
+	}
+}
+
+type CreateBouncerActorCluster struct {
 	// The ID of the actor
 	ID string `json:"id"`
 	// The name of the actor
@@ -247,21 +289,21 @@ type CreateBouncerActorPgbouncer struct {
 	AvatarURL string `json:"avatar_url"`
 }
 
-func (c *CreateBouncerActorPgbouncer) GetID() string {
+func (c *CreateBouncerActorCluster) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
 }
 
-func (c *CreateBouncerActorPgbouncer) GetDisplayName() string {
+func (c *CreateBouncerActorCluster) GetDisplayName() string {
 	if c == nil {
 		return ""
 	}
 	return c.DisplayName
 }
 
-func (c *CreateBouncerActorPgbouncer) GetAvatarURL() string {
+func (c *CreateBouncerActorCluster) GetAvatarURL() string {
 	if c == nil {
 		return ""
 	}
@@ -270,56 +312,66 @@ func (c *CreateBouncerActorPgbouncer) GetAvatarURL() string {
 
 type CreateBouncerParameterDetail struct {
 	// The ID of the parameter
-	ID string `json:"id"`
-	// The namespace of the parameter
-	Namespace CreateBouncerNamespace `json:"namespace"`
+	ID *string `json:"id,omitzero"`
 	// The name of the parameter
 	Name string `json:"name"`
 	// The display name of the parameter
 	DisplayName string `json:"display_name"`
+	// The namespace of the parameter
+	Namespace CreateBouncerNamespace `json:"namespace"`
+	// Whether the parameter is advanced
+	Advanced bool `json:"advanced"`
 	// The category of the parameter
-	Category string `json:"category"`
+	Category *string `json:"category"`
 	// The description of the parameter
 	Description string `json:"description"`
-	// Whether the parameter can be changed
-	Immutable bool `json:"immutable"`
 	// The type of the parameter
 	ParameterType CreateBouncerParameterType `json:"parameter_type"`
 	// The default value of the parameter
-	DefaultValue string `json:"default_value"`
+	DefaultValue *string `json:"default_value"`
+	// Why the parameter cannot be changed
+	DisabledReason *string `json:"disabled_reason,omitzero"`
+	// The update required before the parameter can be configured
+	RequiresUpdate *CreateBouncerRequiresUpdate `json:"requires_update"`
 	// The configured value of the parameter
-	Value string `json:"value"`
+	Value *string `json:"value"`
 	// Whether the parameter is required
 	Required bool `json:"required"`
 	// When the parameter was created
-	CreatedAt string `json:"created_at"`
+	CreatedAt *string `json:"created_at"`
 	// When the parameter was last updated
-	UpdatedAt string `json:"updated_at"`
-	// True if processes require a server restart on change
+	UpdatedAt *string `json:"updated_at"`
+	// Whether processes require a server restart after the parameter changes
 	Restart bool `json:"restart"`
 	// The maximum value of the parameter
-	Max float64 `json:"max"`
+	Max *float64 `json:"max,omitzero"`
 	// The minimum value of the parameter
-	Min float64 `json:"min"`
+	Min *float64 `json:"min,omitzero"`
+	// Valid options for the parameter value. Null represents an unset value
+	Options []string `json:"options,omitzero"`
+	// The units of the parameter value
+	Units []string `json:"units,omitzero"`
 	// The URL of the parameter
-	URL string `json:"url"`
-	// Valid options for the parameter value
-	Options []string                    `json:"options"`
-	Actor   CreateBouncerActorPgbouncer `json:"actor"`
+	URL   string                    `json:"url"`
+	Actor CreateBouncerActorCluster `json:"actor"`
 }
 
-func (c *CreateBouncerParameterDetail) GetID() string {
+func (c CreateBouncerParameterDetail) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateBouncerParameterDetail) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *CreateBouncerParameterDetail) GetID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ID
-}
-
-func (c *CreateBouncerParameterDetail) GetNamespace() CreateBouncerNamespace {
-	if c == nil {
-		return CreateBouncerNamespace("")
-	}
-	return c.Namespace
 }
 
 func (c *CreateBouncerParameterDetail) GetName() string {
@@ -336,9 +388,23 @@ func (c *CreateBouncerParameterDetail) GetDisplayName() string {
 	return c.DisplayName
 }
 
-func (c *CreateBouncerParameterDetail) GetCategory() string {
+func (c *CreateBouncerParameterDetail) GetNamespace() CreateBouncerNamespace {
 	if c == nil {
-		return ""
+		return CreateBouncerNamespace("")
+	}
+	return c.Namespace
+}
+
+func (c *CreateBouncerParameterDetail) GetAdvanced() bool {
+	if c == nil {
+		return false
+	}
+	return c.Advanced
+}
+
+func (c *CreateBouncerParameterDetail) GetCategory() *string {
+	if c == nil {
+		return nil
 	}
 	return c.Category
 }
@@ -350,13 +416,6 @@ func (c *CreateBouncerParameterDetail) GetDescription() string {
 	return c.Description
 }
 
-func (c *CreateBouncerParameterDetail) GetImmutable() bool {
-	if c == nil {
-		return false
-	}
-	return c.Immutable
-}
-
 func (c *CreateBouncerParameterDetail) GetParameterType() CreateBouncerParameterType {
 	if c == nil {
 		return CreateBouncerParameterType("")
@@ -364,16 +423,30 @@ func (c *CreateBouncerParameterDetail) GetParameterType() CreateBouncerParameter
 	return c.ParameterType
 }
 
-func (c *CreateBouncerParameterDetail) GetDefaultValue() string {
+func (c *CreateBouncerParameterDetail) GetDefaultValue() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.DefaultValue
 }
 
-func (c *CreateBouncerParameterDetail) GetValue() string {
+func (c *CreateBouncerParameterDetail) GetDisabledReason() *string {
 	if c == nil {
-		return ""
+		return nil
+	}
+	return c.DisabledReason
+}
+
+func (c *CreateBouncerParameterDetail) GetRequiresUpdate() *CreateBouncerRequiresUpdate {
+	if c == nil {
+		return nil
+	}
+	return c.RequiresUpdate
+}
+
+func (c *CreateBouncerParameterDetail) GetValue() *string {
+	if c == nil {
+		return nil
 	}
 	return c.Value
 }
@@ -385,16 +458,16 @@ func (c *CreateBouncerParameterDetail) GetRequired() bool {
 	return c.Required
 }
 
-func (c *CreateBouncerParameterDetail) GetCreatedAt() string {
+func (c *CreateBouncerParameterDetail) GetCreatedAt() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.CreatedAt
 }
 
-func (c *CreateBouncerParameterDetail) GetUpdatedAt() string {
+func (c *CreateBouncerParameterDetail) GetUpdatedAt() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.UpdatedAt
 }
@@ -406,18 +479,32 @@ func (c *CreateBouncerParameterDetail) GetRestart() bool {
 	return c.Restart
 }
 
-func (c *CreateBouncerParameterDetail) GetMax() float64 {
+func (c *CreateBouncerParameterDetail) GetMax() *float64 {
 	if c == nil {
-		return 0.0
+		return nil
 	}
 	return c.Max
 }
 
-func (c *CreateBouncerParameterDetail) GetMin() float64 {
+func (c *CreateBouncerParameterDetail) GetMin() *float64 {
 	if c == nil {
-		return 0.0
+		return nil
 	}
 	return c.Min
+}
+
+func (c *CreateBouncerParameterDetail) GetOptions() []string {
+	if c == nil {
+		return nil
+	}
+	return c.Options
+}
+
+func (c *CreateBouncerParameterDetail) GetUnits() []string {
+	if c == nil {
+		return nil
+	}
+	return c.Units
 }
 
 func (c *CreateBouncerParameterDetail) GetURL() string {
@@ -427,16 +514,9 @@ func (c *CreateBouncerParameterDetail) GetURL() string {
 	return c.URL
 }
 
-func (c *CreateBouncerParameterDetail) GetOptions() []string {
+func (c *CreateBouncerParameterDetail) GetActor() CreateBouncerActorCluster {
 	if c == nil {
-		return []string{}
-	}
-	return c.Options
-}
-
-func (c *CreateBouncerParameterDetail) GetActor() CreateBouncerActorPgbouncer {
-	if c == nil {
-		return CreateBouncerActorPgbouncer{}
+		return CreateBouncerActorCluster{}
 	}
 	return c.Actor
 }

@@ -94,7 +94,7 @@ type UpdateNekiShardResponseBody struct {
 	Name string `json:"name"`
 	// The display name of the shard
 	DisplayName *string `json:"display_name"`
-	// The name of the shard configuration profile
+	// The name of the configuration profile
 	ConfigurationProfile string `json:"configuration_profile"`
 	// When the shard was created
 	CreatedAt string `json:"created_at"`

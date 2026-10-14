@@ -32,7 +32,7 @@ data "planetscale_neki_sidecar" "my_nekisidecar" {
 ### Required
 
 - `branch` (String) Branch name from `list_branches`. Example: `main`.
-- `configuration_profile` (String) The name of the shard configuration profile the sidecar belongs to
+- `configuration_profile` (String) The name of the configuration profile the sidecar belongs to
 - `database` (String) Database name slug from `list_databases`. Example: `app-db`.
 - `organization` (String) Organization name slug from `list_organizations`. Example: `acme`.
 

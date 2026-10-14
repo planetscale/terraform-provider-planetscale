@@ -54,7 +54,7 @@ func (r *NekiSidecarDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"configuration_profile": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the shard configuration profile the sidecar belongs to`,
+				Description: `The name of the configuration profile the sidecar belongs to`,
 			},
 			"database": schema.StringAttribute{
 				Required:    true,

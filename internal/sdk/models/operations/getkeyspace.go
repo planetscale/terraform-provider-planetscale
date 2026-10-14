@@ -113,6 +113,8 @@ type GetKeyspaceStorage struct {
 	StorageBytes int64 `json:"storage_bytes"`
 	// The maximum size in bytes disks may autoscale to
 	MaxStorageBytes int64 `json:"max_storage_bytes"`
+	// True when PlanetScale staff raised the limit above the organization default. The limit is read-only while this is set
+	MaxStorageBytesManagedByStaff bool `json:"max_storage_bytes_managed_by_staff"`
 	// The disk scaling strategy
 	DiskScalingStrategy GetKeyspaceDiskScalingStrategy `json:"disk_scaling_strategy"`
 }
@@ -129,6 +131,13 @@ func (g *GetKeyspaceStorage) GetMaxStorageBytes() int64 {
 		return 0
 	}
 	return g.MaxStorageBytes
+}
+
+func (g *GetKeyspaceStorage) GetMaxStorageBytesManagedByStaff() bool {
+	if g == nil {
+		return false
+	}
+	return g.MaxStorageBytesManagedByStaff
 }
 
 func (g *GetKeyspaceStorage) GetDiskScalingStrategy() GetKeyspaceDiskScalingStrategy {

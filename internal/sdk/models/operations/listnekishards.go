@@ -18,7 +18,7 @@ type ListNekiShardsRequest struct {
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
 	PerPage *int64 `default:"25" queryParam:"style=form,explode=true,name=per_page"`
-	// Exclude shards in this shard configuration profile
+	// Exclude shards in this configuration profile
 	ExcludeConfigurationProfile *string `queryParam:"style=form,explode=true,name=exclude_configuration_profile"`
 	// Search shards by name, display name, or configuration profile
 	Q *string `queryParam:"style=form,explode=true,name=q"`
@@ -91,7 +91,7 @@ type ListNekiShardsData struct {
 	Name string `json:"name"`
 	// The display name of the shard
 	DisplayName *string `json:"display_name"`
-	// The name of the shard configuration profile
+	// The name of the configuration profile
 	ConfigurationProfile string `json:"configuration_profile"`
 	// When the shard was created
 	CreatedAt string `json:"created_at"`

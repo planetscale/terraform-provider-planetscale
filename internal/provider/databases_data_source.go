@@ -5,8 +5,10 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
@@ -30,6 +32,7 @@ type DatabasesDataSource struct {
 // DatabasesDataSourceModel describes the data model.
 type DatabasesDataSourceModel struct {
 	Data         []tfTypes.ListDatabasesData `tfsdk:"data"`
+	Kind         types.String                `queryParam:"style=form,explode=true,name=kind" tfsdk:"kind"`
 	Organization types.String                `tfsdk:"organization"`
 	Q            types.String                `queryParam:"style=form,explode=true,name=q" tfsdk:"q"`
 	Type         types.String                `tfsdk:"type"`
@@ -245,6 +248,17 @@ func (r *DatabasesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Description: `The URL to the database API endpoint`,
 						},
 					},
+				},
+			},
+			"kind": schema.StringAttribute{
+				Optional:    true,
+				Description: `Filter databases by kind. must be one of ["mysql", "postgresql", "neki"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"mysql",
+						"postgresql",
+						"neki",
+					),
 				},
 			},
 			"organization": schema.StringAttribute{

@@ -31,17 +31,17 @@ Cluster size, replica, parameter, and PostgreSQL version changes update in place
 - `cluster_size` (String) The database cluster size name for shards assigned to this profile. Updates in place through Neki maintenance.
 - `extensions` (List of String) Extensions to enable. This replaces the current set; omit it to leave them unchanged. Use an empty set to disable them. Do not combine this with shared_preload_libraries or session_preload_libraries parameters.
 - `parameters` (Map of Map of String) Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
-- `postgres_major_version` (Number) The PostgreSQL major version for the shard configuration profile
-- `postgres_minor_version` (Number) The PostgreSQL minor version for the shard configuration profile. Requires postgres_major_version when specified.
-- `replicas` (Number) The new number of replicas for the shard configuration profile
+- `postgres_major_version` (Number) The PostgreSQL major version for the configuration profile
+- `postgres_minor_version` (Number) The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.
+- `replicas` (Number) The new number of replicas for the configuration profile
 - `storage` (Attributes) (see [below for nested schema](#nestedatt--storage))
 
 ### Read-Only
 
-- `id` (String) The ID of the shard configuration profile
-- `is_default` (Boolean) Whether this is the default shard configuration profile
+- `id` (String) The ID of the configuration profile
+- `is_default` (Boolean) Whether this is the default configuration profile
 - `shard_count` (Number) The number of shards using this configuration profile
-- `state` (String) The current state of the shard configuration profile
+- `state` (String) The current state of the configuration profile
 
 <a id="nestedatt--storage"></a>
 ### Nested Schema for `storage`
