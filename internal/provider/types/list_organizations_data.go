@@ -19,6 +19,7 @@ type ListOrganizationsData struct {
 	InvoiceBudgetAmount            types.String                    `tfsdk:"invoice_budget_amount"`
 	KeyspaceShardLimit             types.Int64                     `tfsdk:"keyspace_shard_limit"`
 	ManagedTenancy                 types.Bool                      `tfsdk:"managed_tenancy"`
+	McpAccessLevel                 types.String                    `tfsdk:"mcp_access_level"`
 	Name                           types.String                    `tfsdk:"name"`
 	NekiRouterReplicasPerCellLimit types.Int64                     `tfsdk:"neki_router_replicas_per_cell_limit"`
 	PaymentInfoRequired            types.Bool                      `tfsdk:"payment_info_required"`

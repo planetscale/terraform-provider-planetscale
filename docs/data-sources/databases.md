@@ -14,6 +14,7 @@ Databases DataSource
 
 ```terraform
 data "planetscale_databases" "my_databases" {
+  kind         = "neki"
   organization = "...my_organization..."
   q            = "...my_q..."
 }
@@ -28,6 +29,7 @@ data "planetscale_databases" "my_databases" {
 
 ### Optional
 
+- `kind` (String) Filter databases by kind. must be one of ["mysql", "postgresql", "neki"]
 - `q` (String) Search term to filter databases by name
 
 ### Read-Only

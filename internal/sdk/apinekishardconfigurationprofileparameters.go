@@ -28,7 +28,7 @@ func newAPINekiShardConfigurationProfileParameters(rootSDK *PlanetScale, sdkConf
 	}
 }
 
-// GetNekiConfigurationProfileParameters - List parameters for a Neki shard configuration profile
+// GetNekiConfigurationProfileParameters - List parameters for a Neki configuration profile
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //

@@ -63,6 +63,8 @@ type GetOrganizationResponseBody struct {
 	HasCard bool `json:"has_card"`
 	// Whether or not the organization requires payment information
 	PaymentInfoRequired bool `json:"payment_info_required"`
+	// The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
+	McpAccessLevel string `json:"mcp_access_level"`
 }
 
 func (g *GetOrganizationResponseBody) GetID() string {
@@ -210,6 +212,13 @@ func (g *GetOrganizationResponseBody) GetPaymentInfoRequired() bool {
 		return false
 	}
 	return g.PaymentInfoRequired
+}
+
+func (g *GetOrganizationResponseBody) GetMcpAccessLevel() string {
+	if g == nil {
+		return ""
+	}
+	return g.McpAccessLevel
 }
 
 type GetOrganizationResponse struct {

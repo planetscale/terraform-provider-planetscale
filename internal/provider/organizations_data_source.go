@@ -94,6 +94,10 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 							Computed:    true,
 							Description: `Whether or not the organization has managed tenancy enabled`,
 						},
+						"mcp_access_level": schema.StringAttribute{
+							Computed:    true,
+							Description: `The query access level MCP clients can be granted for the organization (none, read_only, or read_write)`,
+						},
 						"name": schema.StringAttribute{
 							Computed:    true,
 							Description: `The name of the organization`,

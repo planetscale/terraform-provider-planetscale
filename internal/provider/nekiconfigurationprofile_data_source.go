@@ -82,15 +82,15 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `The ID of the shard configuration profile`,
+				Description: `The ID of the configuration profile`,
 			},
 			"is_default": schema.BoolAttribute{
 				Computed:    true,
-				Description: `Whether this is the default shard configuration profile`,
+				Description: `Whether this is the default configuration profile`,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
-				Description: `The name of the shard configuration profile`,
+				Description: `The name of the configuration profile`,
 			},
 			"organization": schema.StringAttribute{
 				Required:    true,
@@ -106,11 +106,11 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 			},
 			"postgres_major_version": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The PostgreSQL major version used by the shard configuration profile`,
+				Description: `The PostgreSQL major version used by the configuration profile`,
 			},
 			"postgres_minor_version": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The PostgreSQL minor version used by the shard configuration profile`,
+				Description: `The PostgreSQL minor version used by the configuration profile`,
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
@@ -122,7 +122,7 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
-				Description: `The current state of the shard configuration profile`,
+				Description: `The current state of the configuration profile`,
 			},
 			"storage": schema.SingleNestedAttribute{
 				Computed: true,

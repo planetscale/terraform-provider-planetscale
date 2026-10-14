@@ -136,6 +136,9 @@ paths:
                         payment_info_required:
                           type: boolean
                           description: Whether or not the organization requires payment information
+                        mcp_access_level:
+                          type: string
+                          description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
                       required:
                         - id
                         - name
@@ -156,6 +159,7 @@ paths:
                         - neki_router_replicas_per_cell_limit
                         - has_card
                         - payment_info_required
+                        - mcp_access_level
                 required:
                   - type
                   - current_page
@@ -285,6 +289,9 @@ paths:
                   payment_info_required:
                     type: boolean
                     description: Whether or not the organization requires payment information
+                  mcp_access_level:
+                    type: string
+                    description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
                 required:
                   - id
                   - name
@@ -305,6 +312,7 @@ paths:
                   - neki_router_replicas_per_cell_limit
                   - has_card
                   - payment_info_required
+                  - mcp_access_level
         "401":
           description: Unauthorized
         "403":
@@ -355,6 +363,15 @@ paths:
           description: Search term to filter databases by name
           schema:
             type: string
+        - name: kind
+          in: query
+          description: Filter databases by kind
+          schema:
+            type: string
+            enum:
+              - mysql
+              - postgresql
+              - neki
         - name: page
           in: query
           description: If provided, specifies the page offset of returned results
@@ -1107,67 +1124,98 @@ paths:
                               id:
                                 type: string
                                 description: The ID of the parameter
-                              namespace:
-                                type: string
-                                enum:
-                                  - pgbouncer
-                                description: The namespace of the parameter
+                                nullable: true
                               name:
                                 type: string
                                 description: The name of the parameter
                               display_name:
                                 type: string
                                 description: The display name of the parameter
+                              namespace:
+                                type: string
+                                enum:
+                                  - patroni
+                                  - pgconf
+                                  - pgbouncer
+                                description: The namespace of the parameter
+                              advanced:
+                                type: boolean
+                                description: Whether the parameter is advanced
                               category:
                                 type: string
                                 description: The category of the parameter
+                                nullable: true
                               description:
                                 type: string
                                 description: The description of the parameter
-                              immutable:
-                                type: boolean
-                                description: Whether the parameter can be changed
                               parameter_type:
                                 type: string
                                 enum:
                                   - array
+                                  - boolean
+                                  - bytes
+                                  - float
                                   - integer
                                   - seconds
                                   - select
                                   - string
+                                  - time
                                 description: The type of the parameter
                               default_value:
                                 type: string
                                 description: The default value of the parameter
+                                nullable: true
+                              disabled_reason:
+                                type: string
+                                description: Why the parameter cannot be changed
+                                nullable: true
+                              requires_update:
+                                type: string
+                                enum:
+                                  - cluster
+                                description: The update required before the parameter can be configured
+                                nullable: true
                               value:
                                 type: string
                                 description: The configured value of the parameter
+                                nullable: true
                               required:
                                 type: boolean
                                 description: Whether the parameter is required
                               created_at:
                                 type: string
                                 description: When the parameter was created
+                                nullable: true
                               updated_at:
                                 type: string
                                 description: When the parameter was last updated
+                                nullable: true
                               restart:
                                 type: boolean
-                                description: True if processes require a server restart on change
+                                description: Whether processes require a server restart after the parameter changes
                               max:
                                 type: number
                                 description: The maximum value of the parameter
+                                nullable: true
                               min:
                                 type: number
                                 description: The minimum value of the parameter
-                              url:
-                                type: string
-                                description: The URL of the parameter
+                                nullable: true
                               options:
                                 items:
                                   type: string
                                 type: array
-                                description: Valid options for the parameter value
+                                description: Valid options for the parameter value. Null represents an unset value
+                                nullable: true
+                              units:
+                                items:
+                                  type: string
+                                type: array
+                                description: The units of the parameter value
+                                nullable: true
+                              url:
+                                type: string
+                                description: The URL of the parameter
                               actor:
                                 type: object
                                 properties:
@@ -1185,24 +1233,21 @@ paths:
                                   - display_name
                                   - avatar_url
                             required:
-                              - id
-                              - namespace
                               - name
                               - display_name
+                              - namespace
+                              - advanced
                               - category
                               - description
-                              - immutable
                               - parameter_type
                               - default_value
+                              - requires_update
                               - value
                               - required
                               - created_at
                               - updated_at
                               - restart
-                              - max
-                              - min
                               - url
-                              - options
                               - actor
                           x-speakeasy-name-override: parameter_details
                           x-speakeasy-terraform-ignore: true
@@ -1374,67 +1419,98 @@ paths:
                         id:
                           type: string
                           description: The ID of the parameter
-                        namespace:
-                          type: string
-                          enum:
-                            - pgbouncer
-                          description: The namespace of the parameter
+                          nullable: true
                         name:
                           type: string
                           description: The name of the parameter
                         display_name:
                           type: string
                           description: The display name of the parameter
+                        namespace:
+                          type: string
+                          enum:
+                            - patroni
+                            - pgconf
+                            - pgbouncer
+                          description: The namespace of the parameter
+                        advanced:
+                          type: boolean
+                          description: Whether the parameter is advanced
                         category:
                           type: string
                           description: The category of the parameter
+                          nullable: true
                         description:
                           type: string
                           description: The description of the parameter
-                        immutable:
-                          type: boolean
-                          description: Whether the parameter can be changed
                         parameter_type:
                           type: string
                           enum:
                             - array
+                            - boolean
+                            - bytes
+                            - float
                             - integer
                             - seconds
                             - select
                             - string
+                            - time
                           description: The type of the parameter
                         default_value:
                           type: string
                           description: The default value of the parameter
+                          nullable: true
+                        disabled_reason:
+                          type: string
+                          description: Why the parameter cannot be changed
+                          nullable: true
+                        requires_update:
+                          type: string
+                          enum:
+                            - cluster
+                          description: The update required before the parameter can be configured
+                          nullable: true
                         value:
                           type: string
                           description: The configured value of the parameter
+                          nullable: true
                         required:
                           type: boolean
                           description: Whether the parameter is required
                         created_at:
                           type: string
                           description: When the parameter was created
+                          nullable: true
                         updated_at:
                           type: string
                           description: When the parameter was last updated
+                          nullable: true
                         restart:
                           type: boolean
-                          description: True if processes require a server restart on change
+                          description: Whether processes require a server restart after the parameter changes
                         max:
                           type: number
                           description: The maximum value of the parameter
+                          nullable: true
                         min:
                           type: number
                           description: The minimum value of the parameter
-                        url:
-                          type: string
-                          description: The URL of the parameter
+                          nullable: true
                         options:
                           items:
                             type: string
                           type: array
-                          description: Valid options for the parameter value
+                          description: Valid options for the parameter value. Null represents an unset value
+                          nullable: true
+                        units:
+                          items:
+                            type: string
+                          type: array
+                          description: The units of the parameter value
+                          nullable: true
+                        url:
+                          type: string
+                          description: The URL of the parameter
                         actor:
                           type: object
                           properties:
@@ -1452,24 +1528,21 @@ paths:
                             - display_name
                             - avatar_url
                       required:
-                        - id
-                        - namespace
                         - name
                         - display_name
+                        - namespace
+                        - advanced
                         - category
                         - description
-                        - immutable
                         - parameter_type
                         - default_value
+                        - requires_update
                         - value
                         - required
                         - created_at
                         - updated_at
                         - restart
-                        - max
-                        - min
                         - url
-                        - options
                         - actor
                     x-speakeasy-name-override: parameter_details
                     x-speakeasy-terraform-ignore: true
@@ -1722,7 +1795,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profiles
       operationId: list_neki_configuration_profiles
-      summary: List shard configuration profiles for a Neki branch
+      summary: List configuration profiles for a Neki branch
       parameters:
         - name: organization
           in: path
@@ -1744,7 +1817,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Returns shard configuration profiles for the branch
+          description: Returns configuration profiles for the branch
           headers: {}
           content:
             application/json:
@@ -1755,10 +1828,10 @@ paths:
                   properties:
                     id:
                       type: string
-                      description: The ID of the shard configuration profile
+                      description: The ID of the configuration profile
                     name:
                       type: string
-                      description: The name of the shard configuration profile
+                      description: The name of the configuration profile
                     architecture:
                       type: string
                       description: The architecture of the cluster size SKU
@@ -1772,7 +1845,7 @@ paths:
                       x-speakeasy-terraform-ignore: true
                     default:
                       type: boolean
-                      description: Whether this is the default shard configuration profile
+                      description: Whether this is the default configuration profile
                       x-speakeasy-name-override: is_default
                     metal:
                       type: boolean
@@ -1783,21 +1856,21 @@ paths:
                       description: The number of replicas for shards using this configuration profile
                     postgres_image_version:
                       type: string
-                      description: The PostgreSQL image used by the shard configuration profile
+                      description: The PostgreSQL image used by the configuration profile
                       x-speakeasy-terraform-ignore: true
                     latest_postgres_image_version:
                       type: string
-                      description: The latest PostgreSQL image available to the shard configuration profile
+                      description: The latest PostgreSQL image available to the configuration profile
                       x-speakeasy-terraform-ignore: true
                     postgres_major_version:
                       type: integer
-                      description: The PostgreSQL major version used by the shard configuration profile
+                      description: The PostgreSQL major version used by the configuration profile
                     postgres_minor_version:
                       type: integer
-                      description: The PostgreSQL minor version used by the shard configuration profile
+                      description: The PostgreSQL minor version used by the configuration profile
                     latest_postgres_minor_version:
                       type: integer
-                      description: The latest PostgreSQL minor version available to the shard configuration profile
+                      description: The latest PostgreSQL minor version available to the configuration profile
                       x-speakeasy-terraform-ignore: true
                     shards:
                       type: integer
@@ -1839,14 +1912,14 @@ paths:
                         - pending
                         - applying
                         - ready
-                      description: The current state of the shard configuration profile
+                      description: The current state of the configuration profile
                     created_at:
                       type: string
-                      description: When the shard configuration profile was created
+                      description: When the configuration profile was created
                       x-speakeasy-terraform-ignore: true
                     updated_at:
                       type: string
-                      description: When the shard configuration profile was last updated
+                      description: When the configuration profile was last updated
                       x-speakeasy-terraform-ignore: true
                   required:
                     - id
@@ -1903,7 +1976,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profiles
       operationId: create_neki_configuration_profile
-      summary: Create a shard configuration profile for a Neki branch
+      summary: Create a configuration profile for a Neki branch
       parameters:
         - name: organization
           in: path
@@ -1942,13 +2015,13 @@ paths:
                   x-speakeasy-plan-validators: ClusterSizeValidator
                 replicas:
                   type: integer
-                  description: The number of replicas for the shard configuration profile
+                  description: The number of replicas for the configuration profile
                 postgres_major_version:
                   type: integer
-                  description: The PostgreSQL major version for the shard configuration profile
+                  description: The PostgreSQL major version for the configuration profile
                 postgres_minor_version:
                   type: integer
-                  description: The PostgreSQL minor version for the shard configuration profile. Requires postgres_major_version when specified.
+                  description: The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.
                   x-speakeasy-plan-validators: PostgresMinorVersionValidator
                 storage:
                   type: object
@@ -1972,7 +2045,7 @@ paths:
                 - name
       responses:
         "201":
-          description: Returns the created shard configuration profile
+          description: Returns the created configuration profile
           headers: {}
           content:
             application/json:
@@ -1981,10 +2054,10 @@ paths:
                 properties:
                   id:
                     type: string
-                    description: The ID of the shard configuration profile
+                    description: The ID of the configuration profile
                   name:
                     type: string
-                    description: The name of the shard configuration profile
+                    description: The name of the configuration profile
                   architecture:
                     type: string
                     description: The architecture of the cluster size SKU
@@ -1998,7 +2071,7 @@ paths:
                     x-speakeasy-terraform-ignore: true
                   default:
                     type: boolean
-                    description: Whether this is the default shard configuration profile
+                    description: Whether this is the default configuration profile
                     x-speakeasy-name-override: is_default
                   metal:
                     type: boolean
@@ -2009,21 +2082,21 @@ paths:
                     description: The number of replicas for shards using this configuration profile
                   postgres_image_version:
                     type: string
-                    description: The PostgreSQL image used by the shard configuration profile
+                    description: The PostgreSQL image used by the configuration profile
                     x-speakeasy-terraform-ignore: true
                   latest_postgres_image_version:
                     type: string
-                    description: The latest PostgreSQL image available to the shard configuration profile
+                    description: The latest PostgreSQL image available to the configuration profile
                     x-speakeasy-terraform-ignore: true
                   postgres_major_version:
                     type: integer
-                    description: The PostgreSQL major version used by the shard configuration profile
+                    description: The PostgreSQL major version used by the configuration profile
                   postgres_minor_version:
                     type: integer
-                    description: The PostgreSQL minor version used by the shard configuration profile
+                    description: The PostgreSQL minor version used by the configuration profile
                   latest_postgres_minor_version:
                     type: integer
-                    description: The latest PostgreSQL minor version available to the shard configuration profile
+                    description: The latest PostgreSQL minor version available to the configuration profile
                     x-speakeasy-terraform-ignore: true
                   shards:
                     type: integer
@@ -2065,14 +2138,14 @@ paths:
                       - pending
                       - applying
                       - ready
-                    description: The current state of the shard configuration profile
+                    description: The current state of the configuration profile
                   created_at:
                     type: string
-                    description: When the shard configuration profile was created
+                    description: When the configuration profile was created
                     x-speakeasy-terraform-ignore: true
                   updated_at:
                     type: string
-                    description: When the shard configuration profile was last updated
+                    description: When the configuration profile was last updated
                     x-speakeasy-terraform-ignore: true
                 required:
                   - id
@@ -2138,7 +2211,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profiles
       operationId: get_neki_configuration_profile
-      summary: Get a shard configuration profile for a Neki branch
+      summary: Get a configuration profile for a Neki branch
       parameters:
         - name: organization
           in: path
@@ -2167,7 +2240,7 @@ paths:
           x-speakeasy-match: name
       responses:
         "200":
-          description: Returns the shard configuration profile
+          description: Returns the configuration profile
           headers: {}
           content:
             application/json:
@@ -2176,10 +2249,10 @@ paths:
                 properties:
                   id:
                     type: string
-                    description: The ID of the shard configuration profile
+                    description: The ID of the configuration profile
                   name:
                     type: string
-                    description: The name of the shard configuration profile
+                    description: The name of the configuration profile
                   architecture:
                     type: string
                     description: The architecture of the cluster size SKU
@@ -2193,7 +2266,7 @@ paths:
                     x-speakeasy-terraform-ignore: true
                   default:
                     type: boolean
-                    description: Whether this is the default shard configuration profile
+                    description: Whether this is the default configuration profile
                     x-speakeasy-name-override: is_default
                   metal:
                     type: boolean
@@ -2204,21 +2277,21 @@ paths:
                     description: The number of replicas for shards using this configuration profile
                   postgres_image_version:
                     type: string
-                    description: The PostgreSQL image used by the shard configuration profile
+                    description: The PostgreSQL image used by the configuration profile
                     x-speakeasy-terraform-ignore: true
                   latest_postgres_image_version:
                     type: string
-                    description: The latest PostgreSQL image available to the shard configuration profile
+                    description: The latest PostgreSQL image available to the configuration profile
                     x-speakeasy-terraform-ignore: true
                   postgres_major_version:
                     type: integer
-                    description: The PostgreSQL major version used by the shard configuration profile
+                    description: The PostgreSQL major version used by the configuration profile
                   postgres_minor_version:
                     type: integer
-                    description: The PostgreSQL minor version used by the shard configuration profile
+                    description: The PostgreSQL minor version used by the configuration profile
                   latest_postgres_minor_version:
                     type: integer
-                    description: The latest PostgreSQL minor version available to the shard configuration profile
+                    description: The latest PostgreSQL minor version available to the configuration profile
                     x-speakeasy-terraform-ignore: true
                   shards:
                     type: integer
@@ -2260,14 +2333,14 @@ paths:
                       - pending
                       - applying
                       - ready
-                    description: The current state of the shard configuration profile
+                    description: The current state of the configuration profile
                   created_at:
                     type: string
-                    description: When the shard configuration profile was created
+                    description: When the configuration profile was created
                     x-speakeasy-terraform-ignore: true
                   updated_at:
                     type: string
-                    description: When the shard configuration profile was last updated
+                    description: When the configuration profile was last updated
                     x-speakeasy-terraform-ignore: true
                 required:
                   - id
@@ -2293,7 +2366,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile not found
+          description: Configuration profile not found
           headers: {}
         "422":
           description: Unprocessable Entity
@@ -2343,7 +2416,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profiles
       operationId: update_neki_configuration_profile
-      summary: Update a shard configuration profile for a Neki branch
+      summary: Update a configuration profile for a Neki branch
       parameters:
         - name: organization
           in: path
@@ -2391,13 +2464,13 @@ paths:
                   x-speakeasy-plan-validators: NekiExtensionsValidator
                 replicas:
                   type: integer
-                  description: The new number of replicas for the shard configuration profile
+                  description: The new number of replicas for the configuration profile
                 postgres_major_version:
                   type: integer
-                  description: The PostgreSQL major version for the shard configuration profile
+                  description: The PostgreSQL major version for the configuration profile
                 postgres_minor_version:
                   type: integer
-                  description: The PostgreSQL minor version for the shard configuration profile. Requires postgres_major_version when specified.
+                  description: The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.
                   x-speakeasy-plan-validators: PostgresMinorVersionValidator
                 storage:
                   type: object
@@ -2429,7 +2502,7 @@ paths:
                     Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
       responses:
         "200":
-          description: Returns the updated shard configuration profile
+          description: Returns the updated configuration profile
           headers: {}
           content:
             application/json:
@@ -2438,10 +2511,10 @@ paths:
                 properties:
                   id:
                     type: string
-                    description: The ID of the shard configuration profile
+                    description: The ID of the configuration profile
                   name:
                     type: string
-                    description: The name of the shard configuration profile
+                    description: The name of the configuration profile
                   architecture:
                     type: string
                     description: The architecture of the cluster size SKU
@@ -2455,7 +2528,7 @@ paths:
                     x-speakeasy-terraform-ignore: true
                   default:
                     type: boolean
-                    description: Whether this is the default shard configuration profile
+                    description: Whether this is the default configuration profile
                     x-speakeasy-name-override: is_default
                   metal:
                     type: boolean
@@ -2466,21 +2539,21 @@ paths:
                     description: The number of replicas for shards using this configuration profile
                   postgres_image_version:
                     type: string
-                    description: The PostgreSQL image used by the shard configuration profile
+                    description: The PostgreSQL image used by the configuration profile
                     x-speakeasy-terraform-ignore: true
                   latest_postgres_image_version:
                     type: string
-                    description: The latest PostgreSQL image available to the shard configuration profile
+                    description: The latest PostgreSQL image available to the configuration profile
                     x-speakeasy-terraform-ignore: true
                   postgres_major_version:
                     type: integer
-                    description: The PostgreSQL major version used by the shard configuration profile
+                    description: The PostgreSQL major version used by the configuration profile
                   postgres_minor_version:
                     type: integer
-                    description: The PostgreSQL minor version used by the shard configuration profile
+                    description: The PostgreSQL minor version used by the configuration profile
                   latest_postgres_minor_version:
                     type: integer
-                    description: The latest PostgreSQL minor version available to the shard configuration profile
+                    description: The latest PostgreSQL minor version available to the configuration profile
                     x-speakeasy-terraform-ignore: true
                   shards:
                     type: integer
@@ -2522,14 +2595,14 @@ paths:
                       - pending
                       - applying
                       - ready
-                    description: The current state of the shard configuration profile
+                    description: The current state of the configuration profile
                   created_at:
                     type: string
-                    description: When the shard configuration profile was created
+                    description: When the configuration profile was created
                     x-speakeasy-terraform-ignore: true
                   updated_at:
                     type: string
-                    description: When the shard configuration profile was last updated
+                    description: When the configuration profile was last updated
                     x-speakeasy-terraform-ignore: true
                 required:
                   - id
@@ -2555,7 +2628,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile not found
+          description: Configuration profile not found
           headers: {}
         "422":
           description: Invalid parameters
@@ -2583,7 +2656,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profiles
       operationId: delete_neki_configuration_profile
-      summary: Delete a shard configuration profile for a Neki branch
+      summary: Delete a configuration profile for a Neki branch
       parameters:
         - name: organization
           in: path
@@ -2612,14 +2685,14 @@ paths:
           x-speakeasy-match: name
       responses:
         "204":
-          description: Shard configuration profile deleted
+          description: Configuration profile deleted
           headers: {}
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile not found
+          description: Configuration profile not found
           headers: {}
         "422":
           description: Unprocessable Content
@@ -2643,12 +2716,13 @@ paths:
       x-speakeasy-entity-operation: NekiConfigurationProfile#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/changes: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/changes/{id}: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/duplicate: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}/extensions:
     get:
       tags:
         - api-neki_shard_configuration_profile_extensions
       operationId: get_neki_configuration_profile_extensions
-      summary: List extensions for a Neki shard configuration profile
+      summary: List extensions for a Neki configuration profile
       parameters:
         - name: organization
           in: path
@@ -2677,7 +2751,7 @@ paths:
           x-speakeasy-match: name
       responses:
         "200":
-          description: Returns extensions for the shard configuration profile
+          description: Returns extensions for the configuration profile
           headers: {}
           content:
             application/json:
@@ -2697,7 +2771,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile not found
+          description: Configuration profile not found
           headers: {}
         "422":
           description: Unprocessable Entity
@@ -2727,7 +2801,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profiles
       operationId: run_neki_configuration_profile_maintenance
-      summary: Run maintenance for a Neki shard configuration profile
+      summary: Run maintenance for a Neki configuration profile
       parameters:
         - name: organization
           in: path
@@ -2763,7 +2837,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile not found
+          description: Configuration profile not found
           headers: {}
         "422":
           description: Unprocessable Entity
@@ -2792,7 +2866,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profile_parameters
       operationId: get_neki_configuration_profile_parameters
-      summary: List parameters for a Neki shard configuration profile
+      summary: List parameters for a Neki configuration profile
       responses:
         "200":
           description: Returns reconciled effective parameter values for Terraform.
@@ -2969,7 +3043,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile not found
+          description: Configuration profile not found
           headers: {}
         "422":
           description: Shard could not be created
@@ -2997,7 +3071,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profile_shards
       operationId: reassign_neki_shard
-      summary: Assign shards to a Neki shard configuration profile
+      summary: Assign shards to a Neki configuration profile
       parameters:
         - name: organization
           in: path
@@ -3055,7 +3129,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile or shard not found
+          description: Configuration profile or shard not found
           headers: {}
         "422":
           description: Invalid shard IDs
@@ -3083,7 +3157,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profile_shards
       operationId: update_neki_shard
-      summary: Update a shard in a Neki shard configuration profile
+      summary: Update a shard in a Neki configuration profile
       parameters:
         - name: organization
           in: path
@@ -3145,7 +3219,7 @@ paths:
                     nullable: true
                   configuration_profile:
                     type: string
-                    description: The name of the shard configuration profile
+                    description: The name of the configuration profile
                   created_at:
                     type: string
                     description: When the shard was created
@@ -3168,7 +3242,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile or shard not found
+          description: Configuration profile or shard not found
           headers: {}
         "422":
           description: Unprocessable Content
@@ -3194,7 +3268,7 @@ paths:
       tags:
         - api-neki_shard_configuration_profile_shards
       operationId: delete_neki_shard
-      summary: Remove a shard from a Neki shard configuration profile
+      summary: Remove a shard from a Neki configuration profile
       parameters:
         - name: organization
           in: path
@@ -3235,7 +3309,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Shard configuration profile or shard not found
+          description: Configuration profile or shard not found
           headers: {}
         "422":
           description: Shard could not be removed
@@ -4074,10 +4148,6 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/demote: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/extensions: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/insights: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/insights/agent/runs: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/insights/agent/runs/{id}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/insights/agent/schedules: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/insights/agent/schedules/{run_type}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/insights/anomalies: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/insights/anomalies/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/insights/errors: {}
@@ -4248,6 +4318,9 @@ paths:
                             max_storage_bytes:
                               type: integer
                               description: The maximum size in bytes disks may autoscale to
+                            max_storage_bytes_managed_by_staff:
+                              type: boolean
+                              description: True when PlanetScale staff raised the limit above the organization default. The limit is read-only while this is set
                             disk_scaling_strategy:
                               type: string
                               enum:
@@ -4258,6 +4331,7 @@ paths:
                           required:
                             - storage_bytes
                             - max_storage_bytes
+                            - max_storage_bytes_managed_by_staff
                             - disk_scaling_strategy
                           x-speakeasy-terraform-ignore: true
                         max_rollout:
@@ -4513,6 +4587,9 @@ paths:
                       max_storage_bytes:
                         type: integer
                         description: The maximum size in bytes disks may autoscale to
+                      max_storage_bytes_managed_by_staff:
+                        type: boolean
+                        description: True when PlanetScale staff raised the limit above the organization default. The limit is read-only while this is set
                       disk_scaling_strategy:
                         type: string
                         enum:
@@ -4523,6 +4600,7 @@ paths:
                     required:
                       - storage_bytes
                       - max_storage_bytes
+                      - max_storage_bytes_managed_by_staff
                       - disk_scaling_strategy
                     x-speakeasy-terraform-ignore: true
                   max_rollout:
@@ -4756,6 +4834,9 @@ paths:
                       max_storage_bytes:
                         type: integer
                         description: The maximum size in bytes disks may autoscale to
+                      max_storage_bytes_managed_by_staff:
+                        type: boolean
+                        description: True when PlanetScale staff raised the limit above the organization default. The limit is read-only while this is set
                       disk_scaling_strategy:
                         type: string
                         enum:
@@ -4766,6 +4847,7 @@ paths:
                     required:
                       - storage_bytes
                       - max_storage_bytes
+                      - max_storage_bytes_managed_by_staff
                       - disk_scaling_strategy
                     x-speakeasy-terraform-ignore: true
                   max_rollout:
@@ -8502,7 +8584,7 @@ paths:
           x-speakeasy-terraform-ignore: true
         - name: exclude_configuration_profile
           in: query
-          description: Exclude shards in this shard configuration profile
+          description: Exclude shards in this configuration profile
           schema:
             type: string
           x-speakeasy-terraform-ignore: true
@@ -8578,7 +8660,7 @@ paths:
                           nullable: true
                         configuration_profile:
                           type: string
-                          description: The name of the shard configuration profile
+                          description: The name of the configuration profile
                         created_at:
                           type: string
                           description: When the shard was created
@@ -8725,7 +8807,7 @@ paths:
                     nullable: true
                   configuration_profile:
                     type: string
-                    description: The name of the shard configuration profile
+                    description: The name of the configuration profile
                   created_at:
                     type: string
                     description: When the shard was created
@@ -8835,7 +8917,7 @@ paths:
                     description: The ID of the sidecar
                   configuration_profile:
                     type: string
-                    description: The name of the shard configuration profile the sidecar belongs to
+                    description: The name of the configuration profile the sidecar belongs to
                   state:
                     type: string
                     enum:
@@ -8955,7 +9037,7 @@ paths:
                     description: The ID of the sidecar
                   configuration_profile:
                     type: string
-                    description: The name of the shard configuration profile the sidecar belongs to
+                    description: The name of the configuration profile the sidecar belongs to
                   state:
                     type: string
                     enum:
@@ -9117,6 +9199,7 @@ paths:
   /organizations/{organization}/databases/{database}/deploy-queue: {}
   /organizations/{organization}/databases/{database}/deploy-requests: {}
   /organizations/{organization}/databases/{database}/deploy-requests/{number}: {}
+  /organizations/{organization}/databases/{database}/deploy-requests/{number}/aggressive-cutover: {}
   /organizations/{organization}/databases/{database}/deploy-requests/{number}/apply-deploy: {}
   /organizations/{organization}/databases/{database}/deploy-requests/{number}/auto-apply: {}
   /organizations/{organization}/databases/{database}/deploy-requests/{number}/auto-delete-branch: {}
@@ -9143,16 +9226,6 @@ paths:
   /organizations/{organization}/databases/{database}/webhooks: {}
   /organizations/{organization}/databases/{database}/webhooks/{id}: {}
   /organizations/{organization}/databases/{database}/webhooks/{id}/test: {}
-  /organizations/{organization}/databases/{database}/workflows: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/complete: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/cutover: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/retry: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/reverse-cutover: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/reverse-traffic: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/switch-primaries: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/switch-replicas: {}
-  /organizations/{organization}/databases/{database}/workflows/{number}/verify-data: {}
   /organizations/{organization}/invitations: {}
   /organizations/{organization}/invitations/{id}: {}
   /organizations/{organization}/invoices: {}
@@ -17404,6 +17477,9 @@ tags:
   - name: Keyspace VSchemas
     description: |2
                 Resources for managing VSchemas within a keyspace.
+  - name: MaintenanceEvents
+    description: |2
+                Resources for viewing scheduled maintenance for Postgres databases.
   - name: MaintenanceSchedules
     description: |2
                 Resources for viewing database maintenance schedules for Vitess databases (Enterprise only).
@@ -17471,9 +17547,6 @@ tags:
   - name: VtctldOperations
     description: |2
                 API endpoints for checking the result of asynchronous vtctld operations, such as MoveTables commands.
-  - name: Workflows
-    description: |2
-                API endpoints for managing workflows.
   - name: Deploy requests
     description: |2
                   Resources for managing deploy requests.
@@ -20154,7 +20227,7 @@ components:
         - keyspace_name
         - queued_until
         - actor
-    PostgresExtensionDefinition:
+    PostgresExtension:
       type: object
       properties:
         name:
@@ -20173,21 +20246,15 @@ components:
         internal:
           type: boolean
           description: The internal state of the extension
-        requirements:
-          type: object
-          properties:
-            postgres_image_version:
-              type: string
-              description: The Postgres image version required to use the extension
-              nullable: true
-        url:
-          type: string
-          description: The URL of the extension
         parameters:
           type: array
           items:
             type: object
             properties:
+              id:
+                type: string
+                description: The ID of the parameter
+                nullable: true
               name:
                 type: string
                 description: The name of the parameter
@@ -20201,18 +20268,16 @@ components:
                   - pgconf
                   - pgbouncer
                 description: The namespace of the parameter
+              advanced:
+                type: boolean
+                description: Whether the parameter is advanced
               category:
                 type: string
                 description: The category of the parameter
+                nullable: true
               description:
                 type: string
                 description: The description of the parameter
-              extension:
-                type: boolean
-                description: Configures an extension
-              immutable:
-                type: boolean
-                description: Whether the parameter can be changed
               parameter_type:
                 type: string
                 enum:
@@ -20229,35 +20294,58 @@ components:
               default_value:
                 type: string
                 description: The default value of the parameter
+                nullable: true
+              disabled_reason:
+                type: string
+                description: Why the parameter cannot be changed
+                nullable: true
+              requires_update:
+                type: string
+                enum:
+                  - cluster
+                description: The update required before the parameter can be configured
+                nullable: true
               value:
                 type: string
                 description: The configured value of the parameter
+                nullable: true
               required:
                 type: boolean
                 description: Whether the parameter is required
               created_at:
                 type: string
                 description: When the parameter was created
+                nullable: true
               updated_at:
                 type: string
                 description: When the parameter was last updated
+                nullable: true
               restart:
                 type: boolean
-                description: True if processes require a server restart on change
+                description: Whether processes require a server restart after the parameter changes
               max:
                 type: number
                 description: The maximum value of the parameter
+                nullable: true
               min:
                 type: number
                 description: The minimum value of the parameter
-              url:
-                type: string
-                description: The URL of the parameter
+                nullable: true
               options:
                 items:
                   type: string
                 type: array
-                description: Valid options for the parameter value
+                description: Valid options for the parameter value. Null represents an unset value
+                nullable: true
+              units:
+                items:
+                  type: string
+                type: array
+                description: The units of the parameter value
+                nullable: true
+              url:
+                type: string
+                description: The URL of the parameter
               actor:
                 type: object
                 properties:
@@ -20278,33 +20366,43 @@ components:
               - name
               - display_name
               - namespace
+              - advanced
               - category
               - description
-              - extension
-              - immutable
               - parameter_type
               - default_value
+              - requires_update
               - value
               - required
               - created_at
               - updated_at
               - restart
-              - max
-              - min
               - url
-              - options
               - actor
+        requires_update:
+          type: string
+          enum:
+            - cluster
+          description: The update required before the extension can be used
+          nullable: true
+        url:
+          type: string
+          description: The URL of the extension
       required:
         - name
         - can_enable
         - description
         - internal
-        - requirements
-        - url
         - parameters
-    PostgresClusterParameter:
+        - requires_update
+        - url
+    PostgresParameter:
       type: object
       properties:
+        id:
+          type: string
+          description: The ID of the parameter
+          nullable: true
         name:
           type: string
           description: The name of the parameter
@@ -20318,18 +20416,16 @@ components:
             - pgconf
             - pgbouncer
           description: The namespace of the parameter
+        advanced:
+          type: boolean
+          description: Whether the parameter is advanced
         category:
           type: string
           description: The category of the parameter
+          nullable: true
         description:
           type: string
           description: The description of the parameter
-        extension:
-          type: boolean
-          description: Configures an extension
-        immutable:
-          type: boolean
-          description: Whether the parameter can be changed
         parameter_type:
           type: string
           enum:
@@ -20346,35 +20442,58 @@ components:
         default_value:
           type: string
           description: The default value of the parameter
+          nullable: true
+        disabled_reason:
+          type: string
+          description: Why the parameter cannot be changed
+          nullable: true
+        requires_update:
+          type: string
+          enum:
+            - cluster
+          description: The update required before the parameter can be configured
+          nullable: true
         value:
           type: string
           description: The configured value of the parameter
+          nullable: true
         required:
           type: boolean
           description: Whether the parameter is required
         created_at:
           type: string
           description: When the parameter was created
+          nullable: true
         updated_at:
           type: string
           description: When the parameter was last updated
+          nullable: true
         restart:
           type: boolean
-          description: True if processes require a server restart on change
+          description: Whether processes require a server restart after the parameter changes
         max:
           type: number
           description: The maximum value of the parameter
+          nullable: true
         min:
           type: number
           description: The minimum value of the parameter
-        url:
-          type: string
-          description: The URL of the parameter
+          nullable: true
         options:
           items:
             type: string
           type: array
-          description: Valid options for the parameter value
+          description: Valid options for the parameter value. Null represents an unset value
+          nullable: true
+        units:
+          items:
+            type: string
+          type: array
+          description: The units of the parameter value
+          nullable: true
+        url:
+          type: string
+          description: The URL of the parameter
         actor:
           type: object
           properties:
@@ -20395,21 +20514,18 @@ components:
         - name
         - display_name
         - namespace
+        - advanced
         - category
         - description
-        - extension
-        - immutable
         - parameter_type
         - default_value
+        - requires_update
         - value
         - required
         - created_at
         - updated_at
         - restart
-        - max
-        - min
         - url
-        - options
         - actor
     PaginatedMysqlClusterResizeRequest:
       type: object
@@ -20800,6 +20916,9 @@ components:
                   max_storage_bytes:
                     type: integer
                     description: The maximum size in bytes disks may autoscale to
+                  max_storage_bytes_managed_by_staff:
+                    type: boolean
+                    description: True when PlanetScale staff raised the limit above the organization default. The limit is read-only while this is set
                   disk_scaling_strategy:
                     type: string
                     enum:
@@ -20810,6 +20929,7 @@ components:
                 required:
                   - storage_bytes
                   - max_storage_bytes
+                  - max_storage_bytes_managed_by_staff
                   - disk_scaling_strategy
               max_rollout:
                 type: integer
@@ -20981,6 +21101,9 @@ components:
             max_storage_bytes:
               type: integer
               description: The maximum size in bytes disks may autoscale to
+            max_storage_bytes_managed_by_staff:
+              type: boolean
+              description: True when PlanetScale staff raised the limit above the organization default. The limit is read-only while this is set
             disk_scaling_strategy:
               type: string
               enum:
@@ -20991,6 +21114,7 @@ components:
           required:
             - storage_bytes
             - max_storage_bytes
+            - max_storage_bytes_managed_by_staff
             - disk_scaling_strategy
         max_rollout:
           type: integer
@@ -22652,334 +22776,6 @@ components:
         - keyspaces
         - configurable
         - configurations
-    PaginatedInsightsAgentRun:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The response type. Always "list" for paginated responses.
-        current_page:
-          type: integer
-          description: The current page number
-        per_page:
-          type: integer
-          description: The maximum number of results per page
-        next_page:
-          type: integer
-          description: The next page number, or null when this is the last page
-          nullable: true
-        next_page_url:
-          type: string
-          description: The next page of results, or null when this is the last page
-          nullable: true
-        prev_page:
-          type: integer
-          description: The previous page number, or null when this is the first page
-          nullable: true
-        prev_page_url:
-          type: string
-          description: The previous page of results, or null when this is the first page
-          nullable: true
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: The Insights agent run ID
-              number:
-                type: integer
-                description: The number of the Insights agent run
-              scheduled:
-                type: boolean
-                description: Whether the run was started by a schedule
-              type:
-                type: string
-                enum:
-                  - review_slow_queries
-                  - implement_schema_recommendation
-                description: The work performed by the run
-              state:
-                type: string
-                enum:
-                  - queued
-                  - running
-                  - succeeded
-                  - failed
-                  - cancelled
-                description: The run state
-              repository:
-                type: object
-                additionalProperties: true
-                description: The repository snapshot and analyzed commit
-              agent:
-                type: object
-                additionalProperties: true
-                description: The agent execution snapshot
-                nullable: true
-              schedule_id:
-                type: string
-                description: The schedule that created the run
-                nullable: true
-              scheduled_for:
-                type: string
-                description: The schedule occurrence claimed by the run
-                nullable: true
-              selected_targets:
-                items:
-                  type: object
-                  additionalProperties: true
-                type: array
-                description: The query patterns or schema recommendations selected for the run
-              outcome:
-                type: string
-                description: The run outcome
-                nullable: true
-              title:
-                type: string
-                description: The agent result title
-                nullable: true
-              summary:
-                type: string
-                description: The agent result summary
-                nullable: true
-              pull_request_url:
-                type: string
-                description: The pull request created by the run
-                nullable: true
-              failure_message:
-                type: string
-                description: The run failure
-                nullable: true
-              execution_duration_ms:
-                type: number
-                description: The run execution duration in milliseconds
-                nullable: true
-              cost:
-                type: string
-                description: How much this run cost, as a stringified decimal to preserve precision
-                nullable: true
-              failure_phase:
-                type: string
-                description: The phase where the run failed
-                nullable: true
-              started_at:
-                type: string
-                description: When execution started
-                nullable: true
-              finished_at:
-                type: string
-                description: When execution finished
-                nullable: true
-              created_at:
-                type: string
-                description: When the run was created
-              updated_at:
-                type: string
-                description: When the run was last updated
-            required:
-              - id
-              - number
-              - scheduled
-              - type
-              - state
-              - repository
-              - agent
-              - schedule_id
-              - scheduled_for
-              - selected_targets
-              - outcome
-              - title
-              - summary
-              - pull_request_url
-              - failure_message
-              - execution_duration_ms
-              - cost
-              - failure_phase
-              - started_at
-              - finished_at
-              - created_at
-              - updated_at
-      required:
-        - type
-        - current_page
-        - per_page
-        - next_page
-        - next_page_url
-        - prev_page
-        - prev_page_url
-        - data
-    InsightsAgentRun:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The Insights agent run ID
-        number:
-          type: integer
-          description: The number of the Insights agent run
-        scheduled:
-          type: boolean
-          description: Whether the run was started by a schedule
-        type:
-          type: string
-          enum:
-            - review_slow_queries
-            - implement_schema_recommendation
-          description: The work performed by the run
-        state:
-          type: string
-          enum:
-            - queued
-            - running
-            - succeeded
-            - failed
-            - cancelled
-          description: The run state
-        repository:
-          type: object
-          additionalProperties: true
-          description: The repository snapshot and analyzed commit
-        agent:
-          type: object
-          additionalProperties: true
-          description: The agent execution snapshot
-          nullable: true
-        schedule_id:
-          type: string
-          description: The schedule that created the run
-          nullable: true
-        scheduled_for:
-          type: string
-          description: The schedule occurrence claimed by the run
-          nullable: true
-        selected_targets:
-          items:
-            type: object
-            additionalProperties: true
-          type: array
-          description: The query patterns or schema recommendations selected for the run
-        outcome:
-          type: string
-          description: The run outcome
-          nullable: true
-        title:
-          type: string
-          description: The agent result title
-          nullable: true
-        summary:
-          type: string
-          description: The agent result summary
-          nullable: true
-        pull_request_url:
-          type: string
-          description: The pull request created by the run
-          nullable: true
-        failure_message:
-          type: string
-          description: The run failure
-          nullable: true
-        execution_duration_ms:
-          type: number
-          description: The run execution duration in milliseconds
-          nullable: true
-        cost:
-          type: string
-          description: How much this run cost, as a stringified decimal to preserve precision
-          nullable: true
-        failure_phase:
-          type: string
-          description: The phase where the run failed
-          nullable: true
-        started_at:
-          type: string
-          description: When execution started
-          nullable: true
-        finished_at:
-          type: string
-          description: When execution finished
-          nullable: true
-        created_at:
-          type: string
-          description: When the run was created
-        updated_at:
-          type: string
-          description: When the run was last updated
-      required:
-        - id
-        - number
-        - scheduled
-        - type
-        - state
-        - repository
-        - agent
-        - schedule_id
-        - scheduled_for
-        - selected_targets
-        - outcome
-        - title
-        - summary
-        - pull_request_url
-        - failure_message
-        - execution_duration_ms
-        - cost
-        - failure_phase
-        - started_at
-        - finished_at
-        - created_at
-        - updated_at
-    InsightsAgentSchedule:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The schedule ID
-          nullable: true
-        run_type:
-          type: string
-          enum:
-            - review_slow_queries
-            - implement_schema_recommendation
-          description: The scheduled run type
-        enabled:
-          type: boolean
-          description: Whether the schedule is enabled
-        frequency_unit:
-          type: string
-          enum:
-            - day
-            - week
-            - month
-          description: The cadence unit
-        schedule_time:
-          type: string
-          description: The local time of day in HH:MM format
-        time_zone:
-          type: string
-          description: The IANA time zone
-        day_of_week:
-          type: integer
-          description: The weekday for weekly schedules
-          nullable: true
-        day_of_month:
-          type: integer
-          description: The day of month for monthly schedules
-          nullable: true
-        next_run_at:
-          type: string
-          description: When the schedule will run next
-          nullable: true
-      required:
-        - id
-        - run_type
-        - enabled
-        - frequency_unit
-        - schedule_time
-        - time_zone
-        - day_of_week
-        - day_of_month
-        - next_run_at
     PaginatedKeyspaceConfigChangeRequest:
       type: object
       properties:
@@ -23796,6 +23592,17 @@ components:
           type: string
           description: The default value of the parameter
           nullable: true
+        disabled_reason:
+          type: string
+          description: Why the parameter cannot be changed
+          nullable: true
+        requires_update:
+          type: string
+          enum:
+            - cluster
+            - configuration_profile
+          description: The update required before the parameter can be configured
+          nullable: true
         value:
           type: string
           description: The configured value of the parameter
@@ -23806,9 +23613,11 @@ components:
         created_at:
           type: string
           description: When the parameter was created
+          nullable: true
         updated_at:
           type: string
           description: When the parameter was last updated
+          nullable: true
         restart:
           type: boolean
           description: Whether processes require a server restart after the parameter changes
@@ -23852,7 +23661,6 @@ components:
             - display_name
             - avatar_url
       required:
-        - id
         - name
         - display_name
         - namespace
@@ -23861,6 +23669,7 @@ components:
         - description
         - parameter_type
         - default_value
+        - requires_update
         - value
         - required
         - created_at
@@ -24076,26 +23885,6 @@ components:
                 additionalProperties: true
                 description: The target resource parameters before the change
                 nullable: true
-              flags:
-                items:
-                  type: string
-                type: array
-                description: The cluster flags
-                nullable: true
-              neki_image_version:
-                type: string
-                description: The Neki image version
-                nullable: true
-              previous_flags:
-                items:
-                  type: string
-                type: array
-                description: The previous cluster flags
-                nullable: true
-              previous_neki_image_version:
-                type: string
-                description: The previous Neki image version
-                nullable: true
               replicas:
                 type: integer
                 description: The number of replicas
@@ -24170,11 +23959,11 @@ components:
                 nullable: true
               name:
                 type: string
-                description: The name of the shard configuration profile
+                description: The name of the configuration profile
                 nullable: true
               previous_name:
                 type: string
-                description: The previous name of the shard configuration profile
+                description: The previous name of the configuration profile
                 nullable: true
               cluster_size:
                 type: string
@@ -24399,26 +24188,6 @@ components:
           additionalProperties: true
           description: The target resource parameters before the change
           nullable: true
-        flags:
-          items:
-            type: string
-          type: array
-          description: The cluster flags
-          nullable: true
-        neki_image_version:
-          type: string
-          description: The Neki image version
-          nullable: true
-        previous_flags:
-          items:
-            type: string
-          type: array
-          description: The previous cluster flags
-          nullable: true
-        previous_neki_image_version:
-          type: string
-          description: The previous Neki image version
-          nullable: true
         replicas:
           type: integer
           description: The number of replicas
@@ -24493,11 +24262,11 @@ components:
           nullable: true
         name:
           type: string
-          description: The name of the shard configuration profile
+          description: The name of the configuration profile
           nullable: true
         previous_name:
           type: string
-          description: The previous name of the shard configuration profile
+          description: The previous name of the configuration profile
           nullable: true
         cluster_size:
           type: string
@@ -24617,10 +24386,10 @@ components:
       properties:
         id:
           type: string
-          description: The ID of the shard configuration profile
+          description: The ID of the configuration profile
         name:
           type: string
-          description: The name of the shard configuration profile
+          description: The name of the configuration profile
         architecture:
           type: string
           description: The architecture of the cluster size SKU
@@ -24632,7 +24401,7 @@ components:
           description: The display name of the cluster size SKU
         default:
           type: boolean
-          description: Whether this is the default shard configuration profile
+          description: Whether this is the default configuration profile
         metal:
           type: boolean
           description: Whether shards using this configuration profile use metal instances
@@ -24641,19 +24410,19 @@ components:
           description: The number of replicas for shards using this configuration profile
         postgres_image_version:
           type: string
-          description: The PostgreSQL image used by the shard configuration profile
+          description: The PostgreSQL image used by the configuration profile
         latest_postgres_image_version:
           type: string
-          description: The latest PostgreSQL image available to the shard configuration profile
+          description: The latest PostgreSQL image available to the configuration profile
         postgres_major_version:
           type: integer
-          description: The PostgreSQL major version used by the shard configuration profile
+          description: The PostgreSQL major version used by the configuration profile
         postgres_minor_version:
           type: integer
-          description: The PostgreSQL minor version used by the shard configuration profile
+          description: The PostgreSQL minor version used by the configuration profile
         latest_postgres_minor_version:
           type: integer
-          description: The latest PostgreSQL minor version available to the shard configuration profile
+          description: The latest PostgreSQL minor version available to the configuration profile
         shards:
           type: integer
           description: The number of shards using this configuration profile
@@ -24693,13 +24462,13 @@ components:
             - pending
             - applying
             - ready
-          description: The current state of the shard configuration profile
+          description: The current state of the configuration profile
         created_at:
           type: string
-          description: When the shard configuration profile was created
+          description: When the configuration profile was created
         updated_at:
           type: string
-          description: When the shard configuration profile was last updated
+          description: When the configuration profile was last updated
       required:
         - id
         - name
@@ -24840,7 +24609,7 @@ components:
         - sort_order
         - rate
         - enabled
-    NekiExtensionDefinition:
+    NekiExtension:
       type: object
       properties:
         name:
@@ -24909,6 +24678,17 @@ components:
                 type: string
                 description: The default value of the parameter
                 nullable: true
+              disabled_reason:
+                type: string
+                description: Why the parameter cannot be changed
+                nullable: true
+              requires_update:
+                type: string
+                enum:
+                  - cluster
+                  - configuration_profile
+                description: The update required before the parameter can be configured
+                nullable: true
               value:
                 type: string
                 description: The configured value of the parameter
@@ -24919,9 +24699,11 @@ components:
               created_at:
                 type: string
                 description: When the parameter was created
+                nullable: true
               updated_at:
                 type: string
                 description: When the parameter was last updated
+                nullable: true
               restart:
                 type: boolean
                 description: Whether processes require a server restart after the parameter changes
@@ -24965,7 +24747,6 @@ components:
                   - display_name
                   - avatar_url
             required:
-              - id
               - name
               - display_name
               - namespace
@@ -24974,6 +24755,7 @@ components:
               - description
               - parameter_type
               - default_value
+              - requires_update
               - value
               - required
               - created_at
@@ -24981,13 +24763,13 @@ components:
               - restart
               - url
               - actor
-        requirements:
-          type: object
-          properties:
-            postgres_image_version:
-              type: string
-              description: The Postgres image version required to use the extension
-              nullable: true
+        requires_update:
+          type: string
+          enum:
+            - cluster
+            - configuration_profile
+          description: The update required before the extension can be used
+          nullable: true
         url:
           type: string
           description: The URL of the extension
@@ -24997,7 +24779,7 @@ components:
         - description
         - internal
         - parameters
-        - requirements
+        - requires_update
         - url
     PaginatedNekiShard:
       type: object
@@ -25050,7 +24832,7 @@ components:
                 nullable: true
               configuration_profile:
                 type: string
-                description: The name of the shard configuration profile
+                description: The name of the configuration profile
               created_at:
                 type: string
                 description: When the shard was created
@@ -25095,7 +24877,7 @@ components:
           nullable: true
         configuration_profile:
           type: string
-          description: The name of the shard configuration profile
+          description: The name of the configuration profile
         created_at:
           type: string
           description: When the shard was created
@@ -25146,7 +24928,7 @@ components:
           description: The ID of the sidecar
         configuration_profile:
           type: string
-          description: The name of the shard configuration profile the sidecar belongs to
+          description: The name of the configuration profile the sidecar belongs to
         state:
           type: string
           enum:
@@ -25257,7 +25039,7 @@ components:
                   type: object
                   additionalProperties: true
                 type: array
-                description: MCP tool groups (id, label, section, tools, scopes, parent_id, default_enabled, roles) selectable when authorizing a DCR app; only present for DCR apps. Database-section groups also carry org_scopes (the organization-tier scope names granting the group across all databases in an organization) and org_roles (the organization roles allowed to grant them); both are null for organization-section groups
+                description: "MCP tool groups (id, label, section, tools, scopes, parent_id, default_enabled, roles) selectable when authorizing a DCR app; only present for DCR apps. Database-section groups also carry org_scopes (the organization-tier scope names granting the group across all databases in an organization) and org_roles (the organization roles allowed to grant them); both are null for organization-section groups. Each group includes blocked_mcp_access_levels: the organization mcp_access_level values that prevent granting it, each with a level and reason. Read query groups are blocked at none; write query groups are also blocked at read_only. Other groups return an empty list"
                 nullable: true
             required:
               - id
@@ -25341,7 +25123,7 @@ components:
             type: object
             additionalProperties: true
           type: array
-          description: MCP tool groups (id, label, section, tools, scopes, parent_id, default_enabled, roles) selectable when authorizing a DCR app; only present for DCR apps. Database-section groups also carry org_scopes (the organization-tier scope names granting the group across all databases in an organization) and org_roles (the organization roles allowed to grant them); both are null for organization-section groups
+          description: "MCP tool groups (id, label, section, tools, scopes, parent_id, default_enabled, roles) selectable when authorizing a DCR app; only present for DCR apps. Database-section groups also carry org_scopes (the organization-tier scope names granting the group across all databases in an organization) and org_roles (the organization roles allowed to grant them); both are null for organization-section groups. Each group includes blocked_mcp_access_levels: the organization mcp_access_level values that prevent granting it, each with a level and reason. Read query groups are blocked at none; write query groups are also blocked at read_only. Other groups return an empty list"
           nullable: true
       required:
         - id
@@ -26775,6 +26557,9 @@ components:
               payment_info_required:
                 type: boolean
                 description: Whether or not the organization requires payment information
+              mcp_access_level:
+                type: string
+                description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
             required:
               - id
               - name
@@ -26795,6 +26580,7 @@ components:
               - neki_router_replicas_per_cell_limit
               - has_card
               - payment_info_required
+              - mcp_access_level
       required:
         - type
         - current_page
@@ -26873,6 +26659,9 @@ components:
         payment_info_required:
           type: boolean
           description: Whether or not the organization requires payment information
+        mcp_access_level:
+          type: string
+          description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
       required:
         - id
         - name
@@ -26893,6 +26682,7 @@ components:
         - neki_router_replicas_per_cell_limit
         - has_card
         - payment_info_required
+        - mcp_access_level
     ClusterSizeSku:
       type: object
       properties:
@@ -27382,67 +27172,98 @@ components:
                     id:
                       type: string
                       description: The ID of the parameter
-                    namespace:
-                      type: string
-                      enum:
-                        - pgbouncer
-                      description: The namespace of the parameter
+                      nullable: true
                     name:
                       type: string
                       description: The name of the parameter
                     display_name:
                       type: string
                       description: The display name of the parameter
+                    namespace:
+                      type: string
+                      enum:
+                        - patroni
+                        - pgconf
+                        - pgbouncer
+                      description: The namespace of the parameter
+                    advanced:
+                      type: boolean
+                      description: Whether the parameter is advanced
                     category:
                       type: string
                       description: The category of the parameter
+                      nullable: true
                     description:
                       type: string
                       description: The description of the parameter
-                    immutable:
-                      type: boolean
-                      description: Whether the parameter can be changed
                     parameter_type:
                       type: string
                       enum:
                         - array
+                        - boolean
+                        - bytes
+                        - float
                         - integer
                         - seconds
                         - select
                         - string
+                        - time
                       description: The type of the parameter
                     default_value:
                       type: string
                       description: The default value of the parameter
+                      nullable: true
+                    disabled_reason:
+                      type: string
+                      description: Why the parameter cannot be changed
+                      nullable: true
+                    requires_update:
+                      type: string
+                      enum:
+                        - cluster
+                      description: The update required before the parameter can be configured
+                      nullable: true
                     value:
                       type: string
                       description: The configured value of the parameter
+                      nullable: true
                     required:
                       type: boolean
                       description: Whether the parameter is required
                     created_at:
                       type: string
                       description: When the parameter was created
+                      nullable: true
                     updated_at:
                       type: string
                       description: When the parameter was last updated
+                      nullable: true
                     restart:
                       type: boolean
-                      description: True if processes require a server restart on change
+                      description: Whether processes require a server restart after the parameter changes
                     max:
                       type: number
                       description: The maximum value of the parameter
+                      nullable: true
                     min:
                       type: number
                       description: The minimum value of the parameter
-                    url:
-                      type: string
-                      description: The URL of the parameter
+                      nullable: true
                     options:
                       items:
                         type: string
                       type: array
-                      description: Valid options for the parameter value
+                      description: Valid options for the parameter value. Null represents an unset value
+                      nullable: true
+                    units:
+                      items:
+                        type: string
+                      type: array
+                      description: The units of the parameter value
+                      nullable: true
+                    url:
+                      type: string
+                      description: The URL of the parameter
                     actor:
                       type: object
                       properties:
@@ -27460,24 +27281,21 @@ components:
                         - display_name
                         - avatar_url
                   required:
-                    - id
-                    - namespace
                     - name
                     - display_name
+                    - namespace
+                    - advanced
                     - category
                     - description
-                    - immutable
                     - parameter_type
                     - default_value
+                    - requires_update
                     - value
                     - required
                     - created_at
                     - updated_at
                     - restart
-                    - max
-                    - min
                     - url
-                    - options
                     - actor
             required:
               - id
@@ -27602,67 +27420,98 @@ components:
               id:
                 type: string
                 description: The ID of the parameter
-              namespace:
-                type: string
-                enum:
-                  - pgbouncer
-                description: The namespace of the parameter
+                nullable: true
               name:
                 type: string
                 description: The name of the parameter
               display_name:
                 type: string
                 description: The display name of the parameter
+              namespace:
+                type: string
+                enum:
+                  - patroni
+                  - pgconf
+                  - pgbouncer
+                description: The namespace of the parameter
+              advanced:
+                type: boolean
+                description: Whether the parameter is advanced
               category:
                 type: string
                 description: The category of the parameter
+                nullable: true
               description:
                 type: string
                 description: The description of the parameter
-              immutable:
-                type: boolean
-                description: Whether the parameter can be changed
               parameter_type:
                 type: string
                 enum:
                   - array
+                  - boolean
+                  - bytes
+                  - float
                   - integer
                   - seconds
                   - select
                   - string
+                  - time
                 description: The type of the parameter
               default_value:
                 type: string
                 description: The default value of the parameter
+                nullable: true
+              disabled_reason:
+                type: string
+                description: Why the parameter cannot be changed
+                nullable: true
+              requires_update:
+                type: string
+                enum:
+                  - cluster
+                description: The update required before the parameter can be configured
+                nullable: true
               value:
                 type: string
                 description: The configured value of the parameter
+                nullable: true
               required:
                 type: boolean
                 description: Whether the parameter is required
               created_at:
                 type: string
                 description: When the parameter was created
+                nullable: true
               updated_at:
                 type: string
                 description: When the parameter was last updated
+                nullable: true
               restart:
                 type: boolean
-                description: True if processes require a server restart on change
+                description: Whether processes require a server restart after the parameter changes
               max:
                 type: number
                 description: The maximum value of the parameter
+                nullable: true
               min:
                 type: number
                 description: The minimum value of the parameter
-              url:
-                type: string
-                description: The URL of the parameter
+                nullable: true
               options:
                 items:
                   type: string
                 type: array
-                description: Valid options for the parameter value
+                description: Valid options for the parameter value. Null represents an unset value
+                nullable: true
+              units:
+                items:
+                  type: string
+                type: array
+                description: The units of the parameter value
+                nullable: true
+              url:
+                type: string
+                description: The URL of the parameter
               actor:
                 type: object
                 properties:
@@ -27680,24 +27529,21 @@ components:
                   - display_name
                   - avatar_url
             required:
-              - id
-              - namespace
               - name
               - display_name
+              - namespace
+              - advanced
               - category
               - description
-              - immutable
               - parameter_type
               - default_value
+              - requires_update
               - value
               - required
               - created_at
               - updated_at
               - restart
-              - max
-              - min
               - url
-              - options
               - actor
       required:
         - id
@@ -29744,42 +29590,61 @@ components:
               id:
                 type: string
                 description: The ID of the parameter
-              namespace:
-                type: string
-                enum:
-                  - pgconf
-                description: The namespace of the parameter
+                nullable: true
               name:
                 type: string
                 description: The name of the parameter
               display_name:
                 type: string
                 description: The display name of the parameter
+              namespace:
+                type: string
+                enum:
+                  - patroni
+                  - pgconf
+                  - pgbouncer
+                description: The namespace of the parameter
+              advanced:
+                type: boolean
+                description: Whether the parameter is advanced
               category:
                 type: string
                 description: The category of the parameter
+                nullable: true
               description:
                 type: string
                 description: The description of the parameter
-              immutable:
-                type: boolean
-                description: Whether the parameter can be changed
               parameter_type:
                 type: string
                 enum:
+                  - array
+                  - boolean
+                  - bytes
+                  - float
                   - integer
+                  - seconds
+                  - select
+                  - string
                   - time
                 description: The type of the parameter
               default_value:
                 type: string
-                description: The default value of the parameter, which is the primary's current value
+                description: The default value of the parameter
+                nullable: true
               disabled_reason:
                 type: string
                 description: Why the parameter cannot be changed
                 nullable: true
+              requires_update:
+                type: string
+                enum:
+                  - cluster
+                description: The update required before the parameter can be configured
+                nullable: true
               value:
                 type: string
                 description: The configured value of the parameter
+                nullable: true
               required:
                 type: boolean
                 description: Whether the parameter is required
@@ -29793,26 +29658,30 @@ components:
                 nullable: true
               restart:
                 type: boolean
-                description: True if processes require a server restart on change
+                description: Whether processes require a server restart after the parameter changes
               max:
                 type: number
                 description: The maximum value of the parameter
+                nullable: true
               min:
                 type: number
-                description: The minimum value of the parameter, floored at the primary's current value
-              url:
-                type: string
-                description: The URL of the parameter
+                description: The minimum value of the parameter
+                nullable: true
               options:
                 items:
                   type: string
                 type: array
-                description: Valid options for the parameter value
+                description: Valid options for the parameter value. Null represents an unset value
+                nullable: true
               units:
                 items:
                   type: string
                 type: array
-                description: Display units for the parameter value
+                description: The units of the parameter value
+                nullable: true
+              url:
+                type: string
+                description: The URL of the parameter
               actor:
                 type: object
                 properties:
@@ -29830,25 +29699,21 @@ components:
                   - display_name
                   - avatar_url
             required:
-              - id
-              - namespace
               - name
               - display_name
+              - namespace
+              - advanced
               - category
               - description
-              - immutable
               - parameter_type
               - default_value
+              - requires_update
               - value
               - required
               - created_at
               - updated_at
               - restart
-              - max
-              - min
               - url
-              - options
-              - units
               - actor
       required:
         - id
@@ -30920,891 +30785,6 @@ components:
         - created_at
         - updated_at
         - two_factor_auth_configured
-    PaginatedWorkflow:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The response type. Always "list" for paginated responses.
-        current_page:
-          type: integer
-          description: The current page number
-        per_page:
-          type: integer
-          description: The maximum number of results per page
-        next_page:
-          type: integer
-          description: The next page number, or null when this is the last page
-          nullable: true
-        next_page_url:
-          type: string
-          description: The next page of results, or null when this is the last page
-          nullable: true
-        prev_page:
-          type: integer
-          description: The previous page number, or null when this is the first page
-          nullable: true
-        prev_page_url:
-          type: string
-          description: The previous page of results, or null when this is the first page
-          nullable: true
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: The ID of the workflow
-              name:
-                type: string
-                description: The name of the workflow
-              number:
-                type: integer
-                description: The sequence number of the workflow
-              state:
-                type: string
-                enum:
-                  - pending
-                  - copying
-                  - running
-                  - stopped
-                  - verifying_data
-                  - verified_data
-                  - switching_replicas
-                  - switched_replicas
-                  - switching_primaries
-                  - switched_primaries
-                  - reversing_traffic
-                  - reversing_traffic_for_cancel
-                  - cutting_over
-                  - cutover
-                  - reversed_cutover
-                  - completed
-                  - cancelling
-                  - cancelled
-                  - error
-                description: The state of the workflow
-              created_at:
-                type: string
-                description: When the workflow was created
-              updated_at:
-                type: string
-                description: When the workflow was last updated
-              started_at:
-                type: string
-                description: When the workflow was started
-                nullable: true
-              completed_at:
-                type: string
-                description: When the workflow was completed
-                nullable: true
-              cancelled_at:
-                type: string
-                description: When the workflow was cancelled
-                nullable: true
-              reversed_at:
-                type: string
-                description: When the workflow was reversed
-                nullable: true
-              retried_at:
-                type: string
-                description: When the workflow was retried
-                nullable: true
-              data_copy_completed_at:
-                type: string
-                description: When the data copy was completed
-                nullable: true
-              cutover_at:
-                type: string
-                description: When the cutover was completed
-                nullable: true
-              replicas_switched:
-                type: boolean
-                description: Whether or not the replicas have been switched
-              primaries_switched:
-                type: boolean
-                description: Whether or not the primaries have been switched
-              switch_replicas_at:
-                type: string
-                description: When the replicas were switched
-                nullable: true
-              switch_primaries_at:
-                type: string
-                description: When the primaries were switched
-                nullable: true
-              verify_data_at:
-                type: string
-                description: When the data was verified
-                nullable: true
-              workflow_type:
-                type: string
-                enum:
-                  - move_tables
-                description: The type of the workflow
-              workflow_subtype:
-                type: string
-                description: The subtype of the workflow
-              defer_secondary_keys:
-                type: boolean
-                description: Whether or not secondary keys are deferred
-              on_ddl:
-                type: string
-                enum:
-                  - IGNORE
-                  - STOP
-                  - EXEC
-                  - EXEC_IGNORE
-                description: The behavior when DDL changes during the workflow
-              workflow_errors:
-                type: string
-                description: The errors that occurred during the workflow
-              may_retry:
-                type: boolean
-                description: Whether or not the workflow may be retried
-              may_restart:
-                type: boolean
-                description: Whether or not the workflow may be restarted
-              verified_data_stale:
-                type: boolean
-                description: Whether or not the verified data is stale
-              sequence_tables_applied:
-                type: boolean
-                description: Whether or not sequence tables have been created
-              actor:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              verify_data_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              reversed_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              switch_replicas_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              switch_primaries_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              cancelled_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              completed_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              retried_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              cutover_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              reversed_cutover_by:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the actor
-                  display_name:
-                    type: string
-                    description: The name of the actor
-                  avatar_url:
-                    type: string
-                    description: The URL of the actor's avatar
-                required:
-                  - id
-                  - display_name
-                  - avatar_url
-              branch:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID for the resource
-                  name:
-                    type: string
-                    description: The name for the resource
-                  created_at:
-                    type: string
-                    description: When the resource was created
-                  updated_at:
-                    type: string
-                    description: When the resource was last updated
-                  deleted_at:
-                    type: string
-                    description: When the resource was deleted, if deleted
-                    nullable: true
-                required:
-                  - id
-                  - name
-                  - created_at
-                  - updated_at
-                  - deleted_at
-              source_keyspace:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID for the resource
-                  name:
-                    type: string
-                    description: The name for the resource
-                  created_at:
-                    type: string
-                    description: When the resource was created
-                  updated_at:
-                    type: string
-                    description: When the resource was last updated
-                  deleted_at:
-                    type: string
-                    description: When the resource was deleted, if deleted
-                    nullable: true
-                required:
-                  - id
-                  - name
-                  - created_at
-                  - updated_at
-                  - deleted_at
-              target_keyspace:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID for the resource
-                  name:
-                    type: string
-                    description: The name for the resource
-                  created_at:
-                    type: string
-                    description: When the resource was created
-                  updated_at:
-                    type: string
-                    description: When the resource was last updated
-                  deleted_at:
-                    type: string
-                    description: When the resource was deleted, if deleted
-                    nullable: true
-                required:
-                  - id
-                  - name
-                  - created_at
-                  - updated_at
-                  - deleted_at
-              global_keyspace:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID for the resource
-                  name:
-                    type: string
-                    description: The name for the resource
-                  created_at:
-                    type: string
-                    description: When the resource was created
-                  updated_at:
-                    type: string
-                    description: When the resource was last updated
-                  deleted_at:
-                    type: string
-                    description: When the resource was deleted, if deleted
-                    nullable: true
-                required:
-                  - id
-                  - name
-                  - created_at
-                  - updated_at
-                  - deleted_at
-            required:
-              - id
-              - name
-              - number
-              - state
-              - created_at
-              - updated_at
-              - started_at
-              - completed_at
-              - cancelled_at
-              - reversed_at
-              - retried_at
-              - data_copy_completed_at
-              - cutover_at
-              - replicas_switched
-              - primaries_switched
-              - switch_replicas_at
-              - switch_primaries_at
-              - verify_data_at
-              - workflow_type
-              - workflow_subtype
-              - defer_secondary_keys
-              - on_ddl
-              - workflow_errors
-              - may_retry
-              - may_restart
-              - verified_data_stale
-              - sequence_tables_applied
-              - actor
-              - verify_data_by
-              - reversed_by
-              - switch_replicas_by
-              - switch_primaries_by
-              - cancelled_by
-              - completed_by
-              - retried_by
-              - cutover_by
-              - reversed_cutover_by
-              - branch
-              - source_keyspace
-              - target_keyspace
-              - global_keyspace
-      required:
-        - type
-        - current_page
-        - per_page
-        - next_page
-        - next_page_url
-        - prev_page
-        - prev_page_url
-        - data
-    Workflow:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the workflow
-        name:
-          type: string
-          description: The name of the workflow
-        number:
-          type: integer
-          description: The sequence number of the workflow
-        state:
-          type: string
-          enum:
-            - pending
-            - copying
-            - running
-            - stopped
-            - verifying_data
-            - verified_data
-            - switching_replicas
-            - switched_replicas
-            - switching_primaries
-            - switched_primaries
-            - reversing_traffic
-            - reversing_traffic_for_cancel
-            - cutting_over
-            - cutover
-            - reversed_cutover
-            - completed
-            - cancelling
-            - cancelled
-            - error
-          description: The state of the workflow
-        created_at:
-          type: string
-          description: When the workflow was created
-        updated_at:
-          type: string
-          description: When the workflow was last updated
-        started_at:
-          type: string
-          description: When the workflow was started
-          nullable: true
-        completed_at:
-          type: string
-          description: When the workflow was completed
-          nullable: true
-        cancelled_at:
-          type: string
-          description: When the workflow was cancelled
-          nullable: true
-        reversed_at:
-          type: string
-          description: When the workflow was reversed
-          nullable: true
-        retried_at:
-          type: string
-          description: When the workflow was retried
-          nullable: true
-        data_copy_completed_at:
-          type: string
-          description: When the data copy was completed
-          nullable: true
-        cutover_at:
-          type: string
-          description: When the cutover was completed
-          nullable: true
-        replicas_switched:
-          type: boolean
-          description: Whether or not the replicas have been switched
-        primaries_switched:
-          type: boolean
-          description: Whether or not the primaries have been switched
-        switch_replicas_at:
-          type: string
-          description: When the replicas were switched
-          nullable: true
-        switch_primaries_at:
-          type: string
-          description: When the primaries were switched
-          nullable: true
-        verify_data_at:
-          type: string
-          description: When the data was verified
-          nullable: true
-        workflow_type:
-          type: string
-          enum:
-            - move_tables
-          description: The type of the workflow
-        workflow_subtype:
-          type: string
-          description: The subtype of the workflow
-        defer_secondary_keys:
-          type: boolean
-          description: Whether or not secondary keys are deferred
-        on_ddl:
-          type: string
-          enum:
-            - IGNORE
-            - STOP
-            - EXEC
-            - EXEC_IGNORE
-          description: The behavior when DDL changes during the workflow
-        workflow_errors:
-          type: string
-          description: The errors that occurred during the workflow
-        may_retry:
-          type: boolean
-          description: Whether or not the workflow may be retried
-        may_restart:
-          type: boolean
-          description: Whether or not the workflow may be restarted
-        verified_data_stale:
-          type: boolean
-          description: Whether or not the verified data is stale
-        sequence_tables_applied:
-          type: boolean
-          description: Whether or not sequence tables have been created
-        actor:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        verify_data_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        reversed_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        switch_replicas_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        switch_primaries_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        cancelled_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        completed_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        retried_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        cutover_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        reversed_cutover_by:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID of the actor
-            display_name:
-              type: string
-              description: The name of the actor
-            avatar_url:
-              type: string
-              description: The URL of the actor's avatar
-          required:
-            - id
-            - display_name
-            - avatar_url
-        branch:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID for the resource
-            name:
-              type: string
-              description: The name for the resource
-            created_at:
-              type: string
-              description: When the resource was created
-            updated_at:
-              type: string
-              description: When the resource was last updated
-            deleted_at:
-              type: string
-              description: When the resource was deleted, if deleted
-              nullable: true
-          required:
-            - id
-            - name
-            - created_at
-            - updated_at
-            - deleted_at
-        source_keyspace:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID for the resource
-            name:
-              type: string
-              description: The name for the resource
-            created_at:
-              type: string
-              description: When the resource was created
-            updated_at:
-              type: string
-              description: When the resource was last updated
-            deleted_at:
-              type: string
-              description: When the resource was deleted, if deleted
-              nullable: true
-          required:
-            - id
-            - name
-            - created_at
-            - updated_at
-            - deleted_at
-        target_keyspace:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID for the resource
-            name:
-              type: string
-              description: The name for the resource
-            created_at:
-              type: string
-              description: When the resource was created
-            updated_at:
-              type: string
-              description: When the resource was last updated
-            deleted_at:
-              type: string
-              description: When the resource was deleted, if deleted
-              nullable: true
-          required:
-            - id
-            - name
-            - created_at
-            - updated_at
-            - deleted_at
-        global_keyspace:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The ID for the resource
-            name:
-              type: string
-              description: The name for the resource
-            created_at:
-              type: string
-              description: When the resource was created
-            updated_at:
-              type: string
-              description: When the resource was last updated
-            deleted_at:
-              type: string
-              description: When the resource was deleted, if deleted
-              nullable: true
-          required:
-            - id
-            - name
-            - created_at
-            - updated_at
-            - deleted_at
-      required:
-        - id
-        - name
-        - number
-        - state
-        - created_at
-        - updated_at
-        - started_at
-        - completed_at
-        - cancelled_at
-        - reversed_at
-        - retried_at
-        - data_copy_completed_at
-        - cutover_at
-        - replicas_switched
-        - primaries_switched
-        - switch_replicas_at
-        - switch_primaries_at
-        - verify_data_at
-        - workflow_type
-        - workflow_subtype
-        - defer_secondary_keys
-        - on_ddl
-        - workflow_errors
-        - may_retry
-        - may_restart
-        - verified_data_stale
-        - sequence_tables_applied
-        - actor
-        - verify_data_by
-        - reversed_by
-        - switch_replicas_by
-        - switch_primaries_by
-        - cancelled_by
-        - completed_by
-        - retried_by
-        - cutover_by
-        - reversed_cutover_by
-        - branch
-        - source_keyspace
-        - target_keyspace
-        - global_keyspace
     PaginatedDeployRequestReview:
       type: object
       properties:
@@ -32105,6 +31085,9 @@ components:
                   auto_delete_branch:
                     type: boolean
                     description: Whether or not to automatically delete the head branch once deployment is finished
+                  aggressive_cutover:
+                    type: boolean
+                    description: Whether this deploy request opted in to aggressive cutover. When enabled, Vitess kills blocking queries and transactions on the first cutover attempt. A false value does not disable a database-wide aggressive cutover setting.
                   created_at:
                     type: string
                     description: When the deployment was created
@@ -32126,6 +31109,13 @@ components:
                   force_cutover_requested_at:
                     type: string
                     description: When force cutover was triggered for the deployment
+                    nullable: true
+                  retry_requested:
+                    type: boolean
+                    description: Whether a retry of failed operations was requested within the retry window
+                  retry_requested_at:
+                    type: string
+                    description: When a retry of failed operations was last requested
                     nullable: true
                   queued_at:
                     type: string
@@ -32518,11 +31508,14 @@ components:
                   - id
                   - auto_cutover
                   - auto_delete_branch
+                  - aggressive_cutover
                   - created_at
                   - cutover_at
                   - cutover_expiring
                   - finished_at
                   - force_cutover_requested_at
+                  - retry_requested
+                  - retry_requested_at
                   - queued_at
                   - ready_to_cutover_at
                   - started_at
@@ -32735,6 +31728,9 @@ components:
             auto_delete_branch:
               type: boolean
               description: Whether or not to automatically delete the head branch once deployment is finished
+            aggressive_cutover:
+              type: boolean
+              description: Whether this deploy request opted in to aggressive cutover. When enabled, Vitess kills blocking queries and transactions on the first cutover attempt. A false value does not disable a database-wide aggressive cutover setting.
             created_at:
               type: string
               description: When the deployment was created
@@ -32756,6 +31752,13 @@ components:
             force_cutover_requested_at:
               type: string
               description: When force cutover was triggered for the deployment
+              nullable: true
+            retry_requested:
+              type: boolean
+              description: Whether a retry of failed operations was requested within the retry window
+            retry_requested_at:
+              type: string
+              description: When a retry of failed operations was last requested
               nullable: true
             queued_at:
               type: string
@@ -33148,11 +32151,14 @@ components:
             - id
             - auto_cutover
             - auto_delete_branch
+            - aggressive_cutover
             - created_at
             - cutover_at
             - cutover_expiring
             - finished_at
             - force_cutover_requested_at
+            - retry_requested
+            - retry_requested_at
             - queued_at
             - ready_to_cutover_at
             - started_at
@@ -33237,6 +32243,9 @@ components:
         auto_delete_branch:
           type: boolean
           description: Whether or not to automatically delete the head branch once deployment is finished
+        aggressive_cutover:
+          type: boolean
+          description: Whether this deploy request opted in to aggressive cutover. When enabled, Vitess kills blocking queries and transactions on the first cutover attempt. A false value does not disable a database-wide aggressive cutover setting.
         created_at:
           type: string
           description: When the deployment was created
@@ -33258,6 +32267,13 @@ components:
         force_cutover_requested_at:
           type: string
           description: When force cutover was triggered for the deployment
+          nullable: true
+        retry_requested:
+          type: boolean
+          description: Whether a retry of failed operations was requested within the retry window
+        retry_requested_at:
+          type: string
+          description: When a retry of failed operations was last requested
           nullable: true
         queued_at:
           type: string
@@ -33650,11 +32666,14 @@ components:
         - id
         - auto_cutover
         - auto_delete_branch
+        - aggressive_cutover
         - created_at
         - cutover_at
         - cutover_expiring
         - finished_at
         - force_cutover_requested_at
+        - retry_requested
+        - retry_requested_at
         - queued_at
         - ready_to_cutover_at
         - started_at
@@ -33854,6 +32873,9 @@ components:
               auto_delete_branch:
                 type: boolean
                 description: Whether or not to automatically delete the head branch once deployment is finished
+              aggressive_cutover:
+                type: boolean
+                description: Whether this deploy request opted in to aggressive cutover. When enabled, Vitess kills blocking queries and transactions on the first cutover attempt. A false value does not disable a database-wide aggressive cutover setting.
               created_at:
                 type: string
                 description: When the deployment was created
@@ -33875,6 +32897,13 @@ components:
               force_cutover_requested_at:
                 type: string
                 description: When force cutover was triggered for the deployment
+                nullable: true
+              retry_requested:
+                type: boolean
+                description: Whether a retry of failed operations was requested within the retry window
+              retry_requested_at:
+                type: string
+                description: When a retry of failed operations was last requested
                 nullable: true
               queued_at:
                 type: string
@@ -34267,11 +33296,14 @@ components:
               - id
               - auto_cutover
               - auto_delete_branch
+              - aggressive_cutover
               - created_at
               - cutover_at
               - cutover_expiring
               - finished_at
               - force_cutover_requested_at
+              - retry_requested
+              - retry_requested_at
               - queued_at
               - ready_to_cutover_at
               - started_at
