@@ -139,28 +139,16 @@ const (
 func (e CreateVitessBranchBackupState) ToPointer() *CreateVitessBranchBackupState {
 	return &e
 }
-func (e *CreateVitessBranchBackupState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateVitessBranchBackupState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "running", "success", "failed", "canceled", "ignored":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "running":
-		fallthrough
-	case "success":
-		fallthrough
-	case "failed":
-		fallthrough
-	case "canceled":
-		fallthrough
-	case "ignored":
-		*e = CreateVitessBranchBackupState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateVitessBranchBackupState: %v", v)
-	}
+	return false
 }
 
 type CreateVitessBranchBackupActor struct {

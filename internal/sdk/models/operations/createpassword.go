@@ -172,24 +172,16 @@ const (
 func (e CreatePasswordRoleResponse) ToPointer() *CreatePasswordRoleResponse {
 	return &e
 }
-func (e *CreatePasswordRoleResponse) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreatePasswordRoleResponse) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "reader", "writer", "admin", "readwriter":
+			return true
+		}
 	}
-	switch v {
-	case "reader":
-		fallthrough
-	case "writer":
-		fallthrough
-	case "admin":
-		fallthrough
-	case "readwriter":
-		*e = CreatePasswordRoleResponse(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreatePasswordRoleResponse: %v", v)
-	}
+	return false
 }
 
 type CreatePasswordActor struct {

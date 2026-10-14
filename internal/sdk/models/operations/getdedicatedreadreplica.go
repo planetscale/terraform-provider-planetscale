@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -62,26 +60,16 @@ const (
 func (e GetDedicatedReadReplicaStorageType) ToPointer() *GetDedicatedReadReplicaStorageType {
 	return &e
 }
-func (e *GetDedicatedReadReplicaStorageType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetDedicatedReadReplicaStorageType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "gp3", "io2", "pd_ssd", "hyperdisk_balanced", "premium_v2_lrs":
+			return true
+		}
 	}
-	switch v {
-	case "gp3":
-		fallthrough
-	case "io2":
-		fallthrough
-	case "pd_ssd":
-		fallthrough
-	case "hyperdisk_balanced":
-		fallthrough
-	case "premium_v2_lrs":
-		*e = GetDedicatedReadReplicaStorageType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetDedicatedReadReplicaStorageType: %v", v)
-	}
+	return false
 }
 
 // GetDedicatedReadReplicaResponseBody - Returns the dedicated read replica

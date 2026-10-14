@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -100,42 +98,16 @@ const (
 func (e UpdateRoleInheritedRole) ToPointer() *UpdateRoleInheritedRole {
 	return &e
 }
-func (e *UpdateRoleInheritedRole) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *UpdateRoleInheritedRole) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pscale_managed", "pg_checkpoint", "pg_create_subscription", "pg_maintain", "pg_monitor", "pg_read_all_data", "pg_read_all_settings", "pg_read_all_stats", "pg_signal_backend", "pg_stat_scan_tables", "pg_use_reserved_connections", "pg_write_all_data", "postgres":
+			return true
+		}
 	}
-	switch v {
-	case "pscale_managed":
-		fallthrough
-	case "pg_checkpoint":
-		fallthrough
-	case "pg_create_subscription":
-		fallthrough
-	case "pg_maintain":
-		fallthrough
-	case "pg_monitor":
-		fallthrough
-	case "pg_read_all_data":
-		fallthrough
-	case "pg_read_all_settings":
-		fallthrough
-	case "pg_read_all_stats":
-		fallthrough
-	case "pg_signal_backend":
-		fallthrough
-	case "pg_stat_scan_tables":
-		fallthrough
-	case "pg_use_reserved_connections":
-		fallthrough
-	case "pg_write_all_data":
-		fallthrough
-	case "postgres":
-		*e = UpdateRoleInheritedRole(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateRoleInheritedRole: %v", v)
-	}
+	return false
 }
 
 type UpdateRoleBranchData struct {
@@ -210,22 +182,16 @@ const (
 func (e UpdateRoleRequireWhereOnDelete) ToPointer() *UpdateRoleRequireWhereOnDelete {
 	return &e
 }
-func (e *UpdateRoleRequireWhereOnDelete) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *UpdateRoleRequireWhereOnDelete) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "off", "warn", "on":
+			return true
+		}
 	}
-	switch v {
-	case "off":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "on":
-		*e = UpdateRoleRequireWhereOnDelete(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateRoleRequireWhereOnDelete: %v", v)
-	}
+	return false
 }
 
 // UpdateRoleRequireWhereOnUpdate - Require WHERE clause on UPDATE statements
@@ -240,22 +206,16 @@ const (
 func (e UpdateRoleRequireWhereOnUpdate) ToPointer() *UpdateRoleRequireWhereOnUpdate {
 	return &e
 }
-func (e *UpdateRoleRequireWhereOnUpdate) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *UpdateRoleRequireWhereOnUpdate) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "off", "warn", "on":
+			return true
+		}
 	}
-	switch v {
-	case "off":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "on":
-		*e = UpdateRoleRequireWhereOnUpdate(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateRoleRequireWhereOnUpdate: %v", v)
-	}
+	return false
 }
 
 type UpdateRoleQuerySafetySettings struct {

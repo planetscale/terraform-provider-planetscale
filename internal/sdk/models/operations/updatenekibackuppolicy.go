@@ -249,20 +249,16 @@ const (
 func (e UpdateNekiBackupPolicyTargetResponseBody) ToPointer() *UpdateNekiBackupPolicyTargetResponseBody {
 	return &e
 }
-func (e *UpdateNekiBackupPolicyTargetResponseBody) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *UpdateNekiBackupPolicyTargetResponseBody) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "production", "development":
+			return true
+		}
 	}
-	switch v {
-	case "production":
-		fallthrough
-	case "development":
-		*e = UpdateNekiBackupPolicyTargetResponseBody(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateNekiBackupPolicyTargetResponseBody: %v", v)
-	}
+	return false
 }
 
 // UpdateNekiBackupPolicyResponseBody - Returns the updated backup policy

@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -109,24 +107,16 @@ const (
 func (e GetNekiConfigurationProfileState) ToPointer() *GetNekiConfigurationProfileState {
 	return &e
 }
-func (e *GetNekiConfigurationProfileState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetNekiConfigurationProfileState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "draft", "pending", "applying", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "draft":
-		fallthrough
-	case "pending":
-		fallthrough
-	case "applying":
-		fallthrough
-	case "ready":
-		*e = GetNekiConfigurationProfileState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetNekiConfigurationProfileState: %v", v)
-	}
+	return false
 }
 
 // GetNekiConfigurationProfileResponseBody - Returns the configuration profile

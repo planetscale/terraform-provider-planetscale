@@ -249,20 +249,16 @@ const (
 func (e UpdateVitessBackupPolicyTargetResponseBody) ToPointer() *UpdateVitessBackupPolicyTargetResponseBody {
 	return &e
 }
-func (e *UpdateVitessBackupPolicyTargetResponseBody) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *UpdateVitessBackupPolicyTargetResponseBody) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "production", "development":
+			return true
+		}
 	}
-	switch v {
-	case "production":
-		fallthrough
-	case "development":
-		*e = UpdateVitessBackupPolicyTargetResponseBody(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdateVitessBackupPolicyTargetResponseBody: %v", v)
-	}
+	return false
 }
 
 // UpdateVitessBackupPolicyResponseBody - Returns the updated backup policy

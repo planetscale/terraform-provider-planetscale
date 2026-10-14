@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -53,26 +51,16 @@ const (
 func (e GetNekiBranchState) ToPointer() *GetNekiBranchState {
 	return &e
 }
-func (e *GetNekiBranchState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetNekiBranchState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "sleep_in_progress", "sleeping", "awakening", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "sleep_in_progress":
-		fallthrough
-	case "sleeping":
-		fallthrough
-	case "awakening":
-		fallthrough
-	case "ready":
-		*e = GetNekiBranchState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetNekiBranchState: %v", v)
-	}
+	return false
 }
 
 // GetNekiBranchResponseBody - Returns information about a branch

@@ -216,30 +216,16 @@ const (
 func (e ListDatabasesState) ToPointer() *ListDatabasesState {
 	return &e
 }
-func (e *ListDatabasesState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ListDatabasesState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "importing", "sleep_in_progress", "sleeping", "awakening", "import_ready", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "importing":
-		fallthrough
-	case "sleep_in_progress":
-		fallthrough
-	case "sleeping":
-		fallthrough
-	case "awakening":
-		fallthrough
-	case "import_ready":
-		fallthrough
-	case "ready":
-		*e = ListDatabasesState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListDatabasesState: %v", v)
-	}
+	return false
 }
 
 // KindResponse - The kind of database
@@ -254,22 +240,16 @@ const (
 func (e KindResponse) ToPointer() *KindResponse {
 	return &e
 }
-func (e *KindResponse) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *KindResponse) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "mysql", "postgresql", "neki":
+			return true
+		}
 	}
-	switch v {
-	case "mysql":
-		fallthrough
-	case "postgresql":
-		fallthrough
-	case "neki":
-		*e = KindResponse(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for KindResponse: %v", v)
-	}
+	return false
 }
 
 type ListDatabasesData struct {

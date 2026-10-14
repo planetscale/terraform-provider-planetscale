@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/types"
 	"net/http"
@@ -164,26 +162,16 @@ const (
 func (e CreateNekiBranchState) ToPointer() *CreateNekiBranchState {
 	return &e
 }
-func (e *CreateNekiBranchState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateNekiBranchState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "sleep_in_progress", "sleeping", "awakening", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "sleep_in_progress":
-		fallthrough
-	case "sleeping":
-		fallthrough
-	case "awakening":
-		fallthrough
-	case "ready":
-		*e = CreateNekiBranchState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateNekiBranchState: %v", v)
-	}
+	return false
 }
 
 // CreateNekiBranchResponseBody - Returns the created branch

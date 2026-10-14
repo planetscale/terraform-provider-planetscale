@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -60,22 +58,16 @@ const (
 func (e GetRouterState) ToPointer() *GetRouterState {
 	return &e
 }
-func (e *GetRouterState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetRouterState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "applying", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "applying":
-		fallthrough
-	case "ready":
-		*e = GetRouterState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetRouterState: %v", v)
-	}
+	return false
 }
 
 // GetRouterResponseBody - Returns the router

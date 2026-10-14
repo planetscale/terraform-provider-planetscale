@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -50,20 +48,16 @@ const (
 func (e GetPostgresBackupPolicyTarget) ToPointer() *GetPostgresBackupPolicyTarget {
 	return &e
 }
-func (e *GetPostgresBackupPolicyTarget) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetPostgresBackupPolicyTarget) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "production", "development":
+			return true
+		}
 	}
-	switch v {
-	case "production":
-		fallthrough
-	case "development":
-		*e = GetPostgresBackupPolicyTarget(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetPostgresBackupPolicyTarget: %v", v)
-	}
+	return false
 }
 
 // GetPostgresBackupPolicyResponseBody - Returns a backup policy

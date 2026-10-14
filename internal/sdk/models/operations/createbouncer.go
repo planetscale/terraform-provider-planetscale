@@ -148,22 +148,16 @@ const (
 func (e CreateBouncerTargetResponseBody) ToPointer() *CreateBouncerTargetResponseBody {
 	return &e
 }
-func (e *CreateBouncerTargetResponseBody) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateBouncerTargetResponseBody) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "primary", "replica", "replica_az_affinity":
+			return true
+		}
 	}
-	switch v {
-	case "primary":
-		fallthrough
-	case "replica":
-		fallthrough
-	case "replica_az_affinity":
-		*e = CreateBouncerTargetResponseBody(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateBouncerTargetResponseBody: %v", v)
-	}
+	return false
 }
 
 type CreateBouncerActor struct {
@@ -190,22 +184,16 @@ const (
 func (e CreateBouncerNamespace) ToPointer() *CreateBouncerNamespace {
 	return &e
 }
-func (e *CreateBouncerNamespace) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateBouncerNamespace) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "patroni", "pgconf", "pgbouncer":
+			return true
+		}
 	}
-	switch v {
-	case "patroni":
-		fallthrough
-	case "pgconf":
-		fallthrough
-	case "pgbouncer":
-		*e = CreateBouncerNamespace(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateBouncerNamespace: %v", v)
-	}
+	return false
 }
 
 // CreateBouncerParameterType - The type of the parameter
@@ -226,34 +214,16 @@ const (
 func (e CreateBouncerParameterType) ToPointer() *CreateBouncerParameterType {
 	return &e
 }
-func (e *CreateBouncerParameterType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateBouncerParameterType) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "array", "boolean", "bytes", "float", "integer", "seconds", "select", "string", "time":
+			return true
+		}
 	}
-	switch v {
-	case "array":
-		fallthrough
-	case "boolean":
-		fallthrough
-	case "bytes":
-		fallthrough
-	case "float":
-		fallthrough
-	case "integer":
-		fallthrough
-	case "seconds":
-		fallthrough
-	case "select":
-		fallthrough
-	case "string":
-		fallthrough
-	case "time":
-		*e = CreateBouncerParameterType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateBouncerParameterType: %v", v)
-	}
+	return false
 }
 
 // CreateBouncerRequiresUpdate - The update required before the parameter can be configured

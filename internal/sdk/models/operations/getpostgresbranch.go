@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -53,26 +51,16 @@ const (
 func (e GetPostgresBranchState) ToPointer() *GetPostgresBranchState {
 	return &e
 }
-func (e *GetPostgresBranchState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetPostgresBranchState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "sleep_in_progress", "sleeping", "awakening", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "sleep_in_progress":
-		fallthrough
-	case "sleeping":
-		fallthrough
-	case "awakening":
-		fallthrough
-	case "ready":
-		*e = GetPostgresBranchState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetPostgresBranchState: %v", v)
-	}
+	return false
 }
 
 type GetPostgresBranchActor struct {
