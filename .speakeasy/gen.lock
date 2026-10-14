@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 817d646acd5c5f9a5fd4650091b5aa8a
+  docChecksum: 5d0bb406ae2edebcb5e4ed203c1703e6
   docVersion: v1
   speakeasyVersion: 1.800.0
   generationVersion: 2.943.0
@@ -1211,7 +1211,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9096.15, "per_page": 909615, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameters": [{"id": "<id>", "name": "<value>", "display_name": "Janick38", "namespace": "pgbouncer", "advanced": false, "category": "<value>", "description": "till precedent wear unwilling gee", "parameter_type": "array", "default_value": "<value>", "requires_update": "cluster", "value": "<value>", "required": true, "created_at": "1733654661931", "updated_at": "1735681501018", "restart": true, "max": 5251.45, "min": 6374.53, "options": [], "url": "https://noteworthy-jury.com/", "actor": {"id": "<id>", "display_name": "Lyla63", "avatar_url": "https://last-futon.com/"}}], "parameter_overrides": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>"}}}]}
+          application/json: {"type": "<value>", "current_page": 9096.15, "per_page": 909615, "next_page": 2525.12, "next_page_url": "https://faraway-numeracy.net", "prev_page": 9626.4, "prev_page_url": "https://frivolous-middle.com", "data": [{"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 3448.58, "actor": {"id": "<id>"}, "parameter_overrides": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>"}}}]}
   create_bouncer:
     speakeasy-default-create-bouncer:
       parameters:
@@ -1221,7 +1221,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "actor": {"id": "<id>"}, "parameters": []}
+          application/json: {"id": "<id>", "name": "<value>", "target": "primary", "replicas_per_cell": 5260.28, "actor": {"id": "<id>"}}
   get_bouncer:
     speakeasy-default-get-bouncer:
       parameters:

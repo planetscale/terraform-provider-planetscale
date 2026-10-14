@@ -66,22 +66,22 @@ actions:
       x-speakeasy-match: name
 
   # Response shaping for create: the branch object collides with the branch
-  # path parameter, and the rich parameters array cannot reconcile with the
-  # map-shaped parameters the write and terraform-state endpoints use.
+  # path parameter, and the rich parameters array is dropped because Terraform
+  # uses the map-shaped parameters from the write and terraform-state endpoints.
   # bouncer_size is returned by the API but not yet published in the upstream
   # schema.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema.properties
-    description: Hide the rich parameters array, which cannot reconcile with the map-shaped request. Add undocumented response fields.
+    description: Add undocumented response fields.
     update:
-      parameters:
-        x-speakeasy-name-override: parameter_details
-        x-speakeasy-terraform-ignore: true
       bouncer_size:
         type: string
         description: >-
           The bouncer size, e.g. `PGB_5`, `PGB_10`, `PGB_20`, `PGB_40`,
           `PGB_80`, or `PGB_160`. Defaults to `PGB_5`.
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema.properties.parameters
+    description: Drop the rich parameters array. Terraform never reads it, and decoding it would break bouncer reads whenever parameter definition details change.
+    remove: true
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/bouncers"].post.responses["200"].content["application/json"].schema.properties.created_at
     description: Trim noisy response field, following the branch resource attribute conventions.
     remove: true
