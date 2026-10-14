@@ -46,7 +46,7 @@ func (g *GetNekiConfigurationProfileExtensionsRequest) GetConfigurationProfile()
 	return g.ConfigurationProfile
 }
 
-// GetNekiConfigurationProfileExtensionsResponseBody - Returns extensions for the shard configuration profile
+// GetNekiConfigurationProfileExtensionsResponseBody - Returns extensions for the configuration profile
 type GetNekiConfigurationProfileExtensionsResponseBody struct {
 	// Enabled extensions, excluding those required by PlanetScale.
 	Extensions []string `json:"extensions"`
@@ -66,7 +66,7 @@ type GetNekiConfigurationProfileExtensionsResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Returns extensions for the shard configuration profile
+	// Returns extensions for the configuration profile
 	Object *GetNekiConfigurationProfileExtensionsResponseBody
 }
 

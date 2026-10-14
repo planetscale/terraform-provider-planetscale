@@ -87,7 +87,7 @@ func (l *ListNekiConfigurationProfilesStorage) GetStorageThroughputMibs() *int64
 	return l.StorageThroughputMibs
 }
 
-// ListNekiConfigurationProfilesState - The current state of the shard configuration profile
+// ListNekiConfigurationProfilesState - The current state of the configuration profile
 type ListNekiConfigurationProfilesState string
 
 const (
@@ -121,9 +121,9 @@ func (e *ListNekiConfigurationProfilesState) UnmarshalJSON(data []byte) error {
 }
 
 type ListNekiConfigurationProfilesResponseBody struct {
-	// The ID of the shard configuration profile
+	// The ID of the configuration profile
 	ID string `json:"id"`
-	// The name of the shard configuration profile
+	// The name of the configuration profile
 	Name string `json:"name"`
 	// The architecture of the cluster size SKU
 	Architecture string `json:"architecture"`
@@ -131,30 +131,30 @@ type ListNekiConfigurationProfilesResponseBody struct {
 	ClusterSize string `json:"cluster_size"`
 	// The display name of the cluster size SKU
 	ClusterDisplayName string `json:"cluster_display_name"`
-	// Whether this is the default shard configuration profile
+	// Whether this is the default configuration profile
 	IsDefault bool `json:"default"`
 	// Whether shards using this configuration profile use metal instances
 	Metal bool `json:"metal"`
 	// The number of replicas for shards using this configuration profile
 	Replicas int64 `json:"replicas"`
-	// The PostgreSQL image used by the shard configuration profile
+	// The PostgreSQL image used by the configuration profile
 	PostgresImageVersion string `json:"postgres_image_version"`
-	// The latest PostgreSQL image available to the shard configuration profile
+	// The latest PostgreSQL image available to the configuration profile
 	LatestPostgresImageVersion string `json:"latest_postgres_image_version"`
-	// The PostgreSQL major version used by the shard configuration profile
+	// The PostgreSQL major version used by the configuration profile
 	PostgresMajorVersion int64 `json:"postgres_major_version"`
-	// The PostgreSQL minor version used by the shard configuration profile
+	// The PostgreSQL minor version used by the configuration profile
 	PostgresMinorVersion int64 `json:"postgres_minor_version"`
-	// The latest PostgreSQL minor version available to the shard configuration profile
+	// The latest PostgreSQL minor version available to the configuration profile
 	LatestPostgresMinorVersion int64 `json:"latest_postgres_minor_version"`
 	// The number of shards using this configuration profile
 	ShardCount int64                                `json:"shards"`
 	Storage    ListNekiConfigurationProfilesStorage `json:"storage"`
-	// The current state of the shard configuration profile
+	// The current state of the configuration profile
 	State ListNekiConfigurationProfilesState `json:"state"`
-	// When the shard configuration profile was created
+	// When the configuration profile was created
 	CreatedAt string `json:"created_at"`
-	// When the shard configuration profile was last updated
+	// When the configuration profile was last updated
 	UpdatedAt string `json:"updated_at"`
 }
 
@@ -291,7 +291,7 @@ type ListNekiConfigurationProfilesResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Returns shard configuration profiles for the branch
+	// Returns configuration profiles for the branch
 	ResponseBodies []ListNekiConfigurationProfilesResponseBody
 }
 

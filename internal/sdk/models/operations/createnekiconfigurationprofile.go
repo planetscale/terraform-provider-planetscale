@@ -62,11 +62,11 @@ type CreateNekiConfigurationProfileRequestBody struct {
 	Name string `json:"name"`
 	// The database cluster size name for shards assigned to this profile. Updates in place through Neki maintenance.
 	ClusterSize *string `json:"cluster_size,omitzero"`
-	// The number of replicas for the shard configuration profile
+	// The number of replicas for the configuration profile
 	Replicas *int64 `json:"replicas,omitzero"`
-	// The PostgreSQL major version for the shard configuration profile
+	// The PostgreSQL major version for the configuration profile
 	PostgresMajorVersion *int64 `json:"postgres_major_version,omitzero"`
-	// The PostgreSQL minor version for the shard configuration profile. Requires postgres_major_version when specified.
+	// The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.
 	PostgresMinorVersion *int64                                        `json:"postgres_minor_version,omitzero"`
 	Storage              *CreateNekiConfigurationProfileStorageRequest `json:"storage,omitzero"`
 }
@@ -221,7 +221,7 @@ func (c *CreateNekiConfigurationProfileStorageResponse) GetStorageThroughputMibs
 	return c.StorageThroughputMibs
 }
 
-// CreateNekiConfigurationProfileState - The current state of the shard configuration profile
+// CreateNekiConfigurationProfileState - The current state of the configuration profile
 type CreateNekiConfigurationProfileState string
 
 const (
@@ -254,11 +254,11 @@ func (e *CreateNekiConfigurationProfileState) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// CreateNekiConfigurationProfileResponseBody - Returns the created shard configuration profile
+// CreateNekiConfigurationProfileResponseBody - Returns the created configuration profile
 type CreateNekiConfigurationProfileResponseBody struct {
-	// The ID of the shard configuration profile
+	// The ID of the configuration profile
 	ID string `json:"id"`
-	// The name of the shard configuration profile
+	// The name of the configuration profile
 	Name string `json:"name"`
 	// The architecture of the cluster size SKU
 	Architecture string `json:"architecture"`
@@ -266,30 +266,30 @@ type CreateNekiConfigurationProfileResponseBody struct {
 	ClusterSize string `json:"cluster_size"`
 	// The display name of the cluster size SKU
 	ClusterDisplayName string `json:"cluster_display_name"`
-	// Whether this is the default shard configuration profile
+	// Whether this is the default configuration profile
 	IsDefault bool `json:"default"`
 	// Whether shards using this configuration profile use metal instances
 	Metal bool `json:"metal"`
 	// The number of replicas for shards using this configuration profile
 	Replicas int64 `json:"replicas"`
-	// The PostgreSQL image used by the shard configuration profile
+	// The PostgreSQL image used by the configuration profile
 	PostgresImageVersion string `json:"postgres_image_version"`
-	// The latest PostgreSQL image available to the shard configuration profile
+	// The latest PostgreSQL image available to the configuration profile
 	LatestPostgresImageVersion string `json:"latest_postgres_image_version"`
-	// The PostgreSQL major version used by the shard configuration profile
+	// The PostgreSQL major version used by the configuration profile
 	PostgresMajorVersion int64 `json:"postgres_major_version"`
-	// The PostgreSQL minor version used by the shard configuration profile
+	// The PostgreSQL minor version used by the configuration profile
 	PostgresMinorVersion int64 `json:"postgres_minor_version"`
-	// The latest PostgreSQL minor version available to the shard configuration profile
+	// The latest PostgreSQL minor version available to the configuration profile
 	LatestPostgresMinorVersion int64 `json:"latest_postgres_minor_version"`
 	// The number of shards using this configuration profile
 	ShardCount int64                                         `json:"shards"`
 	Storage    CreateNekiConfigurationProfileStorageResponse `json:"storage"`
-	// The current state of the shard configuration profile
+	// The current state of the configuration profile
 	State CreateNekiConfigurationProfileState `json:"state"`
-	// When the shard configuration profile was created
+	// When the configuration profile was created
 	CreatedAt string `json:"created_at"`
-	// When the shard configuration profile was last updated
+	// When the configuration profile was last updated
 	UpdatedAt string `json:"updated_at"`
 }
 
@@ -426,7 +426,7 @@ type CreateNekiConfigurationProfileResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Returns the created shard configuration profile
+	// Returns the created configuration profile
 	Object *CreateNekiConfigurationProfileResponseBody
 }
 

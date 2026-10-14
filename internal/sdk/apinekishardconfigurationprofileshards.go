@@ -191,7 +191,7 @@ func (s *APINekiShardConfigurationProfileShards) CreateNekiShard(ctx context.Con
 
 }
 
-// ReassignNekiShard - Assign shards to a Neki shard configuration profile
+// ReassignNekiShard - Assign shards to a Neki configuration profile
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -353,7 +353,7 @@ func (s *APINekiShardConfigurationProfileShards) ReassignNekiShard(ctx context.C
 
 }
 
-// UpdateNekiShard - Update a shard in a Neki shard configuration profile
+// UpdateNekiShard - Update a shard in a Neki configuration profile
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -515,7 +515,7 @@ func (s *APINekiShardConfigurationProfileShards) UpdateNekiShard(ctx context.Con
 
 }
 
-// DeleteNekiShard - Remove a shard from a Neki shard configuration profile
+// DeleteNekiShard - Remove a shard from a Neki configuration profile
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //

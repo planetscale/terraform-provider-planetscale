@@ -82,7 +82,7 @@ func (e *GetNekiSidecarState) UnmarshalJSON(data []byte) error {
 type GetNekiSidecarResponseBody struct {
 	// The ID of the sidecar
 	ID string `json:"id"`
-	// The name of the shard configuration profile the sidecar belongs to
+	// The name of the configuration profile the sidecar belongs to
 	ConfigurationProfile string `json:"configuration_profile"`
 	// The current state of the sidecar
 	State GetNekiSidecarState `json:"state"`

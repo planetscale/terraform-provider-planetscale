@@ -30,7 +30,7 @@ func newAPINekiShardConfigurationProfiles(rootSDK *PlanetScale, sdkConfig config
 	}
 }
 
-// ListNekiConfigurationProfiles - List shard configuration profiles for a Neki branch
+// ListNekiConfigurationProfiles - List configuration profiles for a Neki branch
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -186,7 +186,7 @@ func (s *APINekiShardConfigurationProfiles) ListNekiConfigurationProfiles(ctx co
 
 }
 
-// CreateNekiConfigurationProfile - Create a shard configuration profile for a Neki branch
+// CreateNekiConfigurationProfile - Create a configuration profile for a Neki branch
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -348,7 +348,7 @@ func (s *APINekiShardConfigurationProfiles) CreateNekiConfigurationProfile(ctx c
 
 }
 
-// GetNekiConfigurationProfile - Get a shard configuration profile for a Neki branch
+// GetNekiConfigurationProfile - Get a configuration profile for a Neki branch
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -600,7 +600,7 @@ func (s *APINekiShardConfigurationProfiles) getNekiConfigurationProfileWaitForRe
 	return res, &polling.LimitCountError{Limit: *o.Polling.LimitCount}
 }
 
-// UpdateNekiConfigurationProfile - Update a shard configuration profile for a Neki branch
+// UpdateNekiConfigurationProfile - Update a configuration profile for a Neki branch
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -762,7 +762,7 @@ func (s *APINekiShardConfigurationProfiles) UpdateNekiConfigurationProfile(ctx c
 
 }
 
-// DeleteNekiConfigurationProfile - Delete a shard configuration profile for a Neki branch
+// DeleteNekiConfigurationProfile - Delete a configuration profile for a Neki branch
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
@@ -898,7 +898,7 @@ func (s *APINekiShardConfigurationProfiles) DeleteNekiConfigurationProfile(ctx c
 
 }
 
-// RunNekiConfigurationProfileMaintenance - Run maintenance for a Neki shard configuration profile
+// RunNekiConfigurationProfileMaintenance - Run maintenance for a Neki configuration profile
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //

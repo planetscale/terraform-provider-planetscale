@@ -40,6 +40,7 @@ type OrganizationDataSourceModel struct {
 	InvoiceBudgetAmount            types.String                    `tfsdk:"invoice_budget_amount"`
 	KeyspaceShardLimit             types.Int64                     `tfsdk:"keyspace_shard_limit"`
 	ManagedTenancy                 types.Bool                      `tfsdk:"managed_tenancy"`
+	McpAccessLevel                 types.String                    `tfsdk:"mcp_access_level"`
 	Name                           types.String                    `tfsdk:"name"`
 	NekiRouterReplicasPerCellLimit types.Int64                     `tfsdk:"neki_router_replicas_per_cell_limit"`
 	Organization                   types.String                    `tfsdk:"organization"`
@@ -108,6 +109,10 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 			"managed_tenancy": schema.BoolAttribute{
 				Computed:    true,
 				Description: `Whether or not the organization has managed tenancy enabled`,
+			},
+			"mcp_access_level": schema.StringAttribute{
+				Computed:    true,
+				Description: `The query access level MCP clients can be granted for the organization (none, read_only, or read_write)`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,

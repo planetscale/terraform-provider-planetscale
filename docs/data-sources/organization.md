@@ -38,6 +38,7 @@ data "planetscale_organization" "my_organization" {
 - `invoice_budget_amount` (String) The expected monthly budget for the organization
 - `keyspace_shard_limit` (Number) The keyspace shard limit for the organization
 - `managed_tenancy` (Boolean) Whether or not the organization has managed tenancy enabled
+- `mcp_access_level` (String) The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
 - `name` (String) The name of the organization
 - `neki_router_replicas_per_cell_limit` (Number) The Neki router replica limit per cell for the organization
 - `payment_info_required` (Boolean) Whether or not the organization requires payment information

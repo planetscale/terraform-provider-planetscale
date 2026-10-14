@@ -114,6 +114,8 @@ func (l *ListBouncersActor) GetID() string {
 type ListBouncersNamespace string
 
 const (
+	ListBouncersNamespacePatroni   ListBouncersNamespace = "patroni"
+	ListBouncersNamespacePgconf    ListBouncersNamespace = "pgconf"
 	ListBouncersNamespacePgbouncer ListBouncersNamespace = "pgbouncer"
 )
 
@@ -126,6 +128,10 @@ func (e *ListBouncersNamespace) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "patroni":
+		fallthrough
+	case "pgconf":
+		fallthrough
 	case "pgbouncer":
 		*e = ListBouncersNamespace(v)
 		return nil
@@ -139,10 +145,14 @@ type ListBouncersParameterType string
 
 const (
 	ListBouncersParameterTypeArray   ListBouncersParameterType = "array"
+	ListBouncersParameterTypeBoolean ListBouncersParameterType = "boolean"
+	ListBouncersParameterTypeBytes   ListBouncersParameterType = "bytes"
+	ListBouncersParameterTypeFloat   ListBouncersParameterType = "float"
 	ListBouncersParameterTypeInteger ListBouncersParameterType = "integer"
 	ListBouncersParameterTypeSeconds ListBouncersParameterType = "seconds"
 	ListBouncersParameterTypeSelect  ListBouncersParameterType = "select"
 	ListBouncersParameterTypeString  ListBouncersParameterType = "string"
+	ListBouncersParameterTypeTime    ListBouncersParameterType = "time"
 )
 
 func (e ListBouncersParameterType) ToPointer() *ListBouncersParameterType {
@@ -156,6 +166,12 @@ func (e *ListBouncersParameterType) UnmarshalJSON(data []byte) error {
 	switch v {
 	case "array":
 		fallthrough
+	case "boolean":
+		fallthrough
+	case "bytes":
+		fallthrough
+	case "float":
+		fallthrough
 	case "integer":
 		fallthrough
 	case "seconds":
@@ -163,6 +179,8 @@ func (e *ListBouncersParameterType) UnmarshalJSON(data []byte) error {
 	case "select":
 		fallthrough
 	case "string":
+		fallthrough
+	case "time":
 		*e = ListBouncersParameterType(v)
 		return nil
 	default:
@@ -170,7 +188,31 @@ func (e *ListBouncersParameterType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type ListBouncersActorPgbouncer struct {
+// ListBouncersRequiresUpdate - The update required before the parameter can be configured
+type ListBouncersRequiresUpdate string
+
+const (
+	ListBouncersRequiresUpdateCluster ListBouncersRequiresUpdate = "cluster"
+)
+
+func (e ListBouncersRequiresUpdate) ToPointer() *ListBouncersRequiresUpdate {
+	return &e
+}
+func (e *ListBouncersRequiresUpdate) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "cluster":
+		*e = ListBouncersRequiresUpdate(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListBouncersRequiresUpdate: %v", v)
+	}
+}
+
+type ListBouncersActorCluster struct {
 	// The ID of the actor
 	ID string `json:"id"`
 	// The name of the actor
@@ -179,21 +221,21 @@ type ListBouncersActorPgbouncer struct {
 	AvatarURL string `json:"avatar_url"`
 }
 
-func (l *ListBouncersActorPgbouncer) GetID() string {
+func (l *ListBouncersActorCluster) GetID() string {
 	if l == nil {
 		return ""
 	}
 	return l.ID
 }
 
-func (l *ListBouncersActorPgbouncer) GetDisplayName() string {
+func (l *ListBouncersActorCluster) GetDisplayName() string {
 	if l == nil {
 		return ""
 	}
 	return l.DisplayName
 }
 
-func (l *ListBouncersActorPgbouncer) GetAvatarURL() string {
+func (l *ListBouncersActorCluster) GetAvatarURL() string {
 	if l == nil {
 		return ""
 	}
@@ -202,56 +244,66 @@ func (l *ListBouncersActorPgbouncer) GetAvatarURL() string {
 
 type ListBouncersParameterDetail struct {
 	// The ID of the parameter
-	ID string `json:"id"`
-	// The namespace of the parameter
-	Namespace ListBouncersNamespace `json:"namespace"`
+	ID *string `json:"id,omitzero"`
 	// The name of the parameter
 	Name string `json:"name"`
 	// The display name of the parameter
 	DisplayName string `json:"display_name"`
+	// The namespace of the parameter
+	Namespace ListBouncersNamespace `json:"namespace"`
+	// Whether the parameter is advanced
+	Advanced bool `json:"advanced"`
 	// The category of the parameter
-	Category string `json:"category"`
+	Category *string `json:"category"`
 	// The description of the parameter
 	Description string `json:"description"`
-	// Whether the parameter can be changed
-	Immutable bool `json:"immutable"`
 	// The type of the parameter
 	ParameterType ListBouncersParameterType `json:"parameter_type"`
 	// The default value of the parameter
-	DefaultValue string `json:"default_value"`
+	DefaultValue *string `json:"default_value"`
+	// Why the parameter cannot be changed
+	DisabledReason *string `json:"disabled_reason,omitzero"`
+	// The update required before the parameter can be configured
+	RequiresUpdate *ListBouncersRequiresUpdate `json:"requires_update"`
 	// The configured value of the parameter
-	Value string `json:"value"`
+	Value *string `json:"value"`
 	// Whether the parameter is required
 	Required bool `json:"required"`
 	// When the parameter was created
-	CreatedAt string `json:"created_at"`
+	CreatedAt *string `json:"created_at"`
 	// When the parameter was last updated
-	UpdatedAt string `json:"updated_at"`
-	// True if processes require a server restart on change
+	UpdatedAt *string `json:"updated_at"`
+	// Whether processes require a server restart after the parameter changes
 	Restart bool `json:"restart"`
 	// The maximum value of the parameter
-	Max float64 `json:"max"`
+	Max *float64 `json:"max,omitzero"`
 	// The minimum value of the parameter
-	Min float64 `json:"min"`
+	Min *float64 `json:"min,omitzero"`
+	// Valid options for the parameter value. Null represents an unset value
+	Options []string `json:"options,omitzero"`
+	// The units of the parameter value
+	Units []string `json:"units,omitzero"`
 	// The URL of the parameter
-	URL string `json:"url"`
-	// Valid options for the parameter value
-	Options []string                   `json:"options"`
-	Actor   ListBouncersActorPgbouncer `json:"actor"`
+	URL   string                   `json:"url"`
+	Actor ListBouncersActorCluster `json:"actor"`
 }
 
-func (l *ListBouncersParameterDetail) GetID() string {
+func (l ListBouncersParameterDetail) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *ListBouncersParameterDetail) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *ListBouncersParameterDetail) GetID() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.ID
-}
-
-func (l *ListBouncersParameterDetail) GetNamespace() ListBouncersNamespace {
-	if l == nil {
-		return ListBouncersNamespace("")
-	}
-	return l.Namespace
 }
 
 func (l *ListBouncersParameterDetail) GetName() string {
@@ -268,9 +320,23 @@ func (l *ListBouncersParameterDetail) GetDisplayName() string {
 	return l.DisplayName
 }
 
-func (l *ListBouncersParameterDetail) GetCategory() string {
+func (l *ListBouncersParameterDetail) GetNamespace() ListBouncersNamespace {
 	if l == nil {
-		return ""
+		return ListBouncersNamespace("")
+	}
+	return l.Namespace
+}
+
+func (l *ListBouncersParameterDetail) GetAdvanced() bool {
+	if l == nil {
+		return false
+	}
+	return l.Advanced
+}
+
+func (l *ListBouncersParameterDetail) GetCategory() *string {
+	if l == nil {
+		return nil
 	}
 	return l.Category
 }
@@ -282,13 +348,6 @@ func (l *ListBouncersParameterDetail) GetDescription() string {
 	return l.Description
 }
 
-func (l *ListBouncersParameterDetail) GetImmutable() bool {
-	if l == nil {
-		return false
-	}
-	return l.Immutable
-}
-
 func (l *ListBouncersParameterDetail) GetParameterType() ListBouncersParameterType {
 	if l == nil {
 		return ListBouncersParameterType("")
@@ -296,16 +355,30 @@ func (l *ListBouncersParameterDetail) GetParameterType() ListBouncersParameterTy
 	return l.ParameterType
 }
 
-func (l *ListBouncersParameterDetail) GetDefaultValue() string {
+func (l *ListBouncersParameterDetail) GetDefaultValue() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.DefaultValue
 }
 
-func (l *ListBouncersParameterDetail) GetValue() string {
+func (l *ListBouncersParameterDetail) GetDisabledReason() *string {
 	if l == nil {
-		return ""
+		return nil
+	}
+	return l.DisabledReason
+}
+
+func (l *ListBouncersParameterDetail) GetRequiresUpdate() *ListBouncersRequiresUpdate {
+	if l == nil {
+		return nil
+	}
+	return l.RequiresUpdate
+}
+
+func (l *ListBouncersParameterDetail) GetValue() *string {
+	if l == nil {
+		return nil
 	}
 	return l.Value
 }
@@ -317,16 +390,16 @@ func (l *ListBouncersParameterDetail) GetRequired() bool {
 	return l.Required
 }
 
-func (l *ListBouncersParameterDetail) GetCreatedAt() string {
+func (l *ListBouncersParameterDetail) GetCreatedAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.CreatedAt
 }
 
-func (l *ListBouncersParameterDetail) GetUpdatedAt() string {
+func (l *ListBouncersParameterDetail) GetUpdatedAt() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.UpdatedAt
 }
@@ -338,18 +411,32 @@ func (l *ListBouncersParameterDetail) GetRestart() bool {
 	return l.Restart
 }
 
-func (l *ListBouncersParameterDetail) GetMax() float64 {
+func (l *ListBouncersParameterDetail) GetMax() *float64 {
 	if l == nil {
-		return 0.0
+		return nil
 	}
 	return l.Max
 }
 
-func (l *ListBouncersParameterDetail) GetMin() float64 {
+func (l *ListBouncersParameterDetail) GetMin() *float64 {
 	if l == nil {
-		return 0.0
+		return nil
 	}
 	return l.Min
+}
+
+func (l *ListBouncersParameterDetail) GetOptions() []string {
+	if l == nil {
+		return nil
+	}
+	return l.Options
+}
+
+func (l *ListBouncersParameterDetail) GetUnits() []string {
+	if l == nil {
+		return nil
+	}
+	return l.Units
 }
 
 func (l *ListBouncersParameterDetail) GetURL() string {
@@ -359,16 +446,9 @@ func (l *ListBouncersParameterDetail) GetURL() string {
 	return l.URL
 }
 
-func (l *ListBouncersParameterDetail) GetOptions() []string {
+func (l *ListBouncersParameterDetail) GetActor() ListBouncersActorCluster {
 	if l == nil {
-		return []string{}
-	}
-	return l.Options
-}
-
-func (l *ListBouncersParameterDetail) GetActor() ListBouncersActorPgbouncer {
-	if l == nil {
-		return ListBouncersActorPgbouncer{}
+		return ListBouncersActorCluster{}
 	}
 	return l.Actor
 }

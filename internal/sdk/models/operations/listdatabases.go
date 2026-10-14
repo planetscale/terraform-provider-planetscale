@@ -9,11 +9,43 @@ import (
 	"net/http"
 )
 
+// QueryParamKind - Filter databases by kind
+type QueryParamKind string
+
+const (
+	QueryParamKindMysql      QueryParamKind = "mysql"
+	QueryParamKindPostgresql QueryParamKind = "postgresql"
+	QueryParamKindNeki       QueryParamKind = "neki"
+)
+
+func (e QueryParamKind) ToPointer() *QueryParamKind {
+	return &e
+}
+func (e *QueryParamKind) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "mysql":
+		fallthrough
+	case "postgresql":
+		fallthrough
+	case "neki":
+		*e = QueryParamKind(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for QueryParamKind: %v", v)
+	}
+}
+
 type ListDatabasesRequest struct {
 	// Organization name slug from `list_organizations`. Example: `acme`.
 	Organization string `pathParam:"style=simple,explode=false,name=organization"`
 	// Search term to filter databases by name
 	Q *string `queryParam:"style=form,explode=true,name=q"`
+	// Filter databases by kind
+	Kind *QueryParamKind `queryParam:"style=form,explode=true,name=kind"`
 	// If provided, specifies the page offset of returned results
 	Page *int64 `default:"1" queryParam:"style=form,explode=true,name=page"`
 	// If provided, specifies the number of returned results
@@ -43,6 +75,13 @@ func (l *ListDatabasesRequest) GetQ() *string {
 		return nil
 	}
 	return l.Q
+}
+
+func (l *ListDatabasesRequest) GetKind() *QueryParamKind {
+	if l == nil {
+		return nil
+	}
+	return l.Kind
 }
 
 func (l *ListDatabasesRequest) GetPage() *int64 {
@@ -203,19 +242,19 @@ func (e *ListDatabasesState) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// ListDatabasesKind - The kind of database
-type ListDatabasesKind string
+// KindResponse - The kind of database
+type KindResponse string
 
 const (
-	ListDatabasesKindMysql      ListDatabasesKind = "mysql"
-	ListDatabasesKindPostgresql ListDatabasesKind = "postgresql"
-	ListDatabasesKindNeki       ListDatabasesKind = "neki"
+	KindResponseMysql      KindResponse = "mysql"
+	KindResponsePostgresql KindResponse = "postgresql"
+	KindResponseNeki       KindResponse = "neki"
 )
 
-func (e ListDatabasesKind) ToPointer() *ListDatabasesKind {
+func (e KindResponse) ToPointer() *KindResponse {
 	return &e
 }
-func (e *ListDatabasesKind) UnmarshalJSON(data []byte) error {
+func (e *KindResponse) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -226,10 +265,10 @@ func (e *ListDatabasesKind) UnmarshalJSON(data []byte) error {
 	case "postgresql":
 		fallthrough
 	case "neki":
-		*e = ListDatabasesKind(v)
+		*e = KindResponse(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ListDatabasesKind: %v", v)
+		return fmt.Errorf("invalid value for KindResponse: %v", v)
 	}
 }
 
@@ -312,7 +351,7 @@ type ListDatabasesData struct {
 	// When the default branch schema was last changed.
 	SchemaLastUpdatedAt *string `json:"schema_last_updated_at"`
 	// The kind of database
-	Kind ListDatabasesKind `json:"kind"`
+	Kind KindResponse `json:"kind"`
 }
 
 func (l *ListDatabasesData) GetID() string {
@@ -588,9 +627,9 @@ func (l *ListDatabasesData) GetSchemaLastUpdatedAt() *string {
 	return l.SchemaLastUpdatedAt
 }
 
-func (l *ListDatabasesData) GetKind() ListDatabasesKind {
+func (l *ListDatabasesData) GetKind() KindResponse {
 	if l == nil {
-		return ListDatabasesKind("")
+		return KindResponse("")
 	}
 	return l.Kind
 }

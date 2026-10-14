@@ -95,9 +95,16 @@ func (r *DatabasesDataSourceModel) ToOperationsListDatabasesRequest(ctx context.
 	} else {
 		q = nil
 	}
+	kind := new(operations.QueryParamKind)
+	if !r.Kind.IsUnknown() && !r.Kind.IsNull() {
+		*kind = operations.QueryParamKind(r.Kind.ValueString())
+	} else {
+		kind = nil
+	}
 	out := operations.ListDatabasesRequest{
 		Organization: organization,
 		Q:            q,
+		Kind:         kind,
 	}
 
 	return &out, diags

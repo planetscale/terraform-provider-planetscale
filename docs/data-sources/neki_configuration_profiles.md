@@ -31,7 +31,7 @@ data "planetscale_neki_configuration_profiles" "my_nekiconfigurationprofiles" {
 
 ### Read-Only
 
-- `data` (Attributes List) Returns shard configuration profiles for the branch (see [below for nested schema](#nestedatt--data))
+- `data` (Attributes List) Returns configuration profiles for the branch (see [below for nested schema](#nestedatt--data))
 
 <a id="nestedatt--data"></a>
 ### Nested Schema for `data`
@@ -39,14 +39,14 @@ data "planetscale_neki_configuration_profiles" "my_nekiconfigurationprofiles" {
 Read-Only:
 
 - `cluster_size` (String) The name of the cluster size SKU
-- `id` (String) The ID of the shard configuration profile
-- `is_default` (Boolean) Whether this is the default shard configuration profile
-- `name` (String) The name of the shard configuration profile
-- `postgres_major_version` (Number) The PostgreSQL major version used by the shard configuration profile
-- `postgres_minor_version` (Number) The PostgreSQL minor version used by the shard configuration profile
+- `id` (String) The ID of the configuration profile
+- `is_default` (Boolean) Whether this is the default configuration profile
+- `name` (String) The name of the configuration profile
+- `postgres_major_version` (Number) The PostgreSQL major version used by the configuration profile
+- `postgres_minor_version` (Number) The PostgreSQL minor version used by the configuration profile
 - `replicas` (Number) The number of replicas for shards using this configuration profile
 - `shard_count` (Number) The number of shards using this configuration profile
-- `state` (String) The current state of the shard configuration profile
+- `state` (String) The current state of the configuration profile
 - `storage` (Attributes) (see [below for nested schema](#nestedatt--data--storage))
 
 <a id="nestedatt--data--storage"></a>
