@@ -249,20 +249,16 @@ const (
 func (e UpdatePostgresBackupPolicyTargetResponseBody) ToPointer() *UpdatePostgresBackupPolicyTargetResponseBody {
 	return &e
 }
-func (e *UpdatePostgresBackupPolicyTargetResponseBody) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *UpdatePostgresBackupPolicyTargetResponseBody) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "production", "development":
+			return true
+		}
 	}
-	switch v {
-	case "production":
-		fallthrough
-	case "development":
-		*e = UpdatePostgresBackupPolicyTargetResponseBody(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for UpdatePostgresBackupPolicyTargetResponseBody: %v", v)
-	}
+	return false
 }
 
 // UpdatePostgresBackupPolicyResponseBody - Returns the updated backup policy

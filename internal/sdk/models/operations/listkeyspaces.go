@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -80,22 +78,16 @@ const (
 func (e ListKeyspacesNodeTTLStrategy) ToPointer() *ListKeyspacesNodeTTLStrategy {
 	return &e
 }
-func (e *ListKeyspacesNodeTTLStrategy) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ListKeyspacesNodeTTLStrategy) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "node_ttl_follow_maintenance", "node_ttl_always", "node_ttl_off":
+			return true
+		}
 	}
-	switch v {
-	case "node_ttl_follow_maintenance":
-		fallthrough
-	case "node_ttl_always":
-		fallthrough
-	case "node_ttl_off":
-		*e = ListKeyspacesNodeTTLStrategy(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListKeyspacesNodeTTLStrategy: %v", v)
-	}
+	return false
 }
 
 // ListKeyspacesDiskScalingStrategy - The disk scaling strategy
@@ -110,22 +102,16 @@ const (
 func (e ListKeyspacesDiskScalingStrategy) ToPointer() *ListKeyspacesDiskScalingStrategy {
 	return &e
 }
-func (e *ListKeyspacesDiskScalingStrategy) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ListKeyspacesDiskScalingStrategy) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "grow", "disable", "shrink":
+			return true
+		}
 	}
-	switch v {
-	case "grow":
-		fallthrough
-	case "disable":
-		fallthrough
-	case "shrink":
-		*e = ListKeyspacesDiskScalingStrategy(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListKeyspacesDiskScalingStrategy: %v", v)
-	}
+	return false
 }
 
 type ListKeyspacesStorage struct {
@@ -179,22 +165,16 @@ const (
 func (e ListKeyspacesStrategy) ToPointer() *ListKeyspacesStrategy {
 	return &e
 }
-func (e *ListKeyspacesStrategy) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ListKeyspacesStrategy) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "available", "lag", "always":
+			return true
+		}
 	}
-	switch v {
-	case "available":
-		fallthrough
-	case "lag":
-		fallthrough
-	case "always":
-		*e = ListKeyspacesStrategy(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListKeyspacesStrategy: %v", v)
-	}
+	return false
 }
 
 type ListKeyspacesReplicationDurabilityConstraints struct {

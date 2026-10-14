@@ -64,7 +64,7 @@ terraform:
   excludeEmptyObjectSchemas: false
   fixFlags:
     encodePathParams: false
-  forwardCompatibleEnumsByDefault: false
+  forwardCompatibleEnumsByDefault: true
   includeEmptyObjects: true
   inferUnionDiscriminators: false
   packageName: planetscale

@@ -188,42 +188,16 @@ const (
 func (e CreateRoleInheritedRoleResponse) ToPointer() *CreateRoleInheritedRoleResponse {
 	return &e
 }
-func (e *CreateRoleInheritedRoleResponse) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateRoleInheritedRoleResponse) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pscale_managed", "pg_checkpoint", "pg_create_subscription", "pg_maintain", "pg_monitor", "pg_read_all_data", "pg_read_all_settings", "pg_read_all_stats", "pg_signal_backend", "pg_stat_scan_tables", "pg_use_reserved_connections", "pg_write_all_data", "postgres":
+			return true
+		}
 	}
-	switch v {
-	case "pscale_managed":
-		fallthrough
-	case "pg_checkpoint":
-		fallthrough
-	case "pg_create_subscription":
-		fallthrough
-	case "pg_maintain":
-		fallthrough
-	case "pg_monitor":
-		fallthrough
-	case "pg_read_all_data":
-		fallthrough
-	case "pg_read_all_settings":
-		fallthrough
-	case "pg_read_all_stats":
-		fallthrough
-	case "pg_signal_backend":
-		fallthrough
-	case "pg_stat_scan_tables":
-		fallthrough
-	case "pg_use_reserved_connections":
-		fallthrough
-	case "pg_write_all_data":
-		fallthrough
-	case "postgres":
-		*e = CreateRoleInheritedRoleResponse(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateRoleInheritedRoleResponse: %v", v)
-	}
+	return false
 }
 
 type CreateRoleBranchData struct {
@@ -298,22 +272,16 @@ const (
 func (e CreateRoleRequireWhereOnDelete) ToPointer() *CreateRoleRequireWhereOnDelete {
 	return &e
 }
-func (e *CreateRoleRequireWhereOnDelete) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateRoleRequireWhereOnDelete) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "off", "warn", "on":
+			return true
+		}
 	}
-	switch v {
-	case "off":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "on":
-		*e = CreateRoleRequireWhereOnDelete(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateRoleRequireWhereOnDelete: %v", v)
-	}
+	return false
 }
 
 // CreateRoleRequireWhereOnUpdate - Require WHERE clause on UPDATE statements
@@ -328,22 +296,16 @@ const (
 func (e CreateRoleRequireWhereOnUpdate) ToPointer() *CreateRoleRequireWhereOnUpdate {
 	return &e
 }
-func (e *CreateRoleRequireWhereOnUpdate) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateRoleRequireWhereOnUpdate) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "off", "warn", "on":
+			return true
+		}
 	}
-	switch v {
-	case "off":
-		fallthrough
-	case "warn":
-		fallthrough
-	case "on":
-		*e = CreateRoleRequireWhereOnUpdate(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateRoleRequireWhereOnUpdate: %v", v)
-	}
+	return false
 }
 
 type CreateRoleQuerySafetySettings struct {

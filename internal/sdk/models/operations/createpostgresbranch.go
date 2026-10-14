@@ -194,26 +194,16 @@ const (
 func (e CreatePostgresBranchState) ToPointer() *CreatePostgresBranchState {
 	return &e
 }
-func (e *CreatePostgresBranchState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreatePostgresBranchState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "sleep_in_progress", "sleeping", "awakening", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "sleep_in_progress":
-		fallthrough
-	case "sleeping":
-		fallthrough
-	case "awakening":
-		fallthrough
-	case "ready":
-		*e = CreatePostgresBranchState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreatePostgresBranchState: %v", v)
-	}
+	return false
 }
 
 type CreatePostgresBranchActor struct {

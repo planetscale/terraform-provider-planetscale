@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -148,30 +146,16 @@ const (
 func (e GetVitessDatabaseState) ToPointer() *GetVitessDatabaseState {
 	return &e
 }
-func (e *GetVitessDatabaseState) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetVitessDatabaseState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "importing", "sleep_in_progress", "sleeping", "awakening", "import_ready", "ready":
+			return true
+		}
 	}
-	switch v {
-	case "pending":
-		fallthrough
-	case "importing":
-		fallthrough
-	case "sleep_in_progress":
-		fallthrough
-	case "sleeping":
-		fallthrough
-	case "awakening":
-		fallthrough
-	case "import_ready":
-		fallthrough
-	case "ready":
-		*e = GetVitessDatabaseState(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetVitessDatabaseState: %v", v)
-	}
+	return false
 }
 
 // GetVitessDatabaseResponseBody - Returns a database

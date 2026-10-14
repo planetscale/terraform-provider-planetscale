@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -70,20 +68,16 @@ const (
 func (e ListNekiBackupPoliciesTarget) ToPointer() *ListNekiBackupPoliciesTarget {
 	return &e
 }
-func (e *ListNekiBackupPoliciesTarget) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ListNekiBackupPoliciesTarget) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "production", "development":
+			return true
+		}
 	}
-	switch v {
-	case "production":
-		fallthrough
-	case "development":
-		*e = ListNekiBackupPoliciesTarget(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListNekiBackupPoliciesTarget: %v", v)
-	}
+	return false
 }
 
 type ListNekiBackupPoliciesData struct {

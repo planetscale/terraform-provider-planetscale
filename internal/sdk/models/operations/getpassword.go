@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -61,24 +59,16 @@ const (
 func (e GetPasswordRole) ToPointer() *GetPasswordRole {
 	return &e
 }
-func (e *GetPasswordRole) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetPasswordRole) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "reader", "writer", "admin", "readwriter":
+			return true
+		}
 	}
-	switch v {
-	case "reader":
-		fallthrough
-	case "writer":
-		fallthrough
-	case "admin":
-		fallthrough
-	case "readwriter":
-		*e = GetPasswordRole(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for GetPasswordRole: %v", v)
-	}
+	return false
 }
 
 type GetPasswordActor struct {

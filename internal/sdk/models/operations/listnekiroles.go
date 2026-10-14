@@ -3,8 +3,6 @@
 package operations
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/internal/utils"
 	"net/http"
 )
@@ -107,42 +105,16 @@ const (
 func (e ListNekiRolesInheritedRole) ToPointer() *ListNekiRolesInheritedRole {
 	return &e
 }
-func (e *ListNekiRolesInheritedRole) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ListNekiRolesInheritedRole) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pscale_managed", "pg_checkpoint", "pg_create_subscription", "pg_maintain", "pg_monitor", "pg_read_all_data", "pg_read_all_settings", "pg_read_all_stats", "pg_signal_backend", "pg_stat_scan_tables", "pg_use_reserved_connections", "pg_write_all_data", "postgres":
+			return true
+		}
 	}
-	switch v {
-	case "pscale_managed":
-		fallthrough
-	case "pg_checkpoint":
-		fallthrough
-	case "pg_create_subscription":
-		fallthrough
-	case "pg_maintain":
-		fallthrough
-	case "pg_monitor":
-		fallthrough
-	case "pg_read_all_data":
-		fallthrough
-	case "pg_read_all_settings":
-		fallthrough
-	case "pg_read_all_stats":
-		fallthrough
-	case "pg_signal_backend":
-		fallthrough
-	case "pg_stat_scan_tables":
-		fallthrough
-	case "pg_use_reserved_connections":
-		fallthrough
-	case "pg_write_all_data":
-		fallthrough
-	case "postgres":
-		*e = ListNekiRolesInheritedRole(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ListNekiRolesInheritedRole: %v", v)
-	}
+	return false
 }
 
 type ListNekiRolesData struct {
