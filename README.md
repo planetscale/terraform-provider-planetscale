@@ -73,7 +73,7 @@ The PlanetScale Terraform provider is organized around a clear distinction betwe
 PlanetScale databases do not have a dedicated Terraform resource. Their lifecycle is managed implicitly through branch resources:
 
 * Applying a [`planetscale_vitess_branch`](docs/resources/vitess_branch.md), [`planetscale_neki_branch`](docs/resources/neki_branch.md), or [`planetscale_postgres_branch`](docs/resources/postgres_branch.md) creates the parent database if it does not already exist.
-* Destroying the last branch in a database also destroys the database. See [Deletion protection](https://planetscale.com/docs/terraform#deletion-protection) for safeguards.
+* Destroying the last branch in a database also destroys the database. Set `deletion_protected = true` on the branch resource to guard against this.
 
 For example, this creates the `my-db` Postgres database (if it does not already exist) along with its `main` branch:
 
@@ -85,7 +85,7 @@ resource "planetscale_postgres_branch" "main" {
 }
 ```
 
-Creating a Neki branch also provisions a default [configuration profile](https://planetscale.com/docs/neki/cluster-configuration#configuration-profiles), [shard](https://planetscale.com/docs/neki/cluster-configuration#manage-shards), [router group](https://planetscale.com/docs/neki/cluster-configuration#configure-router-groups), [admin](https://planetscale.com/docs/neki/cluster-configuration#configure-the-admin-service), and [sidecar](https://planetscale.com/docs/neki/overview#what-runs-alongside-postgres). Import those objects if Terraform should manage them. Do not recreate the defaults with `planetscale_neki_configuration_profile` or `planetscale_neki_shard`. Creating a Vitess branch likewise provisions the branch's default [keyspace](https://planetscale.com/docs/vitess/sharding/keyspaces); import it to manage its size or replicas.
+Creating a Neki branch also provisions a default [configuration profile](docs/resources/neki_configuration_profile.md), [shard](docs/resources/neki_shard.md), [router group](docs/resources/neki_router.md), [admin](docs/resources/neki_admin.md), and [sidecar](docs/resources/neki_sidecar.md). Import those objects if Terraform should manage them. Do not recreate the defaults with `planetscale_neki_configuration_profile` or `planetscale_neki_shard`. Creating a Vitess branch likewise provisions the branch's default [keyspace](docs/resources/vitess_keyspace.md); import it to manage its size or replicas.
 
 ### Credential models
 
@@ -94,11 +94,9 @@ Creating a Neki branch also provisions a default [configuration profile](https:/
 | Database Type | Resource | How permissions work |
 | - | - | - |
 | Vitess | [`planetscale_vitess_branch_password`](docs/resources/vitess_branch_password.md) | Set the `role` attribute to `reader`, `writer`, `readwriter`, or `admin` |
-| Neki | [`planetscale_neki_role`](docs/resources/neki_role.md) | Use `inherited_roles` to inherit from [built-in Postgres roles](https://planetscale.com/docs/neki/connecting/roles) like `pg_read_all_data` or `pg_write_all_data`. |
-| Postgres | [`planetscale_postgres_branch_role`](docs/resources/postgres_branch_role.md) | Use `inherited_roles` to inherit from [built-in Postgres roles](https://planetscale.com/docs/postgres/connecting/roles) like `pg_read_all_data` or `pg_write_all_data`. |
+| Neki | [`planetscale_neki_role`](docs/resources/neki_role.md) | Use `inherited_roles` to inherit from built-in Postgres roles like `pg_read_all_data` or `pg_write_all_data`. |
+| Postgres | [`planetscale_postgres_branch_role`](docs/resources/postgres_branch_role.md) | Use `inherited_roles` to inherit from built-in Postgres roles like `pg_read_all_data` or `pg_write_all_data`. |
 | Postgres | [`planetscale_postgres_redacted_branch_role`](docs/resources/postgres_redacted_branch_role.md) | Same as `planetscale_postgres_branch_role`, but the password is not stored in Terraform state. Use this when you manage passwords in a secret manager. |
-
-See the [PlanetScale Terraform docs](https://planetscale.com/docs/terraform) for a complete quick start, connection details, and more examples.
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
