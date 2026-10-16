@@ -12,6 +12,7 @@ Terraform Provider for PlanetScale: Manage your PlanetScale resources with Terra
 * [PlanetScale Terraform Provider](#planetscale-terraform-provider)
   * [Installation](#installation)
   * [Authentication](#authentication)
+  * [Conceptual model](#conceptual-model)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
   * [Testing the provider locally](#testing-the-provider-locally)
 * [Contributing](#contributing)
@@ -56,6 +57,48 @@ Available configuration:
 | `service_token` | PlanetScale Service Token. Configurable via environment variable `PLANETSCALE_SERVICE_TOKEN`. |
 | `service_token_id` | PlanetScale Service Token ID. Configurable via environment variable `PLANETSCALE_SERVICE_TOKEN_ID`. |
 <!-- End Authentication [security] -->
+
+<!--
+  Hand-maintained section. It mirrors https://planetscale.com/docs/terraform#conceptual-model
+  and lives outside the Speakeasy "Start ... / End ..." markers, so `make generate` leaves it
+  alone. Update it here and in the public docs together.
+-->
+## Conceptual model
+
+The PlanetScale Terraform provider is organized around a clear distinction between **Vitess**, **Neki**, and **Postgres** resources and is focused on long-lived infrastructure objects.
+
+* There are separate resources for each **database kind**—Vitess, Neki, or Postgres.
+* The provider maps cleanly onto PlanetScale's public API while exposing Terraform-friendly fields and lifecycle behavior.
+
+PlanetScale databases do not have a dedicated Terraform resource. Their lifecycle is managed implicitly through branch resources:
+
+* Applying a [`planetscale_vitess_branch`](docs/resources/vitess_branch.md), [`planetscale_neki_branch`](docs/resources/neki_branch.md), or [`planetscale_postgres_branch`](docs/resources/postgres_branch.md) creates the parent database if it does not already exist.
+* Destroying the last branch in a database also destroys the database. See [Deletion protection](https://planetscale.com/docs/terraform#deletion-protection) for safeguards.
+
+For example, this creates the `my-db` Postgres database (if it does not already exist) along with its `main` branch:
+
+```hcl
+resource "planetscale_postgres_branch" "main" {
+  organization = "my-org"
+  database     = "my-db"
+  name         = "main"
+}
+```
+
+Creating a Neki branch also provisions a default [configuration profile](https://planetscale.com/docs/neki/cluster-configuration#configuration-profiles), [shard](https://planetscale.com/docs/neki/cluster-configuration#manage-shards), [router group](https://planetscale.com/docs/neki/cluster-configuration#configure-router-groups), [admin](https://planetscale.com/docs/neki/cluster-configuration#configure-the-admin-service), and [sidecar](https://planetscale.com/docs/neki/overview#what-runs-alongside-postgres). Import those objects if Terraform should manage them. Do not recreate the defaults with `planetscale_neki_configuration_profile` or `planetscale_neki_shard`. Creating a Vitess branch likewise provisions the branch's default [keyspace](https://planetscale.com/docs/vitess/sharding/keyspaces); import it to manage its size or replicas.
+
+### Credential models
+
+**Vitess**, **Neki**, and **Postgres** use different terminology for database credentials:
+
+| Database Type | Resource | How permissions work |
+| - | - | - |
+| Vitess | [`planetscale_vitess_branch_password`](docs/resources/vitess_branch_password.md) | Set the `role` attribute to `reader`, `writer`, `readwriter`, or `admin` |
+| Neki | [`planetscale_neki_role`](docs/resources/neki_role.md) | Use `inherited_roles` to inherit from [built-in Postgres roles](https://planetscale.com/docs/neki/connecting/roles) like `pg_read_all_data` or `pg_write_all_data`. |
+| Postgres | [`planetscale_postgres_branch_role`](docs/resources/postgres_branch_role.md) | Use `inherited_roles` to inherit from [built-in Postgres roles](https://planetscale.com/docs/postgres/connecting/roles) like `pg_read_all_data` or `pg_write_all_data`. |
+| Postgres | [`planetscale_postgres_redacted_branch_role`](docs/resources/postgres_redacted_branch_role.md) | Same as `planetscale_postgres_branch_role`, but the password is not stored in Terraform state. Use this when you manage passwords in a secret manager. |
+
+See the [PlanetScale Terraform docs](https://planetscale.com/docs/terraform) for a complete quick start, connection details, and more examples.
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
