@@ -250,8 +250,6 @@ func (r *PostgresRedactedBranchRoleDataSource) Read(ctx context.Context, req dat
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

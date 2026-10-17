@@ -182,8 +182,6 @@ func (r *PostgresBackupPolicyResource) Create(ctx context.Context, req resource.
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreatePostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -244,8 +242,6 @@ func (r *PostgresBackupPolicyResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetPostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -299,8 +295,6 @@ func (r *PostgresBackupPolicyResource) Update(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdatePostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -361,8 +355,6 @@ func (r *PostgresBackupPolicyResource) Delete(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeletePostgresBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

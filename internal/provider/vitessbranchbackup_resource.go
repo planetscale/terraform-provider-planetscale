@@ -242,8 +242,6 @@ func (r *VitessBranchBackupResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateVitessBranchBackupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -346,8 +344,6 @@ func (r *VitessBranchBackupResource) Read(ctx context.Context, req resource.Read
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetVitessBranchBackupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -425,8 +421,6 @@ func (r *VitessBranchBackupResource) Delete(ctx context.Context, req resource.De
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteVitessBranchBackupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

@@ -275,8 +275,6 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateVitessBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -489,8 +487,6 @@ func (r *VitessBranchResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetVitessBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -544,8 +540,6 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateBranchResizeRequestRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -716,8 +710,6 @@ func (r *VitessBranchResource) Delete(ctx context.Context, req resource.DeleteRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteVitessBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

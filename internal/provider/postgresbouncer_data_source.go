@@ -142,8 +142,6 @@ func (r *PostgresBouncerDataSource) Read(ctx context.Context, req datasource.Rea
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPostgresBouncerTerraformStateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

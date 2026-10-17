@@ -169,8 +169,6 @@ func (r *NekiConfigurationProfilesDataSource) Read(ctx context.Context, req data
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListNekiConfigurationProfilesRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

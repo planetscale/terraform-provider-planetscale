@@ -132,8 +132,6 @@ func (r *NekiShardsDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListNekiShardsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

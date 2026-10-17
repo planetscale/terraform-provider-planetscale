@@ -193,8 +193,6 @@ func (r *PostgresBranchBackupDataSource) Read(ctx context.Context, req datasourc
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPostgresBranchBackupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

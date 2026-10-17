@@ -271,8 +271,6 @@ func (r *VitessKeyspaceResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateKeyspaceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -375,8 +373,6 @@ func (r *VitessKeyspaceResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetKeyspaceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -430,8 +426,6 @@ func (r *VitessKeyspaceResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateKeyspaceResizeRequestRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -529,8 +523,6 @@ func (r *VitessKeyspaceResource) Delete(ctx context.Context, req resource.Delete
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteKeyspaceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
