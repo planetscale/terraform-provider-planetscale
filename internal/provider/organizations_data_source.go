@@ -187,8 +187,6 @@ func (r *OrganizationsDataSource) Read(ctx context.Context, req datasource.ReadR
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListOrganizationsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

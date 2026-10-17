@@ -233,8 +233,6 @@ func (r *VitessBranchBackupsDataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListVitessBranchBackupsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

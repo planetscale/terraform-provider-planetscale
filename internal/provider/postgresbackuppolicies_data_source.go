@@ -146,8 +146,6 @@ func (r *PostgresBackupPoliciesDataSource) Read(ctx context.Context, req datasou
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListPostgresBackupPoliciesRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

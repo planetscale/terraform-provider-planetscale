@@ -201,8 +201,6 @@ func (r *NekiBackupPolicyResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateNekiBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -263,8 +261,6 @@ func (r *NekiBackupPolicyResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetNekiBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -318,8 +314,6 @@ func (r *NekiBackupPolicyResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateNekiBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -380,8 +374,6 @@ func (r *NekiBackupPolicyResource) Delete(ctx context.Context, req resource.Dele
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteNekiBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

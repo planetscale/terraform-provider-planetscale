@@ -175,8 +175,6 @@ func (r *PostgresBouncerResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateBouncerRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -314,8 +312,6 @@ func (r *PostgresBouncerResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetPostgresBouncerTerraformStateRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -369,8 +365,6 @@ func (r *PostgresBouncerResource) Update(ctx context.Context, req resource.Updat
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsApplyPostgresBouncerTerraformChangesRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -471,8 +465,6 @@ func (r *PostgresBouncerResource) Delete(ctx context.Context, req resource.Delet
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteBouncerRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

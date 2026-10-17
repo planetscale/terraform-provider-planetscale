@@ -146,8 +146,6 @@ func (r *VitessBackupPoliciesDataSource) Read(ctx context.Context, req datasourc
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListVitessBackupPoliciesRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

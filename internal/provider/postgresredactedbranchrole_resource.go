@@ -278,8 +278,6 @@ func (r *PostgresRedactedBranchRoleResource) Create(ctx context.Context, req res
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -340,8 +338,6 @@ func (r *PostgresRedactedBranchRoleResource) Read(ctx context.Context, req resou
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -395,8 +391,6 @@ func (r *PostgresRedactedBranchRoleResource) Update(ctx context.Context, req res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -457,8 +451,6 @@ func (r *PostgresRedactedBranchRoleResource) Delete(ctx context.Context, req res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteRedactedRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

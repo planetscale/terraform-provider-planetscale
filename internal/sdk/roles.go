@@ -294,6 +294,7 @@ func (s *Roles) CreateRole(ctx context.Context, request operations.CreateRoleReq
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "create_role")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -917,6 +918,7 @@ func (s *Roles) CreateRedactedRole(ctx context.Context, request operations.Creat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "create_redacted_role")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -1738,6 +1740,7 @@ func (s *Roles) CreateNekiRole(ctx context.Context, request operations.CreateNek
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "create_neki_role")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

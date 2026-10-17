@@ -136,8 +136,6 @@ func (r *NekiShardResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -240,8 +238,6 @@ func (r *NekiShardResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -295,8 +291,6 @@ func (r *NekiShardResource) Update(ctx context.Context, req resource.UpdateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsReassignNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -468,8 +462,6 @@ func (r *NekiShardResource) Delete(ctx context.Context, req resource.DeleteReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteNekiShardRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
