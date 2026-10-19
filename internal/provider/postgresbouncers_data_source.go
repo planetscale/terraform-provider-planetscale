@@ -143,8 +143,6 @@ func (r *PostgresBouncersDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListBouncersRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

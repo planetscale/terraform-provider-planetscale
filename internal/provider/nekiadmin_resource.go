@@ -139,8 +139,6 @@ func (r *NekiAdminResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsUpdateNekiAdminRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -280,8 +278,6 @@ func (r *NekiAdminResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetNekiAdminRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -370,8 +366,6 @@ func (r *NekiAdminResource) Update(ctx context.Context, req resource.UpdateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateNekiAdminRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

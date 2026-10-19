@@ -231,8 +231,6 @@ func (r *NekiConfigurationProfileResource) Create(ctx context.Context, req resou
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -479,8 +477,6 @@ func (r *NekiConfigurationProfileResource) Read(ctx context.Context, req resourc
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -569,8 +565,6 @@ func (r *NekiConfigurationProfileResource) Update(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -738,8 +732,6 @@ func (r *NekiConfigurationProfileResource) Delete(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteNekiConfigurationProfileRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

@@ -148,8 +148,6 @@ func (r *NekiBackupPolicyDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetNekiBackupPolicyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

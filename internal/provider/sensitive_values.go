@@ -121,7 +121,7 @@ func redactSensitiveValues(ctx context.Context, s string) string {
 
 	// Longest first, so a value contained in another cannot split it.
 	sort.Slice(forms, func(i, j int) bool { return len(forms[i]) > len(forms[j]) })
-	pairs := make([]string, 0, 2*len(forms))
+	var pairs []string
 	for _, form := range forms {
 		pairs = append(pairs, form, "(sensitive)")
 	}

@@ -122,8 +122,6 @@ func (r *NekiAdminDataSource) Read(ctx context.Context, req datasource.ReadReque
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetNekiAdminRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

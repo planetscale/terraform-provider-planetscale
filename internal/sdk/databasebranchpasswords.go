@@ -292,6 +292,7 @@ func (s *DatabaseBranchPasswords) CreatePassword(ctx context.Context, request op
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "create_password")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

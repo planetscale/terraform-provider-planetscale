@@ -212,8 +212,6 @@ func (r *VitessBranchDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetVitessBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

@@ -152,8 +152,6 @@ func (r *PostgresDedicatedReadReplicaResource) Create(ctx context.Context, req r
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -256,8 +254,6 @@ func (r *PostgresDedicatedReadReplicaResource) Read(ctx context.Context, req res
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -311,8 +307,6 @@ func (r *PostgresDedicatedReadReplicaResource) Update(ctx context.Context, req r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -415,8 +409,6 @@ func (r *PostgresDedicatedReadReplicaResource) Delete(ctx context.Context, req r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

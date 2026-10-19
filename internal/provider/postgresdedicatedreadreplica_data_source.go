@@ -133,8 +133,6 @@ func (r *PostgresDedicatedReadReplicaDataSource) Read(ctx context.Context, req d
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetDedicatedReadReplicaRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

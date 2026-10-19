@@ -3,8 +3,8 @@ id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
   docChecksum: 5d0bb406ae2edebcb5e4ed203c1703e6
   docVersion: v1
-  speakeasyVersion: 1.800.0
-  generationVersion: 2.943.0
+  speakeasyVersion: 1.802.0
+  generationVersion: 2.948.4
   releaseVersion: 1.14.0
   configChecksum: 5e3168fb1059f9f5cba5bf2cee6c75fd
 persistentEdits:
@@ -16,7 +16,7 @@ features:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.5
     constsAndDefaults: 0.3.2
-    core: 3.48.3
+    core: 3.50.1
     customSecuritySchemes: 0.1.2
     globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
@@ -805,6 +805,7 @@ trackedFiles:
   internal/sdk/polling/option.go:
     id: cea423d87d1b
     pristine_git_object: 418bc4790e0c5ed403cfa771fd9c5b745e4f1af2
+  internal/sdk/redact/redact.go: {}
   internal/sdk/retry/config.go:
     id: 7ea5fa9128b6
     pristine_git_object: aa809fccb3445b1e2530a979dad620512f50e70f

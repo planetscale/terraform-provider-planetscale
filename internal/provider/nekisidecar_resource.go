@@ -143,8 +143,6 @@ func (r *NekiSidecarResource) Create(ctx context.Context, req resource.CreateReq
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsUpdateNekiSidecarRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -284,8 +282,6 @@ func (r *NekiSidecarResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetNekiSidecarRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -374,8 +370,6 @@ func (r *NekiSidecarResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateNekiSidecarRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

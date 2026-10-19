@@ -123,8 +123,6 @@ func (r *NekiBranchDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetNekiBranchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

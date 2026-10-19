@@ -283,8 +283,6 @@ func (r *VitessBranchPasswordDataSource) Read(ctx context.Context, req datasourc
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPasswordRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
