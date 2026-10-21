@@ -85,19 +85,12 @@ data "planetscale_neki_branch" "test" {
   id           = planetscale_neki_branch.test.id
 }
 
-# Branch provisioning creates a default admin, sidecar, configuration
-# profile, shard, and router group; the data sources read those defaults.
+# Branch provisioning creates a default admin, configuration profile,
+# shard, and router group; the data sources read those defaults.
 data "planetscale_neki_admin" "test" {
   organization = var.organization
   database     = planetscale_neki_branch.test.database
   branch       = planetscale_neki_branch.test.name
-}
-
-data "planetscale_neki_sidecar" "test" {
-  organization          = var.organization
-  database              = planetscale_neki_branch.test.database
-  branch                = planetscale_neki_branch.test.name
-  configuration_profile = "default"
 }
 
 data "planetscale_neki_configuration_profile" "test" {

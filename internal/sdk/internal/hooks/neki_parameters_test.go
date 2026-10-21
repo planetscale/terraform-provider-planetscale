@@ -264,7 +264,7 @@ func TestNekiAdminParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	}, payload.Parameters)
 }
 
-func TestNekiSidecarParametersHookReconcilesAndStripsClientState(t *testing.T) {
+func TestNekiProfileSidecarParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	t.Parallel()
 
 	var calls int
@@ -295,7 +295,7 @@ func TestNekiSidecarParametersHookReconcilesAndStripsClientState(t *testing.T) {
 	}
 	req, err := http.NewRequest(
 		http.MethodGet,
-		"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/sidecars/default/parameters?"+query.Encode(),
+		"https://api.planetscale.com/v1/organizations/org/databases/db/branches/main/configuration-profiles/default/parameters?"+query.Encode(),
 		nil,
 	)
 	require.NoError(t, err)

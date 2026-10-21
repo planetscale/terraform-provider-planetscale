@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 5d0bb406ae2edebcb5e4ed203c1703e6
+  docChecksum: 5f1f8f4289b4f1e3332edac43269927f
   docVersion: v1
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -50,7 +50,6 @@ trackedFiles:
   examples/data-sources/planetscale_neki_routers/data-source.tf: {}
   examples/data-sources/planetscale_neki_shard/data-source.tf: {}
   examples/data-sources/planetscale_neki_shards/data-source.tf: {}
-  examples/data-sources/planetscale_neki_sidecar/data-source.tf: {}
   examples/data-sources/planetscale_organization/data-source.tf:
     id: 66920cabf1a1
     pristine_git_object: 9f31bb76143f3c25afdb3c8befaa55d7da62d6e0
@@ -107,8 +106,6 @@ trackedFiles:
   examples/resources/planetscale_neki_router/import.sh: {}
   examples/resources/planetscale_neki_shard/import-by-string-id.tf: {}
   examples/resources/planetscale_neki_shard/import.sh: {}
-  examples/resources/planetscale_neki_sidecar/import-by-string-id.tf: {}
-  examples/resources/planetscale_neki_sidecar/import.sh: {}
   examples/resources/planetscale_postgres_backup_policy/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_backup_policy/import.sh: {}
   examples/resources/planetscale_postgres_bouncer/import-by-string-id.tf: {}
@@ -267,10 +264,6 @@ trackedFiles:
   internal/provider/nekishard_resource_sdk.go: {}
   internal/provider/nekishards_data_source.go: {}
   internal/provider/nekishards_data_source_sdk.go: {}
-  internal/provider/nekisidecar_data_source.go: {}
-  internal/provider/nekisidecar_data_source_sdk.go: {}
-  internal/provider/nekisidecar_resource.go: {}
-  internal/provider/nekisidecar_resource_sdk.go: {}
   internal/provider/organization_data_source.go:
     id: d22d005e3012
     pristine_git_object: 82a33d8488b23f60aa73688e445ce1e5c225c871
@@ -559,8 +552,6 @@ trackedFiles:
   internal/sdk/apinekishardconfigurationprofiles.go: {}
   internal/sdk/apinekishardconfigurationprofileshards.go: {}
   internal/sdk/apinekishards.go: {}
-  internal/sdk/apinekisidecarparameters.go: {}
-  internal/sdk/apinekisidecars.go: {}
   internal/sdk/backuppolicies.go: {}
   internal/sdk/backups.go: {}
   internal/sdk/bouncers.go: {}
@@ -697,8 +688,6 @@ trackedFiles:
   internal/sdk/models/operations/getnekirole.go: {}
   internal/sdk/models/operations/getnekirouterparameters.go: {}
   internal/sdk/models/operations/getnekishard.go: {}
-  internal/sdk/models/operations/getnekisidecar.go: {}
-  internal/sdk/models/operations/getnekisidecarparameters.go: {}
   internal/sdk/models/operations/getorganization.go:
     id: ebae13951225
     pristine_git_object: 43ae27390b2b1f43bf440e0edfd01a0ae54d1a18
@@ -765,7 +754,6 @@ trackedFiles:
   internal/sdk/models/operations/updatenekiconfigurationprofile.go: {}
   internal/sdk/models/operations/updatenekirole.go: {}
   internal/sdk/models/operations/updatenekishard.go: {}
-  internal/sdk/models/operations/updatenekisidecar.go: {}
   internal/sdk/models/operations/updatepassword.go:
     id: ec303a6a3bd2
     pristine_git_object: a09e397988b36f0e2413a5255ceb30c60b4ef55b

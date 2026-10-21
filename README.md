@@ -85,7 +85,9 @@ resource "planetscale_postgres_branch" "main" {
 }
 ```
 
-Creating a Neki branch also provisions a default [configuration profile](docs/resources/neki_configuration_profile.md), [shard](docs/resources/neki_shard.md), [router group](docs/resources/neki_router.md), [admin](docs/resources/neki_admin.md), and [sidecar](docs/resources/neki_sidecar.md). Import those objects if Terraform should manage them. Do not recreate the defaults with `planetscale_neki_configuration_profile` or `planetscale_neki_shard`. Creating a Vitess branch likewise provisions the branch's default [keyspace](docs/resources/vitess_keyspace.md); import it to manage its size or replicas.
+Creating a Neki branch also provisions a default [configuration profile](docs/resources/neki_configuration_profile.md), [shard](docs/resources/neki_shard.md), [router group](docs/resources/neki_router.md), and [admin](docs/resources/neki_admin.md). Import those objects if Terraform should manage them. Do not recreate the defaults with `planetscale_neki_configuration_profile` or `planetscale_neki_shard`. Creating a Vitess branch likewise provisions the branch's default [keyspace](docs/resources/vitess_keyspace.md); import it to manage its size or replicas.
+
+Sidecar connection-pool parameters belong to the configuration profile. If you used `planetscale_neki_sidecar`, follow the [sidecar migration guide](docs/guides/migrate-neki-sidecars.md) before upgrading.
 
 ### Credential models
 
@@ -110,7 +112,6 @@ Creating a Neki branch also provisions a default [configuration profile](docs/re
 * [planetscale_neki_role](docs/resources/neki_role.md)
 * [planetscale_neki_router](docs/resources/neki_router.md)
 * [planetscale_neki_shard](docs/resources/neki_shard.md)
-* [planetscale_neki_sidecar](docs/resources/neki_sidecar.md)
 * [planetscale_postgres_backup_policy](docs/resources/postgres_backup_policy.md)
 * [planetscale_postgres_bouncer](docs/resources/postgres_bouncer.md)
 * [planetscale_postgres_branch](docs/resources/postgres_branch.md)
@@ -141,7 +142,6 @@ Creating a Neki branch also provisions a default [configuration profile](docs/re
 * [planetscale_neki_routers](docs/data-sources/neki_routers.md)
 * [planetscale_neki_shard](docs/data-sources/neki_shard.md)
 * [planetscale_neki_shards](docs/data-sources/neki_shards.md)
-* [planetscale_neki_sidecar](docs/data-sources/neki_sidecar.md)
 * [planetscale_organization](docs/data-sources/organization.md)
 * [planetscale_organizations](docs/data-sources/organizations.md)
 * [planetscale_postgres_backup_policies](docs/data-sources/postgres_backup_policies.md)
