@@ -17,7 +17,6 @@ sources:
             - location: schemas/overlay-terraform-neki-configuration-profiles.yaml
             - location: schemas/overlay-terraform-neki-shard.yaml
             - location: schemas/overlay-terraform-neki-shards.yaml
-            - location: schemas/overlay-terraform-neki-sidecar.yaml
 
             - location: schemas/overlay-terraform-database_vitess.yaml
             - location: schemas/overlay-terraform-database_postgres.yaml

@@ -14,12 +14,12 @@ import (
 
 // TestAccNeki_Lifecycle is the single Neki acceptance test. Creating a Neki
 // branch provisions a whole cluster (default configuration profile, shard,
-// router group, admin, and sidecar) and takes minutes, so the test creates one
+// router group, and admin) and takes minutes, so the test creates one
 // branch and covers everything else against it: role and backup policy
 // create, update, and import, plus every Neki data source reading either the
 // created objects or the provisioned defaults.
 //
-// The admin, sidecar, router, shard, and configuration profile resources are
+// The admin, router, shard, and configuration profile resources are
 // intentionally not exercised: their create and update paths wait on cluster
 // provisioning or change requests. Their read paths are covered by the data
 // sources here.
@@ -120,8 +120,6 @@ func TestAccNeki_Lifecycle(t *testing.T) {
 					// Data sources reading the defaults that provisioning created.
 					statecheck.ExpectKnownValue("data.planetscale_neki_admin.test", tfjsonpath.New("id"), knownvalue.NotNull()),
 					statecheck.ExpectKnownValue("data.planetscale_neki_admin.test", tfjsonpath.New("admin_size"), knownvalue.NotNull()),
-					statecheck.ExpectKnownValue("data.planetscale_neki_sidecar.test", tfjsonpath.New("id"), knownvalue.NotNull()),
-					statecheck.ExpectKnownValue("data.planetscale_neki_sidecar.test", tfjsonpath.New("configuration_profile"), knownvalue.StringExact("default")),
 					statecheck.ExpectKnownValue("data.planetscale_neki_configuration_profile.test", tfjsonpath.New("name"), knownvalue.StringExact("default")),
 					statecheck.ExpectKnownValue("data.planetscale_neki_configuration_profile.test", tfjsonpath.New("is_default"), knownvalue.Bool(true)),
 					statecheck.ExpectKnownValue("data.planetscale_neki_configuration_profile.test", tfjsonpath.New("cluster_size"), knownvalue.NotNull()),

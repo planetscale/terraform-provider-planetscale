@@ -83,13 +83,11 @@ type PlanetScale struct {
 	APIBranchResizes        *APIBranchResizes
 	//           Resources for managing role credentials.
 	//
-	Roles                    *Roles
-	APINekiRouters           *APINekiRouters
-	APINekiRouterParameters  *APINekiRouterParameters
-	DatabaseBranches         *DatabaseBranches
-	APINekiShards            *APINekiShards
-	APINekiSidecars          *APINekiSidecars
-	APINekiSidecarParameters *APINekiSidecarParameters
+	Roles                   *Roles
+	APINekiRouters          *APINekiRouters
+	APINekiRouterParameters *APINekiRouterParameters
+	DatabaseBranches        *DatabaseBranches
+	APINekiShards           *APINekiShards
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
@@ -217,8 +215,6 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.APINekiRouterParameters = newAPINekiRouterParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShards = newAPINekiShards(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.APINekiSidecars = newAPINekiSidecars(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.APINekiSidecarParameters = newAPINekiSidecarParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 
