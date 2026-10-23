@@ -62,6 +62,8 @@ type CreateNekiConfigurationProfileRequestBody struct {
 	ClusterSize *string `json:"cluster_size,omitzero"`
 	// The number of replicas for the configuration profile
 	Replicas *int64 `json:"replicas,omitzero"`
+	// The number of read-only replicas for the configuration profile
+	ReadOnlyReplicas *int64 `json:"read_only_replicas,omitzero"`
 	// The PostgreSQL major version for the configuration profile
 	PostgresMajorVersion *int64 `json:"postgres_major_version,omitzero"`
 	// The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.
@@ -99,6 +101,13 @@ func (c *CreateNekiConfigurationProfileRequestBody) GetReplicas() *int64 {
 		return nil
 	}
 	return c.Replicas
+}
+
+func (c *CreateNekiConfigurationProfileRequestBody) GetReadOnlyReplicas() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.ReadOnlyReplicas
 }
 
 func (c *CreateNekiConfigurationProfileRequestBody) GetPostgresMajorVersion() *int64 {
@@ -262,6 +271,8 @@ type CreateNekiConfigurationProfileResponseBody struct {
 	Metal bool `json:"metal"`
 	// The number of replicas for shards using this configuration profile
 	Replicas int64 `json:"replicas"`
+	// The number of read-only replicas for shards using this configuration profile
+	ReadOnlyReplicas int64 `json:"read_only_replicas"`
 	// The PostgreSQL image used by the configuration profile
 	PostgresImageVersion string `json:"postgres_image_version"`
 	// The latest PostgreSQL image available to the configuration profile
@@ -337,6 +348,13 @@ func (c *CreateNekiConfigurationProfileResponseBody) GetReplicas() int64 {
 		return 0
 	}
 	return c.Replicas
+}
+
+func (c *CreateNekiConfigurationProfileResponseBody) GetReadOnlyReplicas() int64 {
+	if c == nil {
+		return 0
+	}
+	return c.ReadOnlyReplicas
 }
 
 func (c *CreateNekiConfigurationProfileResponseBody) GetPostgresImageVersion() string {

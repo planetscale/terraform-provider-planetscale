@@ -47,6 +47,7 @@ output "enabled_extensions" {
 - `is_default` (Boolean) Whether this is the default configuration profile
 - `postgres_major_version` (Number) The PostgreSQL major version used by the configuration profile
 - `postgres_minor_version` (Number) The PostgreSQL minor version used by the configuration profile
+- `read_only_replicas` (Number) The number of read-only replicas for shards using this configuration profile
 - `replicas` (Number) The number of replicas for shards using this configuration profile
 - `shard_count` (Number) The number of shards using this configuration profile
 - `state` (String) The current state of the configuration profile

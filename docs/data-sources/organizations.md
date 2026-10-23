@@ -30,6 +30,7 @@ data "planetscale_organizations" "my_organizations" {
 
 Read-Only:
 
+- `allow_llm_usage` (Boolean) Whether or not LLM-powered features are enabled for the organization
 - `billing_email` (String) The billing email of the organization
 - `created_at` (String) When the organization was created
 - `database_count` (Number) The number of databases in the organization
@@ -40,6 +41,7 @@ Read-Only:
 - `idp_managed_roles` (Boolean) Whether or not the IdP provider is be responsible for managing roles in PlanetScale
 - `invoice_budget_amount` (String) The expected monthly budget for the organization
 - `keyspace_shard_limit` (Number) The keyspace shard limit for the organization
+- `llm_usage_blocked` (Boolean) Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled
 - `managed_tenancy` (Boolean) Whether or not the organization has managed tenancy enabled
 - `mcp_access_level` (String) The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
 - `name` (String) The name of the organization

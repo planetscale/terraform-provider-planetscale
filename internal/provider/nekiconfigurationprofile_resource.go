@@ -53,6 +53,7 @@ type NekiConfigurationProfileResourceModel struct {
 	Parameters           map[string]map[string]types.String                    `tfsdk:"parameters"`
 	PostgresMajorVersion types.Int64                                           `tfsdk:"postgres_major_version"`
 	PostgresMinorVersion types.Int64                                           `tfsdk:"postgres_minor_version"`
+	ReadOnlyReplicas     types.Int64                                           `tfsdk:"read_only_replicas"`
 	Replicas             types.Int64                                           `tfsdk:"replicas"`
 	ShardCount           types.Int64                                           `tfsdk:"shard_count"`
 	State                types.String                                          `tfsdk:"state"`
@@ -144,6 +145,11 @@ func (r *NekiConfigurationProfileResource) Schema(ctx context.Context, req resou
 				Validators: []validator.Int64{
 					custom_int64validators.PostgresMinorVersionValidator(),
 				},
+			},
+			"read_only_replicas": schema.Int64Attribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `The new number of read-only replicas for the configuration profile`,
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,

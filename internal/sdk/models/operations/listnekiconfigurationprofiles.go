@@ -127,6 +127,8 @@ type ListNekiConfigurationProfilesResponseBody struct {
 	Metal bool `json:"metal"`
 	// The number of replicas for shards using this configuration profile
 	Replicas int64 `json:"replicas"`
+	// The number of read-only replicas for shards using this configuration profile
+	ReadOnlyReplicas int64 `json:"read_only_replicas"`
 	// The PostgreSQL image used by the configuration profile
 	PostgresImageVersion string `json:"postgres_image_version"`
 	// The latest PostgreSQL image available to the configuration profile
@@ -202,6 +204,13 @@ func (l *ListNekiConfigurationProfilesResponseBody) GetReplicas() int64 {
 		return 0
 	}
 	return l.Replicas
+}
+
+func (l *ListNekiConfigurationProfilesResponseBody) GetReadOnlyReplicas() int64 {
+	if l == nil {
+		return 0
+	}
+	return l.ReadOnlyReplicas
 }
 
 func (l *ListNekiConfigurationProfilesResponseBody) GetPostgresImageVersion() string {

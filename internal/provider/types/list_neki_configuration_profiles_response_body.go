@@ -13,6 +13,7 @@ type ListNekiConfigurationProfilesResponseBody struct {
 	Name                 types.String                          `tfsdk:"name"`
 	PostgresMajorVersion types.Int64                           `tfsdk:"postgres_major_version"`
 	PostgresMinorVersion types.Int64                           `tfsdk:"postgres_minor_version"`
+	ReadOnlyReplicas     types.Int64                           `tfsdk:"read_only_replicas"`
 	Replicas             types.Int64                           `tfsdk:"replicas"`
 	ShardCount           types.Int64                           `tfsdk:"shard_count"`
 	State                types.String                          `tfsdk:"state"`

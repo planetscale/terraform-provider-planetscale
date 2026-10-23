@@ -8,7 +8,7 @@ import (
 )
 
 type CreateRouterRequestBody struct {
-	// The name of the router group. Letters, digits, dashes, and underscores; 1-64 characters; cannot start or end with a dash or underscore. `new`, `primary`, and `replica` are reserved. Clients connect through the group by appending it to the username, e.g. `user|my-router`.
+	// The name of the router group. Lowercase letters, digits, and dashes (an RFC 1123 DNS label); 1-16 characters; cannot start or end with a dash. `new`, `primary`, and `replica` are reserved. Clients connect through the group by appending it to the username, e.g. `user|my-router`.
 	Name string `json:"name"`
 	// The router size SKU, e.g. `NKR_1`. Defaults to the service's default size.
 	RouterSize *string `json:"router_size,omitzero"`

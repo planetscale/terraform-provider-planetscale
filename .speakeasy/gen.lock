@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 5f1f8f4289b4f1e3332edac43269927f
+  docChecksum: cf76e907ffb10a08645712a682dbc36c
   docVersion: v1
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -875,7 +875,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"type": "<value>", "current_page": 9917.69, "per_page": 991769, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "neki_router_replicas_per_cell_limit": 991769, "has_card": false, "payment_info_required": false, "mcp_access_level": "<value>"}]}
+          application/json: {"type": "<value>", "current_page": 9917.69, "per_page": 991769, "next_page": 6534.37, "next_page_url": "https://shiny-zen.org/", "prev_page": 7397.87, "prev_page_url": "https://multicolored-caption.org/", "data": [{"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1708890499923", "updated_at": "1735606280846", "plan": "<value>", "valid_billing_info": true, "sso": true, "sso_directory": false, "single_tenancy": false, "managed_tenancy": true, "has_past_due_invoices": true, "database_count": 4449.15, "sso_portal_url": "https://tempting-jogging.com/", "features": {}, "idp_managed_roles": false, "invoice_budget_amount": "8943.61", "keyspace_shard_limit": 8271.3, "neki_router_replicas_per_cell_limit": 991769, "has_card": false, "payment_info_required": false, "allow_llm_usage": false, "llm_usage_blocked": false, "mcp_access_level": "<value>"}]}
   get_organization:
     speakeasy-default-get-organization:
       parameters:
@@ -884,7 +884,7 @@ examples:
           organization: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "database_count": 1578.34, "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": "9516.88", "keyspace_shard_limit": 6999.24, "neki_router_replicas_per_cell_limit": 276162, "has_card": false, "payment_info_required": true, "mcp_access_level": "<value>"}
+          application/json: {"id": "<id>", "name": "<value>", "billing_email": "<value>", "created_at": "1712862666573", "updated_at": "1735661579502", "plan": "<value>", "valid_billing_info": true, "sso": false, "sso_directory": true, "single_tenancy": false, "managed_tenancy": true, "database_count": 1578.34, "features": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "idp_managed_roles": true, "invoice_budget_amount": "9516.88", "keyspace_shard_limit": 6999.24, "neki_router_replicas_per_cell_limit": 276162, "has_card": false, "payment_info_required": true, "allow_llm_usage": true, "llm_usage_blocked": false, "mcp_access_level": "<value>"}
   update_organization:
     speakeasy-default-update-organization:
       parameters:
@@ -2840,7 +2840,7 @@ examples:
           branch: "<value>"
       responses:
         "200":
-          application/json: [{"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": false, "metal": true, "replicas": 734946, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 511573, "postgres_minor_version": 41372, "latest_postgres_minor_version": 300612, "shards": 876174, "storage": {"minimum_storage_bytes": null, "maximum_storage_bytes": 934308, "storage_autoscaling": false, "storage_iops": 159013, "storage_throughput_mibs": 146288}, "state": "draft", "created_at": "1722619314672", "updated_at": "1735688022241"}]
+          application/json: [{"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": false, "metal": true, "replicas": 734946, "read_only_replicas": 728994, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 511573, "postgres_minor_version": 41372, "latest_postgres_minor_version": 300612, "shards": 876174, "storage": {"minimum_storage_bytes": null, "maximum_storage_bytes": 934308, "storage_autoscaling": false, "storage_iops": 159013, "storage_throughput_mibs": 146288}, "state": "draft", "created_at": "1722619314672", "updated_at": "1735688022241"}]
   create_neki_configuration_profile:
     speakeasy-default-create-neki-configuration-profile:
       parameters:
@@ -2850,7 +2850,7 @@ examples:
           branch: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": true, "metal": true, "replicas": 569300, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 375445, "postgres_minor_version": 250895, "latest_postgres_minor_version": 324060, "shards": 636462, "storage": {"minimum_storage_bytes": 96088, "maximum_storage_bytes": null, "storage_autoscaling": false, "storage_iops": 685717, "storage_throughput_mibs": 912257}, "state": "pending", "created_at": "1727993120123", "updated_at": "1735625063997"}
+          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": true, "metal": true, "replicas": 569300, "read_only_replicas": 423866, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 375445, "postgres_minor_version": 250895, "latest_postgres_minor_version": 324060, "shards": 636462, "storage": {"minimum_storage_bytes": 96088, "maximum_storage_bytes": null, "storage_autoscaling": false, "storage_iops": 685717, "storage_throughput_mibs": 912257}, "state": "pending", "created_at": "1727993120123", "updated_at": "1735625063997"}
   get_neki_configuration_profile:
     speakeasy-default-get-neki-configuration-profile:
       parameters:
@@ -2861,7 +2861,7 @@ examples:
           configuration_profile: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": false, "metal": false, "replicas": 404380, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 448418, "postgres_minor_version": 425520, "latest_postgres_minor_version": 876821, "shards": 482639, "storage": {"minimum_storage_bytes": 890040, "maximum_storage_bytes": 298073, "storage_autoscaling": true, "storage_iops": 200103, "storage_throughput_mibs": 772172}, "state": "ready", "created_at": "1712689687289", "updated_at": "1735652716084"}
+          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": false, "metal": false, "replicas": 404380, "read_only_replicas": 608956, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 448418, "postgres_minor_version": 425520, "latest_postgres_minor_version": 876821, "shards": 482639, "storage": {"minimum_storage_bytes": 890040, "maximum_storage_bytes": 298073, "storage_autoscaling": true, "storage_iops": 200103, "storage_throughput_mibs": 772172}, "state": "ready", "created_at": "1712689687289", "updated_at": "1735652716084"}
   update_neki_configuration_profile:
     speakeasy-default-update-neki-configuration-profile:
       parameters:
@@ -2872,7 +2872,7 @@ examples:
           configuration_profile: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": true, "metal": false, "replicas": 704075, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 452954, "postgres_minor_version": 899499, "latest_postgres_minor_version": 722322, "shards": 24935, "storage": {"minimum_storage_bytes": 935139, "maximum_storage_bytes": null, "storage_autoscaling": true, "storage_iops": 215763, "storage_throughput_mibs": 528577}, "state": "ready", "created_at": "1724411181532", "updated_at": "1735647900622"}
+          application/json: {"id": "<id>", "name": "<value>", "architecture": "<value>", "cluster_size": "<value>", "cluster_display_name": "<value>", "default": true, "metal": false, "replicas": 704075, "read_only_replicas": 146351, "postgres_image_version": "<value>", "latest_postgres_image_version": "<value>", "postgres_major_version": 452954, "postgres_minor_version": 899499, "latest_postgres_minor_version": 722322, "shards": 24935, "storage": {"minimum_storage_bytes": 935139, "maximum_storage_bytes": null, "storage_autoscaling": true, "storage_iops": 215763, "storage_throughput_mibs": 528577}, "state": "ready", "created_at": "1724411181532", "updated_at": "1735647900622"}
   delete_neki_configuration_profile:
     speakeasy-default-delete-neki-configuration-profile:
       parameters:

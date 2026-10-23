@@ -15,6 +15,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.AllowLlmUsage = types.BoolValue(resp.AllowLlmUsage)
 		r.BillingEmail = types.StringValue(resp.BillingEmail)
 		r.CreatedAt = types.StringValue(resp.CreatedAt)
 		r.DatabaseCount = types.Int64Value(resp.DatabaseCount)
@@ -31,6 +32,7 @@ func (r *OrganizationDataSourceModel) RefreshFromOperationsGetOrganizationRespon
 		r.IdpManagedRoles = types.BoolValue(resp.IdpManagedRoles)
 		r.InvoiceBudgetAmount = types.StringValue(resp.InvoiceBudgetAmount)
 		r.KeyspaceShardLimit = types.Int64Value(resp.KeyspaceShardLimit)
+		r.LlmUsageBlocked = types.BoolValue(resp.LlmUsageBlocked)
 		r.ManagedTenancy = types.BoolValue(resp.ManagedTenancy)
 		r.McpAccessLevel = types.StringValue(resp.McpAccessLevel)
 		r.Name = types.StringValue(resp.Name)

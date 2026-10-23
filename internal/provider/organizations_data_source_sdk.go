@@ -23,6 +23,7 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 		for _, dataItem := range resp.Data {
 			var data tfTypes.ListOrganizationsData
 
+			data.AllowLlmUsage = types.BoolValue(dataItem.AllowLlmUsage)
 			data.BillingEmail = types.StringValue(dataItem.BillingEmail)
 			data.CreatedAt = types.StringValue(dataItem.CreatedAt)
 			data.DatabaseCount = types.Int64Value(dataItem.DatabaseCount)
@@ -39,6 +40,7 @@ func (r *OrganizationsDataSourceModel) RefreshFromOperationsListOrganizationsRes
 			data.IdpManagedRoles = types.BoolValue(dataItem.IdpManagedRoles)
 			data.InvoiceBudgetAmount = types.StringValue(dataItem.InvoiceBudgetAmount)
 			data.KeyspaceShardLimit = types.Int64Value(dataItem.KeyspaceShardLimit)
+			data.LlmUsageBlocked = types.BoolValue(dataItem.LlmUsageBlocked)
 			data.ManagedTenancy = types.BoolValue(dataItem.ManagedTenancy)
 			data.McpAccessLevel = types.StringValue(dataItem.McpAccessLevel)
 			data.Name = types.StringValue(dataItem.Name)

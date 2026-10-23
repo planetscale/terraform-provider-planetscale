@@ -82,6 +82,10 @@ type ListOrganizationsData struct {
 	HasCard bool `json:"has_card"`
 	// Whether or not the organization requires payment information
 	PaymentInfoRequired bool `json:"payment_info_required"`
+	// Whether or not LLM-powered features are enabled for the organization
+	AllowLlmUsage bool `json:"allow_llm_usage"`
+	// Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled
+	LlmUsageBlocked bool `json:"llm_usage_blocked"`
 	// The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
 	McpAccessLevel string `json:"mcp_access_level"`
 }
@@ -231,6 +235,20 @@ func (l *ListOrganizationsData) GetPaymentInfoRequired() bool {
 		return false
 	}
 	return l.PaymentInfoRequired
+}
+
+func (l *ListOrganizationsData) GetAllowLlmUsage() bool {
+	if l == nil {
+		return false
+	}
+	return l.AllowLlmUsage
+}
+
+func (l *ListOrganizationsData) GetLlmUsageBlocked() bool {
+	if l == nil {
+		return false
+	}
+	return l.LlmUsageBlocked
 }
 
 func (l *ListOrganizationsData) GetMcpAccessLevel() string {
