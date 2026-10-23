@@ -24,6 +24,7 @@ func (r *NekiConfigurationProfilesDataSourceModel) RefreshFromOperationsListNeki
 		data.Name = types.StringValue(dataItem.Name)
 		data.PostgresMajorVersion = types.Int64Value(dataItem.PostgresMajorVersion)
 		data.PostgresMinorVersion = types.Int64Value(dataItem.PostgresMinorVersion)
+		data.ReadOnlyReplicas = types.Int64Value(dataItem.ReadOnlyReplicas)
 		data.Replicas = types.Int64Value(dataItem.Replicas)
 		data.ShardCount = types.Int64Value(dataItem.ShardCount)
 		data.State = types.StringValue(string(dataItem.State))

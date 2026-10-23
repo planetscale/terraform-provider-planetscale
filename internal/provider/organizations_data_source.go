@@ -49,6 +49,10 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"allow_llm_usage": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether or not LLM-powered features are enabled for the organization`,
+						},
 						"billing_email": schema.StringAttribute{
 							Computed:    true,
 							Description: `The billing email of the organization`,
@@ -89,6 +93,10 @@ func (r *OrganizationsDataSource) Schema(ctx context.Context, req datasource.Sch
 						"keyspace_shard_limit": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The keyspace shard limit for the organization`,
+						},
+						"llm_usage_blocked": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled`,
 						},
 						"managed_tenancy": schema.BoolAttribute{
 							Computed:    true,

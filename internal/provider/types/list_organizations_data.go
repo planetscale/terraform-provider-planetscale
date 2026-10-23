@@ -8,6 +8,7 @@ import (
 )
 
 type ListOrganizationsData struct {
+	AllowLlmUsage                  types.Bool                      `tfsdk:"allow_llm_usage"`
 	BillingEmail                   types.String                    `tfsdk:"billing_email"`
 	CreatedAt                      types.String                    `tfsdk:"created_at"`
 	DatabaseCount                  types.Int64                     `tfsdk:"database_count"`
@@ -18,6 +19,7 @@ type ListOrganizationsData struct {
 	IdpManagedRoles                types.Bool                      `tfsdk:"idp_managed_roles"`
 	InvoiceBudgetAmount            types.String                    `tfsdk:"invoice_budget_amount"`
 	KeyspaceShardLimit             types.Int64                     `tfsdk:"keyspace_shard_limit"`
+	LlmUsageBlocked                types.Bool                      `tfsdk:"llm_usage_blocked"`
 	ManagedTenancy                 types.Bool                      `tfsdk:"managed_tenancy"`
 	McpAccessLevel                 types.String                    `tfsdk:"mcp_access_level"`
 	Name                           types.String                    `tfsdk:"name"`

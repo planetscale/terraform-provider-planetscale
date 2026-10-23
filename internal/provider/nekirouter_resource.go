@@ -97,7 +97,7 @@ func (r *NekiRouterResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The name of the router group. Letters, digits, dashes, and underscores; 1-64 characters; cannot start or end with a dash or underscore. ` + "`" + `new` + "`" + `, ` + "`" + `primary` + "`" + `, and ` + "`" + `replica` + "`" + ` are reserved. Clients connect through the group by appending it to the username, e.g. ` + "`" + `user|my-router` + "`" + `. Requires replacement if changed.`,
+				Description: `The name of the router group. Lowercase letters, digits, and dashes (an RFC 1123 DNS label); 1-16 characters; cannot start or end with a dash. ` + "`" + `new` + "`" + `, ` + "`" + `primary` + "`" + `, and ` + "`" + `replica` + "`" + ` are reserved. Clients connect through the group by appending it to the username, e.g. ` + "`" + `user|my-router` + "`" + `. Requires replacement if changed.`,
 			},
 			"organization": schema.StringAttribute{
 				Required: true,

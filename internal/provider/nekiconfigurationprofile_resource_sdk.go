@@ -20,6 +20,7 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsCreateNekiC
 		r.Name = types.StringValue(resp.Name)
 		r.PostgresMajorVersion = types.Int64Value(resp.PostgresMajorVersion)
 		r.PostgresMinorVersion = types.Int64Value(resp.PostgresMinorVersion)
+		r.ReadOnlyReplicas = types.Int64Value(resp.ReadOnlyReplicas)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.State = types.StringValue(string(resp.State))
@@ -77,6 +78,7 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConf
 		r.Name = types.StringValue(resp.Name)
 		r.PostgresMajorVersion = types.Int64Value(resp.PostgresMajorVersion)
 		r.PostgresMinorVersion = types.Int64Value(resp.PostgresMinorVersion)
+		r.ReadOnlyReplicas = types.Int64Value(resp.ReadOnlyReplicas)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.State = types.StringValue(string(resp.State))
@@ -103,6 +105,7 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsUpdateNekiC
 		r.Name = types.StringValue(resp.Name)
 		r.PostgresMajorVersion = types.Int64Value(resp.PostgresMajorVersion)
 		r.PostgresMinorVersion = types.Int64Value(resp.PostgresMinorVersion)
+		r.ReadOnlyReplicas = types.Int64Value(resp.ReadOnlyReplicas)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.State = types.StringValue(string(resp.State))
@@ -166,6 +169,12 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsCreateNekiConfigurat
 	} else {
 		replicas = nil
 	}
+	readOnlyReplicas := new(int64)
+	if !r.ReadOnlyReplicas.IsUnknown() && !r.ReadOnlyReplicas.IsNull() {
+		*readOnlyReplicas = r.ReadOnlyReplicas.ValueInt64()
+	} else {
+		readOnlyReplicas = nil
+	}
 	postgresMajorVersion := new(int64)
 	if !r.PostgresMajorVersion.IsUnknown() && !r.PostgresMajorVersion.IsNull() {
 		*postgresMajorVersion = r.PostgresMajorVersion.ValueInt64()
@@ -222,6 +231,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsCreateNekiConfigurat
 		Name:                 name,
 		ClusterSize:          clusterSize,
 		Replicas:             replicas,
+		ReadOnlyReplicas:     readOnlyReplicas,
 		PostgresMajorVersion: postgresMajorVersion,
 		PostgresMinorVersion: postgresMinorVersion,
 		Storage:              storage,
@@ -408,6 +418,12 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 	} else {
 		replicas = nil
 	}
+	readOnlyReplicas := new(int64)
+	if !r.ReadOnlyReplicas.IsUnknown() && !r.ReadOnlyReplicas.IsNull() {
+		*readOnlyReplicas = r.ReadOnlyReplicas.ValueInt64()
+	} else {
+		readOnlyReplicas = nil
+	}
 	postgresMajorVersion := new(int64)
 	if !r.PostgresMajorVersion.IsUnknown() && !r.PostgresMajorVersion.IsNull() {
 		*postgresMajorVersion = r.PostgresMajorVersion.ValueInt64()
@@ -478,6 +494,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 		ClusterSize:          clusterSize,
 		Extensions:           extensions,
 		Replicas:             replicas,
+		ReadOnlyReplicas:     readOnlyReplicas,
 		PostgresMajorVersion: postgresMajorVersion,
 		PostgresMinorVersion: postgresMinorVersion,
 		Storage:              storage,

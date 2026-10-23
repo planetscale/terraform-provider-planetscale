@@ -19,7 +19,7 @@ NekiRouter Resource
 
 - `branch` (String) Branch name from `list_branches`. Example: `main`. Requires replacement if changed.
 - `database` (String) Database name slug from `list_databases`. Example: `app-db`. Requires replacement if changed.
-- `name` (String) The name of the router group. Letters, digits, dashes, and underscores; 1-64 characters; cannot start or end with a dash or underscore. `new`, `primary`, and `replica` are reserved. Clients connect through the group by appending it to the username, e.g. `user|my-router`. Requires replacement if changed.
+- `name` (String) The name of the router group. Lowercase letters, digits, and dashes (an RFC 1123 DNS label); 1-16 characters; cannot start or end with a dash. `new`, `primary`, and `replica` are reserved. Clients connect through the group by appending it to the username, e.g. `user|my-router`. Requires replacement if changed.
 - `organization` (String) Organization name slug from `list_organizations`. Example: `acme`. Requires replacement if changed.
 
 ### Optional

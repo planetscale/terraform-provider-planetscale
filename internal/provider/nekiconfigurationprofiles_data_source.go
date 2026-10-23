@@ -78,6 +78,10 @@ func (r *NekiConfigurationProfilesDataSource) Schema(ctx context.Context, req da
 							Computed:    true,
 							Description: `The PostgreSQL minor version used by the configuration profile`,
 						},
+						"read_only_replicas": schema.Int64Attribute{
+							Computed:    true,
+							Description: `The number of read-only replicas for shards using this configuration profile`,
+						},
 						"replicas": schema.Int64Attribute{
 							Computed:    true,
 							Description: `The number of replicas for shards using this configuration profile`,

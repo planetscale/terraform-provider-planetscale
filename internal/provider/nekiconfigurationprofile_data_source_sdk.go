@@ -68,6 +68,7 @@ func (r *NekiConfigurationProfileDataSourceModel) RefreshFromOperationsGetNekiCo
 		r.Name = types.StringValue(resp.Name)
 		r.PostgresMajorVersion = types.Int64Value(resp.PostgresMajorVersion)
 		r.PostgresMinorVersion = types.Int64Value(resp.PostgresMinorVersion)
+		r.ReadOnlyReplicas = types.Int64Value(resp.ReadOnlyReplicas)
 		r.Replicas = types.Int64Value(resp.Replicas)
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.State = types.StringValue(string(resp.State))

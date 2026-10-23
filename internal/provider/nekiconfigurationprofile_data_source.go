@@ -42,6 +42,7 @@ type NekiConfigurationProfileDataSourceModel struct {
 	Parameters           map[string]map[string]types.String          `queryParam:"serialization=json,name=parameters" tfsdk:"parameters"`
 	PostgresMajorVersion types.Int64                                 `tfsdk:"postgres_major_version"`
 	PostgresMinorVersion types.Int64                                 `tfsdk:"postgres_minor_version"`
+	ReadOnlyReplicas     types.Int64                                 `tfsdk:"read_only_replicas"`
 	Replicas             types.Int64                                 `tfsdk:"replicas"`
 	ShardCount           types.Int64                                 `tfsdk:"shard_count"`
 	State                types.String                                `tfsdk:"state"`
@@ -111,6 +112,10 @@ func (r *NekiConfigurationProfileDataSource) Schema(ctx context.Context, req dat
 			"postgres_minor_version": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The PostgreSQL minor version used by the configuration profile`,
+			},
+			"read_only_replicas": schema.Int64Attribute{
+				Computed:    true,
+				Description: `The number of read-only replicas for shards using this configuration profile`,
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,

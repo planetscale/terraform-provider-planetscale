@@ -29,6 +29,7 @@ type OrganizationDataSource struct {
 
 // OrganizationDataSourceModel describes the data model.
 type OrganizationDataSourceModel struct {
+	AllowLlmUsage                  types.Bool                      `tfsdk:"allow_llm_usage"`
 	BillingEmail                   types.String                    `tfsdk:"billing_email"`
 	CreatedAt                      types.String                    `tfsdk:"created_at"`
 	DatabaseCount                  types.Int64                     `tfsdk:"database_count"`
@@ -39,6 +40,7 @@ type OrganizationDataSourceModel struct {
 	IdpManagedRoles                types.Bool                      `tfsdk:"idp_managed_roles"`
 	InvoiceBudgetAmount            types.String                    `tfsdk:"invoice_budget_amount"`
 	KeyspaceShardLimit             types.Int64                     `tfsdk:"keyspace_shard_limit"`
+	LlmUsageBlocked                types.Bool                      `tfsdk:"llm_usage_blocked"`
 	ManagedTenancy                 types.Bool                      `tfsdk:"managed_tenancy"`
 	McpAccessLevel                 types.String                    `tfsdk:"mcp_access_level"`
 	Name                           types.String                    `tfsdk:"name"`
@@ -65,6 +67,10 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 		MarkdownDescription: "Organization DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"allow_llm_usage": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not LLM-powered features are enabled for the organization`,
+			},
 			"billing_email": schema.StringAttribute{
 				Computed:    true,
 				Description: `The billing email of the organization`,
@@ -105,6 +111,10 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 			"keyspace_shard_limit": schema.Int64Attribute{
 				Computed:    true,
 				Description: `The keyspace shard limit for the organization`,
+			},
+			"llm_usage_blocked": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled`,
 			},
 			"managed_tenancy": schema.BoolAttribute{
 				Computed:    true,

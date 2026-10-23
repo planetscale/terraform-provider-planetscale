@@ -63,6 +63,10 @@ type GetOrganizationResponseBody struct {
 	HasCard bool `json:"has_card"`
 	// Whether or not the organization requires payment information
 	PaymentInfoRequired bool `json:"payment_info_required"`
+	// Whether or not LLM-powered features are enabled for the organization
+	AllowLlmUsage bool `json:"allow_llm_usage"`
+	// Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled
+	LlmUsageBlocked bool `json:"llm_usage_blocked"`
 	// The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
 	McpAccessLevel string `json:"mcp_access_level"`
 }
@@ -212,6 +216,20 @@ func (g *GetOrganizationResponseBody) GetPaymentInfoRequired() bool {
 		return false
 	}
 	return g.PaymentInfoRequired
+}
+
+func (g *GetOrganizationResponseBody) GetAllowLlmUsage() bool {
+	if g == nil {
+		return false
+	}
+	return g.AllowLlmUsage
+}
+
+func (g *GetOrganizationResponseBody) GetLlmUsageBlocked() bool {
+	if g == nil {
+		return false
+	}
+	return g.LlmUsageBlocked
 }
 
 func (g *GetOrganizationResponseBody) GetMcpAccessLevel() string {

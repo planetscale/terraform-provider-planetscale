@@ -136,6 +136,12 @@ paths:
                         payment_info_required:
                           type: boolean
                           description: Whether or not the organization requires payment information
+                        allow_llm_usage:
+                          type: boolean
+                          description: Whether or not LLM-powered features are enabled for the organization
+                        llm_usage_blocked:
+                          type: boolean
+                          description: Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled
                         mcp_access_level:
                           type: string
                           description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
@@ -159,6 +165,8 @@ paths:
                         - neki_router_replicas_per_cell_limit
                         - has_card
                         - payment_info_required
+                        - allow_llm_usage
+                        - llm_usage_blocked
                         - mcp_access_level
                 required:
                   - type
@@ -289,6 +297,12 @@ paths:
                   payment_info_required:
                     type: boolean
                     description: Whether or not the organization requires payment information
+                  allow_llm_usage:
+                    type: boolean
+                    description: Whether or not LLM-powered features are enabled for the organization
+                  llm_usage_blocked:
+                    type: boolean
+                    description: Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled
                   mcp_access_level:
                     type: string
                     description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
@@ -312,6 +326,8 @@ paths:
                   - neki_router_replicas_per_cell_limit
                   - has_card
                   - payment_info_required
+                  - allow_llm_usage
+                  - llm_usage_blocked
                   - mcp_access_level
         "401":
           description: Unauthorized
@@ -1584,6 +1600,9 @@ paths:
                     replicas:
                       type: integer
                       description: The number of replicas for shards using this configuration profile
+                    read_only_replicas:
+                      type: integer
+                      description: The number of read-only replicas for shards using this configuration profile
                     postgres_image_version:
                       type: string
                       description: The PostgreSQL image used by the configuration profile
@@ -1660,6 +1679,7 @@ paths:
                     - default
                     - metal
                     - replicas
+                    - read_only_replicas
                     - postgres_image_version
                     - latest_postgres_image_version
                     - postgres_major_version
@@ -1746,6 +1766,9 @@ paths:
                 replicas:
                   type: integer
                   description: The number of replicas for the configuration profile
+                read_only_replicas:
+                  type: integer
+                  description: The number of read-only replicas for the configuration profile
                 postgres_major_version:
                   type: integer
                   description: The PostgreSQL major version for the configuration profile
@@ -1810,6 +1833,9 @@ paths:
                   replicas:
                     type: integer
                     description: The number of replicas for shards using this configuration profile
+                  read_only_replicas:
+                    type: integer
+                    description: The number of read-only replicas for shards using this configuration profile
                   postgres_image_version:
                     type: string
                     description: The PostgreSQL image used by the configuration profile
@@ -1886,6 +1912,7 @@ paths:
                   - default
                   - metal
                   - replicas
+                  - read_only_replicas
                   - postgres_image_version
                   - latest_postgres_image_version
                   - postgres_major_version
@@ -2005,6 +2032,9 @@ paths:
                   replicas:
                     type: integer
                     description: The number of replicas for shards using this configuration profile
+                  read_only_replicas:
+                    type: integer
+                    description: The number of read-only replicas for shards using this configuration profile
                   postgres_image_version:
                     type: string
                     description: The PostgreSQL image used by the configuration profile
@@ -2081,6 +2111,7 @@ paths:
                   - default
                   - metal
                   - replicas
+                  - read_only_replicas
                   - postgres_image_version
                   - latest_postgres_image_version
                   - postgres_major_version
@@ -2195,6 +2226,9 @@ paths:
                 replicas:
                   type: integer
                   description: The new number of replicas for the configuration profile
+                read_only_replicas:
+                  type: integer
+                  description: The new number of read-only replicas for the configuration profile
                 postgres_major_version:
                   type: integer
                   description: The PostgreSQL major version for the configuration profile
@@ -2267,6 +2301,9 @@ paths:
                   replicas:
                     type: integer
                     description: The number of replicas for shards using this configuration profile
+                  read_only_replicas:
+                    type: integer
+                    description: The number of read-only replicas for shards using this configuration profile
                   postgres_image_version:
                     type: string
                     description: The PostgreSQL image used by the configuration profile
@@ -2343,6 +2380,7 @@ paths:
                   - default
                   - metal
                   - replicas
+                  - read_only_replicas
                   - postgres_image_version
                   - latest_postgres_image_version
                   - postgres_major_version
@@ -7674,7 +7712,7 @@ paths:
               properties:
                 name:
                   type: string
-                  description: The name of the router group. Letters, digits, dashes, and underscores; 1-64 characters; cannot start or end with a dash or underscore. `new`, `primary`, and `replica` are reserved. Clients connect through the group by appending it to the username, e.g. `user|my-router`.
+                  description: The name of the router group. Lowercase letters, digits, and dashes (an RFC 1123 DNS label); 1-16 characters; cannot start or end with a dash. `new`, `primary`, and `replica` are reserved. Clients connect through the group by appending it to the username, e.g. `user|my-router`.
                 router_size:
                   type: string
                   description: The router size SKU, e.g. `NKR_1`. Defaults to the service's default size.
@@ -8600,11 +8638,6 @@ paths:
           successCriteria:
             - condition: $statusCode == 200
             - condition: $response.body#/ready == true
-  /organizations/{organization}/databases/{database}/branches/{branch}/sidecars: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}/changes: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}/changes/{id}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/sidecars/{sidecar}/parameters: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/switchovers: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/switchovers/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets: {}
@@ -16935,9 +16968,15 @@ tags:
   - name: Switchovers
     description: |2
                 Resources for moving the primary of a Postgres branch.
+  - name: QueryPatternComments
+    description: |2
+                Comments attached to an Insights query pattern.
   - name: Query Insights reports
     description: |2
                 Resources for downloading query insights data.
+  - name: Dedicated read replica detachments
+    description: |2
+                Resources for detaching Postgres dedicated read replicas.
   - name: Dedicated read replicas
     description: |2
                 Resources for managing Postgres dedicated read replicas.
@@ -19684,12 +19723,15 @@ components:
                 type: string
                 enum:
                   - patroni
-                  - pgconf
                   - pgbouncer
+                  - pgconf
                 description: The namespace of the parameter
               advanced:
                 type: boolean
                 description: Whether the parameter is advanced
+              internal:
+                type: boolean
+                description: Whether the parameter is internal and cannot be changed
               category:
                 type: string
                 description: The category of the parameter
@@ -19705,7 +19747,6 @@ components:
                   - bytes
                   - float
                   - integer
-                  - seconds
                   - select
                   - string
                   - time
@@ -19714,10 +19755,9 @@ components:
                 type: string
                 description: The default value of the parameter
                 nullable: true
-              disabled_reason:
-                type: string
-                description: Why the parameter cannot be changed
-                nullable: true
+              disabled:
+                type: boolean
+                description: Whether the parameter is disabled
               requires_update:
                 type: string
                 enum:
@@ -19743,18 +19783,18 @@ components:
                 type: boolean
                 description: Whether processes require a server restart after the parameter changes
               max:
-                type: number
-                description: The maximum value of the parameter
+                type: string
+                description: The maximum value of the parameter, e.g. `800` or `1h`
                 nullable: true
               min:
-                type: number
-                description: The minimum value of the parameter
+                type: string
+                description: The minimum value of the parameter, e.g. `0` or `1ms`
                 nullable: true
               options:
                 items:
                   type: string
                 type: array
-                description: Valid options for the parameter value. Null represents an unset value
+                description: Options, including disabled ones, for the parameter value. Null means unset
                 nullable: true
               units:
                 items:
@@ -19786,10 +19826,12 @@ components:
               - display_name
               - namespace
               - advanced
+              - internal
               - category
               - description
               - parameter_type
               - default_value
+              - disabled
               - requires_update
               - value
               - required
@@ -19832,12 +19874,15 @@ components:
           type: string
           enum:
             - patroni
-            - pgconf
             - pgbouncer
+            - pgconf
           description: The namespace of the parameter
         advanced:
           type: boolean
           description: Whether the parameter is advanced
+        internal:
+          type: boolean
+          description: Whether the parameter is internal and cannot be changed
         category:
           type: string
           description: The category of the parameter
@@ -19853,7 +19898,6 @@ components:
             - bytes
             - float
             - integer
-            - seconds
             - select
             - string
             - time
@@ -19862,10 +19906,9 @@ components:
           type: string
           description: The default value of the parameter
           nullable: true
-        disabled_reason:
-          type: string
-          description: Why the parameter cannot be changed
-          nullable: true
+        disabled:
+          type: boolean
+          description: Whether the parameter is disabled
         requires_update:
           type: string
           enum:
@@ -19891,18 +19934,18 @@ components:
           type: boolean
           description: Whether processes require a server restart after the parameter changes
         max:
-          type: number
-          description: The maximum value of the parameter
+          type: string
+          description: The maximum value of the parameter, e.g. `800` or `1h`
           nullable: true
         min:
-          type: number
-          description: The minimum value of the parameter
+          type: string
+          description: The minimum value of the parameter, e.g. `0` or `1ms`
           nullable: true
         options:
           items:
             type: string
           type: array
-          description: Valid options for the parameter value. Null represents an unset value
+          description: Options, including disabled ones, for the parameter value. Null means unset
           nullable: true
         units:
           items:
@@ -19934,10 +19977,12 @@ components:
         - display_name
         - namespace
         - advanced
+        - internal
         - category
         - description
         - parameter_type
         - default_value
+        - disabled
         - requires_update
         - value
         - required
@@ -22979,15 +23024,18 @@ components:
         namespace:
           type: string
           enum:
+            - admin
             - pgconf
+            - replicator
             - router
             - sidecar
-            - admin
-            - replicator
           description: The namespace of the parameter
         advanced:
           type: boolean
           description: Whether the parameter is advanced
+        internal:
+          type: boolean
+          description: Whether the parameter is internal and cannot be changed
         category:
           type: string
           description: The category of the parameter
@@ -23011,10 +23059,9 @@ components:
           type: string
           description: The default value of the parameter
           nullable: true
-        disabled_reason:
-          type: string
-          description: Why the parameter cannot be changed
-          nullable: true
+        disabled:
+          type: boolean
+          description: Whether the parameter is disabled
         requires_update:
           type: string
           enum:
@@ -23041,18 +23088,18 @@ components:
           type: boolean
           description: Whether processes require a server restart after the parameter changes
         max:
-          type: number
-          description: The maximum value of the parameter
+          type: string
+          description: The maximum value of the parameter, e.g. `800` or `1h`
           nullable: true
         min:
-          type: number
-          description: The minimum value of the parameter
+          type: string
+          description: The minimum value of the parameter, e.g. `0` or `1ms`
           nullable: true
         options:
           items:
             type: string
           type: array
-          description: Valid options for the parameter value. Null represents an unset value
+          description: Options, including disabled ones, for the parameter value. Null means unset
           nullable: true
         units:
           items:
@@ -23084,10 +23131,12 @@ components:
         - display_name
         - namespace
         - advanced
+        - internal
         - category
         - description
         - parameter_type
         - default_value
+        - disabled
         - requires_update
         - value
         - required
@@ -23214,7 +23263,6 @@ components:
                   - NekiConfigurationProfileChangeRequest
                   - NekiExternalShardChangeRequest
                   - NekiRouterChangeRequest
-                  - NekiSidecarChangeRequest
                 description: The type of change request
               id:
                 type: string
@@ -23273,7 +23321,6 @@ components:
                   - NekiConfigurationProfile
                   - NekiExternalShard
                   - NekiRouter
-                  - NekiSidecar
                 description: The type of resource being changed
               target_name:
                 type: string
@@ -23517,7 +23564,6 @@ components:
             - NekiConfigurationProfileChangeRequest
             - NekiExternalShardChangeRequest
             - NekiRouterChangeRequest
-            - NekiSidecarChangeRequest
           description: The type of change request
         id:
           type: string
@@ -23576,7 +23622,6 @@ components:
             - NekiConfigurationProfile
             - NekiExternalShard
             - NekiRouter
-            - NekiSidecar
           description: The type of resource being changed
         target_name:
           type: string
@@ -23827,6 +23872,9 @@ components:
         replicas:
           type: integer
           description: The number of replicas for shards using this configuration profile
+        read_only_replicas:
+          type: integer
+          description: The number of read-only replicas for shards using this configuration profile
         postgres_image_version:
           type: string
           description: The PostgreSQL image used by the configuration profile
@@ -23897,6 +23945,7 @@ components:
         - default
         - metal
         - replicas
+        - read_only_replicas
         - postgres_image_version
         - latest_postgres_image_version
         - postgres_major_version
@@ -24065,15 +24114,18 @@ components:
               namespace:
                 type: string
                 enum:
+                  - admin
                   - pgconf
+                  - replicator
                   - router
                   - sidecar
-                  - admin
-                  - replicator
                 description: The namespace of the parameter
               advanced:
                 type: boolean
                 description: Whether the parameter is advanced
+              internal:
+                type: boolean
+                description: Whether the parameter is internal and cannot be changed
               category:
                 type: string
                 description: The category of the parameter
@@ -24097,10 +24149,9 @@ components:
                 type: string
                 description: The default value of the parameter
                 nullable: true
-              disabled_reason:
-                type: string
-                description: Why the parameter cannot be changed
-                nullable: true
+              disabled:
+                type: boolean
+                description: Whether the parameter is disabled
               requires_update:
                 type: string
                 enum:
@@ -24127,18 +24178,18 @@ components:
                 type: boolean
                 description: Whether processes require a server restart after the parameter changes
               max:
-                type: number
-                description: The maximum value of the parameter
+                type: string
+                description: The maximum value of the parameter, e.g. `800` or `1h`
                 nullable: true
               min:
-                type: number
-                description: The minimum value of the parameter
+                type: string
+                description: The minimum value of the parameter, e.g. `0` or `1ms`
                 nullable: true
               options:
                 items:
                   type: string
                 type: array
-                description: Valid options for the parameter value. Null represents an unset value
+                description: Options, including disabled ones, for the parameter value. Null means unset
                 nullable: true
               units:
                 items:
@@ -24170,10 +24221,12 @@ components:
               - display_name
               - namespace
               - advanced
+              - internal
               - category
               - description
               - parameter_type
               - default_value
+              - disabled
               - requires_update
               - value
               - required
@@ -24339,34 +24392,6 @@ components:
       required:
         - id
         - status
-    NekiSidecar:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the sidecar
-        configuration_profile:
-          type: string
-          description: The name of the configuration profile the sidecar belongs to
-        state:
-          type: string
-          enum:
-            - pending
-            - applying
-            - ready
-          description: The current state of the sidecar
-        created_at:
-          type: string
-          description: When the sidecar was created
-        updated_at:
-          type: string
-          description: When the sidecar was last updated
-      required:
-        - id
-        - configuration_profile
-        - state
-        - created_at
-        - updated_at
     PaginatedOauthApplication:
       type: object
       properties:
@@ -25976,6 +26001,12 @@ components:
               payment_info_required:
                 type: boolean
                 description: Whether or not the organization requires payment information
+              allow_llm_usage:
+                type: boolean
+                description: Whether or not LLM-powered features are enabled for the organization
+              llm_usage_blocked:
+                type: boolean
+                description: Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled
               mcp_access_level:
                 type: string
                 description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
@@ -25999,6 +26030,8 @@ components:
               - neki_router_replicas_per_cell_limit
               - has_card
               - payment_info_required
+              - allow_llm_usage
+              - llm_usage_blocked
               - mcp_access_level
       required:
         - type
@@ -26078,6 +26111,12 @@ components:
         payment_info_required:
           type: boolean
           description: Whether or not the organization requires payment information
+        allow_llm_usage:
+          type: boolean
+          description: Whether or not LLM-powered features are enabled for the organization
+        llm_usage_blocked:
+          type: boolean
+          description: Whether or not LLM usage is blocked for the organization. When true, LLM-powered features are disabled and can't be enabled
         mcp_access_level:
           type: string
           description: The query access level MCP clients can be granted for the organization (none, read_only, or read_write)
@@ -26101,6 +26140,8 @@ components:
         - neki_router_replicas_per_cell_limit
         - has_card
         - payment_info_required
+        - allow_llm_usage
+        - llm_usage_blocked
         - mcp_access_level
     ClusterSizeSku:
       type: object
@@ -26602,12 +26643,15 @@ components:
                       type: string
                       enum:
                         - patroni
-                        - pgconf
                         - pgbouncer
+                        - pgconf
                       description: The namespace of the parameter
                     advanced:
                       type: boolean
                       description: Whether the parameter is advanced
+                    internal:
+                      type: boolean
+                      description: Whether the parameter is internal and cannot be changed
                     category:
                       type: string
                       description: The category of the parameter
@@ -26623,7 +26667,6 @@ components:
                         - bytes
                         - float
                         - integer
-                        - seconds
                         - select
                         - string
                         - time
@@ -26632,10 +26675,9 @@ components:
                       type: string
                       description: The default value of the parameter
                       nullable: true
-                    disabled_reason:
-                      type: string
-                      description: Why the parameter cannot be changed
-                      nullable: true
+                    disabled:
+                      type: boolean
+                      description: Whether the parameter is disabled
                     requires_update:
                       type: string
                       enum:
@@ -26661,18 +26703,18 @@ components:
                       type: boolean
                       description: Whether processes require a server restart after the parameter changes
                     max:
-                      type: number
-                      description: The maximum value of the parameter
+                      type: string
+                      description: The maximum value of the parameter, e.g. `800` or `1h`
                       nullable: true
                     min:
-                      type: number
-                      description: The minimum value of the parameter
+                      type: string
+                      description: The minimum value of the parameter, e.g. `0` or `1ms`
                       nullable: true
                     options:
                       items:
                         type: string
                       type: array
-                      description: Valid options for the parameter value. Null represents an unset value
+                      description: Options, including disabled ones, for the parameter value. Null means unset
                       nullable: true
                     units:
                       items:
@@ -26704,10 +26746,12 @@ components:
                     - display_name
                     - namespace
                     - advanced
+                    - internal
                     - category
                     - description
                     - parameter_type
                     - default_value
+                    - disabled
                     - requires_update
                     - value
                     - required
@@ -26850,12 +26894,15 @@ components:
                 type: string
                 enum:
                   - patroni
-                  - pgconf
                   - pgbouncer
+                  - pgconf
                 description: The namespace of the parameter
               advanced:
                 type: boolean
                 description: Whether the parameter is advanced
+              internal:
+                type: boolean
+                description: Whether the parameter is internal and cannot be changed
               category:
                 type: string
                 description: The category of the parameter
@@ -26871,7 +26918,6 @@ components:
                   - bytes
                   - float
                   - integer
-                  - seconds
                   - select
                   - string
                   - time
@@ -26880,10 +26926,9 @@ components:
                 type: string
                 description: The default value of the parameter
                 nullable: true
-              disabled_reason:
-                type: string
-                description: Why the parameter cannot be changed
-                nullable: true
+              disabled:
+                type: boolean
+                description: Whether the parameter is disabled
               requires_update:
                 type: string
                 enum:
@@ -26909,18 +26954,18 @@ components:
                 type: boolean
                 description: Whether processes require a server restart after the parameter changes
               max:
-                type: number
-                description: The maximum value of the parameter
+                type: string
+                description: The maximum value of the parameter, e.g. `800` or `1h`
                 nullable: true
               min:
-                type: number
-                description: The minimum value of the parameter
+                type: string
+                description: The minimum value of the parameter, e.g. `0` or `1ms`
                 nullable: true
               options:
                 items:
                   type: string
                 type: array
-                description: Valid options for the parameter value. Null represents an unset value
+                description: Options, including disabled ones, for the parameter value. Null means unset
                 nullable: true
               units:
                 items:
@@ -26952,10 +26997,12 @@ components:
               - display_name
               - namespace
               - advanced
+              - internal
               - category
               - description
               - parameter_type
               - default_value
+              - disabled
               - requires_update
               - value
               - required
@@ -27223,6 +27270,9 @@ components:
               multishard:
                 type: boolean
                 description: Whether the query is a multishard query
+              comment_count:
+                type: integer
+                description: How many comments are on this query pattern
               query_count:
                 type: integer
                 description: The number of times this query was executed
@@ -27373,6 +27423,7 @@ components:
               - normalized_sql
               - syntax_highlighted_sql
               - multishard
+              - comment_count
               - query_count
               - error_count
               - tables
@@ -27589,6 +27640,9 @@ components:
         multishard:
           type: boolean
           description: Whether the query is a multishard query
+        comment_count:
+          type: integer
+          description: How many comments are on this query pattern
         query_count:
           type: integer
           description: The number of times this query was executed
@@ -27739,6 +27793,7 @@ components:
         - normalized_sql
         - syntax_highlighted_sql
         - multishard
+        - comment_count
         - query_count
         - error_count
         - tables
@@ -29020,12 +29075,15 @@ components:
                 type: string
                 enum:
                   - patroni
-                  - pgconf
                   - pgbouncer
+                  - pgconf
                 description: The namespace of the parameter
               advanced:
                 type: boolean
                 description: Whether the parameter is advanced
+              internal:
+                type: boolean
+                description: Whether the parameter is internal and cannot be changed
               category:
                 type: string
                 description: The category of the parameter
@@ -29041,7 +29099,6 @@ components:
                   - bytes
                   - float
                   - integer
-                  - seconds
                   - select
                   - string
                   - time
@@ -29050,10 +29107,9 @@ components:
                 type: string
                 description: The default value of the parameter
                 nullable: true
-              disabled_reason:
-                type: string
-                description: Why the parameter cannot be changed
-                nullable: true
+              disabled:
+                type: boolean
+                description: Whether the parameter is disabled
               requires_update:
                 type: string
                 enum:
@@ -29079,18 +29135,18 @@ components:
                 type: boolean
                 description: Whether processes require a server restart after the parameter changes
               max:
-                type: number
-                description: The maximum value of the parameter
+                type: string
+                description: The maximum value of the parameter, e.g. `800` or `1h`
                 nullable: true
               min:
-                type: number
-                description: The minimum value of the parameter
+                type: string
+                description: The minimum value of the parameter, e.g. `0` or `1ms`
                 nullable: true
               options:
                 items:
                   type: string
                 type: array
-                description: Valid options for the parameter value. Null represents an unset value
+                description: Options, including disabled ones, for the parameter value. Null means unset
                 nullable: true
               units:
                 items:
@@ -29122,10 +29178,12 @@ components:
               - display_name
               - namespace
               - advanced
+              - internal
               - category
               - description
               - parameter_type
               - default_value
+              - disabled
               - requires_update
               - value
               - required
