@@ -156,6 +156,16 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("maximum_storage_bytes"),
+						knownvalue.Int64Exact(maximumStorageBytes),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("storage_autoscaling"),
+						knownvalue.Bool(true),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
 						tfjsonpath.New("storage").AtMapKey("storage_iops"),
 						knownvalue.Int64Exact(storageIopsUpdated),
 					),

@@ -42,6 +42,7 @@ actions:
     update:
       storage:
         type: object
+        description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
         properties:
           minimum_storage_bytes:
             type: integer
@@ -84,6 +85,7 @@ actions:
           options:
             polling:
               name: WaitForReady
+        - PostgresBranch#create#5
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
       x-speakeasy-polling:
         - name: WaitForReady
@@ -128,6 +130,7 @@ actions:
       storage:
         type: object
         nullable: true
+        description: Storage configuration for non-Metal branches. These values are null for Metal cluster sizes.
         properties:
           minimum_storage_bytes:
             type: integer
@@ -272,9 +275,17 @@ actions:
     update:
       x-speakeasy-match: id
 
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.cluster_size
+    update:
+      x-speakeasy-plan-validators: ClusterSizeValidator
+
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties['replicas','extensions']
     description: Keep settings that the PostgreSQL branch resource does not manage out of its schema.
     remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.storage
+    update:
+      description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.storage.properties.confirm_shrink
     description: confirm_shrink is an imperative operation rather than persistent Terraform configuration.

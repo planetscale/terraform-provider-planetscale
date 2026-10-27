@@ -63,11 +63,6 @@ func TestPostgresBranchRegionSlugHookNestsStorage(t *testing.T) {
 
 	require.JSONEq(t, `{
 		"id":"br",
-		"minimum_storage_bytes":10000000000,
-		"maximum_storage_bytes":4000000000000,
-		"storage_autoscaling":true,
-		"storage_iops":3000,
-		"storage_throughput_mibs":125,
 		"storage":{
 			"minimum_storage_bytes":10000000000,
 			"maximum_storage_bytes":4000000000000,
@@ -77,6 +72,20 @@ func TestPostgresBranchRegionSlugHookNestsStorage(t *testing.T) {
 		}
 	}`, string(bodyBytes))
 	require.Equal(t, int64(len(bodyBytes)), res.ContentLength)
+}
+
+func TestPostgresBranchRegionSlugHookDoesNotNestPartialStorage(t *testing.T) {
+	responseBody := `{"id":"br","minimum_storage_bytes":10000000000}`
+	client := postgresBranchGetClient(http.StatusOK, responseBody)
+
+	req, err := http.NewRequest(http.MethodGet, postgresBranchGetURL, nil)
+	require.NoError(t, err)
+	res, err := client.Do(req)
+	require.NoError(t, err)
+	bodyBytes, err := io.ReadAll(res.Body)
+	require.NoError(t, err)
+
+	require.Equal(t, responseBody, string(bodyBytes))
 }
 
 func TestPostgresBranchRegionSlugHookPassesThroughUnexpectedBody(t *testing.T) {

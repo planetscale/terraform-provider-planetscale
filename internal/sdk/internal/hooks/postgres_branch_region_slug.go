@@ -74,20 +74,23 @@ func nestPostgresBranchStorage(body []byte) ([]byte, bool) {
 		return nil, false
 	}
 
-	storage := map[string]any{}
-	for _, name := range []string{
+	names := []string{
 		"minimum_storage_bytes",
 		"maximum_storage_bytes",
 		"storage_autoscaling",
 		"storage_iops",
 		"storage_throughput_mibs",
-	} {
-		if value, ok := payload[name]; ok {
-			storage[name] = value
-		}
 	}
-	if len(storage) == 0 {
-		return nil, false
+	storage := map[string]any{}
+	for _, name := range names {
+		value, ok := payload[name]
+		if !ok {
+			return nil, false
+		}
+		storage[name] = value
+	}
+	for _, name := range names {
+		delete(payload, name)
 	}
 
 	payload["storage"] = storage
