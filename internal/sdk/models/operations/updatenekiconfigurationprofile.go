@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type UpdateNekiConfigurationProfileStorageRequest struct {
+type UpdateNekiConfigurationProfileStorageRequestBody struct {
 	// The minimum storage size in bytes.
 	MinimumStorageBytes *int64 `json:"minimum_storage_bytes,omitzero"`
 	// The maximum storage size in bytes for autoscaling.
@@ -20,35 +20,35 @@ type UpdateNekiConfigurationProfileStorageRequest struct {
 	StorageThroughputMibs *int64 `json:"storage_throughput_mibs,omitzero"`
 }
 
-func (u *UpdateNekiConfigurationProfileStorageRequest) GetMinimumStorageBytes() *int64 {
+func (u *UpdateNekiConfigurationProfileStorageRequestBody) GetMinimumStorageBytes() *int64 {
 	if u == nil {
 		return nil
 	}
 	return u.MinimumStorageBytes
 }
 
-func (u *UpdateNekiConfigurationProfileStorageRequest) GetMaximumStorageBytes() *int64 {
+func (u *UpdateNekiConfigurationProfileStorageRequestBody) GetMaximumStorageBytes() *int64 {
 	if u == nil {
 		return nil
 	}
 	return u.MaximumStorageBytes
 }
 
-func (u *UpdateNekiConfigurationProfileStorageRequest) GetStorageAutoscaling() *bool {
+func (u *UpdateNekiConfigurationProfileStorageRequestBody) GetStorageAutoscaling() *bool {
 	if u == nil {
 		return nil
 	}
 	return u.StorageAutoscaling
 }
 
-func (u *UpdateNekiConfigurationProfileStorageRequest) GetStorageIops() *int64 {
+func (u *UpdateNekiConfigurationProfileStorageRequestBody) GetStorageIops() *int64 {
 	if u == nil {
 		return nil
 	}
 	return u.StorageIops
 }
 
-func (u *UpdateNekiConfigurationProfileStorageRequest) GetStorageThroughputMibs() *int64 {
+func (u *UpdateNekiConfigurationProfileStorageRequestBody) GetStorageThroughputMibs() *int64 {
 	if u == nil {
 		return nil
 	}
@@ -67,8 +67,8 @@ type UpdateNekiConfigurationProfileRequestBody struct {
 	// The PostgreSQL major version for the configuration profile
 	PostgresMajorVersion *int64 `json:"postgres_major_version,omitzero"`
 	// The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.
-	PostgresMinorVersion *int64                                        `json:"postgres_minor_version,omitzero"`
-	Storage              *UpdateNekiConfigurationProfileStorageRequest `json:"storage,omitzero"`
+	PostgresMinorVersion *int64                                            `json:"postgres_minor_version,omitzero"`
+	Storage              *UpdateNekiConfigurationProfileStorageRequestBody `json:"storage,omitzero"`
 	// Desired effective parameter values nested by namespace, e.g. { pgconf = { max_connections = "200" } }. Configure extension settings using their `pgconf` keys (for example, `pgconf.auto_explain.log_level`). Omitted parameters reset to their defaults, except shared_preload_libraries and session_preload_libraries, which remain unchanged. To disable extensions, set extensions to an empty list or explicitly update the preload parameters.
 	Parameters map[string]map[string]string `json:"parameters,omitzero"`
 }
@@ -126,7 +126,7 @@ func (u *UpdateNekiConfigurationProfileRequestBody) GetPostgresMinorVersion() *i
 	return u.PostgresMinorVersion
 }
 
-func (u *UpdateNekiConfigurationProfileRequestBody) GetStorage() *UpdateNekiConfigurationProfileStorageRequest {
+func (u *UpdateNekiConfigurationProfileRequestBody) GetStorage() *UpdateNekiConfigurationProfileStorageRequestBody {
 	if u == nil {
 		return nil
 	}

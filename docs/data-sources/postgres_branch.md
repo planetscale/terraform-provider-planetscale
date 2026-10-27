@@ -43,6 +43,7 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
 - `replicas` (Number) The number of replicas for the branch
 - `state` (String) The current state of the branch
+- `storage` (Attributes) Storage configuration for non-Metal branches. These values are null for Metal cluster sizes. (see [below for nested schema](#nestedatt--storage))
 - `url` (String) Planetscale API URL for the branch
 
 <a id="nestedatt--actor"></a>
@@ -61,3 +62,15 @@ Read-Only:
 - `id` (String) The ID of the region
 - `mysql_supported` (Boolean) Whether the region supports MySQL/Vitess databases
 - `postgresql_supported` (Boolean) Whether the region supports PostgreSQL databases
+
+
+<a id="nestedatt--storage"></a>
+### Nested Schema for `storage`
+
+Read-Only:
+
+- `maximum_storage_bytes` (Number) The maximum storage size in bytes for autoscaling.
+- `minimum_storage_bytes` (Number) The minimum storage size in bytes.
+- `storage_autoscaling` (Boolean) Whether storage autoscaling is enabled.
+- `storage_iops` (Number) The storage IOPS.
+- `storage_throughput_mibs` (Number) The storage throughput in MiB/s.

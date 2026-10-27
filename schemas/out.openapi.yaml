@@ -1399,7 +1399,122 @@ paths:
         | Database | `write_database` |
       x-speakeasy-entity-operation: PostgresBouncer#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/bouncers/{bouncer}/resizes: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/changes: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/changes:
+    patch:
+      tags:
+        - Branch changes
+      operationId: apply_postgres_branch_changes
+      summary: Apply a PostgreSQL branch's cluster size, parameters, and storage configuration
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+          x-speakeasy-match: id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cluster_size:
+                  type: string
+                  description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+                  x-speakeasy-plan-validators: ClusterSizeValidator
+                storage:
+                  type: object
+                  properties:
+                    minimum_storage_bytes:
+                      type: integer
+                      description: The minimum storage size in bytes.
+                    maximum_storage_bytes:
+                      type: integer
+                      description: The maximum storage size in bytes for autoscaling.
+                    storage_autoscaling:
+                      type: boolean
+                      description: Whether storage autoscaling is enabled.
+                    storage_iops:
+                      type: integer
+                      description: The storage IOPS.
+                    storage_throughput_mibs:
+                      type: integer
+                      description: The storage throughput in MiB/s.
+                  description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
+                parameters:
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  description: >-
+                    Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
+      responses:
+        "200":
+          description: Returns the branch change request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: change_request_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: change_request_state
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - id
+                  - state
+        "204":
+          description: No changes to apply
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Invalid parameters
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation:
+        - PostgresBranch#create#3
+        - PostgresBranch#update#2
   /organizations/{organization}/databases/{database}/branches/{branch}/changes/{id}:
     get:
       tags:
@@ -8773,6 +8888,16 @@ paths:
                   const: postgresql
                   default: postgresql
                   x-speakeasy-terraform-ignore: schema
+                storage:
+                  type: object
+                  description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
+                  properties:
+                    minimum_storage_bytes:
+                      type: integer
+                      description: The minimum storage size in bytes.
+                    maximum_storage_bytes:
+                      type: integer
+                      description: The maximum storage size in bytes for autoscaling.
               required:
                 - name
       responses:
@@ -9042,6 +9167,37 @@ paths:
                         type: string
                     description: >-
                       Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
+                  storage:
+                    type: object
+                    nullable: true
+                    description: Storage configuration for non-Metal branches. These values are null for Metal cluster sizes.
+                    properties:
+                      minimum_storage_bytes:
+                        type: integer
+                        nullable: true
+                        description: The minimum storage size in bytes.
+                      maximum_storage_bytes:
+                        type: integer
+                        nullable: true
+                        description: The maximum storage size in bytes for autoscaling.
+                      storage_autoscaling:
+                        type: boolean
+                        nullable: true
+                        description: Whether storage autoscaling is enabled.
+                      storage_iops:
+                        type: integer
+                        nullable: true
+                        description: The storage IOPS.
+                      storage_throughput_mibs:
+                        type: integer
+                        nullable: true
+                        description: The storage throughput in MiB/s.
+                    required:
+                      - minimum_storage_bytes
+                      - maximum_storage_bytes
+                      - storage_autoscaling
+                      - storage_iops
+                      - storage_throughput_mibs
                 required:
                   - id
                   - name
@@ -9104,6 +9260,7 @@ paths:
           options:
             polling:
               name: WaitForReady
+        - PostgresBranch#create#5
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
       x-speakeasy-polling:
         - name: WaitForReady
@@ -10567,78 +10724,6 @@ paths:
         | Database | `delete_branches`, `delete_production_branches` |
         | Branch | `delete_branch` |
       x-speakeasy-entity-operation: NekiBranch#delete
-  /organizations/{organization}/databases/{database}/branches/{branch}/terraform-changes:
-    put:
-      operationId: apply_postgres_branch_terraform_changes
-      summary: Apply a PostgreSQL branch's cluster size and parameters
-      tags:
-        - Branch changes
-      parameters:
-        - name: organization
-          in: path
-          required: true
-          description: "Organization name slug from `list_organizations`. Example: `acme`."
-          schema:
-            type: string
-        - name: database
-          in: path
-          required: true
-          description: "Database name slug from `list_databases`. Example: `app-db`."
-          schema:
-            type: string
-        - name: branch
-          in: path
-          required: true
-          description: "Branch name from `list_branches`. Example: `main`."
-          x-speakeasy-match: id
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties: false
-              properties:
-                cluster_size:
-                  type: string
-                  description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
-                parameters:
-                  type: object
-                  nullable: true
-                  additionalProperties:
-                    type: object
-                    additionalProperties:
-                      type: string
-                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
-                  description: >-
-                    Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
-      responses:
-        "200":
-          description: Returns the resulting change request
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  id:
-                    type: string
-                    x-speakeasy-name-override: change_request_id
-                    x-speakeasy-terraform-ignore: schema
-                  state:
-                    type: string
-                    x-speakeasy-name-override: change_request_state
-                    x-speakeasy-terraform-ignore: schema
-                required:
-                  - id
-                  - state
-        "204":
-          description: No changes to apply
-      x-speakeasy-entity-operation:
-        - PostgresBranch#create#3
-        - PostgresBranch#update#2
   ? /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles/{configuration_profile}#shard-reassignment
   : get:
       tags:

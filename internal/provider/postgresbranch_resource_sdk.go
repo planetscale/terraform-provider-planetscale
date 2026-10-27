@@ -16,7 +16,7 @@ type PostgresBranchResourceModelOptions struct {
 	State  *PostgresBranchResourceModel
 }
 
-func (r *PostgresBranchResourceModel) RefreshFromOperationsApplyPostgresBranchTerraformChangesResponseBody(ctx context.Context, resp *operations.ApplyPostgresBranchTerraformChangesResponseBody) diag.Diagnostics {
+func (r *PostgresBranchResourceModel) RefreshFromOperationsApplyPostgresBranchChangesResponseBody(ctx context.Context, resp *operations.ApplyPostgresBranchChangesResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -104,6 +104,16 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsGetPostgresBranchResp
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
+		if resp.Storage == nil {
+			r.Storage = nil
+		} else {
+			r.Storage = &tfTypes.CreatePostgresBranchStorage{}
+			r.Storage.MaximumStorageBytes = types.Int64PointerValue(resp.Storage.MaximumStorageBytes)
+			r.Storage.MinimumStorageBytes = types.Int64PointerValue(resp.Storage.MinimumStorageBytes)
+			r.Storage.StorageAutoscaling = types.BoolPointerValue(resp.Storage.StorageAutoscaling)
+			r.Storage.StorageIops = types.Int64PointerValue(resp.Storage.StorageIops)
+			r.Storage.StorageThroughputMibs = types.Int64PointerValue(resp.Storage.StorageThroughputMibs)
+		}
 		r.URL = types.StringValue(resp.URL)
 	}
 
@@ -138,7 +148,7 @@ func (r *PostgresBranchResourceModel) RefreshFromOperationsUpdatePostgresBranchR
 	return diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.ApplyPostgresBranchTerraformChangesRequest, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchChangesRequest(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.ApplyPostgresBranchChangesRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var organization string
@@ -150,24 +160,24 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 	var branch string
 	branch = r.ID.ValueString()
 
-	body, bodyDiags := r.ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx, opts)
+	body, bodyDiags := r.ToOperationsApplyPostgresBranchChangesRequestBody(ctx, opts)
 	diags.Append(bodyDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.ApplyPostgresBranchTerraformChangesRequest{
+	out := operations.ApplyPostgresBranchChangesRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
-		Body:         *body,
+		Body:         body,
 	}
 
 	return &out, diags
 }
 
-func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformChangesRequestBody(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.ApplyPostgresBranchTerraformChangesRequestBody, diag.Diagnostics) {
+func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchChangesRequestBody(ctx context.Context, opts *PostgresBranchResourceModelOptions) (*operations.ApplyPostgresBranchChangesRequestBody, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	clusterSize := new(string)
@@ -175,6 +185,46 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 		*clusterSize = r.ClusterSize.ValueString()
 	} else {
 		clusterSize = nil
+	}
+	var storage *operations.ApplyPostgresBranchChangesStorage
+	if r.Storage != nil {
+		minimumStorageBytes := new(int64)
+		if !r.Storage.MinimumStorageBytes.IsUnknown() && !r.Storage.MinimumStorageBytes.IsNull() {
+			*minimumStorageBytes = r.Storage.MinimumStorageBytes.ValueInt64()
+		} else {
+			minimumStorageBytes = nil
+		}
+		maximumStorageBytes := new(int64)
+		if !r.Storage.MaximumStorageBytes.IsUnknown() && !r.Storage.MaximumStorageBytes.IsNull() {
+			*maximumStorageBytes = r.Storage.MaximumStorageBytes.ValueInt64()
+		} else {
+			maximumStorageBytes = nil
+		}
+		storageAutoscaling := new(bool)
+		if !r.Storage.StorageAutoscaling.IsUnknown() && !r.Storage.StorageAutoscaling.IsNull() {
+			*storageAutoscaling = r.Storage.StorageAutoscaling.ValueBool()
+		} else {
+			storageAutoscaling = nil
+		}
+		storageIops := new(int64)
+		if !r.Storage.StorageIops.IsUnknown() && !r.Storage.StorageIops.IsNull() {
+			*storageIops = r.Storage.StorageIops.ValueInt64()
+		} else {
+			storageIops = nil
+		}
+		storageThroughputMibs := new(int64)
+		if !r.Storage.StorageThroughputMibs.IsUnknown() && !r.Storage.StorageThroughputMibs.IsNull() {
+			*storageThroughputMibs = r.Storage.StorageThroughputMibs.ValueInt64()
+		} else {
+			storageThroughputMibs = nil
+		}
+		storage = &operations.ApplyPostgresBranchChangesStorage{
+			MinimumStorageBytes:   minimumStorageBytes,
+			MaximumStorageBytes:   maximumStorageBytes,
+			StorageAutoscaling:    storageAutoscaling,
+			StorageIops:           storageIops,
+			StorageThroughputMibs: storageThroughputMibs,
+		}
 	}
 	var parameters map[string]map[string]string
 	if r.Parameters != nil {
@@ -190,8 +240,9 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchTerraformCh
 			parameters[parametersKey] = parametersInst
 		}
 	}
-	out := operations.ApplyPostgresBranchTerraformChangesRequestBody{
+	out := operations.ApplyPostgresBranchChangesRequestBody{
 		ClusterSize: clusterSize,
+		Storage:     storage,
 		Parameters:  parameters,
 	}
 
@@ -271,6 +322,25 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 	} else {
 		majorVersion = nil
 	}
+	var storage *operations.CreatePostgresBranchStorage
+	if r.Storage != nil {
+		minimumStorageBytes := new(int64)
+		if !r.Storage.MinimumStorageBytes.IsUnknown() && !r.Storage.MinimumStorageBytes.IsNull() {
+			*minimumStorageBytes = r.Storage.MinimumStorageBytes.ValueInt64()
+		} else {
+			minimumStorageBytes = nil
+		}
+		maximumStorageBytes := new(int64)
+		if !r.Storage.MaximumStorageBytes.IsUnknown() && !r.Storage.MaximumStorageBytes.IsNull() {
+			*maximumStorageBytes = r.Storage.MaximumStorageBytes.ValueInt64()
+		} else {
+			maximumStorageBytes = nil
+		}
+		storage = &operations.CreatePostgresBranchStorage{
+			MinimumStorageBytes: minimumStorageBytes,
+			MaximumStorageBytes: maximumStorageBytes,
+		}
+	}
 	out := operations.CreatePostgresBranchRequestBody{
 		Name:              name,
 		DeletionProtected: deletionProtected,
@@ -280,6 +350,7 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 		RestorePoint:      restorePoint,
 		ClusterSize:       clusterSize,
 		MajorVersion:      majorVersion,
+		Storage:           storage,
 	}
 
 	return &out, diags

@@ -114,6 +114,55 @@ func (g *GetPostgresBranchRegionData) GetNekiSupported() bool {
 	return g.NekiSupported
 }
 
+// GetPostgresBranchStorage - Storage configuration for non-Metal branches. These values are null for Metal cluster sizes.
+type GetPostgresBranchStorage struct {
+	// The minimum storage size in bytes.
+	MinimumStorageBytes *int64 `json:"minimum_storage_bytes"`
+	// The maximum storage size in bytes for autoscaling.
+	MaximumStorageBytes *int64 `json:"maximum_storage_bytes"`
+	// Whether storage autoscaling is enabled.
+	StorageAutoscaling *bool `json:"storage_autoscaling"`
+	// The storage IOPS.
+	StorageIops *int64 `json:"storage_iops"`
+	// The storage throughput in MiB/s.
+	StorageThroughputMibs *int64 `json:"storage_throughput_mibs"`
+}
+
+func (g *GetPostgresBranchStorage) GetMinimumStorageBytes() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.MinimumStorageBytes
+}
+
+func (g *GetPostgresBranchStorage) GetMaximumStorageBytes() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.MaximumStorageBytes
+}
+
+func (g *GetPostgresBranchStorage) GetStorageAutoscaling() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.StorageAutoscaling
+}
+
+func (g *GetPostgresBranchStorage) GetStorageIops() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.StorageIops
+}
+
+func (g *GetPostgresBranchStorage) GetStorageThroughputMibs() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.StorageThroughputMibs
+}
+
 // GetPostgresBranchResponseBody - Returns information about a branch
 type GetPostgresBranchResponseBody struct {
 	// The ID of the branch
@@ -142,6 +191,8 @@ type GetPostgresBranchResponseBody struct {
 	Replicas *int64 `json:"replicas,omitzero"`
 	// Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 	Parameters map[string]map[string]string `json:"parameters,omitzero"`
+	// Storage configuration for non-Metal branches. These values are null for Metal cluster sizes.
+	Storage *GetPostgresBranchStorage `json:"storage,omitzero"`
 }
 
 func (g GetPostgresBranchResponseBody) MarshalJSON() ([]byte, error) {
@@ -251,6 +302,13 @@ func (g *GetPostgresBranchResponseBody) GetParameters() map[string]map[string]st
 		return nil
 	}
 	return g.Parameters
+}
+
+func (g *GetPostgresBranchResponseBody) GetStorage() *GetPostgresBranchStorage {
+	if g == nil {
+		return nil
+	}
+	return g.Storage
 }
 
 type GetPostgresBranchResponse struct {

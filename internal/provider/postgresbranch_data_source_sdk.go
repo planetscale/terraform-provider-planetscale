@@ -48,6 +48,16 @@ func (r *PostgresBranchDataSourceModel) RefreshFromOperationsGetPostgresBranchRe
 		r.RegionData.PostgresqlSupported = types.BoolValue(resp.RegionData.PostgresqlSupported)
 		r.Replicas = types.Int64PointerValue(resp.Replicas)
 		r.State = types.StringValue(string(resp.State))
+		if resp.Storage == nil {
+			r.Storage = nil
+		} else {
+			r.Storage = &tfTypes.GetPostgresBranchStorage{}
+			r.Storage.MaximumStorageBytes = types.Int64PointerValue(resp.Storage.MaximumStorageBytes)
+			r.Storage.MinimumStorageBytes = types.Int64PointerValue(resp.Storage.MinimumStorageBytes)
+			r.Storage.StorageAutoscaling = types.BoolPointerValue(resp.Storage.StorageAutoscaling)
+			r.Storage.StorageIops = types.Int64PointerValue(resp.Storage.StorageIops)
+			r.Storage.StorageThroughputMibs = types.Int64PointerValue(resp.Storage.StorageThroughputMibs)
+		}
 		r.URL = types.StringValue(resp.URL)
 	}
 

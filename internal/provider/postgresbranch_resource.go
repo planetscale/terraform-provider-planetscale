@@ -60,6 +60,7 @@ type PostgresBranchResourceModel struct {
 	Replicas           types.Int64                          `tfsdk:"replicas"`
 	RestorePoint       types.String                         `tfsdk:"restore_point"`
 	State              types.String                         `tfsdk:"state"`
+	Storage            *tfTypes.CreatePostgresBranchStorage `tfsdk:"storage"`
 	URL                types.String                         `tfsdk:"url"`
 }
 
@@ -197,6 +198,38 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
+			},
+			"storage": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"maximum_storage_bytes": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The maximum storage size in bytes for autoscaling.`,
+					},
+					"minimum_storage_bytes": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The minimum storage size in bytes.`,
+					},
+					"storage_autoscaling": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Whether storage autoscaling is enabled.`,
+					},
+					"storage_iops": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The storage IOPS.`,
+					},
+					"storage_throughput_mibs": schema.Int64Attribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `The storage throughput in MiB/s.`,
+					},
+				},
+				Description: `Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.`,
 			},
 			"url": schema.StringAttribute{
 				Computed:    true,
@@ -338,13 +371,13 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request2, request2Diags := data.ToOperationsApplyPostgresBranchTerraformChangesRequest(ctx, opts)
+	request2, request2Diags := data.ToOperationsApplyPostgresBranchChangesRequest(ctx, opts)
 	resp.Diagnostics.Append(request2Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res2, err := r.client.BranchChanges.ApplyPostgresBranchTerraformChanges(ctx, *request2)
+	res2, err := r.client.BranchChanges.ApplyPostgresBranchChanges(ctx, *request2)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res2 != nil && res2.RawResponse != nil {
@@ -367,7 +400,7 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsApplyPostgresBranchTerraformChangesResponseBody(ctx, res2.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsApplyPostgresBranchChangesResponseBody(ctx, res2.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -410,6 +443,43 @@ func (r *PostgresBranchResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetBranchChangeRequestResponseBody(ctx, res3.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request4, request4Diags := data.ToOperationsGetPostgresBranchRequest(ctx, opts)
+	resp.Diagnostics.Append(request4Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res4, err := r.client.DatabaseBranches.GetPostgresBranch(ctx, *request4)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res4 != nil && res4.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
+		}
+		return
+	}
+	if res4 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res4))
+		return
+	}
+	if res4.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res4.StatusCode), debugResponse(res4.RawResponse))
+		return
+	}
+	if !(res4.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res4.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetPostgresBranchResponseBody(ctx, res4.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -559,13 +629,13 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsApplyPostgresBranchTerraformChangesRequest(ctx, opts)
+	request1, request1Diags := data.ToOperationsApplyPostgresBranchChangesRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.BranchChanges.ApplyPostgresBranchTerraformChanges(ctx, *request1)
+	res1, err := r.client.BranchChanges.ApplyPostgresBranchChanges(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
@@ -588,7 +658,7 @@ func (r *PostgresBranchResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromOperationsApplyPostgresBranchTerraformChangesResponseBody(ctx, res1.Object)...)
+	resp.Diagnostics.Append(data.RefreshFromOperationsApplyPostgresBranchChangesResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

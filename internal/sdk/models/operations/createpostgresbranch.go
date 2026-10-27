@@ -40,6 +40,28 @@ func (e *CreatePostgresBranchKind) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// CreatePostgresBranchStorage - Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
+type CreatePostgresBranchStorage struct {
+	// The minimum storage size in bytes.
+	MinimumStorageBytes *int64 `json:"minimum_storage_bytes,omitzero"`
+	// The maximum storage size in bytes for autoscaling.
+	MaximumStorageBytes *int64 `json:"maximum_storage_bytes,omitzero"`
+}
+
+func (c *CreatePostgresBranchStorage) GetMinimumStorageBytes() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.MinimumStorageBytes
+}
+
+func (c *CreatePostgresBranchStorage) GetMaximumStorageBytes() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.MaximumStorageBytes
+}
+
 type CreatePostgresBranchRequestBody struct {
 	// The name of the branch to create
 	Name string `json:"name"`
@@ -63,6 +85,8 @@ type CreatePostgresBranchRequestBody struct {
 	// The kind of database. Always postgresql for planetscale_postgres_branch.
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	kind *CreatePostgresBranchKind `const:"postgresql" json:"kind"`
+	// Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
+	Storage *CreatePostgresBranchStorage `json:"storage,omitzero"`
 }
 
 func (c CreatePostgresBranchRequestBody) MarshalJSON() ([]byte, error) {
@@ -138,6 +162,13 @@ func (c *CreatePostgresBranchRequestBody) GetCreateDatabaseIfMissing() *bool {
 
 func (c *CreatePostgresBranchRequestBody) GetKind() *CreatePostgresBranchKind {
 	return CreatePostgresBranchKindPostgresql.ToPointer()
+}
+
+func (c *CreatePostgresBranchRequestBody) GetStorage() *CreatePostgresBranchStorage {
+	if c == nil {
+		return nil
+	}
+	return c.Storage
 }
 
 type CreatePostgresBranchRequest struct {
