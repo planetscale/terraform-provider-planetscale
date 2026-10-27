@@ -43,6 +43,42 @@ func TestPostgresBranchRegionSlugHookHoistsSlug(t *testing.T) {
 	require.Equal(t, int64(len(bodyBytes)), res.ContentLength)
 }
 
+func TestPostgresBranchRegionSlugHookNestsStorage(t *testing.T) {
+	client := postgresBranchGetClient(http.StatusOK, `{
+		"id":"br",
+		"minimum_storage_bytes":10000000000,
+		"maximum_storage_bytes":4000000000000,
+		"storage_autoscaling":true,
+		"storage_iops":3000,
+		"storage_throughput_mibs":125
+	}`)
+
+	req, err := http.NewRequest(http.MethodGet, postgresBranchGetURL, nil)
+	require.NoError(t, err)
+
+	res, err := client.Do(req)
+	require.NoError(t, err)
+	bodyBytes, err := io.ReadAll(res.Body)
+	require.NoError(t, err)
+
+	require.JSONEq(t, `{
+		"id":"br",
+		"minimum_storage_bytes":10000000000,
+		"maximum_storage_bytes":4000000000000,
+		"storage_autoscaling":true,
+		"storage_iops":3000,
+		"storage_throughput_mibs":125,
+		"storage":{
+			"minimum_storage_bytes":10000000000,
+			"maximum_storage_bytes":4000000000000,
+			"storage_autoscaling":true,
+			"storage_iops":3000,
+			"storage_throughput_mibs":125
+		}
+	}`, string(bodyBytes))
+	require.Equal(t, int64(len(bodyBytes)), res.ContentLength)
+}
+
 func TestPostgresBranchRegionSlugHookPassesThroughUnexpectedBody(t *testing.T) {
 	responseBody := `{"id":"br"}`
 	client := postgresBranchGetClient(http.StatusOK, responseBody)
