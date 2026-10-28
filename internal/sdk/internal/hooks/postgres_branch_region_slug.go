@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"net/http"
 	"regexp"
@@ -53,6 +54,9 @@ func (c *postgresBranchRegionSlugClient) Do(req *http.Request) (*http.Response, 
 	if rewritten, ok := hoistRegionSlug(body); ok {
 		body = rewritten
 	}
+	if rewritten, ok := nestPostgresBranchStorage(body); ok {
+		body = rewritten
+	}
 
 	res.Body = io.NopCloser(bytes.NewReader(body))
 	res.ContentLength = int64(len(body))
@@ -62,4 +66,38 @@ func (c *postgresBranchRegionSlugClient) Do(req *http.Request) (*http.Response, 
 	res.Header.Set("Content-Length", strconv.Itoa(len(body)))
 
 	return res, nil
+}
+
+func nestPostgresBranchStorage(body []byte) ([]byte, bool) {
+	var payload map[string]any
+	if err := json.Unmarshal(body, &payload); err != nil {
+		return nil, false
+	}
+
+	names := []string{
+		"minimum_storage_bytes",
+		"maximum_storage_bytes",
+		"storage_autoscaling",
+		"storage_iops",
+		"storage_throughput_mibs",
+	}
+	storage := map[string]any{}
+	for _, name := range names {
+		value, ok := payload[name]
+		if !ok {
+			return nil, false
+		}
+		storage[name] = value
+	}
+	for _, name := range names {
+		delete(payload, name)
+	}
+
+	payload["storage"] = storage
+	rewritten, err := json.Marshal(payload)
+	if err != nil {
+		return nil, false
+	}
+
+	return rewritten, true
 }

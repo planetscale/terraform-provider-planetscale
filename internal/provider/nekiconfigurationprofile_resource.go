@@ -42,22 +42,22 @@ type NekiConfigurationProfileResource struct {
 
 // NekiConfigurationProfileResourceModel describes the resource data model.
 type NekiConfigurationProfileResourceModel struct {
-	Branch               types.String                                          `tfsdk:"branch"`
-	ClusterSize          types.String                                          `tfsdk:"cluster_size"`
-	Database             types.String                                          `tfsdk:"database"`
-	Extensions           []types.String                                        `tfsdk:"extensions"`
-	ID                   types.String                                          `tfsdk:"id"`
-	IsDefault            types.Bool                                            `tfsdk:"is_default"`
-	Name                 types.String                                          `tfsdk:"name"`
-	Organization         types.String                                          `tfsdk:"organization"`
-	Parameters           map[string]map[string]types.String                    `tfsdk:"parameters"`
-	PostgresMajorVersion types.Int64                                           `tfsdk:"postgres_major_version"`
-	PostgresMinorVersion types.Int64                                           `tfsdk:"postgres_minor_version"`
-	ReadOnlyReplicas     types.Int64                                           `tfsdk:"read_only_replicas"`
-	Replicas             types.Int64                                           `tfsdk:"replicas"`
-	ShardCount           types.Int64                                           `tfsdk:"shard_count"`
-	State                types.String                                          `tfsdk:"state"`
-	Storage              *tfTypes.CreateNekiConfigurationProfileStorageRequest `tfsdk:"storage"`
+	Branch               types.String                                              `tfsdk:"branch"`
+	ClusterSize          types.String                                              `tfsdk:"cluster_size"`
+	Database             types.String                                              `tfsdk:"database"`
+	Extensions           []types.String                                            `tfsdk:"extensions"`
+	ID                   types.String                                              `tfsdk:"id"`
+	IsDefault            types.Bool                                                `tfsdk:"is_default"`
+	Name                 types.String                                              `tfsdk:"name"`
+	Organization         types.String                                              `tfsdk:"organization"`
+	Parameters           map[string]map[string]types.String                        `tfsdk:"parameters"`
+	PostgresMajorVersion types.Int64                                               `tfsdk:"postgres_major_version"`
+	PostgresMinorVersion types.Int64                                               `tfsdk:"postgres_minor_version"`
+	ReadOnlyReplicas     types.Int64                                               `tfsdk:"read_only_replicas"`
+	Replicas             types.Int64                                               `tfsdk:"replicas"`
+	ShardCount           types.Int64                                               `tfsdk:"shard_count"`
+	State                types.String                                              `tfsdk:"state"`
+	Storage              *tfTypes.CreateNekiConfigurationProfileStorageRequestBody `tfsdk:"storage"`
 }
 
 func (r *NekiConfigurationProfileResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: cf76e907ffb10a08645712a682dbc36c
+  docChecksum: 7d560bfea35511d859dd0f9541e8ca92
   docVersion: v1
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -391,7 +391,8 @@ trackedFiles:
     pristine_git_object: 54763e7a7555fae6d8bf51c4590220ff610202aa
   internal/provider/types/branch.go: {}
   internal/provider/types/create_bouncer_actor.go: {}
-  internal/provider/types/create_neki_configuration_profile_storage_request.go: {}
+  internal/provider/types/create_neki_configuration_profile_storage_request_body.go: {}
+  internal/provider/types/create_postgres_branch_storage.go: {}
   internal/provider/types/get_keyspace_replication_durability_constraints.go: {}
   internal/provider/types/get_keyspace_throttler.go: {}
   internal/provider/types/get_keyspace_vreplication_flags.go: {}
@@ -415,6 +416,7 @@ trackedFiles:
   internal/provider/types/get_postgres_branch_region_data.go:
     id: 9ca03d131b98
     pristine_git_object: a0a26641b386b0da4fef7870e5683938c018a259
+  internal/provider/types/get_postgres_branch_storage.go: {}
   internal/provider/types/get_postgres_database_region_data.go:
     id: 451d432258bc
     pristine_git_object: c318e8b2809bd06310dbdc58abe9b6fe7c078cf4
@@ -621,7 +623,7 @@ trackedFiles:
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
   internal/sdk/models/errors/responsevalidationerror.go: {}
   internal/sdk/models/operations/applypostgresbouncerterraformchanges.go: {}
-  internal/sdk/models/operations/applypostgresbranchterraformchanges.go: {}
+  internal/sdk/models/operations/applypostgresbranchchanges.go: {}
   internal/sdk/models/operations/createbouncer.go: {}
   internal/sdk/models/operations/creatededicatedreadreplica.go: {}
   internal/sdk/models/operations/createkeyspace.go: {}
@@ -3276,6 +3278,16 @@ examples:
       responses:
         "200":
           application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>", "key2": "<value>"}}}
+  apply_postgres_branch_changes:
+    speakeasy-default-apply-postgres-branch-changes:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "<value>"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

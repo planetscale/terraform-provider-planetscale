@@ -25,7 +25,7 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsCreateNekiC
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.State = types.StringValue(string(resp.State))
 		if r.Storage == nil {
-			r.Storage = &tfTypes.CreateNekiConfigurationProfileStorageRequest{}
+			r.Storage = &tfTypes.CreateNekiConfigurationProfileStorageRequestBody{}
 		}
 		r.Storage.MaximumStorageBytes = types.Int64PointerValue(resp.Storage.MaximumStorageBytes)
 		r.Storage.MinimumStorageBytes = types.Int64PointerValue(resp.Storage.MinimumStorageBytes)
@@ -83,7 +83,7 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsGetNekiConf
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.State = types.StringValue(string(resp.State))
 		if r.Storage == nil {
-			r.Storage = &tfTypes.CreateNekiConfigurationProfileStorageRequest{}
+			r.Storage = &tfTypes.CreateNekiConfigurationProfileStorageRequestBody{}
 		}
 		r.Storage.MaximumStorageBytes = types.Int64PointerValue(resp.Storage.MaximumStorageBytes)
 		r.Storage.MinimumStorageBytes = types.Int64PointerValue(resp.Storage.MinimumStorageBytes)
@@ -110,7 +110,7 @@ func (r *NekiConfigurationProfileResourceModel) RefreshFromOperationsUpdateNekiC
 		r.ShardCount = types.Int64Value(resp.ShardCount)
 		r.State = types.StringValue(string(resp.State))
 		if r.Storage == nil {
-			r.Storage = &tfTypes.CreateNekiConfigurationProfileStorageRequest{}
+			r.Storage = &tfTypes.CreateNekiConfigurationProfileStorageRequestBody{}
 		}
 		r.Storage.MaximumStorageBytes = types.Int64PointerValue(resp.Storage.MaximumStorageBytes)
 		r.Storage.MinimumStorageBytes = types.Int64PointerValue(resp.Storage.MinimumStorageBytes)
@@ -187,7 +187,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsCreateNekiConfigurat
 	} else {
 		postgresMinorVersion = nil
 	}
-	var storage *operations.CreateNekiConfigurationProfileStorageRequest
+	var storage *operations.CreateNekiConfigurationProfileStorageRequestBody
 	if r.Storage != nil {
 		minimumStorageBytes := new(int64)
 		if !r.Storage.MinimumStorageBytes.IsUnknown() && !r.Storage.MinimumStorageBytes.IsNull() {
@@ -219,7 +219,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsCreateNekiConfigurat
 		} else {
 			storageThroughputMibs = nil
 		}
-		storage = &operations.CreateNekiConfigurationProfileStorageRequest{
+		storage = &operations.CreateNekiConfigurationProfileStorageRequestBody{
 			MinimumStorageBytes:   minimumStorageBytes,
 			MaximumStorageBytes:   maximumStorageBytes,
 			StorageAutoscaling:    storageAutoscaling,
@@ -436,7 +436,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 	} else {
 		postgresMinorVersion = nil
 	}
-	var storage *operations.UpdateNekiConfigurationProfileStorageRequest
+	var storage *operations.UpdateNekiConfigurationProfileStorageRequestBody
 	if r.Storage != nil {
 		minimumStorageBytes := new(int64)
 		if !r.Storage.MinimumStorageBytes.IsUnknown() && !r.Storage.MinimumStorageBytes.IsNull() {
@@ -468,7 +468,7 @@ func (r *NekiConfigurationProfileResourceModel) ToOperationsUpdateNekiConfigurat
 		} else {
 			storageThroughputMibs = nil
 		}
-		storage = &operations.UpdateNekiConfigurationProfileStorageRequest{
+		storage = &operations.UpdateNekiConfigurationProfileStorageRequestBody{
 			MinimumStorageBytes:   minimumStorageBytes,
 			MaximumStorageBytes:   maximumStorageBytes,
 			StorageAutoscaling:    storageAutoscaling,

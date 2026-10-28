@@ -38,6 +38,20 @@ actions:
       x-speakeasy-plan-validators: ClusterSizeValidator
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties
+    description: Restore PostgreSQL storage configuration after the shared branch overlay removes it.
+    update:
+      storage:
+        type: object
+        description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
+        properties:
+          minimum_storage_bytes:
+            type: integer
+            description: The minimum storage size in bytes.
+          maximum_storage_bytes:
+            type: integer
+            description: The maximum storage size in bytes for autoscaling.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties
     description: Always send create_database_if_missing=true and kind=postgresql so the branch resource transparently creates the database when it does not already exist.
     update:
       create_database_if_missing:
@@ -71,6 +85,7 @@ actions:
           options:
             polling:
               name: WaitForReady
+        - PostgresBranch#create#5
       x-speakeasy-entity-description: Returns information about a PlanetScale PostgreSQL database branch.
       x-speakeasy-polling:
         - name: WaitForReady
@@ -112,6 +127,37 @@ actions:
           Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
           patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted
           parameters are reset to their defaults.
+      storage:
+        type: object
+        nullable: true
+        description: Storage configuration for non-Metal branches. These values are null for Metal cluster sizes.
+        properties:
+          minimum_storage_bytes:
+            type: integer
+            nullable: true
+            description: The minimum storage size in bytes.
+          maximum_storage_bytes:
+            type: integer
+            nullable: true
+            description: The maximum storage size in bytes for autoscaling.
+          storage_autoscaling:
+            type: boolean
+            nullable: true
+            description: Whether storage autoscaling is enabled.
+          storage_iops:
+            type: integer
+            nullable: true
+            description: The storage IOPS.
+          storage_throughput_mibs:
+            type: integer
+            nullable: true
+            description: The storage throughput in MiB/s.
+        required:
+          - minimum_storage_bytes
+          - maximum_storage_bytes
+          - storage_autoscaling
+          - storage_iops
+          - storage_throughput_mibs
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.responses['201'].content['application/json'].schema.properties['safe_migrations','vtgate_name','vtgate_count','vtgate_max_count','vtgate_autoscaling','vtgate_target_cpu_utilization']
     description: Remove Vitess-only branch settings
@@ -216,80 +262,70 @@ actions:
       summary: Update a PostgreSQL branch
       x-speakeasy-entity-operation: PostgresBranch#update
 
-  - target: $.paths
-    description: Add the undocumented terraform-changes endpoint, which applies cluster_size and parameters with replace semantics and returns a change request to poll.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch
+    description: Apply declarative PostgreSQL branch changes through the public branch changes endpoint.
     update:
-      /organizations/{organization}/databases/{database}/branches/{branch}/terraform-changes:
-        put:
-          operationId: apply_postgres_branch_terraform_changes
-          summary: Apply a PostgreSQL branch's cluster size and parameters
-          tags:
-            - Branch changes
-          parameters:
-            - name: organization
-              in: path
-              required: true
-              description: "Organization name slug from `list_organizations`. Example: `acme`."
-              schema:
-                type: string
-            - name: database
-              in: path
-              required: true
-              description: "Database name slug from `list_databases`. Example: `app-db`."
-              schema:
-                type: string
-            - name: branch
-              in: path
-              required: true
-              description: "Branch name from `list_branches`. Example: `main`."
-              x-speakeasy-match: id
-              schema:
-                type: string
-          requestBody:
-            required: true
-            content:
-              application/json:
-                schema:
-                  type: object
-                  additionalProperties: false
-                  properties:
-                    cluster_size:
-                      type: string
-                      description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
-                    parameters:
-                      type: object
-                      nullable: true
-                      additionalProperties:
-                        type: object
-                        additionalProperties:
-                          type: string
-                      x-speakeasy-plan-modifiers: WarnOnRemovedParameters
-                      description: >-
-                        Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
-                        patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted
-                        parameters are reset to their defaults.
-          responses:
-            "200":
-              description: Returns the resulting change request
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      id:
-                        type: string
-                        x-speakeasy-name-override: change_request_id
-                        x-speakeasy-terraform-ignore: schema
-                      state:
-                        type: string
-                        x-speakeasy-name-override: change_request_state
-                        x-speakeasy-terraform-ignore: schema
-                    required:
-                      - id
-                      - state
-            "204":
-              description: No changes to apply
-          x-speakeasy-entity-operation:
-            - PostgresBranch#create#3
-            - PostgresBranch#update#2
+      operationId: apply_postgres_branch_changes
+      summary: Apply a PostgreSQL branch's cluster size, parameters, and storage configuration
+      x-speakeasy-entity-operation:
+        - PostgresBranch#create#3
+        - PostgresBranch#update#2
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.parameters[?@.name == 'branch']
+    update:
+      x-speakeasy-match: id
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.cluster_size
+    update:
+      x-speakeasy-plan-validators: ClusterSizeValidator
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties['replicas','extensions']
+    description: Keep settings that the PostgreSQL branch resource does not manage out of its schema.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.storage
+    update:
+      description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.storage.properties.confirm_shrink
+    description: confirm_shrink is an imperative operation rather than persistent Terraform configuration.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.parameters
+    description: Use the typed declarative parameter map exposed by the PostgreSQL branch resource.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties
+    update:
+      parameters:
+        type: object
+        nullable: true
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: string
+        x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+        description: >-
+          Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
+          patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted
+          parameters are reset to their defaults.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses["200"].content["application/json"].schema.properties.*
+    description: Keep only the fields needed to poll the resulting change request.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses["200"].content["application/json"].schema.properties
+    update:
+      id:
+        type: string
+        x-speakeasy-name-override: change_request_id
+        x-speakeasy-terraform-ignore: schema
+      state:
+        type: string
+        x-speakeasy-name-override: change_request_state
+        x-speakeasy-terraform-ignore: schema
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses["200"].content["application/json"].schema.required
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.responses["200"].content["application/json"].schema
+    update:
+      required:
+        - id
+        - state

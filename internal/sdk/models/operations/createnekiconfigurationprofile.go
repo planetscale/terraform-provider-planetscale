@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type CreateNekiConfigurationProfileStorageRequest struct {
+type CreateNekiConfigurationProfileStorageRequestBody struct {
 	// The minimum storage size in bytes.
 	MinimumStorageBytes *int64 `json:"minimum_storage_bytes,omitzero"`
 	// The maximum storage size in bytes for autoscaling.
@@ -20,35 +20,35 @@ type CreateNekiConfigurationProfileStorageRequest struct {
 	StorageThroughputMibs *int64 `json:"storage_throughput_mibs,omitzero"`
 }
 
-func (c *CreateNekiConfigurationProfileStorageRequest) GetMinimumStorageBytes() *int64 {
+func (c *CreateNekiConfigurationProfileStorageRequestBody) GetMinimumStorageBytes() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.MinimumStorageBytes
 }
 
-func (c *CreateNekiConfigurationProfileStorageRequest) GetMaximumStorageBytes() *int64 {
+func (c *CreateNekiConfigurationProfileStorageRequestBody) GetMaximumStorageBytes() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.MaximumStorageBytes
 }
 
-func (c *CreateNekiConfigurationProfileStorageRequest) GetStorageAutoscaling() *bool {
+func (c *CreateNekiConfigurationProfileStorageRequestBody) GetStorageAutoscaling() *bool {
 	if c == nil {
 		return nil
 	}
 	return c.StorageAutoscaling
 }
 
-func (c *CreateNekiConfigurationProfileStorageRequest) GetStorageIops() *int64 {
+func (c *CreateNekiConfigurationProfileStorageRequestBody) GetStorageIops() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.StorageIops
 }
 
-func (c *CreateNekiConfigurationProfileStorageRequest) GetStorageThroughputMibs() *int64 {
+func (c *CreateNekiConfigurationProfileStorageRequestBody) GetStorageThroughputMibs() *int64 {
 	if c == nil {
 		return nil
 	}
@@ -67,8 +67,8 @@ type CreateNekiConfigurationProfileRequestBody struct {
 	// The PostgreSQL major version for the configuration profile
 	PostgresMajorVersion *int64 `json:"postgres_major_version,omitzero"`
 	// The PostgreSQL minor version for the configuration profile. Requires postgres_major_version when specified.
-	PostgresMinorVersion *int64                                        `json:"postgres_minor_version,omitzero"`
-	Storage              *CreateNekiConfigurationProfileStorageRequest `json:"storage,omitzero"`
+	PostgresMinorVersion *int64                                            `json:"postgres_minor_version,omitzero"`
+	Storage              *CreateNekiConfigurationProfileStorageRequestBody `json:"storage,omitzero"`
 }
 
 func (c CreateNekiConfigurationProfileRequestBody) MarshalJSON() ([]byte, error) {
@@ -124,7 +124,7 @@ func (c *CreateNekiConfigurationProfileRequestBody) GetPostgresMinorVersion() *i
 	return c.PostgresMinorVersion
 }
 
-func (c *CreateNekiConfigurationProfileRequestBody) GetStorage() *CreateNekiConfigurationProfileStorageRequest {
+func (c *CreateNekiConfigurationProfileRequestBody) GetStorage() *CreateNekiConfigurationProfileStorageRequestBody {
 	if c == nil {
 		return nil
 	}

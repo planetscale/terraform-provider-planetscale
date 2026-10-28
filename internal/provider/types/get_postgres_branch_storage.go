@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type CreateNekiConfigurationProfileStorageRequest struct {
+type GetPostgresBranchStorage struct {
 	MaximumStorageBytes   types.Int64 `tfsdk:"maximum_storage_bytes"`
 	MinimumStorageBytes   types.Int64 `tfsdk:"minimum_storage_bytes"`
 	StorageAutoscaling    types.Bool  `tfsdk:"storage_autoscaling"`

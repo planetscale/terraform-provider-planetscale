@@ -44,6 +44,7 @@ type PostgresBranchDataSourceModel struct {
 	RegionData        *tfTypes.GetPostgresBranchRegionData `tfsdk:"region_data"`
 	Replicas          types.Int64                          `tfsdk:"replicas"`
 	State             types.String                         `tfsdk:"state"`
+	Storage           *tfTypes.GetPostgresBranchStorage    `tfsdk:"storage"`
 	URL               types.String                         `tfsdk:"url"`
 }
 
@@ -138,6 +139,32 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			"state": schema.StringAttribute{
 				Computed:    true,
 				Description: `The current state of the branch`,
+			},
+			"storage": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"maximum_storage_bytes": schema.Int64Attribute{
+						Computed:    true,
+						Description: `The maximum storage size in bytes for autoscaling.`,
+					},
+					"minimum_storage_bytes": schema.Int64Attribute{
+						Computed:    true,
+						Description: `The minimum storage size in bytes.`,
+					},
+					"storage_autoscaling": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Whether storage autoscaling is enabled.`,
+					},
+					"storage_iops": schema.Int64Attribute{
+						Computed:    true,
+						Description: `The storage IOPS.`,
+					},
+					"storage_throughput_mibs": schema.Int64Attribute{
+						Computed:    true,
+						Description: `The storage throughput in MiB/s.`,
+					},
+				},
+				Description: `Storage configuration for non-Metal branches. These values are null for Metal cluster sizes.`,
 			},
 			"url": schema.StringAttribute{
 				Computed:    true,

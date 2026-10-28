@@ -20,6 +20,13 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 	branchNameRenamed := randomWithPrefix("test-renamed")
 	resourceAddress := "planetscale_postgres_branch.test"
 	clusterSize := "PS_DEV_AWS_ARM"
+	minimumStorageBytesOriginal := int64(20 * 1024 * 1024 * 1024)
+	minimumStorageBytesUpdated := int64(30 * 1024 * 1024 * 1024)
+	maximumStorageBytes := int64(1024 * 1024 * 1024 * 1024)
+	storageIopsOriginal := int64(3000)
+	storageIopsUpdated := int64(3500)
+	storageThroughputMibsOriginal := int64(125)
+	storageThroughputMibsUpdated := int64(150)
 	parameters := config.MapVariable(map[string]config.Variable{
 		"pgconf": config.MapVariable(map[string]config.Variable{
 			"max_connections": config.StringVariable("50"),
@@ -33,12 +40,17 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"database_name":      config.StringVariable(databaseName),
-					"organization":       config.StringVariable(testAccOrg),
-					"branch_name":        config.StringVariable(branchNameOriginal),
-					"cluster_size":       config.StringVariable(clusterSize),
-					"deletion_protected": config.BoolVariable(true),
-					"parameters":         parameters,
+					"database_name":           config.StringVariable(databaseName),
+					"organization":            config.StringVariable(testAccOrg),
+					"branch_name":             config.StringVariable(branchNameOriginal),
+					"cluster_size":            config.StringVariable(clusterSize),
+					"deletion_protected":      config.BoolVariable(true),
+					"parameters":              parameters,
+					"minimum_storage_bytes":   config.IntegerVariable(minimumStorageBytesOriginal),
+					"maximum_storage_bytes":   config.IntegerVariable(maximumStorageBytes),
+					"storage_autoscaling":     config.BoolVariable(true),
+					"storage_iops":            config.IntegerVariable(storageIopsOriginal),
+					"storage_throughput_mibs": config.IntegerVariable(storageThroughputMibsOriginal),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -75,17 +87,47 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("deletion_protected"),
 						knownvalue.Bool(true),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("minimum_storage_bytes"),
+						knownvalue.Int64Exact(minimumStorageBytesOriginal),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("maximum_storage_bytes"),
+						knownvalue.Int64Exact(maximumStorageBytes),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("storage_autoscaling"),
+						knownvalue.Bool(true),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("storage_iops"),
+						knownvalue.Int64Exact(storageIopsOriginal),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("storage_throughput_mibs"),
+						knownvalue.Int64Exact(storageThroughputMibsOriginal),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":       config.StringVariable(testAccOrg),
-					"database_name":      config.StringVariable(databaseName),
-					"branch_name":        config.StringVariable(branchNameRenamed),
-					"cluster_size":       config.StringVariable(clusterSize),
-					"deletion_protected": config.BoolVariable(false),
-					"parameters":         parameters,
+					"organization":            config.StringVariable(testAccOrg),
+					"database_name":           config.StringVariable(databaseName),
+					"branch_name":             config.StringVariable(branchNameRenamed),
+					"cluster_size":            config.StringVariable(clusterSize),
+					"deletion_protected":      config.BoolVariable(false),
+					"parameters":              parameters,
+					"minimum_storage_bytes":   config.IntegerVariable(minimumStorageBytesUpdated),
+					"maximum_storage_bytes":   config.IntegerVariable(maximumStorageBytes),
+					"storage_autoscaling":     config.BoolVariable(true),
+					"storage_iops":            config.IntegerVariable(storageIopsUpdated),
+					"storage_throughput_mibs": config.IntegerVariable(storageThroughputMibsUpdated),
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -107,17 +149,47 @@ func TestAccPostgresBranchResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("deletion_protected"),
 						knownvalue.Bool(false),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("minimum_storage_bytes"),
+						knownvalue.Int64Exact(minimumStorageBytesUpdated),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("maximum_storage_bytes"),
+						knownvalue.Int64Exact(maximumStorageBytes),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("storage_autoscaling"),
+						knownvalue.Bool(true),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("storage_iops"),
+						knownvalue.Int64Exact(storageIopsUpdated),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("storage").AtMapKey("storage_throughput_mibs"),
+						knownvalue.Int64Exact(storageThroughputMibsUpdated),
+					),
 				},
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
-					"organization":       config.StringVariable(testAccOrg),
-					"database_name":      config.StringVariable(databaseName),
-					"branch_name":        config.StringVariable(branchNameRenamed),
-					"cluster_size":       config.StringVariable(clusterSize),
-					"deletion_protected": config.BoolVariable(false),
-					"parameters":         parameters,
+					"organization":            config.StringVariable(testAccOrg),
+					"database_name":           config.StringVariable(databaseName),
+					"branch_name":             config.StringVariable(branchNameRenamed),
+					"cluster_size":            config.StringVariable(clusterSize),
+					"deletion_protected":      config.BoolVariable(false),
+					"parameters":              parameters,
+					"minimum_storage_bytes":   config.IntegerVariable(minimumStorageBytesUpdated),
+					"maximum_storage_bytes":   config.IntegerVariable(maximumStorageBytes),
+					"storage_autoscaling":     config.BoolVariable(true),
+					"storage_iops":            config.IntegerVariable(storageIopsUpdated),
+					"storage_throughput_mibs": config.IntegerVariable(storageThroughputMibsUpdated),
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
