@@ -13,10 +13,10 @@ var _ validator.String = StringClusterSizeValidatorValidator{}
 const (
 	psNumericSizePattern  = `(?:5|[1-9][0-9]*0)`
 	psSizePattern         = `(?:` + psNumericSizePattern + `|DEV)`
-	qualifiedPSPattern    = `PS_` + psSizePattern + `_(?:AWS|GCP)_(?:ARM|X86|AMD)`
+	qualifiedPSPattern    = `PS_` + psSizePattern + `_(?:AWS|GCP|AZURE)_(?:ARM|X86|AMD)`
 	vitessPSPattern       = `PS_` + psSizePattern
 	instancePSPattern     = `PS_(?:(?:AWS|GCP)_)?[A-Z][0-9][A-Z0-9]*(?:_[A-Z0-9]+)+`
-	qualifiedMetalPattern = `M[0-9]+_[0-9]+_(?:AWS|GCP)_(?:ARM|X86|AMD|INTEL)_D_METAL_[0-9]+`
+	qualifiedMetalPattern = `M[0-9]+_[0-9]+_(?:AWS|GCP|AZURE)_(?:ARM|X86|AMD|INTEL)_D_METAL_[0-9]+`
 	vitessMetalPattern    = `M[0-9]*_[0-9]+(?:_(?:AWS|GCP)_(?:AMD|INTEL|X86))?_D_METAL_[0-9]+`
 )
 
@@ -42,7 +42,7 @@ func (v StringClusterSizeValidatorValidator) MarkdownDescription(ctx context.Con
 
 // Validate performs the validation.
 func (v StringClusterSizeValidatorValidator) ValidateString(ctx context.Context, req validator.StringRequest, resp *validator.StringResponse) {
-	validateClusterSize(req, resp, clusterSizePattern, "PS_10_AWS_ARM, PS_10_GCP_X86, or M1_10_AWS_AMD_D_METAL_10")
+	validateClusterSize(req, resp, clusterSizePattern, "PS_10_AWS_ARM, PS_10_GCP_X86, PS_10_AZURE_X86, or M1_10_AWS_AMD_D_METAL_10")
 }
 
 func validateClusterSize(req validator.StringRequest, resp *validator.StringResponse, pattern *regexp.Regexp, examples string) {
