@@ -1,0 +1,368 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_vitess_keyspace VTTablet and MySQL parameters
+  version: 0.0.1
+actions:
+  # The API lists parameters for the whole branch and changes VTTablet and
+  # MySQL parameters through draft config change requests that are submitted
+  # together and then roll out. This keyspace-scoped path exists only in this
+  # overlay; VitessParametersHook answers it:
+  # - GET reads the branch's parameters and reports the keyspace's overridden
+  #   VTTablet and MySQL parameters, always as a map so that a keyspace
+  #   without overrides replaces stale state.
+  # - PATCH (create) diffs the configured values against the current
+  #   overrides, creates a draft per changed component, submits them together,
+  #   and returns the submitted config change IDs. It only sets the configured
+  #   parameters.
+  # - PUT (update) does the same and also resets overrides missing from the
+  #   map, which WarnOnRemovedParameters calls out in the plan first.
+  # Neither PATCH nor PUT changes anything when `parameters` is unset.
+  - target: $.paths
+    update:
+      "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vitess-parameters":
+        get:
+          tags:
+            - Keyspace Vitess parameters
+          operationId: get_vitess_keyspace_parameters
+          summary: Get keyspace VTTablet and MySQL parameters
+          x-speakeasy-entity-operation: VitessKeyspace#read#2
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              description: The name of the organization the branch belongs to
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              description: The name of the database the branch belongs to
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              description: The name of the branch
+              schema:
+                type: string
+            - name: keyspace
+              in: path
+              required: true
+              description: The name of the keyspace
+              x-speakeasy-match: name
+              schema:
+                type: string
+          responses:
+            "200":
+              description: Returns the overridden keyspace parameters
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        nullable: true
+                        additionalProperties:
+                          type: object
+                          additionalProperties:
+                            type: string
+                        description: >-
+                          VTTablet and MySQL parameter overrides, nested under the
+                          `vttablet` and `mysqld` namespaces. Values are strings in the
+                          API's format: byte sizes as plain integers and durations such as
+                          `30s`.
+                    required:
+                      - parameters
+            "401":
+              description: Unauthorized
+            "403":
+              description: Forbidden
+            "404":
+              description: Not Found
+            "500":
+              description: Internal Server Error
+        patch:
+          tags:
+            - Keyspace Vitess parameters
+          operationId: set_vitess_keyspace_parameters
+          summary: Set keyspace VTTablet and MySQL parameters
+          x-speakeasy-entity-operation: VitessKeyspace#create#3
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              description: The name of the organization the branch belongs to
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              description: The name of the database the branch belongs to
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              description: The name of the branch
+              schema:
+                type: string
+            - name: keyspace
+              in: path
+              required: true
+              description: The name of the keyspace
+              x-speakeasy-match: name
+              schema:
+                type: string
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    parameters:
+                      type: object
+                      nullable: true
+                      additionalProperties:
+                        type: object
+                        additionalProperties:
+                          type: string
+                      x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                      x-speakeasy-plan-validators: VitessKeyspaceParametersValidator
+                      description: >-
+                        VTTablet and MySQL parameter overrides, nested under the `vttablet`
+                        and `mysqld` namespaces, e.g.
+                        `{ mysqld = { wait_timeout = "600" } }`. Values are strings
+                        in the API's format: byte sizes as plain integers and durations such as
+                        `30s`. When unset, Terraform leaves the keyspace's parameters unchanged
+                        and only reports its current overrides. When set, overridden parameters
+                        missing from this map are reset to their defaults, and the plan warns
+                        before resetting them. Changes roll out to the keyspace's tablets as
+                        config change requests; apply waits until they complete or are queued
+                        for the branch's maintenance window. Run `pscale keyspace parameters
+                        list <database> <branch> <keyspace>` to list the parameters you can set.
+                        To tune the default keyspace created with the branch, import it.
+          responses:
+            "200":
+              description: Returns the configured parameters and the submitted config changes
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        nullable: true
+                        additionalProperties:
+                          type: object
+                          additionalProperties:
+                            type: string
+                        description: >-
+                          VTTablet and MySQL parameter overrides, nested under the `vttablet`
+                          and `mysqld` namespaces, e.g.
+                          `{ mysqld = { wait_timeout = "600" } }`. Values are strings
+                          in the API's format: byte sizes as plain integers and durations such as
+                          `30s`. When unset, Terraform leaves the keyspace's parameters unchanged
+                          and only reports its current overrides. When set, overridden parameters
+                          missing from this map are reset to their defaults, and the plan warns
+                          before resetting them. Changes roll out to the keyspace's tablets as
+                          config change requests; apply waits until they complete or are queued
+                          for the branch's maintenance window. Run `pscale keyspace parameters
+                          list <database> <branch> <keyspace>` to list the parameters you can set.
+                          To tune the default keyspace created with the branch, import it.
+                      config_change_id:
+                        type: string
+                        description: The submitted config change requests, used to wait for their rollout.
+                        x-speakeasy-terraform-ignore: schema
+                    required:
+                      - parameters
+                      - config_change_id
+            "401":
+              description: Unauthorized
+            "403":
+              description: Forbidden
+            "404":
+              description: Not Found
+            "422":
+              description: Unprocessable Entity
+            "429":
+              description: Too Many Requests. Reduce the frequency of requests and try again soon.
+            "500":
+              description: Internal Server Error
+        put:
+          tags:
+            - Keyspace Vitess parameters
+          operationId: replace_vitess_keyspace_parameters
+          summary: Replace keyspace VTTablet and MySQL parameters
+          x-speakeasy-entity-operation: VitessKeyspace#update#3
+          parameters:
+            - name: organization
+              in: path
+              required: true
+              description: The name of the organization the branch belongs to
+              schema:
+                type: string
+            - name: database
+              in: path
+              required: true
+              description: The name of the database the branch belongs to
+              schema:
+                type: string
+            - name: branch
+              in: path
+              required: true
+              description: The name of the branch
+              schema:
+                type: string
+            - name: keyspace
+              in: path
+              required: true
+              description: The name of the keyspace
+              x-speakeasy-match: name
+              schema:
+                type: string
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    parameters:
+                      type: object
+                      nullable: true
+                      additionalProperties:
+                        type: object
+                        additionalProperties:
+                          type: string
+                      x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                      x-speakeasy-plan-validators: VitessKeyspaceParametersValidator
+                      description: >-
+                        VTTablet and MySQL parameter overrides, nested under the `vttablet`
+                        and `mysqld` namespaces, e.g.
+                        `{ mysqld = { wait_timeout = "600" } }`. Values are strings
+                        in the API's format: byte sizes as plain integers and durations such as
+                        `30s`. When unset, Terraform leaves the keyspace's parameters unchanged
+                        and only reports its current overrides. When set, overridden parameters
+                        missing from this map are reset to their defaults, and the plan warns
+                        before resetting them. Changes roll out to the keyspace's tablets as
+                        config change requests; apply waits until they complete or are queued
+                        for the branch's maintenance window. Run `pscale keyspace parameters
+                        list <database> <branch> <keyspace>` to list the parameters you can set.
+                        To tune the default keyspace created with the branch, import it.
+          responses:
+            "200":
+              description: Returns the configured parameters and the submitted config changes
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      parameters:
+                        type: object
+                        nullable: true
+                        additionalProperties:
+                          type: object
+                          additionalProperties:
+                            type: string
+                        description: >-
+                          VTTablet and MySQL parameter overrides, nested under the `vttablet`
+                          and `mysqld` namespaces, e.g.
+                          `{ mysqld = { wait_timeout = "600" } }`. Values are strings
+                          in the API's format: byte sizes as plain integers and durations such as
+                          `30s`. When unset, Terraform leaves the keyspace's parameters unchanged
+                          and only reports its current overrides. When set, overridden parameters
+                          missing from this map are reset to their defaults, and the plan warns
+                          before resetting them. Changes roll out to the keyspace's tablets as
+                          config change requests; apply waits until they complete or are queued
+                          for the branch's maintenance window. Run `pscale keyspace parameters
+                          list <database> <branch> <keyspace>` to list the parameters you can set.
+                          To tune the default keyspace created with the branch, import it.
+                      config_change_id:
+                        type: string
+                        description: The submitted config change requests, used to wait for their rollout.
+                        x-speakeasy-terraform-ignore: schema
+                    required:
+                      - parameters
+                      - config_change_id
+            "401":
+              description: Unauthorized
+            "403":
+              description: Forbidden
+            "404":
+              description: Not Found
+            "422":
+              description: Unprocessable Entity
+            "429":
+              description: Too Many Requests. Reduce the frequency of requests and try again soon.
+            "500":
+              description: Internal Server Error
+
+  # The `id` path segment carries every config change the create or update
+  # submitted, comma-separated. VitessParametersHook reads each one, reports
+  # the group as completed once all are completed or queued (their values are
+  # already saved), and turns failed or canceled changes into errors that
+  # carry the API's error message, so only a success criterion is needed.
+  # Unchanged parameters skip the API call, so polling starts without a delay.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/config-changes/{id}"].get.parameters[?@.name == 'keyspace']
+    update:
+      x-speakeasy-match: name
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/config-changes/{id}"].get.parameters[?@.name == 'id']
+    update:
+      x-speakeasy-name-override: config_change_id
+      x-speakeasy-terraform-ignore: schema
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/config-changes/{id}"].get.responses["200"].content["application/json"].schema
+    description: Keep only the fields needed to wait for the config changes.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/config-changes/{id}"].get
+    description: Wait for submitted VTTablet and MySQL config changes during create and update.
+    update:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: config_change_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: config_change_state
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - id
+                  - state
+      x-speakeasy-entity-operation:
+        - entityOperation: VitessKeyspace#create#4
+          options:
+            polling:
+              name: WaitForConfigChange
+        - entityOperation: VitessKeyspace#update#4
+          options:
+            polling:
+              name: WaitForConfigChange
+      # Rollouts take minutes, so retry dropped connections and gateway errors
+      # instead of failing the apply on one bad poll.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 1000
+          maxInterval: 30000
+          maxElapsedTime: 300000
+          exponent: 2
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
+      x-speakeasy-polling:
+        - name: WaitForConfigChange
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 360 # 60 minutes at a 10 second interval; rollouts go shard by shard
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/config_change_state == "completed"

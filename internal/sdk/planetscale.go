@@ -63,7 +63,10 @@ type PlanetScale struct {
 	Bouncers *Bouncers
 	//           Resources for managing cluster changes.
 	//
-	BranchChanges                              *BranchChanges
+	BranchChanges *BranchChanges
+	//           Resources for managing branch-level configuration change requests.
+	//
+	BranchConfigChanges                        *BranchConfigChanges
 	APINekiShardConfigurationProfiles          *APINekiShardConfigurationProfiles
 	APINekiShardConfigurationProfileExtensions *APINekiShardConfigurationProfileExtensions
 	APINekiShardConfigurationProfileParameters *APINekiShardConfigurationProfileParameters
@@ -74,6 +77,9 @@ type PlanetScale struct {
 	//           Resources for managing keyspaces.
 	//
 	DatabaseBranchKeyspaces *DatabaseBranchKeyspaces
+	//           Resources for managing keyspace-level configuration change requests.
+	//
+	KeyspaceConfigChanges *KeyspaceConfigChanges
 	//           Resources for managing keyspace resize requests.
 	//
 	KeyspaceResizes *KeyspaceResizes
@@ -88,6 +94,10 @@ type PlanetScale struct {
 	APINekiRouterParameters *APINekiRouterParameters
 	DatabaseBranches        *DatabaseBranches
 	APINekiShards           *APINekiShards
+	//           Returns all editable Vitess parameter definitions with their current effective values for a branch.
+	//
+	BranchVitessParameters   *BranchVitessParameters
+	KeyspaceVitessParameters *KeyspaceVitessParameters
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
@@ -201,12 +211,14 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.APINekiAdminParameters = newAPINekiAdminParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Bouncers = newBouncers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchChanges = newBranchChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.BranchConfigChanges = newBranchConfigChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfiles = newAPINekiShardConfigurationProfiles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfileExtensions = newAPINekiShardConfigurationProfileExtensions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfileParameters = newAPINekiShardConfigurationProfileParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShardConfigurationProfileShards = newAPINekiShardConfigurationProfileShards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DedicatedReadReplicas = newDedicatedReadReplicas(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchKeyspaces = newDatabaseBranchKeyspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.KeyspaceConfigChanges = newKeyspaceConfigChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.KeyspaceResizes = newKeyspaceResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -215,6 +227,8 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.APINekiRouterParameters = newAPINekiRouterParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShards = newAPINekiShards(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.BranchVitessParameters = newBranchVitessParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.KeyspaceVitessParameters = newKeyspaceVitessParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)
 

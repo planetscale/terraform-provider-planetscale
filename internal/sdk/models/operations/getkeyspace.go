@@ -254,7 +254,7 @@ type GetKeyspaceResponseBody struct {
 	Ready bool `json:"ready"`
 	// Is the keyspace running on metal instances
 	Metal bool `json:"metal"`
-	// True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.
+	// True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size, replicas, or parameters; do not try to create it with this resource.
 	IsDefault bool `json:"default"`
 	// Is this keyspace used in an import
 	Imported bool `json:"imported"`

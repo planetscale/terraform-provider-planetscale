@@ -47,6 +47,29 @@ func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchRespon
 	return diags
 }
 
+func (r *VitessBranchDataSourceModel) RefreshFromOperationsGetVitessBranchVtgateParametersResponseBody(ctx context.Context, resp *operations.GetVitessBranchVtgateParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
 func (r *VitessBranchDataSourceModel) ToOperationsGetVitessBranchRequest(ctx context.Context) (*operations.GetVitessBranchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -60,6 +83,27 @@ func (r *VitessBranchDataSourceModel) ToOperationsGetVitessBranchRequest(ctx con
 	branch = r.ID.ValueString()
 
 	out := operations.GetVitessBranchRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchDataSourceModel) ToOperationsGetVitessBranchVtgateParametersRequest(ctx context.Context) (*operations.GetVitessBranchVtgateParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	out := operations.GetVitessBranchVtgateParametersRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,

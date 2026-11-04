@@ -1650,7 +1650,115 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/cluster: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/config-changes: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/config-changes/submit: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/config-changes/{id}: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/config-changes/{id}:
+    get:
+      tags:
+        - Branch config changes
+      operationId: get_branch_config_change_request
+      summary: Get a branch config change request
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: id
+          in: path
+          required: true
+          description: The ID of the config change request
+          schema:
+            type: string
+          x-speakeasy-name-override: config_change_id
+          x-speakeasy-terraform-ignore: schema
+      responses:
+        "200":
+          description: Returns a branch config change request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: config_change_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: config_change_state
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - id
+                  - state
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        - entityOperation: VitessBranch#create#7
+          options:
+            polling:
+              name: WaitForConfigChange
+        - entityOperation: VitessBranch#update#6
+          options:
+            polling:
+              name: WaitForConfigChange
+      # Rollouts take minutes, so retry dropped connections and gateway errors
+      # instead of failing the apply on one bad poll.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 1000
+          maxInterval: 30000
+          maxElapsedTime: 300000
+          exponent: 2
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
+      x-speakeasy-polling:
+        - name: WaitForConfigChange
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 180 # 30 minutes at a 10 second interval
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/config_change_state == "completed"
   /organizations/{organization}/databases/{database}/branches/{branch}/configuration-profiles:
     get:
       tags:
@@ -4445,7 +4553,7 @@ paths:
                     description: Is the keyspace running on metal instances
                   default:
                     type: boolean
-                    description: True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.
+                    description: True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size, replicas, or parameters; do not try to create it with this resource.
                     x-speakeasy-name-override: is_default
                   imported:
                     type: boolean
@@ -4566,9 +4674,9 @@ paths:
                 x-speakeasy-entity-description: >-
                   Manage an additional PlanetScale Vitess keyspace on a branch.
 
-                  Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size or replicas in Terraform.
+                  Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size, replicas, or parameters in Terraform.
 
-                  `cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch.
+                  `cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch. `parameters` updates in place through config change requests.
 
                   Apply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.
         "401":
@@ -4594,9 +4702,9 @@ paths:
       x-speakeasy-entity-description: >-
         Manage an additional PlanetScale Vitess keyspace on a branch.
 
-        Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size or replicas in Terraform.
+        Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size, replicas, or parameters in Terraform.
 
-        `cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch.
+        `cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch. `parameters` updates in place through config change requests.
 
         Apply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}:
@@ -4692,7 +4800,7 @@ paths:
                     description: Is the keyspace running on metal instances
                   default:
                     type: boolean
-                    description: True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.
+                    description: True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size, replicas, or parameters; do not try to create it with this resource.
                     x-speakeasy-name-override: is_default
                   imported:
                     type: boolean
@@ -4912,7 +5020,121 @@ paths:
 
       x-speakeasy-entity-operation: VitessKeyspace#delete
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/config-changes: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/config-changes/{id}: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/config-changes/{id}:
+    get:
+      tags:
+        - Keyspace config changes
+      operationId: get_keyspace_config_change_request
+      summary: Get a keyspace config change request
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: keyspace
+          in: path
+          required: true
+          description: The name of the keyspace
+          schema:
+            type: string
+          x-speakeasy-match: name
+        - name: id
+          in: path
+          required: true
+          description: The ID of the config change request
+          schema:
+            type: string
+          x-speakeasy-name-override: config_change_id
+          x-speakeasy-terraform-ignore: schema
+      responses:
+        "200":
+          description: Returns a keyspace config change request
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: config_change_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: config_change_state
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - id
+                  - state
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation:
+        - entityOperation: VitessKeyspace#create#4
+          options:
+            polling:
+              name: WaitForConfigChange
+        - entityOperation: VitessKeyspace#update#4
+          options:
+            polling:
+              name: WaitForConfigChange
+      # Rollouts take minutes, so retry dropped connections and gateway errors
+      # instead of failing the apply on one bad poll.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 1000
+          maxInterval: 30000
+          maxElapsedTime: 300000
+          exponent: 2
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
+      x-speakeasy-polling:
+        - name: WaitForConfigChange
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 360 # 60 minutes at a 10 second interval; rollouts go shard by shard
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/config_change_state == "completed"
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/resizes:
     put:
       tags:
@@ -8759,7 +8981,242 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{budget_id}/rules: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{budget_id}/rules/{id}: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/traffic/budgets/{id}: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/vitess-parameters: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/vitess-parameters:
+    get:
+      tags:
+        - Branch Vitess parameters
+      operationId: get_vitess_branch_vtgate_parameters
+      summary: Get VTGate parameters
+      responses:
+        "200":
+          description: Returns the overridden VTGate parameters
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      VTGate parameter overrides, nested under the `vtgate` namespace. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`.
+                required:
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |2-
+                Returns the VTGate parameters for the branch and the VTTablet and MySQL parameters for each of its keyspaces, with their default and current values.
+                To change VTGate parameters, use the "create_branch_config_change_request" endpoint. To change VTTablet or MySQL parameters, use the "create_keyspace_config_change_request" endpoint.
+
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_branch`, `delete_branch`, `create_branch`, `connect_production_branch`, `connect_branch`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_branches` |
+        | Database | `read_branches` |
+        | Branch | `read_branch` |
+      x-speakeasy-entity-operation: VitessBranch#read#2
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The ID of the branch
+          x-speakeasy-match: id
+          schema:
+            type: string
+    patch:
+      tags:
+        - Branch Vitess parameters
+      operationId: set_vitess_branch_vtgate_parameters
+      summary: Set VTGate parameters
+      x-speakeasy-entity-operation: VitessBranch#create#6
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The ID of the branch
+          x-speakeasy-match: id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  x-speakeasy-plan-validators: VitessVtgateParametersValidator
+                  description: >-
+                    VTGate parameter overrides, nested under the `vtgate` namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the branch's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the branch's VTGates as a config change request; apply waits until it completes or is queued for the branch's maintenance window. Run `pscale branch vtgate parameters <database> <branch>` to list the parameters you can set.
+      responses:
+        "200":
+          description: Returns the configured parameters and the submitted config change
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      VTGate parameter overrides, nested under the `vtgate` namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the branch's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the branch's VTGates as a config change request; apply waits until it completes or is queued for the branch's maintenance window. Run `pscale branch vtgate parameters <database> <branch>` to list the parameters you can set.
+                  config_change_id:
+                    type: string
+                    description: The submitted config change request, used to wait for its rollout.
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - parameters
+                  - config_change_id
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+    put:
+      tags:
+        - Branch Vitess parameters
+      operationId: replace_vitess_branch_vtgate_parameters
+      summary: Replace VTGate parameters
+      x-speakeasy-entity-operation: VitessBranch#update#5
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The ID of the branch
+          x-speakeasy-match: id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  x-speakeasy-plan-validators: VitessVtgateParametersValidator
+                  description: >-
+                    VTGate parameter overrides, nested under the `vtgate` namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the branch's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the branch's VTGates as a config change request; apply waits until it completes or is queued for the branch's maintenance window. Run `pscale branch vtgate parameters <database> <branch>` to list the parameters you can set.
+      responses:
+        "200":
+          description: Returns the configured parameters and the submitted config change
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      VTGate parameter overrides, nested under the `vtgate` namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the branch's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the branch's VTGates as a config change request; apply waits until it completes or is queued for the branch's maintenance window. Run `pscale branch vtgate parameters <database> <branch>` to list the parameters you can set.
+                  config_change_id:
+                    type: string
+                    description: The submitted config change request, used to wait for its rollout.
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - parameters
+                  - config_change_id
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
   /organizations/{organization}/databases/{database}/branches/{branch}/vtctld/operations/{id}: {}
   /organizations/{organization}/databases/{database}/cidrs: {}
   /organizations/{organization}/databases/{database}/cidrs/{id}: {}
@@ -12941,6 +13398,238 @@ paths:
         | Database | `manage_passwords`, `manage_production_branch_passwords`, `manage_read_only_passwords`, `manage_production_read_only_passwords` |
         | Branch | `manage_passwords`, `manage_read_only_passwords` |
       x-speakeasy-entity-operation: NekiRole#delete
+  "/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vitess-parameters":
+    get:
+      tags:
+        - Keyspace Vitess parameters
+      operationId: get_vitess_keyspace_parameters
+      summary: Get keyspace VTTablet and MySQL parameters
+      x-speakeasy-entity-operation: VitessKeyspace#read#2
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: keyspace
+          in: path
+          required: true
+          description: The name of the keyspace
+          x-speakeasy-match: name
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns the overridden keyspace parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      VTTablet and MySQL parameter overrides, nested under the `vttablet` and `mysqld` namespaces. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`.
+                required:
+                  - parameters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+    patch:
+      tags:
+        - Keyspace Vitess parameters
+      operationId: set_vitess_keyspace_parameters
+      summary: Set keyspace VTTablet and MySQL parameters
+      x-speakeasy-entity-operation: VitessKeyspace#create#3
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: keyspace
+          in: path
+          required: true
+          description: The name of the keyspace
+          x-speakeasy-match: name
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  x-speakeasy-plan-validators: VitessKeyspaceParametersValidator
+                  description: >-
+                    VTTablet and MySQL parameter overrides, nested under the `vttablet` and `mysqld` namespaces, e.g. `{ mysqld = { wait_timeout = "600" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the keyspace's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the keyspace's tablets as config change requests; apply waits until they complete or are queued for the branch's maintenance window. Run `pscale keyspace parameters list <database> <branch> <keyspace>` to list the parameters you can set. To tune the default keyspace created with the branch, import it.
+      responses:
+        "200":
+          description: Returns the configured parameters and the submitted config changes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      VTTablet and MySQL parameter overrides, nested under the `vttablet` and `mysqld` namespaces, e.g. `{ mysqld = { wait_timeout = "600" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the keyspace's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the keyspace's tablets as config change requests; apply waits until they complete or are queued for the branch's maintenance window. Run `pscale keyspace parameters list <database> <branch> <keyspace>` to list the parameters you can set. To tune the default keyspace created with the branch, import it.
+                  config_change_id:
+                    type: string
+                    description: The submitted config change requests, used to wait for their rollout.
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - parameters
+                  - config_change_id
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+    put:
+      tags:
+        - Keyspace Vitess parameters
+      operationId: replace_vitess_keyspace_parameters
+      summary: Replace keyspace VTTablet and MySQL parameters
+      x-speakeasy-entity-operation: VitessKeyspace#update#3
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the branch belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database the branch belongs to
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The name of the branch
+          schema:
+            type: string
+        - name: keyspace
+          in: path
+          required: true
+          description: The name of the keyspace
+          x-speakeasy-match: name
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                  x-speakeasy-plan-validators: VitessKeyspaceParametersValidator
+                  description: >-
+                    VTTablet and MySQL parameter overrides, nested under the `vttablet` and `mysqld` namespaces, e.g. `{ mysqld = { wait_timeout = "600" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the keyspace's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the keyspace's tablets as config change requests; apply waits until they complete or are queued for the branch's maintenance window. Run `pscale keyspace parameters list <database> <branch> <keyspace>` to list the parameters you can set. To tune the default keyspace created with the branch, import it.
+      responses:
+        "200":
+          description: Returns the configured parameters and the submitted config changes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      VTTablet and MySQL parameter overrides, nested under the `vttablet` and `mysqld` namespaces, e.g. `{ mysqld = { wait_timeout = "600" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the keyspace's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the keyspace's tablets as config change requests; apply waits until they complete or are queued for the branch's maintenance window. Run `pscale keyspace parameters list <database> <branch> <keyspace>` to list the parameters you can set. To tune the default keyspace created with the branch, import it.
+                  config_change_id:
+                    type: string
+                    description: The submitted config change requests, used to wait for their rollout.
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - parameters
+                  - config_change_id
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
   /organizations/{organization}/databases/{database}/backup-policies#vitess:
     get:
       tags:

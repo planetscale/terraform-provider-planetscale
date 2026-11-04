@@ -52,6 +52,17 @@ func (r *VitessKeyspaceResourceModel) RefreshFromOperationsCreateKeyspaceRespons
 	return diags
 }
 
+func (r *VitessKeyspaceResourceModel) RefreshFromOperationsGetKeyspaceConfigChangeRequestResponseBody(ctx context.Context, resp *operations.GetKeyspaceConfigChangeRequestResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ConfigChangeID = types.StringValue(resp.ConfigChangeID)
+		r.ConfigChangeState = types.StringValue(resp.ConfigChangeState)
+	}
+
+	return diags
+}
+
 func (r *VitessKeyspaceResourceModel) RefreshFromOperationsGetKeyspaceResponseBody(ctx context.Context, resp *operations.GetKeyspaceResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -89,6 +100,77 @@ func (r *VitessKeyspaceResourceModel) RefreshFromOperationsGetKeyspaceResponseBo
 		r.VreplicationFlags.AllowNoBlobBinlogRowImage = types.BoolValue(resp.VreplicationFlags.AllowNoBlobBinlogRowImage)
 		r.VreplicationFlags.OptimizeInserts = types.BoolValue(resp.VreplicationFlags.OptimizeInserts)
 		r.VreplicationFlags.VplayerBatching = types.BoolValue(resp.VreplicationFlags.VplayerBatching)
+	}
+
+	return diags
+}
+
+func (r *VitessKeyspaceResourceModel) RefreshFromOperationsGetVitessKeyspaceParametersResponseBody(ctx context.Context, resp *operations.GetVitessKeyspaceParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
+func (r *VitessKeyspaceResourceModel) RefreshFromOperationsReplaceVitessKeyspaceParametersResponseBody(ctx context.Context, resp *operations.ReplaceVitessKeyspaceParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ConfigChangeID = types.StringValue(resp.ConfigChangeID)
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
+func (r *VitessKeyspaceResourceModel) RefreshFromOperationsSetVitessKeyspaceParametersResponseBody(ctx context.Context, resp *operations.SetVitessKeyspaceParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ConfigChangeID = types.StringValue(resp.ConfigChangeID)
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
 	}
 
 	return diags
@@ -179,6 +261,35 @@ func (r *VitessKeyspaceResourceModel) ToOperationsDeleteKeyspaceRequest(ctx cont
 	return &out, diags
 }
 
+func (r *VitessKeyspaceResourceModel) ToOperationsGetKeyspaceConfigChangeRequestRequest(ctx context.Context) (*operations.GetKeyspaceConfigChangeRequestRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var keyspace string
+	keyspace = r.Name.ValueString()
+
+	var configChangeID string
+	configChangeID = r.ConfigChangeID.ValueString()
+
+	out := operations.GetKeyspaceConfigChangeRequestRequest{
+		Organization:   organization,
+		Database:       database,
+		Branch:         branch,
+		Keyspace:       keyspace,
+		ConfigChangeID: configChangeID,
+	}
+
+	return &out, diags
+}
+
 func (r *VitessKeyspaceResourceModel) ToOperationsGetKeyspaceRequest(ctx context.Context) (*operations.GetKeyspaceRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -199,6 +310,145 @@ func (r *VitessKeyspaceResourceModel) ToOperationsGetKeyspaceRequest(ctx context
 		Database:     database,
 		Branch:       branch,
 		Keyspace:     keyspace,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessKeyspaceResourceModel) ToOperationsGetVitessKeyspaceParametersRequest(ctx context.Context) (*operations.GetVitessKeyspaceParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var keyspace string
+	keyspace = r.Name.ValueString()
+
+	out := operations.GetVitessKeyspaceParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Keyspace:     keyspace,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessKeyspaceResourceModel) ToOperationsReplaceVitessKeyspaceParametersRequest(ctx context.Context) (*operations.ReplaceVitessKeyspaceParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var keyspace string
+	keyspace = r.Name.ValueString()
+
+	body, bodyDiags := r.ToOperationsReplaceVitessKeyspaceParametersRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.ReplaceVitessKeyspaceParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Keyspace:     keyspace,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessKeyspaceResourceModel) ToOperationsReplaceVitessKeyspaceParametersRequestBody(ctx context.Context) (*operations.ReplaceVitessKeyspaceParametersRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
+
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
+		}
+	}
+	out := operations.ReplaceVitessKeyspaceParametersRequestBody{
+		Parameters: parameters,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessKeyspaceResourceModel) ToOperationsSetVitessKeyspaceParametersRequest(ctx context.Context) (*operations.SetVitessKeyspaceParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var keyspace string
+	keyspace = r.Name.ValueString()
+
+	body, bodyDiags := r.ToOperationsSetVitessKeyspaceParametersRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.SetVitessKeyspaceParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Keyspace:     keyspace,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessKeyspaceResourceModel) ToOperationsSetVitessKeyspaceParametersRequestBody(ctx context.Context) (*operations.SetVitessKeyspaceParametersRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
+
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
+		}
+	}
+	out := operations.SetVitessKeyspaceParametersRequestBody{
+		Parameters: parameters,
 	}
 
 	return &out, diags

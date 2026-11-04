@@ -43,6 +43,7 @@ type VitessKeyspaceDataSourceModel struct {
 	Name                             types.String                                         `tfsdk:"name"`
 	NodeTTLStrategy                  types.String                                         `tfsdk:"node_ttl_strategy"`
 	Organization                     types.String                                         `tfsdk:"organization"`
+	Parameters                       map[string]map[string]types.String                   `tfsdk:"parameters"`
 	Ready                            types.Bool                                           `tfsdk:"ready"`
 	Replicas                         types.Int64                                          `tfsdk:"replicas"`
 	ReplicationDurabilityConstraints *tfTypes.GetKeyspaceReplicationDurabilityConstraints `tfsdk:"replication_durability_constraints"`
@@ -106,7 +107,7 @@ func (r *VitessKeyspaceDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"is_default": schema.BoolAttribute{
 				Computed:    true,
-				Description: `True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.`,
+				Description: `True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size, replicas, or parameters; do not try to create it with this resource.`,
 			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
@@ -123,6 +124,13 @@ func (r *VitessKeyspaceDataSource) Schema(ctx context.Context, req datasource.Sc
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the branch belongs to`,
+			},
+			"parameters": schema.MapAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: types.StringType,
+				},
+				Description: `VTTablet and MySQL parameter overrides, nested under the ` + "`" + `vttablet` + "`" + ` and ` + "`" + `mysqld` + "`" + ` namespaces. Values are strings in the API's format: byte sizes as plain integers and durations such as ` + "`" + `30s` + "`" + `.`,
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -268,6 +276,37 @@ func (r *VitessKeyspaceDataSource) Read(ctx context.Context, req datasource.Read
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetKeyspaceResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetVitessKeyspaceParametersRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.KeyspaceVitessParameters.GetVitessKeyspaceParameters(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessKeyspaceParametersResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

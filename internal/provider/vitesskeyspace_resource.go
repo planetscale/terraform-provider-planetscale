@@ -17,10 +17,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/int64planmodifier"
+	custom_mapplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/mapplanmodifier"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	custom_mapvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/mapvalidators"
 	custom_stringvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/stringvalidators"
 )
 
@@ -43,7 +45,9 @@ type VitessKeyspaceResourceModel struct {
 	Branch                           types.String                                         `tfsdk:"branch"`
 	ClusterDisplayName               types.String                                         `tfsdk:"cluster_display_name"`
 	ClusterSize                      types.String                                         `tfsdk:"cluster_size"`
+	ConfigChangeID                   types.String                                         `tfsdk:"-"`
 	ConfigChangeInProgress           types.Bool                                           `tfsdk:"config_change_in_progress"`
+	ConfigChangeState                types.String                                         `tfsdk:"-"`
 	CreatedAt                        types.String                                         `tfsdk:"created_at"`
 	Database                         types.String                                         `tfsdk:"database"`
 	ExtraReplicas                    types.Int64                                          `tfsdk:"extra_replicas"`
@@ -54,6 +58,7 @@ type VitessKeyspaceResourceModel struct {
 	Name                             types.String                                         `tfsdk:"name"`
 	NodeTTLStrategy                  types.String                                         `tfsdk:"node_ttl_strategy"`
 	Organization                     types.String                                         `tfsdk:"organization"`
+	Parameters                       map[string]map[string]types.String                   `tfsdk:"parameters"`
 	Ready                            types.Bool                                           `tfsdk:"ready"`
 	Replicas                         types.Int64                                          `tfsdk:"replicas"`
 	ReplicationDurabilityConstraints *tfTypes.GetKeyspaceReplicationDurabilityConstraints `tfsdk:"replication_durability_constraints"`
@@ -74,7 +79,7 @@ func (r *VitessKeyspaceResource) Metadata(ctx context.Context, req resource.Meta
 
 func (r *VitessKeyspaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage an additional PlanetScale Vitess keyspace on a branch.\nCreating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size or replicas in Terraform.\n`cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch.\nApply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.",
+		MarkdownDescription: "Manage an additional PlanetScale Vitess keyspace on a branch.\nCreating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size, replicas, or parameters in Terraform.\n`cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch. `parameters` updates in place through config change requests.\nApply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.",
 		Attributes: map[string]schema.Attribute{
 			"branch": schema.StringAttribute{
 				Required: true,
@@ -124,7 +129,7 @@ func (r *VitessKeyspaceResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"is_default": schema.BoolAttribute{
 				Computed:    true,
-				Description: `True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.`,
+				Description: `True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size, replicas, or parameters; do not try to create it with this resource.`,
 			},
 			"metal": schema.BoolAttribute{
 				Computed:    true,
@@ -148,6 +153,20 @@ func (r *VitessKeyspaceResource) Schema(ctx context.Context, req resource.Schema
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `The name of the organization the branch belongs to. Requires replacement if changed.`,
+			},
+			"parameters": schema.MapAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Map{
+					custom_mapplanmodifier.WarnOnRemovedParameters(),
+				},
+				ElementType: types.MapType{
+					ElemType: types.StringType,
+				},
+				Description: `VTTablet and MySQL parameter overrides, nested under the ` + "`" + `vttablet` + "`" + ` and ` + "`" + `mysqld` + "`" + ` namespaces, e.g. ` + "`" + `{ mysqld = { wait_timeout = "600" } }` + "`" + `. Values are strings in the API's format: byte sizes as plain integers and durations such as ` + "`" + `30s` + "`" + `. When unset, Terraform leaves the keyspace's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the keyspace's tablets as config change requests; apply waits until they complete or are queued for the branch's maintenance window. Run ` + "`" + `pscale keyspace parameters list <database> <branch> <keyspace>` + "`" + ` to list the parameters you can set. To tune the default keyspace created with the branch, import it.`,
+				Validators: []validator.Map{
+					custom_mapvalidators.VitessKeyspaceParametersValidator(),
+				},
 			},
 			"ready": schema.BoolAttribute{
 				Computed:    true,
@@ -350,6 +369,85 @@ func (r *VitessKeyspaceResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request2, request2Diags := data.ToOperationsSetVitessKeyspaceParametersRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.KeyspaceVitessParameters.SetVitessKeyspaceParameters(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+	if !(res2.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsSetVitessKeyspaceParametersResponseBody(ctx, res2.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request3, request3Diags := data.ToOperationsGetKeyspaceConfigChangeRequestRequest(ctx)
+	resp.Diagnostics.Append(request3Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	getKeyspaceConfigChangeRequestOptions := make([]operations.Option, 0, 1)
+	getKeyspaceConfigChangeRequestOptions = append(getKeyspaceConfigChangeRequestOptions, operations.WithPolling(
+		r.client.KeyspaceConfigChanges.GetKeyspaceConfigChangeRequestWaitForConfigChange(),
+	))
+	res3, err := r.client.KeyspaceConfigChanges.GetKeyspaceConfigChangeRequest(ctx, *request3, getKeyspaceConfigChangeRequestOptions...)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res3 != nil && res3.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
+		}
+		return
+	}
+	if res3 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res3))
+		return
+	}
+	if res3.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res3.StatusCode), debugResponse(res3.RawResponse))
+		return
+	}
+	if !(res3.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res3.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetKeyspaceConfigChangeRequestResponseBody(ctx, res3.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -404,6 +502,41 @@ func (r *VitessKeyspaceResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetKeyspaceResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetVitessKeyspaceParametersRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.KeyspaceVitessParameters.GetVitessKeyspaceParameters(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessKeyspaceParametersResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -491,6 +624,85 @@ func (r *VitessKeyspaceResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetKeyspaceResponseBody(ctx, res1.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request2, request2Diags := data.ToOperationsReplaceVitessKeyspaceParametersRequest(ctx)
+	resp.Diagnostics.Append(request2Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res2, err := r.client.KeyspaceVitessParameters.ReplaceVitessKeyspaceParameters(ctx, *request2)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res2 != nil && res2.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res2.RawResponse))
+		}
+		return
+	}
+	if res2 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res2))
+		return
+	}
+	if res2.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res2.StatusCode), debugResponse(res2.RawResponse))
+		return
+	}
+	if !(res2.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res2.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsReplaceVitessKeyspaceParametersResponseBody(ctx, res2.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request3, request3Diags := data.ToOperationsGetKeyspaceConfigChangeRequestRequest(ctx)
+	resp.Diagnostics.Append(request3Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	getKeyspaceConfigChangeRequestOptions := make([]operations.Option, 0, 1)
+	getKeyspaceConfigChangeRequestOptions = append(getKeyspaceConfigChangeRequestOptions, operations.WithPolling(
+		r.client.KeyspaceConfigChanges.GetKeyspaceConfigChangeRequestWaitForConfigChange(),
+	))
+	res3, err := r.client.KeyspaceConfigChanges.GetKeyspaceConfigChangeRequest(ctx, *request3, getKeyspaceConfigChangeRequestOptions...)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res3 != nil && res3.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res3.RawResponse))
+		}
+		return
+	}
+	if res3 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res3))
+		return
+	}
+	if res3.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res3.StatusCode), debugResponse(res3.RawResponse))
+		return
+	}
+	if !(res3.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res3.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetKeyspaceConfigChangeRequestResponseBody(ctx, res3.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

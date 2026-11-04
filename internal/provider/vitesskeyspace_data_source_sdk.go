@@ -52,6 +52,29 @@ func (r *VitessKeyspaceDataSourceModel) RefreshFromOperationsGetKeyspaceResponse
 	return diags
 }
 
+func (r *VitessKeyspaceDataSourceModel) RefreshFromOperationsGetVitessKeyspaceParametersResponseBody(ctx context.Context, resp *operations.GetVitessKeyspaceParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
 func (r *VitessKeyspaceDataSourceModel) ToOperationsGetKeyspaceRequest(ctx context.Context) (*operations.GetKeyspaceRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -68,6 +91,31 @@ func (r *VitessKeyspaceDataSourceModel) ToOperationsGetKeyspaceRequest(ctx conte
 	keyspace = r.Name.ValueString()
 
 	out := operations.GetKeyspaceRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Keyspace:     keyspace,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessKeyspaceDataSourceModel) ToOperationsGetVitessKeyspaceParametersRequest(ctx context.Context) (*operations.GetVitessKeyspaceParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.Branch.ValueString()
+
+	var keyspace string
+	keyspace = r.Name.ValueString()
+
+	out := operations.GetVitessKeyspaceParametersRequest{
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,

@@ -19,6 +19,16 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 	branchName := "main"
 	keyspaceName := randomWithPrefix("tfks")
 	resourceAddress := "planetscale_vitess_keyspace.test"
+	parametersOriginal := config.MapVariable(map[string]config.Variable{
+		"vttablet": config.MapVariable(map[string]config.Variable{
+			"vreplication-parallel-insert-workers": config.StringVariable("4"),
+		}),
+	})
+	parametersUpdated := config.MapVariable(map[string]config.Variable{
+		"mysqld": config.MapVariable(map[string]config.Variable{
+			"wait_timeout": config.StringVariable("600"),
+		}),
+	})
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -33,6 +43,7 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 					"keyspace_name":  config.StringVariable(keyspaceName),
 					"cluster_size":   config.StringVariable("PS_10"),
 					"extra_replicas": config.IntegerVariable(0),
+					"parameters":     parametersOriginal,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -60,6 +71,15 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("resizing"),
 						knownvalue.Bool(false),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("parameters"),
+						knownvalue.MapExact(map[string]knownvalue.Check{
+							"vttablet": knownvalue.MapExact(map[string]knownvalue.Check{
+								"vreplication-parallel-insert-workers": knownvalue.StringExact("4"),
+							}),
+						}),
+					),
 				},
 			},
 			{
@@ -71,6 +91,7 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 					"keyspace_name":  config.StringVariable(keyspaceName),
 					"cluster_size":   config.StringVariable("PS_10"),
 					"extra_replicas": config.IntegerVariable(1),
+					"parameters":     parametersUpdated,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
@@ -93,6 +114,15 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 						tfjsonpath.New("resize_pending"),
 						knownvalue.Bool(false),
 					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("parameters"),
+						knownvalue.MapExact(map[string]knownvalue.Check{
+							"mysqld": knownvalue.MapExact(map[string]knownvalue.Check{
+								"wait_timeout": knownvalue.StringExact("600"),
+							}),
+						}),
+					),
 				},
 			},
 			{
@@ -104,6 +134,7 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 					"keyspace_name":  config.StringVariable(keyspaceName),
 					"cluster_size":   config.StringVariable("PS_10"),
 					"extra_replicas": config.IntegerVariable(1),
+					"parameters":     parametersUpdated,
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,

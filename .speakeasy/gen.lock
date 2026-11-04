@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 7d560bfea35511d859dd0f9541e8ca92
+  docChecksum: 6d01165380b2b0a2d4f82e7c4892455d
   docVersion: v1
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -25,6 +25,7 @@ features:
     nullables: 0.0.0
     operationPolling: 0.3.1
     pagination: 2.83.7
+    retries: 2.81.7
     sets: 0.1.3
 trackedFiles:
   USAGE.md:
@@ -558,6 +559,8 @@ trackedFiles:
   internal/sdk/backups.go: {}
   internal/sdk/bouncers.go: {}
   internal/sdk/branchchanges.go: {}
+  internal/sdk/branchconfigchanges.go: {}
+  internal/sdk/branchvitessparameters.go: {}
   internal/sdk/databasebranches.go:
     id: 0bae7875cd9d
     pristine_git_object: fa7fcf53770dfab66ff0b41fb2abc57deae178e0
@@ -617,7 +620,9 @@ trackedFiles:
   internal/sdk/internal/utils/utils.go:
     id: feefcdf75dbd
     pristine_git_object: 0415b536598baa76c5d1a8fc32816ed1b83f9137
+  internal/sdk/keyspaceconfigchanges.go: {}
   internal/sdk/keyspaceresizes.go: {}
+  internal/sdk/keyspacevitessparameters.go: {}
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
@@ -677,9 +682,11 @@ trackedFiles:
     pristine_git_object: 59fecfc5d6d5aa341b2382de67a308bc412ae670
   internal/sdk/models/operations/deletevitessbranchbackup.go: {}
   internal/sdk/models/operations/getbranchchangerequest.go: {}
+  internal/sdk/models/operations/getbranchconfigchangerequest.go: {}
   internal/sdk/models/operations/getbranchresizerequest.go: {}
   internal/sdk/models/operations/getdedicatedreadreplica.go: {}
   internal/sdk/models/operations/getkeyspace.go: {}
+  internal/sdk/models/operations/getkeyspaceconfigchangerequest.go: {}
   internal/sdk/models/operations/getnekiadmin.go: {}
   internal/sdk/models/operations/getnekiadminparameters.go: {}
   internal/sdk/models/operations/getnekibackuppolicy.go: {}
@@ -715,9 +722,11 @@ trackedFiles:
     id: 91f8cc51ecc6
     pristine_git_object: 05e715d265afc7f9237fb7ff92f378e221a4491a
   internal/sdk/models/operations/getvitessbranchbackup.go: {}
+  internal/sdk/models/operations/getvitessbranchvtgateparameters.go: {}
   internal/sdk/models/operations/getvitessdatabase.go:
     id: c46fe7ab51ba
     pristine_git_object: be96b47a67d020a8a2b0d5198abfd4db9b7db3bf
+  internal/sdk/models/operations/getvitesskeyspaceparameters.go: {}
   internal/sdk/models/operations/listbouncers.go: {}
   internal/sdk/models/operations/listdatabases.go:
     id: 9a615ba562a7
@@ -746,7 +755,11 @@ trackedFiles:
     id: 6d0d29414e00
     pristine_git_object: fa913aab2c7ba277a03fd7523465d784c9003c33
   internal/sdk/models/operations/reassignnekishard.go: {}
+  internal/sdk/models/operations/replacevitessbranchvtgateparameters.go: {}
+  internal/sdk/models/operations/replacevitesskeyspaceparameters.go: {}
   internal/sdk/models/operations/runnekiconfigurationprofilemaintenance.go: {}
+  internal/sdk/models/operations/setvitessbranchvtgateparameters.go: {}
+  internal/sdk/models/operations/setvitesskeyspaceparameters.go: {}
   internal/sdk/models/operations/updatebranchresizerequest.go: {}
   internal/sdk/models/operations/updatededicatedreadreplica.go: {}
   internal/sdk/models/operations/updatekeyspaceresizerequest.go: {}
@@ -3288,6 +3301,134 @@ examples:
       responses:
         "200":
           application/json: {"id": "<id>", "state": "<value>"}
+  get_branch_config_change_request:
+    speakeasy-default-get-branch-config-change-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "<value>"}
+  get_keyspace_config_change_request:
+    speakeasy-default-get-keyspace-config-change-request:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          keyspace: "<value>"
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "state": "<value>"}
+  get_vitess_vtgate_parameters:
+    speakeasy-default-get-vitess-vtgate-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "parameters": {}}
+  set_vitess_vtgate_parameters:
+    speakeasy-default-set-vitess-vtgate-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>", "key2": "<value>"}}}
+      responses:
+        "200":
+          application/json: {"id": "<id>", "parameters": {"key": {"key": "<value>", "key1": "<value>"}, "key1": {"key": "<value>"}, "key2": {}}, "config_change_id": "<id>"}
+  replace_vitess_vtgate_parameters:
+    speakeasy-default-replace-vitess-vtgate-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {"parameters": {"key": {"key": "<value>"}, "key1": {"key": "<value>", "key1": "<value>"}}}
+      responses:
+        "200":
+          application/json: {"id": "<id>", "parameters": {"key": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key1": {}}, "config_change_id": "<id>"}
+  get_vitess_keyspace_parameters:
+    speakeasy-default-get-vitess-keyspace-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          keyspace: "<value>"
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>"}}}
+  set_vitess_keyspace_parameters:
+    speakeasy-default-set-vitess-keyspace-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          keyspace: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {}, "key1": {"key": "<value>"}}, "config_change_id": "<id>"}
+  replace_vitess_keyspace_parameters:
+    speakeasy-default-replace-vitess-keyspace-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+          keyspace: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {}}, "config_change_id": "<id>"}
+  get_vitess_branch_vtgate_parameters:
+    speakeasy-default-get-vitess-branch-vtgate-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>"}, "key1": {"key": "<value>", "key1": "<value>", "key2": "<value>"}, "key2": {"key": "<value>", "key1": "<value>", "key2": "<value>"}}}
+  set_vitess_branch_vtgate_parameters:
+    speakeasy-default-set-vitess-branch-vtgate-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"parameters": {}, "config_change_id": "<id>"}
+  replace_vitess_branch_vtgate_parameters:
+    speakeasy-default-replace-vitess-branch-vtgate-parameters:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>"}}, "config_change_id": "<id>"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

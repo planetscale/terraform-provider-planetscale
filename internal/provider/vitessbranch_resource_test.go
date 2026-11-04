@@ -19,6 +19,17 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 	branchNameOriginal := randomWithPrefix("test")
 	branchNameRenamed := randomWithPrefix("test-renamed")
 	resourceAddress := "planetscale_vitess_branch.test"
+	parametersOriginal := config.MapVariable(map[string]config.Variable{
+		"vtgate": config.MapVariable(map[string]config.Variable{
+			"query-timeout": config.StringVariable("30000"),
+		}),
+	})
+	parametersUpdated := config.MapVariable(map[string]config.Variable{
+		"vtgate": config.MapVariable(map[string]config.Variable{
+			"query-timeout":   config.StringVariable("60000"),
+			"max_memory_rows": config.StringVariable("500000"),
+		}),
+	})
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -32,12 +43,22 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 					"branch_name":        config.StringVariable(branchNameOriginal),
 					"deletion_protected": config.BoolVariable(true),
 					"safe_migrations":    config.BoolVariable(true),
+					"parameters":         parametersOriginal,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("id"),
 						knownvalue.NotNull(),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("parameters"),
+						knownvalue.MapExact(map[string]knownvalue.Check{
+							"vtgate": knownvalue.MapExact(map[string]knownvalue.Check{
+								"query-timeout": knownvalue.StringExact("30000"),
+							}),
+						}),
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
@@ -74,12 +95,23 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 					"branch_name":        config.StringVariable(branchNameRenamed),
 					"deletion_protected": config.BoolVariable(false),
 					"safe_migrations":    config.BoolVariable(false),
+					"parameters":         parametersUpdated,
 				},
 				ConfigStateChecks: []statecheck.StateCheck{
 					statecheck.ExpectKnownValue(
 						resourceAddress,
 						tfjsonpath.New("name"),
 						knownvalue.StringExact(branchNameRenamed),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
+						tfjsonpath.New("parameters"),
+						knownvalue.MapExact(map[string]knownvalue.Check{
+							"vtgate": knownvalue.MapExact(map[string]knownvalue.Check{
+								"query-timeout":   knownvalue.StringExact("60000"),
+								"max_memory_rows": knownvalue.StringExact("500000"),
+							}),
+						}),
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
@@ -101,6 +133,7 @@ func TestAccVitessBranchResource_Lifecycle(t *testing.T) {
 					"branch_name":        config.StringVariable(branchNameRenamed),
 					"deletion_protected": config.BoolVariable(false),
 					"safe_migrations":    config.BoolVariable(false),
+					"parameters":         parametersUpdated,
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
