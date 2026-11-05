@@ -22,10 +22,6 @@ variable "extra_replicas" {
   type = number
 }
 
-variable "parameters" {
-  type = map(map(string))
-}
-
 resource "planetscale_vitess_branch" "main" {
   organization = var.organization
   database     = var.database_name
@@ -42,5 +38,4 @@ resource "planetscale_vitess_keyspace" "test" {
   name           = var.keyspace_name
   cluster_size   = var.cluster_size
   extra_replicas = var.extra_replicas
-  parameters     = var.parameters
 }

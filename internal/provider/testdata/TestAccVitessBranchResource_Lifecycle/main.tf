@@ -18,15 +18,10 @@ variable "deletion_protected" {
   type = bool
 }
 
-variable "parameters" {
-  type = map(map(string))
-}
-
 resource "planetscale_vitess_branch" "test" {
   organization       = var.organization
   database           = var.database_name
   name               = var.branch_name
   deletion_protected = var.deletion_protected
   safe_migrations    = var.safe_migrations
-  parameters         = var.parameters
 }
