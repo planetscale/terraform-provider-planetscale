@@ -16,10 +16,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	custom_mapplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/mapplanmodifier"
 	speakeasy_stringplanmodifier "github.com/planetscale/terraform-provider-planetscale/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/planetscale/terraform-provider-planetscale/internal/provider/types"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk"
 	"github.com/planetscale/terraform-provider-planetscale/internal/sdk/models/operations"
+	custom_mapvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/mapvalidators"
 	custom_stringvalidators "github.com/planetscale/terraform-provider-planetscale/internal/validators/stringvalidators"
 )
 
@@ -42,6 +44,8 @@ type VitessBranchResourceModel struct {
 	Actor                      *tfTypes.GetVitessBranchActor      `tfsdk:"actor"`
 	BackupID                   types.String                       `tfsdk:"backup_id"`
 	ClusterSize                types.String                       `tfsdk:"cluster_size"`
+	ConfigChangeID             types.String                       `tfsdk:"-"`
+	ConfigChangeState          types.String                       `tfsdk:"-"`
 	Database                   types.String                       `tfsdk:"database"`
 	DeleteDescendants          types.Bool                         `queryParam:"style=form,explode=true,name=delete_descendants" tfsdk:"delete_descendants"`
 	DeletionProtected          types.Bool                         `tfsdk:"deletion_protected"`
@@ -52,6 +56,7 @@ type VitessBranchResourceModel struct {
 	MysqlEdgeAddress           types.String                       `tfsdk:"mysql_edge_address"`
 	Name                       types.String                       `tfsdk:"name"`
 	Organization               types.String                       `tfsdk:"organization"`
+	Parameters                 map[string]map[string]types.String `tfsdk:"parameters"`
 	ParentBranch               types.String                       `tfsdk:"parent_branch"`
 	Ready                      types.Bool                         `tfsdk:"ready"`
 	Region                     types.String                       `tfsdk:"region"`
@@ -145,6 +150,20 @@ func (r *VitessBranchResource) Schema(ctx context.Context, req resource.SchemaRe
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `The name of the organization the branch belongs to`,
+			},
+			"parameters": schema.MapAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Map{
+					custom_mapplanmodifier.WarnOnRemovedParameters(),
+				},
+				ElementType: types.MapType{
+					ElemType: types.StringType,
+				},
+				Description: `VTGate parameter overrides, nested under the ` + "`" + `vtgate` + "`" + ` namespace, e.g. ` + "`" + `{ vtgate = { "query-timeout" = "30000" } }` + "`" + `. Values are strings in the API's format: byte sizes as plain integers and durations such as ` + "`" + `30s` + "`" + `. When unset, Terraform leaves the branch's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the branch's VTGates as a config change request; apply waits until it completes or is queued for the branch's maintenance window. Run ` + "`" + `pscale branch vtgate parameters <database> <branch>` + "`" + ` to list the parameters you can set.`,
+				Validators: []validator.Map{
+					custom_mapvalidators.VitessVtgateParametersValidator(),
+				},
 			},
 			"parent_branch": schema.StringAttribute{
 				Computed: true,
@@ -464,6 +483,85 @@ func (r *VitessBranchResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	request5, request5Diags := data.ToOperationsSetVitessBranchVtgateParametersRequest(ctx)
+	resp.Diagnostics.Append(request5Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res5, err := r.client.BranchVitessParameters.SetVitessBranchVtgateParameters(ctx, *request5)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res5 != nil && res5.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res5.RawResponse))
+		}
+		return
+	}
+	if res5 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res5))
+		return
+	}
+	if res5.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res5.StatusCode), debugResponse(res5.RawResponse))
+		return
+	}
+	if !(res5.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res5.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsSetVitessBranchVtgateParametersResponseBody(ctx, res5.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request6, request6Diags := data.ToOperationsGetBranchConfigChangeRequestRequest(ctx)
+	resp.Diagnostics.Append(request6Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	getBranchConfigChangeRequestOptions := make([]operations.Option, 0, 1)
+	getBranchConfigChangeRequestOptions = append(getBranchConfigChangeRequestOptions, operations.WithPolling(
+		r.client.BranchConfigChanges.GetBranchConfigChangeRequestWaitForConfigChange(),
+	))
+	res6, err := r.client.BranchConfigChanges.GetBranchConfigChangeRequest(ctx, *request6, getBranchConfigChangeRequestOptions...)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res6 != nil && res6.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res6.RawResponse))
+		}
+		return
+	}
+	if res6 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res6))
+		return
+	}
+	if res6.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res6.StatusCode), debugResponse(res6.RawResponse))
+		return
+	}
+	if !(res6.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res6.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetBranchConfigChangeRequestResponseBody(ctx, res6.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -518,6 +616,41 @@ func (r *VitessBranchResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessBranchResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetVitessBranchVtgateParametersRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.BranchVitessParameters.GetVitessBranchVtgateParameters(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessBranchVtgateParametersResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -678,6 +811,85 @@ func (r *VitessBranchResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsUpdateVitessBranchResponseBody(ctx, res3.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request4, request4Diags := data.ToOperationsReplaceVitessBranchVtgateParametersRequest(ctx)
+	resp.Diagnostics.Append(request4Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res4, err := r.client.BranchVitessParameters.ReplaceVitessBranchVtgateParameters(ctx, *request4)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res4 != nil && res4.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res4.RawResponse))
+		}
+		return
+	}
+	if res4 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res4))
+		return
+	}
+	if res4.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res4.StatusCode), debugResponse(res4.RawResponse))
+		return
+	}
+	if !(res4.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res4.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsReplaceVitessBranchVtgateParametersResponseBody(ctx, res4.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request5, request5Diags := data.ToOperationsGetBranchConfigChangeRequestRequest(ctx)
+	resp.Diagnostics.Append(request5Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	getBranchConfigChangeRequestOptions := make([]operations.Option, 0, 1)
+	getBranchConfigChangeRequestOptions = append(getBranchConfigChangeRequestOptions, operations.WithPolling(
+		r.client.BranchConfigChanges.GetBranchConfigChangeRequestWaitForConfigChange(),
+	))
+	res5, err := r.client.BranchConfigChanges.GetBranchConfigChangeRequest(ctx, *request5, getBranchConfigChangeRequestOptions...)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res5 != nil && res5.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res5.RawResponse))
+		}
+		return
+	}
+	if res5 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res5))
+		return
+	}
+	if res5.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res5.StatusCode), debugResponse(res5.RawResponse))
+		return
+	}
+	if !(res5.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res5.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetBranchConfigChangeRequestResponseBody(ctx, res5.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -25,6 +25,15 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
   vtgate_max_count              = 2
   vtgate_size                   = "VTG_320"
   vtgate_target_cpu_utilization = 50
+
+  # VTGate parameter overrides. Once set, overrides missing from this map are
+  # reset to their defaults; leave it unset to leave parameters unchanged.
+  parameters = {
+    vtgate = {
+      "query-timeout" = "30000"
+      max_memory_rows = "500000"
+    }
+  }
 }
 ```
 
@@ -43,6 +52,7 @@ resource "planetscale_vitess_branch" "my_vitessbranch" {
 - `cluster_size` (String) The database cluster size. Required if a backup_id is provided (unless keyspace_cluster_sizes covers every keyspace), optional otherwise. Options: PS_10, PS_20, PS_40, ..., PS_2800. Requires replacement if changed.
 - `delete_descendants` (Boolean) If true, recursively delete all descendant branches along with this branch
 - `deletion_protected` (Boolean) Whether deletion protection is enabled for the branch
+- `parameters` (Map of Map of String) VTGate parameter overrides, nested under the `vtgate` namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the branch's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the branch's VTGates as a config change request; apply waits until it completes or is queued for the branch's maintenance window. Run `pscale branch vtgate parameters <database> <branch>` to list the parameters you can set.
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
 - `safe_migrations` (Boolean) Whether safe migrations are enabled

@@ -40,9 +40,10 @@ data "planetscale_vitess_keyspace" "my_vitesskeyspace" {
 - `extra_replicas` (Number) The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
 - `id` (String) The ID of the keyspace
 - `imported` (Boolean) Is this keyspace used in an import
-- `is_default` (Boolean) True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.
+- `is_default` (Boolean) True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size, replicas, or parameters; do not try to create it with this resource.
 - `metal` (Boolean) Is the keyspace running on metal instances
 - `node_ttl_strategy` (String) Controls when node TTL drains are allowed
+- `parameters` (Map of Map of String) VTTablet and MySQL parameter overrides, nested under the `vttablet` and `mysqld` namespaces. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`.
 - `ready` (Boolean) Is the keyspace provisioned and serving traffic
 - `replicas` (Number) Total number of replicas in the keyspace
 - `replication_durability_constraints` (Attributes) (see [below for nested schema](#nestedatt--replication_durability_constraints))

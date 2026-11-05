@@ -42,6 +42,11 @@ func TestAccVitessKeyspaceResource_Lifecycle(t *testing.T) {
 					),
 					statecheck.ExpectKnownValue(
 						resourceAddress,
+						tfjsonpath.New("parameters"),
+						knownvalue.NotNull(),
+					),
+					statecheck.ExpectKnownValue(
+						resourceAddress,
 						tfjsonpath.New("name"),
 						knownvalue.StringExact(keyspaceName),
 					),

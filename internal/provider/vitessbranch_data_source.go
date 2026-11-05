@@ -40,6 +40,7 @@ type VitessBranchDataSourceModel struct {
 	MysqlEdgeAddress           types.String                       `tfsdk:"mysql_edge_address"`
 	Name                       types.String                       `tfsdk:"name"`
 	Organization               types.String                       `tfsdk:"organization"`
+	Parameters                 map[string]map[string]types.String `tfsdk:"parameters"`
 	ParentBranch               types.String                       `tfsdk:"parent_branch"`
 	Ready                      types.Bool                         `tfsdk:"ready"`
 	RegionData                 *tfTypes.GetVitessBranchRegionData `tfsdk:"region_data"`
@@ -112,6 +113,13 @@ func (r *VitessBranchDataSource) Schema(ctx context.Context, req datasource.Sche
 			"organization": schema.StringAttribute{
 				Required:    true,
 				Description: `Organization name slug from ` + "`" + `list_organizations` + "`" + `. Example: ` + "`" + `acme` + "`" + `.`,
+			},
+			"parameters": schema.MapAttribute{
+				Computed: true,
+				ElementType: types.MapType{
+					ElemType: types.StringType,
+				},
+				Description: `VTGate parameter overrides, nested under the ` + "`" + `vtgate` + "`" + ` namespace. Values are strings in the API's format: byte sizes as plain integers and durations such as ` + "`" + `30s` + "`" + `.`,
 			},
 			"parent_branch": schema.StringAttribute{
 				Computed:    true,
@@ -239,6 +247,37 @@ func (r *VitessBranchDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessBranchResponseBody(ctx, res.Object)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetVitessBranchVtgateParametersRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.BranchVitessParameters.GetVitessBranchVtgateParameters(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.Object != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromOperationsGetVitessBranchVtgateParametersResponseBody(ctx, res1.Object)...)
 
 	if resp.Diagnostics.HasError() {
 		return

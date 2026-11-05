@@ -13,12 +13,14 @@ actions:
 
         Creating a `planetscale_vitess_branch` already provisions the branch's
         **default** keyspace. Do not create that keyspace with this resource;
-        import it if you need to manage its size or replicas in Terraform.
+        import it if you need to manage its size, replicas, or parameters in
+        Terraform.
 
         `cluster_size` and `extra_replicas` update in place (the provider calls
         the keyspace resize API and waits until the resize finishes). Prefer
         this resource for resizing any keyspace. Changing
         `planetscale_vitess_branch.cluster_size` still replaces the branch.
+        `parameters` updates in place through config change requests.
 
         Apply can take several minutes while a keyspace is provisioning or
         resizing. Replication durability, vreplication flags, and vector pool
@@ -33,12 +35,14 @@ actions:
 
         Creating a `planetscale_vitess_branch` already provisions the branch's
         **default** keyspace. Do not create that keyspace with this resource;
-        import it if you need to manage its size or replicas in Terraform.
+        import it if you need to manage its size, replicas, or parameters in
+        Terraform.
 
         `cluster_size` and `extra_replicas` update in place (the provider calls
         the keyspace resize API and waits until the resize finishes). Prefer
         this resource for resizing any keyspace. Changing
         `planetscale_vitess_branch.cluster_size` still replaces the branch.
+        `parameters` updates in place through config change requests.
 
         Apply can take several minutes while a keyspace is provisioning or
         resizing. Replication durability, vreplication flags, and vector pool
@@ -99,15 +103,15 @@ actions:
       x-speakeasy-name-override: is_default
       description: >-
         True when this is the branch's default keyspace (usually created with
-        the branch). Import that keyspace to manage its size or replicas; do
-        not try to create it with this resource.
+        the branch). Import that keyspace to manage its size, replicas, or
+        parameters; do not try to create it with this resource.
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}"].get.responses["200"].content["application/json"].schema.properties.default
     update:
       x-speakeasy-name-override: is_default
       description: >-
         True when this is the branch's default keyspace (usually created with
-        the branch). Import that keyspace to manage its size or replicas; do
-        not try to create it with this resource.
+        the branch). Import that keyspace to manage its size, replicas, or
+        parameters; do not try to create it with this resource.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/keyspaces"].post.responses["200"].content["application/json"].schema.properties.resizing
     update:

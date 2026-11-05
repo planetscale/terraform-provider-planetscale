@@ -19,6 +19,8 @@ func initHooks(h *Hooks) {
 	h.registerSDKInitHook(NewNekiParametersHook())
 	h.registerSDKInitHook(&NekiExtensionsHook{})
 	h.registerSDKInitHook(NewReadOnlyReplicaRegionSlugHook())
+	h.registerSDKInitHook(NewVitessParametersHook())
+	h.registerSDKInitHook(NewVitessKeyspaceResizeSkipHook())
 	h.registerBeforeRequestHook(customSecurityHook)
 	h.registerBeforeRequestHook(nekiShardReassignmentHook)
 	h.registerAfterSuccessHook(nekiShardReassignmentHook)

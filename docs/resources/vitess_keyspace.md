@@ -4,16 +4,16 @@ page_title: "planetscale_vitess_keyspace Resource - terraform-provider-planetsca
 subcategory: ""
 description: |-
   Manage an additional PlanetScale Vitess keyspace on a branch.
-  Creating a planetscale_vitess_branch already provisions the branch's default keyspace. Do not create that keyspace with this resource; import it if you need to manage its size or replicas in Terraform.
-  cluster_size and extra_replicas update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing planetscale_vitess_branch.cluster_size still replaces the branch.
+  Creating a planetscale_vitess_branch already provisions the branch's default keyspace. Do not create that keyspace with this resource; import it if you need to manage its size, replicas, or parameters in Terraform.
+  cluster_size and extra_replicas update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing planetscale_vitess_branch.cluster_size still replaces the branch. parameters updates in place through config change requests.
   Apply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.
 ---
 
 # planetscale_vitess_keyspace (Resource)
 
 Manage an additional PlanetScale Vitess keyspace on a branch.
-Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size or replicas in Terraform.
-`cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch.
+Creating a `planetscale_vitess_branch` already provisions the branch's **default** keyspace. Do not create that keyspace with this resource; import it if you need to manage its size, replicas, or parameters in Terraform.
+`cluster_size` and `extra_replicas` update in place (the provider calls the keyspace resize API and waits until the resize finishes). Prefer this resource for resizing any keyspace. Changing `planetscale_vitess_branch.cluster_size` still replaces the branch. `parameters` updates in place through config change requests.
 Apply can take several minutes while a keyspace is provisioning or resizing. Replication durability, vreplication flags, and vector pool allocation are read-only in this provider version.
 
 ## Example Usage
@@ -21,10 +21,12 @@ Apply can take several minutes while a keyspace is provisioning or resizing. Rep
 ```terraform
 # Creating a planetscale_vitess_branch already provisions the branch's default
 # keyspace. Use this resource for additional keyspaces, or import the default
-# keyspace if you need to manage its size or replicas in Terraform.
+# keyspace if you need to manage its size, replicas, or parameters in
+# Terraform.
 #
-# cluster_size and extra_replicas update in place (resize). Apply can take
-# several minutes while provisioning or resizing finishes.
+# cluster_size and extra_replicas update in place (resize), and parameters
+# update in place through config changes. Apply can take several minutes while
+# provisioning, resizing, or a parameter rollout finishes.
 resource "planetscale_vitess_branch" "example" {
   organization = "example"
   database     = "example"
@@ -39,6 +41,18 @@ resource "planetscale_vitess_keyspace" "example" {
   name           = "metrics"
   cluster_size   = "PS_10"
   extra_replicas = 0
+
+  # VTTablet and MySQL parameter overrides. Once set, overrides missing from
+  # this map are reset to their defaults; leave it unset to leave parameters
+  # unchanged.
+  parameters = {
+    vttablet = {
+      "vreplication-parallel-insert-workers" = "4"
+    }
+    mysqld = {
+      wait_timeout = "600"
+    }
+  }
 }
 ```
 
@@ -56,6 +70,7 @@ resource "planetscale_vitess_keyspace" "example" {
 ### Optional
 
 - `extra_replicas` (Number) The number of additional replicas beyond the included default. Updates in place via a keyspace resize.
+- `parameters` (Map of Map of String) VTTablet and MySQL parameter overrides, nested under the `vttablet` and `mysqld` namespaces, e.g. `{ mysqld = { wait_timeout = "600" } }`. Values are strings in the API's format: byte sizes as plain integers and durations such as `30s`. When unset, Terraform leaves the keyspace's parameters unchanged and only reports its current overrides. When set, overridden parameters missing from this map are reset to their defaults, and the plan warns before resetting them. Changes roll out to the keyspace's tablets as config change requests; apply waits until they complete or are queued for the branch's maintenance window. Run `pscale keyspace parameters list <database> <branch> <keyspace>` to list the parameters you can set. To tune the default keyspace created with the branch, import it.
 - `shards` (Number) The number of shards. Default: 1. Set only at create time; changing this value requires replacement. Requires replacement if changed.
 
 ### Read-Only
@@ -65,7 +80,7 @@ resource "planetscale_vitess_keyspace" "example" {
 - `created_at` (String) When the keyspace was created
 - `id` (String) The ID of the keyspace
 - `imported` (Boolean) Is this keyspace used in an import
-- `is_default` (Boolean) True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size or replicas; do not try to create it with this resource.
+- `is_default` (Boolean) True when this is the branch's default keyspace (usually created with the branch). Import that keyspace to manage its size, replicas, or parameters; do not try to create it with this resource.
 - `metal` (Boolean) Is the keyspace running on metal instances
 - `node_ttl_strategy` (String) Controls when node TTL drains are allowed
 - `ready` (Boolean) Is the keyspace provisioned and serving traffic

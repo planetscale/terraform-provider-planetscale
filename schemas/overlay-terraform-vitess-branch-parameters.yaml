@@ -1,0 +1,348 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_vitess_branch VTGate parameters
+  version: 0.0.1
+actions:
+  # The API changes VTGate parameters through a draft config change request
+  # that is submitted separately and then rolls out. The PATCH and PUT
+  # operations below exist only in this overlay; VitessParametersHook answers
+  # them by diffing the configured values against the current overrides,
+  # creating and submitting the draft, and returning the submitted config
+  # change ID. Neither changes anything when `parameters` is unset. PATCH
+  # (create) only sets the configured parameters. PUT (update) also resets
+  # overrides missing from the map, which WarnOnRemovedParameters calls out in
+  # the plan first.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/vitess-parameters"]
+    update:
+      patch:
+        tags:
+          - Branch Vitess parameters
+        operationId: set_vitess_branch_vtgate_parameters
+        summary: Set VTGate parameters
+        x-speakeasy-entity-operation: VitessBranch#create#6
+        parameters:
+          - name: organization
+            in: path
+            required: true
+            description: The name of the organization the branch belongs to
+            schema:
+              type: string
+          - name: database
+            in: path
+            required: true
+            description: The name of the database the branch belongs to
+            schema:
+              type: string
+          - name: branch
+            in: path
+            required: true
+            description: The ID of the branch
+            x-speakeasy-match: id
+            schema:
+              type: string
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                    x-speakeasy-plan-validators: VitessVtgateParametersValidator
+                    description: >-
+                      VTGate parameter overrides, nested under the `vtgate`
+                      namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`.
+                      Values are strings in the API's format: byte sizes as
+                      plain integers and durations such as `30s`. When unset,
+                      Terraform leaves the branch's parameters unchanged and
+                      only reports its current overrides. When set, overridden
+                      parameters missing from this map are reset to their
+                      defaults, and the plan warns before resetting them.
+                      Changes roll out to the branch's VTGates as a config
+                      change request; apply waits until it completes or is
+                      queued for the branch's maintenance window. Run `pscale
+                      branch vtgate parameters <database> <branch>` to list the
+                      parameters you can set.
+        responses:
+          "200":
+            description: Returns the configured parameters and the submitted config change
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    parameters:
+                      type: object
+                      nullable: true
+                      additionalProperties:
+                        type: object
+                        additionalProperties:
+                          type: string
+                      description: >-
+                        VTGate parameter overrides, nested under the `vtgate`
+                        namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`.
+                        Values are strings in the API's format: byte sizes as
+                        plain integers and durations such as `30s`. When unset,
+                        Terraform leaves the branch's parameters unchanged and
+                        only reports its current overrides. When set, overridden
+                        parameters missing from this map are reset to their
+                        defaults, and the plan warns before resetting them.
+                        Changes roll out to the branch's VTGates as a config
+                        change request; apply waits until it completes or is
+                        queued for the branch's maintenance window. Run `pscale
+                        branch vtgate parameters <database> <branch>` to list the
+                        parameters you can set.
+                    config_change_id:
+                      type: string
+                      description: The submitted config change request, used to wait for its rollout.
+                      x-speakeasy-terraform-ignore: schema
+                  required:
+                    - parameters
+                    - config_change_id
+          "401":
+            description: Unauthorized
+          "403":
+            description: Forbidden
+          "404":
+            description: Not Found
+          "422":
+            description: Unprocessable Entity
+          "429":
+            description: Too Many Requests. Reduce the frequency of requests and try again soon.
+          "500":
+            description: Internal Server Error
+      put:
+        tags:
+          - Branch Vitess parameters
+        operationId: replace_vitess_branch_vtgate_parameters
+        summary: Replace VTGate parameters
+        x-speakeasy-entity-operation: VitessBranch#update#5
+        parameters:
+          - name: organization
+            in: path
+            required: true
+            description: The name of the organization the branch belongs to
+            schema:
+              type: string
+          - name: database
+            in: path
+            required: true
+            description: The name of the database the branch belongs to
+            schema:
+              type: string
+          - name: branch
+            in: path
+            required: true
+            description: The ID of the branch
+            x-speakeasy-match: id
+            schema:
+              type: string
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    x-speakeasy-plan-modifiers: WarnOnRemovedParameters
+                    x-speakeasy-plan-validators: VitessVtgateParametersValidator
+                    description: >-
+                      VTGate parameter overrides, nested under the `vtgate`
+                      namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`.
+                      Values are strings in the API's format: byte sizes as
+                      plain integers and durations such as `30s`. When unset,
+                      Terraform leaves the branch's parameters unchanged and
+                      only reports its current overrides. When set, overridden
+                      parameters missing from this map are reset to their
+                      defaults, and the plan warns before resetting them.
+                      Changes roll out to the branch's VTGates as a config
+                      change request; apply waits until it completes or is
+                      queued for the branch's maintenance window. Run `pscale
+                      branch vtgate parameters <database> <branch>` to list the
+                      parameters you can set.
+        responses:
+          "200":
+            description: Returns the configured parameters and the submitted config change
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    parameters:
+                      type: object
+                      nullable: true
+                      additionalProperties:
+                        type: object
+                        additionalProperties:
+                          type: string
+                      description: >-
+                        VTGate parameter overrides, nested under the `vtgate`
+                        namespace, e.g. `{ vtgate = { "query-timeout" = "30000" } }`.
+                        Values are strings in the API's format: byte sizes as
+                        plain integers and durations such as `30s`. When unset,
+                        Terraform leaves the branch's parameters unchanged and
+                        only reports its current overrides. When set, overridden
+                        parameters missing from this map are reset to their
+                        defaults, and the plan warns before resetting them.
+                        Changes roll out to the branch's VTGates as a config
+                        change request; apply waits until it completes or is
+                        queued for the branch's maintenance window. Run `pscale
+                        branch vtgate parameters <database> <branch>` to list the
+                        parameters you can set.
+                    config_change_id:
+                      type: string
+                      description: The submitted config change request, used to wait for its rollout.
+                      x-speakeasy-terraform-ignore: schema
+                  required:
+                    - parameters
+                    - config_change_id
+          "401":
+            description: Unauthorized
+          "403":
+            description: Forbidden
+          "404":
+            description: Not Found
+          "422":
+            description: Unprocessable Entity
+          "429":
+            description: Too Many Requests. Reduce the frequency of requests and try again soon.
+          "500":
+            description: Internal Server Error
+
+  # The API lists every VTGate, VTTablet, and MySQL parameter with its default
+  # and current value. VitessParametersHook reduces that to the overridden
+  # VTGate parameters, always as a map so that a branch without overrides
+  # replaces stale state. The planetscale_vitess_branch data source takes its
+  # organization and database descriptions from this operation, so they match
+  # get_vitess_branch.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/vitess-parameters"].get.parameters
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/vitess-parameters"].get.responses["200"].content["application/json"].schema
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/vitess-parameters"].get
+    description: Read overridden VTGate parameters for the managed resource and data source.
+    update:
+      operationId: get_vitess_branch_vtgate_parameters
+      summary: Get VTGate parameters
+      x-speakeasy-entity-operation: VitessBranch#read#2
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: The ID of the branch
+          x-speakeasy-match: id
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns the overridden VTGate parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    description: >-
+                      VTGate parameter overrides, nested under the `vtgate`
+                      namespace. Values are strings in the API's format: byte sizes
+                      as plain integers and durations such as `30s`.
+                required:
+                  - parameters
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/config-changes/{id}"].get.parameters[?@.name == 'branch']
+    update:
+      x-speakeasy-match: id
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/config-changes/{id}"].get.parameters[?@.name == 'id']
+    update:
+      x-speakeasy-name-override: config_change_id
+      x-speakeasy-terraform-ignore: schema
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/config-changes/{id}"].get.responses["200"].content["application/json"].schema
+    description: Keep only the fields needed to wait for the config change.
+    remove: true
+  # VitessParametersHook reports queued changes as completed (their values are
+  # already saved) and turns failed or canceled changes into errors that carry
+  # the API's error message, so only a success criterion is needed. Unchanged
+  # parameters skip the API call, so polling starts without a delay.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/config-changes/{id}"].get
+    description: Wait for a submitted VTGate config change during create and update.
+    update:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    x-speakeasy-name-override: config_change_id
+                    x-speakeasy-terraform-ignore: schema
+                  state:
+                    type: string
+                    x-speakeasy-name-override: config_change_state
+                    x-speakeasy-terraform-ignore: schema
+                required:
+                  - id
+                  - state
+      x-speakeasy-entity-operation:
+        - entityOperation: VitessBranch#create#7
+          options:
+            polling:
+              name: WaitForConfigChange
+        - entityOperation: VitessBranch#update#6
+          options:
+            polling:
+              name: WaitForConfigChange
+      # Rollouts take minutes, so retry dropped connections and gateway errors
+      # instead of failing the apply on one bad poll.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 1000
+          maxInterval: 30000
+          maxElapsedTime: 300000
+          exponent: 2
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
+      x-speakeasy-polling:
+        - name: WaitForConfigChange
+          delaySeconds: 0
+          intervalSeconds: 10
+          limitCount: 180 # 30 minutes at a 10 second interval
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/config_change_state == "completed"

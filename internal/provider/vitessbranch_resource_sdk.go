@@ -47,6 +47,17 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsCreateVitessBranchRespo
 	return diags
 }
 
+func (r *VitessBranchResourceModel) RefreshFromOperationsGetBranchConfigChangeRequestResponseBody(ctx context.Context, resp *operations.GetBranchConfigChangeRequestResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ConfigChangeID = types.StringValue(resp.ConfigChangeID)
+		r.ConfigChangeState = types.StringValue(resp.ConfigChangeState)
+	}
+
+	return diags
+}
+
 func (r *VitessBranchResourceModel) RefreshFromOperationsGetBranchResizeRequestResponseBody(ctx context.Context, resp *operations.GetBranchResizeRequestResponseBody) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -90,6 +101,77 @@ func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchResponse
 		r.VtgateMaxCount = types.Int64PointerValue(resp.VtgateMaxCount)
 		r.VtgateSize = types.StringPointerValue(resp.VtgateSize)
 		r.VtgateTargetCPUUtilization = types.Int64PointerValue(resp.VtgateTargetCPUUtilization)
+	}
+
+	return diags
+}
+
+func (r *VitessBranchResourceModel) RefreshFromOperationsGetVitessBranchVtgateParametersResponseBody(ctx context.Context, resp *operations.GetVitessBranchVtgateParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
+func (r *VitessBranchResourceModel) RefreshFromOperationsReplaceVitessBranchVtgateParametersResponseBody(ctx context.Context, resp *operations.ReplaceVitessBranchVtgateParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ConfigChangeID = types.StringValue(resp.ConfigChangeID)
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
+	}
+
+	return diags
+}
+
+func (r *VitessBranchResourceModel) RefreshFromOperationsSetVitessBranchVtgateParametersResponseBody(ctx context.Context, resp *operations.SetVitessBranchVtgateParametersResponseBody) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.ConfigChangeID = types.StringValue(resp.ConfigChangeID)
+		if resp.Parameters != nil {
+			r.Parameters = make(map[string]map[string]types.String, len(resp.Parameters))
+			for parametersKey, parametersValue := range resp.Parameters {
+				var parametersResult map[string]types.String
+				if len(parametersValue) > 0 {
+					parametersResult = make(map[string]types.String, len(parametersValue))
+					for key, value := range parametersValue {
+						parametersResult[key] = types.StringValue(value)
+					}
+				}
+
+				r.Parameters[parametersKey] = parametersResult
+			}
+		}
 	}
 
 	return diags
@@ -257,6 +339,31 @@ func (r *VitessBranchResourceModel) ToOperationsDeleteVitessBranchRequest(ctx co
 	return &out, diags
 }
 
+func (r *VitessBranchResourceModel) ToOperationsGetBranchConfigChangeRequestRequest(ctx context.Context) (*operations.GetBranchConfigChangeRequestRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	var configChangeID string
+	configChangeID = r.ConfigChangeID.ValueString()
+
+	out := operations.GetBranchConfigChangeRequestRequest{
+		Organization:   organization,
+		Database:       database,
+		Branch:         branch,
+		ConfigChangeID: configChangeID,
+	}
+
+	return &out, diags
+}
+
 func (r *VitessBranchResourceModel) ToOperationsGetBranchResizeRequestRequest(ctx context.Context) (*operations.GetBranchResizeRequestRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -298,6 +405,133 @@ func (r *VitessBranchResourceModel) ToOperationsGetVitessBranchRequest(ctx conte
 		Organization: organization,
 		Database:     database,
 		Branch:       branch,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsGetVitessBranchVtgateParametersRequest(ctx context.Context) (*operations.GetVitessBranchVtgateParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	out := operations.GetVitessBranchVtgateParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsReplaceVitessBranchVtgateParametersRequest(ctx context.Context) (*operations.ReplaceVitessBranchVtgateParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsReplaceVitessBranchVtgateParametersRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.ReplaceVitessBranchVtgateParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsReplaceVitessBranchVtgateParametersRequestBody(ctx context.Context) (*operations.ReplaceVitessBranchVtgateParametersRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
+
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
+		}
+	}
+	out := operations.ReplaceVitessBranchVtgateParametersRequestBody{
+		Parameters: parameters,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsSetVitessBranchVtgateParametersRequest(ctx context.Context) (*operations.SetVitessBranchVtgateParametersRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var organization string
+	organization = r.Organization.ValueString()
+
+	var database string
+	database = r.Database.ValueString()
+
+	var branch string
+	branch = r.ID.ValueString()
+
+	body, bodyDiags := r.ToOperationsSetVitessBranchVtgateParametersRequestBody(ctx)
+	diags.Append(bodyDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.SetVitessBranchVtgateParametersRequest{
+		Organization: organization,
+		Database:     database,
+		Branch:       branch,
+		Body:         *body,
+	}
+
+	return &out, diags
+}
+
+func (r *VitessBranchResourceModel) ToOperationsSetVitessBranchVtgateParametersRequestBody(ctx context.Context) (*operations.SetVitessBranchVtgateParametersRequestBody, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var parameters map[string]map[string]string
+	if r.Parameters != nil {
+		parameters = make(map[string]map[string]string)
+		for parametersKey := range r.Parameters {
+			parametersInst := make(map[string]string)
+			for key := range r.Parameters[parametersKey] {
+				var inst string
+				inst = r.Parameters[parametersKey][key].ValueString()
+
+				parametersInst[key] = inst
+			}
+			parameters[parametersKey] = parametersInst
+		}
+	}
+	out := operations.SetVitessBranchVtgateParametersRequestBody{
+		Parameters: parameters,
 	}
 
 	return &out, diags
