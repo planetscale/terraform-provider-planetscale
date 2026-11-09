@@ -160,6 +160,30 @@ func (e *CreatePostgresBranchBackupState) IsExact() bool {
 	return false
 }
 
+// CreatePostgresBranchBackupEmergencySource - The tablet type a MySQL clone backup was taken from
+type CreatePostgresBranchBackupEmergencySource string
+
+const (
+	CreatePostgresBranchBackupEmergencySourceReplica CreatePostgresBranchBackupEmergencySource = "replica"
+	CreatePostgresBranchBackupEmergencySourceRdonly  CreatePostgresBranchBackupEmergencySource = "rdonly"
+	CreatePostgresBranchBackupEmergencySourcePrimary CreatePostgresBranchBackupEmergencySource = "primary"
+)
+
+func (e CreatePostgresBranchBackupEmergencySource) ToPointer() *CreatePostgresBranchBackupEmergencySource {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreatePostgresBranchBackupEmergencySource) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "replica", "rdonly", "primary":
+			return true
+		}
+	}
+	return false
+}
+
 type CreatePostgresBranchBackupActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
@@ -230,10 +254,12 @@ type CreatePostgresBranchBackupResponseBody struct {
 	// The uncompressed (logical) size of the backup in bytes
 	UncompressedSize int64 `json:"uncompressed_size"`
 	// Whether or not the backup is protected from deletion
-	Protected      bool                                      `json:"protected"`
-	Actor          *CreatePostgresBranchBackupActor          `json:"actor"`
-	BackupPolicy   *CreatePostgresBranchBackupBackupPolicy   `json:"backup_policy,omitzero"`
-	DatabaseBranch *CreatePostgresBranchBackupDatabaseBranch `json:"database_branch,omitzero"`
+	Protected bool `json:"protected"`
+	// The tablet type a MySQL clone backup was taken from
+	EmergencySource *CreatePostgresBranchBackupEmergencySource `json:"emergency_source,omitzero"`
+	Actor           *CreatePostgresBranchBackupActor           `json:"actor"`
+	BackupPolicy    *CreatePostgresBranchBackupBackupPolicy    `json:"backup_policy,omitzero"`
+	DatabaseBranch  *CreatePostgresBranchBackupDatabaseBranch  `json:"database_branch,omitzero"`
 }
 
 func (c CreatePostgresBranchBackupResponseBody) MarshalJSON() ([]byte, error) {
@@ -329,6 +355,13 @@ func (c *CreatePostgresBranchBackupResponseBody) GetProtected() bool {
 		return false
 	}
 	return c.Protected
+}
+
+func (c *CreatePostgresBranchBackupResponseBody) GetEmergencySource() *CreatePostgresBranchBackupEmergencySource {
+	if c == nil {
+		return nil
+	}
+	return c.EmergencySource
 }
 
 func (c *CreatePostgresBranchBackupResponseBody) GetActor() *CreatePostgresBranchBackupActor {

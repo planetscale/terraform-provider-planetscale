@@ -45,7 +45,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
 - `backup_id` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) If provided, restores the backup's schema and data to the new branch. Must have `restore_production_branch_backup(s)` or `restore_backup(s)` access to do this. Requires replacement if changed.
-- `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+- `cluster_size` (String) The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint. Changing a production branch to a PS-DEV size demotes it and also requires `connect_production_branch` or `demote_branches` access, or the `demote_branches` OAuth scope.
 - `delete_descendants` (Boolean) If true, recursively delete all descendant branches along with this branch
 - `deletion_protected` (Boolean) Whether deletion protection is enabled for the branch
 - `major_version` (String) The PostgreSQL major version to use for the branch. Defaults to the major version of the parent branch if it exists or the database's default branch major version. Ignored for branches restored from backups. Requires replacement if changed.

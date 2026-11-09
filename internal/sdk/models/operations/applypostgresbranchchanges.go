@@ -57,7 +57,7 @@ func (a *ApplyPostgresBranchChangesStorage) GetStorageThroughputMibs() *int64 {
 }
 
 type ApplyPostgresBranchChangesRequestBody struct {
-	// The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.
+	// The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint. Changing a production branch to a PS-DEV size demotes it and also requires `connect_production_branch` or `demote_branches` access, or the `demote_branches` OAuth scope.
 	ClusterSize *string `json:"cluster_size,omitzero"`
 	// Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
 	Storage *ApplyPostgresBranchChangesStorage `json:"storage,omitzero"`

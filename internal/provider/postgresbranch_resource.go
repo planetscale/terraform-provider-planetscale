@@ -92,7 +92,7 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			"cluster_size": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint.`,
+				Description: `The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint. Changing a production branch to a PS-DEV size demotes it and also requires ` + "`" + `connect_production_branch` + "`" + ` or ` + "`" + `demote_branches` + "`" + ` access, or the ` + "`" + `demote_branches` + "`" + ` OAuth scope.`,
 				Validators: []validator.String{
 					custom_stringvalidators.ClusterSizeValidator(),
 				},
