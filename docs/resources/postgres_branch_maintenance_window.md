@@ -13,7 +13,7 @@ PostgresBranchMaintenanceWindow Resource
 ## Example Usage
 
 ```terraform
-resource "planetscale_postgres_branch_maintenance_window" "main" {
+resource "planetscale_postgres_branch_maintenance_window" "my_postgresbranchmaintenancewindow" {
   organization = "my-organization"
   database     = "my-database"
   branch       = "main"
