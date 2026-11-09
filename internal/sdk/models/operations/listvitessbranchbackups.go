@@ -197,6 +197,30 @@ func (e *ListVitessBranchBackupsDataState) IsExact() bool {
 	return false
 }
 
+// ListVitessBranchBackupsEmergencySource - The tablet type a MySQL clone backup was taken from
+type ListVitessBranchBackupsEmergencySource string
+
+const (
+	ListVitessBranchBackupsEmergencySourceReplica ListVitessBranchBackupsEmergencySource = "replica"
+	ListVitessBranchBackupsEmergencySourceRdonly  ListVitessBranchBackupsEmergencySource = "rdonly"
+	ListVitessBranchBackupsEmergencySourcePrimary ListVitessBranchBackupsEmergencySource = "primary"
+)
+
+func (e ListVitessBranchBackupsEmergencySource) ToPointer() *ListVitessBranchBackupsEmergencySource {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ListVitessBranchBackupsEmergencySource) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "replica", "rdonly", "primary":
+			return true
+		}
+	}
+	return false
+}
+
 type ListVitessBranchBackupsActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
@@ -266,10 +290,12 @@ type ListVitessBranchBackupsData struct {
 	// The uncompressed (logical) size of the backup in bytes
 	UncompressedSize int64 `json:"uncompressed_size"`
 	// Whether or not the backup is protected from deletion
-	Protected      bool                                   `json:"protected"`
-	Actor          *ListVitessBranchBackupsActor          `json:"actor"`
-	BackupPolicy   *ListVitessBranchBackupsBackupPolicy   `json:"backup_policy,omitzero"`
-	DatabaseBranch *ListVitessBranchBackupsDatabaseBranch `json:"database_branch,omitzero"`
+	Protected bool `json:"protected"`
+	// The tablet type a MySQL clone backup was taken from
+	EmergencySource *ListVitessBranchBackupsEmergencySource `json:"emergency_source,omitzero"`
+	Actor           *ListVitessBranchBackupsActor           `json:"actor"`
+	BackupPolicy    *ListVitessBranchBackupsBackupPolicy    `json:"backup_policy,omitzero"`
+	DatabaseBranch  *ListVitessBranchBackupsDatabaseBranch  `json:"database_branch,omitzero"`
 }
 
 func (l ListVitessBranchBackupsData) MarshalJSON() ([]byte, error) {
@@ -365,6 +391,13 @@ func (l *ListVitessBranchBackupsData) GetProtected() bool {
 		return false
 	}
 	return l.Protected
+}
+
+func (l *ListVitessBranchBackupsData) GetEmergencySource() *ListVitessBranchBackupsEmergencySource {
+	if l == nil {
+		return nil
+	}
+	return l.EmergencySource
 }
 
 func (l *ListVitessBranchBackupsData) GetActor() *ListVitessBranchBackupsActor {

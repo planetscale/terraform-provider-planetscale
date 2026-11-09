@@ -98,6 +98,33 @@ actions:
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.backup_policy.properties.required
     remove: true
 
+  # Upstream added `emergency` and `emergency_source` to backup responses; the
+  # provider does not expose them yet. `emergency` is also an optional
+  # (PostgreSQL-only) create request field, so it is removed from the responses
+  # rather than terraform-ignored: an ignore would merge across the entity and
+  # drop the request attribute as well.
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.emergency
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.emergency
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.emergency
+    remove: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.emergency
+    remove: true
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].get.responses['200'].content['application/json'].schema.properties.data.items.properties.emergency_source
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups'].post.responses['201'].content['application/json'].schema.properties.emergency_source
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].get.responses['200'].content['application/json'].schema.properties.emergency_source
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}/backups/{id}'].patch.responses['200'].content['application/json'].schema.properties.emergency_source
+    update:
+      x-speakeasy-terraform-ignore: true
+
   # Copy and split backup paths for Vitess and Postgres resources
   - target: $.paths
     description: Add Vitess backup path entries

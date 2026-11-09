@@ -151,6 +151,30 @@ func (e *CreateVitessBranchBackupState) IsExact() bool {
 	return false
 }
 
+// CreateVitessBranchBackupEmergencySource - The tablet type a MySQL clone backup was taken from
+type CreateVitessBranchBackupEmergencySource string
+
+const (
+	CreateVitessBranchBackupEmergencySourceReplica CreateVitessBranchBackupEmergencySource = "replica"
+	CreateVitessBranchBackupEmergencySourceRdonly  CreateVitessBranchBackupEmergencySource = "rdonly"
+	CreateVitessBranchBackupEmergencySourcePrimary CreateVitessBranchBackupEmergencySource = "primary"
+)
+
+func (e CreateVitessBranchBackupEmergencySource) ToPointer() *CreateVitessBranchBackupEmergencySource {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *CreateVitessBranchBackupEmergencySource) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "replica", "rdonly", "primary":
+			return true
+		}
+	}
+	return false
+}
+
 type CreateVitessBranchBackupActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
@@ -221,10 +245,12 @@ type CreateVitessBranchBackupResponseBody struct {
 	// The uncompressed (logical) size of the backup in bytes
 	UncompressedSize int64 `json:"uncompressed_size"`
 	// Whether or not the backup is protected from deletion
-	Protected      bool                                    `json:"protected"`
-	Actor          *CreateVitessBranchBackupActor          `json:"actor"`
-	BackupPolicy   *CreateVitessBranchBackupBackupPolicy   `json:"backup_policy,omitzero"`
-	DatabaseBranch *CreateVitessBranchBackupDatabaseBranch `json:"database_branch,omitzero"`
+	Protected bool `json:"protected"`
+	// The tablet type a MySQL clone backup was taken from
+	EmergencySource *CreateVitessBranchBackupEmergencySource `json:"emergency_source,omitzero"`
+	Actor           *CreateVitessBranchBackupActor           `json:"actor"`
+	BackupPolicy    *CreateVitessBranchBackupBackupPolicy    `json:"backup_policy,omitzero"`
+	DatabaseBranch  *CreateVitessBranchBackupDatabaseBranch  `json:"database_branch,omitzero"`
 }
 
 func (c CreateVitessBranchBackupResponseBody) MarshalJSON() ([]byte, error) {
@@ -320,6 +346,13 @@ func (c *CreateVitessBranchBackupResponseBody) GetProtected() bool {
 		return false
 	}
 	return c.Protected
+}
+
+func (c *CreateVitessBranchBackupResponseBody) GetEmergencySource() *CreateVitessBranchBackupEmergencySource {
+	if c == nil {
+		return nil
+	}
+	return c.EmergencySource
 }
 
 func (c *CreateVitessBranchBackupResponseBody) GetActor() *CreateVitessBranchBackupActor {

@@ -73,6 +73,30 @@ func (e *GetPostgresBranchBackupState) IsExact() bool {
 	return false
 }
 
+// GetPostgresBranchBackupEmergencySource - The tablet type a MySQL clone backup was taken from
+type GetPostgresBranchBackupEmergencySource string
+
+const (
+	GetPostgresBranchBackupEmergencySourceReplica GetPostgresBranchBackupEmergencySource = "replica"
+	GetPostgresBranchBackupEmergencySourceRdonly  GetPostgresBranchBackupEmergencySource = "rdonly"
+	GetPostgresBranchBackupEmergencySourcePrimary GetPostgresBranchBackupEmergencySource = "primary"
+)
+
+func (e GetPostgresBranchBackupEmergencySource) ToPointer() *GetPostgresBranchBackupEmergencySource {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *GetPostgresBranchBackupEmergencySource) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "replica", "rdonly", "primary":
+			return true
+		}
+	}
+	return false
+}
+
 type GetPostgresBranchBackupActor struct {
 	// The ID of the actor
 	ID string `json:"id"`
@@ -143,10 +167,12 @@ type GetPostgresBranchBackupResponseBody struct {
 	// The uncompressed (logical) size of the backup in bytes
 	UncompressedSize int64 `json:"uncompressed_size"`
 	// Whether or not the backup is protected from deletion
-	Protected      bool                                   `json:"protected"`
-	Actor          *GetPostgresBranchBackupActor          `json:"actor"`
-	BackupPolicy   *GetPostgresBranchBackupBackupPolicy   `json:"backup_policy,omitzero"`
-	DatabaseBranch *GetPostgresBranchBackupDatabaseBranch `json:"database_branch,omitzero"`
+	Protected bool `json:"protected"`
+	// The tablet type a MySQL clone backup was taken from
+	EmergencySource *GetPostgresBranchBackupEmergencySource `json:"emergency_source,omitzero"`
+	Actor           *GetPostgresBranchBackupActor           `json:"actor"`
+	BackupPolicy    *GetPostgresBranchBackupBackupPolicy    `json:"backup_policy,omitzero"`
+	DatabaseBranch  *GetPostgresBranchBackupDatabaseBranch  `json:"database_branch,omitzero"`
 }
 
 func (g GetPostgresBranchBackupResponseBody) MarshalJSON() ([]byte, error) {
@@ -242,6 +268,13 @@ func (g *GetPostgresBranchBackupResponseBody) GetProtected() bool {
 		return false
 	}
 	return g.Protected
+}
+
+func (g *GetPostgresBranchBackupResponseBody) GetEmergencySource() *GetPostgresBranchBackupEmergencySource {
+	if g == nil {
+		return nil
+	}
+	return g.EmergencySource
 }
 
 func (g *GetPostgresBranchBackupResponseBody) GetActor() *GetPostgresBranchBackupActor {
