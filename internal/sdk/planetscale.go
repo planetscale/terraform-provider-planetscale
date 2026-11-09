@@ -83,6 +83,9 @@ type PlanetScale struct {
 	//           Resources for managing keyspace resize requests.
 	//
 	KeyspaceResizes *KeyspaceResizes
+	//           Resources for viewing and updating database maintenance schedules, for PostgreSQL databases and Vitess databases (Enterprise only).
+	//
+	MaintenanceSchedules *MaintenanceSchedules
 	//           Resources for managing database branch passwords.
 	//
 	DatabaseBranchPasswords *DatabaseBranchPasswords
@@ -220,6 +223,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.DatabaseBranchKeyspaces = newDatabaseBranchKeyspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.KeyspaceConfigChanges = newKeyspaceConfigChanges(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.KeyspaceResizes = newKeyspaceResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.MaintenanceSchedules = newMaintenanceSchedules(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DatabaseBranchPasswords = newDatabaseBranchPasswords(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIBranchResizes = newAPIBranchResizes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
