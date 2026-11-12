@@ -8,6 +8,7 @@ on:
       - go.mod
       - go.sum
       - "**.go"
+      - .github/workflows/test-extensive.yml
   merge_group:
     type:
       - checks_requested
@@ -17,6 +18,7 @@ on:
       - go.mod
       - go.sum
       - "**.go"
+      - .github/workflows/test-extensive.yml
     types:
       - opened
       - synchronize
