@@ -52,6 +52,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -72,10 +75,15 @@ jobs:
         with:
           terraform_version: ${{ matrix.terraform }}
           terraform_wrapper: false
+      - uses: planetscale/auth-action@aa8f73f656f858eb798916ce2fe9769ab1ba0d76 # v1.0.0
+        id: planetscale-auth
+        with:
+          organization: planetscale-terraform-testing
+          oidc-trust: tmz96rlfsslr
       - run: make testacc
         env:
-          PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
-          PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+          PLANETSCALE_SERVICE_TOKEN_ID: ${{ steps.planetscale-auth.outputs.service-token-id }}
+          PLANETSCALE_SERVICE_TOKEN: ${{ steps.planetscale-auth.outputs.service-token }}
           # Dedicated backup branch so concurrent jobs don't contend for the
           # API's single in-flight manual backup per branch.
           PLANETSCALE_TEST_BRANCH: ${{ matrix.branch }}
@@ -88,6 +96,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       max-parallel: 2
       fail-fast: false
@@ -106,10 +117,15 @@ jobs:
         with:
           tofu_version: ${{ matrix.tofu }}
           tofu_wrapper: false
+      - uses: planetscale/auth-action@aa8f73f656f858eb798916ce2fe9769ab1ba0d76 # v1.0.0
+        id: planetscale-auth
+        with:
+          organization: planetscale-terraform-testing
+          oidc-trust: tmz96rlfsslr
       - run: make testacc
         env:
-          PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
-          PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+          PLANETSCALE_SERVICE_TOKEN_ID: ${{ steps.planetscale-auth.outputs.service-token-id }}
+          PLANETSCALE_SERVICE_TOKEN: ${{ steps.planetscale-auth.outputs.service-token }}
           # Dedicated backup branch so concurrent jobs don't contend for the
           # API's single in-flight manual backup per branch.
           PLANETSCALE_TEST_BRANCH: ${{ matrix.branch }}
