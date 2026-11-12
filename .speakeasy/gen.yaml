@@ -32,7 +32,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 terraform:
-  version: 1.19.0
+  version: 1.20.0
   additionalActions: []
   additionalDataSources:
     - datasource: NewDeprecatedPostgresReadOnlyReplicaDataSource
