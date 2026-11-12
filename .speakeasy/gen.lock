@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: d777c38efb37cbac8f8ab4ef36e05ccc
+  docChecksum: 7a960a06fe5d583b0c0f13472fe4f561
   docVersion: v1
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -66,6 +66,7 @@ trackedFiles:
     pristine_git_object: 3b6090c12e19ba0ae03c38072b012e34da39cc8b
   examples/data-sources/planetscale_postgres_branch_backup/data-source.tf: {}
   examples/data-sources/planetscale_postgres_branch_backups/data-source.tf: {}
+  examples/data-sources/planetscale_postgres_branch_maintenance_window/data-source.tf: {}
   examples/data-sources/planetscale_postgres_branch_role/data-source.tf:
     id: 1165de7d3af4
     pristine_git_object: a056b4a391124bf64b8f31d57ae298336be026c9
@@ -119,6 +120,8 @@ trackedFiles:
     pristine_git_object: cd24e855212aaf70c29c5a6729c2c2b4f4dc19c1
   examples/resources/planetscale_postgres_branch_backup/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_branch_backup/import.sh: {}
+  examples/resources/planetscale_postgres_branch_maintenance_window/import-by-string-id.tf: {}
+  examples/resources/planetscale_postgres_branch_maintenance_window/import.sh: {}
   examples/resources/planetscale_postgres_branch_role/import-by-string-id.tf:
     id: 481d444b7e2f
     pristine_git_object: 97d4bf0641d16607113cf3c34cfeb7f5d08ad963
@@ -307,6 +310,10 @@ trackedFiles:
   internal/provider/postgresbranchbackup_resource_sdk.go: {}
   internal/provider/postgresbranchbackups_data_source.go: {}
   internal/provider/postgresbranchbackups_data_source_sdk.go: {}
+  internal/provider/postgresbranchmaintenancewindow_data_source.go: {}
+  internal/provider/postgresbranchmaintenancewindow_data_source_sdk.go: {}
+  internal/provider/postgresbranchmaintenancewindow_resource.go: {}
+  internal/provider/postgresbranchmaintenancewindow_resource_sdk.go: {}
   internal/provider/postgresbranchrole_data_source.go:
     id: 6bdf96bc204f
     pristine_git_object: 90dfa7d37827ae4d9d69ee1b8949f4f64435ec23
@@ -623,6 +630,7 @@ trackedFiles:
   internal/sdk/keyspaceconfigchanges.go: {}
   internal/sdk/keyspaceresizes.go: {}
   internal/sdk/keyspacevitessparameters.go: {}
+  internal/sdk/maintenanceschedules.go: {}
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
@@ -683,6 +691,7 @@ trackedFiles:
   internal/sdk/models/operations/deletevitessbranchbackup.go: {}
   internal/sdk/models/operations/getbranchchangerequest.go: {}
   internal/sdk/models/operations/getbranchconfigchangerequest.go: {}
+  internal/sdk/models/operations/getbranchmaintenancewindow.go: {}
   internal/sdk/models/operations/getbranchresizerequest.go: {}
   internal/sdk/models/operations/getdedicatedreadreplica.go: {}
   internal/sdk/models/operations/getkeyspace.go: {}
@@ -760,6 +769,7 @@ trackedFiles:
   internal/sdk/models/operations/runnekiconfigurationprofilemaintenance.go: {}
   internal/sdk/models/operations/setvitessbranchvtgateparameters.go: {}
   internal/sdk/models/operations/setvitesskeyspaceparameters.go: {}
+  internal/sdk/models/operations/updatebranchmaintenancewindow.go: {}
   internal/sdk/models/operations/updatebranchresizerequest.go: {}
   internal/sdk/models/operations/updatededicatedreadreplica.go: {}
   internal/sdk/models/operations/updatekeyspaceresizerequest.go: {}
@@ -3429,6 +3439,26 @@ examples:
       responses:
         "200":
           application/json: {"parameters": {"key": {"key": "<value>", "key1": "<value>"}}, "config_change_id": "<id>"}
+  get_branch_maintenance_window:
+    speakeasy-default-get-branch-maintenance-window:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "duration": 994404, "day": 914571, "hour": 315140}
+  update_branch_maintenance_window:
+    speakeasy-default-update-branch-maintenance-window:
+      parameters:
+        path:
+          organization: "<value>"
+          database: "<value>"
+          branch: "<value>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "duration": 972780, "day": 734744, "hour": 401688}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

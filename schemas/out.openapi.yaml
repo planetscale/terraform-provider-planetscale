@@ -5230,7 +5230,190 @@ paths:
   /organizations/{organization}/databases/{database}/branches/{branch}/keyspaces/{keyspace}/vschema: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/logs/signatures: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/maintenance: {}
-  /organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window: {}
+  /organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window:
+    get:
+      tags:
+        - MaintenanceSchedules
+      operationId: get_branch_maintenance_window
+      summary: Get a branch's maintenance window
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns the branch's maintenance schedule
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the maintenance schedule
+                  duration:
+                    type: integer
+                    description: The duration of the maintenance window in hours
+                  day:
+                    type: integer
+                    description: Day of the week (0 = Sunday, 6 = Saturday, 7 = every day)
+                  hour:
+                    type: integer
+                    description: Hour of the day in UTC (0-23)
+                required:
+                  - id
+                  - duration
+                  - day
+                  - hour
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |2-
+                Returns the weekly maintenance window of a PostgreSQL production branch.
+
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_databases` |
+        | Database | `read_database` |
+      x-speakeasy-entity-operation: PostgresBranchMaintenanceWindow#read
+      x-speakeasy-entity-description: >-
+        Look up the weekly maintenance window of a PlanetScale Postgres production branch.
+    patch:
+      tags:
+        - MaintenanceSchedules
+      operationId: update_branch_maintenance_window
+      summary: Update a branch's maintenance window
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: "Organization name slug from `list_organizations`. Example: `acme`."
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+        - name: database
+          in: path
+          required: true
+          description: "Database name slug from `list_databases`. Example: `app-db`."
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+        - name: branch
+          in: path
+          required: true
+          description: "Branch name from `list_branches`. Example: `main`."
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                day:
+                  type: integer
+                  description: Day of the week the window opens, in UTC, from 0 (Sunday) to 6 (Saturday).
+                  minimum: 0
+                  maximum: 6
+                hour:
+                  type: integer
+                  description: Hour of the day the window opens, in UTC, from 0 to 23.
+                  minimum: 0
+                  maximum: 23
+              required:
+                - day
+                - hour
+      responses:
+        "200":
+          description: Returns the updated maintenance schedule
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the maintenance schedule
+                  duration:
+                    type: integer
+                    description: The duration of the maintenance window in hours
+                  day:
+                    type: integer
+                    description: Day of the week (0 = Sunday, 6 = Saturday, 7 = every day)
+                  hour:
+                    type: integer
+                    description: Hour of the day in UTC (0-23)
+                required:
+                  - id
+                  - duration
+                  - day
+                  - hour
+                x-speakeasy-entity: PostgresBranchMaintenanceWindow
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |2-
+                Changes the day and hour of a PostgreSQL production branch's weekly maintenance window.
+
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresBranchMaintenanceWindow#create,update
+      x-speakeasy-entity-description: >-
+        Manage the weekly maintenance window of a PlanetScale Postgres production branch: the day and hour, in UTC, when scheduled maintenance can start. The window is created with the branch; creating this Terraform resource adopts and configures it, while removing the resource only stops managing it. A change is refused while the window is open, or when it would push scheduled maintenance past its deadline.
   /organizations/{organization}/databases/{database}/branches/{branch}/metrics: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/metrics/instant: {}
   /organizations/{organization}/databases/{database}/branches/{branch}/metrics/keyspace-tables: {}

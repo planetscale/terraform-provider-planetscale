@@ -2,8 +2,8 @@ speakeasyVersion: 1.802.0
 sources:
     PlanetScale API:
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:ec333049e22fdd858fb977e32bedb3ba996989c738433c61807a934e9963652c
-        sourceBlobDigest: sha256:15732697686c818f0506f01a904c06525eee0fb7625f21010738adf151decb75
+        sourceRevisionDigest: sha256:3e8a2bf3275dab55d278c6de7aea22951a6153542f3135bb2dd85e9dcb9b2139
+        sourceBlobDigest: sha256:1088450245f76a2e135a70a2b75030bd6a34b325119c0c59adce49865b097927
         tags:
             - latest
             - v1
@@ -11,8 +11,8 @@ targets:
     planetscale:
         source: PlanetScale API
         sourceNamespace: planet-scale-api
-        sourceRevisionDigest: sha256:ec333049e22fdd858fb977e32bedb3ba996989c738433c61807a934e9963652c
-        sourceBlobDigest: sha256:15732697686c818f0506f01a904c06525eee0fb7625f21010738adf151decb75
+        sourceRevisionDigest: sha256:3e8a2bf3275dab55d278c6de7aea22951a6153542f3135bb2dd85e9dcb9b2139
+        sourceBlobDigest: sha256:1088450245f76a2e135a70a2b75030bd6a34b325119c0c59adce49865b097927
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.802.0
@@ -66,6 +66,7 @@ workflow:
                 - location: schemas/overlay-terraform-neki-routers.yaml
                 - location: schemas/overlay-terraform-postgres-read-only-replica.yaml
                 - location: schemas/overlay-terraform-postgres-read-only-replicas.yaml
+                - location: schemas/overlay-terraform-postgres-branch-maintenance-window.yaml
                 - location: schemas/overlay-terraform-cleanup.yaml
             output: schemas/out.openapi.yaml
             registry:

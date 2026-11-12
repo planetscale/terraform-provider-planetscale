@@ -1,0 +1,70 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_branch_maintenance_window
+  version: 0.0.1
+actions:
+  # A Postgres production branch always has one weekly maintenance window. PATCH
+  # adopts and configures it for both Terraform create and update operations.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch
+    description: API operation for singleton resource create and update.
+    update:
+      x-speakeasy-entity-operation: PostgresBranchMaintenanceWindow#create,update
+      x-speakeasy-entity-description: >-
+        Manage the weekly maintenance window of a PlanetScale Postgres
+        production branch: the day and hour, in UTC, when scheduled
+        maintenance can start. The window is created with the branch;
+        creating this Terraform resource adopts and configures it, while
+        removing the resource only stops managing it. A change is refused
+        while the window is open, or when it would push scheduled maintenance
+        past its deadline.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch.parameters[?@.name == 'organization'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch.parameters[?@.name == 'database'].schema
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch.parameters[?@.name == 'branch'].schema
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch.requestBody.content["application/json"].schema
+    description: Terraform always sends the whole window.
+    update:
+      required:
+        - day
+        - hour
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch.requestBody.content["application/json"].schema.properties.day
+    description: Practitioner-facing attribute description.
+    update:
+      minimum: 0
+      maximum: 6
+      description: Day of the week the window opens, in UTC, from 0 (Sunday) to 6 (Saturday).
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch.requestBody.content["application/json"].schema.properties.hour
+    description: Practitioner-facing attribute description.
+    update:
+      minimum: 0
+      maximum: 23
+      description: Hour of the day the window opens, in UTC, from 0 to 23.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].patch.responses["200"].content["application/json"].schema
+    update:
+      x-speakeasy-entity: PostgresBranchMaintenanceWindow
+
+  # Keep the window itself. The rest describes other kinds of schedule, or
+  # changes every week and would show as drift.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"][*].responses["200"].content["application/json"].schema.properties['name','created_at','updated_at','last_window_datetime','next_window_datetime','week','frequency_value','frequency_unit','enabled','expires_at','deadline_at','required','pending_vitess_version_update','pending_vitess_version','pending_mysql_version_update','pending_mysql_version']
+    description: Omit fields that are not part of a weekly window from Terraform state.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"][*].responses["200"].content["application/json"].schema.required[?@ != 'id' && @ != 'day' && @ != 'hour' && @ != 'duration']
+    description: Remove omitted fields from the required list.
+    remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/maintenance-window"].get
+    description: API operation for resource read.
+    update:
+      x-speakeasy-entity-operation: PostgresBranchMaintenanceWindow#read
+      x-speakeasy-entity-description: >-
+        Look up the weekly maintenance window of a PlanetScale Postgres
+        production branch.
