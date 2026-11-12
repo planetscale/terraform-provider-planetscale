@@ -1,0 +1,132 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_ip_restriction managed and data resources.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].post
+    description: API operation for managed resource create.
+    update:
+      x-speakeasy-entity-operation: PostgresIpRestriction#create
+      x-speakeasy-entity-description: >-
+        Manage an IP restriction entry for a PlanetScale Postgres database.
+        An entry lists the IPv4 ranges allowed to connect, optionally scoped
+        to one Postgres schema and role, and applies to every branch of the
+        database. A database can have only one entry for each combination of
+        `schema` and `role`.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"].get
+    description: API operation for managed resource read.
+    update:
+      x-speakeasy-entity-operation: PostgresIpRestriction#read
+      x-speakeasy-entity-description: Returns information about an IP restriction entry for a PlanetScale Postgres database.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"].patch
+    description: API operation for managed resource update.
+    update:
+      x-speakeasy-entity-operation: PostgresIpRestriction#update
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"].delete
+    description: API operation for managed resource delete.
+    update:
+      x-speakeasy-entity-operation: PostgresIpRestriction#delete
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].post.parameters[?@.name == 'organization' || @.name == 'database'].schema
+    description: An entry cannot move between databases.
+    update:
+      x-speakeasy-param-force-new: true
+
+  # The API stores every range in canonical form (`192.168.1.1` becomes
+  # `192.168.1.1/32`, `10.0.0.5/24` becomes `10.0.0.0/24`), so anything else
+  # would come back different from the configuration. The validator rejects
+  # non-canonical ranges at plan time.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].post.requestBody.content["application/json"].schema.properties.cidrs
+    description: Practitioner-facing attribute description.
+    update:
+      uniqueItems: true
+      minItems: 1
+      x-speakeasy-plan-validators: CidrRangesValidator
+      description: >-
+        The IPv4 ranges allowed to connect, in CIDR notation, e.g.
+        `["203.0.113.0/24", "198.51.100.7/32"]`. Use `/32` for a single
+        address.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"].patch.requestBody.content["application/json"].schema.properties.cidrs
+    description: Practitioner-facing attribute description.
+    update:
+      uniqueItems: true
+      minItems: 1
+      x-speakeasy-plan-validators: CidrRangesValidator
+      description: >-
+        The IPv4 ranges allowed to connect, in CIDR notation, e.g.
+        `["203.0.113.0/24", "198.51.100.7/32"]`. Use `/32` for a single
+        address.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"].patch.requestBody.content["application/json"].schema
+    description: Terraform always sends the ranges.
+    update:
+      required:
+        - cidrs
+
+  # The API treats an empty schema or role as "all", and returns it that way.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"]["post"].requestBody.content["application/json"].schema.properties.schema
+    description: Practitioner-facing attribute description.
+    update:
+      default: ""
+      description: The Postgres schema the entry applies to. Leave unset to apply to all schemas.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"]["patch"].requestBody.content["application/json"].schema.properties.schema
+    description: Practitioner-facing attribute description.
+    update:
+      default: ""
+      description: The Postgres schema the entry applies to. Leave unset to apply to all schemas.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"]["post"].requestBody.content["application/json"].schema.properties.role
+    description: Practitioner-facing attribute description.
+    update:
+      default: ""
+      description: The Postgres role the entry applies to. Leave unset to apply to all roles.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"]["patch"].requestBody.content["application/json"].schema.properties.role
+    description: Practitioner-facing attribute description.
+    update:
+      default: ""
+      description: The Postgres role the entry applies to. Leave unset to apply to all roles.
+  # The API returns a cleared description as "", and the dashboard always
+  # sends one. Defaulting to "" means removing the attribute clears it.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"]["post"].requestBody.content["application/json"].schema.properties.description
+    description: Practitioner-facing attribute description.
+    update:
+      maxLength: 255
+      default: ""
+      description: A description of the entry, at most 255 characters.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"]["patch"].requestBody.content["application/json"].schema.properties.description
+    description: Practitioner-facing attribute description.
+    update:
+      maxLength: 255
+      default: ""
+      description: A description of the entry, at most 255 characters.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].post.responses["201"].content["application/json"].schema.properties
+    description: Response attribute descriptions and types matching the request.
+    update:
+      id:
+        description: The ID of the IP restriction entry
+      schema:
+        description: The Postgres schema the entry applies to. Empty when it applies to all schemas.
+      role:
+        description: The Postgres role the entry applies to. Empty when it applies to all roles.
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"]["get","patch"].responses["200"].content["application/json"].schema.properties
+    description: Response attribute descriptions and types matching the request.
+    update:
+      id:
+        description: The ID of the IP restriction entry
+      schema:
+        description: The Postgres schema the entry applies to. Empty when it applies to all schemas.
+      role:
+        description: The Postgres role the entry applies to. Empty when it applies to all roles.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].post.responses["201"].content["application/json"].schema.properties['created_at','updated_at','deleted_at']
+    description: Trim noisy response fields, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"]["get","patch"].responses["200"].content["application/json"].schema.properties['created_at','updated_at','deleted_at']
+    description: Trim noisy response fields, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].post.responses["201"].content["application/json"].schema.properties.actor.properties['avatar_url','display_name']
+    description: Trim the actor to its ID, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"]["get","patch"].responses["200"].content["application/json"].schema.properties.actor.properties['avatar_url','display_name']
+    description: Trim the actor to its ID, following the branch resource attribute conventions.
+    remove: true

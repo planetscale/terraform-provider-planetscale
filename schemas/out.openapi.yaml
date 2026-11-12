@@ -9406,8 +9406,578 @@ paths:
         "500":
           description: Internal Server Error
   /organizations/{organization}/databases/{database}/branches/{branch}/vtctld/operations/{id}: {}
-  /organizations/{organization}/databases/{database}/cidrs: {}
-  /organizations/{organization}/databases/{database}/cidrs/{id}: {}
+  /organizations/{organization}/databases/{database}/cidrs:
+    get:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: list_database_postgres_cidrs
+      summary: List IP restriction entries
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: If provided, specifies the page offset of returned results
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: If provided, specifies the number of returned results
+          schema:
+            type: integer
+            default: 25
+          x-speakeasy-terraform-ignore: true
+      responses:
+        "200":
+          description: Returns IP restriction entries for the database
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: The response type. Always "list" for paginated responses.
+                    x-speakeasy-terraform-ignore: true
+                  current_page:
+                    type: integer
+                    description: The current page number
+                    x-speakeasy-terraform-ignore: true
+                  per_page:
+                    type: integer
+                    description: The maximum number of results per page
+                  next_page:
+                    type: integer
+                    description: The next page number, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  next_page_url:
+                    type: string
+                    description: The next page of results, or null when this is the last page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page:
+                    type: integer
+                    description: The previous page number, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  prev_page_url:
+                    type: string
+                    description: The previous page of results, or null when this is the first page
+                    nullable: true
+                    x-speakeasy-terraform-ignore: true
+                  total_count:
+                    type: integer
+                    description: The total number of matching results
+                    x-speakeasy-terraform-ignore: true
+                  total_pages:
+                    type: integer
+                    description: The total number of pages of matching results
+                    x-speakeasy-terraform-ignore: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the IP restriction entry
+                        schema:
+                          type: string
+                          description: The Postgres schema the entry applies to. Empty when it applies to all schemas.
+                        role:
+                          type: string
+                          description: The Postgres role the entry applies to. Empty when it applies to all roles.
+                        cidrs:
+                          items:
+                            type: string
+                          type: array
+                          description: The IPv4 ranges allowed to connect, in CIDR notation.
+                        description:
+                          type: string
+                          description: A description of the entry.
+                          nullable: true
+                        actor:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the actor
+                          required:
+                            - id
+                            - display_name
+                            - avatar_url
+                      required:
+                        - id
+                        - schema
+                        - role
+                        - cidrs
+                        - description
+                        - created_at
+                        - updated_at
+                        - deleted_at
+                        - actor
+                required:
+                  - type
+                  - current_page
+                  - per_page
+                  - next_page
+                  - next_page_url
+                  - prev_page
+                  - prev_page_url
+                  - total_count
+                  - total_pages
+                  - data
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_database`, `read_databases`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_databases` |
+        | Database | `read_database` |
+      x-speakeasy-entity-operation: PostgresIpRestrictions#read
+      x-speakeasy-entity-description: Returns information about the IP restriction entries for a PlanetScale Postgres database.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+    post:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: create_database_postgres_cidr
+      summary: Create an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+        - name: database
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+            x-speakeasy-param-force-new: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schema:
+                  type: string
+                  description: The Postgres schema the entry applies to. Leave unset to apply to all schemas.
+                  default: ""
+                role:
+                  type: string
+                  description: The Postgres role the entry applies to. Leave unset to apply to all roles.
+                  default: ""
+                cidrs:
+                  type: array
+                  items:
+                    type: string
+                  description: The IPv4 ranges allowed to connect, in CIDR notation, e.g. `["203.0.113.0/24", "198.51.100.7/32"]`. Use `/32` for a single address.
+                  uniqueItems: true
+                  minItems: 1
+                  x-speakeasy-plan-validators: CidrRangesValidator
+                description:
+                  type: string
+                  description: A description of the entry, at most 255 characters.
+                  maxLength: 255
+                  default: ""
+              required:
+                - cidrs
+      responses:
+        "201":
+          description: Returns the created IP restriction entry
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the IP restriction entry
+                  schema:
+                    type: string
+                    description: The Postgres schema the entry applies to. Empty when it applies to all schemas.
+                  role:
+                    type: string
+                    description: The Postgres role the entry applies to. Empty when it applies to all roles.
+                  cidrs:
+                    items:
+                      type: string
+                    type: array
+                    description: List of CIDR ranges
+                  description:
+                    type: string
+                    description: An optional description for the IP restriction rule
+                    nullable: true
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                required:
+                  - id
+                  - schema
+                  - role
+                  - cidrs
+                  - description
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresIpRestriction#create
+      x-speakeasy-entity-description: >-
+        Manage an IP restriction entry for a PlanetScale Postgres database. An entry lists the IPv4 ranges allowed to connect, optionally scoped to one Postgres schema and role, and applies to every branch of the database. A database can have only one entry for each combination of `schema` and `role`.
+  /organizations/{organization}/databases/{database}/cidrs/{id}:
+    get:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: get_database_postgres_cidr
+      summary: Get an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the IP restriction entry
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns an IP restriction entry
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the IP restriction entry
+                  schema:
+                    type: string
+                    description: The Postgres schema the entry applies to. Empty when it applies to all schemas.
+                  role:
+                    type: string
+                    description: The Postgres role the entry applies to. Empty when it applies to all roles.
+                  cidrs:
+                    items:
+                      type: string
+                    type: array
+                    description: List of CIDR ranges
+                  description:
+                    type: string
+                    description: An optional description for the IP restriction rule
+                    nullable: true
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                required:
+                  - id
+                  - schema
+                  - role
+                  - cidrs
+                  - description
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `read_database`, `read_databases`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `read_databases` |
+        | Database | `read_database` |
+      x-speakeasy-entity-operation: PostgresIpRestriction#read
+      x-speakeasy-entity-description: Returns information about an IP restriction entry for a PlanetScale Postgres database.
+    patch:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: update_database_postgres_cidr
+      summary: Update an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the IP restriction entry
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schema:
+                  type: string
+                  description: The Postgres schema the entry applies to. Leave unset to apply to all schemas.
+                  default: ""
+                role:
+                  type: string
+                  description: The Postgres role the entry applies to. Leave unset to apply to all roles.
+                  default: ""
+                cidrs:
+                  type: array
+                  items:
+                    type: string
+                  description: The IPv4 ranges allowed to connect, in CIDR notation, e.g. `["203.0.113.0/24", "198.51.100.7/32"]`. Use `/32` for a single address.
+                  uniqueItems: true
+                  minItems: 1
+                  x-speakeasy-plan-validators: CidrRangesValidator
+                description:
+                  type: string
+                  description: A description of the entry, at most 255 characters.
+                  maxLength: 255
+                  default: ""
+              required:
+                - cidrs
+      responses:
+        "200":
+          description: Returns the updated IP restriction entry
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the IP restriction entry
+                  schema:
+                    type: string
+                    description: The Postgres schema the entry applies to. Empty when it applies to all schemas.
+                  role:
+                    type: string
+                    description: The Postgres role the entry applies to. Empty when it applies to all roles.
+                  cidrs:
+                    items:
+                      type: string
+                    type: array
+                    description: List of CIDR ranges
+                  description:
+                    type: string
+                    description: An optional description for the IP restriction rule
+                    nullable: true
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the actor
+                    required:
+                      - id
+                      - display_name
+                      - avatar_url
+                required:
+                  - id
+                  - schema
+                  - role
+                  - cidrs
+                  - description
+                  - created_at
+                  - updated_at
+                  - deleted_at
+                  - actor
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresIpRestriction#update
+    delete:
+      tags:
+        - Database Postgres IP restrictions
+      operationId: delete_database_postgres_cidr
+      summary: Delete an IP restriction entry
+      parameters:
+        - name: organization
+          in: path
+          required: true
+          description: The name of the organization the database belongs to
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          description: The name of the database
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          description: The ID of the IP restriction entry
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "IP restriction entry deleted successfully. Note: This will also remove the restriction from all database branches."
+          headers: {}
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+        "429":
+          description: Too Many Requests. Reduce the frequency of requests and try again soon.
+        "500":
+          description: Internal Server Error
+      description: |-
+        ### Authorization
+        A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
+
+        **Service Token Accesses**
+         `write_database`
+
+        **OAuth Scopes**
+
+         | Resource | Scopes |
+        | :------- | :---------- |
+        | Organization | `write_databases` |
+        | Database | `write_database` |
+      x-speakeasy-entity-operation: PostgresIpRestriction#delete
   /organizations/{organization}/databases/{database}/deploy-queue: {}
   /organizations/{organization}/databases/{database}/deploy-requests: {}
   /organizations/{organization}/databases/{database}/deploy-requests/{number}: {}
