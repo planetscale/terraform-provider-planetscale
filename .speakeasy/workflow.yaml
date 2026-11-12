@@ -60,6 +60,9 @@ sources:
 
             - location: schemas/overlay-terraform-postgres-branch-maintenance-window.yaml
 
+            - location: schemas/overlay-terraform-postgres-ip-restriction.yaml
+            - location: schemas/overlay-terraform-postgres-ip-restrictions.yaml
+
             - location: schemas/overlay-terraform-cleanup.yaml
         output: schemas/out.openapi.yaml
         registry:

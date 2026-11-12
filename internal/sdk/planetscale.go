@@ -99,8 +99,13 @@ type PlanetScale struct {
 	APINekiShards           *APINekiShards
 	//           Returns all editable Vitess parameter definitions with their current effective values for a branch.
 	//
-	BranchVitessParameters   *BranchVitessParameters
-	KeyspaceVitessParameters *KeyspaceVitessParameters
+	BranchVitessParameters *BranchVitessParameters
+	//           Resources for managing Postgres IP restriction entries for databases.
+	//
+	//           Note: This endpoint is only available for PostgreSQL databases. For MySQL databases, use the Database Branch Passwords endpoint.
+	//
+	DatabasePostgresIPRestrictions *DatabasePostgresIPRestrictions
+	KeyspaceVitessParameters       *KeyspaceVitessParameters
 	//           Resources for managing database backup policies.
 	//
 	BackupPolicies *BackupPolicies
@@ -232,6 +237,7 @@ func New(opts ...SDKOption) *PlanetScale {
 	sdk.DatabaseBranches = newDatabaseBranches(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APINekiShards = newAPINekiShards(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BranchVitessParameters = newBranchVitessParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.DatabasePostgresIPRestrictions = newDatabasePostgresIPRestrictions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.KeyspaceVitessParameters = newKeyspaceVitessParameters(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.BackupPolicies = newBackupPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Backups = newBackups(sdk, sdk.sdkConfiguration, sdk.hooks)

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 156e2223-c8d0-4591-922d-3e4c474de609
 management:
-  docChecksum: 7a960a06fe5d583b0c0f13472fe4f561
+  docChecksum: 268e02d2f494395a87c6afd58e711507
   docVersion: v1
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -75,6 +75,8 @@ trackedFiles:
     pristine_git_object: db4928f864e1065b1079b9ab9b87536cbec6c41f
   examples/data-sources/planetscale_postgres_dedicated_read_replica/data-source.tf: {}
   examples/data-sources/planetscale_postgres_dedicated_read_replicas/data-source.tf: {}
+  examples/data-sources/planetscale_postgres_ip_restriction/data-source.tf: {}
+  examples/data-sources/planetscale_postgres_ip_restrictions/data-source.tf: {}
   examples/data-sources/planetscale_postgres_redacted_branch_role/data-source.tf: {}
   examples/data-sources/planetscale_vitess_backup_policies/data-source.tf: {}
   examples/data-sources/planetscale_vitess_backup_policy/data-source.tf: {}
@@ -130,6 +132,8 @@ trackedFiles:
     pristine_git_object: 06aae354a87031b23f6da8a3d618711d4412e1cf
   examples/resources/planetscale_postgres_dedicated_read_replica/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_dedicated_read_replica/import.sh: {}
+  examples/resources/planetscale_postgres_ip_restriction/import-by-string-id.tf: {}
+  examples/resources/planetscale_postgres_ip_restriction/import.sh: {}
   examples/resources/planetscale_postgres_redacted_branch_role/import-by-string-id.tf: {}
   examples/resources/planetscale_postgres_redacted_branch_role/import.sh: {}
   examples/resources/planetscale_vitess_backup_policy/import-by-string-id.tf: {}
@@ -338,6 +342,12 @@ trackedFiles:
   internal/provider/postgresdedicatedreadreplica_resource_sdk.go: {}
   internal/provider/postgresdedicatedreadreplicas_data_source.go: {}
   internal/provider/postgresdedicatedreadreplicas_data_source_sdk.go: {}
+  internal/provider/postgresiprestriction_data_source.go: {}
+  internal/provider/postgresiprestriction_data_source_sdk.go: {}
+  internal/provider/postgresiprestriction_resource.go: {}
+  internal/provider/postgresiprestriction_resource_sdk.go: {}
+  internal/provider/postgresiprestrictions_data_source.go: {}
+  internal/provider/postgresiprestrictions_data_source_sdk.go: {}
   internal/provider/postgresredactedbranchrole_data_source.go: {}
   internal/provider/postgresredactedbranchrole_data_source_sdk.go: {}
   internal/provider/postgresredactedbranchrole_resource.go: {}
@@ -401,6 +411,7 @@ trackedFiles:
   internal/provider/types/create_bouncer_actor.go: {}
   internal/provider/types/create_neki_configuration_profile_storage_request_body.go: {}
   internal/provider/types/create_postgres_branch_storage.go: {}
+  internal/provider/types/get_database_postgres_cidr_actor.go: {}
   internal/provider/types/get_keyspace_replication_durability_constraints.go: {}
   internal/provider/types/get_keyspace_throttler.go: {}
   internal/provider/types/get_keyspace_vreplication_flags.go: {}
@@ -452,6 +463,8 @@ trackedFiles:
     pristine_git_object: 2e2fec5fe8f8eaf8802a5b6119fa9b7e2f1472f0
   internal/provider/types/list_bouncers_actor.go: {}
   internal/provider/types/list_bouncers_data.go: {}
+  internal/provider/types/list_database_postgres_cidrs_actor.go: {}
+  internal/provider/types/list_database_postgres_cidrs_data.go: {}
   internal/provider/types/list_databases_data.go:
     id: 3e22778bc2ef
     pristine_git_object: 0da917340d6876896e0c61d1d082c8f9190e4cf8
@@ -575,6 +588,7 @@ trackedFiles:
   internal/sdk/databasebranchpasswords.go:
     id: a545604b52ee
     pristine_git_object: bbdaca1bf8767c009824bd0b013ec873f22e23e9
+  internal/sdk/databasepostgresiprestrictions.go: {}
   internal/sdk/databases.go:
     id: 5bb9b0f6f18a
     pristine_git_object: 878dd535045ad6034de0f19193be0575e918ecb6
@@ -638,6 +652,7 @@ trackedFiles:
   internal/sdk/models/operations/applypostgresbouncerterraformchanges.go: {}
   internal/sdk/models/operations/applypostgresbranchchanges.go: {}
   internal/sdk/models/operations/createbouncer.go: {}
+  internal/sdk/models/operations/createdatabasepostgrescidr.go: {}
   internal/sdk/models/operations/creatededicatedreadreplica.go: {}
   internal/sdk/models/operations/createkeyspace.go: {}
   internal/sdk/models/operations/createnekibackuppolicy.go: {}
@@ -664,6 +679,7 @@ trackedFiles:
     pristine_git_object: 4164e962f94db2ef10a0ac3446371930522a0d05
   internal/sdk/models/operations/createvitessbranchbackup.go: {}
   internal/sdk/models/operations/deletebouncer.go: {}
+  internal/sdk/models/operations/deletedatabasepostgrescidr.go: {}
   internal/sdk/models/operations/deletededicatedreadreplica.go: {}
   internal/sdk/models/operations/deletekeyspace.go: {}
   internal/sdk/models/operations/deletenekibackuppolicy.go: {}
@@ -693,6 +709,7 @@ trackedFiles:
   internal/sdk/models/operations/getbranchconfigchangerequest.go: {}
   internal/sdk/models/operations/getbranchmaintenancewindow.go: {}
   internal/sdk/models/operations/getbranchresizerequest.go: {}
+  internal/sdk/models/operations/getdatabasepostgrescidr.go: {}
   internal/sdk/models/operations/getdedicatedreadreplica.go: {}
   internal/sdk/models/operations/getkeyspace.go: {}
   internal/sdk/models/operations/getkeyspaceconfigchangerequest.go: {}
@@ -737,6 +754,7 @@ trackedFiles:
     pristine_git_object: be96b47a67d020a8a2b0d5198abfd4db9b7db3bf
   internal/sdk/models/operations/getvitesskeyspaceparameters.go: {}
   internal/sdk/models/operations/listbouncers.go: {}
+  internal/sdk/models/operations/listdatabasepostgrescidrs.go: {}
   internal/sdk/models/operations/listdatabases.go:
     id: 9a615ba562a7
     pristine_git_object: 3b63c0cbb7a174e2c27699547377755e941ee9f2
@@ -771,6 +789,7 @@ trackedFiles:
   internal/sdk/models/operations/setvitesskeyspaceparameters.go: {}
   internal/sdk/models/operations/updatebranchmaintenancewindow.go: {}
   internal/sdk/models/operations/updatebranchresizerequest.go: {}
+  internal/sdk/models/operations/updatedatabasepostgrescidr.go: {}
   internal/sdk/models/operations/updatededicatedreadreplica.go: {}
   internal/sdk/models/operations/updatekeyspaceresizerequest.go: {}
   internal/sdk/models/operations/updatenekiadmin.go: {}
@@ -2154,7 +2173,7 @@ examples:
           per_page: 25
       responses:
         "200":
-          application/json: {"current_page": 4774.22, "next_page": 3396.64, "next_page_url": "https://tasty-affect.org", "prev_page": 4866.83, "prev_page_url": "https://mixed-vibraphone.name/", "data": [{"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": ["<value 1>"], "created_at": "1719417695596", "updated_at": "1735682302995", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Sadye73", "avatar_url": "https://simplistic-hygienic.org"}}]}
+          application/json: {"type": "<value>", "current_page": 4774.22, "per_page": 477422, "next_page": 3396.64, "next_page_url": "https://tasty-affect.org", "prev_page": 4866.83, "prev_page_url": "https://mixed-vibraphone.name/", "total_count": 339664, "total_pages": 539200, "data": [{"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": ["<value 1>"], "description": "posh over quintessential", "actor": {"id": "<id>"}}]}
   create_database_postgres_cidr:
     speakeasy-default-create-database-postgres-cidr:
       parameters:
@@ -2164,7 +2183,7 @@ examples:
           database: "<value>"
       responses:
         "201":
-          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "created_at": "1729618456817", "updated_at": "1735657061783", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Nico_Ryan", "avatar_url": "https://unfortunate-knickers.net"}}
+          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "description": "ornery needily unless dreamily ouch excepting under reporter ew", "actor": {"id": "<id>"}}
   get_database_postgres_cidr:
     speakeasy-default-get-database-postgres-cidr:
       parameters:
@@ -2175,7 +2194,7 @@ examples:
           database: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": ["<value 1>", "<value 2>"], "created_at": "1725946727260", "updated_at": "1735658492313", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "William.Haley", "avatar_url": "https://regular-agreement.org/"}}
+          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": ["<value 1>", "<value 2>"], "description": "aw but violent keenly whoever and sandy hm", "actor": {"id": "<id>"}}
   update_database_postgres_cidr:
     speakeasy-default-update-database-postgres-cidr:
       parameters:
@@ -2186,7 +2205,7 @@ examples:
           database: "<value>"
       responses:
         "200":
-          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "created_at": "1709625983230", "updated_at": "1735665403648", "deleted_at": "<value>", "actor": {"id": "<id>", "display_name": "Juanita_Cassin89", "avatar_url": "https://insecure-interchange.name/"}}
+          application/json: {"id": "<id>", "schema": "<value>", "role": "<value>", "cidrs": [], "description": "clonk really wherever experienced", "actor": {"id": "<id>"}}
   delete_database_postgres_cidr:
     speakeasy-default-delete-database-postgres-cidr:
       parameters:

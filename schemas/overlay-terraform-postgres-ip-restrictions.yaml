@@ -1,0 +1,65 @@
+overlay: 1.1.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Terraform generation overlay for planetscale_postgres_ip_restrictions data resource.
+  version: 0.0.1
+actions:
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].get
+    description: API operation for read and enable pagination.
+    update:
+      x-speakeasy-entity-operation: PostgresIpRestrictions#read
+      x-speakeasy-entity-description: Returns information about the IP restriction entries for a PlanetScale Postgres database.
+      x-speakeasy-pagination:
+        type: offsetLimit
+        inputs:
+          - name: page
+            in: parameters
+            type: page
+        outputs:
+          results: $.data
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].get.parameters[?@.name == 'per_page']
+    description: Ignore extraneous parameter in Terraform schema.
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].get.responses["200"].content["application/json"].schema.properties
+    description: Ignore extraneous response properties in Terraform schema.
+    update:
+      type:
+        x-speakeasy-terraform-ignore: true
+      current_page:
+        x-speakeasy-terraform-ignore: true
+      next_page:
+        x-speakeasy-terraform-ignore: true
+      next_page_url:
+        x-speakeasy-terraform-ignore: true
+      prev_page:
+        x-speakeasy-terraform-ignore: true
+      prev_page_url:
+        x-speakeasy-terraform-ignore: true
+      total_count:
+        x-speakeasy-terraform-ignore: true
+      total_pages:
+        x-speakeasy-terraform-ignore: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].get.responses["200"].content["application/json"].schema.properties.data.items.properties
+    description: Practitioner-facing attribute descriptions.
+    update:
+      id:
+        description: The ID of the IP restriction entry
+      cidrs:
+        description: The IPv4 ranges allowed to connect, in CIDR notation.
+      schema:
+        description: The Postgres schema the entry applies to. Empty when it applies to all schemas.
+      role:
+        description: The Postgres role the entry applies to. Empty when it applies to all roles.
+      description:
+        description: A description of the entry.
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].get.responses["200"].content["application/json"].schema.properties.data.items.properties['created_at','updated_at','deleted_at']
+    description: Trim noisy response fields, following the branch resource attribute conventions.
+    remove: true
+  - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].get.responses["200"].content["application/json"].schema.properties.data.items.properties.actor.properties['avatar_url','display_name']
+    description: Trim the actor to its ID, following the branch resource attribute conventions.
+    remove: true
