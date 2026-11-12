@@ -43,7 +43,7 @@ resource "planetscale_postgres_ip_restriction" "reporting" {
 
 ### Optional
 
-- `description` (String) A description of the entry, at most 255 characters. Set to an empty string to clear it.
+- `description` (String) A description of the entry, at most 255 characters. Default: ""
 - `role` (String) The Postgres role the entry applies to. Leave unset to apply to all roles. Default: ""
 - `schema` (String) The Postgres schema the entry applies to. Leave unset to apply to all schemas. Default: ""
 

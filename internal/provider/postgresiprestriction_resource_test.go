@@ -79,7 +79,14 @@ func TestAccPostgresIPRestrictionResource_Lifecycle(t *testing.T) {
 			},
 			{
 				ConfigDirectory: config.TestNameDirectory(),
-				ConfigVariables: variables("Updated by Terraform", "203.0.113.0/24", "198.51.100.7/32"),
+				ConfigVariables: variables("", "203.0.113.0/24", "198.51.100.7/32"),
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(resourceAddress, tfjsonpath.New("description"), knownvalue.StringExact("")),
+				},
+			},
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: variables("", "203.0.113.0/24", "198.51.100.7/32"),
 				ResourceName:    resourceAddress,
 				ImportState:     true,
 				ImportStateIdFunc: func(s *terraform.State) (string, error) {

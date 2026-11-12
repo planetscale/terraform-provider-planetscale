@@ -86,7 +86,8 @@ func (r *PostgresIPRestrictionResource) Schema(ctx context.Context, req resource
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `A description of the entry, at most 255 characters. Set to an empty string to clear it.`,
+				Default:     stringdefault.StaticString(``),
+				Description: `A description of the entry, at most 255 characters. Default: ""`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(255),
 				},

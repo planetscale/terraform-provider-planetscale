@@ -14,8 +14,8 @@ type UpdateDatabasePostgresCidrRequestBody struct {
 	Role *string `default:"" json:"role"`
 	// The IPv4 ranges allowed to connect, in CIDR notation, e.g. `["203.0.113.0/24", "198.51.100.7/32"]`. Use `/32` for a single address.
 	Cidrs []string `json:"cidrs"`
-	// A description of the entry, at most 255 characters. Set to an empty string to clear it.
-	Description *string `json:"description,omitzero"`
+	// A description of the entry, at most 255 characters.
+	Description *string `default:"" json:"description"`
 }
 
 func (u UpdateDatabasePostgresCidrRequestBody) MarshalJSON() ([]byte, error) {

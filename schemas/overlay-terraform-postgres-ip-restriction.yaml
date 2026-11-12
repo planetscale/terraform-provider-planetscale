@@ -84,16 +84,20 @@ actions:
     update:
       default: ""
       description: The Postgres role the entry applies to. Leave unset to apply to all roles.
+  # The API returns a cleared description as "", and the dashboard always
+  # sends one. Defaulting to "" means removing the attribute clears it.
   - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"]["post"].requestBody.content["application/json"].schema.properties.description
     description: Practitioner-facing attribute description.
     update:
       maxLength: 255
-      description: A description of the entry, at most 255 characters. Set to an empty string to clear it.
+      default: ""
+      description: A description of the entry, at most 255 characters.
   - target: $.paths["/organizations/{organization}/databases/{database}/cidrs/{id}"]["patch"].requestBody.content["application/json"].schema.properties.description
     description: Practitioner-facing attribute description.
     update:
       maxLength: 255
-      description: A description of the entry, at most 255 characters. Set to an empty string to clear it.
+      default: ""
+      description: A description of the entry, at most 255 characters.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/cidrs"].post.responses["201"].content["application/json"].schema.properties
     description: Response attribute descriptions and types matching the request.

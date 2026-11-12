@@ -9619,8 +9619,9 @@ paths:
                   x-speakeasy-plan-validators: CidrRangesValidator
                 description:
                   type: string
-                  description: A description of the entry, at most 255 characters. Set to an empty string to clear it.
+                  description: A description of the entry, at most 255 characters.
                   maxLength: 255
+                  default: ""
               required:
                 - cidrs
       responses:
@@ -9845,8 +9846,9 @@ paths:
                   x-speakeasy-plan-validators: CidrRangesValidator
                 description:
                   type: string
-                  description: A description of the entry, at most 255 characters. Set to an empty string to clear it.
+                  description: A description of the entry, at most 255 characters.
                   maxLength: 255
+                  default: ""
               required:
                 - cidrs
       responses:
