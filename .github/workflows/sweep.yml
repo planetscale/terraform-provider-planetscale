@@ -1,0 +1,35 @@
+name: Sweep 🧹
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: planetscale/setup-pscale-action@b6a50ee45b4b24944e1d8de6e57b3a5f6476a1af # v1
+      - uses: planetscale/auth-action@aa8f73f656f858eb798916ce2fe9769ab1ba0d76 # v1.0.0
+        id: auth
+        with:
+          organization: planetscale-terraform-testing
+          oidc-trust: tmz96rlfsslr
+      - run: script/sweep
+        env:
+          PLANETSCALE_SERVICE_TOKEN_ID: ${{ steps.auth.outputs.service-token-id }}
+          PLANETSCALE_SERVICE_TOKEN: ${{ steps.auth.outputs.service-token }}
+          DRY_RUN: "false"
