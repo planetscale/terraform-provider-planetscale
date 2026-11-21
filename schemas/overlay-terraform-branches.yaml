@@ -13,10 +13,9 @@ actions:
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches'].post.requestBody.content['application/json'].schema.properties.replicas
     description: >-
-      Not exposed yet. Remove rather than x-speakeasy-terraform-ignore: the
-      ignore would merge across the entity and also hide the computed
-      `replicas` attribute that overlay-terraform-postgres-branch.yaml adds
-      from the branch read response.
+      Remove from the shared branch create body so Vitess and Neki do not
+      expose it. overlay-terraform-postgres-branch.yaml restores it on the
+      Postgres create request so it can be optional on create and update.
     remove: true
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}'].get.parameters[?@.name == 'branch']

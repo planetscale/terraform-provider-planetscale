@@ -185,7 +185,8 @@ func (r *PostgresBranchResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The number of replicas for the branch`,
+				Optional:    true,
+				Description: `The number of additional replicas, not counting the primary. 0 is a single-node branch. 2-8 is HA. If omitted, the cluster size default is used.`,
 			},
 			"restore_point": schema.StringAttribute{
 				Optional:  true,

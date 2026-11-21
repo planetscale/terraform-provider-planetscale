@@ -4,6 +4,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 
   name               = "my-branch"
   cluster_size       = "PS_10_AWS_ARM"
+  replicas           = 0
   deletion_protected = true
 
   # Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
