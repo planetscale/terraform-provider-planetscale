@@ -187,7 +187,7 @@ type GetPostgresBranchResponseBody struct {
 	ParentBranch *string `json:"parent_branch"`
 	// The region slug where the branch is hosted.
 	Region string `json:"region_slug"`
-	// The number of replicas for the branch
+	// The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA.
 	Replicas *int64 `json:"replicas,omitzero"`
 	// Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 	Parameters map[string]map[string]string `json:"parameters,omitzero"`

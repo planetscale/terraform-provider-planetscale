@@ -186,6 +186,12 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchChangesRequ
 	} else {
 		clusterSize = nil
 	}
+	replicas := new(int64)
+	if !r.Replicas.IsUnknown() && !r.Replicas.IsNull() {
+		*replicas = r.Replicas.ValueInt64()
+	} else {
+		replicas = nil
+	}
 	var storage *operations.ApplyPostgresBranchChangesStorage
 	if r.Storage != nil {
 		minimumStorageBytes := new(int64)
@@ -242,6 +248,7 @@ func (r *PostgresBranchResourceModel) ToOperationsApplyPostgresBranchChangesRequ
 	}
 	out := operations.ApplyPostgresBranchChangesRequestBody{
 		ClusterSize: clusterSize,
+		Replicas:    replicas,
 		Storage:     storage,
 		Parameters:  parameters,
 	}
@@ -322,6 +329,12 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 	} else {
 		majorVersion = nil
 	}
+	replicas := new(int64)
+	if !r.Replicas.IsUnknown() && !r.Replicas.IsNull() {
+		*replicas = r.Replicas.ValueInt64()
+	} else {
+		replicas = nil
+	}
 	var storage *operations.CreatePostgresBranchStorage
 	if r.Storage != nil {
 		minimumStorageBytes := new(int64)
@@ -350,6 +363,7 @@ func (r *PostgresBranchResourceModel) ToOperationsCreatePostgresBranchRequestBod
 		RestorePoint:      restorePoint,
 		ClusterSize:       clusterSize,
 		MajorVersion:      majorVersion,
+		Replicas:          replicas,
 		Storage:           storage,
 	}
 

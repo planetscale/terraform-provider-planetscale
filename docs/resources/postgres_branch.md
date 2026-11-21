@@ -19,6 +19,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 
   name               = "my-branch"
   cluster_size       = "PS_10_AWS_ARM"
+  replicas           = 0
   deletion_protected = true
 
   # Postgres parameter overrides, nested by namespace (pgconf, pgbouncer,
@@ -52,6 +53,7 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `parameters` (Map of Map of String) Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
 - `parent_branch` (String) The name of the parent branch. Defaults to the database's default branch if not provided. Requires replacement if changed.
 - `region` (String) The region to create the branch in. If not provided, the branch will be created in the default region for its database. Requires replacement if changed.
+- `replicas` (Number) The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA. If omitted, the cluster size default is used.
 - `restore_point` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Restore from a point-in-time recovery timestamp (e.g. 2023-01-01T00:00:00Z). Available only for PostgreSQL databases. Requires replacement if changed.
 - `storage` (Attributes) Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes. (see [below for nested schema](#nestedatt--storage))
 
@@ -62,7 +64,6 @@ resource "planetscale_postgres_branch" "my_postgresbranch" {
 - `id` (String) The ID of the branch
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
-- `replicas` (Number) The number of replicas for the branch
 - `state` (String) The current state of the branch
 - `url` (String) Planetscale API URL for the branch
 

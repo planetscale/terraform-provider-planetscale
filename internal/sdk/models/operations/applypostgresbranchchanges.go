@@ -59,6 +59,8 @@ func (a *ApplyPostgresBranchChangesStorage) GetStorageThroughputMibs() *int64 {
 type ApplyPostgresBranchChangesRequestBody struct {
 	// The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint. Changing a production branch to a PS-DEV size demotes it and also requires `connect_production_branch` or `demote_branches` access, or the `demote_branches` OAuth scope.
 	ClusterSize *string `json:"cluster_size,omitzero"`
+	// The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA. If omitted, the cluster size default is used.
+	Replicas *int64 `json:"replicas,omitzero"`
 	// Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
 	Storage *ApplyPostgresBranchChangesStorage `json:"storage,omitzero"`
 	// Postgres parameter overrides, nested by namespace (pgconf, pgbouncer, patroni), e.g. { pgconf = { max_connections = "200" } }. Omitted parameters are reset to their defaults.
@@ -81,6 +83,13 @@ func (a *ApplyPostgresBranchChangesRequestBody) GetClusterSize() *string {
 		return nil
 	}
 	return a.ClusterSize
+}
+
+func (a *ApplyPostgresBranchChangesRequestBody) GetReplicas() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.Replicas
 }
 
 func (a *ApplyPostgresBranchChangesRequestBody) GetStorage() *ApplyPostgresBranchChangesStorage {

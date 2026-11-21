@@ -38,6 +38,15 @@ actions:
       x-speakeasy-plan-validators: ClusterSizeValidator
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties
+    description: Restore replicas after the shared branch overlay removes it, so it is optional on create like cluster_size.
+    update:
+      replicas:
+        type: integer
+        description: >-
+          The number of replicas. 0 is a single-node branch with no replicas. 2-8
+          is HA. If omitted, the cluster size default is used.
+
+  - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties
     description: Restore PostgreSQL storage configuration after the shared branch overlay removes it.
     update:
       storage:
@@ -72,7 +81,9 @@ actions:
     update:
       replicas:
         type: integer
-        description: The number of replicas for the branch
+        description: >-
+          The number of replicas. 0 is a single-node branch with no replicas. 2-8
+          is HA.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get
     description: Update operation metadata for PostgreSQL
@@ -115,7 +126,9 @@ actions:
     update:
       replicas:
         type: integer
-        description: The number of replicas for the branch
+        description: >-
+          The number of replicas. 0 is a single-node branch with no replicas. 2-8
+          is HA.
       parameters:
         type: object
         nullable: true
@@ -266,7 +279,7 @@ actions:
     description: Apply declarative PostgreSQL branch changes through the public branch changes endpoint.
     update:
       operationId: apply_postgres_branch_changes
-      summary: Apply a PostgreSQL branch's cluster size, parameters, and storage configuration
+      summary: Apply a PostgreSQL branch's cluster size, replicas, parameters, and storage configuration
       x-speakeasy-entity-operation:
         - PostgresBranch#create#3
         - PostgresBranch#update#2
@@ -279,9 +292,15 @@ actions:
     update:
       x-speakeasy-plan-validators: ClusterSizeValidator
 
-  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties['replicas','extensions']
-    description: Keep settings that the PostgreSQL branch resource does not manage out of its schema.
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.extensions
+    description: Keep extensions out of the PostgreSQL branch resource schema.
     remove: true
+
+  - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.replicas
+    update:
+      description: >-
+        The number of replicas. 0 is a single-node branch with no replicas. 2-8
+        is HA. If omitted, the cluster size default is used.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.storage
     update:

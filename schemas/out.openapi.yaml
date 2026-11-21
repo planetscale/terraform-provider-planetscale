@@ -1406,7 +1406,7 @@ paths:
       tags:
         - Branch changes
       operationId: apply_postgres_branch_changes
-      summary: Apply a PostgreSQL branch's cluster size, parameters, and storage configuration
+      summary: Apply a PostgreSQL branch's cluster size, replicas, parameters, and storage configuration
       parameters:
         - name: organization
           in: path
@@ -1437,6 +1437,9 @@ paths:
                   type: string
                   description: The size of the cluster. Available sizes can be found using the 'List cluster sizes' endpoint. Changing a production branch to a PS-DEV size demotes it and also requires `connect_production_branch` or `demote_branches` access, or the `demote_branches` OAuth scope.
                   x-speakeasy-plan-validators: ClusterSizeValidator
+                replicas:
+                  type: integer
+                  description: The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA. If omitted, the cluster size default is used.
                 storage:
                   type: object
                   properties:
@@ -10105,6 +10108,10 @@ paths:
                   const: postgresql
                   default: postgresql
                   x-speakeasy-terraform-ignore: schema
+                replicas:
+                  type: integer
+                  description: >-
+                    The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA. If omitted, the cluster size default is used.
                 storage:
                   type: object
                   description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
@@ -10374,7 +10381,8 @@ paths:
                     description: The region slug where the branch is hosted.
                   replicas:
                     type: integer
-                    description: The number of replicas for the branch
+                    description: >-
+                      The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA.
                   parameters:
                     type: object
                     nullable: true
