@@ -10110,7 +10110,8 @@ paths:
                   x-speakeasy-terraform-ignore: schema
                 replicas:
                   type: integer
-                  description: The number of additional replicas, not counting the primary. 0 is a single-node branch. 2-8 is HA. If omitted, the cluster size default is used.
+                  description: >-
+                    The number of additional replicas, not counting the primary. 0 is a single-node branch. 2-8 is HA. If omitted, the cluster size default is used.
                 storage:
                   type: object
                   description: Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
@@ -10380,7 +10381,8 @@ paths:
                     description: The region slug where the branch is hosted.
                   replicas:
                     type: integer
-                    description: The number of additional replicas, not counting the primary. 0 is a single-node branch. 2-8 is HA.
+                    description: >-
+                      The number of additional replicas, not counting the primary. 0 is a single-node branch. 2-8 is HA.
                   parameters:
                     type: object
                     nullable: true
