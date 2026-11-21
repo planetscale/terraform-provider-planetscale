@@ -41,7 +41,7 @@ data "planetscale_postgres_branch" "my_postgresbranch" {
 - `ready` (Boolean) Whether or not the branch is ready to serve queries
 - `region` (String) The region slug where the branch is hosted.
 - `region_data` (Attributes) (see [below for nested schema](#nestedatt--region_data))
-- `replicas` (Number) The number of additional replicas, not counting the primary. 0 is a single-node branch. 2-8 is HA.
+- `replicas` (Number) The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA.
 - `state` (String) The current state of the branch
 - `storage` (Attributes) Storage configuration for non-Metal branches. These values are null for Metal cluster sizes. (see [below for nested schema](#nestedatt--storage))
 - `url` (String) Planetscale API URL for the branch

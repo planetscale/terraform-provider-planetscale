@@ -43,9 +43,8 @@ actions:
       replicas:
         type: integer
         description: >-
-          The number of additional replicas, not counting the primary. 0 is a
-          single-node branch. 2-8 is HA. If omitted, the cluster size default
-          is used.
+          The number of replicas. 0 is a single-node branch with no replicas. 2-8
+          is HA. If omitted, the cluster size default is used.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches#postgres'].post.requestBody.content['application/json'].schema.properties
     description: Restore PostgreSQL storage configuration after the shared branch overlay removes it.
@@ -83,8 +82,8 @@ actions:
       replicas:
         type: integer
         description: >-
-          The number of additional replicas, not counting the primary. 0 is a
-          single-node branch. 2-8 is HA.
+          The number of replicas. 0 is a single-node branch with no replicas. 2-8
+          is HA.
 
   - target: $.paths['/organizations/{organization}/databases/{database}/branches/{branch}#postgres'].get
     description: Update operation metadata for PostgreSQL
@@ -128,8 +127,8 @@ actions:
       replicas:
         type: integer
         description: >-
-          The number of additional replicas, not counting the primary. 0 is a
-          single-node branch. 2-8 is HA.
+          The number of replicas. 0 is a single-node branch with no replicas. 2-8
+          is HA.
       parameters:
         type: object
         nullable: true
@@ -300,9 +299,8 @@ actions:
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.replicas
     update:
       description: >-
-        The number of additional replicas, not counting the primary. 0 is a
-        single-node branch. 2-8 is HA. If omitted, the cluster size default
-        is used.
+        The number of replicas. 0 is a single-node branch with no replicas. 2-8
+        is HA. If omitted, the cluster size default is used.
 
   - target: $.paths["/organizations/{organization}/databases/{database}/branches/{branch}/changes"].patch.requestBody.content["application/json"].schema.properties.storage
     update:

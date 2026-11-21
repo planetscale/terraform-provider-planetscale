@@ -85,7 +85,7 @@ type CreatePostgresBranchRequestBody struct {
 	// The kind of database. Always postgresql for planetscale_postgres_branch.
 	//lint:ignore U1000 accessed via reflection for JSON marshaling
 	kind *CreatePostgresBranchKind `const:"postgresql" json:"kind"`
-	// The number of additional replicas, not counting the primary. 0 is a single-node branch. 2-8 is HA. If omitted, the cluster size default is used.
+	// The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA. If omitted, the cluster size default is used.
 	Replicas *int64 `json:"replicas,omitzero"`
 	// Storage configuration for non-Metal branches. PlanetScale clears these settings for Metal cluster sizes.
 	Storage *CreatePostgresBranchStorage `json:"storage,omitzero"`
