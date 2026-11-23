@@ -134,7 +134,7 @@ func (r *PostgresBranchDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"replicas": schema.Int64Attribute{
 				Computed:    true,
-				Description: `The number of replicas for the branch`,
+				Description: `The number of replicas. 0 is a single-node branch with no replicas. 2-8 is HA.`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,

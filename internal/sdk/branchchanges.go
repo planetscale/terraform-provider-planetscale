@@ -32,7 +32,7 @@ func newBranchChanges(rootSDK *PlanetScale, sdkConfig config.SDKConfiguration, h
 	}
 }
 
-// ApplyPostgresBranchChanges - Apply a PostgreSQL branch's cluster size, parameters, and storage configuration
+// ApplyPostgresBranchChanges - Apply a PostgreSQL branch's cluster size, replicas, parameters, and storage configuration
 // ### Authorization
 // A service token or OAuth token must have at least one of the following access or scopes in order to use this API endpoint:
 //
